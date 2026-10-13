@@ -3,14 +3,18 @@
 import {
   Bar, BarChart, CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
+import { useLocale, useTranslations } from "next-intl";
 import type { WeekPoint } from "@/lib/metrics";
+import { eur as eurL, eurShort as eurShortL, shortDate } from "@/lib/format";
 
-const eur = (v: number) =>
-  new Intl.NumberFormat("en-IE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(v);
-const eurShort = (v: number) =>
-  Math.abs(v) >= 1000 ? `€${(v / 1000).toFixed(v % 1000 === 0 ? 0 : 1)}k` : `€${v}`;
-const weekLabel = (w: string) =>
-  new Date(w + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+function useFmt() {
+  const locale = useLocale();
+  return {
+    eur: (v: number) => eurL(v, locale),
+    eurShort: (v: number) => eurShortL(v, locale),
+    weekLabel: (w: string) => shortDate(w, locale),
+  };
+}
 
 const axis = { stroke: "var(--muted)", fontSize: 12, tickLine: false, axisLine: false } as const;
 
@@ -50,26 +54,28 @@ export function Legend({ items }: { items: { label: string; color: string; dashe
 
 /** Weekly revenue and profit (grouped bars, one axis). */
 export function WeeklyChart({ data }: { data: WeekPoint[] }) {
+  const t = useTranslations("overview");
+  const { eur, eurShort, weekLabel } = useFmt();
   return (
     <div className="h-56 w-full">
-      <ResponsiveContainer>
+      <ResponsiveContainer initialDimension={{ width: 480, height: 200 }}>
         <BarChart data={data} barGap={2} barCategoryGap="25%" margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
           <CartesianGrid vertical={false} stroke="var(--grid)" />
           <XAxis dataKey="week" tickFormatter={weekLabel} {...axis} minTickGap={16} />
-          <YAxis tickFormatter={eurShort} {...axis} width={44} />
+          <YAxis tickFormatter={eurShort} {...axis} width={64} />
           <ReferenceLine y={0} stroke="var(--muted)" strokeOpacity={0.4} />
           <Tooltip
             cursor={{ fill: "var(--surface-2)" }}
             content={({ active, payload, label }) =>
               active && payload?.length ? (
-                <TipBox title={`Week of ${weekLabel(String(label))}`} rows={[
-                  { label: "Revenue", value: eur(Number(payload[0]?.payload.revenue)), color: "var(--series-1)" },
-                  { label: "Profit", value: eur(Number(payload[0]?.payload.profit)), color: "var(--series-2)" },
+                <TipBox title={t("weekOf", { date: weekLabel(String(label)) })} rows={[
+                  { label: t("revenue"), value: eur(Number(payload[0]?.payload.revenue)), color: "var(--series-1)" },
+                  { label: t("profit"), value: eur(Number(payload[0]?.payload.profit)), color: "var(--series-2)" },
                 ]} />
               ) : null}
           />
-          <Bar dataKey="revenue" name="Revenue" fill="var(--series-1)" radius={[4, 4, 0, 0]} maxBarSize={28} isAnimationActive={false} />
-          <Bar dataKey="profit" name="Profit" fill="var(--series-2)" radius={[4, 4, 0, 0]} maxBarSize={28} isAnimationActive={false} />
+          <Bar dataKey="revenue" name={t("revenue")} fill="var(--series-1)" radius={[4, 4, 0, 0]} maxBarSize={28} isAnimationActive={false} />
+          <Bar dataKey="profit" name={t("profit")} fill="var(--series-2)" radius={[4, 4, 0, 0]} maxBarSize={28} isAnimationActive={false} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -78,21 +84,23 @@ export function WeeklyChart({ data }: { data: WeekPoint[] }) {
 
 /** Running totals since the start, with an even-pace reference line (information only, not a target). */
 export function CumulativeChart({ data }: { data: WeekPoint[] }) {
+  const t = useTranslations("overview");
+  const { eur, eurShort, weekLabel } = useFmt();
   return (
     <div className="h-56 w-full">
-      <ResponsiveContainer>
+      <ResponsiveContainer initialDimension={{ width: 480, height: 200 }}>
         <LineChart data={data} margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
           <CartesianGrid vertical={false} stroke="var(--grid)" />
           <XAxis dataKey="week" tickFormatter={weekLabel} {...axis} minTickGap={16} />
-          <YAxis tickFormatter={eurShort} {...axis} width={44} />
+          <YAxis tickFormatter={eurShort} {...axis} width={64} />
           <Tooltip
             cursor={{ stroke: "var(--muted)", strokeDasharray: "3 3" }}
             content={({ active, payload, label }) =>
               active && payload?.length ? (
-                <TipBox title={`By week of ${weekLabel(String(label))}`} rows={[
-                  { label: "Revenue", value: eur(Number(payload[0]?.payload.cumRevenue)), color: "var(--series-1)" },
-                  { label: "Profit", value: eur(Number(payload[0]?.payload.cumProfit)), color: "var(--series-2)" },
-                  { label: "Even pace", value: eur(Number(payload[0]?.payload.evenPace)), color: "var(--muted)", dashed: true },
+                <TipBox title={t("byWeekOf", { date: weekLabel(String(label)) })} rows={[
+                  { label: t("revenue"), value: eur(Number(payload[0]?.payload.cumRevenue)), color: "var(--series-1)" },
+                  { label: t("profit"), value: eur(Number(payload[0]?.payload.cumProfit)), color: "var(--series-2)" },
+                  { label: t("evenPaceShort"), value: eur(Number(payload[0]?.payload.evenPace)), color: "var(--muted)", dashed: true },
                 ]} />
               ) : null}
           />

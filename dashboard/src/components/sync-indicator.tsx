@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 
 type State = "connecting" | "synced" | "offline";
 
 /** "● Synced" dot: green while the live connection to Supabase Realtime is up. */
 export function SyncIndicator() {
+  const t = useTranslations("shell.sync");
   const [state, setState] = useState<State>("connecting");
 
   useEffect(() => {
@@ -29,12 +31,12 @@ export function SyncIndicator() {
   }, []);
 
   const color = state === "synced" ? "bg-ok" : state === "offline" ? "bg-bad" : "bg-warn";
-  const label = state === "synced" ? "Synced" : state === "offline" ? "Offline" : "Connecting";
+  const label = t(state);
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-xs text-muted"
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-xs text-muted" title={label}
           aria-live="polite">
       <span className={`size-2 rounded-full ${color} ${state === "synced" ? "animate-pulse" : ""}`} />
-      {label}
+      <span className="sr-only sm:not-sr-only">{label}</span>
     </span>
   );
 }

@@ -201,6 +201,33 @@ select t.assert('Activity entry carries the right group (sale → Finance)',
 select t.check('Nobody can write fake activity directly',
   $$insert into activity_log (action, entity) values ('insert', 'sales')$$, 'denied');
 
+
+-- ── Auto timestamps & design requests (0004) ─────────────────
+select t.login(6);
+select t.check('Customer member logs a complaint',
+  $$insert into complaints (customer, issue) values ('Ana', 'Late delivery')$$, 'ok');
+select t.check('Customer member resolves it',
+  $$update complaints set status = 'resolved' where customer = 'Ana'$$, 'ok');
+select t.assert('Resolving stamps resolved_at automatically',
+  t.num($$select count(*) from complaints where customer = 'Ana' and resolved_at is not null$$) = 1);
+select t.login(2);
+select t.check('Non-Marketing member cannot request a design already assigned to someone',
+  $$insert into design_requests (title, requested_by, assignee_id) select 'Poster', my_profile_id(), id from profiles where full_name = 'Rocco'$$, 'denied');
+select t.check('Non-Marketing member cannot mark a design delivered',
+  $$update design_requests set status = 'delivered'$$, 'denied');
+
+
+-- ── Trello settings (0006) ───────────────────────────────────
+select t.login(3);
+select t.check('Group member cannot switch on Trello sync for their board',
+  $$update boards set trello_sync_enabled = true where slug = 'marketing'$$, 'denied');
+select t.login(4);
+select t.check('Team Leader can switch on Trello sync',
+  $$update boards set trello_sync_enabled = true, trello_board_id = 'abc123' where slug = 'marketing'$$, 'ok');
+select t.login(2);
+select t.check('Non-admin cannot map Trello members',
+  $$insert into trello_member_map (trello_member_id, trello_username, profile_id) select 'x', 'x', id from profiles limit 1$$, 'denied');
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',

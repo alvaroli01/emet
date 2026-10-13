@@ -1,0 +1,3 @@
+{
+  "crons": [{ "path": "/api/trello/sync", "schedule": "0 3 * * *" }]
+}

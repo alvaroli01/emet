@@ -109,8 +109,8 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 
 | System | Status | Where | Notes |
 |---|---|---|---|
-| Team dashboard (web app, personal logins, per-group permissions, task boards) | 🚧 Steps 1–2 of 7 done: database, invite-only login, permissions (47 tests passing), app shell, live Overview page. Not deployed yet | Code: [`dashboard/`](dashboard/) · Spec: [`docs/dashboard-build-prompt.md`](docs/dashboard-build-prompt.md) | Next.js + Supabase free + Vercel Hobby; 7 languages; progress table in [`dashboard/README.md`](dashboard/README.md) |
-| Task boards: 1 general company board + 1 per group (6 total) | ⏳ To create | Inside the dashboard | Trello's free plan caps a workspace at 10 members, so the 15-person general board can't be free on Trello — boards are built into the dashboard, with Trello sync ready for later |
+| Team dashboard (web app, personal logins, per-group permissions, task boards, 7 languages) | ✅ Built (all 7 steps). ⏳ Not online yet: needs the free Supabase + Vercel setup | Code: [`dashboard/`](dashboard/) · Setup guide: [`dashboard/README.md`](dashboard/README.md) · Spec: [`docs/dashboard-build-prompt.md`](docs/dashboard-build-prompt.md) | Next.js + Supabase free + Vercel Hobby, €0. Permissions enforced in the database (55 tests). Tested in a browser with sample data |
+| Task boards: 1 general company board + 1 per group (6 total) | ✅ Built into the dashboard | Dashboard → General board and each group tab | Drag and drop, assignees, due dates, labels, checklists, comments, My Tasks. Optional Trello sync per board, off by default ([`dashboard/TRELLO_SETUP.md`](dashboard/TRELLO_SETUP.md)) |
 
 ## 9. Decisions log
 
@@ -129,6 +129,9 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-13 | Alvaro is the starting dashboard admin until Team Leaders are chosen (Team Leader group = admins) | Alvaro |
 | 2026-10-13 | Any member can comment on any card and request a design from Marketing; editing stays group-only | Alvaro |
 | 2026-10-13 | Overview: profit = sales − cost of goods − expenses; a task is on time if it reaches Done by its due date | Alvaro |
+| 2026-10-13 | Dashboard finished (steps 3–7): 6 task boards, group tools, Team management, 7 languages, optional Trello sync, dark mode | Alvaro |
+| 2026-10-13 | Morale comments are private to Communications + team leaders; everyone sees the anonymous weekly average | Alvaro |
+| 2026-10-13 | Anyone can request a design from Marketing; only Marketing works the queue | Alvaro |
 
 ## 10. Open questions
 
@@ -140,7 +143,8 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 - [ ] Emails of all 15 members (for dashboard logins)
 - [ ] Who creates the free Supabase project and Vercel account for the dashboard (needed before it can go live)
 - [ ] Missing self-reviews (Nico, Nahuel), Fran's redo, and missing peer reviews — see `docs/team-profiles.md`
-- [ ] Trello: use the dashboard's built-in boards for now, or split across several free Trello workspaces?
+- [x] ~~Trello: built-in boards or Trello?~~ → built-in boards; any group can link its board to Trello later (off by default)
+- [ ] Vercel Hobby is for non-commercial use — fine for a student non-profit; revisit if emet starts trading as a business
 
 ---
 

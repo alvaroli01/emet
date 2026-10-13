@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
+import { cookies } from "next/headers";
+import { ToastProvider } from "@/components/toast";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,10 +21,20 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getLocale();
+  const theme = (await cookies()).get("emet-theme")?.value;
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body>{children}</body>
+    <html
+      lang={locale}
+      data-theme={theme === "light" || theme === "dark" ? theme : undefined}
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+    >
+      <body>
+        <NextIntlClientProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </NextIntlClientProvider>
+      </body>
     </html>
   );
 }
