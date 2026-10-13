@@ -6,5 +6,5 @@
 4. Before any `git push`, show your human the full diff (`git diff --staged`) and wait for an explicit "push it".
 5. Add to other people's work; don't rewrite or delete it without their OK.
 6. **€0 budget:** only use free plans, free tiers and free APIs. If something would cost money, stop and say so instead of adding it.
-7. Anything user-facing must support English, Spanish, German, French, Finnish, Portuguese (Brazil) and Russian.
+7. Write docs and talk with the team in English or Spanish. Only the team dashboard must support all 7 languages (English, Spanish, German, French, Finnish, Portuguese (Brazil), Russian).
 8. Team profiles in `docs/team-profiles.md` are preliminary and some members dispute them — never treat them as final roles.

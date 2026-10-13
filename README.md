@@ -26,7 +26,7 @@ We go at our own pace — there is no fixed weekly revenue target.
 ## 3. Ground rules
 
 - **€0 budget for tools right now.** Everything we build (dashboard, hosting, database, task boards, APIs) must run on free plans. No paid APIs or subscriptions until the team decides otherwise.
-- **Languages:** the team works in English and Spanish; shared tools must also support German, French, Finnish, Portuguese (Brazil) and Russian.
+- **Languages:** everything in this repo (docs, specs, notes) is in English or Spanish. Only the **team dashboard** must also support German, French, Finnish, Portuguese (Brazil) and Russian.
 
 ## 4. Team structure (15 people, 5 groups)
 
