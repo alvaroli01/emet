@@ -109,7 +109,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 
 | System | Status | Where | Notes |
 |---|---|---|---|
-| Team dashboard (web app, personal logins, per-group permissions, task boards) | 📝 Spec written, not built | [`docs/dashboard-build-prompt.md`](docs/dashboard-build-prompt.md) | Free stack only; 7 languages |
+| Team dashboard (web app, personal logins, per-group permissions, task boards) | 🚧 Step 1 of 7 done: database, invite-only login, permissions (47 tests passing), app shell. Not deployed yet | Code: [`dashboard/`](dashboard/) · Spec: [`docs/dashboard-build-prompt.md`](docs/dashboard-build-prompt.md) | Next.js + Supabase free + Vercel Hobby; 7 languages; progress table in [`dashboard/README.md`](dashboard/README.md) |
 | Task boards: 1 general company board + 1 per group (6 total) | ⏳ To create | Inside the dashboard | Trello's free plan caps a workspace at 10 members, so the 15-person general board can't be free on Trello — boards are built into the dashboard, with Trello sync ready for later |
 
 ## 9. Decisions log
@@ -124,6 +124,10 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-13 | Dashboard in English, Spanish, German, French, Finnish, Portuguese (Brazil), Russian | Alvaro |
 | 2026-10-13 | 6 task boards: 1 general company board + 1 per group | Alvaro |
 | 2026-10-13 | Preliminary team profiles (self + peer reviews) added as a quick reference, not final roles | Alvaro |
+| 2026-10-13 | Dashboard built step by step in `dashboard/` (7 steps); step 1 = database, login, permissions | Alvaro |
+| 2026-10-13 | Dashboard is invite-only: a login only works for emails an admin added; members start with no group/role | Alvaro |
+| 2026-10-13 | Alvaro is the starting dashboard admin until Team Leaders are chosen (Team Leader group = admins) | Alvaro |
+| 2026-10-13 | Any member can comment on any card and request a design from Marketing; editing stays group-only | Alvaro |
 
 ## 10. Open questions
 
@@ -133,6 +137,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 - [ ] Domain: start on the free hosting subdomain; buy a custom domain later if the team agrees to spend
 - [x] ~~Names of all 15 members~~ → section 5
 - [ ] Emails of all 15 members (for dashboard logins)
+- [ ] Who creates the free Supabase project and Vercel account for the dashboard (needed before it can go live)
 - [ ] Missing self-reviews (Nico, Nahuel), Fran's redo, and missing peer reviews — see `docs/team-profiles.md`
 - [ ] Trello: use the dashboard's built-in boards for now, or split across several free Trello workspaces?
 

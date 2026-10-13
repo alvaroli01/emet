@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* Theme tokens — light by default, dark follows the device (a manual toggle comes in the polish step) */
+:root {
+  --bg: #f7f7f8;
+  --surface: #ffffff;
+  --surface-2: #f1f1f3;
+  --border: #e6e6ea;
+  --text: #16161a;
+  --muted: #6b6b76;
+  --brand: #16161a;
+  --brand-contrast: #ffffff;
+  --ok: #10b981;
+  --warn: #f59e0b;
+  --bad: #ef4444;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0c0e;
+    --surface: #151518;
+    --surface-2: #1d1d21;
+    --border: #2a2a30;
+    --text: #f2f2f4;
+    --muted: #9a9aa5;
+    --brand: #f2f2f4;
+    --brand-contrast: #0c0c0e;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0c0c0e;
+  --surface: #151518;
+  --surface-2: #1d1d21;
+  --border: #2a2a30;
+  --text: #f2f2f4;
+  --muted: #9a9aa5;
+  --brand: #f2f2f4;
+  --brand-contrast: #0c0c0e;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-contrast: var(--brand-contrast);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Long German / Finnish / Russian words must wrap instead of breaking the layout */
+h1, h2, h3, p, label, button, a { overflow-wrap: anywhere; hyphens: auto; }
+
+@layer components {
+  .input {
+    @apply w-full rounded-xl border border-line bg-surface px-3 py-2.5 text-sm outline-none transition
+      placeholder:text-muted/70 focus:border-ink/40 focus:ring-4 focus:ring-ink/5;
+  }
+}
