@@ -92,7 +92,7 @@ Suggested tables (adjust as needed; RLS on every table):
 - `meeting_notes`, `outreach`
 - `activity_log` (id, user_id, group_id, action, entity, entity_id, created_at)
 
-**RLS rules:** `SELECT` for any logged-in user (except morale comments, see above). `INSERT/UPDATE/DELETE` only when the row's `group_id` = the user's `group_id`, or the user `is_admin`. On the general board: anyone can create cards; only assignees, the creator or admins can edit a card. Write SQL migrations for all tables + policies + a seed with the 5 groups, the 6 boards (default lists: To do / Doing / Review / Done) and 15 placeholder members.
+**RLS rules:** `SELECT` for any logged-in user (except morale comments, see above). `INSERT/UPDATE/DELETE` only when the row's `group_id` = the user's `group_id`, or the user `is_admin`. On the general board: anyone can create cards; only assignees, the creator or admins can edit a card. Write SQL migrations for all tables + policies + a seed with the 5 groups, the 6 boards (default lists: To do / Doing / Review / Done) and the 15 members by first name (Alvaro, Stefan, Rocco, Fran, Zayd, Nico, Nahuel, Emily, Elizabeth, Lassi, Mario, Martin, Fernando, Sasha, Mirage) with group/role left empty and placeholder emails. Do **not** import the self/peer review data from `docs/team-profiles.md` into the dashboard.
 
 ## 5. Optional Trello sync (off by default, free)
 

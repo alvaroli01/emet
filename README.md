@@ -71,13 +71,26 @@ Roles and leaders have **not been chosen yet** (decision expected in the coming 
 | Name | Group | Role | Contact |
 |---|---|---|---|
 | Alvaro | _TBD_ | _TBD_ | — |
-| _TBD_ | | | |
+| Stefan | _TBD_ | _TBD_ | — |
+| Rocco | _TBD_ | _TBD_ | — |
+| Fran | _TBD_ | _TBD_ | — |
+| Zayd | _TBD_ | _TBD_ | — |
+| Nico | _TBD_ | _TBD_ | — |
+| Nahuel | _TBD_ | _TBD_ | — |
+| Emily | _TBD_ | _TBD_ | — |
+| Elizabeth | _TBD_ | _TBD_ | — |
+| Lassi | _TBD_ | _TBD_ | — |
+| Mario | _TBD_ | _TBD_ | — |
+| Martin | _TBD_ | _TBD_ | — |
+| Fernando | _TBD_ | _TBD_ | — |
+| Sasha | _TBD_ | _TBD_ | — |
+| Mirage | _TBD_ | _TBD_ | — |
 
-*(Fill in once roles are assigned. 15 rows total.)*
+*(Groups and roles get filled in once the team decides.)*
 
 ## 6. Team profiles (preliminary)
 
-Each member's self-review and peer-review results will be summarised in [`docs/team-profiles.md`](docs/team-profiles.md) _(coming soon)_.
+Each member's self-review and peer-review results are summarised in [`docs/team-profiles.md`](docs/team-profiles.md), including which roles people picked versus the seats available, and the data gaps still to fix.
 
 > ⚠️ **Treat these as a quick reference only, not as final roles.** Roles and leaders are decided by the team in the coming days, and some members said in class that they disagree with their results. Don't assign anyone a role based only on these profiles.
 
@@ -110,6 +123,7 @@ Each member's self-review and peer-review results will be summarised in [`docs/t
 | 2026-10-13 | €0 tool budget for now — free plans only | Alvaro |
 | 2026-10-13 | Dashboard in English, Spanish, German, French, Finnish, Portuguese (Brazil), Russian | Alvaro |
 | 2026-10-13 | 6 task boards: 1 general company board + 1 per group | Alvaro |
+| 2026-10-13 | Preliminary team profiles (self + peer reviews) added as a quick reference, not final roles | Alvaro |
 
 ## 10. Open questions
 
@@ -117,7 +131,9 @@ Each member's self-review and peer-review results will be summarised in [`docs/t
 - [ ] What exactly is emet selling? (brainstorm week of 19 Oct 2026)
 - [ ] Who are the group leaders and who has which role?
 - [ ] Domain: start on the free hosting subdomain; buy a custom domain later if the team agrees to spend
-- [ ] Names + emails of all 15 members
+- [x] ~~Names of all 15 members~~ → section 5
+- [ ] Emails of all 15 members (for dashboard logins)
+- [ ] Missing self-reviews (Nico, Nahuel), Fran's redo, and missing peer reviews — see `docs/team-profiles.md`
 - [ ] Trello: use the dashboard's built-in boards for now, or split across several free Trello workspaces?
 
 ---
