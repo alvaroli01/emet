@@ -8,8 +8,8 @@ Free stack only: **Next.js + Supabase (free tier) + Vercel Hobby (free)**.
 | Step | What | Status |
 |---|---|---|
 | 1 | Database, login, permissions, app shell | ✅ Done |
-| 2 | Overview page | ⏳ Next |
-| 3 | Task boards (6) + My Tasks | ⏳ |
+| 2 | Overview page | ✅ Done |
+| 3 | Task boards (6) + My Tasks | ⏳ Next |
 | 4 | Group tabs & tools + Team management | ⏳ |
 | 5 | 7 languages | ⏳ |
 | 6 | Trello sync (off by default) | ⏳ |
@@ -37,6 +37,17 @@ Notes:
 - Morale: each person sees their own score; Communications and admins see individual comments; everyone sees the anonymous weekly average.
 - **Alvaro starts as admin** so someone can invite the others. Once Team Leaders are chosen they're admins automatically and Alvaro's flag can be removed.
 
+## What's in step 2 — Overview
+
+- **Goal rings:** revenue €X / €30,000 and profit €X / €15,000, with % and "€Y to go".
+- **Countdown to 30 June 2027**, average weekly pace so far and the pace needed from now on (information only, no fixed target).
+- **Margin so far** vs the 50% minimum and **on-time task rate** vs 85% (a card counts as on time if it reaches *Done* by its due date; open cards past their due date count as late).
+- **Two charts** (deliberately not one chart with two scales): weekly revenue & profit bars, and running totals with a dashed "even pace to €30K" reference line. Date range: 4 weeks / 12 weeks / all time.
+- **Group cards:** on track / at risk / behind (icon + word, never colour only), from overdue cards, open blockers and on-time rate, plus one key number per group.
+- **Blockers** from every group and a **live activity feed** ("Stefan logged a €120 sale · 2 minutes ago").
+- Everything refreshes by itself when anyone changes something.
+- Profit = sales − cost of goods − expenses. Chart colours are a colour-blind-safe palette checked in light and dark mode.
+
 ## Set up (short version — the full non-developer guide comes in step 7)
 
 1. Create a free project at [supabase.com](https://supabase.com) (no card needed).
@@ -56,10 +67,9 @@ Notes:
 
 > Supabase free projects **pause after ~7 days with no activity**. If that happens: Supabase dashboard → your project → **Restore**. Daily use keeps it awake.
 
-## Run the permission tests
-
-Needs a local Postgres 15+ (no Supabase account):
+## Run the tests
 
 ```bash
-bash supabase/tests/run-local.sh     # prints PASS/FAIL for each rule
+npm test          # Overview calculations (profit, pace, on-time rate, weekly totals)
+npm run test:db   # 47 permission tests — needs a local Postgres 15+, no Supabase account
 ```

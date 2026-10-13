@@ -40,7 +40,7 @@ export default async function GroupPage({ params }: { params: Promise<{ slug: st
           )}
         </div>
       </header>
-      <ComingSoon step={2} what="KPI cards" />
+      <ComingSoon step={4} what="KPI cards with editable targets" />
       <ComingSoon step={3} what={`The ${group.name} task board`} />
       <ComingSoon step={4} what={`${group.name} tools`} />
     </div>

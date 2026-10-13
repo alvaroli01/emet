@@ -109,7 +109,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 
 | System | Status | Where | Notes |
 |---|---|---|---|
-| Team dashboard (web app, personal logins, per-group permissions, task boards) | 🚧 Step 1 of 7 done: database, invite-only login, permissions (47 tests passing), app shell. Not deployed yet | Code: [`dashboard/`](dashboard/) · Spec: [`docs/dashboard-build-prompt.md`](docs/dashboard-build-prompt.md) | Next.js + Supabase free + Vercel Hobby; 7 languages; progress table in [`dashboard/README.md`](dashboard/README.md) |
+| Team dashboard (web app, personal logins, per-group permissions, task boards) | 🚧 Steps 1–2 of 7 done: database, invite-only login, permissions (47 tests passing), app shell, live Overview page. Not deployed yet | Code: [`dashboard/`](dashboard/) · Spec: [`docs/dashboard-build-prompt.md`](docs/dashboard-build-prompt.md) | Next.js + Supabase free + Vercel Hobby; 7 languages; progress table in [`dashboard/README.md`](dashboard/README.md) |
 | Task boards: 1 general company board + 1 per group (6 total) | ⏳ To create | Inside the dashboard | Trello's free plan caps a workspace at 10 members, so the 15-person general board can't be free on Trello — boards are built into the dashboard, with Trello sync ready for later |
 
 ## 9. Decisions log
@@ -128,6 +128,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-13 | Dashboard is invite-only: a login only works for emails an admin added; members start with no group/role | Alvaro |
 | 2026-10-13 | Alvaro is the starting dashboard admin until Team Leaders are chosen (Team Leader group = admins) | Alvaro |
 | 2026-10-13 | Any member can comment on any card and request a design from Marketing; editing stays group-only | Alvaro |
+| 2026-10-13 | Overview: profit = sales − cost of goods − expenses; a task is on time if it reaches Done by its due date | Alvaro |
 
 ## 10. Open questions
 

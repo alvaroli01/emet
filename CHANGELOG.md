@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-13 — Alvaro — Dashboard step 2: live Overview page (goal rings, countdown and pace, margin, on-time rate, weekly and running-total charts, group health cards, blockers, activity feed) plus tests for the calculations.
 - 2026-10-13 — Alvaro — Dashboard step 1: added `dashboard/` (Next.js app) with Supabase schema, invite-only login, per-group permissions enforced in the database (47 passing tests), seed data, app shell and setup notes.
 - 2026-10-13 — Alvaro — Clarified languages: repo docs in English/Spanish only; the 7 languages apply to the dashboard only.
 - 2026-10-13 — Alvaro — Added docs/team-profiles.md (preliminary self + peer review summaries for all 15 members); filled names into README "Who's who"; dashboard seed uses the real first names.
