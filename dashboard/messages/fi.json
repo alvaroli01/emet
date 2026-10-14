@@ -1041,7 +1041,15 @@
     "noAgenda": "Tänään ei ole mitään suunniteltuna.",
     "goal": "Tiimin tavoite: 30 000 € liikevaihto",
     "daysLeft": "{count, plural, one {# päivä jäljellä} other {# päivää jäljellä}}",
-    "needed": "Tästä eteenpäin tarvitaan: {amount} viikossa"
+    "needed": "Tästä eteenpäin tarvitaan: {amount} viikossa",
+    "of": "/ {goal}",
+    "toCamp": "{amount} leiriin {n}",
+    "summitReached": "Huippu saavutettu",
+    "profit": "Voitto",
+    "perWeekNeeded": "tarvitaan viikossa tästä eteenpäin",
+    "mountainLabel": "3D-vuori: liikevaihto on noussut {pct} matkasta kohti 30 000 €:a",
+    "summit": "Huippu {amount}",
+    "camp": "Leiri {n} · {amount}"
   },
   "report": {
     "title": "Viikkoraportti · viikko alkaen {date}",

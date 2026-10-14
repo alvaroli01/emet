@@ -1041,7 +1041,15 @@
     "noAgenda": "Heute ist nichts geplant.",
     "goal": "Teamziel: 30.000 € Umsatz",
     "daysLeft": "{count, plural, one {noch # Tag} other {noch # Tage}}",
-    "needed": "Ab jetzt nötig: {amount} pro Woche"
+    "needed": "Ab jetzt nötig: {amount} pro Woche",
+    "of": "von {goal}",
+    "toCamp": "Noch {amount} bis Lager {n}",
+    "summitReached": "Gipfel erreicht",
+    "profit": "Gewinn",
+    "perWeekNeeded": "pro Woche ab jetzt nötig",
+    "mountainLabel": "3D-Berg: Der Umsatz hat {pct} des Wegs zu 30.000 € geschafft",
+    "summit": "Gipfel {amount}",
+    "camp": "Lager {n} · {amount}"
   },
   "report": {
     "title": "Wochenbericht · Woche vom {date}",

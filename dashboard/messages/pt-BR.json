@@ -1041,7 +1041,15 @@
     "noAgenda": "Nada planejado para hoje.",
     "goal": "Meta da equipe: €30 mil de receita",
     "daysLeft": "{count, plural, one {Falta # dia} other {Faltam # dias}}",
-    "needed": "Necessário daqui para frente: {amount} por semana"
+    "needed": "Necessário daqui para frente: {amount} por semana",
+    "of": "de {goal}",
+    "toCamp": "Faltam {amount} para o acampamento {n}",
+    "summitReached": "Cume alcançado",
+    "profit": "Lucro",
+    "perWeekNeeded": "necessários por semana a partir de agora",
+    "mountainLabel": "Montanha 3D: a receita já subiu {pct} do caminho até € 30.000",
+    "summit": "Cume {amount}",
+    "camp": "Acampamento {n} · {amount}"
   },
   "report": {
     "title": "Relatório semanal · semana de {date}",

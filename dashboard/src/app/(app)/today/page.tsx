@@ -4,9 +4,10 @@ import { CalendarClock, ArrowUpRight, Plus, Mic, Lightbulb, FileText, Receipt, S
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { weekStart, GOAL, pace, totals, type Sale, type Expense } from "@/lib/metrics";
-import { todayISO, eur, shortDate } from "@/lib/format";
+import { todayISO, eur, shortDate, pct } from "@/lib/format";
 import { LiveRefresh } from "@/components/live-refresh";
 import { Altimeter } from "@/components/summit/altimeter";
+import { MountainLazy } from "@/components/summit/mountain-lazy";
 import { AskButton } from "@/components/workspace/ask-button";
 import { ReportCard } from "@/components/workspace/report-card";
 import type { WeeklyReport } from "@/lib/weekly-report";
@@ -50,6 +51,9 @@ export default async function TodayPage() {
   const hour = Number(new Date().toLocaleString("en-GB", { hour: "2-digit", hour12: false, timeZone: "Europe/Madrid" }));
   const greet = hour < 12 ? "morning" : hour < 19 ? "afternoon" : "evening";
   const canLogSales = isAdmin || myGroup?.slug === "finance";
+  const revPct = Math.min(1, Math.max(0, all.revenue / GOAL.revenue));
+  const campN = Math.floor(all.revenue / (GOAL.revenue / 6)) + 1;
+  const nextCamp = campN <= 6 ? { n: campN, amount: campN * (GOAL.revenue / 6) } : null;
   const reportIsFresh = report.data && report.data.week_start === week;
 
   const actions = [
@@ -70,6 +74,30 @@ export default async function TodayPage() {
         </div>
         <AskButton />
       </header>
+
+      <section className="panel grid overflow-hidden md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+        <Link href="/" className="flex flex-col justify-between gap-5 p-5 sm:p-6">
+          <div>
+            <p className="text-sm text-muted">{t("goal")}</p>
+            <p className="readout text-4xl leading-none sm:text-5xl">{eur(all.revenue, locale)}</p>
+            <p className="mt-1.5 text-sm text-muted tabular">{t("of", { goal: eur(GOAL.revenue, locale) })} · {pct(revPct, locale)}</p>
+            <Altimeter value={revPct} steps={6} color="var(--climbed)" className="mt-3" label={t("goal")} />
+            <p className="mt-2 text-sm font-medium tabular">{nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - all.revenue, locale), n: nextCamp.n }) : t("summitReached")}</p>
+          </div>
+          <dl className="grid grid-cols-2 gap-4 border-t border-line pt-4">
+            <div><dt className="text-xs text-muted">{t("profit")}</dt><dd className="readout text-xl">{eur(Math.max(0, all.profit), locale)}</dd>
+              <dd className="text-xs text-muted">{t("of", { goal: eur(GOAL.profit, locale) })}</dd></div>
+            <div><dt className="text-xs text-muted">{t("daysLeft", { count: p.daysLeft })}</dt><dd className="readout text-xl">{eur(p.revenuePerWeekNeeded, locale)}</dd>
+              <dd className="text-xs text-muted">{t("perWeekNeeded")}</dd></div>
+          </dl>
+        </Link>
+        <div className="relative h-60 border-t border-line sm:h-72 md:h-auto md:min-h-[300px] md:border-t-0 md:border-l">
+          <MountainLazy className="size-full" progress={revPct} nextCampAt={nextCamp ? nextCamp.amount / GOAL.revenue : null}
+                        ariaLabel={t("mountainLabel", { pct: pct(revPct, locale) })}
+                        labels={{ summit: t("summit", { amount: eur(GOAL.revenue, locale) }), here: all.revenue > 0 ? eur(all.revenue, locale) : null,
+                                  nextCamp: nextCamp ? t("camp", { n: nextCamp.n, amount: eur(nextCamp.amount, locale) }) : null }} />
+        </div>
+      </section>
 
       <nav aria-label={t("quick")} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] lg:mx-0 lg:px-0">
         {actions.map((a) => (
@@ -148,15 +176,6 @@ export default async function TodayPage() {
 
       {reportIsFresh && <ReportCard report={report.data!.data as WeeklyReport} />}
 
-      <Link href="/" className="panel panel-lift block p-5">
-        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="font-semibold">{t("goal")}</h2>
-          <span className="text-sm text-muted tabular-nums">{t("daysLeft", { count: p.daysLeft })}</span>
-        </div>
-        <p className="readout text-2xl">{eur(all.revenue, locale)} <span className="text-base font-normal text-muted">/ {eur(GOAL.revenue, locale)}</span></p>
-        <Altimeter value={all.revenue / GOAL.revenue} steps={6} color="var(--climbed)" className="mt-2" label={t("goal")} />
-        <p className="mt-2 flex items-center gap-1.5 text-xs text-muted"><Sparkles size={12} /> {t("needed", { amount: eur(p.revenuePerWeekNeeded, locale) })}</p>
-      </Link>
     </div>
   );
 }

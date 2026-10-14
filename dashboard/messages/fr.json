@@ -1041,7 +1041,15 @@
     "noAgenda": "Rien de prévu aujourd’hui.",
     "goal": "Objectif de l’équipe : 30 000 € de chiffre d’affaires",
     "daysLeft": "{count, plural, one {# jour restant} other {# jours restants}}",
-    "needed": "Nécessaire à partir de maintenant : {amount} par semaine"
+    "needed": "Nécessaire à partir de maintenant : {amount} par semaine",
+    "of": "sur {goal}",
+    "toCamp": "{amount} avant le camp {n}",
+    "summitReached": "Sommet atteint",
+    "profit": "Bénéfice",
+    "perWeekNeeded": "nécessaires par semaine à partir de maintenant",
+    "mountainLabel": "Montagne 3D : le chiffre d’affaires a gravi {pct} du chemin vers 30 000 €",
+    "summit": "Sommet {amount}",
+    "camp": "Camp {n} · {amount}"
   },
   "report": {
     "title": "Rapport hebdomadaire · semaine du {date}",
