@@ -280,7 +280,7 @@ function Editor({ doc, canEdit, members, meId, ownerName, onBack, onChange, onDe
         </div>
       )}
 
-      {canEdit && (doc.audio_parts ?? 0) > 0 && <AudioPlayer ownerId={doc.owner_id} docId={doc.id} />}
+      {canEdit && (doc.audio_parts ?? 0) > 0 && <AudioPlayer ownerId={doc.owner_id} docId={doc.id} createdAt={doc.created_at} />}
 
       {preview ? (
         body.trim() ? (

@@ -794,7 +794,8 @@
       "part": "Parte {n} de {total}",
       "loadingAudio": "Carregando áudio…",
       "downloadAudio": "Baixar esta parte",
-      "defaultName": "Notas"
+      "defaultName": "Notas",
+      "keptUntil": "áudio guardado até {date}"
     }
   }
 }

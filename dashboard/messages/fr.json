@@ -794,7 +794,8 @@
       "part": "Partie {n} sur {total}",
       "loadingAudio": "Chargement de l’audio…",
       "downloadAudio": "Télécharger cette partie",
-      "defaultName": "Notes"
+      "defaultName": "Notes",
+      "keptUntil": "audio conservé jusqu’au {date}"
     }
   }
 }

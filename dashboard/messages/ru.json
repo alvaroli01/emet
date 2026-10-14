@@ -794,7 +794,8 @@
       "part": "Часть {n} из {total}",
       "loadingAudio": "Загружаем аудио…",
       "downloadAudio": "Скачать эту часть",
-      "defaultName": "Заметки"
+      "defaultName": "Заметки",
+      "keptUntil": "аудио хранится до {date}"
     }
   }
 }

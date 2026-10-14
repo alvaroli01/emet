@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { shortDate } from "@/lib/format";
 import { Play, Pause, Download, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 /** Plays a recording back from the owner's private storage, minute by minute, as one continuous track. */
-export function AudioPlayer({ ownerId, docId }: { ownerId: string; docId: string }) {
+export function AudioPlayer({ ownerId, docId, createdAt }: { ownerId: string; docId: string; createdAt: string }) {
   const t = useTranslations("camp.recorder");
   const supabase = useMemo(() => createClient(), []);
   const [urls, setUrls] = useState<string[] | null>(null);
   const [part, setPart] = useState(0);
   const [playing, setPlaying] = useState(false);
   const audio = useRef<HTMLAudioElement>(null);
+  const locale = useLocale();
+  const keptUntil = shortDate(new Date(Date.parse(createdAt) + 60 * 864e5), locale);
 
   useEffect(() => {
     (async () => {
@@ -36,7 +39,7 @@ export function AudioPlayer({ ownerId, docId }: { ownerId: string; docId: string
       </button>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium">{t("recording")}</p>
-        <p className="text-xs text-muted tabular-nums">{urls ? t("part", { n: part + 1, total: urls.length }) : t("loadingAudio")}</p>
+        <p className="text-xs text-muted tabular-nums">{urls ? `${t("part", { n: part + 1, total: urls.length })} · ${t("keptUntil", { date: keptUntil })}` : t("loadingAudio")}</p>
       </div>
       {urls && (
         <a href={urls[part]} download className="grid size-8 place-items-center rounded-lg text-muted hover:bg-surface hover:text-ink" aria-label={t("downloadAudio")} title={t("downloadAudio")}>

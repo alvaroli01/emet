@@ -794,7 +794,8 @@
       "part": "Osa {n}/{total}",
       "loadingAudio": "Ladataan ääntä…",
       "downloadAudio": "Lataa tämä osa",
-      "defaultName": "Muistiinpanot"
+      "defaultName": "Muistiinpanot",
+      "keptUntil": "ääni säilytetään {date} asti"
     }
   }
 }

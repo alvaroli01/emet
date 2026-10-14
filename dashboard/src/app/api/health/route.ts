@@ -5,7 +5,9 @@ import { createClient } from "@supabase/supabase-js";
  * Daily keep-alive (Vercel Cron). A free Supabase project pauses after 7 days without activity —
  * this touches the database once a day so the dashboard is never asleep after a holiday.
  * Also a quick health check: open it with the cron secret to see that the database answers.
+ * Housekeeping: deletes recordings older than AUDIO_DAYS (free storage is 1 GB); transcripts stay.
  */
+const AUDIO_DAYS = 60;
 export async function GET(request: NextRequest) {
   const secret = process.env.CRON_SECRET;
   if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
@@ -15,5 +17,15 @@ export async function GET(request: NextRequest) {
   const started = Date.now();
   const { count, error } = await db.from("groups").select("id", { count: "exact", head: true });
   if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 503 });
-  return NextResponse.json({ ok: true, groups: count, ms: Date.now() - started, at: new Date().toISOString() });
+  const ms = Date.now() - started;
+
+  const { data: expired } = await db.rpc("expired_recordings", { p_days: AUDIO_DAYS });
+  const names = (expired as string[] | null) ?? [];
+  let removed = 0;
+  for (let i = 0; i < names.length; i += 100) {
+    const { data } = await db.storage.from("recordings").remove(names.slice(i, i + 100));
+    removed += data?.length ?? 0;
+  }
+  const { data: docsMarked } = await db.rpc("mark_audio_expired", { p_days: AUDIO_DAYS });
+  return NextResponse.json({ ok: true, groups: count, ms, audioRemoved: removed, docsMarked, at: new Date().toISOString() });
 }
