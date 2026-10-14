@@ -166,7 +166,7 @@ export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, t
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={card.title}>
       <button className="absolute inset-0 bg-black/40" aria-label={t("close")} onClick={onClose} />
-      <div className="relative max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-3xl bg-surface p-5 shadow-2xl sm:rounded-3xl sm:p-6">
+      <div className="relative max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-3xl bg-solid p-5 shadow-2xl ring-1 ring-line sm:rounded-3xl sm:p-6">
         <div className="mb-4 flex items-start gap-3">
           {canEdit ? (
             <textarea value={title} onChange={(e) => setTitle(e.target.value)} rows={1}

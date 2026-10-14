@@ -226,7 +226,7 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
             <label className="relative block"><span className="mb-0.5 block text-xs text-muted">{t("city")}</span>
               <input value={city} onChange={(e) => { setCity(e.target.value); setPicked(null); setTyped(true); }} onBlur={() => setTimeout(() => setSuggest([]), 150)} placeholder={t("cityPlaceholder")} className="input" disabled={!canScout || running} autoComplete="off" required />
               {suggest.length > 0 && (
-                <ul className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-line bg-surface shadow-lg" role="listbox">
+                <ul className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-line bg-solid shadow-lg" role="listbox">
                   {suggest.map((s) => (
                     <li key={`${s.lat},${s.lng}`}><button type="button" role="option" aria-selected={false} onClick={() => { setCity(s.name); setPicked(s); setSuggest([]); setTyped(false); if (s.country_code) setCountry(s.country_code); }}
                       className="block w-full truncate px-3 py-2 text-left text-sm hover:bg-surface-2">{s.name}</button></li>

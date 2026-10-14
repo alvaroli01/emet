@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { cookies } from "next/headers";
@@ -7,9 +7,9 @@ import { ToastProvider } from "@/components/toast";
 import "./globals.css";
 
 
-// Inter for reading (covers Russian), Space Grotesk for headings and numbers
-const inter = Inter({ subsets: ["latin", "latin-ext", "cyrillic"], variable: "--font-inter", display: "swap" });
-const display = Space_Grotesk({ subsets: ["latin", "latin-ext"], variable: "--font-display-face", display: "swap" });
+// Geist: the clean geometric sans of modern dashboards (covers Russian); Geist Mono for small data labels
+const geist = Geist({ subsets: ["latin", "latin-ext", "cyrillic"], variable: "--font-geist", display: "swap" });
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
 
 export const metadata: Metadata = {
   title: "emet HQ",
@@ -31,11 +31,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${display.variable}`}
+      className={`${geist.variable} ${geistMono.variable}`}
       data-theme={theme === "light" || theme === "dark" ? theme : undefined}
     >
       <head>
-        <meta name="theme-color" content={theme === "dark" ? "#07080c" : "#f6f7fb"} />
+        <meta name="theme-color" content={theme === "light" ? "#d8d8d3" : "#08080a"} />
       </head>
       <body>
         <NextIntlClientProvider>

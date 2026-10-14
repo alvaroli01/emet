@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CalendarClock, ArrowUpRight, Plus, Mic, Lightbulb, FileText, Receipt, Clock, CheckCircle2, Sun } from "lucide-react";
-import { PageHero } from "@/components/shell/page-hero";
+import { CalendarClock, ArrowUpRight, Clock, CheckCircle2 } from "lucide-react";
+import { HomeDashboard, type HomeData } from "@/components/home/home-dashboard";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
-import { weekStart, GOAL, pace, totals, type Sale, type Expense } from "@/lib/metrics";
-import { todayISO, eur, shortDate, pct } from "@/lib/format";
+import { weekStart, GOAL, pace, totals, onTimeRate, weekly, type Sale, type Expense, type CardLite } from "@/lib/metrics";
+import { todayISO, shortDate } from "@/lib/format";
 import { LiveRefresh } from "@/components/live-refresh";
-import { MountainLazy } from "@/components/summit/mountain-lazy";
-import { AskButton } from "@/components/workspace/ask-button";
 import { ReportCard } from "@/components/workspace/report-card";
 import type { WeeklyReport } from "@/lib/weekly-report";
 
@@ -17,12 +15,15 @@ type Due = { id: string; title: string; day: string; href: string; parent?: stri
 /** Today: everything one person needs to start the day, on one screen. */
 export default async function TodayPage() {
   const t = await getTranslations("today");
-  const th = await getTranslations("hero");
   const locale = await getLocale();
   const { me, myGroup, groups, isAdmin } = await getSession();
   const supabase = await createClient();
   const today = todayISO();
   const week = weekStart(Date.now());
+  const DAY = 864e5;
+  const lastMonday = new Date(Date.parse(week + "T00:00:00Z") - 7 * DAY).toISOString().slice(0, 10);
+  const tHome = await getTranslations("home");
+  const tg = await getTranslations("group.names");
 
   const [plan, cards, subtasks, agenda, sales, expenses, report, leads] = await Promise.all([
     supabase.from("week_plans").select("priorities").eq("owner_id", me.id).eq("week_start", week).maybeSingle(),
@@ -36,6 +37,15 @@ export default async function TodayPage() {
     supabase.from("weekly_reports").select("week_start, data").order("week_start", { ascending: false }).limit(1).maybeSingle(),
     supabase.from("scout_leads").select("id, project_id, next_step_at, place:scout_places(name)").eq("owner_id", me.id)
       .not("next_step_at", "is", null).lte("next_step_at", today).not("status", "in", "(won,lost,ignored)"),
+  ]);
+  const since30 = new Date(Date.now() - 30 * DAY).toISOString().slice(0, 10);
+  const [weekSales, doneCards, dueCards, blockers, morale, myDone] = await Promise.all([
+    supabase.from("sales").select("date, amount, heard_about, channel").gte("date", lastMonday),
+    supabase.from("cards").select("completed_at").not("completed_at", "is", null).gte("completed_at", lastMonday),
+    supabase.from("cards").select("board_id, due_at, completed_at").not("due_at", "is", null),
+    supabase.from("blockers").select("id", { count: "exact", head: true }).eq("status", "open"),
+    supabase.from("morale_checks").select("score").eq("week_start", week),
+    supabase.from("cards").select("completed_at, card_assignees!inner(user_id)").eq("card_assignees.user_id", me.id).not("completed_at", "is", null).gte("completed_at", since30),
   ]);
 
   const slug = (gid: string | null | undefined) => (gid ? groups.find((g) => g.id === gid)?.slug : undefined);
@@ -54,53 +64,47 @@ export default async function TodayPage() {
   const priorities = (plan.data?.priorities ?? []).filter((p: string) => p.trim());
   const all = totals(sales.data ?? [], expenses.data ?? []);
   const p = pace(all.revenue, all.profit);
-  const hour = Number(new Date().toLocaleString("en-GB", { hour: "2-digit", hour12: false, timeZone: "Europe/Madrid" }));
-  const greet = hour < 12 ? "morning" : hour < 19 ? "afternoon" : "evening";
   const canLogSales = isAdmin || myGroup?.slug === "finance";
   const revPct = Math.min(1, Math.max(0, all.revenue / GOAL.revenue));
   const campN = Math.floor(all.revenue / (GOAL.revenue / 6)) + 1;
   const nextCamp = campN <= 6 ? { n: campN, amount: campN * (GOAL.revenue / 6) } : null;
-  const nextAgenda = (agenda.data ?? []).find((a) => !a.done && (a.start_time ?? "99") >= new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" }));
+  // ── Home cards ──
+  const dayIdx = (d: string) => Math.floor((Date.parse(d.slice(0, 10) + "T00:00:00Z") - Date.parse(week + "T00:00:00Z")) / DAY);
+  const ws = (weekSales.data ?? []).filter((x) => x.date >= week && Number(x.amount) > 0);
+  const chan = (x: { heard_about: string | null; channel: string | null }) => x.heard_about === "stall" ? "stall" : ["instagram", "tiktok", "whatsapp"].includes(x.heard_about ?? "") || /insta|tiktok|online|web/i.test(x.channel ?? "") ? "online" : "other";
+  const rows = (["stall", "online", "other"] as const).map((k) => ({ label: tHome(`channels.${k}`), days: Array.from({ length: 7 }, (_, i) => ws.filter((x) => chan(x) === k && dayIdx(x.date) === i).length) }));
+  const doneDays = (from: string) => { const c = Array(7).fill(0); for (const x of doneCards.data ?? []) { const i = Math.floor((Date.parse(x.completed_at!) - Date.parse(from + "T00:00:00Z")) / DAY); if (i >= 0 && i < 7) c[i]++; } return c.map((_, i) => c.slice(0, i + 1).reduce((a: number, b: number) => a + b, 0)); };
+  const todayIdx = Math.min(6, dayIdx(today));
+  const thisW = doneDays(week).map((v, i) => (i <= todayIdx ? v : v)), lastW = doneDays(lastMonday);
+  const moneyDays = Array.from({ length: 7 }, (_, i) => ws.filter((x) => dayIdx(x.date) === i).reduce((a, x) => a + Number(x.amount), 0));
+  const ot = onTimeRate((dueCards.data ?? []) as CardLite[]);
+  const moods = (morale.data ?? []).map((m) => Number(m.score)).filter((n) => n > 0);
+  const wk = weekly(sales.data ?? [], expenses.data ?? [], 10);
+  const healthScore = ot.rate === null && !moods.length ? null : Math.round(((ot.rate ?? 0.7) * 0.6 + (moods.length ? (moods.reduce((a, b) => a + b, 0) / moods.length) / 5 : 0.7) * 0.3 + (blockers.count ? 0 : 0.1)) * 100);
+  const myDoneDays = Array.from({ length: 30 }, (_, i) => { const d = new Date(Date.now() - (29 - i) * DAY).toISOString().slice(0, 10); return (myDone.data ?? []).filter((x) => x.completed_at!.slice(0, 10) === d).length; });
+  const prioDone = priorities.filter((x: string) => x.startsWith("✓ ")).length;
+  const doneWeekMine = (myDone.data ?? []).filter((x) => x.completed_at!.slice(0, 10) >= week).length;
+  const focusScore = priorities.length || doneWeekMine ? Math.min(100, Math.round((priorities.length ? (prioDone / priorities.length) * 60 : 30) + Math.min(40, doneWeekMine * 8) - overdue.length * 5)) : null;
+  const fmtDay = (d: string) => new Date(d + "T12:00:00Z").toLocaleDateString(locale, { day: "numeric", month: "short", timeZone: "UTC" });
+  const home: HomeData = {
+    name: me.full_name.split(" ")[0],
+    weekLabel: `${fmtDay(week)} – ${fmtDay(new Date(Date.parse(week) + 6 * DAY).toISOString().slice(0, 10))}`,
+    canLogSale: canLogSales,
+    sales: { week: moneyDays.reduce((a, b) => a + b, 0), count: ws.length, rows },
+    tasks: { thisWeek: thisW, lastWeek: lastW, done: thisW[todayIdx] ?? 0, delta: (thisW[todayIdx] ?? 0) - (lastW[todayIdx] ?? 0) },
+    money: { days: moneyDays, week: moneyDays.reduce((a, b) => a + b, 0) },
+    goal: { revenue: all.revenue, goal: GOAL.revenue, pct: revPct, daysLeft: p.daysLeft, nextCampAt: nextCamp ? nextCamp.amount / GOAL.revenue : null,
+            teams: groups.map((g) => ({ slug: g.slug, color: g.color, label: tg(g.slug), mine: g.id === me.group_id })) },
+    health: { score: healthScore, series: [wk.map((x) => x.revenue), wk.map((x) => Math.max(0, x.profit)), wk.map((_, i) => i + 1)], onTime: ot.rate, blockers: blockers.count ?? 0, mood: moods.length ? moods.reduce((a, b) => a + b, 0) / moods.length : null },
+    focus: { score: focusScore, bars: myDoneDays, dueToday: dueToday.length, late: overdue.length, doneWeek: doneWeekMine },
+  };
   const reportIsFresh = report.data && report.data.week_start === week;
 
-  const actions = [
-    { href: "/board", icon: Plus, label: t("actions.task") },
-    { href: "/meetings", icon: Mic, label: t("actions.record") },
-    { href: "/lab", icon: Lightbulb, label: t("actions.idea") },
-    { href: "/camp?tab=docs", icon: FileText, label: t("actions.doc") },
-    ...(canLogSales ? [{ href: "/g/finance?tab=books", icon: Receipt, label: t("actions.sale") }] : []),
-  ];
 
   return (
     <div className="space-y-5">
       <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads"]} />
-      <PageHero
-        section={{ label: new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/Madrid" }), icon: <Sun size={16} /> }}
-        title={t(`greeting.${greet}`, { name: me.full_name.split(" ")[0] })}
-        subtitle={th("today.subtitle")}
-        visualTitle={th("climbTitle")}
-        lines={[
-          ...(overdue.length ? [{ text: th("today.late", { count: overdue.length }), tone: "bad" as const, href: "/my-tasks" }] : []),
-          ...(dueToday.length ? [{ text: th("today.dueToday", { count: dueToday.length }), tone: "warn" as const, href: "/my-tasks" }] : []),
-          ...(nextAgenda ? [{ text: th("today.next", { time: nextAgenda.start_time?.slice(0, 5) ?? "", title: nextAgenda.title }), tone: "info" as const, href: "/camp?tab=agenda" }] : []),
-          ...(priorities.length ? [{ text: th("today.priority", { title: priorities.find((x: string) => !x.startsWith("✓ ")) ?? priorities[0] }), tone: "info" as const, href: "/camp" }] : []),
-          ...(!overdue.length && !dueToday.length ? [{ text: t("nothingDue"), tone: "ok" as const }] : []),
-        ]}
-        stats={[
-          { label: th("today.revenue"), value: all.revenue, kind: "eur" },
-          { label: th("today.profit"), value: Math.max(0, all.profit), kind: "eur" },
-          { label: t("perWeekNeeded"), value: p.revenuePerWeekNeeded, kind: "eur" },
-        ]}
-        actions={actions.map((a, i) => ({ label: a.label, href: a.href, icon: <a.icon size={15} />, primary: i === 0 }))}
-        corner={<AskButton />}
-        aside={<div className="flex flex-wrap items-center justify-center gap-3"><span className="text-sm text-muted tabular">{nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - all.revenue, locale), n: nextCamp.n }) : t("summitReached")} · {t("daysLeft", { count: p.daysLeft })}</span></div>}
-        visual={
-          <MountainLazy className="size-full" progress={revPct} nextCampAt={nextCamp ? nextCamp.amount / GOAL.revenue : null}
-                        ariaLabel={t("mountainLabel", { pct: pct(revPct, locale) })}
-                        labels={{ summit: t("summit", { amount: eur(GOAL.revenue, locale) }), here: all.revenue > 0 ? eur(all.revenue, locale) : null,
-                                  nextCamp: nextCamp ? t("camp", { n: nextCamp.n, amount: eur(nextCamp.amount, locale) }) : null }} />
-        }
-      />
+      <HomeDashboard d={home} />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <section className="panel p-5">
@@ -169,7 +173,7 @@ export default async function TodayPage() {
         </div>
       </div>
 
-      {reportIsFresh && <ReportCard report={report.data!.data as WeeklyReport} />}
+      {reportIsFresh && <div id="report" className="scroll-mt-20"><ReportCard report={report.data!.data as WeeklyReport} /></div>}
 
     </div>
   );

@@ -1,0 +1,269 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, BarChart3, ArrowUp } from "lucide-react";
+import { MountainLazy } from "@/components/summit/mountain-lazy";
+import { GroupIcon } from "@/components/group-icon";
+import { NumberTicker } from "@/components/ui/number-ticker";
+import { eur } from "@/lib/format";
+
+export type HomeData = {
+  name: string;
+  weekLabel: string;
+  canLogSale: boolean;
+  sales: { week: number; count: number; rows: { label: string; days: number[] }[] };
+  tasks: { thisWeek: number[]; lastWeek: number[]; done: number; delta: number };
+  money: { days: number[]; week: number };
+  goal: { revenue: number; goal: number; pct: number; daysLeft: number; nextCampAt: number | null; teams: { slug: string; color: string; label: string; mine: boolean }[] };
+  health: { score: number | null; series: number[][]; onTime: number | null; blockers: number; mood: number | null };
+  focus: { score: number | null; bars: number[]; dueToday: number; late: number; doneWeek: number };
+};
+
+/** One glass card with the round icon chip and a "Last 7 days" style note — the building block of Home. */
+function Card({ icon, title, note, children, className = "" }: { icon: React.ReactNode; title: string; note?: string; children: React.ReactNode; className?: string }) {
+  return (
+    <section className={`panel flex min-w-0 flex-col p-4 sm:p-5 ${className}`}>
+      <header className="flex items-start justify-between gap-2">
+        <h2 className="flex items-center gap-3 text-[17px] font-medium">
+          <span aria-hidden className="grid size-11 place-items-center rounded-2xl text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.35)]" style={{ background: "linear-gradient(145deg, #3a3a40, #1c1c20)" }}>{icon}</span>
+          {title}
+        </h2>
+        {note && <span className="text-xs text-muted">{note}</span>}
+      </header>
+      {children}
+    </section>
+  );
+}
+
+/** Days of the week in the viewer's language (Monday first), one letter or short. */
+function useWeekdays(style: "narrow" | "short" = "narrow") {
+  const locale = useLocale();
+  return useMemo(() => Array.from({ length: 7 }, (_, i) => new Date(Date.UTC(2024, 0, 1 + i)).toLocaleDateString(locale, { weekday: style, timeZone: "UTC" })), [locale, style]);
+}
+
+/** Sales by channel: orange pills on a day grid (like the activity strip). */
+function ChannelStrip({ rows }: { rows: { label: string; days: number[] }[] }) {
+  const days = useWeekdays();
+  const max = Math.max(1, ...rows.flatMap((r) => r.days));
+  return (
+    <div className="mt-4 grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2.5 text-[11px] text-muted">
+      {rows.map((r) => (
+        <div key={r.label} className="contents">
+          <span className="text-right">{r.label}</span>
+          <div className="grid h-4 grid-cols-7 items-center gap-1">
+            {r.days.map((v, i) => <span key={i} title={`${days[i]}: ${v}`} className="mx-auto h-4 rounded-[4px] bg-[#ff7a2e]" style={{ width: v ? `${30 + (v / max) * 70}%` : 0, opacity: v ? 0.55 + (v / max) * 0.45 : 0 }} />)}
+          </div>
+        </div>
+      ))}
+      <span />
+      <div className="grid grid-cols-7 text-center">{days.map((d, i) => <span key={i}>{d}</span>)}</div>
+    </div>
+  );
+}
+
+/** Two step-lines: tasks finished this week (orange) vs last week (lime). */
+function StepLines({ a, b }: { a: number[]; b: number[] }) {
+  const days = useWeekdays();
+  const max = Math.max(4, ...a, ...b);
+  const W = 220, H = 92;
+  const path = (v: number[]) => v.map((y, i) => { const x = (i / 6) * W, yy = H - (y / max) * H; return i ? `H ${x} V ${yy}` : `M 0 ${yy}`; }).join(" ");
+  return (
+    <div className="mt-3 flex gap-2">
+      <div className="flex flex-col justify-between py-0.5 text-[10px] text-muted">{[max, Math.round(max / 2), 0].map((v) => <span key={v}>{v}</span>)}</div>
+      <div className="flex-1">
+        <svg viewBox={`0 0 ${W} ${H}`} className="h-24 w-full overflow-visible" preserveAspectRatio="none" aria-hidden>
+          {[0, 0.5, 1].map((f) => <line key={f} x1="0" x2={W} y1={H * f} y2={H * f} stroke="var(--grid)" />)}
+          <path d={path(b)} fill="none" stroke="#c8e86b" strokeWidth="2" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+          <path d={path(a)} fill="none" stroke="#ffb02e" strokeWidth="2.5" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+        </svg>
+        <div className="mt-1 grid grid-cols-7 text-center text-[10px] text-muted">{days.map((d, i) => <span key={i}>{d}</span>)}</div>
+      </div>
+    </div>
+  );
+}
+
+/** Money per day as stacked yellow blocks (like the heart-rate columns). */
+function BlockColumns({ values }: { values: number[] }) {
+  const days = useWeekdays();
+  const max = Math.max(1, ...values);
+  return (
+    <div className="mt-3 grid grid-cols-7 gap-1.5">
+      {values.map((v, i) => {
+        const filled = v ? Math.max(1, Math.round((v / max) * 6)) : 0;
+        return (
+          <div key={i} className="flex flex-col items-center gap-1">
+            <div className="flex h-24 w-full flex-col-reverse gap-[3px]" title={`${days[i]}: ${v}`}>
+              {Array.from({ length: 6 }, (_, k) => <span key={k} className={`h-full rounded-[4px] ${k < filled ? "bg-[#ffc23d] shadow-[0_0_10px_rgb(255_194_61/0.35)]" : "bg-surface-2"}`} />)}
+            </div>
+            <span className="text-[10px] text-muted">{days[i]}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Three soft waves built from real weekly series (revenue, profit, tasks) — the "wellness" look. */
+function Waves({ series }: { series: number[][] }) {
+  const W = 320, H = 70;
+  const colors = ["#ff7a2e", "#ffc23d", "#f5f5f7"];
+  const line = (s: number[]) => {
+    const max = Math.max(1, ...s), n = Math.max(2, s.length);
+    const pts = s.map((v, i) => [(i / (n - 1)) * W, H / 2 - ((v / max) - 0.5) * H * 0.8] as const);
+    return pts.reduce((d, [x, y], i) => {
+      if (!i) return `M ${x} ${y}`;
+      const [px, py] = pts[i - 1], cx = (px + x) / 2;
+      return `${d} C ${cx} ${py}, ${cx} ${y}, ${x} ${y}`;
+    }, "");
+  };
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="mt-3 h-20 w-full" preserveAspectRatio="none" aria-hidden>
+      {series.map((s, i) => <path key={i} d={line(s.length > 1 ? s : [0, 0])} fill="none" stroke={colors[i]} strokeOpacity={i === 2 ? 0.45 : 0.9} strokeWidth="2" vectorEffect="non-scaling-stroke" />)}
+    </svg>
+  );
+}
+
+/** A dense waveform of daily activity with the middle (today-ish) highlighted. */
+function Waveform({ bars }: { bars: number[] }) {
+  const max = Math.max(1, ...bars);
+  const mid = bars.length - 1;
+  return (
+    <div className="mt-3 flex h-20 items-center gap-[3px]" aria-hidden>
+      {bars.map((v, i) => (
+        <span key={i} className="flex-1 rounded-full" style={{ height: `${12 + (v / max) * 88}%`, background: i === mid ? "#ff6a1a" : "var(--muted)", opacity: i === mid ? 1 : 0.35 + (v / max) * 0.4 }} />
+      ))}
+    </div>
+  );
+}
+
+/** Speedometer-style gauge: tick marks around a half circle, filled up to the goal %. */
+function Gauge({ pct, label }: { pct: number; label: string }) {
+  const ticks = 46;
+  return (
+    <div className="relative mx-auto w-full max-w-[260px]">
+      <svg viewBox="0 0 200 112" className="w-full" aria-hidden>
+        {Array.from({ length: ticks }, (_, i) => {
+          const f = i / (ticks - 1), a = Math.PI * (1 - f);
+          const r1 = 84, r2 = i % 5 === 0 ? 70 : 75;
+          const on = f <= pct;
+          return <line key={i} x1={100 + r1 * Math.cos(a)} y1={100 - r1 * Math.sin(a)} x2={100 + r2 * Math.cos(a)} y2={100 - r2 * Math.sin(a)}
+                       stroke={on ? "#ffffff" : "rgb(255 255 255 / 0.28)"} strokeWidth={i % 5 === 0 ? 3 : 2} strokeLinecap="round" />;
+        })}
+        {(() => { const a = Math.PI * (1 - pct); return <line x1="100" y1="100" x2={100 + 60 * Math.cos(a)} y2={100 - 60 * Math.sin(a)} stroke="#ff6a1a" strokeWidth="3" strokeLinecap="round" />; })()}
+        <circle cx="100" cy="100" r="5" fill="#ff6a1a" />
+      </svg>
+      <p className="absolute inset-x-0 top-[34%] text-center text-[11px] text-white/75">{label}</p>
+      <p className="readout absolute inset-x-0 top-[50%] text-center text-4xl text-white">{Math.round(pct * 100)}%</p>
+    </div>
+  );
+}
+
+/** Home: the Bilbao-at-night page — ask box on top, glass cards at the bottom (from the "home page example"). */
+export function HomeDashboard({ d }: { d: HomeData }) {
+  const t = useTranslations("home");
+  const locale = useLocale();
+  const [q, setQ] = useState("");
+  const ask = (e: React.FormEvent) => { e.preventDefault(); if (q.trim()) { window.dispatchEvent(new CustomEvent("emet:ask", { detail: q.trim() })); setQ(""); } };
+
+  return (
+    <div className="fade-in flex min-h-[calc(100dvh-5rem)] flex-col">
+      {/* Ask box — "Hey, need help? / Just ask me anything" */}
+      <form id="ask" onSubmit={ask} className="mx-auto w-full max-w-2xl pt-2 text-center sm:pt-6">
+        <p className="text-lg font-medium text-white sm:text-xl">{t("needHelp", { name: d.name })} <span aria-hidden>🙋</span></p>
+        <label htmlFor="home-ask" className="sr-only">{t("askLabel")}</label>
+        <div className="relative mt-1">
+          <input id="home-ask" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("askPlaceholder")} autoComplete="off"
+                 className="w-full bg-transparent text-center text-[clamp(1.6rem,4vw,2.6rem)] font-light tracking-tight text-white caret-[#ff6a1a] outline-none placeholder:text-white/70 focus-visible:outline-none" />
+          {q && <button aria-label={t("askSend")} className="absolute top-1/2 right-0 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-brand text-white"><ArrowUp size={18} /></button>}
+        </div>
+      </form>
+
+      <div className="min-h-[18vh] flex-1" />
+
+      {/* Glass pill controls */}
+      <div className="-mx-3 mb-3 flex gap-2 overflow-x-auto px-3 pb-1 [scrollbar-width:none] sm:mx-0 sm:justify-end sm:px-0">
+        <button onClick={() => window.dispatchEvent(new Event("emet:palette"))} aria-label={t("search")} className="glass-pill size-11 shrink-0 justify-center text-white"><Search size={17} /></button>
+        <Link href="/board" aria-label={t("newTask")} className="glass-pill size-11 shrink-0 justify-center text-white"><PenLine size={17} /></Link>
+        <span className="glass-pill h-11 shrink-0 px-4 text-sm text-white"><CalendarDays size={16} /> {d.weekLabel}</span>
+        {d.canLogSale && <Link href="/g/finance?tab=books" className="glass-pill h-11 shrink-0 px-4 text-sm text-white"><Plus size={16} /> {t("logSale")}</Link>}
+        <Link href="/today#report" className="glass-pill h-11 shrink-0 px-4 text-sm text-white"><FileText size={16} /> {t("report")}</Link>
+      </div>
+
+      {/* Glass cards */}
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,3fr)_minmax(260px,1fr)] lg:gap-4">
+        <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+          <Card icon={<Receipt size={19} />} title={t("sales")} note={t("last7")}>
+            <ChannelStrip rows={d.sales.rows} />
+            <p className="readout mt-3 text-3xl"><NumberTicker value={Math.round(d.sales.week)} locale={locale} options={{ style: "currency", currency: "EUR", maximumFractionDigits: 0 }} /></p>
+            <p className="text-xs text-muted">{t("salesCount", { count: d.sales.count })}</p>
+          </Card>
+          <Card icon={<ListChecks size={19} />} title={t("tasks")} note={t("last7")}>
+            <StepLines a={d.tasks.thisWeek} b={d.tasks.lastWeek} />
+            <p className="readout mt-2 text-3xl">{d.tasks.done} <span className="text-base font-normal text-muted">{t("done")}</span></p>
+            <p className="text-xs text-muted">{d.tasks.delta >= 0 ? "+" : ""}{d.tasks.delta} {t("vsLastWeek")}</p>
+          </Card>
+          <Card icon={<Coins size={19} />} title={t("money")} note={t("last7")} className="sm:col-span-2 lg:col-span-1">
+            <BlockColumns values={d.money.days} />
+            <p className="readout mt-2 text-3xl">{eur(d.money.week, locale)}</p>
+            <p className="flex items-center gap-1 text-xs text-muted"><span className="text-[#ff7a2e]">●</span> {t("moneyNote")}</p>
+          </Card>
+
+          <section className="panel p-4 sm:col-span-2 sm:p-5 lg:col-span-1 lg:[grid-column:span_1]">
+            <h2 className="text-[15px] font-medium">{t("health")}</h2>
+            <div className="mt-1 text-center">
+              <p className="readout text-3xl text-[#ff7a2e]">{d.health.score ?? "—"}</p>
+              <p className="text-sm font-medium">{d.health.score === null ? t("noData") : d.health.score >= 75 ? t("good") : d.health.score >= 50 ? t("ok") : t("needsCare")}</p>
+            </div>
+            <Waves series={d.health.series} />
+            <dl className="mt-2 grid grid-cols-3 text-xs">
+              <div><dt className="text-muted">{t("onTime")}</dt><dd className="readout text-lg">{d.health.onTime === null ? "—" : `${Math.round(d.health.onTime * 100)}%`}</dd></div>
+              <div className="text-center"><HeartPulse size={18} className="mx-auto text-muted" /><dd className="mt-0.5 text-muted">{t("insights")}</dd></div>
+              <div className="text-right"><dt className="text-muted">{t("blockers")}</dt><dd className="readout text-lg">{d.health.blockers}</dd></div>
+            </dl>
+          </section>
+
+          <section className="panel p-4 sm:col-span-2 sm:p-5 lg:col-span-2">
+            <h2 className="text-[15px] font-medium">{t("yourWeek")}</h2>
+            <div className="mt-1 text-center">
+              <p className="readout text-3xl text-[#ff7a2e]">{d.focus.score ?? "—"}</p>
+              <p className="text-sm font-medium">{t("focusScore")}</p>
+              <p className="text-xs text-muted">{t("doneThisWeek", { count: d.focus.doneWeek })}</p>
+            </div>
+            <Waveform bars={d.focus.bars} />
+            <dl className="mt-2 grid grid-cols-3 text-xs">
+              <div><dt className="text-muted">{t("dueToday")}</dt><dd className="readout text-lg">{d.focus.dueToday}</dd></div>
+              <div className="text-center"><BarChart3 size={18} className="mx-auto text-muted" /><dd className="mt-0.5 text-muted">{t("insights")}</dd></div>
+              <div className="text-right"><dt className="text-muted">{t("late")}</dt><dd className={`readout text-lg ${d.focus.late ? "text-bad-text" : ""}`}>{d.focus.late}</dd></div>
+            </dl>
+          </section>
+        </div>
+
+        {/* Goal: the 3D mountain with coins behind a speed-style gauge, teams on top */}
+        <section className="panel relative isolate min-h-[420px] overflow-hidden p-4 sm:p-5">
+          <div className="absolute inset-0 -z-10 opacity-90">
+            <MountainLazy className="size-full" progress={d.goal.pct} nextCampAt={d.goal.nextCampAt} ariaLabel={t("goalAria", { pct: Math.round(d.goal.pct * 100) })} labels={{ summit: "" }} />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-black/10 to-black/80" />
+          </div>
+          <div className="flex justify-center gap-1.5">
+            {d.goal.teams.map((g) => (
+              <Link key={g.slug} href={`/g/${g.slug}`} title={g.label} aria-label={g.label}
+                    className={`glass-pill grid place-items-center text-white transition hover:brightness-125 ${g.mine ? "size-12 ring-2 ring-white/60" : "size-10"}`}>
+                <GroupIcon slug={g.slug} size={g.mine ? 19 : 16} />
+              </Link>
+            ))}
+          </div>
+          <div className="pointer-events-none mt-10">
+            <Gauge pct={d.goal.pct} label={t("toSummit")} />
+          </div>
+          <div className="pointer-events-none absolute inset-x-4 bottom-5 text-center">
+            <p className="flex items-center justify-center gap-1.5 text-lg font-medium text-white"><Target size={17} /> {eur(d.goal.revenue, locale)} <span className="text-white/60">/ {eur(d.goal.goal, locale)}</span></p>
+            <p className="mt-0.5 text-xs text-white/70">{t("daysLeft", { count: d.goal.daysLeft })}</p>
+          </div>
+        </section>
+      </div>
+      <p className="mt-3 text-right text-[10px] text-white/40">{t("photoCredit")}</p>
+    </div>
+  );
+}

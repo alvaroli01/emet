@@ -1,74 +1,85 @@
 @import "tailwindcss";
 
-/* Magic UI / shadcn "dark:" classes follow the chosen theme (light is the default) */
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+/* Magic UI / shadcn "dark:" classes: dark is the default; light only when chosen */
+@custom-variant dark (&:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *));
 
-/* Theme tokens — a calm, bright workspace (inspired by Zyro's dashboard): cool off-white canvas, white cards with a
-   quiet edge, ink text, one indigo for actions and cyan for "live". Dark is opt-in (avatar menu).
+/* Theme tokens — "emet glass": a dark workspace of liquid-glass panels (translucent, blurred, with a light top
+   edge) over a deep night background, warm orange for actions (like the city lights in Bilbao at night) and a
+   colour per team. "Light glass" (frosted white on warm grey) is the opt-in light theme and Base camp's look.
    Status colours are always paired with an icon and a word, never colour alone. */
 :root {
   --foreground: var(--text); /* used by Magic UI ripple */
-  --bg: #f6f7fb;
-  --surface: #ffffff;
-  --surface-2: #f0f2f8;
-  --border: #e2e6ef;
-  --text: #121729;
-  --muted: #5c6580;
-  --brand: #3949f5;
+  --bg: #08080a;
+  --surface: rgb(28 28 32 / 0.62);
+  --surface-2: rgb(255 255 255 / 0.06);
+  --solid: #141417;
+  --border: rgb(255 255 255 / 0.09);
+  --text: #f5f5f7;
+  --muted: rgb(235 235 245 / 0.58);
+  --brand: #ff6a1a;
   --brand-contrast: #ffffff;
-  --brand-soft: #eef0ff;
-  --link: #2f3fe0;
-  --live: #0fa9d6;
-  --contour: #c8cefd;
-  --terrain: #ffffff;
-  --climbed: #3949f5;
-  --trail: #3949f5;
-  --ok: #10b981;
-  --warn: #f59e0b;
-  --bad: #ef4444;
-  --ok-text: #047857;
-  --warn-text: #92400e;
-  --bad-text: #b91c1c;
-  --series-1: #3949f5;
-  --series-2: #18c5f2;
-  --series-3: #10b981;
-  --grid: #edf0f6;
-  --shadow: 0 1px 2px rgb(18 23 41 / 0.04), 0 4px 16px -6px rgb(18 23 41 / 0.07);
-  --shadow-lift: 0 2px 4px rgb(18 23 41 / 0.04), 0 22px 44px -18px rgb(57 73 245 / 0.28);
-  --panel-edge: #e6e9f2;
-  --io-gradient: linear-gradient(120deg, #2b39e0 0%, #3949f5 45%, #18c5f2 100%);
-  color-scheme: light;
-}
-:root[data-theme="dark"] {
-  --bg: #07080c;
-  --surface: #10121a;
-  --surface-2: #181b26;
-  --border: #262a38;
-  --text: #f3f4f8;
-  --muted: #a1a7ba;
-  --brand: #5b69ff;
-  --brand-contrast: #ffffff;
-  --brand-soft: #1a1f45;
-  --link: #9aa5ff;
-  --live: #3dd0f5;
-  --contour: #2c3256;
-  --terrain: #141722;
-  --climbed: #8f99ff;
-  --trail: #7c88ff;
+  --brand-soft: rgb(255 106 26 / 0.14);
+  --link: #ff9a5c;
+  --live: #3ddc97;
+  --glass-hi: rgb(255 255 255 / 0.14);
+  --glass-edge: rgb(255 255 255 / 0.08);
+  --glass-blur: 22px;
+  --contour: #4a3a30;
+  --terrain: #1a1714;
+  --climbed: #ff8a3d;
+  --trail: #ff6a1a;
   --ok: #34d399;
   --warn: #fbbf24;
   --bad: #f87171;
   --ok-text: #6ee7b7;
   --warn-text: #fcd34d;
   --bad-text: #fca5a5;
-  --series-1: #8f99ff;
-  --series-2: #3dd0f5;
-  --series-3: #34d399;
-  --grid: #1d2030;
-  --shadow: 0 0 0 1px rgb(255 255 255 / 0.04);
-  --shadow-lift: 0 0 0 1px rgb(143 153 255 / 0.35), 0 20px 50px -20px rgb(57 73 245 / 0.5);
-  --panel-edge: #232736;
+  --series-1: #ff7a2e;
+  --series-2: #f5f5f7;
+  --series-3: #fbbf24;
+  --grid: rgb(255 255 255 / 0.06);
+  --shadow: 0 18px 40px -22px rgb(0 0 0 / 0.75);
+  --shadow-lift: 0 24px 50px -20px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(255 106 26 / 0.35);
+  --panel-edge: rgb(255 255 255 / 0.08);
+  --io-gradient: linear-gradient(135deg, #ff8a3d 0%, #ff6a1a 50%, #e8430a 100%);
+  --page-glow: radial-gradient(1200px 700px at 12% -10%, rgb(255 106 26 / 0.16), transparent 60%), radial-gradient(1000px 700px at 100% 110%, rgb(79 140 255 / 0.10), transparent 60%), #08080a;
   color-scheme: dark;
+}
+/* Light glass: frosted white panels on warm grey (opt-in theme, and always used by Base camp) */
+:root[data-theme="light"], .light-glass {
+  --bg: #d8d8d3;
+  --surface: rgb(255 255 255 / 0.55);
+  --surface-2: rgb(255 255 255 / 0.55);
+  --solid: #f2f2ef;
+  --border: rgb(20 20 30 / 0.08);
+  --text: #1c1c22;
+  --muted: rgb(28 28 34 / 0.6);
+  --brand: #f26a1b;
+  --brand-contrast: #ffffff;
+  --brand-soft: rgb(242 106 27 / 0.14);
+  --link: #c4520f;
+  --live: #10b981;
+  --glass-hi: rgb(255 255 255 / 0.9);
+  --glass-edge: rgb(255 255 255 / 0.6);
+  --contour: #c9c3b6;
+  --terrain: #f4f2ec;
+  --climbed: #f26a1b;
+  --trail: #2f5bea;
+  --ok: #10b981;
+  --warn: #f59e0b;
+  --bad: #ef4444;
+  --ok-text: #047857;
+  --warn-text: #92400e;
+  --bad-text: #b91c1c;
+  --series-1: #f26a1b;
+  --series-2: #2f5bea;
+  --series-3: #f59e0b;
+  --grid: rgb(20 20 30 / 0.07);
+  --shadow: 0 14px 34px -20px rgb(40 40 30 / 0.35);
+  --shadow-lift: 0 18px 40px -18px rgb(40 40 30 / 0.4), 0 0 0 1px rgb(242 106 27 / 0.35);
+  --panel-edge: rgb(255 255 255 / 0.7);
+  --page-glow: radial-gradient(900px 600px at 0% 0%, rgb(255 255 255 / 0.55), transparent 60%), #d8d8d3;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -110,9 +121,10 @@
   --color-border: var(--border);
   --color-input: var(--border);
   --color-ring: var(--climbed);
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --font-display: var(--font-display-face), var(--font-inter), system-ui, sans-serif;
-  --font-mono: var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-display: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-solid: var(--solid);
   --color-brand-soft: var(--brand-soft);
   --color-live: var(--live);
   --color-link: var(--link);
@@ -139,8 +151,9 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-inter), system-ui, sans-serif;
-  font-feature-settings: "cv11", "ss01";
+  font-family: var(--font-geist), system-ui, sans-serif;
+  background: var(--page-glow);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -149,10 +162,10 @@ html { touch-action: manipulation; -webkit-text-size-adjust: 100%; -webkit-tap-h
 :focus-visible { outline: 2px solid var(--climbed); outline-offset: 2px; border-radius: 6px; }
 .tabular { font-variant-numeric: tabular-nums; }
 /* Display numerals: tight, heavy, tabular so they don't jump while counting */
-.readout { font-family: var(--font-display-face), var(--font-inter), sans-serif; font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.readout { font-weight: 500; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
 /* I/O display headline: big, medium weight, very tight */
-.display { font-family: var(--font-display-face), var(--font-inter), sans-serif; font-weight: 600; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance; }
-h1, h2, h3 { font-family: var(--font-display-face), var(--font-inter), sans-serif; letter-spacing: -0.02em; }
+.display { font-weight: 500; letter-spacing: -0.035em; line-height: 1.06; text-wrap: balance; }
+h1, h2, h3 { letter-spacing: -0.02em; }
 p, li { text-wrap: pretty; }
 /* The I/O four-colour gradient as text fill */
 .io-text { background: var(--io-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -162,13 +175,23 @@ h1, h2, h3, p, label, li, td { overflow-wrap: break-word; hyphens: auto; }
 button { white-space: nowrap; }
 
 @layer components {
-  /* Cards: white, quiet edge, soft shadow; they lift with an indigo glow when they are links */
-  .panel {
-    @apply rounded-[18px] bg-surface;
-    box-shadow: var(--shadow), inset 0 0 0 1px var(--panel-edge);
+  /* Liquid glass: translucent, blurred, with a bright top edge — every card and menu is made of it */
+  .glass, .panel {
+    background: var(--surface);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    box-shadow: inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-edge), var(--shadow);
+  }
+  .panel { @apply rounded-[22px]; }
+  .glass-pill {
+    @apply inline-flex items-center gap-2 rounded-full;
+    background: var(--surface-2);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-edge);
   }
   .panel-lift { transition: box-shadow 180ms cubic-bezier(.23,1,.32,1), transform 180ms cubic-bezier(.23,1,.32,1); }
-  .panel-lift:hover { box-shadow: var(--shadow-lift), inset 0 0 0 1px color-mix(in srgb, var(--brand) 40%, var(--panel-edge)); transform: translateY(-1px); }
+  .panel-lift:hover { box-shadow: inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-edge), var(--shadow-lift); transform: translateY(-1px); }
   .panel-lift:active { transform: scale(0.99); }
   /* Soft dot grid (replaces the old contour lines wherever they were used) */
   .contours {

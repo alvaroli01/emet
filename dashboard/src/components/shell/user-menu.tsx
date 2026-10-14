@@ -29,7 +29,7 @@ export function UserMenu({ name, avatar, subtitle, profileId }: { name: string; 
         <ChevronDown size={14} className={`hidden text-muted transition-transform md:block ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
-        <div role="menu" className="absolute top-full right-0 z-40 mt-2 w-64 overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-[var(--shadow-lift)]">
+        <div role="menu" className="absolute top-full right-0 z-40 mt-2 w-64 overflow-hidden rounded-2xl border border-line bg-solid p-1.5 shadow-[var(--shadow-lift)]">
           <div className="px-3 py-2.5 md:hidden">
             <p className="truncate text-sm font-medium">{name}</p>
             <p className="truncate text-xs text-muted">{subtitle}</p>

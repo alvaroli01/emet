@@ -21,6 +21,10 @@ import { createClient } from "@/lib/supabase/server";
 import { PageHero } from "@/components/shell/page-hero";
 import { HeroTerrain, MemberOrbit } from "@/components/shell/hero-visuals";
 import { groupHero } from "@/lib/hero-data";
+import { loadFinanceDash } from "@/lib/finance-dash";
+import { loadMarketingDash } from "@/lib/marketing-dash";
+import { MarketingDashboard } from "@/components/marketing/marketing-dashboard";
+import { FinanceDashboard } from "@/components/finance/finance-dashboard";
 import { shortDate, todayISO } from "@/lib/format";
 import { GroupIcon } from "@/components/group-icon";
 
@@ -71,6 +75,8 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   const toolTabs = Tools ? await Tools(props) : [];
   const ta = await getTranslations("assist");
   const { data: aiKey } = await (await createClient()).from("ai_keys").select("last4").maybeSingle();
+  const financeDash = slug === "finance" ? await loadFinanceDash(todayISO()) : null;
+  const marketingDash = slug === "marketing" ? await loadMarketingDash() : null;
   const allTools = [
     { id: "board", group: "work", label: t("board"), node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
     ...toolTabs,
@@ -78,6 +84,14 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   ];
   const hero = await groupHero(slug, session.me.id, group.id, todayISO());
   const firstName = session.me.full_name.split(" ")[0];
+  const assistantNode = (
+          <SectionAssistant section={slug} greeting={ta("greeting", { name: firstName, section: t(`names.${slug}`) })} helper={ta("helper")} groupId={group.id} boardId={board.board.id} listId={[...board.lists].sort((a, b) => a.position - b.position)[0]?.id ?? null}
+                            meId={session.me.id} hasKey={!!aiKey} tools={allTools.map((x) => ({ id: x.id, label: x.label }))}
+                            starters={[
+                              ...hero.needs.slice(0, 2).map((n) => ({ label: th(`needs.${n.key}`, { count: n.count, ...(n.values ?? {}) }), tab: n.tab })),
+                              ...(STARTERS[slug] ?? []).map((k) => ({ label: ta(`starters.${k}`), prompt: ta(`starterPrompts.${k}`) })),
+                            ].slice(0, 5)} />
+  );
   const heroKey = ["finance", "marketing", "customer", "communications", "team-leader"].includes(slug) ? slug : "default";
 
   return (
@@ -86,7 +100,15 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         "complaints", "content_posts", "campaigns", "design_requests", "experiments", "follower_snapshots",
         "decisions", "morale_checks", "meeting_notes", "outreach", "profiles"]} />
 
-      <PageHero
+      {slug === "marketing" && marketingDash ? (
+        <MarketingDashboard d={marketingDash} assistant={assistantNode} />
+      ) : slug === "finance" && financeDash ? (
+        <>
+          <FinanceDashboard d={financeDash} canEdit={editable} />
+          {assistantNode}
+        </>
+      ) : (
+        <PageHero
         section={{ label: th("teamLabel"), icon: <GroupIcon slug={slug} size={14} />, color: group.color }}
         title={t(`names.${slug}`)}
         subtitle={th(`groups.${heroKey}.subtitle`)}
@@ -101,14 +123,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
           : <HeroTerrain points={hero.series.map((p) => ({ label: th("weekOf", { date: shortDate(p.label, locale) }), value: p.value }))} kind={hero.seriesKind}
                          ariaLabel={th(`series.${hero.seriesKey}`)} />}
         visualTitle={th(`series.${hero.seriesKey}`)}
-        assistant={
-          <SectionAssistant section={slug} greeting={ta("greeting", { name: firstName, section: t(`names.${slug}`) })} helper={ta("helper")} groupId={group.id} boardId={board.board.id} listId={[...board.lists].sort((a, b) => a.position - b.position)[0]?.id ?? null}
-                            meId={session.me.id} hasKey={!!aiKey} tools={allTools.map((x) => ({ id: x.id, label: x.label }))}
-                            starters={[
-                              ...hero.needs.slice(0, 2).map((n) => ({ label: th(`needs.${n.key}`, { count: n.count, ...(n.values ?? {}) }), tab: n.tab })),
-                              ...(STARTERS[slug] ?? []).map((k) => ({ label: ta(`starters.${k}`), prompt: ta(`starterPrompts.${k}`) })),
-                            ].slice(0, 5)} />
-        }
+        assistant={assistantNode}
         aside={
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex -space-x-2">
@@ -120,6 +135,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
           </div>
         }
       />
+      )}
 
       {groupKpis.length > 0 && (
         <section className="panel p-4 sm:p-5">

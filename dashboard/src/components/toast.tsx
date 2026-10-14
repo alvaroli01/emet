@@ -22,7 +22,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
            aria-live="polite">
         {toasts.map((t) => (
           <div key={t.id}
-               className="toast-in pointer-events-auto flex max-w-sm items-center gap-2 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm shadow-lg">
+               className="toast-in pointer-events-auto flex max-w-sm items-center gap-2 rounded-xl border border-line bg-solid px-4 py-2.5 text-sm shadow-lg">
             {t.kind === "ok"
               ? <CheckCircle2 size={16} className="shrink-0 text-ok-text" />
               : <XCircle size={16} className="shrink-0 text-bad-text" />}

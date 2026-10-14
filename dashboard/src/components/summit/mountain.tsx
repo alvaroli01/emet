@@ -58,8 +58,10 @@ function height(x: number, z: number) {
   return Math.max(0, (main + shoulder + ridge + rough * (0.35 + main * 0.25)) * Math.min(1, fall * 2.2));
 }
 
+/** Read a theme colour from where the mountain sits, so it matches its own card (e.g. Base camp's light glass). */
+let colorScope: Element | null = null;
 function cssColor(name: string, fallback: string) {
-  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const v = getComputedStyle(colorScope ?? document.documentElement).getPropertyValue(name).trim();
   return new THREE.Color(v || fallback);
 }
 
@@ -266,6 +268,7 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
     world.add(tent);
 
     const applyTheme = () => {
+      colorScope = host;
       uniforms.uPaper.value.copy(cssColor("--terrain", "#fbfbf8"));
       uniforms.uContour.value.copy(cssColor("--contour", "#a9845c"));
       uniforms.uClimbed.value.copy(cssColor("--climbed", "#2b6ca3"));

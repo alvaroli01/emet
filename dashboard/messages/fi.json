@@ -26,7 +26,9 @@
     "sectionTools": "Työkalut",
     "expand": "Laajenna valikko",
     "collapse": "Tiivistä valikko",
-    "mobileNav": "Päävalikko"
+    "mobileNav": "Päävalikko",
+    "askCard": "Kysy emetiltä",
+    "askCardText": "Kysymyksiä tiimistä, rahasta tai tehtävistä – vastaus tulee meidän datastamme."
   },
   "shell": {
     "noGroupYet": "Ei vielä ryhmää",
@@ -2081,14 +2083,14 @@
       "priority": "Tämän viikon prioriteetti: {title}",
       "revenue": "Tiimin liikevaihto",
       "profit": "Tiimin voitto",
-      "subtitle": "Here is what needs you today, and how close we are to our goal."
+      "subtitle": "Tässä se, mikä tarvitsee sinua tänään, ja kuinka lähellä tavoitetta olemme."
     },
     "overview": {
-      "title": "Hei {name}, tässä koko nousu",
+      "title": "Miten koko tiimillä menee",
       "blockers": "{count, plural, one {# este jarruttaa tiimiä} other {# estettä jarruttaa tiimejä}}",
       "complaints": "{count, plural, one {# asiakasongelma on auki} other {# asiakasongelmaa on auki}}",
       "pace": "Tästä eteenpäin tarvitsemme {amount} viikossa",
-      "subtitle": "Our goal: €30,000 in sales and €15,000 profit by June 2027."
+      "subtitle": "Tavoitteemme: 30 000 € myyntiä ja 15 000 € voittoa kesäkuuhun 2027 mennessä."
     },
     "camp": {
       "title": "Tervetuloa takaisin leiriisi, {name}",
@@ -2096,20 +2098,20 @@
       "setPriorities": "Aseta viikon 3 prioriteettiasi",
       "shared": "{count, plural, one {# dokumentti jaettiin sinulle} other {# dokumenttia jaettiin sinulle}}",
       "record": "Tallenna luento tai palaveri",
-      "subtitle": "Only you can see this. Plan your week, keep notes and record classes."
+      "subtitle": "Vain sinä näet tämän. Suunnittele viikkosi, pidä muistiinpanoja ja tallenna tunteja."
     },
     "board": {
-      "title": "Hei {name}, tässä kaikki, mitä yritys tekee",
+      "title": "Kaikki, mitä yritys tekee",
       "late": "{count, plural, one {# kortti on myöhässä} other {# korttia on myöhässä}}",
       "mine": "{count, plural, one {# kortti täällä on sinun} other {# korttia täällä on sinun}}",
       "none": "Mikään täällä ei ole osoitettu sinulle",
       "open": "Avoimet kortit",
       "done": "Valmis",
       "ring": "kaikista korteista valmiina",
-      "subtitle": "Each card is a job. Drag it to Done when it is finished."
+      "subtitle": "Jokainen kortti on tehtävä. Vedä se kohtaan Valmis, kun se on tehty."
     },
     "team": {
-      "title": "Hei {name}, tutustu tiimiin",
+      "title": "Kaikki emetissä",
       "people": "Ihmiset",
       "joined": "Kirjautunut",
       "noGroup": "Ei vielä ryhmää"
@@ -2123,16 +2125,16 @@
       "board": "Yleistaulu",
       "camp": "Tukikohta",
       "ring": "tehtävistäsi valmiina",
-      "subtitle": "Every job that has your name on it, from every board."
+      "subtitle": "Kaikki tehtävät, joissa on sinun nimesi, kaikilta tauluilta."
     },
     "meetings": {
-      "title": "Hei {name}, mistä puhuimme?",
+      "title": "Tallentamamme palaverit",
       "latest": "Viimeisin: {title} ({date})",
       "none": "Palavereita ei ole vielä tallennettu. Tallenna seuraava, ettei kukaan jää paitsi.",
       "processing": "{count, plural, one {# tallenteesi kirjoitetaan vielä auki} other {# tallennettasi kirjoitetaan vielä auki}}",
       "week": "Tällä viikolla",
       "total": "Kaikki tallenteet",
-      "subtitle": "Press Record in a meeting and emet writes the notes for everyone."
+      "subtitle": "Paina palaverissa Tallenna, niin emet kirjoittaa muistiinpanot kaikille."
     },
     "lab": {
       "title": "Hei {name}, mitä voisimme rakentaa?",
@@ -2144,7 +2146,7 @@
       "votes": "Äänet",
       "pitch": "Pitchaa idea",
       "scout": "Etsi asiakkaita",
-      "subtitle": "Write an idea, and emet researches it and tells you honestly if it can work."
+      "subtitle": "Kirjoita idea, niin emet tutkii sen ja kertoo rehellisesti, voiko se toimia."
     },
     "scout": {
       "title": "Hei {name}, kenelle meidän pitäisi myydä?",
@@ -2152,11 +2154,11 @@
       "strong": "{count, plural, one {# vahva liidi, johon kukaan ei ole vielä ottanut yhteyttä} other {# vahvaa liidiä, joihin kukaan ei ole vielä ottanut yhteyttä}}"
     },
     "assistTitle": "Hei {name}, mitä tehdään tänään osiossa {section}?",
-    "needsYou": "Needs you",
-    "allDoneTitle": "All done here.",
-    "teamLabel": "Team",
-    "climbTitle": "Our climb to €30,000",
-    "campVisual": "Your base camp"
+    "needsYou": "Tarvitsee sinua",
+    "allDoneTitle": "Täällä kaikki valmista.",
+    "teamLabel": "Tiimi",
+    "climbTitle": "Nousumme 30 000 euroon",
+    "campVisual": "Perusleirisi"
   },
   "assist": {
     "label": "Kysy emetiltä tästä osiosta",
@@ -2228,7 +2230,154 @@
       "recordDecision": "Kirjaa päätös, jonka teimme",
       "whatsLate": "Mikä tiimissä on myöhässä ja ketä minun kannattaa muistuttaa?"
     },
-    "greeting": "Hey {name}, what are we doing in {section} today?",
-    "helper": "Ask a question or tell me what you did. I prepare it, you tap Add."
+    "greeting": "Hei {name}, mitä tehdään tänään kohdassa {section}?",
+    "helper": "Kysy jotain tai kerro, mitä teit. Minä valmistelen, sinä painat Lisää."
+  },
+  "home": {
+    "needHelp": "Hei {name}, tarvitsetko apua?",
+    "askLabel": "Kysy emetiltä mitä vain",
+    "askPlaceholder": "Kysy minulta mitä vain",
+    "askSend": "Kysy",
+    "search": "Haku",
+    "newTask": "Uusi tehtävä",
+    "logSale": "Kirjaa myynti",
+    "report": "Viikkoraportti",
+    "last7": "Tämä viikko",
+    "sales": "Myynti",
+    "salesCount": "{count, plural, one {# myynti tällä viikolla} other {# myyntiä tällä viikolla}}",
+    "tasks": "Tehtävät",
+    "done": "valmiina",
+    "vsLastWeek": "vs. viime viikko",
+    "money": "Sisään tullut raha",
+    "moneyNote": "Sisään tulevat eurot päivässä",
+    "health": "Tiimin kunto",
+    "good": "Hyvässä kunnossa",
+    "ok": "Ok",
+    "needsCare": "Kaipaa huolenpitoa",
+    "noData": "Dataa ei vielä riittävästi",
+    "onTime": "Ajallaan",
+    "insights": "Oivallukset",
+    "blockers": "Esteet",
+    "yourWeek": "Viikkosi",
+    "focusScore": "Keskittymispisteet",
+    "doneThisWeek": "{count, plural, one {# tehtävä tehty tällä viikolla} other {# tehtävää tehty tällä viikolla}}",
+    "dueToday": "Erääntyy tänään",
+    "late": "Myöhässä",
+    "toSummit": "Huipulle",
+    "goalAria": "Nousumme: {pct} % 30 000 euron tavoitteesta",
+    "daysLeft": "{count, plural, one {# päivä jäljellä} other {# päivää jäljellä}} · kesäkuu 2027",
+    "photoCredit": "Bilbao yöllä — kuva: Adrian Villa / Unsplash",
+    "channels": {
+      "stall": "Kojuni",
+      "online": "Verkossa",
+      "other": "Muu"
+    }
+  },
+  "financeDash": {
+    "totalRevenue": "Kokonaistulot",
+    "thisMonthIn": "Tässä kuussa sisään",
+    "thisMonthOut": "Tässä kuussa ulos",
+    "logSale": "Kirjaa myynti",
+    "addExpense": "Lisää kulu",
+    "closeMonth": "Sulje kuukausi",
+    "methods": "Raha maksutavoittain",
+    "fromLastMonth": "vs. viime kuu",
+    "addProject": "Lisää projekti seurataksesi sen rahaa",
+    "moneyOverTime": "Sisään ja ulos menevä raha (7 päivän summat)",
+    "last30": "viimeiset 30 päivää",
+    "in": "Sisään",
+    "out": "Ulos",
+    "spentThisWeek": "Käytetty tällä viikolla",
+    "seeAll": "Näytä kaikki",
+    "recent": "Viimeisin toiminta",
+    "sale": "Myynti",
+    "expense": "Kulu",
+    "noActivity": "Mitään ei ole vielä kirjattu.",
+    "flow": "Mistä raha tulee",
+    "noProject": "Ei projektia",
+    "netCashflow": "Nettokassavirta",
+    "moreIn": "Enemmän sisään",
+    "moreOut": "Enemmän ulos",
+    "sources": {
+      "friend": "Kaveri",
+      "stall": "Kojuni",
+      "ambassador": "Lähettiläs",
+      "poster": "Juliste",
+      "other": "Muu",
+      "unknown": "Ei kysytty",
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "whatsapp": "WhatsApp"
+    }
+  },
+  "marketingDash": {
+    "back": "Takaisin Tähän päivään",
+    "subtitle": "Mitä julkaisemme ja mitä se tuo",
+    "overview": "Yleiskatsaus",
+    "newContent": "Suunnittele uutta sisältöä",
+    "widgets": "{count} widgettiä",
+    "posts": "Julkaisut",
+    "posts30": "{count} viimeisen 30 päivän aikana",
+    "shareSave": "Jaot + tallennukset",
+    "shareSaveSub": "tavoitettua henkilöä kohden (mediaani)",
+    "bestFormat": "Paras formaatti",
+    "dms": "{count} ostopyyntöä yksityisviestinä (30 päivää)",
+    "whereSales": "Mistä myynti tulee",
+    "noSales": "Ei vielä myyntiä viimeisen 30 päivän aikana.",
+    "formats": "Formaatit, joita ihmiset tallentavat ja jakavat",
+    "needThree": "Julkaise vähintään 3 formaattia ja kirjaa niiden luvut nähdäksesi tämän.",
+    "whatWorks": "Mikä toimii viikko viikolta (katselut viestityypeittäin)",
+    "noPosts": "Merkitse julkaisusi ja kirjaa niiden luvut täyttääksesi tämän.",
+    "revenueNote": "Myynti viimeisen 30 päivän aikana: {amount}.",
+    "title": "Marketing"
+  },
+  "campDash": {
+    "title": "{name}n leiri",
+    "areas": "Leirisi alueet",
+    "priorities": "Prioriteetit",
+    "week": "Kulunut viikko",
+    "today": "Tänään",
+    "docs": "Dokumentit",
+    "dueThisWeek": "Erääntyy tällä viikolla",
+    "tasks": "tehtävää",
+    "late": "{count, plural, one {# on myöhässä} other {# on myöhässä}}",
+    "setup": "Asetuksesi",
+    "aiNotes": "Tekoälymuistiinpanot",
+    "vault": "Salasanaholvi",
+    "calendar": "Kalenterin synkronointi",
+    "on": "Päällä",
+    "off": "Pois",
+    "focus": "Keskittyminen",
+    "focusSub": "Tämän viikon prioriteeteista tehty osuus",
+    "agendaWeek": "Tämän viikon menot",
+    "weekly": "Viikoittain",
+    "plans": "menoa",
+    "status": "Tila",
+    "busy": "Kiireinen",
+    "free": "Vapaa",
+    "nextUp": "Seuraavaksi: {title} {time}",
+    "nothingNext": "Seuraavaksi ei ole mitään suunniteltua. Lisää jotain kalenteriisi.",
+    "recordClass": "Tallenna tunti tai palaveri",
+    "tasksDone": "Tehdyt tehtävät",
+    "tasksDoneSub": "kaikista nimelläsi olevista tehtävistä",
+    "teamGoal": "Tiimin tavoite",
+    "teamGoalSub": "30 000 euron myynnistä",
+    "sceneLabel": "Perusleirisi vuorella",
+    "yourCamp": "Leirisi",
+    "tapAreas": "Avaa alue alla olevista välilehdistä",
+    "areaNames": {
+      "week": "Viikkoni",
+      "agenda": "Kalenteri",
+      "docs": "Dokumentit",
+      "ideas": "Ideaseinä",
+      "vault": "Holvi"
+    },
+    "areaText": {
+      "week": "Kolme prioriteettiasi ja miten viikko meni.",
+      "agenda": "Menosi ja määräaikasi lähipäiville.",
+      "docs": "Muistiinpanot, tuntitallenteet ja jaetut dokumentit.",
+      "ideas": "Tarralaput, jotka voit lähettää taululle.",
+      "vault": "Salasanat, jotka vain sinä voit avata."
+    }
   }
 }

@@ -310,7 +310,7 @@ export function Modal({ title, onClose, children, wide }: { title: string; onClo
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={title}>
       <button className="absolute inset-0 bg-black/40" aria-label="Close" onClick={onClose} />
-      <div className={`relative max-h-[92dvh] w-full ${wide ? "max-w-2xl" : "max-w-md"} overflow-y-auto rounded-t-3xl bg-surface p-5 shadow-2xl sm:rounded-3xl sm:p-6`}>
+      <div className={`relative max-h-[92dvh] w-full ${wide ? "max-w-2xl" : "max-w-md"} overflow-y-auto rounded-t-3xl bg-solid p-5 shadow-2xl ring-1 ring-line sm:rounded-3xl sm:p-6`}>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button onClick={onClose} aria-label="Close" className="rounded-lg p-1.5 text-muted hover:bg-surface-2"><X size={18} /></button>

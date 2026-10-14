@@ -335,7 +335,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   if (phase !== "setup") return (
     // While recording: a small floating box, so the rest of the dashboard stays usable
     <section role="region" aria-label={t("title")} aria-live="polite"
-             className="fixed right-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-50 w-[min(380px,calc(100vw-1.5rem))] rounded-2xl bg-surface p-4 shadow-[0_24px_60px_-16px_rgb(0_0_0/0.45),0_2px_6px_rgb(0_0_0/0.12)] ring-1 ring-line lg:right-6 lg:bottom-6">
+             className="fixed right-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-50 w-[min(380px,calc(100vw-1.5rem))] rounded-2xl bg-solid p-4 shadow-[0_24px_60px_-16px_rgb(0_0_0/0.45),0_2px_6px_rgb(0_0_0/0.12)] ring-1 ring-line lg:right-6 lg:bottom-6">
       <div className="flex items-center gap-3">
         <span className="relative grid size-10 shrink-0 place-items-center">
           {phase === "recording" && <span className="absolute inset-0 animate-ping rounded-full bg-trail/30 motion-reduce:animate-none" />}
@@ -390,7 +390,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={t("title")}>
       <button className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" aria-label={t("close")} onClick={onClose} />
-      <div className="relative max-h-[92dvh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-surface p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl sm:rounded-3xl sm:p-7">
+      <div className="relative max-h-[92dvh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-solid p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl sm:rounded-3xl sm:p-7">
         <div className="mb-5 flex items-start justify-between gap-3">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">{destination?.title ?? t("title")}</h2>

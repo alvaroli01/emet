@@ -1,13 +1,11 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { loadMembers } from "@/lib/boards";
-import { weekStart, GOAL, pace } from "@/lib/metrics";
-import { todayISO, eur } from "@/lib/format";
+import { weekStart, GOAL } from "@/lib/metrics";
+import { todayISO } from "@/lib/format";
 import { SectionTabs } from "@/components/section-tabs";
-import { MountainLazy } from "@/components/summit/mountain-lazy";
-import { PageHero } from "@/components/shell/page-hero";
-import { Tent, Mic } from "lucide-react";
+import { CampDashboard, type CampData } from "@/components/camp/camp-dashboard";
 import { WeekTab, type WeekPlan, type DueTask } from "@/components/camp/week";
 import { AgendaTab, type AgendaItem } from "@/components/camp/agenda";
 import { DocsTab, type Doc } from "@/components/camp/docs";
@@ -21,7 +19,6 @@ type SubDue = { id: string; text: string; due_on: string | null; done: boolean; 
 export default async function CampPage({ searchParams }: { searchParams: Promise<{ tab?: string; doc?: string }> }) {
   const { tab, doc: openDoc } = await searchParams;
   const t = await getTranslations("camp");
-  const locale = await getLocale();
   const { me, groups } = await getSession();
   const supabase = await createClient();
   const week = weekStart(Date.now());
@@ -63,41 +60,32 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   const thisWeek = (plans.data ?? []).find((p) => p.week_start === week) ?? null;
   const openThisWeek = due.filter((d) => d.day < new Date(Date.parse(week) + 7 * 864e5).toISOString().slice(0, 10)).length;
   const firstName = me.full_name.split(" ")[0];
-  const th = await getTranslations("hero");
-  const tn = await getTranslations("nav");
+  const { data: feed } = await supabase.from("calendar_feeds").select("owner_id").eq("owner_id", me.id).maybeSingle();
+  const myCards = await supabase.from("cards").select("completed_at, card_assignees!inner(user_id)").eq("card_assignees.user_id", me.id);
+  const allMine = myCards.data ?? [];
+  const prios = (thisWeek?.priorities ?? []).filter((x: string) => x.trim());
+  const dayMs = Date.now() - Date.parse(week + "T00:00:00Z");
+  const items = agenda.data ?? [];
+  const nowTime = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" });
+  const nextItem = items.find((x) => x.day === today && !x.done && (x.start_time ?? "99") >= nowTime) ?? items.find((x) => x.day > today && !x.done);
+  const campData: CampData = {
+    name: firstName,
+    priorities: { done: prios.filter((x: string) => x.startsWith("✓ ")).length, total: prios.length },
+    weekDone: Math.min(1, Math.max(0, dayMs / (7 * 864e5))),
+    dueThisWeek: openThisWeek, lateCount: due.filter((x) => x.day < today).length,
+    agendaToday: items.filter((x) => x.day === today).length,
+    next: nextItem ? { title: nextItem.title, time: nextItem.start_time?.slice(0, 5) ?? null } : null,
+    agendaWeek: Array.from({ length: 7 }, (_, i) => { const d = new Date(Date.parse(week + "T00:00:00Z") + i * 864e5).toISOString().slice(0, 10); return items.filter((x) => x.day === d).length; }),
+    docs: myDocs.length, shared: sharedDocs.length, ideas: (ideas.data ?? []).length,
+    setup: { ai: !!aiKey.data, vault: !!vaultKey.data, calendar: !!feed },
+    revenuePct: Math.min(1, revenue / GOAL.revenue),
+    tasksDonePct: allMine.length ? allMine.filter((x) => x.completed_at).length / allMine.length : null,
+  };
 
   return (
     <div className="space-y-6">
-      <PageHero
-        section={{ label: tn("camp"), icon: <Tent size={16} /> }}
-        title={th("camp.title", { name: firstName })}
-        subtitle={th("camp.subtitle")}
-        visualTitle={th("campVisual")}
-        lines={[
-          ...(openThisWeek ? [{ text: th("camp.due", { count: openThisWeek }), tone: "warn" as const, href: "/camp?tab=week" }] : []),
-          ...(thisWeek?.priorities?.filter((x: string) => x.trim()).length ? [] : [{ text: th("camp.setPriorities"), tone: "info" as const, href: "/camp?tab=week" }]),
-          ...(sharedDocs.length ? [{ text: th("camp.shared", { count: sharedDocs.length }), tone: "info" as const, href: "/camp?tab=docs" }] : []),
-        ]}
-        stats={[
-          { label: t("stats.dueThisWeek"), value: openThisWeek, kind: "num" },
-          { label: t("stats.sharedWithMe"), value: sharedDocs.length, kind: "num" },
-          { label: t("stats.daysLeft"), value: pace(revenue, 0).daysLeft, kind: "num" },
-        ]}
-        actions={[
-          { label: th("camp.record"), href: "/camp?tab=docs", icon: <Mic size={15} />, primary: true },
-          { label: t("tabs.agenda"), href: "/camp?tab=agenda" },
-          { label: t("tabs.ideas"), href: "/camp?tab=ideas" },
-        ]}
-        visual={
-          <MountainLazy
-            className="size-full"
-            variant="camp"
-            progress={Math.min(1, revenue / GOAL.revenue)}
-            ariaLabel={t("sceneLabel")}
-            labels={{ summit: t("summit"), camp: t("yourCamp", { name: firstName }), here: revenue > 0 ? eur(revenue, locale) : null }}
-          />
-        }
-      />
+      <CampDashboard d={campData} />
+      <div id="camp-tabs" className="scroll-mt-20" />
 
       <SectionTabs label={t("sections")} initial={tab} tabs={[
         { id: "week", label: t("tabs.week"), node: <WeekTab week={week} plan={thisWeek} past={(plans.data ?? []).filter((p) => p.week_start !== week)} due={due} meId={me.id} /> },

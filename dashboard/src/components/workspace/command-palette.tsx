@@ -26,17 +26,26 @@ export function CommandPalette() {
   const [sel, setSel] = useState(0);
   const [answer, setAnswer] = useState<{ q: string; text: string | null; error?: string } | null>(null);
   const input = useRef<HTMLInputElement>(null);
+  const pending = useRef<string | null>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setOpen((v) => !v); }
     };
     const onOpen = () => setOpen(true);
+    // "emet:ask" with a question (e.g. from Today's big ask box) opens straight to the answer
+    const onAsk = (e: Event) => { pending.current = String((e as CustomEvent<string>).detail ?? "").trim() || null; setOpen(true); };
     window.addEventListener("keydown", onKey);
     window.addEventListener("emet:palette", onOpen);
-    return () => { window.removeEventListener("keydown", onKey); window.removeEventListener("emet:palette", onOpen); };
+    window.addEventListener("emet:ask", onAsk);
+    return () => { window.removeEventListener("keydown", onKey); window.removeEventListener("emet:palette", onOpen); window.removeEventListener("emet:ask", onAsk); };
   }, []);
-  useEffect(() => { if (open) { setQ(""); setHits([]); setAnswer(null); setSel(0); setTimeout(() => input.current?.focus(), 10); } }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const question = pending.current; pending.current = null;
+    setQ(question ?? ""); setHits([]); setAnswer(null); setSel(0);
+    if (question) ask(question); else setTimeout(() => input.current?.focus(), 10);
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Search as you type (debounced); the database decides what this person may see
   useEffect(() => {
@@ -92,7 +101,7 @@ export function CommandPalette() {
   return createPortal(
     <div className="fixed inset-0 z-[60] flex items-start justify-center p-3 pt-[10vh] sm:pt-[14vh]" role="dialog" aria-modal="true" aria-label={t("label")}>
       <button className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" aria-label={t("close")} onClick={() => setOpen(false)} />
-      <div className="relative w-full max-w-xl overflow-hidden rounded-2xl bg-surface shadow-[0_30px_80px_-20px_rgb(0_0_0/0.5)] ring-1 ring-line" onKeyDown={onKeyDown}>
+      <div className="relative w-full max-w-xl overflow-hidden rounded-2xl bg-solid shadow-[0_30px_80px_-20px_rgb(0_0_0/0.5)] ring-1 ring-line" onKeyDown={onKeyDown}>
         <div className="flex items-center gap-3 border-b border-line px-4">
           {answer ? <Sparkles size={18} className="shrink-0 text-trail" /> : <Search size={18} className="shrink-0 text-muted" />}
           <input ref={input} value={answer ? answer.q : q} readOnly={!!answer} onChange={(e) => setQ(e.target.value)} placeholder={t("placeholder")}
@@ -148,9 +157,9 @@ export function SearchButton() {
   const t = useTranslations("palette");
   return (
     <button onClick={() => window.dispatchEvent(new Event("emet:palette"))} aria-label={t("label")}
-            className="flex h-9 items-center gap-2 rounded-full px-2.5 text-sm text-muted transition hover:bg-surface-2 hover:text-ink sm:bg-surface-2/70 sm:pr-3">
-      <Search size={16} /> <span className="hidden md:inline">{t("short")}</span>
-      <kbd className="hidden rounded border border-line px-1 text-[10px] lg:inline">⌘K</kbd>
+            className="glass-pill h-10 w-10 justify-center text-sm text-muted transition hover:text-ink md:w-full md:max-w-md md:justify-start md:px-4">
+      <Search size={16} /> <span className="hidden flex-1 text-left md:inline">{t("short")}</span>
+      <kbd className="hidden rounded-md bg-surface-2 px-1.5 py-0.5 text-[11px] lg:inline">⌘ K</kbd>
     </button>
   );
 }

@@ -26,7 +26,9 @@
     "sectionTools": "Outils",
     "expand": "Déplier le menu",
     "collapse": "Replier le menu",
-    "mobileNav": "Principal"
+    "mobileNav": "Principal",
+    "askCard": "Demande à emet",
+    "askCardText": "Des questions sur l’équipe, l’argent ou les tâches ? Réponse à partir de nos données."
   },
   "shell": {
     "noGroupYet": "Pas encore de groupe",
@@ -2081,14 +2083,14 @@
       "priority": "Priorité de la semaine : {title}",
       "revenue": "CA de l’équipe",
       "profit": "Bénéfice de l’équipe",
-      "subtitle": "Here is what needs you today, and how close we are to our goal."
+      "subtitle": "Voici ce qui a besoin de toi aujourd’hui, et où on en est de notre objectif."
     },
     "overview": {
-      "title": "Hey {name}, voici toute l’ascension",
+      "title": "Comment va toute l’équipe",
       "blockers": "{count, plural, one {# blocage freine une équipe} other {# blocages freinent des équipes}}",
       "complaints": "{count, plural, one {# problème client est ouvert} other {# problèmes clients sont ouverts}}",
       "pace": "Il nous faut {amount} par semaine à partir de maintenant",
-      "subtitle": "Our goal: €30,000 in sales and €15,000 profit by June 2027."
+      "subtitle": "Notre objectif : 30 000 € de ventes et 15 000 € de bénéfice d’ici juin 2027."
     },
     "camp": {
       "title": "Content de te revoir au camp, {name}",
@@ -2096,20 +2098,20 @@
       "setPriorities": "Fixe tes 3 priorités de la semaine",
       "shared": "{count, plural, one {# document a été partagé avec toi} other {# documents ont été partagés avec toi}}",
       "record": "Enregistrer un cours ou une réunion",
-      "subtitle": "Only you can see this. Plan your week, keep notes and record classes."
+      "subtitle": "Visible par toi seul. Planifie ta semaine, garde tes notes et enregistre tes cours."
     },
     "board": {
-      "title": "Hey {name}, voilà tout ce sur quoi l’entreprise travaille",
+      "title": "Tout ce sur quoi l’entreprise travaille",
       "late": "{count, plural, one {# carte est en retard} other {# cartes sont en retard}}",
       "mine": "{count, plural, one {# carte ici est à toi} other {# cartes ici sont à toi}}",
       "none": "Rien ne t’est assigné ici",
       "open": "Cartes ouvertes",
       "done": "Terminé",
       "ring": "des cartes terminées",
-      "subtitle": "Each card is a job. Drag it to Done when it is finished."
+      "subtitle": "Chaque carte est une tâche. Glisse-la dans Terminé quand c’est fait."
     },
     "team": {
-      "title": "Hey {name}, fais connaissance avec l’équipe",
+      "title": "Tout le monde chez emet",
       "people": "Personnes",
       "joined": "Connectés",
       "noGroup": "Pas encore de groupe"
@@ -2123,16 +2125,16 @@
       "board": "Tableau général",
       "camp": "Camp de base",
       "ring": "de tes tâches terminées",
-      "subtitle": "Every job that has your name on it, from every board."
+      "subtitle": "Toutes les tâches à ton nom, de tous les tableaux."
     },
     "meetings": {
-      "title": "Hey {name}, de quoi a-t-on parlé ?",
+      "title": "Réunions que nous avons enregistrées",
       "latest": "Dernière : {title} ({date})",
       "none": "Aucune réunion enregistrée pour l’instant. Enregistre la prochaine pour que personne ne la rate.",
       "processing": "{count, plural, one {# de tes enregistrements est encore en cours de rédaction} other {# de tes enregistrements sont encore en cours de rédaction}}",
       "week": "Cette semaine",
       "total": "Tous les enregistrements",
-      "subtitle": "Press Record in a meeting and emet writes the notes for everyone."
+      "subtitle": "Appuie sur Enregistrer pendant une réunion et emet rédige les notes pour tout le monde."
     },
     "lab": {
       "title": "Hey {name}, qu’est-ce qu’on pourrait construire ?",
@@ -2144,7 +2146,7 @@
       "votes": "Votes",
       "pitch": "Proposer une idée",
       "scout": "Trouver des clients",
-      "subtitle": "Write an idea, and emet researches it and tells you honestly if it can work."
+      "subtitle": "Écris une idée : emet l’étudie et te dit honnêtement si elle peut marcher."
     },
     "scout": {
       "title": "Hey {name}, à qui devrait-on vendre ?",
@@ -2152,11 +2154,11 @@
       "strong": "{count, plural, one {# lead solide que personne n’a encore contacté} other {# leads solides que personne n’a encore contactés}}"
     },
     "assistTitle": "Salut {name}, on fait quoi aujourd'hui dans {section} ?",
-    "needsYou": "Needs you",
-    "allDoneTitle": "All done here.",
-    "teamLabel": "Team",
-    "climbTitle": "Our climb to €30,000",
-    "campVisual": "Your base camp"
+    "needsYou": "Besoin de toi",
+    "allDoneTitle": "Tout est fait ici.",
+    "teamLabel": "Équipe",
+    "climbTitle": "Notre ascension vers 30 000 €",
+    "campVisual": "Ton camp de base"
   },
   "assist": {
     "label": "Demande à emet à propos de cette section",
@@ -2228,7 +2230,154 @@
       "recordDecision": "Enregistre une décision qu'on a prise",
       "whatsLate": "Qu'est-ce qui est en retard dans l'équipe et qui dois-je relancer ?"
     },
-    "greeting": "Hey {name}, what are we doing in {section} today?",
-    "helper": "Ask a question or tell me what you did. I prepare it, you tap Add."
+    "greeting": "Salut {name}, qu’est-ce qu’on fait aujourd’hui dans {section} ?",
+    "helper": "Pose une question ou dis-moi ce que tu as fait. Je prépare, tu touches Ajouter."
+  },
+  "home": {
+    "needHelp": "Salut {name}, besoin d’aide ?",
+    "askLabel": "Demande n’importe quoi à emet",
+    "askPlaceholder": "Demande-moi ce que tu veux",
+    "askSend": "Demander",
+    "search": "Rechercher",
+    "newTask": "Nouvelle tâche",
+    "logSale": "Enregistrer une vente",
+    "report": "Rapport hebdo",
+    "last7": "Cette semaine",
+    "sales": "Ventes",
+    "salesCount": "{count, plural, one {# vente cette semaine} other {# ventes cette semaine}}",
+    "tasks": "Tâches",
+    "done": "faites",
+    "vsLastWeek": "vs semaine dernière",
+    "money": "Argent entrant",
+    "moneyNote": "Euros encaissés par jour",
+    "health": "Santé de l’équipe",
+    "good": "En bonne forme",
+    "ok": "Correct",
+    "needsCare": "Besoin d’attention",
+    "noData": "Pas encore assez de données",
+    "onTime": "Dans les temps",
+    "insights": "Aperçus",
+    "blockers": "Blocages",
+    "yourWeek": "Ta semaine",
+    "focusScore": "Score de concentration",
+    "doneThisWeek": "{count, plural, one {# tâche terminée cette semaine} other {# tâches terminées cette semaine}}",
+    "dueToday": "À rendre aujourd’hui",
+    "late": "En retard",
+    "toSummit": "Vers le sommet",
+    "goalAria": "Notre ascension : {pct} % de l’objectif de 30 000 €",
+    "daysLeft": "{count, plural, one {Plus qu’# jour} other {Plus que # jours}} · juin 2027",
+    "photoCredit": "Bilbao la nuit — photo : Adrian Villa / Unsplash",
+    "channels": {
+      "stall": "Stand",
+      "online": "En ligne",
+      "other": "Autre"
+    }
+  },
+  "financeDash": {
+    "totalRevenue": "Chiffre d’affaires total",
+    "thisMonthIn": "Entrées ce mois-ci",
+    "thisMonthOut": "Sorties ce mois-ci",
+    "logSale": "Enregistrer une vente",
+    "addExpense": "Ajouter une dépense",
+    "closeMonth": "Clôturer le mois",
+    "methods": "Argent par moyen de paiement",
+    "fromLastMonth": "vs mois dernier",
+    "addProject": "Ajoute un projet pour suivre son argent",
+    "moneyOverTime": "Argent entrant et sortant (totaux sur 7 jours)",
+    "last30": "30 derniers jours",
+    "in": "Entrées",
+    "out": "Sorties",
+    "spentThisWeek": "Dépensé cette semaine",
+    "seeAll": "Tout voir",
+    "recent": "Activité récente",
+    "sale": "Vente",
+    "expense": "Dépense",
+    "noActivity": "Rien d’enregistré pour l’instant.",
+    "flow": "D’où vient l’argent",
+    "noProject": "Aucun projet",
+    "netCashflow": "Flux de trésorerie net",
+    "moreIn": "Plus d’entrées",
+    "moreOut": "Plus de sorties",
+    "sources": {
+      "friend": "Un ami",
+      "stall": "Stand",
+      "ambassador": "Ambassadeur",
+      "poster": "Affiche",
+      "other": "Autre",
+      "unknown": "Non demandé",
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "whatsapp": "WhatsApp"
+    }
+  },
+  "marketingDash": {
+    "back": "Retour à Aujourd’hui",
+    "subtitle": "Ce qu’on publie et ce que ça rapporte",
+    "overview": "Vue d’ensemble",
+    "newContent": "Planifier un nouveau contenu",
+    "widgets": "{count} widgets",
+    "posts": "Publications",
+    "posts30": "{count} sur les 30 derniers jours",
+    "shareSave": "Partages + enregistrements",
+    "shareSaveSub": "par personne touchée (médiane)",
+    "bestFormat": "Meilleur format",
+    "dms": "{count} DM pour acheter (30 jours)",
+    "whereSales": "D’où viennent les ventes",
+    "noSales": "Pas encore de ventes sur les 30 derniers jours.",
+    "formats": "Formats que les gens enregistrent et partagent",
+    "needThree": "Publie au moins 3 formats et note leurs chiffres pour voir ça.",
+    "whatWorks": "Ce qui marche, semaine par semaine (vues par type de message)",
+    "noPosts": "Étiquette tes publications et note leurs chiffres pour remplir ça.",
+    "revenueNote": "Ventes sur les 30 derniers jours : {amount}.",
+    "title": "Marketing"
+  },
+  "campDash": {
+    "title": "Le camp de {name}",
+    "areas": "Les zones de ton camp",
+    "priorities": "Priorités",
+    "week": "Semaine écoulée",
+    "today": "Aujourd’hui",
+    "docs": "Documents",
+    "dueThisWeek": "À rendre cette semaine",
+    "tasks": "tâches",
+    "late": "{count, plural, one {# est en retard} other {# sont en retard}}",
+    "setup": "Ta configuration",
+    "aiNotes": "Prise de notes IA",
+    "vault": "Coffre à mots de passe",
+    "calendar": "Synchro du calendrier",
+    "on": "Activé",
+    "off": "Désactivé",
+    "focus": "Concentration",
+    "focusSub": "Part des priorités de la semaine déjà faites",
+    "agendaWeek": "Plans de la semaine",
+    "weekly": "Hebdo",
+    "plans": "plans",
+    "status": "Statut",
+    "busy": "Occupé",
+    "free": "Libre",
+    "nextUp": "Ensuite : {title} {time}",
+    "nothingNext": "Rien de prévu ensuite. Ajoute quelque chose à ton agenda.",
+    "recordClass": "Enregistrer un cours ou une réunion",
+    "tasksDone": "Tâches terminées",
+    "tasksDoneSub": "de toutes les tâches à ton nom",
+    "teamGoal": "Objectif d’équipe",
+    "teamGoalSub": "de 30 000 € de ventes",
+    "sceneLabel": "Ton camp de base dans la montagne",
+    "yourCamp": "Ton camp",
+    "tapAreas": "Ouvre une zone depuis les onglets en dessous",
+    "areaNames": {
+      "week": "Ma semaine",
+      "agenda": "Agenda",
+      "docs": "Documents",
+      "ideas": "Mur d’idées",
+      "vault": "Coffre"
+    },
+    "areaText": {
+      "week": "Tes 3 priorités et comment la semaine s’est passée.",
+      "agenda": "Tes plans et échéances des prochains jours.",
+      "docs": "Notes, enregistrements de cours et documents partagés.",
+      "ideas": "Des post-its que tu peux envoyer vers un tableau.",
+      "vault": "Des mots de passe que toi seul peux ouvrir."
+    }
   }
 }

@@ -71,7 +71,7 @@ export function ToolWorkspace({ tools, initial, groups }: { tools: WorkspaceTool
       {sheet && (
         <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true" aria-label={t("tools")}>
           <button aria-label={t("close")} onClick={() => setSheet(false)} className="absolute inset-0 bg-black/60" />
-          <div className="absolute inset-x-0 bottom-0 max-h-[80dvh] overflow-y-auto rounded-t-[28px] border-t border-line bg-surface p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+          <div className="absolute inset-x-0 bottom-0 max-h-[80dvh] overflow-y-auto rounded-t-[28px] border-t border-line bg-solid p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
             <div aria-hidden className="mx-auto mb-3 h-1 w-10 rounded-full bg-line" />
             <div className="mb-3 flex items-center justify-between">
               <p className="display text-xl">{t("tools")}</p>
