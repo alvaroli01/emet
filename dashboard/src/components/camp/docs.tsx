@@ -69,7 +69,7 @@ export function DocsTab({ mine, shared, members, meId, ai, initialOpen }: { mine
         <Recorder connected={ai.connected} last4={ai.last4} onClose={() => setRecording(false)}
                   onCreated={(doc) => { setDocs((d) => [doc, ...d]); setOpenId(doc.id); setRecording(false); }} />
       )}
-      <aside className={`space-y-3 ${open ? "hidden lg:block" : ""}`}>
+      <aside className={`min-w-0 space-y-3 ${open ? "hidden lg:block" : ""}`}>
         <div className="flex gap-2">
           <label className="relative flex-1">
             <Search size={15} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted" />

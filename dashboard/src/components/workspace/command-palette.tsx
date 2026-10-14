@@ -96,7 +96,7 @@ export function CommandPalette() {
         <div className="flex items-center gap-3 border-b border-line px-4">
           {answer ? <Sparkles size={18} className="shrink-0 text-trail" /> : <Search size={18} className="shrink-0 text-muted" />}
           <input ref={input} value={answer ? answer.q : q} readOnly={!!answer} onChange={(e) => setQ(e.target.value)} placeholder={t("placeholder")}
-                 aria-label={t("placeholder")} className="h-14 flex-1 bg-transparent text-base outline-none placeholder:text-muted/70" />
+                 aria-label={t("placeholder")} className="h-14 flex-1 bg-transparent text-base outline-none placeholder:text-muted/70 focus-visible:outline-none" />
           {loading && !answer && <Loader2 size={16} className="animate-spin text-muted" />}
           {answer && <button onClick={() => { setAnswer(null); setTimeout(() => input.current?.focus(), 10); }} className="text-xs text-muted hover:text-ink">{t("back")}</button>}
         </div>

@@ -126,7 +126,7 @@ export function IdeaLab({ ideas, votes, comments, names, meId, isAdmin, hasKey: 
       </section>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <div className={`space-y-3 ${open ? "hidden lg:block" : ""}`}>
+        <div className={`min-w-0 space-y-3 ${open ? "hidden lg:block" : ""}`}>
           <div className="flex items-center gap-1 rounded-xl bg-surface-2 p-1 text-sm" role="tablist" aria-label={t("sort")}>
             {(["score", "votes", "new"] as const).map((s) => (
               <button key={s} role="tab" aria-selected={sort === s} onClick={() => setSort(s)}

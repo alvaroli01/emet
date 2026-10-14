@@ -21,8 +21,10 @@ export async function GET(request: NextRequest) {
     supabase.from("groups").select("id, slug"),
   ]);
   const slug = new Map((groups.data ?? []).map((g) => [g.id, g.slug]));
-  const snip = (text: string | null | undefined) => {
-    if (!text) return undefined;
+  const plain = (t: string) => t.replace(/[*_#>`]+/g, "").replace(/- \[[ x]\] /gi, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+  const snip = (raw: string | null | undefined) => {
+    if (!raw) return undefined;
+    const text = plain(raw);
     const i = text.toLowerCase().indexOf(q.toLowerCase());
     if (i < 0) return text.slice(0, 110);
     const start = Math.max(0, i - 40);

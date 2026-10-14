@@ -93,7 +93,7 @@ export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, 
       </section>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <div className={`space-y-3 ${open ? "hidden lg:block" : ""}`}>
+        <div className={`min-w-0 space-y-3 ${open ? "hidden lg:block" : ""}`}>
           <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
             {(["all", ...kinds] as const).map((k) => {
               const n = k === "all" ? meetings.length : meetings.filter((m) => m.kind === k).length;

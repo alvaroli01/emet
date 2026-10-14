@@ -398,7 +398,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
           </div>
           <button onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-surface-2"><X size={18} /></button>
         </div>
-          <div className="space-y-5">
+          <div className="space-y-4 sm:space-y-5">
             {/* Engine: your own Groq account (best), or the browser */}
             <section className="rounded-2xl bg-surface-2/60 p-4">
               {connected ? (
@@ -462,11 +462,13 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
               {lang === "auto" && mode === "browser" && <p className="mt-1 text-xs text-muted">{t("autoBrowserNote")}</p>}
             </fieldset>
 
-            <button onClick={start} disabled={!name.trim() || (!connected && !browserSupported)}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-trail py-3.5 text-base font-semibold text-white shadow-[var(--shadow-lift)] transition hover:brightness-105 disabled:opacity-50">
-              <Mic size={19} /> {t("start")}
-            </button>
-            <p className="text-center text-xs text-muted">{t("micTip")}</p>
+            <div className="sticky -bottom-5 -mx-5 bg-surface px-5 pt-2 pb-1 sm:static sm:mx-0 sm:p-0">
+              <button onClick={start} disabled={!name.trim() || (!connected && !browserSupported)}
+                      className="flex w-full items-center justify-center gap-2 rounded-2xl bg-trail py-3.5 text-base font-semibold text-white shadow-[var(--shadow-lift)] transition hover:brightness-105 disabled:opacity-50">
+                <Mic size={19} /> {t("start")}
+              </button>
+              <p className="mt-2 text-center text-xs text-muted">{t("micTip")}</p>
+            </div>
           </div>
       </div>
     </div>

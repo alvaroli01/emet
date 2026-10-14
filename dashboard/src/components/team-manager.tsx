@@ -65,33 +65,37 @@ export function TeamManager({ people, groups, meId, isAdmin }: { people: Profile
             const g = groupOf(p.group_id);
             const admin = p.is_admin || g?.slug === "team-leader";
             return (
-              <li key={p.id} className={`flex flex-wrap items-center gap-3 px-5 py-3 ${p.active ? "" : "opacity-50"}`}>
+              <li key={p.id} className={`flex items-center gap-3 px-4 py-3 sm:px-5 ${p.active ? "" : "opacity-50"}`}>
                 <Avatar name={p.full_name} src={p.avatar_url} size={36} />
                 <div className="min-w-0 flex-1">
-                  <p className="flex items-center gap-1.5 text-sm font-medium">
-                    {p.full_name}
-                    {admin && <ShieldCheck size={14} className="text-muted" aria-label={t("admin")} />}
-                    {p.id === meId && <span className="text-xs font-normal text-muted">({t("you")})</span>}
+                  <p className="flex min-w-0 items-center gap-1.5 text-sm font-medium">
+                    <span className="truncate">{p.full_name}</span>
+                    {admin && <ShieldCheck size={14} className="shrink-0 text-muted" aria-label={t("admin")} />}
+                    {p.id === meId && <span className="shrink-0 text-xs font-normal text-muted">({t("you")})</span>}
                   </p>
-                  <p className="truncate text-xs text-muted">
-                    {p.role_title ?? t("roleTbd")} · {LOCALE_NAMES[isLocale(p.locale) ? p.locale : "en"]}
-                    {isAdmin && <> · {p.email}</>}
+                  <p className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-muted">
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-surface-2 px-1.5 py-0.5 text-ink">
+                      {g && <span aria-hidden className="size-1.5 rounded-full" style={{ background: g.color }} />}
+                      {g ? tg(g.slug) : t("noGroup")}
+                    </span>
+                    <span className="truncate">{p.role_title ?? t("roleTbd")} · {LOCALE_NAMES[isLocale(p.locale) ? p.locale : "en"]}</span>
                   </p>
+                  {isAdmin && <p className="mt-0.5 truncate text-xs text-muted">{p.email}</p>}
+                  {!isAdmin && !p.user_id && <p className="mt-0.5 text-xs text-muted">{t("notJoined")}</p>}
                 </div>
-                <span className="text-sm">{g ? <span style={{ color: g.color }}>{g.emoji}</span> : null} <span className="text-muted">{g ? tg(g.slug) : t("noGroup")}</span></span>
                 {isAdmin && (
-                  <div className="flex gap-1.5">
+                  <div className="flex shrink-0 gap-1.5">
                     {p.active && (
-                      <button onClick={() => invite(p)} className="inline-flex items-center gap-1 rounded-lg border border-line px-2 py-1 text-xs hover:bg-surface-2">
-                        <Mail size={12} /> {p.user_id ? t("sendLink") : t("invite")}
+                      <button onClick={() => invite(p)} aria-label={p.user_id ? t("sendLink") : t("invite")} title={p.user_id ? t("sendLink") : t("invite")}
+                              className="inline-flex h-8 items-center gap-1 rounded-lg border border-line px-2 text-xs hover:bg-surface-2">
+                        <Mail size={13} /> <span className="hidden sm:inline">{p.user_id ? t("sendLink") : t("invite")}</span>
                       </button>
                     )}
-                    <button onClick={() => setEditing(p)} aria-label={t("edit")} className="rounded-lg border border-line px-2 py-1 text-xs hover:bg-surface-2">
-                      <Pencil size={12} />
+                    <button onClick={() => setEditing(p)} aria-label={t("edit")} title={t("edit")} className="grid size-8 place-items-center rounded-lg border border-line hover:bg-surface-2">
+                      <Pencil size={13} />
                     </button>
                   </div>
                 )}
-                {!isAdmin && !p.user_id && <span className="text-xs text-muted">{t("notJoined")}</span>}
               </li>
             );
           })}
