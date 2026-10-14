@@ -65,10 +65,12 @@ export function Backdrop() {
   const src = PHOTOS.find(([re]) => re.test(path))?.[1];
   if (!src) return null;
   const today = path === "/today";
+  // Finance is all numbers and charts: its photo is softened and darker so nothing competes with them
+  const calm = path.startsWith("/g/finance");
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
       {/* eslint-disable-next-line @next/next/no-img-element -- decorative full-screen backdrop */}
-      <img key={src} src={src} alt="" decoding="async" className={`size-full object-cover ${today ? "object-[60%_40%]" : "object-center"}`} />
+      <img key={src} src={src} alt="" decoding="async" className={`size-full object-cover ${today ? "object-[60%_40%]" : "object-center"} ${calm ? "scale-105 blur-[6px]" : ""}`} />
       {today ? (
         <>
           <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_10%,transparent_0%,rgb(8_8_10/0.55)_55%,rgb(8_8_10/0.92)_100%)]" />
@@ -76,7 +78,7 @@ export function Backdrop() {
         </>
       ) : (
         // Work pages hold more text, so the photo is dimmer and fades out further down the page
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(var(--shade)/0.3)_0%,rgb(var(--shade)/0.62)_50%,rgb(var(--shade)/0.9)_100%)]" />
+        <div className={`absolute inset-0 ${calm ? "bg-[linear-gradient(180deg,rgb(var(--shade)/0.55)_0%,rgb(var(--shade)/0.78)_50%,rgb(var(--shade)/0.94)_100%)]" : "bg-[linear-gradient(180deg,rgb(var(--shade)/0.3)_0%,rgb(var(--shade)/0.62)_50%,rgb(var(--shade)/0.9)_100%)]"}`} />
       )}
     </div>
   );
