@@ -206,7 +206,16 @@
     "errors": {
       "save": "Não foi possível salvar — talvez você não tenha permissão ou esteja offline.",
       "listNotEmpty": "Mova ou exclua os cartões primeiro e depois a lista."
-    }
+    },
+    "subtasks": "Tarefas deste projeto",
+    "subtasksHint": "Divida o cartão em tarefas pequenas. Cada uma pode ter sua pessoa e sua data.",
+    "addSubtask": "Adicionar tarefa",
+    "subtaskPerson": "Quem",
+    "subtaskDue": "Quando",
+    "nobody": "Ninguém",
+    "showEveryone": "Mostrar todos",
+    "sectionOnly": "Só esta seção",
+    "addedBy": "Adicionado por {name} · {when}"
   },
   "myTasks": {
     "title": "Minhas tarefas",

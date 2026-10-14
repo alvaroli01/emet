@@ -11,11 +11,11 @@ import type { BoardCard, ListRow, Member } from "@/lib/boards";
 import { LabelChip, PRESET_LABELS, useListName } from "./labels";
 import { pushToTrello } from "./trello-push";
 
-type Item = { id: string; text: string; done: boolean; position: number };
+type Item = { id: string; text: string; done: boolean; position: number; assignee_id: string | null; due_on: string | null };
 type Comment = { id: string; author_id: string; body: string; created_at: string };
 
-export function CardDialog({ card, lists, members, viewerId, canEdit, trello, onClose, onChange }: {
-  card: BoardCard; lists: ListRow[]; members: Member[]; viewerId: string; canEdit: boolean; trello: boolean;
+export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, trello, onClose, onChange }: {
+  card: BoardCard; lists: ListRow[]; members: Member[]; groupId: string | null; viewerId: string; canEdit: boolean; trello: boolean;
   onClose: () => void; onChange: (card: BoardCard | null, id: string) => void;
 }) {
   const t = useTranslations("board");
@@ -30,7 +30,11 @@ export function CardDialog({ card, lists, members, viewerId, canEdit, trello, on
   const [newItem, setNewItem] = useState("");
   const [newComment, setNewComment] = useState("");
   const [customLabel, setCustomLabel] = useState("");
+  const [everyone, setEveryone] = useState(false);
   const names = Object.fromEntries(members.map((m) => [m.id, m]));
+  // People of this section first (the whole team on the general board); anyone already assigned stays visible
+  const section = groupId ? members.filter((m) => m.group_id === groupId) : members;
+  const pickable = everyone || !groupId ? members : members.filter((m) => m.group_id === groupId || card.assignees.includes(m.id));
   const listName = useListName();
 
   useEffect(() => {
@@ -94,6 +98,12 @@ export function CardDialog({ card, lists, members, viewerId, canEdit, trello, on
     if (error) toast("error", t("errors.save"));
   }
 
+  async function patchItem(item: Item, patch: Partial<Pick<Item, "assignee_id" | "due_on">>) {
+    setItems((all) => all.map((i) => (i.id === item.id ? { ...i, ...patch } : i)));
+    const { error } = await supabase.from("card_checklist_items").update(patch).eq("id", item.id);
+    if (error) toast("error", t("errors.save"));
+  }
+
   async function deleteItem(item: Item) {
     const next = items.filter((i) => i.id !== item.id);
     setItems(next);
@@ -145,6 +155,9 @@ export function CardDialog({ card, lists, members, viewerId, canEdit, trello, on
           <button onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-surface-2"><X size={18} /></button>
         </div>
 
+        {card.created_by && names[card.created_by] && (
+          <p className="-mt-2 mb-4 text-xs text-muted">{t("addedBy", { name: names[card.created_by].full_name, when: timeAgo(card.created_at, locale) })}</p>
+        )}
         {!canEdit && (
           <p className="mb-4 inline-flex items-center gap-1.5 rounded-lg bg-surface-2 px-2.5 py-1.5 text-xs text-muted">
             <Lock size={12} /> {t("readOnlyCard")}
@@ -154,7 +167,7 @@ export function CardDialog({ card, lists, members, viewerId, canEdit, trello, on
         <div className="grid gap-5 sm:grid-cols-[1fr_200px]">
           <div className="space-y-5">
             <section>
-              <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wider text-muted">{t("description")}</h3>
+              <h3 className="mb-2 text-sm font-semibold">{t("description")}</h3>
               {canEdit ? (
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4}
                           onBlur={() => description !== (card.description ?? "") && save({ description: description || null })}
@@ -165,35 +178,54 @@ export function CardDialog({ card, lists, members, viewerId, canEdit, trello, on
             </section>
 
             <section>
-              <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wider text-muted">
-                {t("checklist")} {items.length > 0 && <span className="tabular-nums">· {items.filter((i) => i.done).length}/{items.length}</span>}
-              </h3>
-              <ul className="space-y-1">
+              <div className="mb-2 flex items-baseline justify-between gap-2">
+                <h3 className="text-sm font-semibold">{t("subtasks")}</h3>
+                {items.length > 0 && <span className="text-xs text-muted tabular-nums">{items.filter((i) => i.done).length}/{items.length}</span>}
+              </div>
+              {items.length > 0 ? (
+                <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-surface-2" aria-hidden>
+                  <div className="h-full rounded-full bg-ok transition-[width] duration-500" style={{ width: `${(items.filter((i) => i.done).length / items.length) * 100}%` }} />
+                </div>
+              ) : canEdit && <p className="mb-2 text-xs text-muted">{t("subtasksHint")}</p>}
+              <ul className="space-y-1.5">
                 {items.map((i) => (
-                  <li key={i.id} className="group flex items-center gap-2 text-sm">
-                    <button disabled={!canEdit} onClick={() => toggleItem(i)} aria-pressed={i.done}
-                            className={`grid size-5 shrink-0 place-items-center rounded-md border ${i.done ? "border-ok bg-ok text-white" : "border-line"}`}>
+                  <li key={i.id} className="group flex flex-wrap items-center gap-x-2 gap-y-1.5 rounded-[10px] bg-surface-2/60 px-2.5 py-2 text-sm">
+                    <button disabled={!canEdit} onClick={() => toggleItem(i)} aria-pressed={i.done} aria-label={i.text}
+                            className={`grid size-5 shrink-0 place-items-center rounded-md border transition-colors ${i.done ? "border-ok bg-ok text-white" : "border-line bg-surface"}`}>
                       {i.done && <Check size={13} />}
                     </button>
-                    <span className={`flex-1 ${i.done ? "text-muted line-through" : ""}`}>{i.text}</span>
-                    {canEdit && (
-                      <button onClick={() => deleteItem(i)} aria-label={t("delete")} className="text-muted opacity-0 hover:text-bad-text group-hover:opacity-100">
-                        <Trash2 size={14} />
-                      </button>
-                    )}
+                    <span className={`min-w-0 flex-1 basis-40 ${i.done ? "text-muted line-through" : ""}`}>{i.text}</span>
+                    <span className="ml-7 flex items-center gap-1.5 sm:ml-0">
+                      {i.assignee_id && <Avatar name={names[i.assignee_id]?.full_name ?? "?"} src={names[i.assignee_id]?.avatar_url} size={20} />}
+                      <select disabled={!canEdit} value={i.assignee_id ?? ""} aria-label={t("subtaskPerson")}
+                              onChange={(e) => patchItem(i, { assignee_id: e.target.value || null })}
+                              className="max-w-28 rounded-md bg-transparent py-0.5 text-xs text-muted outline-none hover:text-ink">
+                        <option value="">{t("nobody")}</option>
+                        {section.concat(i.assignee_id && !section.some((m) => m.id === i.assignee_id) && names[i.assignee_id] ? [names[i.assignee_id]] : [])
+                          .map((m) => <option key={m.id} value={m.id}>{m.full_name}</option>)}
+                      </select>
+                      <input type="date" disabled={!canEdit} value={i.due_on ?? ""} aria-label={t("subtaskDue")}
+                             onChange={(e) => patchItem(i, { due_on: e.target.value || null })}
+                             className="w-[7.4rem] rounded-md bg-transparent py-0.5 text-xs text-muted outline-none hover:text-ink" />
+                      {canEdit && (
+                        <button onClick={() => deleteItem(i)} aria-label={t("delete")} className="p-0.5 text-muted hover:text-bad-text sm:opacity-0 sm:group-hover:opacity-100">
+                          <Trash2 size={14} />
+                        </button>
+                      )}
+                    </span>
                   </li>
                 ))}
               </ul>
               {canEdit && (
                 <form className="mt-2 flex gap-2" onSubmit={(e) => { e.preventDefault(); addItem(); }}>
-                  <input value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder={t("addItem")} className="input py-1.5" />
-                  <button className="rounded-lg border border-line px-2.5 text-muted hover:text-ink" aria-label={t("addItem")}><Plus size={16} /></button>
+                  <input value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder={t("addSubtask")} className="input py-1.5" />
+                  <button className="rounded-lg border border-line px-2.5 text-muted hover:text-ink" aria-label={t("addSubtask")}><Plus size={16} /></button>
                 </form>
               )}
             </section>
 
             <section>
-              <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-muted">{t("comments")}</h3>
+              <h3 className="mb-2 text-sm font-semibold">{t("comments")}</h3>
               <ul className="space-y-3">
                 {comments.map((c) => (
                   <li key={c.id} className="flex gap-2.5 text-sm">
@@ -219,7 +251,7 @@ export function CardDialog({ card, lists, members, viewerId, canEdit, trello, on
 
           <aside className="space-y-5">
             <section>
-              <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wider text-muted">{t("list")}</h3>
+              <h3 className="mb-2 text-sm font-semibold">{t("list")}</h3>
               <select disabled={!canEdit} value={card.list_id}
                       onChange={(e) => save({ list_id: e.target.value, position: Date.now() / 1000,
                         completed_at: lists.find((l) => l.id === e.target.value)?.name.toLowerCase() === "done" ? new Date().toISOString() : null })}
@@ -228,15 +260,15 @@ export function CardDialog({ card, lists, members, viewerId, canEdit, trello, on
               </select>
             </section>
             <section>
-              <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wider text-muted">{t("due")}</h3>
+              <h3 className="mb-2 text-sm font-semibold">{t("due")}</h3>
               <input type="date" disabled={!canEdit} value={dueValue}
                      onChange={(e) => save({ due_at: e.target.value ? new Date(e.target.value + "T21:59:00Z").toISOString() : null })}
                      className="input py-1.5" />
             </section>
             <section>
-              <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wider text-muted">{t("assignees")}</h3>
+              <h3 className="mb-2 text-sm font-semibold">{t("assignees")}</h3>
               <div className="flex flex-wrap gap-1.5">
-                {(canEdit ? members : members.filter((m) => card.assignees.includes(m.id))).map((m) => {
+                {(canEdit ? pickable : members.filter((m) => card.assignees.includes(m.id))).map((m) => {
                   const on = card.assignees.includes(m.id);
                   return (
                     <button key={m.id} disabled={!canEdit} onClick={() => toggleAssignee(m.id)} aria-pressed={on}
@@ -248,9 +280,14 @@ export function CardDialog({ card, lists, members, viewerId, canEdit, trello, on
                 })}
                 {!canEdit && !card.assignees.length && <span className="text-sm text-muted">—</span>}
               </div>
+              {canEdit && groupId && (
+                <button type="button" onClick={() => setEveryone((v) => !v)} className="mt-2 text-xs text-muted underline-offset-2 hover:text-ink hover:underline">
+                  {everyone ? t("sectionOnly") : t("showEveryone")}
+                </button>
+              )}
             </section>
             <section>
-              <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wider text-muted">{t("labelsTitle")}</h3>
+              <h3 className="mb-2 text-sm font-semibold">{t("labelsTitle")}</h3>
               <div className="flex flex-wrap gap-1.5">
                 {canEdit ? (
                   <>

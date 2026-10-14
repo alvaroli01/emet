@@ -206,7 +206,16 @@
     "errors": {
       "save": "Speichern fehlgeschlagen – vielleicht fehlt dir die Berechtigung oder du bist offline.",
       "listNotEmpty": "Verschiebe oder lösche zuerst die Karten, dann die Liste."
-    }
+    },
+    "subtasks": "Aufgaben in diesem Projekt",
+    "subtasksHint": "Teile die Karte in kleine Aufgaben. Jede kann eine eigene Person und ein Datum haben.",
+    "addSubtask": "Aufgabe hinzufügen",
+    "subtaskPerson": "Wer",
+    "subtaskDue": "Wann",
+    "nobody": "Niemand",
+    "showEveryone": "Alle anzeigen",
+    "sectionOnly": "Nur dieser Bereich",
+    "addedBy": "Hinzugefügt von {name} · {when}"
   },
   "myTasks": {
     "title": "Meine Aufgaben",

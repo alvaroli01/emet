@@ -4,7 +4,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import {
-  DndContext, DragOverlay, KeyboardSensor, PointerSensor, TouchSensor, closestCorners,
+  DndContext, DragOverlay, KeyboardSensor, MouseSensor, TouchSensor, closestCorners,
   useDroppable, useSensor, useSensors, type DragEndEvent, type DragOverEvent, type DragStartEvent, type KeyboardCoordinateGetter,
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
@@ -78,8 +78,9 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
   }, [data]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 6 } }),
+    // Mouse: drag after moving 6px. Touch: press and hold, so swiping still scrolls the board.
+    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 260, tolerance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: keyboardCoordinates, keyboardCodes: { start: ["Space"], cancel: ["Escape"], end: ["Space"] } }),
   );
 
@@ -87,6 +88,7 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
 
   function onDragStart(e: DragStartEvent) {
     dragging.current = true;
+    navigator.vibrate?.(8); // a small tick on Android when the card lifts
     setActiveId(String(e.active.id));
   }
 
@@ -139,14 +141,23 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
   async function addCard(listId: string, title: string) {
     const ids = order[listId];
     const last = ids.length ? cards[ids[ids.length - 1]]?.position ?? 0 : 0;
-    const { data: row, error } = await supabase.from("cards")
-      .insert({ board_id: data.board.id, list_id: listId, title, position: last + 1, created_by: viewer.meId })
-      .select("*").single();
-    if (error || !row) return toast("error", t("errors.save"));
-    const card: BoardCard = { ...row, labels: row.labels ?? [], assignees: [], checklist: { done: 0, total: 0 }, comments: 0 };
-    setCards((c) => ({ ...c, [card.id]: card }));
-    setOrder((o) => ({ ...o, [listId]: [...o[listId], card.id] }));
-    if (data.board.trello_sync_enabled) pushToTrello({ cardId: card.id, op: "upsert" });
+    // Show the card instantly; the person adding it is its creator and first assignee
+    const id = crypto.randomUUID();
+    const card: BoardCard = {
+      id, board_id: data.board.id, list_id: listId, title, description: null, due_at: null, completed_at: null,
+      position: last + 1, labels: [], created_by: viewer.meId, created_at: new Date().toISOString(),
+      assignees: [viewer.meId], checklist: { done: 0, total: 0 }, comments: 0,
+    };
+    setCards((c) => ({ ...c, [id]: card }));
+    setOrder((o) => ({ ...o, [listId]: [...o[listId], id] }));
+    const { error } = await supabase.from("cards")
+      .insert({ id, board_id: data.board.id, list_id: listId, title, position: last + 1, created_by: viewer.meId });
+    if (error) {
+      setOrder((o) => ({ ...o, [listId]: o[listId].filter((x) => x !== id) }));
+      return toast("error", t("errors.save"));
+    }
+    await supabase.from("card_assignees").insert({ card_id: id, user_id: viewer.meId });
+    if (data.board.trello_sync_enabled) pushToTrello({ cardId: id, op: "upsert" });
   }
 
   async function addList(name: string) {
@@ -211,7 +222,7 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
       {viewer.isAdmin && <TrelloPanel board={data.board} members={data.members} />}
 
       {openCard && (
-        <CardDialog card={openCard} lists={lists} members={data.members} viewerId={viewer.meId} trello={data.board.trello_sync_enabled}
+        <CardDialog card={openCard} lists={lists} members={data.members} groupId={data.board.group_id} viewerId={viewer.meId} trello={data.board.trello_sync_enabled}
                     canEdit={rights.canEditCard(openCard)} onClose={() => setOpenId(null)} onChange={onCardChange} />
       )}
     </div>
@@ -334,13 +345,18 @@ export function CardTile({ card, members, done, dragging }: { card: BoardCard; m
 
   return (
     <article suppressHydrationWarning style={{ boxShadow: dragging ? "var(--shadow-lift)" : "var(--shadow), inset 0 0 0 1px var(--panel-edge)" }}
-      className={`relative cursor-grab touch-manipulation rounded-[10px] bg-surface p-3 text-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-px active:cursor-grabbing ${
+      className={`no-select relative cursor-grab touch-manipulation rounded-[10px] bg-surface p-3 text-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-px active:cursor-grabbing ${
       dragging ? "-rotate-2 scale-[1.03]" : ""}`}>
       {overdue && <span aria-hidden className="absolute top-3 right-3 size-2 rounded-full bg-bad" />}
       {card.labels.length > 0 && (
         <div className="mb-2 flex flex-wrap gap-1">{card.labels.map((l) => <LabelChip key={l} label={l} />)}</div>
       )}
       <p className={`leading-snug ${done ? "text-muted line-through decoration-muted/50" : ""}`}>{card.title}</p>
+      {card.checklist.total > 0 && (
+        <div className="mt-2.5 h-1 overflow-hidden rounded-full bg-surface-2" aria-hidden>
+          <div className="h-full rounded-full bg-ok transition-[width] duration-500" style={{ width: `${(card.checklist.done / card.checklist.total) * 100}%` }} />
+        </div>
+      )}
       {(card.due_at || card.checklist.total > 0 || card.comments > 0 || people.length > 0) && (
         <div className="mt-2.5 flex items-center gap-2.5 text-xs text-muted">
           {card.due_at && (

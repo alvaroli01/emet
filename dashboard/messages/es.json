@@ -206,7 +206,16 @@
     "errors": {
       "save": "No se pudo guardar: quizá no tienes permiso o estás sin conexión.",
       "listNotEmpty": "Mueve o elimina primero las tarjetas y luego borra la lista."
-    }
+    },
+    "subtasks": "Tareas de este proyecto",
+    "subtasksHint": "Divide la tarjeta en tareas pequeñas. Cada una puede tener su persona y su fecha.",
+    "addSubtask": "Añadir tarea",
+    "subtaskPerson": "Quién",
+    "subtaskDue": "Cuándo",
+    "nobody": "Nadie",
+    "showEveryone": "Mostrar a todos",
+    "sectionOnly": "Solo esta sección",
+    "addedBy": "Añadida por {name} · {when}"
   },
   "myTasks": {
     "title": "Mis tareas",

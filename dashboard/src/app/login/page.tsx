@@ -45,8 +45,9 @@ function LoginForm() {
       if (error) {
         setMsg({ kind: "error", text: t("errors.wrongPassword") });
       } else {
+        // Dynamic pages are never served from the router cache, so one navigation is enough
         router.replace(safeNext);
-        router.refresh();
+        return; // keep the spinner until the next page shows
       }
     } else {
       // shouldCreateUser: false → only invited members can get a link

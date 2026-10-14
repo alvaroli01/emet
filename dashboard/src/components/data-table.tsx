@@ -106,7 +106,10 @@ export function DataTable({
     router.refresh();
   }
 
+  // "Who did this" is taken from the login, never asked: these fields are filled from `defaults` and hidden in forms
+  const AUTO_WHO = ["logged_by", "created_by", "requested_by", "author_id"];
   const formFields = (row: Row | null) => fields.filter((f) => f.form !== false && f.type !== "timer" && f.type !== "logged24" && f.type !== "margin")
+    .filter((f) => !(f.type === "person" && AUTO_WHO.includes(f.key)))
     .filter((f) => row || canEdit || !addFields || addFields.includes(f.key));
 
   return (

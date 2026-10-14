@@ -32,11 +32,13 @@ export type Session = {
 /** Loads the logged-in member once per request. Redirects to /login if not logged in or not on the team. */
 export const getSession = cache(async (): Promise<Session> => {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  // Verified locally (see middleware); the database checks the same token on every query.
+  const { data } = await supabase.auth.getClaims();
+  const userId = data?.claims?.sub;
+  if (!userId) redirect("/login");
 
   const [{ data: me }, { data: groups }] = await Promise.all([
-    supabase.from("profiles").select("*").eq("user_id", user.id).maybeSingle<Profile>(),
+    supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle<Profile>(),
     supabase.from("groups").select("*").order("position").returns<Group[]>(),
   ]);
   if (!me || !me.active) redirect("/auth/not-on-team");

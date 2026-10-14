@@ -206,7 +206,16 @@
     "errors": {
       "save": "Échec de l’enregistrement — tu n’as peut-être pas le droit, ou tu es hors ligne.",
       "listNotEmpty": "Déplace ou supprime d’abord les cartes, puis la liste."
-    }
+    },
+    "subtasks": "Tâches de ce projet",
+    "subtasksHint": "Découpez la carte en petites tâches. Chacune peut avoir sa personne et sa date.",
+    "addSubtask": "Ajouter une tâche",
+    "subtaskPerson": "Qui",
+    "subtaskDue": "Quand",
+    "nobody": "Personne",
+    "showEveryone": "Afficher tout le monde",
+    "sectionOnly": "Seulement cette section",
+    "addedBy": "Ajoutée par {name} · {when}"
   },
   "myTasks": {
     "title": "Mes tâches",

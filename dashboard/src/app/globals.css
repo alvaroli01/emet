@@ -116,7 +116,7 @@ body {
 }
 
 ::selection { background: color-mix(in srgb, var(--climbed) 28%, transparent); color: var(--text); }
-html { scrollbar-color: var(--border) transparent; accent-color: var(--climbed); caret-color: var(--climbed); }
+html { touch-action: manipulation; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; scrollbar-color: var(--border) transparent; accent-color: var(--climbed); caret-color: var(--climbed); }
 :focus-visible { outline: 2px solid var(--climbed); outline-offset: 2px; border-radius: 6px; }
 .tabular { font-variant-numeric: tabular-nums; }
 /* Display numerals: Archivo's width axis gives the altimeter readout its stance */
@@ -151,3 +151,10 @@ button { white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Phones: iOS zooms into any field under 16px — keep fields at 16px so the page never jumps */
+@media (max-width: 639px) {
+  input, select, textarea { font-size: 16px !important; }
+}
+/* Dragging cards: no text selection, no iOS magnifier or callout on long-press */
+.no-select { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }

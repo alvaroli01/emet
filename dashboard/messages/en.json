@@ -206,7 +206,16 @@
     "errors": {
       "save": "Couldn't save — you may not have permission, or you're offline.",
       "listNotEmpty": "Move or delete the cards first, then delete the list."
-    }
+    },
+    "subtasks": "Tasks in this project",
+    "subtasksHint": "Split the card into small tasks. Each one can have its own person and date.",
+    "addSubtask": "Add a task",
+    "subtaskPerson": "Who",
+    "subtaskDue": "When",
+    "nobody": "No one",
+    "showEveryone": "Show everyone",
+    "sectionOnly": "Only this section",
+    "addedBy": "Added by {name} · {when}"
   },
   "myTasks": {
     "title": "My Tasks",

@@ -206,7 +206,16 @@
     "errors": {
       "save": "Tallennus epäonnistui – ehkä sinulla ei ole oikeutta tai olet offline-tilassa.",
       "listNotEmpty": "Siirrä tai poista ensin kortit, sitten lista."
-    }
+    },
+    "subtasks": "Projektin tehtävät",
+    "subtasksHint": "Jaa kortti pieniin tehtäviin. Jokaisella voi olla oma tekijä ja päivämäärä.",
+    "addSubtask": "Lisää tehtävä",
+    "subtaskPerson": "Kuka",
+    "subtaskDue": "Milloin",
+    "nobody": "Ei kukaan",
+    "showEveryone": "Näytä kaikki",
+    "sectionOnly": "Vain tämä osio",
+    "addedBy": "Lisännyt {name} · {when}"
   },
   "myTasks": {
     "title": "Omat tehtävät",
