@@ -24,6 +24,7 @@
   --glass-hi: rgb(255 255 255 / 0.14);
   --glass-edge: rgb(255 255 255 / 0.08);
   --glass-blur: 22px;
+  --shade: 8 8 10;
   --contour: #4a3a30;
   --terrain: #1a1714;
   --climbed: #ff8a3d;
@@ -48,6 +49,7 @@
 /* Light glass: frosted white panels on warm grey (opt-in theme, and always used by Base camp) */
 :root[data-theme="light"], .light-glass {
   --bg: #d8d8d3;
+  --shade: 226 226 221;
   --surface: rgb(255 255 255 / 0.55);
   --surface-2: rgb(255 255 255 / 0.55);
   --solid: #f2f2ef;
@@ -64,7 +66,7 @@
   --contour: #c9c3b6;
   --terrain: #f4f2ec;
   --climbed: #f26a1b;
-  --trail: #2f5bea;
+  --trail: #e85d10;
   --ok: #10b981;
   --warn: #f59e0b;
   --bad: #ef4444;

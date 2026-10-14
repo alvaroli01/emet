@@ -21,7 +21,7 @@ export function HeaderRecord() {
   return (
     <>
       <button onClick={open} aria-label={t("record")} title={t("record")}
-              className="grid size-9 place-items-center rounded-full bg-trail text-white shadow-[var(--shadow)] transition hover:brightness-105 active:scale-95">
+              className="grid size-9 place-items-center rounded-full bg-brand text-white shadow-[0_6px_18px_-6px_rgb(255_106_26/0.8)] transition hover:brightness-110 active:scale-95">
         <Mic size={16} />
       </button>
       {/* Portalled to <body>: the top bar's blur would otherwise trap a fixed window inside it */}

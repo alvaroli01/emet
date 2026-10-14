@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { getSession } from "@/lib/session";
 import { loadBoard, BOARD_TABLES } from "@/lib/boards";
 import { loadKpis } from "@/lib/kpi-data";
@@ -21,13 +21,13 @@ import { LayoutDashboard, KanbanSquare } from "lucide-react";
 import { SectionAssistant } from "@/components/shell/section-assistant";
 import { createClient } from "@/lib/supabase/server";
 import { PageHero } from "@/components/shell/page-hero";
-import { HeroTerrain, MemberOrbit } from "@/components/shell/hero-visuals";
+import { MemberOrbit } from "@/components/shell/hero-visuals";
 import { groupHero } from "@/lib/hero-data";
 import { loadFinanceDash } from "@/lib/finance-dash";
 import { loadMarketingDash } from "@/lib/marketing-dash";
 import { MarketingDashboard } from "@/components/marketing/marketing-dashboard";
 import { FinanceDashboard } from "@/components/finance/finance-dashboard";
-import { shortDate, todayISO } from "@/lib/format";
+import { todayISO } from "@/lib/format";
 import { GroupIcon } from "@/components/group-icon";
 
 /** Quick things to ask the assistant in each section (shown as chips under the chat). */
@@ -73,7 +73,6 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   const groupKpis = kpis.filter((k) => k.group_id === group.id);
   const tt = await getTranslations("tools");
   const th = await getTranslations("hero");
-  const locale = await getLocale();
   const toolTabs = Tools ? await Tools(props) : [];
   const ta = await getTranslations("assist");
   const { data: aiKey } = await (await createClient()).from("ai_keys").select("last4").maybeSingle();
@@ -120,11 +119,8 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         })) : [{ text: th("allClear"), tone: "ok" as const }]}
         stats={hero.stats.map((x) => ({ label: th(`stats.${x.key}`), value: x.value, kind: x.kind }))}
         actions={(ACTIONS[slug] ?? []).filter((a) => !a.edit || editable).map((a, i) => ({ label: th(`actions.${a.key}`), href: a.href ?? `/g/${slug}?tab=${a.tab}`, primary: i === 0 }))}
-        visual={slug === "communications"
-          ? <MemberOrbit slug={slug} color={group.color} people={members} />
-          : <HeroTerrain points={hero.series.map((p) => ({ label: th("weekOf", { date: shortDate(p.label, locale) }), value: p.value }))} kind={hero.seriesKind}
-                         ariaLabel={th(`series.${hero.seriesKey}`)} />}
-        visualTitle={th(`series.${hero.seriesKey}`)}
+        visual={slug === "communications" ? <MemberOrbit slug={slug} color={group.color} people={members} /> : undefined}
+        visualTitle={slug === "communications" ? th(`series.${hero.seriesKey}`) : undefined}
         aside={
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex -space-x-2">

@@ -139,10 +139,10 @@ function Waveform({ bars }: { bars: number[] }) {
 }
 
 /** Speedometer-style gauge: tick marks around a half circle, filled up to the goal %. */
-function Gauge({ pct, label }: { pct: number; label: string }) {
+function Gauge({ pct, label, small = false }: { pct: number; label: string; small?: boolean }) {
   const ticks = 46;
   return (
-    <div className="relative mx-auto w-full max-w-[260px]">
+    <div className={`relative w-full ${small ? "max-w-[170px]" : "mx-auto max-w-[260px]"}`}>
       <svg viewBox="0 0 200 112" className="w-full" aria-hidden>
         {Array.from({ length: ticks }, (_, i) => {
           const f = i / (ticks - 1), a = Math.PI * (1 - f);
@@ -154,8 +154,8 @@ function Gauge({ pct, label }: { pct: number; label: string }) {
         {(() => { const a = Math.PI * (1 - pct); return <line x1="100" y1="100" x2={100 + 60 * Math.cos(a)} y2={100 - 60 * Math.sin(a)} stroke="#ff6a1a" strokeWidth="3" strokeLinecap="round" />; })()}
         <circle cx="100" cy="100" r="5" fill="#ff6a1a" />
       </svg>
-      <p className="absolute inset-x-0 top-[34%] text-center text-[11px] text-white/75">{label}</p>
-      <p className="readout absolute inset-x-0 top-[50%] text-center text-4xl text-white">{Math.round(pct * 100)}%</p>
+      <p className={`absolute inset-x-0 top-[34%] text-center text-white/75 ${small ? "text-[9px]" : "text-[11px]"}`}>{label}</p>
+      <p className={`readout absolute inset-x-0 top-[50%] text-center text-white ${small ? "text-2xl" : "text-4xl"}`}>{Math.round(pct * 100)}%</p>
     </div>
   );
 }
@@ -254,11 +254,12 @@ export function HomeDashboard({ d }: { d: HomeData }) {
               </Link>
             ))}
           </div>
-          <div className="pointer-events-none mt-10">
-            <Gauge pct={d.goal.pct} label={t("toSummit")} />
+          {/* Gauge sits in the corner so the mountain stays visible in the middle */}
+          <div className="pointer-events-none absolute bottom-20 left-3 w-[170px] rounded-3xl bg-black/35 p-2 backdrop-blur-md">
+            <Gauge pct={d.goal.pct} label={t("toSummit")} small />
           </div>
-          <div className="pointer-events-none absolute inset-x-4 bottom-5 text-center">
-            <p className="flex items-center justify-center gap-1.5 text-lg font-medium text-white"><Target size={17} /> {eur(d.goal.revenue, locale)} <span className="text-white/60">/ {eur(d.goal.goal, locale)}</span></p>
+          <div className="pointer-events-none absolute inset-x-4 bottom-5 text-left">
+            <p className="flex items-center gap-1.5 text-lg font-medium text-white"><Target size={17} /> {eur(d.goal.revenue, locale)} <span className="text-white/60">/ {eur(d.goal.goal, locale)}</span></p>
             <p className="mt-0.5 text-xs text-white/70">{t("daysLeft", { count: d.goal.daysLeft })}</p>
           </div>
         </section>

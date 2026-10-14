@@ -58,7 +58,7 @@ export function WeeklyChart({ data }: { data: WeekPoint[] }) {
   const { eur, eurShort, weekLabel } = useFmt();
   return (
     <div className="h-56 w-full">
-      <ResponsiveContainer initialDimension={{ width: 480, height: 200 }}>
+      <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 480, height: 200 }}>
         <BarChart data={data} barGap={2} barCategoryGap="25%" margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
           <CartesianGrid vertical={false} stroke="var(--grid)" />
           <XAxis dataKey="week" tickFormatter={weekLabel} {...axis} minTickGap={16} />
@@ -88,7 +88,7 @@ export function CumulativeChart({ data }: { data: WeekPoint[] }) {
   const { eur, eurShort, weekLabel } = useFmt();
   return (
     <div className="h-56 w-full">
-      <ResponsiveContainer initialDimension={{ width: 480, height: 200 }}>
+      <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 480, height: 200 }}>
         <LineChart data={data} margin={{ top: 8, right: 4, left: 4, bottom: 0 }}>
           <CartesianGrid vertical={false} stroke="var(--grid)" />
           <XAxis dataKey="week" tickFormatter={weekLabel} {...axis} minTickGap={16} />
