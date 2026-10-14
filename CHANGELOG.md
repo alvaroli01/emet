@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-14 — Alvaro — Today's top bar (Synced, bell, your name and role) is always white so it reads over the photo, even in the light theme.
 - 2026-10-14 — Alvaro — Page titles sit in a glass box (team logo → members line on team pages; subtitle + title on Marketing) so they read clearly over the photos.
 - 2026-10-14 — Alvaro — Finance background is now calm gold coins on dark, blurred and darker, so numbers and charts are easy to read.
 - 2026-10-14 — Alvaro — Ask emet is now a real conversation (follow-up questions, New chat); Today's ask box types example questions by itself; all text bolder and full contrast (white on dark, black on light). All 7 languages.
