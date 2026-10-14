@@ -17,7 +17,11 @@
     "meetings": "Kokousloki",
     "lab": "Ideapaja",
     "today": "Tänään",
-    "scout": "Scout"
+    "scout": "Scout",
+    "sectionWorkspace": "Työtila",
+    "sectionTools": "Työkalut",
+    "expand": "Laajenna valikko",
+    "collapse": "Tiivistä valikko"
   },
   "shell": {
     "noGroupYet": "Ei vielä ryhmää",
@@ -1969,6 +1973,167 @@
       "forgotten": "Tämä paikka unohdettiin tarkoituksella, eikä sitä tarkisteta enää.",
       "needKey": "Yhdistä ensin ilmainen Groq-avaimesi.",
       "error": "Paikkaa ei voitu tarkistaa. Yritä uudelleen minuutin päästä."
+    }
+  },
+  "hero": {
+    "allClear": "Täällä ei ole mitään odottamassa sinua. Hyvä hetki ottaa ennakkoa.",
+    "weekOf": "{date} alkava viikko",
+    "groups": {
+      "finance": {
+        "title": "Hei {name}, tältä rahatilanne näyttää",
+        "subtitle": "Jokainen sisään ja ulos mennyt euro kirjattuna 24 tunnissa, jotta tiimi tietää aina, kuinka lähellä huippu on."
+      },
+      "marketing": {
+        "title": "Hei {name}, mitä julkaisemme tänään?",
+        "subtitle": "Suunnittele, julkaise, kirjaa luvut ja pidä se, mikä toimii."
+      },
+      "customer": {
+        "title": "Hei {name}, kenelle puhumme tänään?",
+        "subtitle": "Liidit, seurannat ja kaikki, jotka tarvitsevat apua oston jälkeen."
+      },
+      "communications": {
+        "title": "Hei {name}, mitä tiimin pitää kuulla?",
+        "subtitle": "Päätökset, viikon tulostaulu ja se, miltä kaikista tuntuu."
+      },
+      "team-leader": {
+        "title": "Hei {name}, miten tiimillä menee?",
+        "subtitle": "Koko tiimin vointi, palaverit ja yhteydenotot yhdessä paikassa."
+      },
+      "default": {
+        "title": "Hei {name}, tässä on tiimisi",
+        "subtitle": "Tämän ryhmän tehtävät ja työkalut."
+      }
+    },
+    "needs": {
+      "overdue": "{count, plural, one {# tehtäväsi täällä on myöhässä} other {# tehtävääsi täällä on myöhässä}}",
+      "myCards": "{count, plural, one {# tehtävä täällä on sinun} other {# tehtävää täällä on sinun}}",
+      "blockers": "{count, plural, one {# este on auki} other {# estettä on auki}}",
+      "claims": "{count, plural, one {# kulukorvaus odottaa päätöstä} other {# kulukorvausta odottaa päätöstä}}",
+      "lowStock": "{count, plural, one {# tuote on loppumassa} other {# tuotetta on loppumassa}}",
+      "closeMonth": "{month} ei ole vielä suljettu",
+      "toLog": "{count, plural, one {# julkaisun luvut odottavat kirjaamista} other {# julkaisun luvut odottavat kirjaamista}}",
+      "contentDue": "{count, plural, one {# sisältö erääntyy tällä viikolla} other {# sisältöä erääntyy tällä viikolla}}",
+      "briefsDraft": "{count, plural, one {# brief odottaa hyväksyntää} other {# briefiä odottaa hyväksyntää}}",
+      "complaints": "{count, plural, one {# asiakasongelma on auki} other {# asiakasongelmaa on auki}}",
+      "followUp": "Sinulla on {count, plural, one {# liidi, joka vaatii seurantaa} other {# liidiä, jotka vaativat seurantaa}}",
+      "scoutDue": "{count, plural, one {# Scout-liidi erääntyy tänään} other {# Scout-liidiä erääntyy tänään}}",
+      "morale": "Et ole vielä tehnyt tämän viikon fiilistarkistusta",
+      "teamOverdue": "{count, plural, one {# tiimin tehtävä on myöhässä} other {# tiimin tehtävää on myöhässä}}"
+    },
+    "stats": {
+      "revenue": "Liikevaihto toistaiseksi",
+      "profit": "Voitto",
+      "margin": "Kate",
+      "posts7": "Julkaisut tällä viikolla",
+      "inquiries30": "DM:t (30 päivää)",
+      "clicks7": "Linkkiklikkaukset (7 päivää)",
+      "openProspects": "Avoimet liidit",
+      "won": "Voitetut",
+      "openComplaints": "Avoimet ongelmat",
+      "decisions30": "Päätökset (30 päivää)",
+      "moraleAvg": "Fiilis tällä viikolla",
+      "teamOverdue": "Myöhässä olevat tehtävät"
+    },
+    "series": {
+      "revenuePerWeek": "Liikevaihto viikossa",
+      "viewsPerWeek": "Katselut viikossa",
+      "postsPerWeek": "Julkaisut viikossa",
+      "prospectsPerWeek": "Uudet liidit viikossa",
+      "doneTasksPerWeek": "Valmistuneet tehtävät viikossa"
+    },
+    "actions": {
+      "logSale": "Kirjaa myynti",
+      "ledgers": "Pääkirjat",
+      "overview": "Rahayhteenveto",
+      "newContent": "Suunnittele sisältöä",
+      "myWeek": "Minun viikkoni",
+      "pulse": "Syke",
+      "prospects": "Liidit",
+      "findClients": "Etsi asiakkaita",
+      "complaints": "Asiakasongelmat",
+      "decisions": "Päätökset",
+      "morale": "Fiilistarkistus",
+      "board": "Tehtävätaulu",
+      "health": "Tiimin vointi",
+      "generalBoard": "Yleistaulu",
+      "outreach": "Yhteydenotot"
+    },
+    "tabGroups": {
+      "work": "Työ",
+      "plan": "Suunnitelma",
+      "numbers": "Luvut",
+      "people": "Ihmiset"
+    },
+    "today": {
+      "ask": "— mitä tehdään tänään?",
+      "late": "{count, plural, one {# tehtävä on myöhässä} other {# tehtävää on myöhässä}}",
+      "dueToday": "{count, plural, one {# tehtävä erääntyy tänään} other {# tehtävää erääntyy tänään}}",
+      "next": "Seuraavaksi klo {time}: {title}",
+      "priority": "Tämän viikon prioriteetti: {title}",
+      "revenue": "Tiimin liikevaihto",
+      "profit": "Tiimin voitto"
+    },
+    "overview": {
+      "title": "Hei {name}, tässä koko nousu",
+      "blockers": "{count, plural, one {# este jarruttaa tiimiä} other {# estettä jarruttaa tiimejä}}",
+      "complaints": "{count, plural, one {# asiakasongelma on auki} other {# asiakasongelmaa on auki}}",
+      "pace": "Tästä eteenpäin tarvitsemme {amount} viikossa"
+    },
+    "camp": {
+      "title": "Tervetuloa takaisin leiriisi, {name}",
+      "due": "{count, plural, one {# asia erääntyy tällä viikolla} other {# asiaa erääntyy tällä viikolla}}",
+      "setPriorities": "Aseta viikon 3 prioriteettiasi",
+      "shared": "{count, plural, one {# dokumentti jaettiin sinulle} other {# dokumenttia jaettiin sinulle}}",
+      "record": "Tallenna luento tai palaveri"
+    },
+    "board": {
+      "title": "Hei {name}, tässä kaikki, mitä yritys tekee",
+      "late": "{count, plural, one {# kortti on myöhässä} other {# korttia on myöhässä}}",
+      "mine": "{count, plural, one {# kortti täällä on sinun} other {# korttia täällä on sinun}}",
+      "none": "Mikään täällä ei ole osoitettu sinulle",
+      "open": "Avoimet kortit",
+      "done": "Valmis",
+      "ring": "kaikista korteista valmiina"
+    },
+    "team": {
+      "title": "Hei {name}, tutustu tiimiin",
+      "people": "Ihmiset",
+      "joined": "Kirjautunut",
+      "noGroup": "Ei vielä ryhmää"
+    },
+    "tasks": {
+      "title": "Hei {name}, tässä kaikki, mitä sinulla on työn alla",
+      "late": "{count, plural, one {# tehtävä on myöhässä} other {# tehtävää on myöhässä}}",
+      "next": "Seuraava: {title} ({date})",
+      "clear": "Ei avoimia. Hyvää työtä.",
+      "doneWeek": "Valmiina tällä viikolla",
+      "board": "Yleistaulu",
+      "camp": "Tukikohta",
+      "ring": "tehtävistäsi valmiina"
+    },
+    "meetings": {
+      "title": "Hei {name}, mistä puhuimme?",
+      "latest": "Viimeisin: {title} ({date})",
+      "none": "Palavereita ei ole vielä tallennettu. Tallenna seuraava, ettei kukaan jää paitsi.",
+      "processing": "{count, plural, one {# tallenteesi kirjoitetaan vielä auki} other {# tallennettasi kirjoitetaan vielä auki}}",
+      "week": "Tällä viikolla",
+      "total": "Kaikki tallenteet"
+    },
+    "lab": {
+      "title": "Hei {name}, mitä voisimme rakentaa?",
+      "best": "Paras idea toistaiseksi: {title} ({score}/100)",
+      "toVote": "{count, plural, one {# analysoitu idea odottaa ääntäsi} other {# analysoitua ideaa odottaa ääntäsi}}",
+      "empty": "Ei vielä ideoita. Pitchaa ensimmäinen.",
+      "ideas": "Ideat",
+      "strong": "Vahvat (75+)",
+      "votes": "Äänet",
+      "pitch": "Pitchaa idea",
+      "scout": "Etsi asiakkaita"
+    },
+    "scout": {
+      "title": "Hei {name}, kenelle meidän pitäisi myydä?",
+      "due": "{count, plural, one {# liidi odottaa seuraavaa askeltasi} other {# liidiä odottaa seuraavaa askeltasi}}",
+      "strong": "{count, plural, one {# vahva liidi, johon kukaan ei ole vielä ottanut yhteyttä} other {# vahvaa liidiä, joihin kukaan ei ole vielä ottanut yhteyttä}}"
     }
   }
 }

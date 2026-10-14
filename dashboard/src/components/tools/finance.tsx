@@ -85,7 +85,7 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
 
   return [
     {
-      id: "money", label: tf("tabs.overview"),
+      id: "money", group: "numbers", label: tf("tabs.overview"),
       node: (
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-end gap-2">
@@ -97,15 +97,15 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
         </div>
       ),
     },
-    { id: "projects", label: tf("tabs.projects"), node: <FinanceProjects projects={p} sales={s} expenses={e} names={names} canEdit={editable} /> },
+    { id: "projects", group: "plan", label: tf("tabs.projects"), node: <FinanceProjects projects={p} sales={s} expenses={e} names={names} canEdit={editable} /> },
     {
-      id: "ledgers", label: tf("tabs.ledgers"),
+      id: "ledgers", group: "numbers", label: tf("tabs.ledgers"),
       node: <Ledgers sales={sales.data ?? []} expenses={expenses.data ?? []} salesFields={salesFields} expenseFields={expenseFields} members={allMembers}
                      projects={p} categories={categoryOptions} canEdit={editable} me={me} today={today} />,
     },
-    { id: "stock", label: tf("tabs.stock"), node: <Stock items={inventory.data ?? []} fields={inventoryFields} sales={s} members={allMembers} canEdit={editable} isAdmin={session.isAdmin} linking={linking} today={today} /> },
+    { id: "stock", group: "work", label: tf("tabs.stock"), node: <Stock items={inventory.data ?? []} fields={inventoryFields} sales={s} members={allMembers} canEdit={editable} isAdmin={session.isAdmin} linking={linking} today={today} /> },
     ...(editable ? [{
-      id: "books", label: tf("tabs.books"),
+      id: "books", group: "work" as const, label: tf("tabs.books"),
       node: <Bookkeeper claims={(claims.data ?? []) as never} counts={(counts.data ?? []) as never} audit={(audit.data ?? []) as never}
                         locks={(locks.data ?? []).map((l) => l.month)} entries={[...s, ...e].map((x) => ({ date: x.date, created_at: x.created_at, logged_by: x.logged_by, description: x.description }))}
                         cashExpected={cashExpected(s, e)} projects={p} categories={categoryOptions} names={names} isAdmin={session.isAdmin} me={me} today={today} sync={sync} />,

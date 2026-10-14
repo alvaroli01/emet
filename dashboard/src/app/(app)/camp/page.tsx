@@ -6,6 +6,8 @@ import { weekStart, GOAL, pace } from "@/lib/metrics";
 import { todayISO, eur } from "@/lib/format";
 import { SectionTabs } from "@/components/section-tabs";
 import { MountainLazy } from "@/components/summit/mountain-lazy";
+import { PageHero } from "@/components/shell/page-hero";
+import { Tent, Mic } from "lucide-react";
 import { WeekTab, type WeekPlan, type DueTask } from "@/components/camp/week";
 import { AgendaTab, type AgendaItem } from "@/components/camp/agenda";
 import { DocsTab, type Doc } from "@/components/camp/docs";
@@ -61,22 +63,31 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   const thisWeek = (plans.data ?? []).find((p) => p.week_start === week) ?? null;
   const openThisWeek = due.filter((d) => d.day < new Date(Date.parse(week) + 7 * 864e5).toISOString().slice(0, 10)).length;
   const firstName = me.full_name.split(" ")[0];
+  const th = await getTranslations("hero");
+  const tn = await getTranslations("nav");
 
   return (
     <div className="space-y-6">
-      <section className="panel grid overflow-hidden md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-        <div className="flex flex-col justify-between gap-6 p-5 sm:p-7">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-balance">{t("title", { name: firstName })}</h1>
-            <p className="mt-1 max-w-md text-sm text-muted">{t("subtitle")}</p>
-          </div>
-          <dl className="grid grid-cols-3 gap-4">
-            <div><dt className="text-xs text-muted">{t("stats.dueThisWeek")}</dt><dd className="readout text-2xl">{openThisWeek}</dd></div>
-            <div><dt className="text-xs text-muted">{t("stats.sharedWithMe")}</dt><dd className="readout text-2xl">{sharedDocs.length}</dd></div>
-            <div><dt className="text-xs text-muted">{t("stats.daysLeft")}</dt><dd className="readout text-2xl">{pace(revenue, 0).daysLeft}</dd></div>
-          </dl>
-        </div>
-        <div className="relative h-56 border-t border-line sm:h-64 md:h-auto md:min-h-[280px] md:border-t-0 md:border-l">
+      <PageHero
+        section={{ label: tn("camp"), icon: <Tent size={16} /> }}
+        title={th("camp.title", { name: firstName })}
+        subtitle={t("subtitle")}
+        lines={[
+          ...(openThisWeek ? [{ text: th("camp.due", { count: openThisWeek }), tone: "warn" as const, href: "/camp?tab=week" }] : []),
+          ...(thisWeek?.priorities?.filter((x: string) => x.trim()).length ? [] : [{ text: th("camp.setPriorities"), tone: "info" as const, href: "/camp?tab=week" }]),
+          ...(sharedDocs.length ? [{ text: th("camp.shared", { count: sharedDocs.length }), tone: "info" as const, href: "/camp?tab=docs" }] : []),
+        ]}
+        stats={[
+          { label: t("stats.dueThisWeek"), value: openThisWeek, kind: "num" },
+          { label: t("stats.sharedWithMe"), value: sharedDocs.length, kind: "num" },
+          { label: t("stats.daysLeft"), value: pace(revenue, 0).daysLeft, kind: "num" },
+        ]}
+        actions={[
+          { label: th("camp.record"), href: "/camp?tab=docs", icon: <Mic size={15} />, primary: true },
+          { label: t("tabs.agenda"), href: "/camp?tab=agenda" },
+          { label: t("tabs.ideas"), href: "/camp?tab=ideas" },
+        ]}
+        visual={
           <MountainLazy
             className="size-full"
             variant="camp"
@@ -84,8 +95,8 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
             ariaLabel={t("sceneLabel")}
             labels={{ summit: t("summit"), camp: t("yourCamp", { name: firstName }), here: revenue > 0 ? eur(revenue, locale) : null }}
           />
-        </div>
-      </section>
+        }
+      />
 
       <SectionTabs label={t("sections")} initial={tab} tabs={[
         { id: "week", label: t("tabs.week"), node: <WeekTab week={week} plan={thisWeek} past={(plans.data ?? []).filter((p) => p.week_start !== week)} due={due} meId={me.id} /> },

@@ -36,6 +36,7 @@ export function IdeaLab({ ideas, votes, comments, names, meId, isAdmin, hasKey: 
   ideas: LabIdea[]; votes: { idea_id: string; user_id: string }[]; comments: LabComment[];
   names: Record<string, string>; meId: string; isAdmin: boolean; hasKey: boolean; initialOpen?: string;
 }) {
+  const tlh = useTranslations("hero");
   const t = useTranslations("lab");
   const router = useRouter();
   const toast = useToast();
@@ -96,14 +97,8 @@ export function IdeaLab({ ideas, votes, comments, names, meId, isAdmin, hasKey: 
 
   return (
     <>
-      <section className="panel contours contours-corner p-5 sm:p-6">
-        <div className="mb-4 flex items-start gap-3">
-          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[color-mix(in_srgb,var(--warn)_18%,transparent)] text-warn-text"><Lightbulb size={20} /></span>
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
-            <p className="mt-0.5 max-w-2xl text-sm text-muted">{t("subtitle")}</p>
-          </div>
-        </div>
+      <section id="pitch" className="panel p-5 sm:p-6">
+        <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold tracking-tight"><Lightbulb size={18} className="text-warn-text" /> {tlh("lab.pitch")}</h2>
         <form onSubmit={(e) => create(e)} className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_auto] lg:items-start">
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("titlePlaceholder")} aria-label={t("titleLabel")} maxLength={140} className="input text-base font-medium" />
           <textarea value={pitch} onChange={(e) => setPitch(e.target.value)} placeholder={t("pitchPlaceholder")} aria-label={t("pitchLabel")} rows={2} maxLength={4000} className="input resize-y" />

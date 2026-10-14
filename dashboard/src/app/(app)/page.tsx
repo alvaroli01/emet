@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CalendarClock, Percent, Timer, AlertOctagon, ArrowRight, Move3d } from "lucide-react";
+import { CalendarClock, Percent, Timer, AlertOctagon, ArrowRight, Move3d, LayoutDashboard } from "lucide-react";
+import { PageHero } from "@/components/shell/page-hero";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -24,6 +25,8 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
   const { range: rangeParam } = await searchParams;
   const range = RANGES.find((r) => r === rangeParam) ?? "12";
   const t = await getTranslations("overview");
+  const th = await getTranslations("hero");
+  const tn = await getTranslations("nav");
   const tg = await getTranslations("group.names");
   const locale = await getLocale();
   const { me, groups } = await getSession();
@@ -78,50 +81,44 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
     <div className="space-y-6">
       <LiveRefresh tables={["sales", "expenses", "cards", "blockers", "activity_log", "complaints", "content_posts", "morale_checks"]} />
 
-      <section className="panel grid overflow-hidden lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <div className="relative z-10 flex flex-col gap-6 p-5 sm:p-7">
-          <div>
-            <h1 className="text-xl font-semibold tracking-tight text-balance">{t("hi", { name: me.full_name })}</h1>
-            <p className="text-sm text-muted">{t("subtitle")}</p>
+      <PageHero
+        section={{ label: tn("overview"), icon: <LayoutDashboard size={16} /> }}
+        title={th("overview.title", { name: me.full_name.split(" ")[0] })}
+        subtitle={t("subtitle")}
+        lines={[
+          ...(openBlockers.length ? [{ text: th("overview.blockers", { count: openBlockers.length }), tone: "warn" as const }] : []),
+          ...((complaints.count ?? 0) > 0 ? [{ text: th("overview.complaints", { count: complaints.count ?? 0 }), tone: "bad" as const, href: "/g/customer?tab=complaints" }] : []),
+          { text: nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - tot.revenue, locale), n: nextCamp.n }) : t("reached"), tone: "info" as const },
+          { text: th("overview.pace", { amount: eur(p.revenuePerWeekNeeded, locale) }), tone: p.revenuePerWeekSoFar >= p.revenuePerWeekNeeded ? "ok" as const : "warn" as const },
+        ]}
+        stats={[
+          { label: t("revenue"), value: tot.revenue, kind: "eur", hint: t("of", { goal: eur(GOAL.revenue, locale) }) },
+          { label: t("profit"), value: Math.max(0, tot.profit), kind: "eur", hint: t("of", { goal: eur(GOAL.profit, locale) }) },
+          { label: t("until", { date: longDate(DEADLINE, locale) }), value: p.daysLeft, kind: "num", hint: t("weeksLeft", { count: p.weeksLeft }) },
+        ]}
+        aside={
+          <div className="max-w-md space-y-3">
+            <Altimeter value={revPct} steps={CAMPS} color="var(--climbed)" label={t("ringLabel", { label: t("revenue"), value: eur(tot.revenue, locale), goal: eur(GOAL.revenue, locale), pct: Math.round(revPct * 100) })} />
+            <Altimeter value={profitPct} color="var(--series-2)" label={t("ringLabel", { label: t("profit"), value: eur(Math.max(0, tot.profit), locale), goal: eur(GOAL.profit, locale), pct: Math.round(profitPct * 100) })} />
           </div>
-          <div>
-            <p className="text-sm text-muted">{t("revenue")}</p>
-            <p className="readout text-5xl leading-none sm:text-6xl">{eur(tot.revenue, locale)}</p>
-            <p className="mt-2 text-sm text-muted tabular">{t("of", { goal: eur(GOAL.revenue, locale) })} · {pct(revPct, locale)}</p>
-            <Altimeter value={revPct} steps={CAMPS} color="var(--climbed)" className="mt-4" label={t("ringLabel", { label: t("revenue"), value: eur(tot.revenue, locale), goal: eur(GOAL.revenue, locale), pct: Math.round(revPct * 100) })} />
-            <p className="mt-2 text-sm font-medium tabular">
-              {nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - tot.revenue, locale), n: nextCamp.n }) : t("reached")}
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4 border-t border-line pt-5">
-            <div>
-              <p className="text-sm text-muted">{t("profit")}</p>
-              <p className="readout text-2xl">{eur(Math.max(0, tot.profit), locale)}</p>
-              <p className="text-xs text-muted tabular">{t("of", { goal: eur(GOAL.profit, locale) })}</p>
-              <Altimeter value={profitPct} color="var(--series-2)" className="mt-2" label={t("ringLabel", { label: t("profit"), value: eur(Math.max(0, tot.profit), locale), goal: eur(GOAL.profit, locale), pct: Math.round(profitPct * 100) })} />
-            </div>
-            <div>
-              <p className="text-sm text-muted">{t("until", { date: longDate(DEADLINE, locale) })}</p>
-              <p className="readout text-2xl">{t("days", { count: p.daysLeft })}</p>
-              <p className="text-xs text-muted">{t("weeksLeft", { count: p.weeksLeft })}</p>
-            </div>
-          </div>
-        </div>
-        <div className="relative h-[300px] border-t border-line sm:h-[380px] lg:h-auto lg:min-h-[440px] lg:border-t-0 lg:border-l">
-          <MountainLazy
-            className="size-full"
-            progress={revPct}
-            nextCampAt={nextCamp ? nextCamp.amount / GOAL.revenue : null}
-            ariaLabel={t("mountainLabel", { pct: pct(revPct, locale), goal: eur(GOAL.revenue, locale) })}
-            labels={{
-              summit: t("summit", { amount: eur(GOAL.revenue, locale) }),
-              here: tot.revenue > 0 ? eur(tot.revenue, locale) : null,
-              nextCamp: nextCamp ? t("camp", { n: nextCamp.n, amount: eur(nextCamp.amount, locale) }) : null,
-            }}
-          />
-          <p className="pointer-events-none absolute right-3 bottom-3 flex items-center gap-1 text-xs text-muted"><Move3d size={13} aria-hidden /> {t("dragHint")}</p>
-        </div>
-      </section>
+        }
+        visual={
+          <>
+            <MountainLazy
+              className="size-full"
+              progress={revPct}
+              nextCampAt={nextCamp ? nextCamp.amount / GOAL.revenue : null}
+              ariaLabel={t("mountainLabel", { pct: pct(revPct, locale), goal: eur(GOAL.revenue, locale) })}
+              labels={{
+                summit: t("summit", { amount: eur(GOAL.revenue, locale) }),
+                here: tot.revenue > 0 ? eur(tot.revenue, locale) : null,
+                nextCamp: nextCamp ? t("camp", { n: nextCamp.n, amount: eur(nextCamp.amount, locale) }) : null,
+              }}
+            />
+            <p className="pointer-events-none absolute right-3 bottom-3 flex items-center gap-1 text-xs text-muted"><Move3d size={13} aria-hidden /> {t("dragHint")}</p>
+          </>
+        }
+      />
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>

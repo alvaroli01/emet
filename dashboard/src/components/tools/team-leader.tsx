@@ -53,7 +53,7 @@ export async function TeamLeaderTools(props: ToolProps): Promise<ToolTab[]> {
 
   return [
     {
-      id: "health", label: t("leader.onTime"),
+      id: "health", group: "numbers", label: t("leader.onTime"),
       node: (
         <div className="space-y-4">
           <div className="panel">
@@ -80,7 +80,7 @@ export async function TeamLeaderTools(props: ToolProps): Promise<ToolTab[]> {
       ),
     },
     {
-      id: "meetings", label: t("leader.meetings"),
+      id: "meetings", group: "plan", label: t("leader.meetings"),
       node: (
         <DataTable table="meeting_notes" title={t("leader.meetings")} rows={notes.data ?? []} fields={noteFields} members={allMembers}
                    canEdit={editable} defaults={{ created_by: session.me.id, meeting_date: new Date().toISOString().slice(0, 10) }}
@@ -88,7 +88,7 @@ export async function TeamLeaderTools(props: ToolProps): Promise<ToolTab[]> {
       ),
     },
     {
-      id: "outreach", label: t("leader.outreach"),
+      id: "outreach", group: "people", label: t("leader.outreach"),
       node: (
         <DataTable table="outreach" title={t("leader.outreach")} rows={outreach.data ?? []} fields={outreachFields} members={allMembers}
                    canEdit={editable} defaults={{ owner_id: session.me.id, kind: "school", status: "to_contact" }}

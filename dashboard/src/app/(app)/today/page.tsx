@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CalendarClock, ArrowUpRight, Plus, Mic, Lightbulb, FileText, Receipt, Clock, CheckCircle2 } from "lucide-react";
+import { CalendarClock, ArrowUpRight, Plus, Mic, Lightbulb, FileText, Receipt, Clock, CheckCircle2, Sun } from "lucide-react";
+import { PageHero } from "@/components/shell/page-hero";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { weekStart, GOAL, pace, totals, type Sale, type Expense } from "@/lib/metrics";
 import { todayISO, eur, shortDate, pct } from "@/lib/format";
 import { LiveRefresh } from "@/components/live-refresh";
-import { Altimeter } from "@/components/summit/altimeter";
 import { MountainLazy } from "@/components/summit/mountain-lazy";
 import { AskButton } from "@/components/workspace/ask-button";
 import { ReportCard } from "@/components/workspace/report-card";
@@ -17,6 +17,7 @@ type Due = { id: string; title: string; day: string; href: string; parent?: stri
 /** Today: everything one person needs to start the day, on one screen. */
 export default async function TodayPage() {
   const t = await getTranslations("today");
+  const th = await getTranslations("hero");
   const locale = await getLocale();
   const { me, myGroup, groups, isAdmin } = await getSession();
   const supabase = await createClient();
@@ -59,6 +60,7 @@ export default async function TodayPage() {
   const revPct = Math.min(1, Math.max(0, all.revenue / GOAL.revenue));
   const campN = Math.floor(all.revenue / (GOAL.revenue / 6)) + 1;
   const nextCamp = campN <= 6 ? { n: campN, amount: campN * (GOAL.revenue / 6) } : null;
+  const nextAgenda = (agenda.data ?? []).find((a) => !a.done && (a.start_time ?? "99") >= new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" }));
   const reportIsFresh = report.data && report.data.week_start === week;
 
   const actions = [
@@ -72,45 +74,30 @@ export default async function TodayPage() {
   return (
     <div className="space-y-5">
       <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads"]} />
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <p className="text-sm text-muted first-letter:uppercase">{new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/Madrid" })}</p>
-          <h1 className="text-3xl font-semibold tracking-tight">{t(`greeting.${greet}`, { name: me.full_name.split(" ")[0] })}</h1>
-        </div>
-        <AskButton />
-      </header>
-
-      <section className="panel grid overflow-hidden md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <Link href="/" className="flex flex-col justify-between gap-5 p-5 sm:p-6">
-          <div>
-            <p className="text-sm text-muted">{t("goal")}</p>
-            <p className="readout text-4xl leading-none sm:text-5xl">{eur(all.revenue, locale)}</p>
-            <p className="mt-1.5 text-sm text-muted tabular">{t("of", { goal: eur(GOAL.revenue, locale) })} · {pct(revPct, locale)}</p>
-            <Altimeter value={revPct} steps={6} color="var(--climbed)" className="mt-3" label={t("goal")} />
-            <p className="mt-2 text-sm font-medium tabular">{nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - all.revenue, locale), n: nextCamp.n }) : t("summitReached")}</p>
-          </div>
-          <dl className="grid grid-cols-2 gap-4 border-t border-line pt-4">
-            <div><dt className="text-xs text-muted">{t("profit")}</dt><dd className="readout text-xl">{eur(Math.max(0, all.profit), locale)}</dd>
-              <dd className="text-xs text-muted">{t("of", { goal: eur(GOAL.profit, locale) })}</dd></div>
-            <div><dt className="text-xs text-muted">{t("daysLeft", { count: p.daysLeft })}</dt><dd className="readout text-xl">{eur(p.revenuePerWeekNeeded, locale)}</dd>
-              <dd className="text-xs text-muted">{t("perWeekNeeded")}</dd></div>
-          </dl>
-        </Link>
-        <div className="relative h-60 border-t border-line sm:h-72 md:h-auto md:min-h-[300px] md:border-t-0 md:border-l">
+      <PageHero
+        section={{ label: new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/Madrid" }), icon: <Sun size={16} /> }}
+        title={t(`greeting.${greet}`, { name: me.full_name.split(" ")[0] }) + " " + th("today.ask")}
+        lines={[
+          ...(overdue.length ? [{ text: th("today.late", { count: overdue.length }), tone: "bad" as const, href: "/my-tasks" }] : []),
+          ...(dueToday.length ? [{ text: th("today.dueToday", { count: dueToday.length }), tone: "warn" as const, href: "/my-tasks" }] : []),
+          ...(nextAgenda ? [{ text: th("today.next", { time: nextAgenda.start_time?.slice(0, 5) ?? "", title: nextAgenda.title }), tone: "info" as const, href: "/camp?tab=agenda" }] : []),
+          ...(priorities.length ? [{ text: th("today.priority", { title: priorities.find((x: string) => !x.startsWith("✓ ")) ?? priorities[0] }), tone: "info" as const, href: "/camp" }] : []),
+          ...(!overdue.length && !dueToday.length ? [{ text: t("nothingDue"), tone: "ok" as const }] : []),
+        ]}
+        stats={[
+          { label: th("today.revenue"), value: all.revenue, kind: "eur" },
+          { label: th("today.profit"), value: Math.max(0, all.profit), kind: "eur" },
+          { label: t("perWeekNeeded"), value: p.revenuePerWeekNeeded, kind: "eur" },
+        ]}
+        actions={actions.map((a, i) => ({ label: a.label, href: a.href, icon: <a.icon size={15} />, primary: i === 0 }))}
+        aside={<div className="flex flex-wrap items-center gap-3"><AskButton /><span className="text-sm text-muted tabular">{nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - all.revenue, locale), n: nextCamp.n }) : t("summitReached")} · {t("daysLeft", { count: p.daysLeft })}</span></div>}
+        visual={
           <MountainLazy className="size-full" progress={revPct} nextCampAt={nextCamp ? nextCamp.amount / GOAL.revenue : null}
                         ariaLabel={t("mountainLabel", { pct: pct(revPct, locale) })}
                         labels={{ summit: t("summit", { amount: eur(GOAL.revenue, locale) }), here: all.revenue > 0 ? eur(all.revenue, locale) : null,
                                   nextCamp: nextCamp ? t("camp", { n: nextCamp.n, amount: eur(nextCamp.amount, locale) }) : null }} />
-        </div>
-      </section>
-
-      <nav aria-label={t("quick")} className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] lg:mx-0 lg:px-0">
-        {actions.map((a) => (
-          <Link key={a.href} href={a.href} className="panel panel-lift flex shrink-0 items-center gap-2 px-4 py-3 text-sm font-medium">
-            <a.icon size={16} className="text-trail" /> {a.label}
-          </Link>
-        ))}
-      </nav>
+        }
+      />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <section className="panel p-5">

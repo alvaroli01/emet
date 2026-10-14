@@ -24,9 +24,9 @@ const FREE_BYTES = 1024 ** 3;
 
 type Drive = { configured: boolean; connected: boolean; email: string | null; archivedBytes: number; result: string | null };
 
-export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, initialOpen, title, drive }: {
+export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, initialOpen, title, drive, startRecording = false }: {
   meetings: MeetingRow[]; names: Record<string, string>; meId: string; isLeader: boolean;
-  ai: { connected: boolean; last4: string | null }; storageBytes: number | null; initialOpen?: string; title: string; drive: Drive | null;
+  ai: { connected: boolean; last4: string | null }; storageBytes: number | null; initialOpen?: string; title: string; drive: Drive | null; startRecording?: boolean;
 }) {
   const t = useTranslations("meetings");
   const locale = useLocale();
@@ -35,7 +35,7 @@ export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, 
   const [filter, setFilter] = useState<Kind | "all">("all");
   const [query, setQuery] = useState("");
   const [openId, setOpenId] = useState<string | null>(initialOpen ?? null);
-  const [recording, setRecording] = useState(false);
+  const [recording, setRecording] = useState(startRecording);
   const toast = useToast();
   useEffect(() => {
     if (drive?.result === "connected") toast("ok", t("drive.connectedToast"));
@@ -81,16 +81,13 @@ export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, 
         document.body,
       )}
 
-      <section className="panel contours contours-corner flex flex-wrap items-end justify-between gap-4 p-5 sm:p-6">
-        <div className="max-w-xl">
-          <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-          <p className="mt-1 text-sm text-muted">{t("subtitle")}</p>
-        </div>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
         <button onClick={() => setRecording(true)}
-                className="flex items-center gap-2 rounded-2xl bg-trail px-5 py-3 text-sm font-semibold text-white shadow-[var(--shadow-lift)] transition hover:brightness-105 active:scale-[0.98]">
-          <Mic size={18} /> {t("record")}
+                className="flex items-center gap-2 rounded-xl bg-trail px-4 py-2 text-sm font-semibold text-white shadow-[var(--shadow-lift)] transition hover:brightness-105 active:scale-[0.98]">
+          <Mic size={16} /> {t("record")}
         </button>
-      </section>
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <div className={`min-w-0 space-y-3 ${open ? "hidden lg:block" : ""}`}>

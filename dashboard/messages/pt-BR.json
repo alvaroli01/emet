@@ -17,7 +17,11 @@
     "meetings": "Registro de reuniões",
     "lab": "Laboratório de ideias",
     "today": "Hoje",
-    "scout": "Scout"
+    "scout": "Scout",
+    "sectionWorkspace": "Espaço de trabalho",
+    "sectionTools": "Ferramentas",
+    "expand": "Expandir menu",
+    "collapse": "Recolher menu"
   },
   "shell": {
     "noGroupYet": "Ainda sem grupo",
@@ -1969,6 +1973,167 @@
       "forgotten": "Este lugar foi esquecido de propósito e não será checado de novo.",
       "needKey": "Conecte primeiro sua chave gratuita do Groq.",
       "error": "Não foi possível checar esse lugar. Tente de novo em um minuto."
+    }
+  },
+  "hero": {
+    "allClear": "Nada esperando por você aqui. Bom momento pra se adiantar.",
+    "weekOf": "Semana de {date}",
+    "groups": {
+      "finance": {
+        "title": "Oi {name}, olha como está o dinheiro",
+        "subtitle": "Cada euro que entra e sai, registrado em até 24 horas, pra equipe saber sempre o quão perto está o topo."
+      },
+      "marketing": {
+        "title": "Oi {name}, o que vamos publicar hoje?",
+        "subtitle": "Planeje, poste, registre os números e fique com o que funciona."
+      },
+      "customer": {
+        "title": "Oi {name}, com quem vamos falar hoje?",
+        "subtitle": "Prospects, acompanhamentos e quem precisa de ajuda depois de comprar."
+      },
+      "communications": {
+        "title": "Oi {name}, o que a equipe precisa ouvir?",
+        "subtitle": "Decisões, o placar da semana e como todo mundo está se sentindo."
+      },
+      "team-leader": {
+        "title": "Oi {name}, como está a equipe?",
+        "subtitle": "A saúde de toda a equipe, reuniões e prospecção num só lugar."
+      },
+      "default": {
+        "title": "Oi {name}, esta é a sua equipe",
+        "subtitle": "Tarefas e ferramentas deste grupo."
+      }
+    },
+    "needs": {
+      "overdue": "{count, plural, one {# tarefa sua aqui está atrasada} other {# tarefas suas aqui estão atrasadas}}",
+      "myCards": "{count, plural, one {# tarefa aqui é sua} other {# tarefas aqui são suas}}",
+      "blockers": "{count, plural, one {# bloqueio em aberto} other {# bloqueios em aberto}}",
+      "claims": "{count, plural, one {# pedido de reembolso aguarda decisão} other {# pedidos de reembolso aguardam decisão}}",
+      "lowStock": "{count, plural, one {# produto está acabando} other {# produtos estão acabando}}",
+      "closeMonth": "{month} ainda não foi fechado",
+      "toLog": "{count, plural, one {# post precisa ter os números registrados} other {# posts precisam ter os números registrados}}",
+      "contentDue": "{count, plural, one {# conteúdo vence esta semana} other {# conteúdos vencem esta semana}}",
+      "briefsDraft": "{count, plural, one {# briefing aguarda aprovação} other {# briefings aguardam aprovação}}",
+      "complaints": "{count, plural, one {# problema de cliente em aberto} other {# problemas de clientes em aberto}}",
+      "followUp": "{count, plural, one {# dos seus prospects precisa de acompanhamento} other {# dos seus prospects precisam de acompanhamento}}",
+      "scoutDue": "{count, plural, one {# lead do Scout vence hoje} other {# leads do Scout vencem hoje}}",
+      "morale": "Você ainda não fez o check-in de humor desta semana",
+      "teamOverdue": "{count, plural, one {# tarefa da equipe está atrasada} other {# tarefas da equipe estão atrasadas}}"
+    },
+    "stats": {
+      "revenue": "Receita até agora",
+      "profit": "Lucro",
+      "margin": "Margem",
+      "posts7": "Posts esta semana",
+      "inquiries30": "DMs (30 dias)",
+      "clicks7": "Cliques em links (7 dias)",
+      "openProspects": "Prospects em aberto",
+      "won": "Ganhos",
+      "openComplaints": "Problemas em aberto",
+      "decisions30": "Decisões (30 dias)",
+      "moraleAvg": "Humor da semana",
+      "teamOverdue": "Tarefas atrasadas"
+    },
+    "series": {
+      "revenuePerWeek": "Receita por semana",
+      "viewsPerWeek": "Visualizações por semana",
+      "postsPerWeek": "Posts por semana",
+      "prospectsPerWeek": "Novos prospects por semana",
+      "doneTasksPerWeek": "Tarefas concluídas por semana"
+    },
+    "actions": {
+      "logSale": "Registrar uma venda",
+      "ledgers": "Livros-caixa",
+      "overview": "Visão geral do dinheiro",
+      "newContent": "Planejar conteúdo",
+      "myWeek": "Minha semana",
+      "pulse": "Pulso",
+      "prospects": "Prospects",
+      "findClients": "Encontrar clientes",
+      "complaints": "Problemas de clientes",
+      "decisions": "Decisões",
+      "morale": "Check-in de humor",
+      "board": "Quadro de tarefas",
+      "health": "Saúde da equipe",
+      "generalBoard": "Quadro geral",
+      "outreach": "Prospecção"
+    },
+    "tabGroups": {
+      "work": "Trabalho",
+      "plan": "Plano",
+      "numbers": "Números",
+      "people": "Pessoas"
+    },
+    "today": {
+      "ask": "— o que vamos fazer hoje?",
+      "late": "{count, plural, one {# tarefa está atrasada} other {# tarefas estão atrasadas}}",
+      "dueToday": "{count, plural, one {# tarefa vence hoje} other {# tarefas vencem hoje}}",
+      "next": "Próximo às {time}: {title}",
+      "priority": "Prioridade da semana: {title}",
+      "revenue": "Receita da equipe",
+      "profit": "Lucro da equipe"
+    },
+    "overview": {
+      "title": "Oi {name}, esta é a subida inteira",
+      "blockers": "{count, plural, one {# bloqueio está segurando uma equipe} other {# bloqueios estão segurando equipes}}",
+      "complaints": "{count, plural, one {# problema de cliente em aberto} other {# problemas de clientes em aberto}}",
+      "pace": "Daqui pra frente precisamos de {amount} por semana"
+    },
+    "camp": {
+      "title": "De volta ao seu acampamento, {name}",
+      "due": "{count, plural, one {# coisa vence esta semana} other {# coisas vencem esta semana}}",
+      "setPriorities": "Defina suas 3 prioridades da semana",
+      "shared": "{count, plural, one {# documento foi compartilhado com você} other {# documentos foram compartilhados com você}}",
+      "record": "Gravar uma aula ou reunião"
+    },
+    "board": {
+      "title": "Oi {name}, tudo o que a empresa está fazendo",
+      "late": "{count, plural, one {# card está atrasado} other {# cards estão atrasados}}",
+      "mine": "{count, plural, one {# card aqui é seu} other {# cards aqui são seus}}",
+      "none": "Nada aqui está atribuído a você",
+      "open": "Cards em aberto",
+      "done": "Concluídos",
+      "ring": "de todos os cards concluídos"
+    },
+    "team": {
+      "title": "Oi {name}, conheça a equipe",
+      "people": "Pessoas",
+      "joined": "Já entraram",
+      "noGroup": "Ainda sem grupo"
+    },
+    "tasks": {
+      "title": "Oi {name}, tudo o que está no seu prato",
+      "late": "{count, plural, one {# tarefa está atrasada} other {# tarefas estão atrasadas}}",
+      "next": "Próxima: {title} ({date})",
+      "clear": "Nada em aberto. Bom trabalho.",
+      "doneWeek": "Concluídas esta semana",
+      "board": "Quadro geral",
+      "camp": "Acampamento base",
+      "ring": "das suas tarefas concluídas"
+    },
+    "meetings": {
+      "title": "Oi {name}, sobre o que conversamos?",
+      "latest": "Última: {title} ({date})",
+      "none": "Nenhuma reunião gravada ainda. Grave a próxima pra ninguém ficar de fora.",
+      "processing": "{count, plural, one {# das suas gravações ainda está sendo transcrita} other {# das suas gravações ainda estão sendo transcritas}}",
+      "week": "Esta semana",
+      "total": "Todas as gravações"
+    },
+    "lab": {
+      "title": "Oi {name}, o que poderíamos construir?",
+      "best": "Melhor ideia até agora: {title} ({score}/100)",
+      "toVote": "{count, plural, one {# ideia analisada aguarda seu voto} other {# ideias analisadas aguardam seu voto}}",
+      "empty": "Ainda sem ideias. Apresente a primeira.",
+      "ideas": "Ideias",
+      "strong": "Fortes (75+)",
+      "votes": "Votos",
+      "pitch": "Apresentar uma ideia",
+      "scout": "Encontrar clientes"
+    },
+    "scout": {
+      "title": "Oi {name}, pra quem devemos vender?",
+      "due": "{count, plural, one {# lead aguarda seu próximo passo} other {# leads aguardam seu próximo passo}}",
+      "strong": "{count, plural, one {# lead forte que ninguém contatou ainda} other {# leads fortes que ninguém contatou ainda}}"
     }
   }
 }

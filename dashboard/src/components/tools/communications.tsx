@@ -33,9 +33,9 @@ export async function CommunicationsTools({ group, editable, session, allMembers
   ];
 
   return [
-    { id: "scorecard", label: t("comms.scorecardTab"), node: <Scorecard kpis={kpis} groups={session.groups} /> },
+    { id: "scorecard", group: "numbers", label: t("comms.scorecardTab"), node: <Scorecard kpis={kpis} groups={session.groups} /> },
     {
-      id: "decisions", label: t("comms.decisions"),
+      id: "decisions", group: "plan", label: t("comms.decisions"),
       node: (
         <DataTable table="decisions" title={t("comms.decisions")} rows={decisions.data ?? []} fields={decisionFields}
                    members={allMembers} canEdit={editable} defaults={{ date: new Date().toISOString().slice(0, 10), group_id: group.id }}
@@ -43,7 +43,7 @@ export async function CommunicationsTools({ group, editable, session, allMembers
       ),
     },
     {
-      id: "morale", label: t("comms.moraleTab"),
+      id: "morale", group: "people", label: t("comms.moraleTab"),
       node: (
         <MoraleCheck
           week={week}

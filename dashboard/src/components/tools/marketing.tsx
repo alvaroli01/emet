@@ -127,23 +127,23 @@ export async function MarketingTools({ group, editable, session, allMembers }: T
 
   return [
     {
-      id: "pulse", label: tm("tabs.pulse"),
+      id: "pulse", group: "numbers", label: tm("tabs.pulse"),
       node: <Pulse items={c} metrics={m} sales={s} profit={profit} codeChannel={codeChannel} today={today}
                    inquiries={(inquiries.data ?? []) as unknown as { date: string; converted_sale_id: string | null }[]} />,
     },
     {
-      id: "my-week", label: tm("tabs.myWeek"),
+      id: "my-week", group: "work", label: tm("tabs.myWeek"),
       node: <MyWeek me={me} items={c} metrics={m} today={today}
                     briefs={(briefs.data ?? []) as Brief[]}
                     designs={(designs.data ?? []) as unknown as { id: string; title: string; status: string; assignee_id: string | null; requested_at: string }[]} />,
     },
     {
-      id: "content", label: tm("tabs.content"),
+      id: "content", group: "plan", label: tm("tabs.content"),
       node: <ContentPipeline items={c} metrics={m} glossary={(glossary.data ?? []) as { tag_type: Content["tags"] extends Partial<Record<infer K, string>> ? K : never; value: string }[]}
                              members={members} canEdit={editable} me={me} campaigns={camp.map((x) => ({ id: x.id, name: x.name }))} />,
     },
     {
-      id: "briefs", label: tm("tabs.briefs"),
+      id: "briefs", group: "plan", label: tm("tabs.briefs"),
       node: (
         <div className="space-y-6">
           <Briefs briefs={(briefs.data ?? []) as Brief[]} members={members} campaigns={camp} canEdit={editable} me={me} leaderId={leaderId} />
@@ -152,7 +152,7 @@ export async function MarketingTools({ group, editable, session, allMembers }: T
       ),
     },
     {
-      id: "library", label: tm("tabs.library"),
+      id: "library", group: "numbers", label: tm("tabs.library"),
       node: (
         <div className="space-y-4">
           <Library items={c} metrics={m} />
@@ -164,7 +164,7 @@ export async function MarketingTools({ group, editable, session, allMembers }: T
       ),
     },
     {
-      id: "attribution", label: tm("tabs.attribution"),
+      id: "attribution", group: "numbers", label: tm("tabs.attribution"),
       node: (
         <div className="space-y-4">
           <Attribution links={(links.data ?? []) as GoLink[]} clicks={clickMap} sales={s.filter((x) => Number(x.amount) > 0 && !x.reverses_id)} codeChannel={codeChannel}
@@ -178,7 +178,7 @@ export async function MarketingTools({ group, editable, session, allMembers }: T
       ),
     },
     {
-      id: "followers", label: t("marketing.followerGrowth"),
+      id: "followers", group: "numbers", label: t("marketing.followerGrowth"),
       node: (
         <div className="space-y-4">
           <div className="panel p-5">
@@ -191,7 +191,7 @@ export async function MarketingTools({ group, editable, session, allMembers }: T
       ),
     },
     {
-      id: "design", label: t("marketing.designQueue"),
+      id: "design", group: "work", label: t("marketing.designQueue"),
       node: (
         <DataTable table="design_requests" title={t("marketing.designQueue")} rows={designs.data ?? []} fields={designFields} members={allMembers}
                    canEdit={editable} canAdd addFields={["title", "details"]}

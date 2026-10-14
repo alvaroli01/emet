@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { getSession } from "@/lib/session";
 import { loadBoard, BOARD_TABLES } from "@/lib/boards";
 import { loadKpis } from "@/lib/kpi-data";
@@ -16,6 +16,19 @@ import { CommunicationsTools } from "@/components/tools/communications";
 import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { SectionTabs } from "@/components/section-tabs";
+import { PageHero } from "@/components/shell/page-hero";
+import { HeroTerrain, MemberOrbit } from "@/components/shell/hero-visuals";
+import { groupHero } from "@/lib/hero-data";
+import { shortDate, todayISO } from "@/lib/format";
+
+/** The hero's buttons per group: the first is the main action. `edit` = only for people who can edit this group. */
+const ACTIONS: Record<string, { key: string; tab?: string; href?: string; edit?: boolean }[]> = {
+  finance: [{ key: "logSale", tab: "books", edit: true }, { key: "ledgers", tab: "ledgers" }, { key: "overview", tab: "money" }],
+  marketing: [{ key: "newContent", tab: "content" }, { key: "myWeek", tab: "my-week" }, { key: "pulse", tab: "pulse" }],
+  customer: [{ key: "prospects", tab: "sales" }, { key: "findClients", href: "/scout" }, { key: "complaints", tab: "complaints" }],
+  communications: [{ key: "decisions", tab: "decisions" }, { key: "morale", tab: "morale" }, { key: "board", tab: "board" }],
+  "team-leader": [{ key: "health", tab: "health" }, { key: "generalBoard", href: "/board" }, { key: "outreach", tab: "outreach" }],
+};
 
 const TOOLS: Record<string, (p: ToolProps) => Promise<ToolTab[]>> = {
   finance: FinanceTools,
@@ -44,6 +57,12 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   const props: ToolProps = { group, editable, session, allMembers: board.members };
   const groupKpis = kpis.filter((k) => k.group_id === group.id);
   const tt = await getTranslations("tools");
+  const th = await getTranslations("hero");
+  const locale = await getLocale();
+  const toolTabs = Tools ? await Tools(props) : [];
+  const hero = await groupHero(slug, session.me.id, group.id, todayISO());
+  const firstName = session.me.full_name.split(" ")[0];
+  const heroKey = ["finance", "marketing", "customer", "communications", "team-leader"].includes(slug) ? slug : "default";
 
   return (
     <div className="space-y-6">
@@ -51,39 +70,42 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         "complaints", "content_posts", "campaigns", "design_requests", "experiments", "follower_snapshots",
         "decisions", "morale_checks", "meeting_notes", "outreach", "profiles"]} />
 
-      <header className="panel contours contours-corner p-5 sm:p-6">
-        <div className="flex flex-wrap items-center gap-3">
-          <span aria-hidden className="grid size-12 place-items-center rounded-xl text-2xl leading-none"
-                style={{ background: `color-mix(in srgb, ${group.color} 16%, transparent)` }}>{group.emoji}</span>
-          <h1 className="text-2xl font-semibold tracking-tight">{t(`names.${slug}`)}</h1>
-          {session.me.group_id === group.id && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium">
-              <span aria-hidden className="size-1.5 rounded-full" style={{ background: group.color }} />
-              {t("yourTeam")}
-            </span>
-          )}
-          {!editable && <ViewOnlyBadge />}
-        </div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {members.length ? members.map((m) => (
-            <div key={m.id} className="flex items-center gap-2 rounded-full bg-surface-2 py-1 pr-3 pl-1">
-              <Avatar name={m.full_name} src={m.avatar_url} size={26} />
-              <span className="text-sm">{m.full_name}</span>
-              {m.role_title && <span className="text-xs text-muted">· {m.role_title}</span>}
+      <PageHero
+        section={{ label: t(`names.${slug}`), icon: group.emoji, color: group.color }}
+        title={th(`groups.${heroKey}.title`, { name: firstName })}
+        subtitle={th(`groups.${heroKey}.subtitle`)}
+        lines={hero.needs.length ? hero.needs.map((n) => ({
+          text: th(`needs.${n.key}`, { count: n.count, ...(n.values ?? {}) }), tone: n.tone,
+          href: n.href ?? (n.tab ? `/g/${slug}?tab=${n.tab}` : undefined),
+        })) : [{ text: th("allClear"), tone: "ok" as const }]}
+        stats={hero.stats.map((x) => ({ label: th(`stats.${x.key}`), value: x.value, kind: x.kind }))}
+        actions={(ACTIONS[slug] ?? []).filter((a) => !a.edit || editable).map((a, i) => ({ label: th(`actions.${a.key}`), href: a.href ?? `/g/${slug}?tab=${a.tab}`, primary: i === 0 }))}
+        visual={slug === "communications"
+          ? <MemberOrbit emoji={group.emoji} color={group.color} people={members} />
+          : <HeroTerrain points={hero.series.map((p) => ({ label: th("weekOf", { date: shortDate(p.label, locale) }), value: p.value }))} kind={hero.seriesKind}
+                         ariaLabel={th(`series.${hero.seriesKey}`)} caption={th(`series.${hero.seriesKey}`)} />}
+        aside={
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex -space-x-2">
+              {members.slice(0, 6).map((m) => <span key={m.id} title={m.full_name} className="rounded-full ring-2 ring-surface"><Avatar name={m.full_name} src={m.avatar_url} size={28} /></span>)}
             </div>
-          )) : <p className="text-sm text-muted">{t("noMembers")}</p>}
-        </div>
-        {groupKpis.length > 0 && (
-          <div className="mt-5 border-t border-line pt-4">
-            <KpiCards kpis={groupKpis} canEdit={editable} inline />
+            <span className="text-sm text-muted">{members.length ? members.map((m) => m.full_name.split(" ")[0]).join(", ") : t("noMembers")}</span>
+            {session.me.group_id === group.id && <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium">{t("yourTeam")}</span>}
+            {!editable && <ViewOnlyBadge />}
           </div>
-        )}
-      </header>
+        }
+      />
 
-      <SectionTabs label={t("sections")} initial={tab} tabs={[
-        { id: "board", label: t("board"), node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
-        ...(Tools ? await Tools(props) : []),
-        ...(slug !== "team-leader" ? [{ id: "blockers", label: tt("blockers.title"), node: await BlockersTool({ ...props, onlyThisGroup: true }) }] : []),
+      {groupKpis.length > 0 && (
+        <section className="panel p-4 sm:p-5">
+          <KpiCards kpis={groupKpis} canEdit={editable} inline />
+        </section>
+      )}
+
+      <SectionTabs label={t("sections")} initial={tab} groups={toolTabs.length > 4 ? { work: th("tabGroups.work"), plan: th("tabGroups.plan"), numbers: th("tabGroups.numbers"), people: th("tabGroups.people") } : undefined} tabs={[
+        { id: "board", group: "work", label: t("board"), node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
+        ...toolTabs,
+        ...(slug !== "team-leader" ? [{ id: "blockers", group: "work", label: tt("blockers.title"), node: await BlockersTool({ ...props, onlyThisGroup: true }) }] : []),
       ]} />
     </div>
   );

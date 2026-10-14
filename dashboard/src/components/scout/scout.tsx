@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Plus, Search, Loader2, Link2, X, MapPin, Pencil } from "lucide-react";
+import { Plus, Search, Loader2, Link2, X, MapPin, Pencil, Radar } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Modal } from "@/components/data-table";
@@ -31,8 +31,8 @@ const EXAMPLES = [
 const COUNTRIES = "ES PT FR DE IT GB IE NL BE LU CH AT DK SE NO FI IS PL CZ SK HU SI HR RO BG GR CY MT EE LV LT RS BA ME MK AL UA MD RU TR US CA MX BR AR CL CO PE UY EC VE BO PY CR PA DO GT CU PR MA DZ TN EG ZA NG KE GH AE SA QA IL JO IN PK BD LK CN JP KR TW HK SG MY TH VN PH ID AU NZ".split(" ");
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export function Scout({ projects, searches, leads, members, meId, canScout, hasKey: initialKey, ideas, initialProject, fromIdea }: {
-  projects: ScoutProject[]; searches: ScoutSearch[]; leads: ScoutLead[]; members: Person[]; meId: string; canScout: boolean; hasKey: boolean;
+export function Scout({ projects, searches, leads, members, meId, meName, canScout, hasKey: initialKey, ideas, initialProject, fromIdea }: {
+  projects: ScoutProject[]; searches: ScoutSearch[]; leads: ScoutLead[]; members: Person[]; meId: string; meName: string; canScout: boolean; hasKey: boolean;
   ideas: { id: string; title: string; pitch: string }[]; initialProject: string | null; fromIdea: { id: string; title: string; pitch: string } | null;
 }) {
   const t = useTranslations("scout");
@@ -43,13 +43,24 @@ export function Scout({ projects, searches, leads, members, meId, canScout, hasK
   const project = projects.find((p) => p.id === projectId) ?? null;
   const projectLeads = leads.filter((l) => l.project_id === projectId);
   const latest = searches.find((s) => s.project_id === projectId) ?? null;
+  const th = useTranslations("hero");
+  const today = new Date().toISOString().slice(0, 10);
+  const myDue = leads.filter((l) => l.owner_id === meId && l.next_step_at && l.next_step_at <= today && !["won", "lost", "ignored"].includes(l.status)).length;
+  const strongNew = projectLeads.filter((l) => l.fit === "strong" && l.status === "new").length;
 
   return (
     <>
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div className="max-w-2xl">
-          <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
-          <p className="mt-1 text-sm text-muted">{t("intro")}</p>
+          <p className="flex items-center gap-2 text-sm text-muted"><Radar size={15} /> {t("title")}</p>
+          <h1 className="mt-2 text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.08] font-[650] tracking-[-0.02em] text-balance" style={{ fontStretch: "112%" }}>{th("scout.title", { name: meName })}</h1>
+          <p className="mt-1.5 text-[15px] text-muted">{t("intro")}</p>
+          {(myDue > 0 || strongNew > 0) && (
+            <ul className="mt-3 space-y-1 text-[15px]">
+              {myDue > 0 && <li className="flex gap-2.5"><span aria-hidden className="mt-[7px] size-2 rounded-full bg-warn" />{th("scout.due", { count: myDue })}</li>}
+              {strongNew > 0 && <li className="flex gap-2.5"><span aria-hidden className="mt-[7px] size-2 rounded-full bg-climbed" />{th("scout.strong", { count: strongNew })}</li>}
+            </ul>
+          )}
         </div>
         {projects.length > 0 && (
           <div className="flex items-center gap-2">

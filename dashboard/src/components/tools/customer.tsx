@@ -47,7 +47,7 @@ export async function CustomerTools({ group, editable, session, allMembers }: To
 
   return [
     {
-      id: "sales", label: t("customer.pipeline"),
+      id: "sales", group: "work", label: t("customer.pipeline"),
       node: (
         <div className="space-y-4">
           <div className="grid gap-4 lg:grid-cols-2">
@@ -115,7 +115,7 @@ export async function CustomerTools({ group, editable, session, allMembers }: To
       ),
     },
     {
-      id: "complaints", label: t("customer.complaints"),
+      id: "complaints", group: "work", label: t("customer.complaints"),
       node: (
         <DataTable table="complaints" title={t("customer.complaints")} rows={complaints.data ?? []} fields={complaintFields}
                    members={allMembers} canEdit={editable} defaults={{ owner_id: session.me.id, status: "open" }}

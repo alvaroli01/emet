@@ -23,7 +23,7 @@ export default async function ScoutPage({ searchParams }: { searchParams: Promis
     <div className="space-y-6">
       <LiveRefresh tables={["scout_projects", "scout_searches", "scout_leads"]} />
       <Scout projects={projects.data ?? []} searches={searches.data ?? []} leads={(leads.data ?? []).filter((l) => l.place && !l.place.forgotten)}
-             members={members.map((m) => ({ id: m.id, full_name: m.full_name }))} meId={me.id} canScout={!!canScout.data} hasKey={!!aiKey.data}
+             members={members.map((m) => ({ id: m.id, full_name: m.full_name }))} meId={me.id} meName={me.full_name.split(" ")[0]} canScout={!!canScout.data} hasKey={!!aiKey.data}
              ideas={(ideas.data ?? []).map((i) => ({ id: i.id, title: i.title, pitch: i.pitch }))}
              initialProject={p ?? null} fromIdea={fromIdea ? { id: fromIdea.id, title: fromIdea.title, pitch: fromIdea.pitch } : null} />
     </div>

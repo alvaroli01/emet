@@ -1,9 +1,16 @@
 @import "tailwindcss";
 
+/* Magic UI / shadcn "dark:" classes follow the app's theme switch (data-theme, else the device setting) */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) { @slot; }
+  @media (prefers-color-scheme: dark) { &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) { @slot; } }
+}
+
 /* Theme tokens — light by default, dark follows the device (a manual toggle comes in the polish step) */
 /* "Summit" world: a topographic map. Day map = paper + ink; night map = slate + chalk.
    Status colours are always paired with an icon and a word, never colour alone. */
 :root {
+  --foreground: var(--text); /* used by Magic UI ripple */
   --bg: #f1f2ed;
   --surface: #fbfbf8;
   --surface-2: #e7e9e2;
@@ -103,8 +110,44 @@
   --color-contour: var(--contour);
   --color-climbed: var(--climbed);
   --color-trail: var(--trail);
+  /* shadcn / Magic UI names mapped onto the Summit palette */
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text);
+  --color-primary: var(--brand);
+  --color-primary-foreground: var(--brand-contrast);
+  --color-secondary: var(--surface-2);
+  --color-secondary-foreground: var(--text);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--surface-2);
+  --color-accent-foreground: var(--text);
+  --color-destructive: var(--bad);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--climbed);
   --font-sans: var(--font-archivo);
   --font-mono: var(--font-archivo);
+  --animate-orbit: orbit calc(var(--duration)*1s) linear infinite;
+  --animate-ripple: ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite;
+  @keyframes orbit {
+  0% {
+    transform: rotate(calc(var(--angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--angle) * -1deg));
+    }
+  100% {
+    transform: rotate(calc(var(--angle) * 1deg + 360deg)) translateY(calc(var(--radius) * 1px)) rotate(calc((var(--angle) * -1deg) - 360deg));
+    }
+  }
+  @keyframes ripple {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    }
+  50% {
+    transform: translate(-50%, -50%) scale(0.9);
+    }
+  }
 }
 
 body {

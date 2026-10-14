@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Calendar, CheckCircle2 } from "lucide-react";
+import { Calendar, CheckCircle2, CheckSquare } from "lucide-react";
+import { PageHero } from "@/components/shell/page-hero";
+import { ProgressRing } from "@/components/shell/hero-visuals";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui";
@@ -40,19 +42,35 @@ export default async function MyTasksPage() {
     { key: "done", items: rows.filter((r) => r.completed_at) },
   ] as const;
   const byDue = (a: Row, b: Row) => Date.parse(a.due_at ?? "9999") - Date.parse(b.due_at ?? "9999");
+  const th = await getTranslations("hero");
+  const nextDue = [...sections[1].items].sort(byDue)[0];
+  const doneWeek = rows.filter((r) => r.completed_at && Date.parse(r.completed_at) >= now - 7 * 864e5).length;
 
   return (
     <div className="space-y-6">
       <LiveRefresh tables={["cards", "card_assignees"]} />
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
-        <p className="text-sm text-muted">{t("subtitle", { count: open.length })}</p>
-      </div>
+      <PageHero
+        section={{ label: t("title"), icon: <CheckSquare size={16} /> }}
+        title={th("tasks.title", { name: me.full_name.split(" ")[0] })}
+        subtitle={t("subtitle", { count: open.length })}
+        lines={[
+          ...(sections[0].items.length ? [{ text: th("tasks.late", { count: sections[0].items.length }), tone: "bad" as const }] : []),
+          ...(nextDue ? [{ text: th("tasks.next", { title: nextDue.title, date: shortDate(nextDue.due_at!, locale) }), tone: "info" as const }] : []),
+          ...(!open.length ? [{ text: th("tasks.clear"), tone: "ok" as const }] : []),
+        ]}
+        stats={[
+          { label: t("sections.overdue"), value: sections[0].items.length, kind: "num" },
+          { label: t("sections.upcoming"), value: sections[1].items.length, kind: "num" },
+          { label: th("tasks.doneWeek"), value: doneWeek, kind: "num" },
+        ]}
+        actions={[{ label: th("tasks.board"), href: "/board", primary: true }, { label: th("tasks.camp"), href: "/camp" }]}
+        visual={<ProgressRing value={sections[3].items.length} max={rows.length} label={th("tasks.ring")} />}
+      />
       {!rows.length && (
         <Card className="text-center text-sm text-muted">{t("empty")}</Card>
       )}
       {sections.map(({ key, items }) => items.length > 0 && (
-        <section key={key}>
+        <section key={key} className={key === "done" ? "opacity-90" : ""}>
           <h2 className={`mb-2 text-sm font-semibold ${key === "overdue" ? "text-bad-text" : ""}`}>
             {t(`sections.${key}`)} <span className="text-muted tabular-nums">· {items.length}</span>
           </h2>
