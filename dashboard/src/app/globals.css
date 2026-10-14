@@ -1,93 +1,71 @@
 @import "tailwindcss";
+@import "./google-sans.css";
 
-/* Magic UI / shadcn "dark:" classes follow the app's theme switch (data-theme, else the device setting) */
-@custom-variant dark {
-  &:where([data-theme="dark"], [data-theme="dark"] *) { @slot; }
-  @media (prefers-color-scheme: dark) { &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) { @slot; } }
-}
+/* Magic UI / shadcn "dark:" classes: dark is the default; light only when chosen */
+@custom-variant dark (&:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *));
 
-/* Theme tokens — "Studio": a bright workspace of white bento tiles on a soft grey canvas, one iris accent,
-   and a soft tint per team. Status colours are always paired with an icon and a word, never colour alone. */
+/* Theme tokens — "I/O": modelled on Google I/O. Pure black canvas, white Google Sans headlines, dark cards with a
+   hairline edge, Google-blue pill buttons and Google's four colours for the teams. Light theme is opt-in.
+   Status colours are always paired with an icon and a word, never colour alone. */
 :root {
   --foreground: var(--text); /* used by Magic UI ripple */
-  --bg: #f4f4f8;
-  --surface: #ffffff;
-  --surface-2: #efeff5;
-  --border: #e4e4ee;
-  --text: #15151f;
-  --muted: #666679;
-  --brand: #5b4bff;
+  --bg: #000000;
+  --surface: #0f1012;
+  --surface-2: #1b1c1f;
+  --border: #303134;
+  --text: #ffffff;
+  --muted: #a6aab1;
+  --brand: #1a73e8;
   --brand-contrast: #ffffff;
-  --contour: #c9c3ff;
+  --link: #8ab4f8;
+  --contour: #3c4043;
+  --terrain: #16171a;
+  --climbed: #8ab4f8;
+  --trail: #4285f4;
+  --ok: #34a853;
+  --warn: #fbbc04;
+  --bad: #ea4335;
+  --ok-text: #81c995;
+  --warn-text: #fdd663;
+  --bad-text: #f28b82;
+  --series-1: #8ab4f8;
+  --series-2: #f28b82;
+  --series-3: #81c995;
+  --grid: #26272a;
+  --shadow: 0 1px 0 rgb(255 255 255 / 0.03) inset;
+  --shadow-lift: 0 0 0 1px rgb(138 180 248 / 0.35), 0 20px 50px -20px rgb(26 115 232 / 0.45);
+  --panel-edge: #303134;
+  --io-gradient: linear-gradient(115deg, #4285f4 0%, #34a853 38%, #fbbc04 66%, #ea4335 100%);
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --surface-2: #f1f3f4;
+  --border: #dadce0;
+  --text: #202124;
+  --muted: #5f6368;
+  --brand: #1a73e8;
+  --brand-contrast: #ffffff;
+  --link: #1a73e8;
+  --contour: #c6dafc;
   --terrain: #ffffff;
-  --climbed: #5b4bff;
-  --trail: #5b4bff;
-  --ok: #18c29c;
-  --warn: #f5a524;
-  --bad: #f04461;
-  --ok-text: #0b7a61;
-  --warn-text: #8a5300;
-  --bad-text: #b4213c;
-  --series-1: #5b4bff;
-  --series-2: #ff7a59;
-  --series-3: #18c29c;
-  --grid: #ececf3;
-  --shadow: 0 1px 2px rgb(21 21 31 / 0.04), 0 1px 1px rgb(21 21 31 / 0.02);
-  --shadow-lift: 0 2px 6px rgb(21 21 31 / 0.05), 0 18px 40px -16px rgb(91 75 255 / 0.28);
-  --panel-edge: #e4e4ee;
-  /* Team tints */
-  --tint-finance: #18c29c; --tint-marketing: #ff7a59; --tint-customer: #2e9bff; --tint-communications: #f5a524; --tint-team-leader: #5b4bff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0e0e14;
-    --surface: #17171f;
-    --surface-2: #20202b;
-    --border: #2a2a37;
-    --text: #f2f2f8;
-    --muted: #9d9db2;
-    --brand: #7c6dff;
-    --brand-contrast: #ffffff;
-    --contour: #3b3580;
-    --terrain: #1d1d27;
-    --climbed: #8b7dff;
-    --trail: #8b7dff;
-    --ok-text: #4fe0b9;
-    --warn-text: #ffc35c;
-    --bad-text: #ff8098;
-    --series-1: #8b7dff;
-    --series-2: #ff9478;
-    --series-3: #3ad7b0;
-    --grid: #262632;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.4);
-    --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.4), 0 18px 40px -16px rgb(124 109 255 / 0.35);
-    --panel-edge: #2a2a37;
-  }
-}
-:root[data-theme="dark"] {
-    --bg: #0e0e14;
-    --surface: #17171f;
-    --surface-2: #20202b;
-    --border: #2a2a37;
-    --text: #f2f2f8;
-    --muted: #9d9db2;
-    --brand: #7c6dff;
-    --brand-contrast: #ffffff;
-    --contour: #3b3580;
-    --terrain: #1d1d27;
-    --climbed: #8b7dff;
-    --trail: #8b7dff;
-    --ok-text: #4fe0b9;
-    --warn-text: #ffc35c;
-    --bad-text: #ff8098;
-    --series-1: #8b7dff;
-    --series-2: #ff9478;
-    --series-3: #3ad7b0;
-    --grid: #262632;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.4);
-    --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.4), 0 18px 40px -16px rgb(124 109 255 / 0.35);
-    --panel-edge: #2a2a37;
+  --climbed: #1a73e8;
+  --trail: #1a73e8;
+  --ok: #188038;
+  --warn: #f9ab00;
+  --bad: #d93025;
+  --ok-text: #137333;
+  --warn-text: #b06000;
+  --bad-text: #c5221f;
+  --series-1: #1a73e8;
+  --series-2: #d93025;
+  --series-3: #188038;
+  --grid: #e8eaed;
+  --shadow: 0 1px 2px rgb(60 64 67 / 0.12), 0 1px 3px 1px rgb(60 64 67 / 0.06);
+  --shadow-lift: 0 1px 3px rgb(60 64 67 / 0.2), 0 12px 32px -12px rgb(26 115 232 / 0.35);
+  --panel-edge: #dadce0;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -129,8 +107,9 @@
   --color-border: var(--border);
   --color-input: var(--border);
   --color-ring: var(--climbed);
-  --font-sans: var(--font-onest);
-  --font-mono: var(--font-onest);
+  --font-sans: "Google Sans", system-ui, sans-serif;
+  --font-mono: "Google Sans", system-ui, sans-serif;
+  --color-link: var(--link);
   --animate-orbit: orbit calc(var(--duration)*1s) linear infinite;
   --animate-ripple: ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite;
   @keyframes orbit {
@@ -154,8 +133,8 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-onest), system-ui, sans-serif;
-  font-feature-settings: "cv11", "ss01";
+  font-family: "Google Sans", system-ui, sans-serif;
+  letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -164,20 +143,25 @@ html { touch-action: manipulation; -webkit-text-size-adjust: 100%; -webkit-tap-h
 :focus-visible { outline: 2px solid var(--climbed); outline-offset: 2px; border-radius: 6px; }
 .tabular { font-variant-numeric: tabular-nums; }
 /* Display numerals: tight, heavy, tabular so they don't jump while counting */
-.readout { font-weight: 650; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.readout { font-weight: 500; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+/* I/O display headline: big, medium weight, very tight */
+.display { font-weight: 500; letter-spacing: -0.04em; line-height: 1.04; text-wrap: balance; }
+/* The I/O four-colour gradient as text fill */
+.io-text { background: var(--io-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 /* Long German / Finnish / Russian words must wrap instead of breaking the layout */
 h1, h2, h3, p, label, li, td { overflow-wrap: break-word; hyphens: auto; }
 button { white-space: nowrap; }
 
 @layer components {
-  /* Bento tiles: white, hairline edge, generous radius; they lift with an iris glow on hover */
+  /* I/O cards: dark, hairline edge, 20px radius; a soft lift with a blue edge on hover */
   .panel {
-    @apply rounded-[22px] bg-surface;
+    @apply rounded-[20px] bg-surface;
+    background-image: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 55%, transparent), transparent 70%);
     box-shadow: var(--shadow), inset 0 0 0 1px var(--panel-edge);
   }
   .panel-lift { transition: box-shadow 200ms cubic-bezier(.2,.8,.2,1), transform 200ms cubic-bezier(.2,.8,.2,1); }
-  .panel-lift:hover { box-shadow: var(--shadow-lift), inset 0 0 0 1px color-mix(in srgb, var(--brand) 35%, var(--panel-edge)); transform: translateY(-2px); }
+  .panel-lift:hover { box-shadow: var(--shadow-lift), inset 0 0 0 1px color-mix(in srgb, var(--brand) 55%, var(--panel-edge)); transform: translateY(-2px); }
   .panel-lift:active { transform: scale(0.99); }
   /* Soft dot grid (replaces the old contour lines wherever they were used) */
   .contours {
@@ -187,7 +171,7 @@ button { white-space: nowrap; }
   }
   .contours-corner { mask-image: radial-gradient(ellipse at 100% 0%, #000 0%, transparent 55%); }
   /* A tile washed with its team's colour */
-  .tint { background: color-mix(in srgb, var(--tile-tint, var(--brand)) 9%, var(--surface)); }
+  .tint { background-color: color-mix(in srgb, var(--tile-tint, var(--brand)) 12%, var(--surface)); }
   .input {
     @apply w-full rounded-xl border border-line bg-surface px-3 py-2.5 text-sm outline-none transition
       placeholder:text-muted/70 focus:border-brand/50 focus:ring-4 focus:ring-brand/10;

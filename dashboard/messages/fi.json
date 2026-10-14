@@ -2139,6 +2139,78 @@
       "title": "Hei {name}, kenelle meidän pitäisi myydä?",
       "due": "{count, plural, one {# liidi odottaa seuraavaa askeltasi} other {# liidiä odottaa seuraavaa askeltasi}}",
       "strong": "{count, plural, one {# vahva liidi, johon kukaan ei ole vielä ottanut yhteyttä} other {# vahvaa liidiä, joihin kukaan ei ole vielä ottanut yhteyttä}}"
+    },
+    "assistTitle": "Hei {name}, mitä tehdään tänään osiossa {section}?"
+  },
+  "assist": {
+    "label": "Kysy emetiltä tästä osiosta",
+    "placeholder": "Kerro, mitä teet, esim. \"kirjaa 25 € kangaskassin myynti, maksettu Bizumilla\"",
+    "placeholderNoKey": "Yhdistä ilmainen Groq-avaimesi alla, niin voit keskustella",
+    "send": "Lähetä",
+    "thinking": "Mietin…",
+    "error": "Vastaaminen ei onnistunut juuri nyt. Yritä hetken päästä uudelleen.",
+    "limit": "Ilmaisen tekoälyn raja täyttyi – yritä uudelleen {s} s kuluttua.",
+    "needKey": "Yhdistä ilmainen Groq-avaimesi käyttääksesi avustajaa.",
+    "open": "Avaa {tool}",
+    "add": "Lisää",
+    "added": "Lisätty",
+    "dismiss": "Ei nyt",
+    "saveError": "Tallennus ei onnistunut. Tarkista tiedot ja yritä uudelleen.",
+    "noPermission": "Vain tämä tiimi voi lisätä sen. Kysy joltakulta tiimistä tai johtajalta.",
+    "tools": "Työkalut",
+    "close": "Sulje",
+    "kinds": {
+      "task": "Uusi tehtävä",
+      "sale": "Uusi myynti",
+      "expense": "Uusi meno",
+      "content": "Uusi sisältö",
+      "inquiry": "Uusi DM-tiedustelu",
+      "prospect": "Uusi mahdollinen asiakas",
+      "complaint": "Uusi asiakasongelma",
+      "decision": "Uusi päätös",
+      "blocker": "Uusi este"
+    },
+    "fields": {
+      "title": "Otsikko",
+      "due": "Eräpäivä",
+      "description": "Mitä",
+      "amount": "Summa",
+      "cost": "Kustannus",
+      "date": "Päivämäärä",
+      "payment_method": "Maksutapa",
+      "heard_about": "Mistä kuuli meistä",
+      "category": "Luokka",
+      "planned_for": "Suunniteltu ajalle",
+      "platform": "Alusta",
+      "handle": "Käyttäjänimi",
+      "product": "Tuote",
+      "name": "Nimi",
+      "contact": "Yhteystieto",
+      "customer": "Asiakas",
+      "issue": "Ongelma",
+      "decision": "Päätös"
+    },
+    "starters": {
+      "logSale": "Kirjaa myynti",
+      "addExpense": "Lisää meno",
+      "addTask": "Lisää tehtävä",
+      "planPost": "Suunnittele postaus",
+      "logDm": "Kirjaa DM",
+      "addProspect": "Lisää mahdollinen asiakas",
+      "logProblem": "Kirjaa asiakasongelma",
+      "recordDecision": "Kirjaa päätös",
+      "whatsLate": "Mikä on myöhässä?"
+    },
+    "starterPrompts": {
+      "logSale": "Haluan kirjata myynnin",
+      "addExpense": "Haluan lisätä menon",
+      "addTask": "Lisää minulle tehtävä",
+      "planPost": "Auta minua suunnittelemaan postaus",
+      "logDm": "Kirjaa DM-tiedustelu",
+      "addProspect": "Lisää uusi mahdollinen asiakas",
+      "logProblem": "Kirjaa asiakasongelma",
+      "recordDecision": "Kirjaa päätös, jonka teimme",
+      "whatsLate": "Mikä tiimissä on myöhässä ja ketä minun kannattaa muistuttaa?"
     }
   }
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Languages, Moon, Sun, Monitor } from "lucide-react";
+import { Languages, Moon, Sun } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LOCALES, LOCALE_COOKIE, LOCALE_NAMES, type Locale } from "@/i18n/config";
 
@@ -50,28 +50,24 @@ export function LocaleSync({ saved }: { saved: string | null }) {
   return null;
 }
 
-type Theme = "system" | "light" | "dark";
 
 /** Light / dark / follow device */
 export function ThemeToggle() {
   const t = useTranslations("prefs");
-  const [theme, setTheme] = useState<Theme>("system");
-  useEffect(() => {
-    const v = document.documentElement.dataset.theme;
-    setTheme(v === "light" || v === "dark" ? v : "system");
-  }, []);
+  // Dark is the house style (like Google I/O); light is opt-in and remembered in a cookie
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  useEffect(() => { setTheme(document.documentElement.dataset.theme === "light" ? "light" : "dark"); }, []);
 
-  function cycle() {
-    const next: Theme = theme === "system" ? "light" : theme === "light" ? "dark" : "system";
+  function toggle() {
+    const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    if (next === "system") delete document.documentElement.dataset.theme;
-    else document.documentElement.dataset.theme = next;
+    document.documentElement.dataset.theme = next;
     setCookie("emet-theme", next);
   }
 
-  const Icon = theme === "light" ? Sun : theme === "dark" ? Moon : Monitor;
+  const Icon = theme === "light" ? Sun : Moon;
   return (
-    <button onClick={cycle} title={t(`theme.${theme}`)} aria-label={t(`theme.${theme}`)}
+    <button onClick={toggle} title={t(`theme.${theme}`)} aria-label={t(`theme.${theme}`)}
             className="rounded-lg p-2 text-muted hover:bg-surface-2 hover:text-ink">
       <Icon size={17} />
     </button>

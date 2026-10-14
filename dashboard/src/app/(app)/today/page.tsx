@@ -90,7 +90,9 @@ export default async function TodayPage() {
           { label: t("perWeekNeeded"), value: p.revenuePerWeekNeeded, kind: "eur" },
         ]}
         actions={actions.map((a, i) => ({ label: a.label, href: a.href, icon: <a.icon size={15} />, primary: i === 0 }))}
-        aside={<div className="flex flex-wrap items-center gap-3"><AskButton /><span className="text-sm text-muted tabular">{nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - all.revenue, locale), n: nextCamp.n }) : t("summitReached")} · {t("daysLeft", { count: p.daysLeft })}</span></div>}
+        corner={<AskButton />}
+        art={["mountain", "coin", "sparkle", "cloud"]}
+        aside={<div className="flex flex-wrap items-center justify-center gap-3"><span className="text-sm text-muted tabular">{nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - all.revenue, locale), n: nextCamp.n }) : t("summitReached")} · {t("daysLeft", { count: p.daysLeft })}</span></div>}
         visual={
           <MountainLazy className="size-full" progress={revPct} nextCampAt={nextCamp ? nextCamp.amount / GOAL.revenue : null}
                         ariaLabel={t("mountainLabel", { pct: pct(revPct, locale) })}

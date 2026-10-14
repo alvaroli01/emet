@@ -2139,6 +2139,78 @@
       "title": "Hey {name}, who should we sell to?",
       "due": "{count, plural, one {# lead is waiting for your next step} other {# leads are waiting for your next step}}",
       "strong": "{count, plural, one {# strong lead nobody has contacted yet} other {# strong leads nobody has contacted yet}}"
+    },
+    "assistTitle": "Hey {name}, what are we doing in {section} today?"
+  },
+  "assist": {
+    "label": "Ask emet about this section",
+    "placeholder": "Tell me what you're doing — e.g. \"log a €25 tote sale paid by Bizum\"",
+    "placeholderNoKey": "Connect your free Groq key below to chat",
+    "send": "Send",
+    "thinking": "Thinking…",
+    "error": "Couldn't answer just now. Try again in a moment.",
+    "limit": "Free AI limit reached — try again in {s} s.",
+    "needKey": "Connect your free Groq key to use the assistant.",
+    "open": "Open {tool}",
+    "add": "Add it",
+    "added": "Added",
+    "dismiss": "Not now",
+    "saveError": "Couldn't save it. Check the details and try again.",
+    "noPermission": "Only this team can add that. Ask someone in the team, or a leader.",
+    "tools": "Tools",
+    "close": "Close",
+    "kinds": {
+      "task": "New task",
+      "sale": "New sale",
+      "expense": "New expense",
+      "content": "New content",
+      "inquiry": "New DM inquiry",
+      "prospect": "New prospect",
+      "complaint": "New customer problem",
+      "decision": "New decision",
+      "blocker": "New blocker"
+    },
+    "fields": {
+      "title": "Title",
+      "due": "Due",
+      "description": "What",
+      "amount": "Amount",
+      "cost": "Cost",
+      "date": "Date",
+      "payment_method": "Paid with",
+      "heard_about": "Heard about us",
+      "category": "Category",
+      "planned_for": "Planned for",
+      "platform": "Platform",
+      "handle": "Handle",
+      "product": "Product",
+      "name": "Name",
+      "contact": "Contact",
+      "customer": "Customer",
+      "issue": "Problem",
+      "decision": "Decision"
+    },
+    "starters": {
+      "logSale": "Log a sale",
+      "addExpense": "Add an expense",
+      "addTask": "Add a task",
+      "planPost": "Plan a post",
+      "logDm": "Log a DM",
+      "addProspect": "Add a prospect",
+      "logProblem": "Log a customer problem",
+      "recordDecision": "Record a decision",
+      "whatsLate": "What's late?"
+    },
+    "starterPrompts": {
+      "logSale": "I want to log a sale",
+      "addExpense": "I want to add an expense",
+      "addTask": "Add a task for me",
+      "planPost": "Help me plan a post",
+      "logDm": "Log a DM inquiry",
+      "addProspect": "Add a new prospect",
+      "logProblem": "Log a customer problem",
+      "recordDecision": "Record a decision we made",
+      "whatsLate": "What's late across the team and who should I chase?"
     }
   }
 }

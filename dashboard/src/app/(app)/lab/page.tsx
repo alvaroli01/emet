@@ -31,6 +31,7 @@ export default async function LabPage({ searchParams }: { searchParams: Promise<
     <div className="space-y-6">
       <LiveRefresh tables={["lab_ideas", "lab_votes", "lab_comments"]} />
       <PageHero
+        art={["sparkle", "cloud", "globe", "ring"]}
         section={{ label: tn("lab"), icon: <Lightbulb size={16} /> }}
         title={th("lab.title", { name: me.full_name.split(" ")[0] })}
         subtitle={tl("subtitle")}

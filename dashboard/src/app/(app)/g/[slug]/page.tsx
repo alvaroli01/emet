@@ -15,12 +15,26 @@ import { MarketingTools } from "@/components/tools/marketing";
 import { CommunicationsTools } from "@/components/tools/communications";
 import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
-import { SectionTabs } from "@/components/section-tabs";
+import { ToolWorkspace } from "@/components/shell/tool-workspace";
+import { SectionAssistant } from "@/components/shell/section-assistant";
+import { createClient } from "@/lib/supabase/server";
 import { PageHero } from "@/components/shell/page-hero";
+import type { ShapeName } from "@/components/shell/io-art";
 import { HeroTerrain, MemberOrbit } from "@/components/shell/hero-visuals";
 import { groupHero } from "@/lib/hero-data";
 import { shortDate, todayISO } from "@/lib/format";
 import { GroupIcon } from "@/components/group-icon";
+
+const ART: Record<string, ShapeName[]> = {
+  finance: ["coin", "mountain", "ring", "sparkle"], marketing: ["sparkle", "globe", "pill", "cloud"], customer: ["globe", "ring", "sparkle", "cloud"],
+  communications: ["cloud", "pill", "sparkle", "ring"], "team-leader": ["mountain", "sparkle", "globe", "coin"],
+};
+
+/** Quick things to ask the assistant in each section (shown as chips under the chat). */
+const STARTERS: Record<string, string[]> = {
+  finance: ["logSale", "addExpense", "addTask"], marketing: ["planPost", "logDm", "addTask"], customer: ["addProspect", "logProblem", "addTask"],
+  communications: ["recordDecision", "addTask"], "team-leader": ["whatsLate", "recordDecision", "addTask"],
+};
 
 /** The hero's buttons per group: the first is the main action. `edit` = only for people who can edit this group. */
 const ACTIONS: Record<string, { key: string; tab?: string; href?: string; edit?: boolean }[]> = {
@@ -61,6 +75,13 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   const th = await getTranslations("hero");
   const locale = await getLocale();
   const toolTabs = Tools ? await Tools(props) : [];
+  const ta = await getTranslations("assist");
+  const { data: aiKey } = await (await createClient()).from("ai_keys").select("last4").maybeSingle();
+  const allTools = [
+    { id: "board", group: "work", label: t("board"), node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
+    ...toolTabs,
+    ...(slug !== "team-leader" ? [{ id: "blockers", group: "work" as const, label: tt("blockers.title"), node: await BlockersTool({ ...props, onlyThisGroup: true }) }] : []),
+  ];
   const hero = await groupHero(slug, session.me.id, group.id, todayISO());
   const firstName = session.me.full_name.split(" ")[0];
   const heroKey = ["finance", "marketing", "customer", "communications", "team-leader"].includes(slug) ? slug : "default";
@@ -72,8 +93,9 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         "decisions", "morale_checks", "meeting_notes", "outreach", "profiles"]} />
 
       <PageHero
+        art={ART[slug] ?? ["sparkle", "globe", "coin", "cloud"]}
         section={{ label: t(`names.${slug}`), icon: <GroupIcon slug={slug} size={14} />, color: group.color }}
-        title={th(`groups.${heroKey}.title`, { name: firstName })}
+        title={th("assistTitle", { name: firstName, section: t(`names.${slug}`) })}
         subtitle={th(`groups.${heroKey}.subtitle`)}
         lines={hero.needs.length ? hero.needs.map((n) => ({
           text: th(`needs.${n.key}`, { count: n.count, ...(n.values ?? {}) }), tone: n.tone,
@@ -85,6 +107,14 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
           ? <MemberOrbit slug={slug} color={group.color} people={members} />
           : <HeroTerrain points={hero.series.map((p) => ({ label: th("weekOf", { date: shortDate(p.label, locale) }), value: p.value }))} kind={hero.seriesKind}
                          ariaLabel={th(`series.${hero.seriesKey}`)} caption={th(`series.${hero.seriesKey}`)} />}
+        assistant={
+          <SectionAssistant section={slug} groupId={group.id} boardId={board.board.id} listId={[...board.lists].sort((a, b) => a.position - b.position)[0]?.id ?? null}
+                            meId={session.me.id} hasKey={!!aiKey} tools={allTools.map((x) => ({ id: x.id, label: x.label }))}
+                            starters={[
+                              ...hero.needs.slice(0, 2).map((n) => ({ label: th(`needs.${n.key}`, { count: n.count, ...(n.values ?? {}) }), tab: n.tab })),
+                              ...(STARTERS[slug] ?? []).map((k) => ({ label: ta(`starters.${k}`), prompt: ta(`starterPrompts.${k}`) })),
+                            ].slice(0, 5)} />
+        }
         aside={
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex -space-x-2">
@@ -103,11 +133,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         </section>
       )}
 
-      <SectionTabs label={t("sections")} initial={tab} groups={toolTabs.length > 4 ? { work: th("tabGroups.work"), plan: th("tabGroups.plan"), numbers: th("tabGroups.numbers"), people: th("tabGroups.people") } : undefined} tabs={[
-        { id: "board", group: "work", label: t("board"), node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
-        ...toolTabs,
-        ...(slug !== "team-leader" ? [{ id: "blockers", group: "work", label: tt("blockers.title"), node: await BlockersTool({ ...props, onlyThisGroup: true }) }] : []),
-      ]} />
+      <ToolWorkspace initial={tab} groups={{ work: th("tabGroups.work"), plan: th("tabGroups.plan"), numbers: th("tabGroups.numbers"), people: th("tabGroups.people") }} tools={allTools} />
     </div>
   );
 }

@@ -25,6 +25,7 @@ export default async function GeneralBoardPage() {
     <div className="space-y-4">
       <LiveRefresh tables={BOARD_TABLES} />
       <PageHero
+        art={["pill", "sparkle", "ring", "globe"]}
         section={{ label: tn("generalBoard"), icon: <KanbanSquare size={16} /> }}
         title={th("board.title", { name: me.full_name.split(" ")[0] })}
         subtitle={t("generalHint")}

@@ -1,13 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Onest } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { cookies } from "next/headers";
 import { ToastProvider } from "@/components/toast";
 import "./globals.css";
 
-// Onest: a friendly, very readable grotesk drawn for both Latin and Cyrillic (Russian is one of our 7 languages)
-const onest = Onest({ subsets: ["latin", "latin-ext", "cyrillic"], variable: "--font-onest", display: "swap" });
 
 export const metadata: Metadata = {
   title: "emet HQ",
@@ -30,8 +27,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html
       lang={locale}
       data-theme={theme === "light" || theme === "dark" ? theme : undefined}
-      className={onest.variable}
     >
+      <head>
+        {/* Google Sans (self-hosted) — preload the Latin file so headlines render in the right font straight away */}
+        <link rel="preload" href="/fonts/google-sans-latin.woff2" as="font" type="font/woff2" crossOrigin="" />
+        <meta name="theme-color" content={theme === "light" ? "#f8f9fa" : "#000000"} />
+      </head>
       <body>
         <NextIntlClientProvider>
           <ToastProvider>{children}</ToastProvider>

@@ -38,6 +38,7 @@ export default async function MeetingsPage({ searchParams }: { searchParams: Pro
     <div className="space-y-6">
       <LiveRefresh tables={["meetings"]} />
       <PageHero
+        art={["ring", "cloud", "sparkle", "globe"]}
         section={{ label: tn("meetings"), icon: <AudioLines size={16} /> }}
         title={th("meetings.title", { name: me.full_name.split(" ")[0] })}
         subtitle={t("subtitle")}

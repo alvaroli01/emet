@@ -84,6 +84,7 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
       <LiveRefresh tables={["sales", "expenses", "cards", "blockers", "activity_log", "complaints", "content_posts", "morale_checks"]} />
 
       <PageHero
+        art={["mountain", "ring", "coin", "sparkle"]}
         section={{ label: tn("overview"), icon: <LayoutDashboard size={16} /> }}
         title={th("overview.title", { name: me.full_name.split(" ")[0] })}
         subtitle={t("subtitle")}

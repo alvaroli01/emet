@@ -212,12 +212,48 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
     // Summit flag
     const flagMat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
     const summit = pts[N].clone();
+    const bigCoinBase = summit.y + 1.25;
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.6, 6), flagMat);
     pole.position.copy(summit).add(new THREE.Vector3(0, 0.3, 0));
     const flagShape = new THREE.Shape([new THREE.Vector2(0, 0), new THREE.Vector2(0.32, -0.09), new THREE.Vector2(0, -0.18)]);
     const flag = new THREE.Mesh(new THREE.ShapeGeometry(flagShape), flagMat);
     flag.position.copy(summit).add(new THREE.Vector3(0, 0.6, 0));
     world.add(pole, flag);
+
+    // Money on the mountain: a gold coin on the trail for every €1K climbed, a coin stack at each €5K camp
+    // reached, and a big € coin turning above the summit (the goal).
+    const goldTop = new THREE.MeshBasicMaterial({ color: 0xfbbc04 });
+    const goldSide = new THREE.MeshBasicMaterial({ color: 0xc58b00 });
+    const coinMats = [goldSide, goldTop, goldTop];
+    const coinGeo = new THREE.CylinderGeometry(0.085, 0.085, 0.022, 28);
+    const coins: { mesh: THREE.Mesh; at: number; phase: number; base: number }[] = [];
+    for (let k = 1; k < 30; k++) {
+      const a = k / 30;
+      const p = curve.getPoint(indexAt(a) / N);
+      const mesh = new THREE.Mesh(coinGeo, coinMats);
+      mesh.rotation.x = Math.PI / 2; // stand the coin on its edge
+      mesh.position.set(p.x, p.y + 0.16, p.z);
+      mesh.visible = false;
+      world.add(mesh);
+      coins.push({ mesh, at: a, phase: k * 0.7, base: p.y + 0.16 });
+    }
+    const stacks: { group: THREE.Group; at: number }[] = [];
+    for (let c = 1; c < 6; c++) {
+      const a = c / 6, p = curve.getPoint(indexAt(a) / N), g = new THREE.Group();
+      for (let j = 0; j < 4; j++) { const m = new THREE.Mesh(coinGeo, coinMats); m.position.set((j % 2) * 0.012, j * 0.024, 0); m.scale.setScalar(1.25); g.add(m); }
+      g.position.set(p.x + 0.22, p.y + 0.02, p.z + 0.05);
+      g.visible = false;
+      world.add(g);
+      stacks.push({ group: g, at: a });
+    }
+    const euroCanvas = document.createElement("canvas");
+    euroCanvas.width = euroCanvas.height = 128;
+    const ec = euroCanvas.getContext("2d");
+    if (ec) { ec.fillStyle = "#fbbc04"; ec.fillRect(0, 0, 128, 128); ec.fillStyle = "#9a6b00"; ec.font = "bold 86px sans-serif"; ec.textAlign = "center"; ec.textBaseline = "middle"; ec.fillText("€", 64, 70); }
+    const euroTex = new THREE.CanvasTexture(euroCanvas);
+    const bigCoin = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.05, 40), [goldSide, new THREE.MeshBasicMaterial({ map: euroTex }), new THREE.MeshBasicMaterial({ map: euroTex })]);
+    bigCoin.rotation.x = Math.PI / 2;
+    world.add(bigCoin);
 
     // Base camp: your tent at the foot of the trail
     const tentAt = curve.getPoint(0.05);
@@ -343,6 +379,16 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
         if (!reduced && now - lastInput > 2500) rotY += dt * 0.07;
       }
       world.rotation.y = rotY;
+
+      // Coins appear as the climb passes them, spin and bob; the summit coin turns slowly
+      const tsec = now / 1000;
+      for (const c of coins) {
+        c.mesh.visible = c.at <= shown + 1e-6;
+        if (c.mesh.visible && !reduced) { c.mesh.rotation.z = tsec * 1.6 + c.phase; c.mesh.position.y = c.base + Math.sin(tsec * 2 + c.phase) * 0.025; }
+      }
+      for (const st of stacks) st.group.visible = st.at <= shown + 1e-6;
+      bigCoin.position.set(summit.x, bigCoinBase + (reduced ? 0 : Math.sin(tsec * 1.2) * 0.06), summit.z);
+      if (!reduced) bigCoin.rotation.z = tsec * 0.9;
 
       const i = indexAt(shown);
       const at = curve.getPoint(i / N);

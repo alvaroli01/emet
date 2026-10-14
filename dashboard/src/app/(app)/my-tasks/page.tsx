@@ -50,6 +50,7 @@ export default async function MyTasksPage() {
     <div className="space-y-6">
       <LiveRefresh tables={["cards", "card_assignees"]} />
       <PageHero
+        art={["ring", "sparkle", "pill", "coin"]}
         section={{ label: t("title"), icon: <CheckSquare size={16} /> }}
         title={th("tasks.title", { name: me.full_name.split(" ")[0] })}
         subtitle={t("subtitle", { count: open.length })}

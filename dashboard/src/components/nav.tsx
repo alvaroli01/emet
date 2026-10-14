@@ -57,11 +57,11 @@ function NavList({ collapsed = false, onNavigate, ...props }: Props & { collapse
                 <li key={i.href}>
                   <Link href={i.href} onClick={onNavigate} aria-current={active ? "page" : undefined} title={collapsed ? i.label : undefined}
                         className={`group relative flex items-center gap-3 rounded-xl py-2 text-sm transition-colors ${collapsed ? "justify-center px-0" : "px-3"} ${
-                          active ? "bg-[color-mix(in_srgb,var(--brand)_10%,transparent)] font-medium text-brand" : "text-muted hover:bg-surface-2 hover:text-ink"}`}>
+                          active ? "bg-[color-mix(in_srgb,var(--brand)_10%,transparent)] font-medium text-link" : "text-muted hover:bg-surface-2 hover:text-ink"}`}>
                     {i.icon}
                     {!collapsed && <span className="flex-1 truncate">{i.label}</span>}
                     {!collapsed && i.mine && (
-                      <span className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${active ? "bg-surface text-brand" : "bg-surface-2 text-ink"}`}>
+                      <span className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${active ? "bg-surface text-link" : "bg-surface-2 text-ink"}`}>
                         <span aria-hidden className="size-1.5 rounded-full" style={{ background: i.color }} />{t("yourTeam")}
                       </span>
                     )}
@@ -125,7 +125,7 @@ export function BottomNav(props: Props) {
             return (
               <li key={i.href}>
                 <Link href={i.href} aria-current={active ? "page" : undefined}
-                      className={`flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl text-[11px] transition-colors active:scale-95 ${active ? "font-semibold text-brand" : "text-muted"}`}>
+                      className={`flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl text-[11px] transition-colors active:scale-95 ${active ? "font-semibold text-link" : "text-muted"}`}>
                   <span className={`grid h-7 w-12 place-items-center rounded-full transition-colors ${active ? "bg-[color-mix(in_srgb,var(--brand)_14%,transparent)]" : ""}`}>{i.icon}</span>
                   <span className="max-w-full truncate px-0.5">{i.label}</span>
                 </Link>

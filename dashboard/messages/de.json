@@ -2139,6 +2139,78 @@
       "title": "Hey {name}, an wen sollten wir verkaufen?",
       "due": "{count, plural, one {# Lead wartet auf deinen nächsten Schritt} other {# Leads warten auf deinen nächsten Schritt}}",
       "strong": "{count, plural, one {# starker Lead, den noch niemand kontaktiert hat} other {# starke Leads, die noch niemand kontaktiert hat}}"
+    },
+    "assistTitle": "Hey {name}, was machen wir heute in {section}?"
+  },
+  "assist": {
+    "label": "Frag emet zu diesem Bereich",
+    "placeholder": "Sag mir, was du gerade machst, z. B. \"trag einen Tote-Bag-Verkauf über 25 € ein, bezahlt per Bizum\"",
+    "placeholderNoKey": "Verbinde unten deinen kostenlosen Groq-Schlüssel, um zu chatten",
+    "send": "Senden",
+    "thinking": "Denke nach…",
+    "error": "Gerade konnte ich nicht antworten. Versuch es gleich nochmal.",
+    "limit": "Kostenloses KI-Limit erreicht – versuch es in {s} s nochmal.",
+    "needKey": "Verbinde deinen kostenlosen Groq-Schlüssel, um den Assistenten zu nutzen.",
+    "open": "{tool} öffnen",
+    "add": "Hinzufügen",
+    "added": "Hinzugefügt",
+    "dismiss": "Nicht jetzt",
+    "saveError": "Konnte nicht gespeichert werden. Prüf die Angaben und versuch es nochmal.",
+    "noPermission": "Das kann nur dieses Team hinzufügen. Frag jemanden im Team oder eine Leitung.",
+    "tools": "Tools",
+    "close": "Schließen",
+    "kinds": {
+      "task": "Neue Aufgabe",
+      "sale": "Neuer Verkauf",
+      "expense": "Neue Ausgabe",
+      "content": "Neuer Inhalt",
+      "inquiry": "Neue DM-Anfrage",
+      "prospect": "Neuer Interessent",
+      "complaint": "Neues Kundenproblem",
+      "decision": "Neue Entscheidung",
+      "blocker": "Neues Hindernis"
+    },
+    "fields": {
+      "title": "Titel",
+      "due": "Fällig",
+      "description": "Was",
+      "amount": "Betrag",
+      "cost": "Kosten",
+      "date": "Datum",
+      "payment_method": "Bezahlt mit",
+      "heard_about": "Wie bist du auf uns gekommen",
+      "category": "Kategorie",
+      "planned_for": "Geplant für",
+      "platform": "Plattform",
+      "handle": "Handle",
+      "product": "Produkt",
+      "name": "Name",
+      "contact": "Kontakt",
+      "customer": "Kunde",
+      "issue": "Problem",
+      "decision": "Entscheidung"
+    },
+    "starters": {
+      "logSale": "Verkauf eintragen",
+      "addExpense": "Ausgabe hinzufügen",
+      "addTask": "Aufgabe hinzufügen",
+      "planPost": "Post planen",
+      "logDm": "DM eintragen",
+      "addProspect": "Interessenten hinzufügen",
+      "logProblem": "Kundenproblem eintragen",
+      "recordDecision": "Entscheidung festhalten",
+      "whatsLate": "Was ist überfällig?"
+    },
+    "starterPrompts": {
+      "logSale": "Ich möchte einen Verkauf eintragen",
+      "addExpense": "Ich möchte eine Ausgabe hinzufügen",
+      "addTask": "Füg eine Aufgabe für mich hinzu",
+      "planPost": "Hilf mir, einen Post zu planen",
+      "logDm": "Trag eine DM-Anfrage ein",
+      "addProspect": "Füg einen neuen Interessenten hinzu",
+      "logProblem": "Trag ein Kundenproblem ein",
+      "recordDecision": "Halt eine Entscheidung fest, die wir getroffen haben",
+      "whatsLate": "Was ist im Team überfällig, und bei wem sollte ich nachhaken?"
     }
   }
 }

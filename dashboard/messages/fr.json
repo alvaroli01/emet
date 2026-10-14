@@ -2139,6 +2139,78 @@
       "title": "Hey {name}, à qui devrait-on vendre ?",
       "due": "{count, plural, one {# lead attend ta prochaine étape} other {# leads attendent ta prochaine étape}}",
       "strong": "{count, plural, one {# lead solide que personne n’a encore contacté} other {# leads solides que personne n’a encore contactés}}"
+    },
+    "assistTitle": "Salut {name}, on fait quoi aujourd'hui dans {section} ?"
+  },
+  "assist": {
+    "label": "Demande à emet à propos de cette section",
+    "placeholder": "Dis-moi ce que tu fais, p. ex. « note une vente de tote bag à 25 € payée par Bizum »",
+    "placeholderNoKey": "Connecte ta clé Groq gratuite ci-dessous pour discuter",
+    "send": "Envoyer",
+    "thinking": "Je réfléchis…",
+    "error": "Impossible de répondre pour l'instant. Réessaie dans un instant.",
+    "limit": "Limite d'IA gratuite atteinte : réessaie dans {s} s.",
+    "needKey": "Connecte ta clé Groq gratuite pour utiliser l'assistant.",
+    "open": "Ouvrir {tool}",
+    "add": "Ajouter",
+    "added": "Ajouté",
+    "dismiss": "Pas maintenant",
+    "saveError": "Impossible d'enregistrer. Vérifie les infos et réessaie.",
+    "noPermission": "Seule cette équipe peut ajouter ça. Demande à quelqu'un de l'équipe ou à un responsable.",
+    "tools": "Outils",
+    "close": "Fermer",
+    "kinds": {
+      "task": "Nouvelle tâche",
+      "sale": "Nouvelle vente",
+      "expense": "Nouvelle dépense",
+      "content": "Nouveau contenu",
+      "inquiry": "Nouvelle demande par DM",
+      "prospect": "Nouveau prospect",
+      "complaint": "Nouveau problème client",
+      "decision": "Nouvelle décision",
+      "blocker": "Nouveau blocage"
+    },
+    "fields": {
+      "title": "Titre",
+      "due": "Échéance",
+      "description": "Quoi",
+      "amount": "Montant",
+      "cost": "Coût",
+      "date": "Date",
+      "payment_method": "Payé avec",
+      "heard_about": "Comment il nous a connus",
+      "category": "Catégorie",
+      "planned_for": "Prévu pour",
+      "platform": "Plateforme",
+      "handle": "Pseudo",
+      "product": "Produit",
+      "name": "Nom",
+      "contact": "Contact",
+      "customer": "Client",
+      "issue": "Problème",
+      "decision": "Décision"
+    },
+    "starters": {
+      "logSale": "Noter une vente",
+      "addExpense": "Ajouter une dépense",
+      "addTask": "Ajouter une tâche",
+      "planPost": "Planifier un post",
+      "logDm": "Noter un DM",
+      "addProspect": "Ajouter un prospect",
+      "logProblem": "Noter un problème client",
+      "recordDecision": "Enregistrer une décision",
+      "whatsLate": "Qu'est-ce qui est en retard ?"
+    },
+    "starterPrompts": {
+      "logSale": "Je veux noter une vente",
+      "addExpense": "Je veux ajouter une dépense",
+      "addTask": "Ajoute-moi une tâche",
+      "planPost": "Aide-moi à planifier un post",
+      "logDm": "Note une demande par DM",
+      "addProspect": "Ajoute un nouveau prospect",
+      "logProblem": "Note un problème client",
+      "recordDecision": "Enregistre une décision qu'on a prise",
+      "whatsLate": "Qu'est-ce qui est en retard dans l'équipe et qui dois-je relancer ?"
     }
   }
 }

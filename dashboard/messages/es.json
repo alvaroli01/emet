@@ -2139,6 +2139,78 @@
       "title": "Hola, {name}, ¿a quién deberíamos vender?",
       "due": "{count, plural, one {# lead espera tu siguiente paso} other {# leads esperan tu siguiente paso}}",
       "strong": "{count, plural, one {# lead fuerte al que nadie ha contactado aún} other {# leads fuertes a los que nadie ha contactado aún}}"
+    },
+    "assistTitle": "Hola {name}, ¿qué hacemos hoy en {section}?"
+  },
+  "assist": {
+    "label": "Pregunta a emet sobre esta sección",
+    "placeholder": "Cuéntame qué estás haciendo, p. ej. \"apunta una venta de un tote de 25 € pagada por Bizum\"",
+    "placeholderNoKey": "Conecta abajo tu clave gratuita de Groq para chatear",
+    "send": "Enviar",
+    "thinking": "Pensando…",
+    "error": "No he podido responder ahora. Inténtalo de nuevo en un momento.",
+    "limit": "Límite de IA gratuita alcanzado: prueba de nuevo en {s} s.",
+    "needKey": "Conecta tu clave gratuita de Groq para usar el asistente.",
+    "open": "Abrir {tool}",
+    "add": "Añadir",
+    "added": "Añadido",
+    "dismiss": "Ahora no",
+    "saveError": "No se pudo guardar. Revisa los datos e inténtalo de nuevo.",
+    "noPermission": "Solo este equipo puede añadir eso. Pregunta a alguien del equipo o a un líder.",
+    "tools": "Herramientas",
+    "close": "Cerrar",
+    "kinds": {
+      "task": "Nueva tarea",
+      "sale": "Nueva venta",
+      "expense": "Nuevo gasto",
+      "content": "Nuevo contenido",
+      "inquiry": "Nueva consulta por DM",
+      "prospect": "Nuevo prospecto",
+      "complaint": "Nuevo problema de cliente",
+      "decision": "Nueva decisión",
+      "blocker": "Nuevo bloqueo"
+    },
+    "fields": {
+      "title": "Título",
+      "due": "Vence",
+      "description": "Qué",
+      "amount": "Importe",
+      "cost": "Coste",
+      "date": "Fecha",
+      "payment_method": "Pagado con",
+      "heard_about": "Cómo nos conoció",
+      "category": "Categoría",
+      "planned_for": "Previsto para",
+      "platform": "Plataforma",
+      "handle": "Usuario",
+      "product": "Producto",
+      "name": "Nombre",
+      "contact": "Contacto",
+      "customer": "Cliente",
+      "issue": "Problema",
+      "decision": "Decisión"
+    },
+    "starters": {
+      "logSale": "Apuntar una venta",
+      "addExpense": "Añadir un gasto",
+      "addTask": "Añadir una tarea",
+      "planPost": "Planear un post",
+      "logDm": "Apuntar un DM",
+      "addProspect": "Añadir un prospecto",
+      "logProblem": "Apuntar un problema de cliente",
+      "recordDecision": "Registrar una decisión",
+      "whatsLate": "¿Qué va tarde?"
+    },
+    "starterPrompts": {
+      "logSale": "Quiero apuntar una venta",
+      "addExpense": "Quiero añadir un gasto",
+      "addTask": "Añádeme una tarea",
+      "planPost": "Ayúdame a planear un post",
+      "logDm": "Apunta una consulta por DM",
+      "addProspect": "Añade un nuevo prospecto",
+      "logProblem": "Apunta un problema de un cliente",
+      "recordDecision": "Registra una decisión que hemos tomado",
+      "whatsLate": "¿Qué va tarde en el equipo y a quién debería avisar?"
     }
   }
 }
