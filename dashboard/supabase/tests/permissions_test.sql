@@ -397,6 +397,25 @@ select t.check('Nobody fakes link clicks from the browser', $$insert into go_cli
 select t.login(5);
 select t.check('Communications cannot log inquiries', $$insert into inquiries (handle) values ('@x')$$, 'denied');
 
+-- ── Scout (lead finder) + council ───────────────────────────
+select t.login(3);  -- Rocco (Marketing)
+select t.check('Marketing creates a Scout project', $$insert into scout_projects (title, offer, niche) values ('Café content', 'Instagram content', 'cafés')$$, 'ok');
+select t.check('Marketing starts a search', $$insert into scout_searches (project_id, country_code, city) select id, 'ES', 'Bilbao' from scout_projects limit 1$$, 'ok');
+select t.check('Marketing stores a place', $$insert into scout_places (fingerprint, name) values ('cafe-x|43.26|-2.93', 'Café X')$$, 'ok');
+select t.check('Marketing saves a lead', $$insert into scout_leads (project_id, place_id, score, fit) select p.id, pl.id, 80, 'strong' from scout_projects p, scout_places pl limit 1$$, 'ok');
+select t.check('Same place cannot be judged twice for a project', $$insert into scout_leads (project_id, place_id) select p.id, pl.id from scout_projects p, scout_places pl limit 1$$, 'denied');
+select t.check('Marketing assigns the lead to Mario', $$update scout_leads set owner_id = (select id from profiles where full_name = 'Mario')$$, 'ok');
+select t.login(2);  -- Stefan (Finance)
+select t.assert('Everyone sees Scout leads', t.num('select count(*) from scout_leads') = 1);
+select t.check('Finance cannot start searches', $$insert into scout_searches (project_id, country_code, city) select id, 'ES', 'Madrid' from scout_projects limit 1$$, 'denied');
+select t.check('Finance cannot change leads', $$update scout_leads set status = 'won'$$, 'denied');
+select t.login(5);  -- Mario (Comms), owner of the lead
+select t.check('The lead owner moves it along', $$update scout_leads set status = 'contacted'$$, 'ok');
+select t.check('The lead owner cannot hand it to someone else', $$update scout_leads set owner_id = (select id from profiles where full_name = 'Stefan')$$, 'denied');
+select t.check('Member runs the council on an idea', $$insert into lab_councils (idea_id) select id from lab_ideas limit 1$$, 'ok');
+select t.login(2);
+select t.check('Others cannot overwrite that council', $$update lab_councils set status = 'failed'$$, 'denied');
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',

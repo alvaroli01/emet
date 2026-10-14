@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test src/lib/*.test.ts src/lib/ai/*.test.ts src/lib/lab/*.test.ts",
+    "test": "node --test src/lib/*.test.ts src/lib/ai/*.test.ts src/lib/lab/*.test.ts src/lib/scout/*.test.ts",
     "test:db": "bash supabase/tests/run-local.sh",
     "check:i18n": "node scripts/check-i18n.mjs"
   },
@@ -27,7 +27,9 @@
     "react-dom": "19.1.0",
     "recharts": "^3.10.1",
     "server-only": "^0.0.1",
-    "three": "^0.185.1"
+    "three": "^0.185.1",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -37,6 +39,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.185.0",
+    "@types/topojson-client": "^3.1.5",
     "eslint": "^9",
     "eslint-config-next": "15.5.27",
     "tailwindcss": "^4",

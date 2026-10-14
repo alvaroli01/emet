@@ -23,7 +23,7 @@ export default async function TodayPage() {
   const today = todayISO();
   const week = weekStart(Date.now());
 
-  const [plan, cards, subtasks, agenda, sales, expenses, report] = await Promise.all([
+  const [plan, cards, subtasks, agenda, sales, expenses, report, leads] = await Promise.all([
     supabase.from("week_plans").select("priorities").eq("owner_id", me.id).eq("week_start", week).maybeSingle(),
     supabase.from("cards").select("id, title, due_at, boards(group_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).is("completed_at", null).not("due_at", "is", null).lte("due_at", `${today}T23:59:59Z`),
@@ -33,6 +33,8 @@ export default async function TodayPage() {
     supabase.from("sales").select("date, amount, cost").returns<Sale[]>(),
     supabase.from("expenses").select("date, amount").returns<Expense[]>(),
     supabase.from("weekly_reports").select("week_start, data").order("week_start", { ascending: false }).limit(1).maybeSingle(),
+    supabase.from("scout_leads").select("id, project_id, next_step_at, place:scout_places(name)").eq("owner_id", me.id)
+      .not("next_step_at", "is", null).lte("next_step_at", today).not("status", "in", "(won,lost,ignored)"),
   ]);
 
   const slug = (gid: string | null | undefined) => (gid ? groups.find((g) => g.id === gid)?.slug : undefined);
@@ -42,6 +44,9 @@ export default async function TodayPage() {
       .map((c) => ({ id: c.id, title: c.title, day: c.due_at.slice(0, 10), href: href(c.boards?.group_id, c.id) })),
     ...((subtasks.data ?? []) as unknown as { id: string; text: string; due_on: string; cards: { id: string; title: string; boards: { group_id: string | null } | null } | null }[])
       .filter((s) => s.cards).map((s) => ({ id: s.id, title: s.text, day: s.due_on, href: href(s.cards!.boards?.group_id, s.cards!.id), parent: s.cards!.title })),
+    // Scout leads whose next step is due: who to visit or call today
+    ...((leads.data ?? []) as unknown as { id: string; project_id: string; next_step_at: string; place: { name: string } | null }[])
+      .map((l) => ({ id: l.id, title: l.place?.name ?? "—", day: l.next_step_at, href: `/scout?p=${l.project_id}`, parent: "Scout" })),
   ].sort((a, b) => a.day.localeCompare(b.day));
   const overdue = due.filter((d) => d.day < today);
   const dueToday = due.filter((d) => d.day === today);
@@ -66,7 +71,7 @@ export default async function TodayPage() {
 
   return (
     <div className="space-y-5">
-      <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports"]} />
+      <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads"]} />
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-sm text-muted first-letter:uppercase">{new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/Madrid" })}</p>

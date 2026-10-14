@@ -9,15 +9,15 @@ const API = "https://api.groq.com/openai/v1/chat/completions";
 const MODELS = ["openai/gpt-oss-120b", "openai/gpt-oss-20b"];
 export type Source = { title: string; url: string };
 export type Research = { notes: string; sources: Source[] };
-type Fail = { error: "limit" | "bad-key" | "failed"; retryAfter?: number };
+export type Fail = { error: "limit" | "bad-key" | "failed"; retryAfter?: number };
 
-const LANG: Record<string, string> = { en: "English", es: "Spanish", de: "German", fr: "French", fi: "Finnish", "pt-BR": "Brazilian Portuguese", ru: "Russian" };
+export const LANG: Record<string, string> = { en: "English", es: "Spanish", de: "German", fr: "French", fi: "Finnish", "pt-BR": "Brazilian Portuguese", ru: "Russian" };
 
-const CONTEXT = `Team: emet, 15 university students (LEINN Internacional, Mondragon University, Spain), 5 groups (leaders, finance, customer, marketing, communications).
+export const CONTEXT = `Team: emet, 15 university students (LEINN Internacional, Mondragon University, Spain), 5 groups (leaders, finance, customer, marketing, communications).
 Goal: €30,000 revenue and €15,000 profit by 30 June 2027 (about 8 months from October 2026), minimum 50% margin.
 Budget to start: €0 (they can reinvest profits). They can sell on campus, at events, online and via Instagram/TikTok. Nothing is decided yet.`;
 
-async function call(key: string, body: Record<string, unknown>, models = MODELS): Promise<{ ok: true; message: Record<string, unknown> } | Fail> {
+export async function call(key: string, body: Record<string, unknown>, models = MODELS): Promise<{ ok: true; message: Record<string, unknown> } | Fail> {
   let limited: Fail | null = null;
   for (const model of models) {
     const res = await fetch(API, { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: JSON.stringify({ model, ...body }) });
@@ -44,6 +44,8 @@ Research this business idea on the web, focused on Spain (and the team's campus 
 
 Find facts that decide if it can work for them: real demand and who buys, typical prices and costs in Spain, competitors and
 what they charge, legal/permit requirements, seasonality, and examples of similar student or small ventures.
+Also look for PROOF THAT IT ALREADY SELLS somewhere (any country): live ads or shops selling the same thing, review counts, sold-out
+products, and how long competitors have been running it. List that proof with links; say clearly if you found none.
 Write compact research notes (bullet points with numbers) in ${LANG[locale] ?? "English"}. Do not give a verdict.` }],
   });
   if (!("ok" in r)) return r;

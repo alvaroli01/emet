@@ -8,6 +8,7 @@ import {
   TrendingUp, TrendingDown, AlertTriangle, CircleHelp, GitBranch, Package, Wrench, PartyPopper, MonitorSmartphone, Shapes, KeyRound,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { IdeaExtras } from "./extras";
 import { useToast } from "@/components/toast";
 import { timeAgo } from "@/lib/format";
 import { CRITERIA, type Analysis, type Verdict } from "@/lib/lab/score";
@@ -412,6 +413,8 @@ function Detail({ idea, names, meId, isAdmin, hasKey, votes, comments, parent, v
               )}
             </section>
           )}
+
+          <IdeaExtras idea={idea} hasKey={hasKey} />
         </div>
       )}
 
@@ -468,7 +471,7 @@ function Running({ progress }: { progress: NonNullable<Progress> }) {
   );
 }
 
-function KeyNotice({ onConnected }: { onConnected: () => void }) {
+export function KeyNotice({ onConnected }: { onConnected: () => void }) {
   const t = useTranslations("lab");
   const [key, setKey] = useState("");
   const [busy, setBusy] = useState(false);
