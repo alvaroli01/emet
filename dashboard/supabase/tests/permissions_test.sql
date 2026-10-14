@@ -379,6 +379,24 @@ select t.check('Sale of a stock item (linking on)', $$insert into sales (descrip
 select t.assert('With linking ON, stock goes down and cost fills in', (select stock from inventory where product = 'Tote bag') = 8
   and (select cost from sales where description = 'Tote' order by created_at desc limit 1) = 6);
 
+-- ── Marketing section ───────────────────────────────────────
+select t.login(3);  -- Rocco (Marketing)
+select t.check('Marketing plans a post with tags', $$insert into content_items (title, tags, status) values ('Tote reel', '{"format":"reel","hook_message":"question"}', 'scheduled')$$, 'ok');
+select t.check('Marketing logs 7-day numbers', $$insert into content_metrics (content_id, age_hours, views, reach, saves, shares) select id, 168, 1200, 900, 30, 12 from content_items where title = 'Tote reel'$$, 'ok');
+select t.check('Marketing writes a brief', $$insert into briefs (title, hypothesis) values ('Launch week', 'Questions beat claims')$$, 'ok');
+select t.check('Marketing creates a short link', $$insert into go_links (slug, destination) values ('bio', 'https://example.com')$$, 'ok');
+select t.check('Marketing creates a discount code', $$insert into discount_codes (code, channel) values ('IG10', 'instagram')$$, 'ok');
+select t.check('Marketing logs a DM inquiry', $$insert into inquiries (handle, product) values ('@ana', 'tote')$$, 'ok');
+select t.login(2);  -- Stefan (Finance)
+select t.assert('Everyone sees the content log', t.num('select count(*) from content_items') >= 1);
+select t.check('Finance cannot edit posts', $$update content_items set decision = 'kill'$$, 'denied');
+select t.check('Finance cannot change the tag glossary', $$insert into tag_glossary (tag_type, value) values ('format', 'hack')$$, 'denied');
+select t.check('Finance logs a sale with code + heard-about', $$insert into sales (description, amount, code, heard_about) values ('IG sale', 15, 'IG10', 'instagram')$$, 'ok');
+select t.check('Finance opens a stall day', $$insert into stall_sessions (place) values ('Campus hall')$$, 'ok');
+select t.check('Nobody fakes link clicks from the browser', $$insert into go_clicks (link_id) select id from go_links limit 1$$, 'denied');
+select t.login(5);
+select t.check('Communications cannot log inquiries', $$insert into inquiries (handle) values ('@x')$$, 'denied');
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',

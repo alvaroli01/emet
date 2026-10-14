@@ -1400,5 +1400,355 @@
       },
       "noAudit": "No changes yet."
     }
+  },
+  "marketing": {
+    "tabs": {
+      "pulse": "Pulse",
+      "myWeek": "My week",
+      "content": "Content",
+      "briefs": "Briefs",
+      "campaigns": "Campaigns",
+      "library": "What works",
+      "experiments": "Experiments",
+      "attribution": "Attribution"
+    },
+    "tags": {
+      "product": "Product",
+      "format": "Format",
+      "hook_visual": "Visual hook",
+      "hook_message": "Message hook",
+      "audience": "Audience",
+      "channel": "Channel"
+    },
+    "heardLabel": "How did they hear about us?",
+    "heard": {
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "friend": "A friend",
+      "stall": "Our stall",
+      "whatsapp": "WhatsApp",
+      "ambassador": "Ambassador",
+      "poster": "Poster / flyer",
+      "other": "Other"
+    },
+    "pulse": {
+      "northStar": "Profit so far vs the €15K goal",
+      "ahead": "{amount} ahead of pace",
+      "behind": "{amount} behind pace",
+      "paceNote": "The black tick is where a steady pace says we should be today ({amount}).",
+      "inputs": {
+        "posts": "Posts this week",
+        "hitRate": "Hit rate (30 days)",
+        "shareSave": "Share + save rate",
+        "inquiries": "DMs that bought"
+      },
+      "explain": {
+        "posts": "Posts published in the last 7 days. Consistency beats bursts.",
+        "hitRate": "Share of posts whose 7-day views were at least 2× our own recent median. Our own baseline, not other brands'.",
+        "shareSave": "Median (shares + saves) ÷ reach over the last 30 days. The best early sign that a post will sell.",
+        "inquiries": "Share of DM inquiries in the last 30 days that turned into a sale."
+      },
+      "channels": "Revenue by channel (30 days)",
+      "channelNames": {
+        "instagram": "Instagram",
+        "tiktok": "TikTok",
+        "friend": "Word of mouth",
+        "stall": "Stall",
+        "whatsapp": "WhatsApp",
+        "ambassador": "Ambassadors",
+        "poster": "Posters",
+        "other": "Other",
+        "unknown": "Unknown"
+      },
+      "noSales": "No sales in the last 30 days yet.",
+      "next": "What to do next",
+      "doMore": "Do more of",
+      "stop": "Do less of",
+      "posts": "{count, plural, one {# post} other {# posts}}",
+      "needData": "Tag posts and log their numbers — after a few posts this tells you what works.",
+      "dq": {
+        "title": "Fix these so the numbers are right",
+        "ok": "Data is complete — the numbers above can be trusted.",
+        "missing7d": "{count, plural, one {# post is} other {# posts are}} missing 7-day numbers.",
+        "untagged": "{count, plural, one {# posted item is} other {# posted items are}} missing format, hook or channel tags.",
+        "noHeard": "{count, plural, one {# sale has} other {# sales have}} no “how did you hear about us” answer."
+      }
+    },
+    "content": {
+      "view": "View",
+      "pipeline": "Pipeline",
+      "leaderboard": "Leaderboard",
+      "new": "New content",
+      "edit": "Edit content",
+      "status": {
+        "idea": "Idea",
+        "briefed": "Briefed",
+        "production": "In production",
+        "scheduled": "Scheduled",
+        "posted": "Posted"
+      },
+      "hit": "Hit",
+      "winner": "Winner",
+      "logNumbers": "Log numbers",
+      "logNumbersFor": "Numbers for “{title}”",
+      "views": "Views",
+      "vsMedian": "vs median",
+      "shareSave": "Share + save",
+      "decision": {
+        "scale": "Scale",
+        "iterate": "Iterate",
+        "kill": "Kill"
+      },
+      "decisionLabel": "Decision",
+      "decisionNone": "No decision yet",
+      "why": "Why? (one line)",
+      "open": "Open post",
+      "noPosted": "Nothing posted yet. Posted content with numbers shows up here, ranked.",
+      "needTags": "Posted content needs a format, message hook and channel tag.",
+      "saveError": "Couldn't save. Check your connection and try again.",
+      "saved": "Saved",
+      "title": "Title",
+      "titlePlaceholder": "e.g. Reel: 3 ways to wear the tote",
+      "statusLabel": "Status",
+      "planned": "Planned date",
+      "platform": "Platform",
+      "owner": "Owner",
+      "tagsTitle": "Tags (pick from the glossary so results can be compared)",
+      "campaign": "Campaign",
+      "noCampaign": "No campaign",
+      "permalink": "Link to the post",
+      "cancel": "Cancel",
+      "save": "Save",
+      "age": {
+        "24": "After 24 h",
+        "48": "After 48 h",
+        "168": "After 7 days"
+      },
+      "m": {
+        "views": "Views",
+        "reach": "Reach",
+        "likes": "Likes",
+        "comments": "Comments",
+        "saves": "Saves",
+        "shares": "Shares",
+        "profile_visits": "Profile visits",
+        "link_clicks": "Link clicks"
+      },
+      "whereNumbers": "In Instagram: open the post → View insights. Leave a box empty if you don't have that number."
+    },
+    "briefs": {
+      "intro": "One page per idea. The marketing leader approves; then it becomes content in one click.",
+      "new": "New brief",
+      "edit": "Edit brief",
+      "driver": "Driver",
+      "campaign": "Campaign",
+      "noCampaign": "No campaign",
+      "statusLabel": "Status",
+      "status": {
+        "draft": "Draft",
+        "approved": "Approved",
+        "production": "In production",
+        "live": "Live",
+        "reviewed": "Reviewed"
+      },
+      "title": "Title",
+      "goal": "Goal",
+      "audience": "Audience",
+      "hypothesis": "Hypothesis",
+      "message": "Key message",
+      "reason_to_believe": "Reason to believe",
+      "hooks": "Hook ideas (one per line)",
+      "customer_quote": "Customer quote",
+      "refs": "References",
+      "ph": {
+        "title": "e.g. Back-to-campus tote launch",
+        "goal": "What should change? e.g. 20 DMs in a week",
+        "audience": "Who exactly? e.g. first-year Erasmus students",
+        "hypothesis": "We believe … will … because …",
+        "message": "The one thing they should remember",
+        "reason_to_believe": "Why they should believe it",
+        "hooks": "Did you know…?\nStop doing…",
+        "customer_quote": "Something a real customer said",
+        "refs": "Links to examples, the swipe file…"
+      },
+      "approve": "Approve",
+      "approved": "Brief approved",
+      "waiting": "Waiting for {name} to approve",
+      "toContent": "Create content from brief",
+      "contentCreated": "Content added to the pipeline",
+      "empty": "No briefs yet.",
+      "saved": "Saved",
+      "saveError": "Couldn't save. Check your connection and try again.",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "campaigns": {
+      "new": "New campaign",
+      "edit": "Edit campaign",
+      "status": {
+        "planned": "Planned",
+        "live": "Live",
+        "done": "Done"
+      },
+      "posts": "Posted",
+      "views": "Views",
+      "hits": "Hits",
+      "reviewed": "Reviewed",
+      "writeReview": "Write the post-mortem",
+      "empty": "No campaigns yet.",
+      "saved": "Saved",
+      "saveError": "Couldn't save. Check your connection and try again.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "f": {
+        "name": "Name",
+        "objective": "Objective",
+        "target_metric": "Target metric",
+        "target_value": "Target value",
+        "starts_on": "Starts",
+        "ends_on": "Ends",
+        "product": "Product",
+        "budget": "Budget (€)",
+        "status": "Status",
+        "owner_id": "Owner"
+      },
+      "reviewOf": "Post-mortem: {name}",
+      "pm": {
+        "summary": "{posts} posts · {views} views · {hits} hits.",
+        "target": "Target: {metric} {value}",
+        "result": "Actual result",
+        "worked": "What worked",
+        "didnt": "What didn't",
+        "next": "What we'll do next time",
+        "bestWas": "Best: “{title}” ({rate} share + save)",
+        "worstWas": "Weakest: “{title}” ({rate} share + save)"
+      }
+    },
+    "library": {
+      "decisions": "Decisions",
+      "d": {
+        "scale": "Scale",
+        "iterate": "Iterate",
+        "kill": "Kill"
+      },
+      "noDecisions": "No decisions yet. Mark posted content as scale, iterate or kill.",
+      "byTag": "Performance by tag",
+      "posts": "{count, plural, one {# post} other {# posts}}",
+      "byTagNote": "Median share + save rate. Grey bars have only one post — not proof yet.",
+      "noData": "Tag posts and log their numbers to see what works."
+    },
+    "experiments": {
+      "variable": "What we change",
+      "baseline": "Baseline",
+      "result": "Result",
+      "verdict": "Verdict",
+      "v": {
+        "better": "Better",
+        "unclear": "Unclear",
+        "worse": "Worse"
+      },
+      "phHypothesis": "If we … then … will go up, because …",
+      "phVariable": "Only one thing, e.g. the first 2 seconds",
+      "phDecision": "Keep / drop / test again"
+    },
+    "attribution": {
+      "agreement": "Attribution agreement",
+      "agreementExplain": "How often the code or link channel matches what the customer said. Above 80% means the channel numbers can be trusted.",
+      "surveyed": "Sales with an answer",
+      "surveyedExplain": "Share of sales where we asked “how did you hear about us?”. Aim for every sale.",
+      "clicks7": "Link clicks (7 days)",
+      "clicks7Explain": "Clicks on our emet short links in the last 7 days.",
+      "funnelTitle": "Funnel (30 days)",
+      "funnelEmpty": "Log post numbers, inquiries and sales to see the funnel.",
+      "funnel": {
+        "views": "Views",
+        "profile": "Profile visits",
+        "clicks": "Link clicks",
+        "inquiries": "DM inquiries",
+        "orders": "Orders"
+      },
+      "links": "Short links",
+      "newLink": "New link",
+      "noLinks": "No links yet. Make one for your bio, a story or a poster.",
+      "clicks": "clicks",
+      "clicksTitle": "Clicks in the last 30 days",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "qr": "QR code",
+      "qrAlt": "QR code for /go/{slug}",
+      "qrHint": "Print it on posters and at the stall — every scan is counted.",
+      "download": "Download PNG",
+      "slugTaken": "That short name is already used.",
+      "saved": "Saved",
+      "saveError": "Couldn't save. Check the link and try again.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "f": {
+        "label": "Name",
+        "slug": "Short name",
+        "destination": "Where it goes",
+        "utm_source": "Source",
+        "utm_medium": "Medium",
+        "utm_campaign": "Campaign"
+      },
+      "ph": {
+        "label": "e.g. Instagram bio"
+      },
+      "utmHint": "Source/medium/campaign are added to the link so the shop knows where visitors came from."
+    },
+    "codes": {
+      "heading": "Discount codes",
+      "code": "Code",
+      "channel": "Channel",
+      "label": "Note",
+      "active": "Active",
+      "used": "Used",
+      "empty": "No codes yet. One code per channel (e.g. STALL10, TIKTOK10).",
+      "add": "Add code"
+    },
+    "inquiries": {
+      "heading": "DM inquiries",
+      "handle": "Handle",
+      "empty": "No inquiries logged. Log every DM asking about a product.",
+      "add": "Log inquiry"
+    },
+    "swipe": {
+      "heading": "Swipe file",
+      "title": "What",
+      "notes": "Why it's good",
+      "phNotes": "The hook, the format, what we could copy",
+      "competitor": "Competitor",
+      "empty": "Save posts and ads that inspire you.",
+      "add": "Save example"
+    },
+    "myWeek": {
+      "posted30": "Posted (30 days)",
+      "posted30Explain": "Content you own that went live in the last 30 days.",
+      "hits": "Your hits",
+      "hitsExplain": "Your posts with at least 2× our usual views.",
+      "open": "Open items",
+      "openExplain": "Numbers to log, content due this week, your briefs and design requests.",
+      "todo": "Your to-do",
+      "logFor": "Log numbers for “{title}” — {age}",
+      "age": {
+        "24": "24 h",
+        "48": "48 h",
+        "168": "7 days"
+      },
+      "status": {
+        "idea": "Idea",
+        "briefed": "Briefed",
+        "production": "In production",
+        "scheduled": "Scheduled"
+      },
+      "brief": {
+        "draft": "Draft brief",
+        "approved": "Approved brief",
+        "production": "Brief in production",
+        "live": "Brief live"
+      },
+      "designSince": "requested {date}",
+      "allClear": "All clear — nothing waiting on you."
+    }
   }
 }

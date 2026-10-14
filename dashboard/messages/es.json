@@ -1400,5 +1400,355 @@
       },
       "noAudit": "Aún no hay cambios."
     }
+  },
+  "marketing": {
+    "tabs": {
+      "pulse": "Pulso",
+      "myWeek": "Mi semana",
+      "content": "Contenido",
+      "briefs": "Briefs",
+      "campaigns": "Campañas",
+      "library": "Lo que funciona",
+      "experiments": "Experimentos",
+      "attribution": "Atribución"
+    },
+    "tags": {
+      "product": "Producto",
+      "format": "Formato",
+      "hook_visual": "Gancho visual",
+      "hook_message": "Gancho del mensaje",
+      "audience": "Público",
+      "channel": "Canal"
+    },
+    "heardLabel": "¿Cómo nos conoció?",
+    "heard": {
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "friend": "Un amigo",
+      "stall": "Nuestro puesto",
+      "whatsapp": "WhatsApp",
+      "ambassador": "Embajador",
+      "poster": "Cartel / folleto",
+      "other": "Otro"
+    },
+    "pulse": {
+      "northStar": "Beneficio hasta ahora vs el objetivo de €15K",
+      "ahead": "{amount} por delante del ritmo",
+      "behind": "{amount} por detrás del ritmo",
+      "paceNote": "La marca negra indica dónde deberíamos estar hoy a un ritmo constante ({amount}).",
+      "inputs": {
+        "posts": "Publicaciones esta semana",
+        "hitRate": "Tasa de éxitos (30 días)",
+        "shareSave": "Tasa de compartidos + guardados",
+        "inquiries": "DMs que compraron"
+      },
+      "explain": {
+        "posts": "Publicaciones de los últimos 7 días. La constancia gana a los picos.",
+        "hitRate": "Porcentaje de publicaciones cuyas vistas a 7 días fueron al menos 2× nuestra mediana reciente. Nuestra propia base, no la de otras marcas.",
+        "shareSave": "Mediana de (compartidos + guardados) ÷ alcance en los últimos 30 días. La mejor señal temprana de que una publicación venderá.",
+        "inquiries": "Porcentaje de consultas por DM de los últimos 30 días que acabaron en venta."
+      },
+      "channels": "Ingresos por canal (30 días)",
+      "channelNames": {
+        "instagram": "Instagram",
+        "tiktok": "TikTok",
+        "friend": "Boca a boca",
+        "stall": "Puesto",
+        "whatsapp": "WhatsApp",
+        "ambassador": "Embajadores",
+        "poster": "Carteles",
+        "other": "Otro",
+        "unknown": "Desconocido"
+      },
+      "noSales": "Aún no hay ventas en los últimos 30 días.",
+      "next": "Qué hacer ahora",
+      "doMore": "Hacer más de",
+      "stop": "Hacer menos de",
+      "posts": "{count, plural, one {# publicación} other {# publicaciones}}",
+      "needData": "Etiqueta las publicaciones y registra sus números: tras unas cuantas, esto te dirá qué funciona.",
+      "dq": {
+        "title": "Arregla esto para que los números sean correctos",
+        "ok": "Los datos están completos: puedes fiarte de los números de arriba.",
+        "missing7d": "{count, plural, one {A # publicación le faltan} other {A # publicaciones les faltan}} los números de 7 días.",
+        "untagged": "{count, plural, one {A # elemento publicado le faltan} other {A # elementos publicados les faltan}} las etiquetas de formato, gancho o canal.",
+        "noHeard": "{count, plural, one {# venta no tiene} other {# ventas no tienen}} respuesta a «¿cómo nos conociste?»."
+      }
+    },
+    "content": {
+      "view": "Vista",
+      "pipeline": "Flujo",
+      "leaderboard": "Ranking",
+      "new": "Nuevo contenido",
+      "edit": "Editar contenido",
+      "status": {
+        "idea": "Idea",
+        "briefed": "Con brief",
+        "production": "En producción",
+        "scheduled": "Programado",
+        "posted": "Publicado"
+      },
+      "hit": "Éxito",
+      "winner": "Ganador",
+      "logNumbers": "Registrar números",
+      "logNumbersFor": "Números de «{title}»",
+      "views": "Vistas",
+      "vsMedian": "vs mediana",
+      "shareSave": "Compartidos + guardados",
+      "decision": {
+        "scale": "Escalar",
+        "iterate": "Iterar",
+        "kill": "Descartar"
+      },
+      "decisionLabel": "Decisión",
+      "decisionNone": "Aún sin decisión",
+      "why": "¿Por qué? (una línea)",
+      "open": "Abrir publicación",
+      "noPosted": "Aún no has publicado nada. El contenido publicado con números aparece aquí, ordenado.",
+      "needTags": "El contenido publicado necesita etiqueta de formato, gancho del mensaje y canal.",
+      "saveError": "No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.",
+      "saved": "Guardado",
+      "title": "Título",
+      "titlePlaceholder": "p. ej. Reel: 3 formas de llevar el tote",
+      "statusLabel": "Estado",
+      "planned": "Fecha prevista",
+      "platform": "Plataforma",
+      "owner": "Responsable",
+      "tagsTitle": "Etiquetas (elige del glosario para poder comparar resultados)",
+      "campaign": "Campaña",
+      "noCampaign": "Sin campaña",
+      "permalink": "Enlace a la publicación",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "age": {
+        "24": "A las 24 h",
+        "48": "A las 48 h",
+        "168": "A los 7 días"
+      },
+      "m": {
+        "views": "Vistas",
+        "reach": "Alcance",
+        "likes": "Me gusta",
+        "comments": "Comentarios",
+        "saves": "Guardados",
+        "shares": "Compartidos",
+        "profile_visits": "Visitas al perfil",
+        "link_clicks": "Clics en el enlace"
+      },
+      "whereNumbers": "En Instagram: abre la publicación → Ver estadísticas. Deja vacía la casilla si no tienes ese número."
+    },
+    "briefs": {
+      "intro": "Una página por idea. Lo aprueba la responsable de marketing y luego se convierte en contenido con un clic.",
+      "new": "Nuevo brief",
+      "edit": "Editar brief",
+      "driver": "Responsable",
+      "campaign": "Campaña",
+      "noCampaign": "Sin campaña",
+      "statusLabel": "Estado",
+      "status": {
+        "draft": "Borrador",
+        "approved": "Aprobado",
+        "production": "En producción",
+        "live": "En directo",
+        "reviewed": "Revisado"
+      },
+      "title": "Título",
+      "goal": "Objetivo",
+      "audience": "Público",
+      "hypothesis": "Hipótesis",
+      "message": "Mensaje clave",
+      "reason_to_believe": "Motivo para creerlo",
+      "hooks": "Ideas de gancho (una por línea)",
+      "customer_quote": "Cita de cliente",
+      "refs": "Referencias",
+      "ph": {
+        "title": "p. ej. Lanzamiento del tote de vuelta al campus",
+        "goal": "¿Qué debería cambiar? p. ej. 20 DMs en una semana",
+        "audience": "¿Quién exactamente? p. ej. estudiantes Erasmus de primer año",
+        "hypothesis": "Creemos que … hará que … porque …",
+        "message": "Lo único que deben recordar",
+        "reason_to_believe": "Por qué deberían creerlo",
+        "hooks": "¿Sabías que…?\nDeja de hacer…",
+        "customer_quote": "Algo que dijo un cliente real",
+        "refs": "Enlaces a ejemplos, al swipe file…"
+      },
+      "approve": "Aprobar",
+      "approved": "Brief aprobado",
+      "waiting": "Esperando a que {name} lo apruebe",
+      "toContent": "Crear contenido desde el brief",
+      "contentCreated": "Contenido añadido al flujo",
+      "empty": "Aún no hay briefs.",
+      "saved": "Guardado",
+      "saveError": "No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    },
+    "campaigns": {
+      "new": "Nueva campaña",
+      "edit": "Editar campaña",
+      "status": {
+        "planned": "Planificada",
+        "live": "En directo",
+        "done": "Terminada"
+      },
+      "posts": "Publicado",
+      "views": "Vistas",
+      "hits": "Éxitos",
+      "reviewed": "Revisada",
+      "writeReview": "Escribir el análisis posterior",
+      "empty": "Aún no hay campañas.",
+      "saved": "Guardado",
+      "saveError": "No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "f": {
+        "name": "Nombre",
+        "objective": "Objetivo",
+        "target_metric": "Métrica objetivo",
+        "target_value": "Valor objetivo",
+        "starts_on": "Empieza",
+        "ends_on": "Termina",
+        "product": "Producto",
+        "budget": "Presupuesto (€)",
+        "status": "Estado",
+        "owner_id": "Responsable"
+      },
+      "reviewOf": "Análisis posterior: {name}",
+      "pm": {
+        "summary": "{posts} publicaciones · {views} vistas · {hits} éxitos.",
+        "target": "Objetivo: {metric} {value}",
+        "result": "Resultado real",
+        "worked": "Qué funcionó",
+        "didnt": "Qué no",
+        "next": "Qué haremos la próxima vez",
+        "bestWas": "Mejor: «{title}» ({rate} compartidos + guardados)",
+        "worstWas": "Más flojo: «{title}» ({rate} compartidos + guardados)"
+      }
+    },
+    "library": {
+      "decisions": "Decisiones",
+      "d": {
+        "scale": "Escalar",
+        "iterate": "Iterar",
+        "kill": "Descartar"
+      },
+      "noDecisions": "Aún no hay decisiones. Marca el contenido publicado como escalar, iterar o descartar.",
+      "byTag": "Rendimiento por etiqueta",
+      "posts": "{count, plural, one {# publicación} other {# publicaciones}}",
+      "byTagNote": "Mediana de compartidos + guardados. Las barras grises tienen una sola publicación: aún no es una prueba.",
+      "noData": "Etiqueta las publicaciones y registra sus números para ver qué funciona."
+    },
+    "experiments": {
+      "variable": "Qué cambiamos",
+      "baseline": "Punto de partida",
+      "result": "Resultado",
+      "verdict": "Veredicto",
+      "v": {
+        "better": "Mejor",
+        "unclear": "Poco claro",
+        "worse": "Peor"
+      },
+      "phHypothesis": "Si … entonces … subirá, porque …",
+      "phVariable": "Solo una cosa, p. ej. los primeros 2 segundos",
+      "phDecision": "Mantener / descartar / probar otra vez"
+    },
+    "attribution": {
+      "agreement": "Coincidencia de atribución",
+      "agreementExplain": "Cuántas veces el canal del código o enlace coincide con lo que dijo el cliente. Por encima del 80 % puedes fiarte de los números por canal.",
+      "surveyed": "Ventas con respuesta",
+      "surveyedExplain": "Porcentaje de ventas en las que preguntamos «¿cómo nos conociste?». La meta es preguntarlo en todas.",
+      "clicks7": "Clics en enlaces (7 días)",
+      "clicks7Explain": "Clics en nuestros enlaces cortos de emet en los últimos 7 días.",
+      "funnelTitle": "Embudo (30 días)",
+      "funnelEmpty": "Registra los números de publicaciones, consultas y ventas para ver el embudo.",
+      "funnel": {
+        "views": "Vistas",
+        "profile": "Visitas al perfil",
+        "clicks": "Clics en el enlace",
+        "inquiries": "Consultas por DM",
+        "orders": "Pedidos"
+      },
+      "links": "Enlaces cortos",
+      "newLink": "Nuevo enlace",
+      "noLinks": "Aún no hay enlaces. Crea uno para tu bio, una story o un cartel.",
+      "clicks": "clics",
+      "clicksTitle": "Clics en los últimos 30 días",
+      "copy": "Copiar enlace",
+      "copied": "Enlace copiado",
+      "qr": "Código QR",
+      "qrAlt": "Código QR de /go/{slug}",
+      "qrHint": "Imprímelo en carteles y en el puesto: cada escaneo cuenta.",
+      "download": "Descargar PNG",
+      "slugTaken": "Ese nombre corto ya está en uso.",
+      "saved": "Guardado",
+      "saveError": "No se pudo guardar. Revisa el enlace e inténtalo de nuevo.",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "f": {
+        "label": "Nombre",
+        "slug": "Nombre corto",
+        "destination": "Adónde lleva",
+        "utm_source": "Fuente",
+        "utm_medium": "Medio",
+        "utm_campaign": "Campaña"
+      },
+      "ph": {
+        "label": "p. ej. Bio de Instagram"
+      },
+      "utmHint": "Fuente/medio/campaña se añaden al enlace para que la tienda sepa de dónde vienen los visitantes."
+    },
+    "codes": {
+      "heading": "Códigos de descuento",
+      "code": "Código",
+      "channel": "Canal",
+      "label": "Nota",
+      "active": "Activo",
+      "used": "Usado",
+      "empty": "Aún no hay códigos. Un código por canal (p. ej. STALL10, TIKTOK10).",
+      "add": "Añadir código"
+    },
+    "inquiries": {
+      "heading": "Consultas por DM",
+      "handle": "Usuario",
+      "empty": "No hay consultas registradas. Registra cada DM que pregunte por un producto.",
+      "add": "Registrar consulta"
+    },
+    "swipe": {
+      "heading": "Swipe file",
+      "title": "Qué",
+      "notes": "Por qué está bien",
+      "phNotes": "El gancho, el formato, lo que podríamos copiar",
+      "competitor": "Competidor",
+      "empty": "Guarda publicaciones y anuncios que te inspiren.",
+      "add": "Guardar ejemplo"
+    },
+    "myWeek": {
+      "posted30": "Publicado (30 días)",
+      "posted30Explain": "Contenido tuyo que salió en los últimos 30 días.",
+      "hits": "Tus éxitos",
+      "hitsExplain": "Tus publicaciones con al menos 2× nuestras vistas habituales.",
+      "open": "Pendientes",
+      "openExplain": "Números por registrar, contenido para esta semana, tus briefs y peticiones de diseño.",
+      "todo": "Tus tareas",
+      "logFor": "Registra los números de «{title}» — {age}",
+      "age": {
+        "24": "24 h",
+        "48": "48 h",
+        "168": "7 días"
+      },
+      "status": {
+        "idea": "Idea",
+        "briefed": "Con brief",
+        "production": "En producción",
+        "scheduled": "Programado"
+      },
+      "brief": {
+        "draft": "Brief en borrador",
+        "approved": "Brief aprobado",
+        "production": "Brief en producción",
+        "live": "Brief en directo"
+      },
+      "designSince": "pedido el {date}",
+      "allClear": "Todo al día: no hay nada esperándote."
+    }
   }
 }

@@ -29,7 +29,7 @@ export type Field =
 export type Row = Record<string, unknown> & { id: string };
 
 export function DataTable({
-  table, title, rows, fields, members, canEdit, canAdd = canEdit, addFields, defaults = {}, emptyText, addLabel, footer, onReverse, reverseLabel, onSaved,
+  table, title, rows, fields, members, canEdit, canAdd = canEdit, addFields, defaults = {}, emptyText, addLabel, footer, onReverse, reverseLabel, onSaved, idKey = "id",
 }: {
   table: string;
   title: string;
@@ -51,6 +51,8 @@ export function DataTable({
   reverseLabel?: string;
   /** Called after a successful add/edit (e.g. mirror Finance changes to the Google Sheet) */
   onSaved?: () => void;
+  /** Primary-key column when it isn't "id" (e.g. discount_codes.code) */
+  idKey?: string;
 }) {
   const t = useTranslations("table");
   const locale = useLocale();
@@ -89,7 +91,7 @@ export function DataTable({
   async function saveRow(values: Record<string, unknown>, existing: Row | null) {
     const payload = existing ? values : { ...defaults, ...values };
     const q = existing
-      ? supabase.from(table).update(payload).eq("id", existing.id)
+      ? supabase.from(table).update(payload).eq(idKey, existing.id)
       : supabase.from(table).insert(payload);
     const { error } = await q;
     if (error) {
@@ -106,7 +108,7 @@ export function DataTable({
 
   async function deleteRow(row: Row) {
     if (!confirm(t("confirmDelete"))) return;
-    const { error } = await supabase.from(table).delete().eq("id", row.id);
+    const { error } = await supabase.from(table).delete().eq(idKey, row.id);
     if (error) return toast("error", t("saveError"));
     toast("ok", t("deleted"));
     setEditing(null);

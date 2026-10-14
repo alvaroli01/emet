@@ -11,6 +11,7 @@ import { Stock } from "@/components/finance/stock";
 import { Bookkeeper } from "@/components/finance/bookkeeper";
 import { ClaimButton } from "@/components/finance/claim";
 import { FridayReport } from "./friday-report";
+import { HEARD_ABOUT } from "./marketing";
 import type { ToolProps, ToolTab } from "./types";
 
 export const EXPENSE_CATEGORIES = ["stock", "marketing", "tools", "transport", "printing", "events", "other"] as const;
@@ -18,9 +19,10 @@ export const EXPENSE_CATEGORIES = ["stock", "marketing", "tools", "transport", "
 export async function FinanceTools({ editable, session, allMembers }: ToolProps): Promise<ToolTab[]> {
   const t = await getTranslations("tools");
   const tf = await getTranslations("finance");
+  const tmk = await getTranslations("marketing");
   const supabase = await createClient();
   const today = todayISO();
-  const [sales, expenses, inventory, projects, flags, locks, claims, counts, audit, won, people] = await Promise.all([
+  const [sales, expenses, inventory, projects, flags, locks, claims, counts, audit, won, people, codes] = await Promise.all([
     supabase.from("sales").select("*").order("date", { ascending: false }).order("created_at", { ascending: false }).returns<Row[]>(),
     supabase.from("expenses").select("*").order("date", { ascending: false }).order("created_at", { ascending: false }).returns<Row[]>(),
     supabase.from("inventory").select("*").order("product").returns<Row[]>(),
@@ -32,6 +34,7 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
     editable ? supabase.from("finance_audit").select("*").order("at", { ascending: false }).limit(100) : Promise.resolve({ data: [] }),
     supabase.from("prospects").select("id", { count: "exact", head: true }).eq("stage", "won"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("active", true),
+    supabase.from("discount_codes").select("code").eq("active", true).order("code"),
   ]);
   const me = session.me.id;
   const s = (sales.data ?? []) as unknown as SaleRow[];
@@ -51,7 +54,9 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
     { key: "cost", label: t("fields.cost"), type: "money" },
     { key: "payment_method", label: tf("ledgers.method"), type: "select", options: methodOptions },
     { key: "project_id", label: tf("ledgers.project"), type: "select", options: projectOptions },
-    { key: "channel", label: t("fields.channel"), type: "text", placeholder: "Instagram, market stall…" },
+    { key: "heard_about", label: tmk("heardLabel"), type: "select", required: true, options: HEARD_ABOUT.map((h) => ({ value: h, label: tmk(`heard.${h}`) })) },
+    { key: "code", label: tmk("codes.code"), type: "select", list: false, options: (codes.data ?? []).map((c) => ({ value: c.code, label: c.code })) },
+    { key: "channel", label: t("fields.channel"), type: "text", placeholder: "Instagram, market stall…", list: false },
     { key: "rep_id", label: t("fields.rep"), type: "person", list: false },
     ...(linking ? [{ key: "item_id", label: tf("stock.item"), type: "select", options: (inventory.data ?? []).map((i) => ({ value: i.id, label: String(i.product) })), list: false } as Field,
       { key: "quantity", label: tf("stock.quantity"), type: "number", list: false } as Field] : []),

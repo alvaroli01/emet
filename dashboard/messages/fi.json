@@ -1400,5 +1400,355 @@
       },
       "noAudit": "Ei vielä muutoksia."
     }
+  },
+  "marketing": {
+    "tabs": {
+      "pulse": "Pulssi",
+      "myWeek": "Minun viikkoni",
+      "content": "Sisältö",
+      "briefs": "Briiffit",
+      "campaigns": "Kampanjat",
+      "library": "Mikä toimii",
+      "experiments": "Kokeilut",
+      "attribution": "Attribuutio"
+    },
+    "tags": {
+      "product": "Tuote",
+      "format": "Formaatti",
+      "hook_visual": "Visuaalinen koukku",
+      "hook_message": "Viestin koukku",
+      "audience": "Kohderyhmä",
+      "channel": "Kanava"
+    },
+    "heardLabel": "Mistä he kuulivat meistä?",
+    "heard": {
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "friend": "Kaveri",
+      "stall": "Meidän pöytämme",
+      "whatsapp": "WhatsApp",
+      "ambassador": "Lähettiläs",
+      "poster": "Juliste / flyeri",
+      "other": "Muu"
+    },
+    "pulse": {
+      "northStar": "Tähänastinen voitto vs. €15K tavoite",
+      "ahead": "{amount} tahdin edellä",
+      "behind": "{amount} tahdin jäljessä",
+      "paceNote": "Musta merkki näyttää, missä tasaisella tahdilla pitäisi olla tänään ({amount}).",
+      "inputs": {
+        "posts": "Julkaisuja tällä viikolla",
+        "hitRate": "Osumaprosentti (30 päivää)",
+        "shareSave": "Jako- + tallennusosuus",
+        "inquiries": "Ostaneet DM:t"
+      },
+      "explain": {
+        "posts": "Viimeisen 7 päivän aikana julkaistut postaukset. Tasaisuus voittaa kertapiikit.",
+        "hitRate": "Osuus postauksista, joiden 7 päivän katselut olivat vähintään 2× oma viimeaikainen mediaanimme. Oma lähtötasomme, ei muiden brändien.",
+        "shareSave": "(Jaot + tallennukset) ÷ tavoittavuus, mediaani viimeisen 30 päivän ajalta. Paras varhainen merkki siitä, että postaus myy.",
+        "inquiries": "Osuus viimeisen 30 päivän DM-kyselyistä, jotka johtivat kauppaan."
+      },
+      "channels": "Tuotto kanavittain (30 päivää)",
+      "channelNames": {
+        "instagram": "Instagram",
+        "tiktok": "TikTok",
+        "friend": "Puskaradio",
+        "stall": "Pöytä",
+        "whatsapp": "WhatsApp",
+        "ambassador": "Lähettiläät",
+        "poster": "Julisteet",
+        "other": "Muu",
+        "unknown": "Tuntematon"
+      },
+      "noSales": "Ei vielä myyntiä viimeisen 30 päivän aikana.",
+      "next": "Mitä seuraavaksi",
+      "doMore": "Tee enemmän",
+      "stop": "Tee vähemmän",
+      "posts": "{count, plural, one {# postaus} other {# postausta}}",
+      "needData": "Merkitse postaukset tageilla ja kirjaa niiden luvut — muutaman postauksen jälkeen tämä kertoo, mikä toimii.",
+      "dq": {
+        "title": "Korjaa nämä, jotta luvut ovat oikein",
+        "ok": "Tiedot ovat täydelliset — yllä oleviin lukuihin voi luottaa.",
+        "missing7d": "{count, plural, one {# postauksesta puuttuu} other {# postauksesta puuttuu}} 7 päivän luvut.",
+        "untagged": "{count, plural, one {# julkaistulta kohteelta puuttuu} other {# julkaistulta kohteelta puuttuu}} formaatti-, koukku- tai kanavatagi.",
+        "noHeard": "{count, plural, one {# kaupalta puuttuu} other {# kaupalta puuttuu}} vastaus kysymykseen ”mistä kuulit meistä?”."
+      }
+    },
+    "content": {
+      "view": "Näkymä",
+      "pipeline": "Putki",
+      "leaderboard": "Tulostaulu",
+      "new": "Uusi sisältö",
+      "edit": "Muokkaa sisältöä",
+      "status": {
+        "idea": "Idea",
+        "briefed": "Briiffattu",
+        "production": "Tuotannossa",
+        "scheduled": "Ajastettu",
+        "posted": "Julkaistu"
+      },
+      "hit": "Osuma",
+      "winner": "Voittaja",
+      "logNumbers": "Kirjaa luvut",
+      "logNumbersFor": "Luvut kohteelle ”{title}”",
+      "views": "Katselut",
+      "vsMedian": "vs. mediaani",
+      "shareSave": "Jako + tallennus",
+      "decision": {
+        "scale": "Skaalaa",
+        "iterate": "Paranna",
+        "kill": "Lopeta"
+      },
+      "decisionLabel": "Päätös",
+      "decisionNone": "Ei vielä päätöstä",
+      "why": "Miksi? (yksi rivi)",
+      "open": "Avaa postaus",
+      "noPosted": "Mitään ei ole vielä julkaistu. Julkaistu sisältö lukuineen näkyy tässä järjestyksessä.",
+      "needTags": "Julkaistulle sisällölle tarvitaan formaatti-, viestikoukku- ja kanavatagi.",
+      "saveError": "Tallennus epäonnistui. Tarkista yhteytesi ja yritä uudelleen.",
+      "saved": "Tallennettu",
+      "title": "Otsikko",
+      "titlePlaceholder": "esim. Reel: 3 tapaa kantaa kangaskassia",
+      "statusLabel": "Tila",
+      "planned": "Suunniteltu päivä",
+      "platform": "Alusta",
+      "owner": "Vastuuhenkilö",
+      "tagsTitle": "Tagit (valitse sanastosta, jotta tuloksia voi verrata)",
+      "campaign": "Kampanja",
+      "noCampaign": "Ei kampanjaa",
+      "permalink": "Linkki postaukseen",
+      "cancel": "Peruuta",
+      "save": "Tallenna",
+      "age": {
+        "24": "24 h jälkeen",
+        "48": "48 h jälkeen",
+        "168": "7 päivän jälkeen"
+      },
+      "m": {
+        "views": "Katselut",
+        "reach": "Tavoittavuus",
+        "likes": "Tykkäykset",
+        "comments": "Kommentit",
+        "saves": "Tallennukset",
+        "shares": "Jaot",
+        "profile_visits": "Profiilikäynnit",
+        "link_clicks": "Linkkiklikkaukset"
+      },
+      "whereNumbers": "Instagramissa: avaa postaus → Näytä tilastot. Jätä kenttä tyhjäksi, jos sinulla ei ole sitä lukua."
+    },
+    "briefs": {
+      "intro": "Yksi sivu per idea. Markkinoinnin vetäjä hyväksyy, ja sen jälkeen siitä tulee sisältöä yhdellä klikkauksella.",
+      "new": "Uusi briiffi",
+      "edit": "Muokkaa briiffiä",
+      "driver": "Vetäjä",
+      "campaign": "Kampanja",
+      "noCampaign": "Ei kampanjaa",
+      "statusLabel": "Tila",
+      "status": {
+        "draft": "Luonnos",
+        "approved": "Hyväksytty",
+        "production": "Tuotannossa",
+        "live": "Julkaistu",
+        "reviewed": "Arvioitu"
+      },
+      "title": "Otsikko",
+      "goal": "Tavoite",
+      "audience": "Kohderyhmä",
+      "hypothesis": "Hypoteesi",
+      "message": "Ydinviesti",
+      "reason_to_believe": "Syy uskoa",
+      "hooks": "Koukkuideat (yksi per rivi)",
+      "customer_quote": "Asiakkaan lainaus",
+      "refs": "Viitteet",
+      "ph": {
+        "title": "esim. Koulun alun kangaskassin lanseeraus",
+        "goal": "Mitä pitäisi muuttua? esim. 20 DM:ää viikossa",
+        "audience": "Keitä tarkalleen? esim. ensimmäisen vuoden vaihto-opiskelijat",
+        "hypothesis": "Uskomme, että … saa aikaan … koska …",
+        "message": "Yksi asia, jonka heidän pitää muistaa",
+        "reason_to_believe": "Miksi heidän pitäisi uskoa",
+        "hooks": "Tiesitkö, että…?\nLopeta…",
+        "customer_quote": "Jotain, mitä oikea asiakas sanoi",
+        "refs": "Linkkejä esimerkkeihin, swipe-tiedostoon…"
+      },
+      "approve": "Hyväksy",
+      "approved": "Briiffi hyväksytty",
+      "waiting": "Odotetaan, että {name} hyväksyy",
+      "toContent": "Luo sisältö briiffistä",
+      "contentCreated": "Sisältö lisätty putkeen",
+      "empty": "Ei vielä briiffejä.",
+      "saved": "Tallennettu",
+      "saveError": "Tallennus epäonnistui. Tarkista yhteytesi ja yritä uudelleen.",
+      "cancel": "Peruuta",
+      "save": "Tallenna"
+    },
+    "campaigns": {
+      "new": "Uusi kampanja",
+      "edit": "Muokkaa kampanjaa",
+      "status": {
+        "planned": "Suunniteltu",
+        "live": "Käynnissä",
+        "done": "Valmis"
+      },
+      "posts": "Julkaistu",
+      "views": "Katselut",
+      "hits": "Osumat",
+      "reviewed": "Arvioitu",
+      "writeReview": "Kirjoita jälkianalyysi",
+      "empty": "Ei vielä kampanjoita.",
+      "saved": "Tallennettu",
+      "saveError": "Tallennus epäonnistui. Tarkista yhteytesi ja yritä uudelleen.",
+      "cancel": "Peruuta",
+      "save": "Tallenna",
+      "f": {
+        "name": "Nimi",
+        "objective": "Tavoite",
+        "target_metric": "Tavoitemittari",
+        "target_value": "Tavoitearvo",
+        "starts_on": "Alkaa",
+        "ends_on": "Päättyy",
+        "product": "Tuote",
+        "budget": "Budjetti (€)",
+        "status": "Tila",
+        "owner_id": "Vastuuhenkilö"
+      },
+      "reviewOf": "Jälkianalyysi: {name}",
+      "pm": {
+        "summary": "{posts} postausta · {views} katselua · {hits} osumaa.",
+        "target": "Tavoite: {metric} {value}",
+        "result": "Todellinen tulos",
+        "worked": "Mikä toimi",
+        "didnt": "Mikä ei toiminut",
+        "next": "Mitä teemme ensi kerralla",
+        "bestWas": "Paras: ”{title}” ({rate} jako + tallennus)",
+        "worstWas": "Heikoin: ”{title}” ({rate} jako + tallennus)"
+      }
+    },
+    "library": {
+      "decisions": "Päätökset",
+      "d": {
+        "scale": "Skaalaa",
+        "iterate": "Paranna",
+        "kill": "Lopeta"
+      },
+      "noDecisions": "Ei vielä päätöksiä. Merkitse julkaistu sisältö skaalattavaksi, parannettavaksi tai lopetettavaksi.",
+      "byTag": "Tulokset tageittain",
+      "posts": "{count, plural, one {# postaus} other {# postausta}}",
+      "byTagNote": "Jako- + tallennusosuuden mediaani. Harmaissa palkeissa on vain yksi postaus — ei vielä todiste.",
+      "noData": "Merkitse postaukset tageilla ja kirjaa niiden luvut nähdäksesi, mikä toimii."
+    },
+    "experiments": {
+      "variable": "Mitä muutamme",
+      "baseline": "Lähtötaso",
+      "result": "Tulos",
+      "verdict": "Tuomio",
+      "v": {
+        "better": "Parempi",
+        "unclear": "Epäselvä",
+        "worse": "Huonompi"
+      },
+      "phHypothesis": "Jos me … niin … kasvaa, koska …",
+      "phVariable": "Vain yksi asia, esim. ensimmäiset 2 sekuntia",
+      "phDecision": "Pidä / hylkää / testaa uudelleen"
+    },
+    "attribution": {
+      "agreement": "Attribuution täsmäävyys",
+      "agreementExplain": "Kuinka usein koodin tai linkin kanava täsmää siihen, mitä asiakas sanoi. Yli 80 %:n täsmäävyys tarkoittaa, että kanavalukuihin voi luottaa.",
+      "surveyed": "Myynnit, joissa on vastaus",
+      "surveyedExplain": "Osuus myynneistä, joissa kysyimme ”mistä kuulit meistä?”. Tavoite on kysyä jokaisesta.",
+      "clicks7": "Linkkiklikkaukset (7 päivää)",
+      "clicks7Explain": "Klikkaukset emet-lyhytlinkkeihimme viimeisen 7 päivän aikana.",
+      "funnelTitle": "Suppilo (30 päivää)",
+      "funnelEmpty": "Kirjaa postausten luvut, kyselyt ja myynnit nähdäksesi suppilon.",
+      "funnel": {
+        "views": "Katselut",
+        "profile": "Profiilikäynnit",
+        "clicks": "Linkkiklikkaukset",
+        "inquiries": "DM-kyselyt",
+        "orders": "Tilaukset"
+      },
+      "links": "Lyhytlinkit",
+      "newLink": "Uusi linkki",
+      "noLinks": "Ei vielä linkkejä. Tee yksi bioon, storyyn tai julisteeseen.",
+      "clicks": "klikkausta",
+      "clicksTitle": "Klikkaukset viimeisen 30 päivän aikana",
+      "copy": "Kopioi linkki",
+      "copied": "Linkki kopioitu",
+      "qr": "QR-koodi",
+      "qrAlt": "QR-koodi osoitteelle /go/{slug}",
+      "qrHint": "Tulosta se julisteisiin ja pöydälle — jokainen skannaus lasketaan.",
+      "download": "Lataa PNG",
+      "slugTaken": "Tämä lyhyt nimi on jo käytössä.",
+      "saved": "Tallennettu",
+      "saveError": "Tallennus epäonnistui. Tarkista linkki ja yritä uudelleen.",
+      "cancel": "Peruuta",
+      "save": "Tallenna",
+      "f": {
+        "label": "Nimi",
+        "slug": "Lyhyt nimi",
+        "destination": "Minne se vie",
+        "utm_source": "Lähde",
+        "utm_medium": "Väline",
+        "utm_campaign": "Kampanja"
+      },
+      "ph": {
+        "label": "esim. Instagram-bio"
+      },
+      "utmHint": "Lähde/väline/kampanja lisätään linkkiin, jotta kauppa tietää, mistä kävijät tulivat."
+    },
+    "codes": {
+      "heading": "Alennuskoodit",
+      "code": "Koodi",
+      "channel": "Kanava",
+      "label": "Muistiinpano",
+      "active": "Aktiivinen",
+      "used": "Käytetty",
+      "empty": "Ei vielä koodeja. Yksi koodi per kanava (esim. STALL10, TIKTOK10).",
+      "add": "Lisää koodi"
+    },
+    "inquiries": {
+      "heading": "DM-kyselyt",
+      "handle": "Käyttäjätunnus",
+      "empty": "Ei kirjattuja kyselyitä. Kirjaa jokainen DM, jossa kysytään tuotteesta.",
+      "add": "Kirjaa kysely"
+    },
+    "swipe": {
+      "heading": "Swipe-tiedosto",
+      "title": "Mitä",
+      "notes": "Miksi se on hyvä",
+      "phNotes": "Koukku, formaatti, mitä voisimme kopioida",
+      "competitor": "Kilpailija",
+      "empty": "Tallenna postauksia ja mainoksia, jotka inspiroivat sinua.",
+      "add": "Tallenna esimerkki"
+    },
+    "myWeek": {
+      "posted30": "Julkaistu (30 päivää)",
+      "posted30Explain": "Sinun sisältösi, joka julkaistiin viimeisen 30 päivän aikana.",
+      "hits": "Sinun osumasi",
+      "hitsExplain": "Postauksesi, joilla on vähintään 2× tavallinen katselumäärämme.",
+      "open": "Avoimet asiat",
+      "openExplain": "Kirjattavat luvut, tällä viikolla erääntyvä sisältö, briiffisi ja suunnittelupyynnöt.",
+      "todo": "Tehtäväsi",
+      "logFor": "Kirjaa luvut kohteelle ”{title}” — {age}",
+      "age": {
+        "24": "24 h",
+        "48": "48 h",
+        "168": "7 päivää"
+      },
+      "status": {
+        "idea": "Idea",
+        "briefed": "Briiffattu",
+        "production": "Tuotannossa",
+        "scheduled": "Ajastettu"
+      },
+      "brief": {
+        "draft": "Briiffiluonnos",
+        "approved": "Hyväksytty briiffi",
+        "production": "Briiffi tuotannossa",
+        "live": "Briiffi julkaistu"
+      },
+      "designSince": "pyydetty {date}",
+      "allClear": "Kaikki kunnossa — mikään ei odota sinua."
+    }
   }
 }
