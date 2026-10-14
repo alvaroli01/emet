@@ -998,7 +998,7 @@
     "ask": "Pregunta a emet: «{q}»",
     "askHint": "Respuesta con los datos en vivo del equipo",
     "thinking": "Mirando los datos del equipo…",
-    "noKey": "Para preguntar a emet necesitas tu cuenta gratuita de Groq. Conéctala en Campo base → Docs → micrófono, o en el Laboratorio de ideas.",
+    "noKey": "Para preguntar a emet necesitas tu cuenta gratuita de Groq. Conéctala en Campo base → Documentos → micrófono, o en el Laboratorio de ideas.",
     "askFailed": "No se pudo responder ahora. Inténtalo de nuevo en un minuto.",
     "fromData": "Respuesta basada en los datos de emet HQ que puedes ver. Comprueba las cifras importantes en su pestaña.",
     "noResults": "No se encontró nada.",
