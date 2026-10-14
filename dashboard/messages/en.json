@@ -13,7 +13,8 @@
     "myTeam": "My team",
     "more": "More",
     "close": "Close",
-    "camp": "Base camp"
+    "camp": "Base camp",
+    "meetings": "Meeting log"
   },
   "shell": {
     "noGroupYet": "No group yet",
@@ -795,7 +796,54 @@
       "loadingAudio": "Loading audio…",
       "downloadAudio": "Download this part",
       "defaultName": "Notes",
-      "keptUntil": "audio kept until {date}"
+      "keptUntil": "audio kept until {date}",
+      "meetingType": "Type of meeting",
+      "subtitleMeeting": "Shared with the whole team: you get notes, the transcript and the audio.",
+      "savedMeeting": "Meeting saved to the Meeting log"
+    }
+  },
+  "meetings": {
+    "title": "Meeting log",
+    "subtitle": "Every meeting recorded here is shared with the whole team: notes, transcript and audio. Leaders’ meetings are only visible to leaders.",
+    "record": "Record a meeting",
+    "recordTitle": "Record a team meeting",
+    "all": "All",
+    "kinds": {
+      "training": "Training sessions",
+      "phone": "Phone calls",
+      "video": "Video calls",
+      "leaders": "Leaders’ meetings"
+    },
+    "search": "Search meetings",
+    "noResults": "No meetings match.",
+    "empty": "No meetings yet",
+    "emptyHint": "Press “Record a meeting” at the start of the next training, call or meeting.",
+    "storage": "Audio storage (free plan)",
+    "storageUsed": "{used} MB of {total}",
+    "pick": "Open a meeting",
+    "pickHint": "Notes, transcript and audio for everyone on the team.",
+    "unfinished": "Recording not finished",
+    "live": "Recording now…",
+    "minutes": "{count, plural, one {# min} other {# min}}",
+    "back": "Back to meetings",
+    "download": "Download",
+    "downloadAs": {
+      "word": "Word (.docx)",
+      "pdf": "PDF",
+      "md": "Markdown (.md)"
+    },
+    "delete": "Delete meeting",
+    "confirmDelete": "Delete “{title}” for everyone, with its audio? This can’t be undone.",
+    "deleteError": "Couldn’t delete it.",
+    "deleted": "Meeting deleted",
+    "stillRecording": "Still being recorded — notes appear here when it ends.",
+    "noNotes": "No notes for this meeting.",
+    "transcript": "Full transcript",
+    "kindOne": {
+      "training": "Training session",
+      "phone": "Phone call",
+      "video": "Video call",
+      "leaders": "Leaders’ meeting"
     }
   }
 }

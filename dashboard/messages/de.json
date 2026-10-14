@@ -13,7 +13,8 @@
     "myTeam": "Mein Team",
     "more": "Mehr",
     "close": "Schließen",
-    "camp": "Basislager"
+    "camp": "Basislager",
+    "meetings": "Besprechungsprotokoll"
   },
   "shell": {
     "noGroupYet": "Noch keine Gruppe",
@@ -795,7 +796,54 @@
       "loadingAudio": "Audio wird geladen…",
       "downloadAudio": "Diesen Teil herunterladen",
       "defaultName": "Notizen",
-      "keptUntil": "Audio gespeichert bis {date}"
+      "keptUntil": "Audio gespeichert bis {date}",
+      "meetingType": "Art der Besprechung",
+      "subtitleMeeting": "Wird mit dem ganzen Team geteilt: Du bekommst Notizen, das Transkript und das Audio.",
+      "savedMeeting": "Besprechung im Besprechungsprotokoll gespeichert"
+    }
+  },
+  "meetings": {
+    "title": "Besprechungsprotokoll",
+    "subtitle": "Jede hier aufgenommene Besprechung wird mit dem ganzen Team geteilt: Notizen, Transkript und Audio. Besprechungen der Teamleiter sind nur für Leiter sichtbar.",
+    "record": "Besprechung aufnehmen",
+    "recordTitle": "Teambesprechung aufnehmen",
+    "all": "Alle",
+    "kinds": {
+      "training": "Trainings",
+      "phone": "Telefonate",
+      "video": "Videocalls",
+      "leaders": "Leiterbesprechungen"
+    },
+    "search": "Besprechungen durchsuchen",
+    "noResults": "Keine Besprechung passt.",
+    "empty": "Noch keine Besprechungen",
+    "emptyHint": "Tippe bei der nächsten Schulung, dem nächsten Anruf oder Meeting auf „Besprechung aufnehmen“.",
+    "storage": "Audio-Speicher (kostenloser Plan)",
+    "storageUsed": "{used} MB von {total}",
+    "pick": "Besprechung öffnen",
+    "pickHint": "Notizen, Transkript und Audio für alle im Team.",
+    "unfinished": "Aufnahme nicht beendet",
+    "live": "Wird gerade aufgenommen …",
+    "minutes": "{count, plural, one {# Min.} other {# Min.}}",
+    "back": "Zurück zu den Besprechungen",
+    "download": "Herunterladen",
+    "downloadAs": {
+      "word": "Word (.docx)",
+      "pdf": "PDF",
+      "md": "Markdown (.md)"
+    },
+    "delete": "Besprechung löschen",
+    "confirmDelete": "„{title}“ für alle samt Audio löschen? Das lässt sich nicht rückgängig machen.",
+    "deleteError": "Konnte nicht gelöscht werden.",
+    "deleted": "Besprechung gelöscht",
+    "stillRecording": "Wird noch aufgenommen – die Notizen erscheinen hier, sobald sie endet.",
+    "noNotes": "Keine Notizen für diese Besprechung.",
+    "transcript": "Vollständiges Transkript",
+    "kindOne": {
+      "training": "Schulung",
+      "phone": "Telefonat",
+      "video": "Videoanruf",
+      "leaders": "Leitungstreffen"
     }
   }
 }

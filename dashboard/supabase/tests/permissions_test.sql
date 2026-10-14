@@ -262,6 +262,38 @@ select t.check('Other member cannot overwrite it', $$update ai_keys set last4 = 
 select t.login(1);
 select t.assert('Admin cannot see members'' keys', t.num('select count(*) from ai_keys') = 0);
 
+-- ── Meeting log: shared with the team; leaders' meetings only for leaders ──
+select t.login(3);  -- Rocco (Marketing, not a leader)
+select t.check('Member records a training session for the team', $$insert into meetings (title, kind) values ('Pricing training', 'training')$$, 'ok');
+select t.check('Non-leader cannot create a leaders'' meeting', $$insert into meetings (title, kind) values ('Secret', 'leaders')$$, 'denied');
+select t.login(4);  -- Lassi (Team Leader group)
+select t.check('Leader records a leaders'' meeting', $$insert into meetings (title, kind) values ('Leaders weekly', 'leaders')$$, 'ok');
+select t.assert('Leader sees both meetings', t.num('select count(*) from meetings') = 2);
+select t.login(2);  -- Stefan (Finance)
+select t.assert('Member sees the training session', t.num($$select count(*) from meetings where kind = 'training'$$) = 1);
+select t.assert('Member does not see the leaders'' meeting', t.num($$select count(*) from meetings where kind = 'leaders'$$) = 0);
+select t.check('Member cannot edit someone else''s meeting', $$update meetings set title = 'x' where title = 'Pricing training'$$, 'denied');
+select t.check('Member cannot delete someone else''s meeting', $$delete from meetings where title = 'Pricing training'$$, 'denied');
+select t.login(3);
+select t.check('Author can fix their meeting''s notes', $$update meetings set notes = 'Fixed' where title = 'Pricing training'$$, 'ok');
+select t.check('Author cannot turn it into a leaders'' meeting', $$update meetings set kind = 'leaders' where title = 'Pricing training'$$, 'denied');
+select t.login(1);  -- Alvaro (admin)
+select t.assert('Admin sees the leaders'' meeting', t.num($$select count(*) from meetings where kind = 'leaders'$$) = 1);
+
+-- Meeting audio follows who can see the meeting
+select t.login(4);
+select t.check('Leader uploads audio for their leaders'' meeting',
+  $$insert into storage.objects (bucket_id, name) select 'meetings', id || '/chunk-000.webm' from meetings where kind = 'leaders'$$, 'ok');
+select t.login(3);
+select t.check('Author uploads audio for their training session',
+  $$insert into storage.objects (bucket_id, name) select 'meetings', id || '/chunk-000.webm' from meetings where kind = 'training'$$, 'ok');
+select t.login(2);
+select t.assert('Member can play the training audio', t.num($$select count(*) from storage.objects o join meetings m on o.name like m.id || '/%' where m.kind = 'training'$$) = 1);
+select t.assert('Member cannot reach the leaders'' audio', t.num($$select count(*) from storage.objects where bucket_id = 'meetings'$$) = 1);
+select t.check('Member cannot add audio to someone else''s meeting',
+  $$insert into storage.objects (bucket_id, name) select 'meetings', id || '/chunk-009.webm' from meetings where kind = 'training'$$, 'denied');
+select t.assert('Member cannot see private Base camp recordings of others', t.num($$select count(*) from storage.objects where bucket_id = 'recordings'$$) = 0);
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',

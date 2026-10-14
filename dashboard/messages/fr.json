@@ -13,7 +13,8 @@
     "myTeam": "Mon équipe",
     "more": "Plus",
     "close": "Fermer",
-    "camp": "Camp de base"
+    "camp": "Camp de base",
+    "meetings": "Journal des réunions"
   },
   "shell": {
     "noGroupYet": "Pas encore de groupe",
@@ -795,7 +796,54 @@
       "loadingAudio": "Chargement de l’audio…",
       "downloadAudio": "Télécharger cette partie",
       "defaultName": "Notes",
-      "keptUntil": "audio conservé jusqu’au {date}"
+      "keptUntil": "audio conservé jusqu’au {date}",
+      "meetingType": "Type de réunion",
+      "subtitleMeeting": "Partagé avec toute l’équipe : vous recevez les notes, la transcription et l’audio.",
+      "savedMeeting": "Réunion enregistrée dans le Journal des réunions"
+    }
+  },
+  "meetings": {
+    "title": "Journal des réunions",
+    "subtitle": "Chaque réunion enregistrée ici est partagée avec toute l’équipe : notes, transcription et audio. Les réunions des responsables ne sont visibles que par les responsables.",
+    "record": "Enregistrer une réunion",
+    "recordTitle": "Enregistrer une réunion d’équipe",
+    "all": "Toutes",
+    "kinds": {
+      "training": "Formations",
+      "phone": "Appels téléphoniques",
+      "video": "Appels vidéo",
+      "leaders": "Réunions des responsables"
+    },
+    "search": "Rechercher des réunions",
+    "noResults": "Aucune réunion ne correspond.",
+    "empty": "Aucune réunion pour l’instant",
+    "emptyHint": "Appuyez sur « Enregistrer une réunion » au début de la prochaine formation, du prochain appel ou de la prochaine réunion.",
+    "storage": "Stockage audio (offre gratuite)",
+    "storageUsed": "{used} Mo sur {total}",
+    "pick": "Ouvrir une réunion",
+    "pickHint": "Notes, transcription et audio pour toute l’équipe.",
+    "unfinished": "Enregistrement non terminé",
+    "live": "Enregistrement en cours…",
+    "minutes": "{count, plural, one {# min} other {# min}}",
+    "back": "Retour aux réunions",
+    "download": "Télécharger",
+    "downloadAs": {
+      "word": "Word (.docx)",
+      "pdf": "PDF",
+      "md": "Markdown (.md)"
+    },
+    "delete": "Supprimer la réunion",
+    "confirmDelete": "Supprimer « {title} » pour tout le monde, avec son audio ? Cette action est irréversible.",
+    "deleteError": "Suppression impossible.",
+    "deleted": "Réunion supprimée",
+    "stillRecording": "Enregistrement en cours : les notes apparaîtront ici à la fin.",
+    "noNotes": "Aucune note pour cette réunion.",
+    "transcript": "Transcription complète",
+    "kindOne": {
+      "training": "Formation",
+      "phone": "Appel téléphonique",
+      "video": "Appel vidéo",
+      "leaders": "Réunion des responsables"
     }
   }
 }

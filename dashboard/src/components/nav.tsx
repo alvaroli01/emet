@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent } from "lucide-react";
+import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent, AudioLines } from "lucide-react";
 import type { Group } from "@/lib/session";
 import { LogoMark } from "@/components/summit/logo";
 
@@ -27,6 +27,7 @@ function useItems({ groups, myGroupId }: Props) {
   }));
   const bottom = [
     { href: "/my-tasks", label: t("myTasks"), icon: <CheckSquare size={17} /> },
+    { href: "/meetings", label: t("meetings"), icon: <AudioLines size={17} /> },
     { href: "/team", label: t("team"), icon: <Users size={17} /> },
   ];
   return { top, groupItems, bottom, t };

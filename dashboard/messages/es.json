@@ -13,7 +13,8 @@
     "myTeam": "Mi equipo",
     "more": "Más",
     "close": "Cerrar",
-    "camp": "Campo base"
+    "camp": "Campo base",
+    "meetings": "Registro de reuniones"
   },
   "shell": {
     "noGroupYet": "Sin grupo todavía",
@@ -795,7 +796,54 @@
       "loadingAudio": "Cargando audio…",
       "downloadAudio": "Descargar esta parte",
       "defaultName": "Notas",
-      "keptUntil": "audio guardado hasta el {date}"
+      "keptUntil": "audio guardado hasta el {date}",
+      "meetingType": "Tipo de reunión",
+      "subtitleMeeting": "Se comparte con todo el equipo: recibes apuntes, la transcripción y el audio.",
+      "savedMeeting": "Reunión guardada en el Registro de reuniones"
+    }
+  },
+  "meetings": {
+    "title": "Registro de reuniones",
+    "subtitle": "Cada reunión grabada aquí se comparte con todo el equipo: apuntes, transcripción y audio. Las reuniones de líderes solo las ven los líderes.",
+    "record": "Grabar una reunión",
+    "recordTitle": "Grabar una reunión de equipo",
+    "all": "Todas",
+    "kinds": {
+      "training": "Formaciones",
+      "phone": "Llamadas",
+      "video": "Videollamadas",
+      "leaders": "Reuniones de líderes"
+    },
+    "search": "Buscar reuniones",
+    "noResults": "Ninguna reunión coincide.",
+    "empty": "Aún no hay reuniones",
+    "emptyHint": "Pulsa «Grabar una reunión» al empezar la próxima formación, llamada o reunión.",
+    "storage": "Almacenamiento de audio (plan gratuito)",
+    "storageUsed": "{used} MB de {total}",
+    "pick": "Abre una reunión",
+    "pickHint": "Apuntes, transcripción y audio para todo el equipo.",
+    "unfinished": "Grabación sin terminar",
+    "live": "Grabando ahora…",
+    "minutes": "{count, plural, one {# min} other {# min}}",
+    "back": "Volver a las reuniones",
+    "download": "Descargar",
+    "downloadAs": {
+      "word": "Word (.docx)",
+      "pdf": "PDF",
+      "md": "Markdown (.md)"
+    },
+    "delete": "Eliminar reunión",
+    "confirmDelete": "¿Eliminar «{title}» para todos, con su audio? No se puede deshacer.",
+    "deleteError": "No se pudo eliminar.",
+    "deleted": "Reunión eliminada",
+    "stillRecording": "Todavía se está grabando: los apuntes aparecerán aquí cuando termine.",
+    "noNotes": "No hay apuntes de esta reunión.",
+    "transcript": "Transcripción completa",
+    "kindOne": {
+      "training": "Sesión de formación",
+      "phone": "Llamada",
+      "video": "Videollamada",
+      "leaders": "Reunión de líderes"
     }
   }
 }

@@ -7,7 +7,9 @@ import { Play, Pause, Download, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 /** Plays a recording back from the owner's private storage, minute by minute, as one continuous track. */
-export function AudioPlayer({ ownerId, docId, createdAt }: { ownerId: string; docId: string; createdAt: string }) {
+export function AudioPlayer({ ownerId, docId, createdAt, bucket = "recordings", folder: folderProp, keepForever = false }: {
+  ownerId: string; docId: string; createdAt: string; bucket?: "recordings" | "meetings"; folder?: string; keepForever?: boolean;
+}) {
   const t = useTranslations("camp.recorder");
   const supabase = useMemo(() => createClient(), []);
   const [urls, setUrls] = useState<string[] | null>(null);
@@ -19,14 +21,14 @@ export function AudioPlayer({ ownerId, docId, createdAt }: { ownerId: string; do
 
   useEffect(() => {
     (async () => {
-      const folder = `${ownerId}/${docId}`;
-      const { data } = await supabase.storage.from("recordings").list(folder, { sortBy: { column: "name", order: "asc" } });
+      const folder = folderProp ?? `${ownerId}/${docId}`;
+      const { data } = await supabase.storage.from(bucket).list(folder, { sortBy: { column: "name", order: "asc" } });
       const names = (data ?? []).map((f) => `${folder}/${f.name}`);
       if (!names.length) return setUrls([]);
-      const { data: signed } = await supabase.storage.from("recordings").createSignedUrls(names, 60 * 60 * 6);
+      const { data: signed } = await supabase.storage.from(bucket).createSignedUrls(names, 60 * 60 * 6);
       setUrls((signed ?? []).map((s) => s.signedUrl).filter(Boolean) as string[]);
     })();
-  }, [ownerId, docId, supabase]);
+  }, [ownerId, docId, supabase, bucket, folderProp]);
 
   if (urls && !urls.length) return null;
 
@@ -39,7 +41,7 @@ export function AudioPlayer({ ownerId, docId, createdAt }: { ownerId: string; do
       </button>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium">{t("recording")}</p>
-        <p className="text-xs text-muted tabular-nums">{urls ? `${t("part", { n: part + 1, total: urls.length })} · ${t("keptUntil", { date: keptUntil })}` : t("loadingAudio")}</p>
+        <p className="text-xs text-muted tabular-nums">{urls ? `${t("part", { n: part + 1, total: urls.length })}${keepForever ? "" : ` · ${t("keptUntil", { date: keptUntil })}`}` : t("loadingAudio")}</p>
       </div>
       {urls && (
         <a href={urls[part]} download className="grid size-8 place-items-center rounded-lg text-muted hover:bg-surface hover:text-ink" aria-label={t("downloadAudio")} title={t("downloadAudio")}>

@@ -13,7 +13,8 @@
     "myTeam": "Oma tiimi",
     "more": "Lisää",
     "close": "Sulje",
-    "camp": "Perusleiri"
+    "camp": "Perusleiri",
+    "meetings": "Kokousloki"
   },
   "shell": {
     "noGroupYet": "Ei vielä ryhmää",
@@ -795,7 +796,54 @@
       "loadingAudio": "Ladataan ääntä…",
       "downloadAudio": "Lataa tämä osa",
       "defaultName": "Muistiinpanot",
-      "keptUntil": "ääni säilytetään {date} asti"
+      "keptUntil": "ääni säilytetään {date} asti",
+      "meetingType": "Kokouksen tyyppi",
+      "subtitleMeeting": "Jaetaan koko tiimille: saat muistiinpanot, litteroinnin ja äänen.",
+      "savedMeeting": "Kokous tallennettu kokouslokiin"
+    }
+  },
+  "meetings": {
+    "title": "Kokousloki",
+    "subtitle": "Jokainen tähän tallennettu kokous jaetaan koko tiimille: muistiinpanot, litterointi ja ääni. Johtajien kokoukset näkyvät vain johtajille.",
+    "record": "Tallenna kokous",
+    "recordTitle": "Tallenna tiimin kokous",
+    "all": "Kaikki",
+    "kinds": {
+      "training": "Koulutukset",
+      "phone": "Puhelut",
+      "video": "Videopuhelut",
+      "leaders": "Johtajien kokoukset"
+    },
+    "search": "Hae kokouksia",
+    "noResults": "Mikään kokous ei vastaa hakua.",
+    "empty": "Ei vielä kokouksia",
+    "emptyHint": "Paina ”Tallenna kokous” seuraavan koulutuksen, puhelun tai kokouksen alussa.",
+    "storage": "Äänen tallennustila (ilmainen paketti)",
+    "storageUsed": "{used} MB / {total}",
+    "pick": "Avaa kokous",
+    "pickHint": "Muistiinpanot, litterointi ja ääni koko tiimille.",
+    "unfinished": "Tallennus ei valmistunut",
+    "live": "Tallennetaan nyt…",
+    "minutes": "{count, plural, one {# min} other {# min}}",
+    "back": "Takaisin kokouksiin",
+    "download": "Lataa",
+    "downloadAs": {
+      "word": "Word (.docx)",
+      "pdf": "PDF",
+      "md": "Markdown (.md)"
+    },
+    "delete": "Poista kokous",
+    "confirmDelete": "Poistetaanko ”{title}” kaikilta äänineen? Tätä ei voi perua.",
+    "deleteError": "Poistaminen epäonnistui.",
+    "deleted": "Kokous poistettu",
+    "stillRecording": "Tallennus on vielä kesken – muistiinpanot näkyvät tässä, kun se päättyy.",
+    "noNotes": "Tähän kokoukseen ei ole muistiinpanoja.",
+    "transcript": "Koko litterointi",
+    "kindOne": {
+      "training": "Koulutus",
+      "phone": "Puhelu",
+      "video": "Videopuhelu",
+      "leaders": "Johtajien kokous"
     }
   }
 }

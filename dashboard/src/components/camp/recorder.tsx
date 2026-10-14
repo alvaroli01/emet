@@ -32,8 +32,18 @@ type Recognition = { lang: string; continuous: boolean; interimResults: boolean;
 const res0 = (e: { resultIndex: number; results: ArrayLike<{ 0: { transcript: string } }> }) => e.results[e.results.length - 1]?.[0]?.transcript ?? "";
 
 /** Records a class or meeting and turns it into a named, dated doc: notes on top, full transcript below. */
-export function Recorder({ connected: initiallyConnected, last4: initialLast4, onClose, onCreated }: {
-  connected: boolean; last4: string | null; onClose: () => void; onCreated: (doc: Doc) => void;
+/** Where a recording goes. Default: a private doc in Base camp. The Meeting log passes its own. */
+export type Destination = {
+  bucket: "recordings" | "meetings";
+  title: string;
+  kinds?: { value: string; label: string }[];
+  /** Called when recording starts: creates the record and returns the audio folder */
+  prepare: (a: { name: string; kind?: string }) => Promise<{ id: string; folder: string } | null>;
+  save: (a: { id: string; name: string; kind?: string; notes: string; transcript: string; minutes: number; audioParts: number }) => Promise<boolean>;
+};
+
+export function Recorder({ connected: initiallyConnected, last4: initialLast4, onClose, onCreated, destination }: {
+  connected: boolean; last4: string | null; onClose: () => void; onCreated: (doc: Doc) => void; destination?: Destination;
 }) {
   const t = useTranslations("camp.recorder");
   const locale = useLocale();
@@ -70,6 +80,9 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   const startedAt = useRef(0);
   const segPeak = useRef(0);
   const owner = useRef<string | null>(null);
+  const folder = useRef<string | null>(null);
+  const bucket = destination?.bucket ?? "recordings";
+  const [kind, setKind] = useState(destination?.kinds?.[0]?.value);
   const uploads = useRef<Promise<boolean>[]>([]);
   const finished = useRef(false);
 
@@ -117,9 +130,15 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     } catch {
       return toast("error", t("micDenied"));
     }
-    meter(stream.current);
     const { data: me } = await supabase.rpc("my_profile_id");
     owner.current = (me as string | null) ?? null;
+    if (destination) {
+      const made = await destination.prepare({ name: name.trim(), kind });
+      if (!made) { stream.current.getTracks().forEach((tr) => tr.stop()); return toast("error", t("saveError")); }
+      session.current = made.id;
+      folder.current = made.folder;
+    } else folder.current = owner.current ? `${owner.current}/${session.current}` : null;
+    meter(stream.current);
     startedAt.current = Date.now();
     setPhase("recording");
     if (mode === "groq") {
@@ -169,12 +188,12 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
 
   // Every minute of audio goes to the owner's private storage folder (retried a few times on a bad connection)
   function keepAudio(index: number, blob: Blob) {
-    if (!owner.current) return;
+    if (!folder.current) return;
     const ext = blob.type.includes("mp4") ? "m4a" : "webm";
-    const path = `${owner.current}/${session.current}/chunk-${String(index).padStart(3, "0")}.${ext}`;
+    const path = `${folder.current}/chunk-${String(index).padStart(3, "0")}.${ext}`;
     uploads.current.push((async () => {
       for (let attempt = 0; attempt < 4; attempt++) {
-        const { error } = await supabase.storage.from("recordings").upload(path, blob, { contentType: blob.type.split(";")[0], upsert: true });
+        const { error } = await supabase.storage.from(bucket).upload(path, blob, { contentType: blob.type.split(";")[0], upsert: true });
         if (!error) return true;
         await new Promise((r) => setTimeout(r, 2000 * (attempt + 1)));
       }
@@ -286,6 +305,14 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
       }
     }
     const mins = Math.max(1, Math.round((Date.now() - startedAt.current) / 60000));
+    if (destination) {
+      const ok = await destination.save({ id: session.current, name: name.trim(), kind, notes: notes || (transcript ? "" : `_${t("nothingHeard")}_`),
+        transcript, minutes: mins, audioParts: saved });
+      if (!ok) { finished.current = false; toast("error", t("saveError")); setStatus(""); return; }
+      toast("ok", t("savedMeeting"));
+      onCreated({ id: session.current } as Doc);
+      return;
+    }
     const body = [
       notes || (transcript ? `_${t("noNotes")}_` : `_${t("nothingHeard")}_`),
       transcript ? `\n## ${t("transcriptHeading")}\n\n${transcript}` : "",
@@ -366,8 +393,8 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
       <div className="relative max-h-[92dvh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-surface p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl sm:rounded-3xl sm:p-7">
         <div className="mb-5 flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-xl font-semibold tracking-tight">{t("title")}</h2>
-            <p className="text-sm text-muted">{t("subtitle")}</p>
+            <h2 className="text-xl font-semibold tracking-tight">{destination?.title ?? t("title")}</h2>
+            <p className="text-sm text-muted">{destination ? t("subtitleMeeting") : t("subtitle")}</p>
           </div>
           <button onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-surface-2"><X size={18} /></button>
         </div>
@@ -409,6 +436,20 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
               <input value={name} onChange={(e) => setName(e.target.value)} onFocus={(e) => e.target.select()} placeholder={t("namePlaceholder")} className="input" />
               <span className="mt-1 block text-xs text-muted">{t("dateAuto", { date: shortDate(todayISO(), locale) })}</span>
             </label>
+
+            {destination?.kinds && (
+              <fieldset>
+                <legend className="mb-1.5 text-sm font-medium">{t("meetingType")}</legend>
+                <div className="grid grid-cols-2 gap-1.5 text-sm">
+                  {destination.kinds.map((k) => (
+                    <button key={k.value} type="button" onClick={() => setKind(k.value)} aria-pressed={kind === k.value}
+                            className={`rounded-xl px-3 py-2 text-left transition ${kind === k.value ? "bg-ink font-medium text-brand-contrast" : "bg-surface-2 text-muted hover:text-ink"}`}>
+                      {k.label}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+            )}
 
             <fieldset>
               <legend className="mb-1.5 text-sm font-medium">{t("language")}</legend>
