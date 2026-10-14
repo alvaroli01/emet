@@ -14,7 +14,8 @@
     "more": "Plus",
     "close": "Fermer",
     "camp": "Camp de base",
-    "meetings": "Journal des réunions"
+    "meetings": "Journal des réunions",
+    "lab": "Labo d’idées"
   },
   "shell": {
     "noGroupYet": "Pas encore de groupe",
@@ -854,5 +855,93 @@
       "connect": "Connecter Google Drive",
       "reconnect": "Reconnecter"
     }
+  },
+  "lab": {
+    "title": "Labo d’idées",
+    "subtitle": "Proposez n’importe quelle idée de business. L’IA l’étudie sur le web, la note par rapport à notre objectif (30 000 € de chiffre d’affaires / 15 000 € de bénéfice d’ici juin 2027, en partant de 0 €) et suggère des versions plus solides. Toute l’équipe vote et en discute.",
+    "titleLabel": "Idée",
+    "titlePlaceholder": "Votre idée en quelques mots",
+    "pitchLabel": "Description",
+    "pitchPlaceholder": "Qui l’achète, ce que nous vendons, comment — autant ou aussi peu que vous en savez",
+    "analyze": "Analyser l’idée",
+    "addOnly": "Ajouter l’idée",
+    "kinds": {
+      "product": "Produit",
+      "service": "Service",
+      "event": "Événement",
+      "online": "En ligne",
+      "other": "Autre"
+    },
+    "sort": "Trier les idées",
+    "sorts": {
+      "score": "Meilleure note",
+      "votes": "Plus de votes",
+      "new": "Plus récentes"
+    },
+    "empty": "Aucune idée pour l’instant",
+    "emptyHint": "Écrivez la première ci-dessus, même brouillonne. L’IA se charge de la recherche.",
+    "pick": "Ouvrir une idée",
+    "pickHint": "Consultez le verdict, les chiffres, un test de 7 jours et des versions plus solides.",
+    "verdicts": {
+      "strong": "Idée solide",
+      "promising": "Prometteuse",
+      "weak": "Fragile en l’état",
+      "not_recommended": "Déconseillée"
+    },
+    "criteria": {
+      "demand": "Demande",
+      "margin": "Marge (≥ 50 %)",
+      "startup_cost": "Démarrer à 0 €",
+      "time_to_cash": "Délai avant la première vente",
+      "scale_to_goal": "Peut atteindre 30 000 €",
+      "team_fit": "Adaptée à notre équipe",
+      "low_risk": "Faible risque"
+    },
+    "weight": "poids {w} %",
+    "howScored": "Comment elle est notée",
+    "strengths": "Points forts",
+    "weaknesses": "Points faibles",
+    "risks": "Risques",
+    "questions": "Questions à régler d’abord",
+    "numbers": "Les chiffres",
+    "price": "Prix",
+    "unitCost": "Coût unitaire",
+    "margin": "Marge",
+    "toGoal": "Pour atteindre 30 000 € :",
+    "test": "Testez-la en 7 jours, pour 0 €",
+    "toTasks": "Ajouter comme tâches",
+    "tasksCreated": "{count, plural, one {# tâche ajoutée} other {# tâches ajoutées}} au Tableau général, à rendre dans 7 jours",
+    "variations": "Versions plus solides",
+    "whyBetter": "Pourquoi c’est mieux :",
+    "explore": "Explorer celle-ci",
+    "openVariation": "Ouvrir l’analyse",
+    "sources": "{count, plural, one {# source} other {# sources}}",
+    "showNotes": "Afficher les notes de recherche",
+    "hideNotes": "Masquer les notes de recherche",
+    "discussion": "Discussion",
+    "commentPlaceholder": "Qu’en pensez-vous ?",
+    "send": "Envoyer",
+    "back": "Retour aux idées",
+    "rerun": "Analyser à nouveau",
+    "delete": "Supprimer l’idée",
+    "confirmDelete": "Supprimer « {title} » pour tout le monde ?",
+    "variationOf": "Version de « {title} »",
+    "notAnalyzed": "Pas encore analysée.",
+    "needKey": "Connectez un compte Groq gratuit pour obtenir la recherche et le verdict de l’IA.",
+    "noResearchNote": "La recherche web n’était pas disponible cette fois — ce verdict s’appuie sur des connaissances générales. Relancez l’analyse plus tard pour obtenir des sources.",
+    "steps": {
+      "research": "Recherche sur le web",
+      "researchHint": "Demande, prix, concurrents, autorisations en Espagne — environ 30 secondes",
+      "analyze": "Notation de l’idée",
+      "analyzeHint": "Par rapport à notre objectif, à la marge et au budget de 0 €"
+    },
+    "limitWait": "Les minutes d’IA gratuites sont saturées — reprise dans {seconds} s, vous n’avez rien à faire.",
+    "researchFailed": "La recherche web n’a pas fonctionné cette fois — notation selon les connaissances générales.",
+    "analyzed": "Idée analysée",
+    "analysisFailed": "L’analyse n’a pas fonctionné. Réessayez dans une minute.",
+    "saveError": "Enregistrement impossible. Réessayez.",
+    "keyNotice": "L’IA utilise votre propre compte Groq gratuit (la même clé que pour la prise de notes) :",
+    "keyError": "Groq n’a pas accepté cette clé.",
+    "connect": "Connecter"
   }
 }

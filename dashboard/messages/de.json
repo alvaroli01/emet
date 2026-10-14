@@ -14,7 +14,8 @@
     "more": "Mehr",
     "close": "Schließen",
     "camp": "Basislager",
-    "meetings": "Besprechungsprotokoll"
+    "meetings": "Besprechungsprotokoll",
+    "lab": "Ideenlabor"
   },
   "shell": {
     "noGroupYet": "Noch keine Gruppe",
@@ -854,5 +855,93 @@
       "connect": "Google Drive verbinden",
       "reconnect": "Neu verbinden"
     }
+  },
+  "lab": {
+    "title": "Ideenlabor",
+    "subtitle": "Stelle jede Geschäftsidee vor. Die KI recherchiert sie im Web, bewertet sie an unserem Ziel (30.000 € Umsatz / 15.000 € Gewinn bis Juni 2027, Start mit 0 €) und schlägt stärkere Varianten vor. Das ganze Team stimmt ab und diskutiert mit.",
+    "titleLabel": "Idee",
+    "titlePlaceholder": "Deine Idee in wenigen Worten",
+    "pitchLabel": "Beschreibung",
+    "pitchPlaceholder": "Wer kauft es, was verkaufen wir, wie – so viel oder so wenig, wie du weißt",
+    "analyze": "Idee analysieren",
+    "addOnly": "Idee hinzufügen",
+    "kinds": {
+      "product": "Produkt",
+      "service": "Dienstleistung",
+      "event": "Event",
+      "online": "Online",
+      "other": "Sonstiges"
+    },
+    "sort": "Ideen sortieren",
+    "sorts": {
+      "score": "Beste Bewertung",
+      "votes": "Meiste Stimmen",
+      "new": "Neueste"
+    },
+    "empty": "Noch keine Ideen",
+    "emptyHint": "Schreib oben die erste auf – grob reicht. Die KI übernimmt die Recherche.",
+    "pick": "Idee öffnen",
+    "pickHint": "Sieh dir das Urteil, die Zahlen, einen 7-Tage-Test und stärkere Varianten an.",
+    "verdicts": {
+      "strong": "Starke Idee",
+      "promising": "Vielversprechend",
+      "weak": "So noch schwach",
+      "not_recommended": "Nicht empfohlen"
+    },
+    "criteria": {
+      "demand": "Nachfrage",
+      "margin": "Marge (≥ 50 %)",
+      "startup_cost": "Start mit 0 €",
+      "time_to_cash": "Zeit bis zum ersten Verkauf",
+      "scale_to_goal": "Kann 30.000 € erreichen",
+      "team_fit": "Passt zu unserem Team",
+      "low_risk": "Geringes Risiko"
+    },
+    "weight": "Gewicht {w} %",
+    "howScored": "So wird bewertet",
+    "strengths": "Stärken",
+    "weaknesses": "Schwächen",
+    "risks": "Risiken",
+    "questions": "Fragen, die zuerst geklärt werden müssen",
+    "numbers": "Die Zahlen",
+    "price": "Preis",
+    "unitCost": "Kosten pro Stück",
+    "margin": "Marge",
+    "toGoal": "Um 30.000 € zu erreichen:",
+    "test": "Teste es in 7 Tagen, für 0 €",
+    "toTasks": "Als Aufgaben hinzufügen",
+    "tasksCreated": "{count, plural, one {# Aufgabe} other {# Aufgaben}} zum Gesamtboard hinzugefügt, fällig in 7 Tagen",
+    "variations": "Stärkere Varianten",
+    "whyBetter": "Warum besser:",
+    "explore": "Das genauer ansehen",
+    "openVariation": "Analyse öffnen",
+    "sources": "{count, plural, one {# Quelle} other {# Quellen}}",
+    "showNotes": "Recherchenotizen anzeigen",
+    "hideNotes": "Recherchenotizen ausblenden",
+    "discussion": "Diskussion",
+    "commentPlaceholder": "Was denkst du?",
+    "send": "Senden",
+    "back": "Zurück zu den Ideen",
+    "rerun": "Erneut analysieren",
+    "delete": "Idee löschen",
+    "confirmDelete": "„{title}“ für alle löschen?",
+    "variationOf": "Variante von „{title}“",
+    "notAnalyzed": "Noch nicht analysiert.",
+    "needKey": "Verbinde ein kostenloses Groq-Konto, um die KI-Recherche und das Urteil zu erhalten.",
+    "noResearchNote": "Die Web-Recherche war diesmal nicht verfügbar – dieses Urteil beruht auf Allgemeinwissen. Analysiere später erneut, um Quellen zu bekommen.",
+    "steps": {
+      "research": "Recherche im Web",
+      "researchHint": "Nachfrage, Preise, Wettbewerber, Genehmigungen in Spanien – etwa 30 Sekunden",
+      "analyze": "Idee wird bewertet",
+      "analyzeHint": "Gemessen an unserem Ziel, der Marge und dem 0-€-Budget"
+    },
+    "limitWait": "Die kostenlosen KI-Minuten sind ausgelastet – es geht in {seconds} s weiter, du musst nichts tun.",
+    "researchFailed": "Die Web-Recherche hat diesmal nicht geklappt – die Bewertung beruht auf Allgemeinwissen.",
+    "analyzed": "Idee analysiert",
+    "analysisFailed": "Die Analyse hat nicht geklappt. Versuch es in einer Minute erneut.",
+    "saveError": "Speichern nicht möglich. Versuch es erneut.",
+    "keyNotice": "Die KI nutzt dein eigenes kostenloses Groq-Konto (derselbe Schlüssel wie beim Notizen-Mitschreiber):",
+    "keyError": "Groq hat diesen Schlüssel nicht akzeptiert.",
+    "connect": "Verbinden"
   }
 }

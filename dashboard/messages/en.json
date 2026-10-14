@@ -14,7 +14,8 @@
     "more": "More",
     "close": "Close",
     "camp": "Base camp",
-    "meetings": "Meeting log"
+    "meetings": "Meeting log",
+    "lab": "Idea lab"
   },
   "shell": {
     "noGroupYet": "No group yet",
@@ -854,5 +855,93 @@
       "connect": "Connect Google Drive",
       "reconnect": "Reconnect"
     }
+  },
+  "lab": {
+    "title": "Idea lab",
+    "subtitle": "Pitch any business idea. AI researches it on the web, scores it against our goal (€30K revenue / €15K profit by June 2027, €0 to start) and suggests stronger versions. The whole team votes and discusses.",
+    "titleLabel": "Idea",
+    "titlePlaceholder": "Your idea in a few words",
+    "pitchLabel": "Description",
+    "pitchPlaceholder": "Who buys it, what we sell, how — as much or as little as you know",
+    "analyze": "Analyse idea",
+    "addOnly": "Add idea",
+    "kinds": {
+      "product": "Product",
+      "service": "Service",
+      "event": "Event",
+      "online": "Online",
+      "other": "Other"
+    },
+    "sort": "Sort ideas",
+    "sorts": {
+      "score": "Best score",
+      "votes": "Most votes",
+      "new": "Newest"
+    },
+    "empty": "No ideas yet",
+    "emptyHint": "Write the first one above — rough is fine. The AI does the research.",
+    "pick": "Open an idea",
+    "pickHint": "See the verdict, the numbers, a 7-day test and stronger versions.",
+    "verdicts": {
+      "strong": "Strong idea",
+      "promising": "Promising",
+      "weak": "Weak as it is",
+      "not_recommended": "Not recommended"
+    },
+    "criteria": {
+      "demand": "Demand",
+      "margin": "Margin (≥50%)",
+      "startup_cost": "Start with €0",
+      "time_to_cash": "Time to first sale",
+      "scale_to_goal": "Can reach €30K",
+      "team_fit": "Fits our team",
+      "low_risk": "Low risk"
+    },
+    "weight": "weight {w}%",
+    "howScored": "How it scores",
+    "strengths": "Strengths",
+    "weaknesses": "Weaknesses",
+    "risks": "Risks",
+    "questions": "Questions to answer first",
+    "numbers": "The numbers",
+    "price": "Price",
+    "unitCost": "Cost each",
+    "margin": "Margin",
+    "toGoal": "To reach €30K:",
+    "test": "Test it in 7 days, for €0",
+    "toTasks": "Add as tasks",
+    "tasksCreated": "{count, plural, one {# task added} other {# tasks added}} to the General board, due in 7 days",
+    "variations": "Stronger versions",
+    "whyBetter": "Why better:",
+    "explore": "Explore this",
+    "openVariation": "Open analysis",
+    "sources": "{count, plural, one {# source} other {# sources}}",
+    "showNotes": "Show research notes",
+    "hideNotes": "Hide research notes",
+    "discussion": "Discussion",
+    "commentPlaceholder": "What do you think?",
+    "send": "Send",
+    "back": "Back to ideas",
+    "rerun": "Analyse again",
+    "delete": "Delete idea",
+    "confirmDelete": "Delete “{title}” for everyone?",
+    "variationOf": "Version of “{title}”",
+    "notAnalyzed": "Not analysed yet.",
+    "needKey": "Connect a free Groq account to get the AI research and verdict.",
+    "noResearchNote": "Web research wasn’t available this time — this verdict uses general knowledge. Analyse again later for sources.",
+    "steps": {
+      "research": "Researching the web",
+      "researchHint": "Demand, prices, competitors, permits in Spain — about 30 seconds",
+      "analyze": "Scoring the idea",
+      "analyzeHint": "Against our goal, margin and €0 budget"
+    },
+    "limitWait": "Free AI minutes are busy — continuing in {seconds} s, no need to do anything.",
+    "researchFailed": "Web research didn’t work this time — scoring with general knowledge.",
+    "analyzed": "Idea analysed",
+    "analysisFailed": "The analysis didn’t work. Try again in a minute.",
+    "saveError": "Couldn’t save. Try again.",
+    "keyNotice": "The AI uses your own free Groq account (same key as the note-taker):",
+    "keyError": "Groq didn’t accept that key.",
+    "connect": "Connect"
   }
 }

@@ -14,7 +14,8 @@
     "more": "Lisää",
     "close": "Sulje",
     "camp": "Perusleiri",
-    "meetings": "Kokousloki"
+    "meetings": "Kokousloki",
+    "lab": "Ideapaja"
   },
   "shell": {
     "noGroupYet": "Ei vielä ryhmää",
@@ -854,5 +855,93 @@
       "connect": "Yhdistä Google Drive",
       "reconnect": "Yhdistä uudelleen"
     }
+  },
+  "lab": {
+    "title": "Ideapaja",
+    "subtitle": "Esittele mikä tahansa liikeidea. Tekoäly tutkii sen verkosta, pisteyttää sen tavoitettamme vasten (30 000 € liikevaihtoa / 15 000 € voittoa kesäkuuhun 2027 mennessä, aloitus 0 €:lla) ja ehdottaa vahvempia versioita. Koko tiimi äänestää ja keskustelee.",
+    "titleLabel": "Idea",
+    "titlePlaceholder": "Ideasi muutamalla sanalla",
+    "pitchLabel": "Kuvaus",
+    "pitchPlaceholder": "Kuka sen ostaa, mitä myymme ja miten – niin paljon tai vähän kuin tiedät",
+    "analyze": "Analysoi idea",
+    "addOnly": "Lisää idea",
+    "kinds": {
+      "product": "Tuote",
+      "service": "Palvelu",
+      "event": "Tapahtuma",
+      "online": "Verkossa",
+      "other": "Muu"
+    },
+    "sort": "Järjestä ideat",
+    "sorts": {
+      "score": "Paras pistemäärä",
+      "votes": "Eniten ääniä",
+      "new": "Uusimmat"
+    },
+    "empty": "Ei vielä ideoita",
+    "emptyHint": "Kirjoita ensimmäinen yllä – raakaversiokin kelpaa. Tekoäly tekee tutkimuksen.",
+    "pick": "Avaa idea",
+    "pickHint": "Katso arvio, luvut, 7 päivän testi ja vahvempia versioita.",
+    "verdicts": {
+      "strong": "Vahva idea",
+      "promising": "Lupaava",
+      "weak": "Heikko sellaisenaan",
+      "not_recommended": "Ei suositella"
+    },
+    "criteria": {
+      "demand": "Kysyntä",
+      "margin": "Kate (≥ 50 %)",
+      "startup_cost": "Aloitus 0 €:lla",
+      "time_to_cash": "Aika ensimmäiseen myyntiin",
+      "scale_to_goal": "Yltää 30 000 €:oon",
+      "team_fit": "Sopii tiimillemme",
+      "low_risk": "Pieni riski"
+    },
+    "weight": "paino {w} %",
+    "howScored": "Näin pisteytys syntyy",
+    "strengths": "Vahvuudet",
+    "weaknesses": "Heikkoudet",
+    "risks": "Riskit",
+    "questions": "Kysymykset, joihin vastataan ensin",
+    "numbers": "Luvut",
+    "price": "Hinta",
+    "unitCost": "Kustannus per kappale",
+    "margin": "Kate",
+    "toGoal": "30 000 €:n saavuttamiseksi:",
+    "test": "Testaa se 7 päivässä, 0 €:lla",
+    "toTasks": "Lisää tehtäviksi",
+    "tasksCreated": "{count, plural, one {# tehtävä lisätty} other {# tehtävää lisätty}} Yhteiselle taululle, määräaika 7 päivän päästä",
+    "variations": "Vahvempia versioita",
+    "whyBetter": "Miksi parempi:",
+    "explore": "Tutki tätä",
+    "openVariation": "Avaa analyysi",
+    "sources": "{count, plural, one {# lähde} other {# lähdettä}}",
+    "showNotes": "Näytä tutkimusmuistiinpanot",
+    "hideNotes": "Piilota tutkimusmuistiinpanot",
+    "discussion": "Keskustelu",
+    "commentPlaceholder": "Mitä mieltä olet?",
+    "send": "Lähetä",
+    "back": "Takaisin ideoihin",
+    "rerun": "Analysoi uudelleen",
+    "delete": "Poista idea",
+    "confirmDelete": "Poistetaanko ”{title}” kaikilta?",
+    "variationOf": "Versio ideasta ”{title}”",
+    "notAnalyzed": "Ei vielä analysoitu.",
+    "needKey": "Yhdistä ilmainen Groq-tili, niin saat tekoälyn tutkimuksen ja arvion.",
+    "noResearchNote": "Verkkotutkimus ei ollut tällä kertaa käytettävissä – tämä arvio perustuu yleistietoon. Analysoi myöhemmin uudelleen saadaksesi lähteet.",
+    "steps": {
+      "research": "Tutkitaan verkosta",
+      "researchHint": "Kysyntä, hinnat, kilpailijat, luvat Espanjassa – noin 30 sekuntia",
+      "analyze": "Pisteytetään ideaa",
+      "analyzeHint": "Tavoitettamme, katetta ja 0 €:n budjettia vasten"
+    },
+    "limitWait": "Ilmaiset tekoälyminuutit ovat varattuja – jatketaan {seconds} s kuluttua, sinun ei tarvitse tehdä mitään.",
+    "researchFailed": "Verkkotutkimus ei onnistunut tällä kertaa – pisteytys perustuu yleistietoon.",
+    "analyzed": "Idea analysoitu",
+    "analysisFailed": "Analyysi ei onnistunut. Yritä uudelleen minuutin kuluttua.",
+    "saveError": "Tallennus ei onnistunut. Yritä uudelleen.",
+    "keyNotice": "Tekoäly käyttää omaa ilmaista Groq-tiliäsi (sama avain kuin muistiinpanojen kirjaajassa):",
+    "keyError": "Groq ei hyväksynyt avainta.",
+    "connect": "Yhdistä"
   }
 }

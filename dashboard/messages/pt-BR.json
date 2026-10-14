@@ -14,7 +14,8 @@
     "more": "Mais",
     "close": "Fechar",
     "camp": "Acampamento base",
-    "meetings": "Registro de reuniões"
+    "meetings": "Registro de reuniões",
+    "lab": "Laboratório de ideias"
   },
   "shell": {
     "noGroupYet": "Ainda sem grupo",
@@ -854,5 +855,93 @@
       "connect": "Conectar Google Drive",
       "reconnect": "Reconectar"
     }
+  },
+  "lab": {
+    "title": "Laboratório de ideias",
+    "subtitle": "Apresente qualquer ideia de negócio. A IA pesquisa na web, pontua a ideia em relação ao nosso objetivo (€30 mil de receita / €15 mil de lucro até junho de 2027, começando com €0) e sugere versões mais fortes. A equipe toda vota e debate.",
+    "titleLabel": "Ideia",
+    "titlePlaceholder": "Sua ideia em poucas palavras",
+    "pitchLabel": "Descrição",
+    "pitchPlaceholder": "Quem compra, o que vendemos, como — o tanto que você souber",
+    "analyze": "Analisar ideia",
+    "addOnly": "Adicionar ideia",
+    "kinds": {
+      "product": "Produto",
+      "service": "Serviço",
+      "event": "Evento",
+      "online": "Online",
+      "other": "Outro"
+    },
+    "sort": "Ordenar ideias",
+    "sorts": {
+      "score": "Melhor pontuação",
+      "votes": "Mais votadas",
+      "new": "Mais recentes"
+    },
+    "empty": "Ainda não há ideias",
+    "emptyHint": "Escreva a primeira acima — pode ser rascunho. A IA faz a pesquisa.",
+    "pick": "Abra uma ideia",
+    "pickHint": "Veja o veredito, os números, um teste de 7 dias e versões mais fortes.",
+    "verdicts": {
+      "strong": "Ideia forte",
+      "promising": "Promissora",
+      "weak": "Fraca do jeito que está",
+      "not_recommended": "Não recomendada"
+    },
+    "criteria": {
+      "demand": "Demanda",
+      "margin": "Margem (≥50%)",
+      "startup_cost": "Começar com €0",
+      "time_to_cash": "Tempo até a primeira venda",
+      "scale_to_goal": "Pode chegar a €30 mil",
+      "team_fit": "Combina com nossa equipe",
+      "low_risk": "Baixo risco"
+    },
+    "weight": "peso {w}%",
+    "howScored": "Como foi pontuada",
+    "strengths": "Pontos fortes",
+    "weaknesses": "Pontos fracos",
+    "risks": "Riscos",
+    "questions": "Perguntas para responder primeiro",
+    "numbers": "Os números",
+    "price": "Preço",
+    "unitCost": "Custo por unidade",
+    "margin": "Margem",
+    "toGoal": "Para chegar a €30 mil:",
+    "test": "Teste em 7 dias, com €0",
+    "toTasks": "Adicionar como tarefas",
+    "tasksCreated": "{count, plural, one {# tarefa adicionada} other {# tarefas adicionadas}} ao Quadro geral, com prazo em 7 dias",
+    "variations": "Versões mais fortes",
+    "whyBetter": "Por que é melhor:",
+    "explore": "Explorar esta",
+    "openVariation": "Abrir análise",
+    "sources": "{count, plural, one {# fonte} other {# fontes}}",
+    "showNotes": "Mostrar notas da pesquisa",
+    "hideNotes": "Ocultar notas da pesquisa",
+    "discussion": "Discussão",
+    "commentPlaceholder": "O que você acha?",
+    "send": "Enviar",
+    "back": "Voltar às ideias",
+    "rerun": "Analisar de novo",
+    "delete": "Excluir ideia",
+    "confirmDelete": "Excluir “{title}” para todos?",
+    "variationOf": "Versão de “{title}”",
+    "notAnalyzed": "Ainda não analisada.",
+    "needKey": "Conecte uma conta gratuita do Groq para receber a pesquisa e o veredito da IA.",
+    "noResearchNote": "A pesquisa na web não estava disponível desta vez — este veredito usa conhecimento geral. Analise de novo mais tarde para obter fontes.",
+    "steps": {
+      "research": "Pesquisando na web",
+      "researchHint": "Demanda, preços, concorrentes, licenças na Espanha — cerca de 30 segundos",
+      "analyze": "Pontuando a ideia",
+      "analyzeHint": "Em relação ao nosso objetivo, à margem e ao orçamento de €0"
+    },
+    "limitWait": "Os minutos gratuitos de IA estão ocupados — continuamos em {seconds} s, você não precisa fazer nada.",
+    "researchFailed": "A pesquisa na web não funcionou desta vez — pontuando com conhecimento geral.",
+    "analyzed": "Ideia analisada",
+    "analysisFailed": "A análise não funcionou. Tente de novo em um minuto.",
+    "saveError": "Não foi possível salvar. Tente de novo.",
+    "keyNotice": "A IA usa sua própria conta gratuita do Groq (a mesma chave do transcritor de notas):",
+    "keyError": "O Groq não aceitou essa chave.",
+    "connect": "Conectar"
   }
 }

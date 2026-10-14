@@ -307,6 +307,23 @@ select t.check('Member cannot add archive entries', $$insert into meeting_audio 
 select t.login(4);
 select t.assert('Leader sees archived parts of leaders'' meetings too', t.num('select count(*) from meeting_audio') = 2);
 
+-- ── Idea lab: shared with the team; authors own their ideas ──
+select t.login(3);
+select t.check('Member posts an idea', $$insert into lab_ideas (title, pitch, kind) values ('Campus coffee bike', 'Sell coffee from a bike', 'product')$$, 'ok');
+select t.check('Member cannot post as someone else', $$insert into lab_ideas (created_by, title) select id, 'Fake' from profiles where full_name = 'Stefan'$$, 'denied');
+select t.login(2);
+select t.assert('Everyone sees the idea', t.num($$select count(*) from lab_ideas$$) = 1);
+select t.check('Member votes once', $$insert into lab_votes (idea_id) select id from lab_ideas$$, 'ok');
+select t.check('...and cannot vote twice', $$insert into lab_votes (idea_id) select id from lab_ideas$$, 'denied');
+select t.check('Member comments', $$insert into lab_comments (idea_id, body) select id, 'Love it' from lab_ideas$$, 'ok');
+select t.check('Member cannot edit someone else''s idea', $$update lab_ideas set title = 'x'$$, 'denied');
+select t.check('Member cannot delete someone else''s idea', $$delete from lab_ideas$$, 'denied');
+select t.login(3);
+select t.check('Author cannot delete another member''s vote', $$delete from lab_votes$$, 'denied');
+select t.check('Author updates the analysis of their idea', $$update lab_ideas set score = 72, status = 'analyzed'$$, 'ok');
+select t.login(1);
+select t.check('Admin can remove a comment', $$delete from lab_comments where body = 'Love it'$$, 'ok');
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',

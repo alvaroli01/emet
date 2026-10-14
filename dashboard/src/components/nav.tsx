@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent, AudioLines } from "lucide-react";
+import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent, AudioLines, Lightbulb } from "lucide-react";
 import type { Group } from "@/lib/session";
 import { LogoMark } from "@/components/summit/logo";
 
@@ -17,6 +17,7 @@ function useItems({ groups, myGroupId }: Props) {
     { href: "/", label: t("overview"), icon: <LayoutDashboard size={17} /> },
     { href: "/camp", label: t("camp"), icon: <Tent size={17} /> },
     { href: "/board", label: t("generalBoard"), icon: <KanbanSquare size={17} />, emoji: "🏢" },
+    { href: "/lab", label: t("lab"), icon: <Lightbulb size={17} /> },
   ];
   const groupItems = groups.map((g) => ({
     href: `/g/${g.slug}`,
