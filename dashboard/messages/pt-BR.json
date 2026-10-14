@@ -677,7 +677,8 @@
         "peopleOption": "Pessoas escolhidas",
         "peopleHint": "Só os colegas que você escolher.",
         "readOnlyNote": "Quem recebe o compartilhamento pode ler e baixar, mas não editar."
-      }
+      },
+      "record": "Gravar anotações"
     },
     "ideas": {
       "saveError": "Não foi possível salvar. Tente de novo.",
@@ -727,6 +728,64 @@
       "open": "Abrir",
       "delete": "Excluir",
       "empty": "Nada guardado ainda. Adicione seu primeiro login com Adicionar."
+    },
+    "recorder": {
+      "title": "Gravar anotações",
+      "subtitle": "Grave uma aula ou reunião. Você recebe um doc com os pontos principais e a transcrição completa.",
+      "close": "Fechar",
+      "connected": "Sua conta Groq está conectada",
+      "disconnect": "Desconectar",
+      "confirmDisconnect": "Desconectar sua conta Groq? Você pode conectá-la de novo quando quiser.",
+      "connectTitle": "Conecte sua conta gratuita do Groq (melhor qualidade)",
+      "step1": "Crie uma conta gratuita e abra",
+      "step2": "Clique em “Create API key”, dê o nome “emet” e copie.",
+      "step3": "Cole aqui. Ela é verificada, armazenada criptografada e usada apenas nas suas gravações.",
+      "keyLabel": "Chave de API do Groq",
+      "connect": "Conectar",
+      "keyErrors": {
+        "format": "Isso não parece uma chave do Groq (ela começa com gsk_).",
+        "rejected": "O Groq não aceitou essa chave. Copie-a de novo no console do Groq.",
+        "save": "Não foi possível salvar a chave. Tente de novo."
+      },
+      "keyPrivacy": "Com a sua própria chave, você tem seus próprios minutos grátis por dia (cerca de 8 horas de áudio por dia). Ninguém mais pode vê-la ou usá-la.",
+      "browserFallback": "Ainda não conectou? Você ainda pode gravar: seu navegador escreve a transcrição ao vivo (funciona melhor no Chrome, um idioma por vez, sem pontos principais automáticos).",
+      "browserUnsupported": "Este navegador não consegue transcrever sozinho. Conecte uma conta Groq acima ou use o Chrome.",
+      "nameLabel": "Dê um nome a este doc",
+      "namePlaceholder": "ex.: Aula de marketing — precificação",
+      "dateAuto": "A data de hoje ({date}) é adicionada automaticamente.",
+      "language": "Idioma",
+      "lang": {
+        "auto": "Automático",
+        "es": "Español",
+        "en": "English"
+      },
+      "autoBrowserNote": "A transcrição do navegador precisa de um único idioma; ele usará o idioma do seu painel.",
+      "start": "Iniciar gravação",
+      "micTip": "Dica: coloque o celular ou o notebook entre você e quem está falando, com a tela para cima.",
+      "stop": "Parar",
+      "chunk": {
+        "waiting": "Aguardando",
+        "sending": "Transcrevendo",
+        "done": "Concluído",
+        "limit": "Aguardando minutos grátis",
+        "error": "Tentando de novo"
+      },
+      "pendingChunks": "{count, plural, one {# minuto ainda sendo transcrito} other {# minutos ainda sendo transcritos}}",
+      "allTranscribed": "Tudo até agora foi transcrito",
+      "limitWait": "Seus minutos grátis do Groq acabaram por enquanto. Continue gravando — nada se perde; a transcrição continua em cerca de {minutes} min.",
+      "firstMinute": "O primeiro texto aparece após cerca de um minuto…",
+      "listening": "Ouvindo…",
+      "finishing": "Finalizando a transcrição…",
+      "writingNotes": "Escrevendo suas anotações…",
+      "noNotes": "Desta vez não foi possível escrever os pontos principais — a transcrição completa está abaixo.",
+      "nothingHeard": "Nada foi ouvido. Verifique o microfone e tente de novo.",
+      "transcriptHeading": "Transcrição completa",
+      "recordedMeta": "Gravado {minutes} min · transcrito com {engine}",
+      "browserEngine": "o navegador",
+      "saveError": "Não foi possível salvar o doc. Tente de novo.",
+      "saved": "Anotações salvas nos seus docs",
+      "micDenied": "O acesso ao microfone foi bloqueado. Permita-o no navegador e tente de novo.",
+      "keyStopped": "O Groq parou de aceitar sua chave. Conecte-a de novo em Gravar anotações."
     }
   }
 }

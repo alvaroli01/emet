@@ -677,7 +677,8 @@
         "peopleOption": "Chosen people",
         "peopleHint": "Only the teammates you pick.",
         "readOnlyNote": "People you share with can read and download, not edit."
-      }
+      },
+      "record": "Record notes"
     },
     "ideas": {
       "saveError": "Couldn’t save. Try again.",
@@ -727,6 +728,64 @@
       "open": "Open",
       "delete": "Delete",
       "empty": "Nothing stored yet. Add your first login with Add."
+    },
+    "recorder": {
+      "title": "Record notes",
+      "subtitle": "Record a class or meeting. You get a doc with the key points and the full transcript.",
+      "close": "Close",
+      "connected": "Your Groq account is connected",
+      "disconnect": "Disconnect",
+      "confirmDisconnect": "Disconnect your Groq account? You can connect it again any time.",
+      "connectTitle": "Connect your free Groq account (best quality)",
+      "step1": "Create a free account and open",
+      "step2": "Click “Create API key”, name it “emet”, and copy it.",
+      "step3": "Paste it here. It's checked, stored encrypted and only used for your recordings.",
+      "keyLabel": "Groq API key",
+      "connect": "Connect",
+      "keyErrors": {
+        "format": "That doesn't look like a Groq key (it starts with gsk_).",
+        "rejected": "Groq didn't accept that key. Copy it again from the Groq console.",
+        "save": "Couldn't save the key. Try again."
+      },
+      "keyPrivacy": "Your own key means your own free daily minutes (about 8 hours of audio a day). Nobody else can see or use it.",
+      "browserFallback": "Not connected yet? You can still record: your browser writes the transcript live (works best in Chrome, one language at a time, no automatic key points).",
+      "browserUnsupported": "This browser can't transcribe on its own. Connect a Groq account above, or use Chrome.",
+      "nameLabel": "Name this doc",
+      "namePlaceholder": "e.g. Marketing class — pricing",
+      "dateAuto": "Today's date ({date}) is added automatically.",
+      "language": "Language",
+      "lang": {
+        "auto": "Auto",
+        "es": "Español",
+        "en": "English"
+      },
+      "autoBrowserNote": "Browser transcription needs one language; it will use your dashboard language.",
+      "start": "Start recording",
+      "micTip": "Tip: put the phone or laptop between you and the speaker, screen up.",
+      "stop": "Stop",
+      "chunk": {
+        "waiting": "Waiting",
+        "sending": "Transcribing",
+        "done": "Done",
+        "limit": "Waiting for free minutes",
+        "error": "Retrying"
+      },
+      "pendingChunks": "{count, plural, one {# minute still being transcribed} other {# minutes still being transcribed}}",
+      "allTranscribed": "Everything so far is transcribed",
+      "limitWait": "Your free Groq minutes are used up for now. Keep recording — nothing is lost; it continues in about {minutes} min.",
+      "firstMinute": "The first text appears after about a minute…",
+      "listening": "Listening…",
+      "finishing": "Finishing the transcript…",
+      "writingNotes": "Writing your notes…",
+      "noNotes": "Key points couldn't be written this time — the full transcript is below.",
+      "nothingHeard": "Nothing was heard. Check the microphone and try again.",
+      "transcriptHeading": "Full transcript",
+      "recordedMeta": "Recorded {minutes} min · transcribed with {engine}",
+      "browserEngine": "the browser",
+      "saveError": "Couldn't save the doc. Try again.",
+      "saved": "Notes saved to your docs",
+      "micDenied": "Microphone access was blocked. Allow it in the browser and try again.",
+      "keyStopped": "Groq stopped accepting your key. Connect it again in Record notes."
     }
   }
 }

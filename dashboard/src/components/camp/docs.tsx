@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
-  Plus, Search, Pin, PinOff, Trash2, Download, Share2, Bold, Heading1, Heading2, List, ListChecks, Eye, PenLine, ArrowLeft, Users, Lock, FileText,
+  Plus, Search, Mic, Pin, PinOff, Trash2, Download, Share2, Bold, Heading1, Heading2, List, ListChecks, Eye, PenLine, ArrowLeft, Users, Lock, FileText,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
@@ -11,13 +11,14 @@ import { Avatar } from "@/components/ui";
 import { mdToHtml } from "@/lib/markdown";
 import { shortDate, todayISO, timeAgo } from "@/lib/format";
 import type { Member } from "@/lib/boards";
+import { Recorder } from "./recorder";
 
 export type Doc = {
   id: string; owner_id: string; title: string; body: string; kind: "note" | "meeting"; pinned: boolean; tags: string[];
   share_all: boolean; shared_with: string[]; doc_date: string; created_at: string; updated_at: string;
 };
 
-export function DocsTab({ mine, shared, members, meId }: { mine: Doc[]; shared: Doc[]; members: Member[]; meId: string }) {
+export function DocsTab({ mine, shared, members, meId, ai }: { mine: Doc[]; shared: Doc[]; members: Member[]; meId: string; ai: { connected: boolean; last4: string | null } }) {
   const t = useTranslations("camp.docs");
   const locale = useLocale();
   const toast = useToast();
@@ -27,6 +28,7 @@ export function DocsTab({ mine, shared, members, meId }: { mine: Doc[]; shared: 
   const [query, setQuery] = useState("");
   const [naming, setNaming] = useState(false);
   const [newName, setNewName] = useState("");
+  const [recording, setRecording] = useState(false);
 
   const all = [...docs, ...shared];
   const open = all.find((d) => d.id === openId) ?? null;
@@ -62,12 +64,20 @@ export function DocsTab({ mine, shared, members, meId }: { mine: Doc[]; shared: 
 
   return (
     <div className="grid gap-4 lg:grid-cols-[300px_minmax(0,1fr)]">
+      {recording && (
+        <Recorder connected={ai.connected} last4={ai.last4} onClose={() => setRecording(false)}
+                  onCreated={(doc) => { setDocs((d) => [doc, ...d]); setOpenId(doc.id); setRecording(false); }} />
+      )}
       <aside className={`space-y-3 ${open ? "hidden lg:block" : ""}`}>
         <div className="flex gap-2">
           <label className="relative flex-1">
             <Search size={15} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted" />
             <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t("search")} className="input pl-9" />
           </label>
+          <button onClick={() => setRecording(true)} aria-label={t("record")} title={t("record")}
+                  className="grid size-[42px] shrink-0 place-items-center rounded-xl bg-trail text-white shadow-[var(--shadow)] transition hover:brightness-105">
+            <Mic size={17} />
+          </button>
           <button onClick={() => setNaming(true)} className="flex shrink-0 items-center gap-1.5 rounded-xl bg-brand px-3 text-sm font-medium text-brand-contrast">
             <Plus size={16} /> {t("new")}
           </button>

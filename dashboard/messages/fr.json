@@ -677,7 +677,8 @@
         "peopleOption": "Personnes choisies",
         "peopleHint": "Uniquement les coéquipiers que vous choisissez.",
         "readOnlyNote": "Les personnes avec qui vous partagez peuvent lire et télécharger, mais pas modifier."
-      }
+      },
+      "record": "Enregistrer des notes"
     },
     "ideas": {
       "saveError": "Échec de l’enregistrement. Réessayez.",
@@ -727,6 +728,64 @@
       "open": "Ouvrir",
       "delete": "Supprimer",
       "empty": "Rien d’enregistré pour l’instant. Ajoutez votre premier identifiant avec Ajouter."
+    },
+    "recorder": {
+      "title": "Enregistrer des notes",
+      "subtitle": "Enregistrez un cours ou une réunion. Vous obtenez un doc avec les points clés et la transcription complète.",
+      "close": "Fermer",
+      "connected": "Votre compte Groq est connecté",
+      "disconnect": "Déconnecter",
+      "confirmDisconnect": "Déconnecter votre compte Groq ? Vous pourrez le reconnecter à tout moment.",
+      "connectTitle": "Connectez votre compte Groq gratuit (meilleure qualité)",
+      "step1": "Créez un compte gratuit et ouvrez",
+      "step2": "Cliquez sur « Create API key », nommez-la « emet » et copiez-la.",
+      "step3": "Collez-la ici. Elle est vérifiée, stockée de façon chiffrée et utilisée uniquement pour vos enregistrements.",
+      "keyLabel": "Clé API Groq",
+      "connect": "Connecter",
+      "keyErrors": {
+        "format": "Cela ne ressemble pas à une clé Groq (elle commence par gsk_).",
+        "rejected": "Groq n’a pas accepté cette clé. Copiez-la à nouveau depuis la console Groq.",
+        "save": "Impossible d’enregistrer la clé. Réessayez."
+      },
+      "keyPrivacy": "Avec votre propre clé, vous avez vos propres minutes gratuites par jour (environ 8 heures d’audio par jour). Personne d’autre ne peut la voir ni l’utiliser.",
+      "browserFallback": "Pas encore connecté ? Vous pouvez quand même enregistrer : votre navigateur écrit la transcription en direct (fonctionne mieux dans Chrome, une seule langue à la fois, pas de points clés automatiques).",
+      "browserUnsupported": "Ce navigateur ne peut pas transcrire seul. Connectez un compte Groq ci-dessus, ou utilisez Chrome.",
+      "nameLabel": "Nommez ce doc",
+      "namePlaceholder": "p. ex. Cours de marketing — prix",
+      "dateAuto": "La date du jour ({date}) est ajoutée automatiquement.",
+      "language": "Langue",
+      "lang": {
+        "auto": "Auto",
+        "es": "Español",
+        "en": "English"
+      },
+      "autoBrowserNote": "La transcription du navigateur nécessite une seule langue ; elle utilisera la langue de votre tableau de bord.",
+      "start": "Démarrer l’enregistrement",
+      "micTip": "Astuce : placez le téléphone ou l’ordinateur entre vous et la personne qui parle, écran vers le haut.",
+      "stop": "Arrêter",
+      "chunk": {
+        "waiting": "En attente",
+        "sending": "Transcription en cours",
+        "done": "Terminé",
+        "limit": "En attente de minutes gratuites",
+        "error": "Nouvelle tentative"
+      },
+      "pendingChunks": "{count, plural, one {# minute en cours de transcription} other {# minutes en cours de transcription}}",
+      "allTranscribed": "Tout ce qui précède est transcrit",
+      "limitWait": "Vos minutes Groq gratuites sont épuisées pour le moment. Continuez à enregistrer : rien n’est perdu, la suite reprend dans environ {minutes} min.",
+      "firstMinute": "Le premier texte apparaît après environ une minute…",
+      "listening": "Écoute en cours…",
+      "finishing": "Finalisation de la transcription…",
+      "writingNotes": "Rédaction de vos notes…",
+      "noNotes": "Les points clés n’ont pas pu être rédigés cette fois : la transcription complète est ci-dessous.",
+      "nothingHeard": "Aucun son détecté. Vérifiez le micro et réessayez.",
+      "transcriptHeading": "Transcription complète",
+      "recordedMeta": "Enregistré {minutes} min · transcrit avec {engine}",
+      "browserEngine": "le navigateur",
+      "saveError": "Impossible d’enregistrer le doc. Réessayez.",
+      "saved": "Notes enregistrées dans vos docs",
+      "micDenied": "L’accès au microphone a été bloqué. Autorisez-le dans le navigateur et réessayez.",
+      "keyStopped": "Groq n’accepte plus votre clé. Reconnectez-la dans Enregistrer des notes."
     }
   }
 }

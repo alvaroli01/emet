@@ -677,7 +677,8 @@
         "peopleOption": "Ausgewählte Personen",
         "peopleHint": "Nur die Teammitglieder, die du auswählst.",
         "readOnlyNote": "Personen, mit denen du teilst, können lesen und herunterladen, aber nicht bearbeiten."
-      }
+      },
+      "record": "Notizen aufnehmen"
     },
     "ideas": {
       "saveError": "Speichern fehlgeschlagen. Versuch es nochmal.",
@@ -727,6 +728,64 @@
       "open": "Öffnen",
       "delete": "Löschen",
       "empty": "Noch nichts gespeichert. Füge deinen ersten Login mit Hinzufügen hinzu."
+    },
+    "recorder": {
+      "title": "Notizen aufnehmen",
+      "subtitle": "Nimm eine Vorlesung oder ein Meeting auf. Du bekommst ein Dokument mit den wichtigsten Punkten und dem vollständigen Transkript.",
+      "close": "Schließen",
+      "connected": "Dein Groq-Konto ist verbunden",
+      "disconnect": "Trennen",
+      "confirmDisconnect": "Dein Groq-Konto trennen? Du kannst es jederzeit wieder verbinden.",
+      "connectTitle": "Verbinde dein kostenloses Groq-Konto (beste Qualität)",
+      "step1": "Erstelle ein kostenloses Konto und öffne",
+      "step2": "Klicke auf „Create API key“, nenne ihn „emet“ und kopiere ihn.",
+      "step3": "Füge ihn hier ein. Er wird geprüft, verschlüsselt gespeichert und nur für deine Aufnahmen verwendet.",
+      "keyLabel": "Groq-API-Schlüssel",
+      "connect": "Verbinden",
+      "keyErrors": {
+        "format": "Das sieht nicht nach einem Groq-Schlüssel aus (er beginnt mit gsk_).",
+        "rejected": "Groq hat diesen Schlüssel nicht akzeptiert. Kopiere ihn noch einmal aus der Groq-Konsole.",
+        "save": "Der Schlüssel konnte nicht gespeichert werden. Versuch es nochmal."
+      },
+      "keyPrivacy": "Mit deinem eigenen Schlüssel hast du deine eigenen kostenlosen Minuten pro Tag (etwa 8 Stunden Audio täglich). Niemand sonst kann ihn sehen oder nutzen.",
+      "browserFallback": "Noch nicht verbunden? Du kannst trotzdem aufnehmen: Dein Browser schreibt das Transkript live mit (funktioniert am besten in Chrome, jeweils nur eine Sprache, keine automatischen Kernpunkte).",
+      "browserUnsupported": "Dieser Browser kann nicht selbst transkribieren. Verbinde oben ein Groq-Konto oder nutze Chrome.",
+      "nameLabel": "Gib diesem Dokument einen Namen",
+      "namePlaceholder": "z. B. Marketing-Vorlesung — Preisgestaltung",
+      "dateAuto": "Das heutige Datum ({date}) wird automatisch hinzugefügt.",
+      "language": "Sprache",
+      "lang": {
+        "auto": "Automatisch",
+        "es": "Español",
+        "en": "English"
+      },
+      "autoBrowserNote": "Die Transkription im Browser braucht eine einzelne Sprache; es wird die Sprache deines Dashboards verwendet.",
+      "start": "Aufnahme starten",
+      "micTip": "Tipp: Leg das Handy oder den Laptop zwischen dich und die sprechende Person, mit dem Bildschirm nach oben.",
+      "stop": "Stopp",
+      "chunk": {
+        "waiting": "Wartet",
+        "sending": "Wird transkribiert",
+        "done": "Fertig",
+        "limit": "Wartet auf freie Minuten",
+        "error": "Neuer Versuch"
+      },
+      "pendingChunks": "{count, plural, one {# Minute wird noch transkribiert} other {# Minuten werden noch transkribiert}}",
+      "allTranscribed": "Alles bisher ist transkribiert",
+      "limitWait": "Deine kostenlosen Groq-Minuten sind vorerst aufgebraucht. Nimm einfach weiter auf – nichts geht verloren; es geht in etwa {minutes} Min. weiter.",
+      "firstMinute": "Der erste Text erscheint nach etwa einer Minute…",
+      "listening": "Hört zu…",
+      "finishing": "Transkript wird abgeschlossen…",
+      "writingNotes": "Deine Notizen werden geschrieben…",
+      "noNotes": "Die Kernpunkte konnten diesmal nicht erstellt werden – das vollständige Transkript steht unten.",
+      "nothingHeard": "Es war nichts zu hören. Prüfe das Mikrofon und versuch es nochmal.",
+      "transcriptHeading": "Vollständiges Transkript",
+      "recordedMeta": "{minutes} Min. aufgenommen · transkribiert mit {engine}",
+      "browserEngine": "dem Browser",
+      "saveError": "Das Dokument konnte nicht gespeichert werden. Versuch es nochmal.",
+      "saved": "Notizen in deinen Dokumenten gespeichert",
+      "micDenied": "Der Mikrofonzugriff wurde blockiert. Erlaube ihn im Browser und versuch es nochmal.",
+      "keyStopped": "Groq akzeptiert deinen Schlüssel nicht mehr. Verbinde ihn erneut unter „Notizen aufnehmen“."
     }
   }
 }

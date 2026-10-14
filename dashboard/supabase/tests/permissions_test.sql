@@ -253,6 +253,15 @@ select t.assert('Admin cannot read a private note', t.num($$select count(*) from
 select t.assert('Admin cannot read the vault', t.num('select count(*) from vault_items') = 0);
 select t.check('Admin cannot change a private note', $$update docs set body = 'x' where title = 'Stefan private'$$, 'denied');
 
+-- ── Note-taker keys: only the owner ─────────────────────────
+select t.login(2);
+select t.check('Member saves their own (encrypted) Groq key', $$insert into ai_keys (key_iv, key_data, last4) values ('iv', 'enc', '1234')$$, 'ok');
+select t.login(3);
+select t.assert('Other member cannot see someone else''s key', t.num('select count(*) from ai_keys') = 0);
+select t.check('Other member cannot overwrite it', $$update ai_keys set last4 = 'xxxx'$$, 'denied');
+select t.login(1);
+select t.assert('Admin cannot see members'' keys', t.num('select count(*) from ai_keys') = 0);
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',

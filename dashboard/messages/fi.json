@@ -677,7 +677,8 @@
         "peopleOption": "Valitut henkilöt",
         "peopleHint": "Vain valitsemasi tiimikaverit.",
         "readOnlyNote": "Henkilöt, joille jaat, voivat lukea ja ladata, mutta eivät muokata."
-      }
+      },
+      "record": "Nauhoita muistiinpanot"
     },
     "ideas": {
       "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
@@ -727,6 +728,64 @@
       "open": "Avaa",
       "delete": "Poista",
       "empty": "Ei vielä tallennettua. Lisää ensimmäinen kirjautumistietosi painamalla Lisää."
+    },
+    "recorder": {
+      "title": "Nauhoita muistiinpanot",
+      "subtitle": "Nauhoita luento tai palaveri. Saat dokumentin, jossa on tärkeimmät kohdat ja koko litteraatti.",
+      "close": "Sulje",
+      "connected": "Groq-tilisi on yhdistetty",
+      "disconnect": "Katkaise yhteys",
+      "confirmDisconnect": "Katkaistaanko Groq-tilisi yhteys? Voit yhdistää sen uudelleen milloin tahansa.",
+      "connectTitle": "Yhdistä ilmainen Groq-tilisi (paras laatu)",
+      "step1": "Luo ilmainen tili ja avaa",
+      "step2": "Napsauta ”Create API key”, anna sille nimi ”emet” ja kopioi se.",
+      "step3": "Liitä se tähän. Se tarkistetaan, tallennetaan salattuna ja sitä käytetään vain nauhoituksiisi.",
+      "keyLabel": "Groqin API-avain",
+      "connect": "Yhdistä",
+      "keyErrors": {
+        "format": "Tämä ei näytä Groq-avaimelta (se alkaa merkeillä gsk_).",
+        "rejected": "Groq ei hyväksynyt avainta. Kopioi se uudelleen Groqin konsolista.",
+        "save": "Avaimen tallennus epäonnistui. Yritä uudelleen."
+      },
+      "keyPrivacy": "Oma avaimesi tarkoittaa omia ilmaisia minuuttejasi päivässä (noin 8 tuntia ääntä päivässä). Kukaan muu ei näe tai voi käyttää sitä.",
+      "browserFallback": "Ei vielä yhdistetty? Voit silti nauhoittaa: selaimesi kirjoittaa litteraatin livenä (toimii parhaiten Chromella, vain yksi kieli kerrallaan, ei automaattisia tärkeimpiä kohtia).",
+      "browserUnsupported": "Tämä selain ei osaa litteroida itse. Yhdistä Groq-tili yllä tai käytä Chromea.",
+      "nameLabel": "Nimeä tämä dokumentti",
+      "namePlaceholder": "esim. Markkinoinnin luento — hinnoittelu",
+      "dateAuto": "Tämän päivän päivämäärä ({date}) lisätään automaattisesti.",
+      "language": "Kieli",
+      "lang": {
+        "auto": "Automaattinen",
+        "es": "Español",
+        "en": "English"
+      },
+      "autoBrowserNote": "Selaimen litterointi tarvitsee yhden kielen; se käyttää hallintapaneelisi kieltä.",
+      "start": "Aloita nauhoitus",
+      "micTip": "Vinkki: aseta puhelin tai kannettava itsesi ja puhujan väliin, näyttö ylöspäin.",
+      "stop": "Lopeta",
+      "chunk": {
+        "waiting": "Odottaa",
+        "sending": "Litteroidaan",
+        "done": "Valmis",
+        "limit": "Odottaa ilmaisia minuutteja",
+        "error": "Yritetään uudelleen"
+      },
+      "pendingChunks": "{count, plural, one {# minuutti on vielä litteroitavana} other {# minuuttia on vielä litteroitavana}}",
+      "allTranscribed": "Kaikki tähän asti on litteroitu",
+      "limitWait": "Ilmaiset Groq-minuuttisi on käytetty toistaiseksi. Jatka nauhoitusta – mitään ei katoa; se jatkuu noin {minutes} min kuluttua.",
+      "firstMinute": "Ensimmäinen teksti ilmestyy noin minuutin kuluttua…",
+      "listening": "Kuunnellaan…",
+      "finishing": "Viimeistellään litteraattia…",
+      "writingNotes": "Kirjoitetaan muistiinpanojasi…",
+      "noNotes": "Tärkeimpiä kohtia ei voitu kirjoittaa tällä kertaa – koko litteraatti on alla.",
+      "nothingHeard": "Mitään ei kuulunut. Tarkista mikrofoni ja yritä uudelleen.",
+      "transcriptHeading": "Koko litteraatti",
+      "recordedMeta": "Nauhoitettu {minutes} min · litteroitu: {engine}",
+      "browserEngine": "selain",
+      "saveError": "Dokumentin tallennus epäonnistui. Yritä uudelleen.",
+      "saved": "Muistiinpanot tallennettu dokumentteihisi",
+      "micDenied": "Mikrofonin käyttö estettiin. Salli se selaimessa ja yritä uudelleen.",
+      "keyStopped": "Groq ei enää hyväksy avaintasi. Yhdistä se uudelleen kohdassa Nauhoita muistiinpanot."
     }
   }
 }

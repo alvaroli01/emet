@@ -677,7 +677,8 @@
         "peopleOption": "Personas concretas",
         "peopleHint": "Solo los compañeros que elijas.",
         "readOnlyNote": "Las personas con las que compartas pueden leer y descargar, no editar."
-      }
+      },
+      "record": "Grabar apuntes"
     },
     "ideas": {
       "saveError": "No se pudo guardar. Inténtalo de nuevo.",
@@ -727,6 +728,64 @@
       "open": "Abrir",
       "delete": "Eliminar",
       "empty": "Aún no hay nada guardado. Añade tu primer acceso con Añadir."
+    },
+    "recorder": {
+      "title": "Grabar apuntes",
+      "subtitle": "Graba una clase o una reunión. Recibes un doc con los puntos clave y la transcripción completa.",
+      "close": "Cerrar",
+      "connected": "Tu cuenta de Groq está conectada",
+      "disconnect": "Desconectar",
+      "confirmDisconnect": "¿Desconectar tu cuenta de Groq? Puedes volver a conectarla cuando quieras.",
+      "connectTitle": "Conecta tu cuenta gratuita de Groq (mejor calidad)",
+      "step1": "Crea una cuenta gratuita y abre",
+      "step2": "Haz clic en «Create API key», ponle de nombre «emet» y cópiala.",
+      "step3": "Pégala aquí. Se comprueba, se guarda cifrada y solo se usa para tus grabaciones.",
+      "keyLabel": "Clave API de Groq",
+      "connect": "Conectar",
+      "keyErrors": {
+        "format": "Eso no parece una clave de Groq (empieza por gsk_).",
+        "rejected": "Groq no ha aceptado esa clave. Vuelve a copiarla desde la consola de Groq.",
+        "save": "No se pudo guardar la clave. Inténtalo de nuevo."
+      },
+      "keyPrivacy": "Con tu propia clave tienes tus propios minutos gratis al día (unas 8 horas de audio diarias). Nadie más puede verla ni usarla.",
+      "browserFallback": "¿Aún sin conectar? Puedes grabar igualmente: tu navegador escribe la transcripción en directo (funciona mejor en Chrome, un idioma a la vez, sin puntos clave automáticos).",
+      "browserUnsupported": "Este navegador no puede transcribir por sí solo. Conecta una cuenta de Groq arriba o usa Chrome.",
+      "nameLabel": "Ponle nombre a este doc",
+      "namePlaceholder": "p. ej. Clase de marketing — precios",
+      "dateAuto": "La fecha de hoy ({date}) se añade automáticamente.",
+      "language": "Idioma",
+      "lang": {
+        "auto": "Automático",
+        "es": "Español",
+        "en": "English"
+      },
+      "autoBrowserNote": "La transcripción del navegador necesita un solo idioma; usará el idioma de tu panel.",
+      "start": "Empezar a grabar",
+      "micTip": "Consejo: pon el móvil o el portátil entre tú y quien habla, con la pantalla hacia arriba.",
+      "stop": "Parar",
+      "chunk": {
+        "waiting": "En espera",
+        "sending": "Transcribiendo",
+        "done": "Hecho",
+        "limit": "Esperando minutos gratis",
+        "error": "Reintentando"
+      },
+      "pendingChunks": "{count, plural, one {# minuto aún se está transcribiendo} other {# minutos aún se están transcribiendo}}",
+      "allTranscribed": "Todo lo grabado hasta ahora está transcrito",
+      "limitWait": "Tus minutos gratis de Groq se han agotado por ahora. Sigue grabando: no se pierde nada, continúa en unos {minutes} min.",
+      "firstMinute": "El primer texto aparece tras aproximadamente un minuto…",
+      "listening": "Escuchando…",
+      "finishing": "Terminando la transcripción…",
+      "writingNotes": "Escribiendo tus apuntes…",
+      "noNotes": "Esta vez no se pudieron escribir los puntos clave; la transcripción completa está abajo.",
+      "nothingHeard": "No se oyó nada. Revisa el micrófono e inténtalo de nuevo.",
+      "transcriptHeading": "Transcripción completa",
+      "recordedMeta": "Grabado {minutes} min · transcrito con {engine}",
+      "browserEngine": "el navegador",
+      "saveError": "No se pudo guardar el doc. Inténtalo de nuevo.",
+      "saved": "Apuntes guardados en tus docs",
+      "micDenied": "Se bloqueó el acceso al micrófono. Permítelo en el navegador e inténtalo de nuevo.",
+      "keyStopped": "Groq dejó de aceptar tu clave. Vuelve a conectarla en Grabar apuntes."
     }
   }
 }

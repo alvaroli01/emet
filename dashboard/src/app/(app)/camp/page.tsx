@@ -25,7 +25,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   const week = weekStart(Date.now());
   const today = todayISO();
 
-  const [plans, agenda, cards, subtasks, docs, ideas, vaultKey, vaultItems, members, sales] = await Promise.all([
+  const [plans, agenda, cards, subtasks, docs, ideas, vaultKey, vaultItems, members, sales, aiKey] = await Promise.all([
     supabase.from("week_plans").select("*").eq("owner_id", me.id).order("week_start", { ascending: false }).limit(8).returns<WeekPlan[]>(),
     supabase.from("agenda_items").select("*").eq("owner_id", me.id).gte("day", today).order("day").order("start_time").returns<AgendaItem[]>(),
     supabase.from("cards").select("id, title, due_at, completed_at, boards(slug, group_id), card_assignees!inner(user_id)")
@@ -38,6 +38,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
     supabase.from("vault_items").select("id, iv, data").eq("owner_id", me.id).order("created_at"),
     loadMembers(),
     supabase.from("sales").select("amount"),
+    supabase.from("ai_keys").select("last4").maybeSingle(),
   ]);
 
   const slugOf = (b: { slug: string; group_id: string | null } | null | undefined) =>
@@ -89,7 +90,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
       <SectionTabs label={t("sections")} initial={tab} tabs={[
         { id: "week", label: t("tabs.week"), node: <WeekTab week={week} plan={thisWeek} past={(plans.data ?? []).filter((p) => p.week_start !== week)} due={due} meId={me.id} /> },
         { id: "agenda", label: t("tabs.agenda"), node: <AgendaTab items={agenda.data ?? []} due={due} today={today} /> },
-        { id: "docs", label: t("tabs.docs"), node: <DocsTab mine={myDocs} shared={sharedDocs} members={members} meId={me.id} /> },
+        { id: "docs", label: t("tabs.docs"), node: <DocsTab mine={myDocs} shared={sharedDocs} members={members} meId={me.id} ai={{ connected: !!aiKey.data, last4: aiKey.data?.last4 ?? null }} /> },
         { id: "ideas", label: t("tabs.ideas"), node: <IdeasTab ideas={ideas.data ?? []} meId={me.id} /> },
         { id: "vault", label: t("tabs.vault"), node: <VaultTab keyRow={vaultKey.data} items={vaultItems.data ?? []} meId={me.id} /> },
       ]} />
