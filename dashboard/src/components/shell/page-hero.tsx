@@ -43,7 +43,8 @@ export function PageHero({ section, title, subtitle, lines = [], stats = [], act
   return (
     <div className="fade-in space-y-4 sm:space-y-5">
       <header className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 pt-1">
-        <div className="min-w-0 max-w-3xl">
+        {/* Glass box behind the title block so it reads clearly over the section photo */}
+        <div className="panel min-w-0 max-w-3xl px-5 py-4 sm:px-6 sm:py-5">
           <p className="flex items-center gap-2 text-sm font-medium text-muted">
             <span aria-hidden className="grid size-7 place-items-center rounded-lg text-white" style={{ background: color }}>{section.icon}</span>
             {section.label}

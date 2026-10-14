@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-14 — Alvaro — Page titles sit in a glass box (team logo → members line on team pages; subtitle + title on Marketing) so they read clearly over the photos.
 - 2026-10-14 — Alvaro — Finance background is now calm gold coins on dark, blurred and darker, so numbers and charts are easy to read.
 - 2026-10-14 — Alvaro — Ask emet is now a real conversation (follow-up questions, New chat); Today's ask box types example questions by itself; all text bolder and full contrast (white on dark, black on light). All 7 languages.
 - 2026-10-14 — Alvaro — Text is easy to read over the background photos: more solid glass panels, brighter grey text, darker pills and top bar, soft shadow on titles and Today's ask box, brighter text on Today; fixed a small gauge glitch.

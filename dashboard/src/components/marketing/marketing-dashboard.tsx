@@ -41,7 +41,7 @@ export function MarketingDashboard({ d }: { d: MarketingDash }) {
   return (
     <div className="fade-in space-y-4">
       <header className="flex flex-wrap items-end justify-between gap-3 pt-1">
-        <div>
+        <div className="panel px-5 py-4 sm:px-6">
           <p className="text-sm text-muted">{t("subtitle")}</p>
           <h1 className="mt-1 text-[clamp(1.7rem,3.5vw,2.4rem)] font-medium tracking-tight">{t("title")}</h1>
         </div>
