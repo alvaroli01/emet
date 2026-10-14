@@ -575,7 +575,8 @@
       "invite": "Impossible d’envoyer l’invitation. Vérifie l’adresse e-mail.",
       "emailTaken": "Quelqu’un utilise déjà cet e-mail.",
       "save": "Échec de l’enregistrement."
-    }
+    },
+    "manage": "Gérer les personnes (ajouter, modifier, inviter)"
   },
   "trello": {
     "title": "Synchro Trello",
@@ -2158,7 +2159,8 @@
     "allDoneTitle": "Tout est fait ici.",
     "teamLabel": "Équipe",
     "climbTitle": "Notre ascension vers 30 000 €",
-    "campVisual": "Ton camp de base"
+    "campVisual": "Ton camp de base",
+    "overviewTool": "Vue d'ensemble"
   },
   "assist": {
     "label": "Demande à emet à propos de cette section",
@@ -2231,7 +2233,8 @@
       "whatsLate": "Qu'est-ce qui est en retard dans l'équipe et qui dois-je relancer ?"
     },
     "greeting": "Salut {name}, qu’est-ce qu’on fait aujourd’hui dans {section} ?",
-    "helper": "Pose une question ou dis-moi ce que tu as fait. Je prépare, tu touches Ajouter."
+    "helper": "Pose une question ou dis-moi ce que tu as fait. Je prépare, tu touches Ajouter.",
+    "bubble": "Demande à emet à propos de cette section"
   },
   "home": {
     "needHelp": "Salut {name}, besoin d’aide ?",
@@ -2321,7 +2324,7 @@
     "shareSave": "Partages + enregistrements",
     "shareSaveSub": "par personne touchée (médiane)",
     "bestFormat": "Meilleur format",
-    "dms": "{count} DM pour acheter (30 jours)",
+    "dms": "DM",
     "whereSales": "D’où viennent les ventes",
     "noSales": "Pas encore de ventes sur les 30 derniers jours.",
     "formats": "Formats que les gens enregistrent et partagent",
@@ -2329,7 +2332,34 @@
     "whatWorks": "Ce qui marche, semaine par semaine (vues par type de message)",
     "noPosts": "Étiquette tes publications et note leurs chiffres pour remplir ça.",
     "revenueNote": "Ventes sur les 30 derniers jours : {amount}.",
-    "title": "Marketing"
+    "title": "Marketing",
+    "jump": "Aller à",
+    "content": "Contenu",
+    "links": "Liens",
+    "pulse": "Pouls",
+    "keyPerformance": "Performances clés",
+    "reach": "Portée (30 jours)",
+    "revenueAll": "Toutes les ventes (30 jours)",
+    "conversion": "Conversion",
+    "dmsShort": "DM",
+    "orders": "Commandes (30 jours)",
+    "analytics": "Analytique",
+    "views": "Vues",
+    "views30": "Vues (30 jours)",
+    "socialTraffic": "Trafic social",
+    "socialTrafficSub": "Où les acheteurs ont entendu parler de nous, 30 derniers jours",
+    "salesN": "{count, plural, one {# vente} other {# ventes}}",
+    "dailyTraffic": "Trafic quotidien",
+    "clicks": "Clics sur les liens",
+    "recentActivities": "Activités récentes",
+    "topContent": "Meilleurs contenus",
+    "search": "Rechercher des posts",
+    "post": "Post",
+    "shareSaveShort": "Partages+enregistrements",
+    "allContent": "Tous les contenus",
+    "goal": "Objectif marketing",
+    "goalSub": "Part des ventes venant du marketing",
+    "basedIn": "Basés à Bilbao"
   },
   "campDash": {
     "title": "Le camp de {name}",
@@ -2379,5 +2409,105 @@
       "ideas": "Des post-its que tu peux envoyer vers un tableau.",
       "vault": "Des mots de passe que toi seul peux ouvrir."
     }
+  },
+  "personal": {
+    "title": "Salut {name}, voici ta journée",
+    "focus": "Temps de concentration",
+    "focusSub": "Lance le minuteur quand tu te mets au travail",
+    "start": "Lancer le minuteur",
+    "pause": "Mettre le minuteur en pause",
+    "today": "Aujourd'hui",
+    "goal": "Objectif du jour",
+    "todayTasks": "Mes tâches ouvertes",
+    "manage": "Gérer",
+    "company": "Tableau de l'entreprise",
+    "noTasks": "Rien d'ouvert. Top.",
+    "todayMeetings": "Programme du jour",
+    "viewAll": "Tout voir",
+    "schedule": "Planifier quelque chose",
+    "myWeek": "Ma semaine",
+    "viewToday": "Aujourd'hui",
+    "viewWeek": "Semaine",
+    "free": "Rien à rendre",
+    "card": {
+      "done": "Fait",
+      "late": "En retard",
+      "today": "Pour aujourd'hui",
+      "planned": "Prévu"
+    },
+    "activity": "Activité",
+    "thisWeek": "Cette semaine",
+    "worked": "Où se trouve mon travail",
+    "noWork": "Aucune tâche assignée pour l'instant",
+    "reminders": "Rappels",
+    "add": "Ajouter",
+    "whatToRemember": "De quoi dois-je te rappeler ?",
+    "time": "Heure",
+    "priority": "Priorité",
+    "status": {
+      "low": "Basse",
+      "medium": "Moyenne",
+      "high": "Haute"
+    },
+    "save": "Enregistrer le rappel",
+    "done": "Fait",
+    "undo": "Annuler",
+    "delete": "Supprimer le rappel",
+    "noReminders": "Aucun rappel. Ajoutes-en un pour aujourd'hui.",
+    "saveError": "Enregistrement impossible. Réessaie."
+  },
+  "teamTable": {
+    "search": "Rechercher des personnes",
+    "filter": "Afficher les personnes",
+    "name": "Nom",
+    "statusCol": "Statut",
+    "status": {
+      "inactive": "Inactives",
+      "somewhat": "Un peu actives",
+      "active": "Actives"
+    },
+    "usedApp": "A utilisé le tableau de bord\n(30 derniers jours)",
+    "didTask": "A terminé une tâche\n(30 derniers jours)",
+    "tasksDone": "Tâches terminées\n(30 derniers jours)",
+    "lastActive": "Dernière activité",
+    "never": "Jamais",
+    "today": "Aujourd'hui",
+    "daysAgo": "{n, plural, one {il y a # jour} other {il y a # jours}}",
+    "monthsAgo": "il y a plus de 2 mois",
+    "yes": "Oui",
+    "no": "Non",
+    "noRole": "Rôle non défini",
+    "notJoined": "Pas encore connecté",
+    "open": "Ouvrir {name}",
+    "empty": "Personne ne correspond.",
+    "note": "Actif = a fait quelque chose dans le tableau de bord sur 3 jours ou plus parmi les 30 derniers. Un peu actif = 1 à 2 jours."
+  },
+  "member": {
+    "back": "Équipe",
+    "inProgress": "En cours",
+    "completed": "Terminées (7 jours)",
+    "sales": "Ventes",
+    "tasks": "{n, plural, one {tâche} other {tâches}}",
+    "newThisWeek": "{n} nouvelles cette semaine",
+    "vsLastWeek": "{n} vs semaine dernière",
+    "vsLastMonth": "{n} vs mois dernier",
+    "noPrev": "Aucune vente le mois dernier",
+    "perMonth": "ce mois-ci",
+    "noRole": "Rôle non défini",
+    "email": "Écrire à {name}",
+    "format": "Où il ou elle travaille",
+    "ownTeam": "Sa propre équipe",
+    "elsewhere": "Autres équipes",
+    "weekly": "Activité de la semaine",
+    "weeklySub": "Jours actifs cette semaine",
+    "noCurrent": "Aucune tâche ouverte",
+    "untilDue": "avant l'échéance",
+    "openTask": "Ouvrir la tâche",
+    "topProjects": "Activité par équipe cette semaine",
+    "noActivity": "Aucune activité cette semaine",
+    "prevMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "upcoming": "À venir",
+    "noUpcoming": "Rien à rendre bientôt"
   }
 }

@@ -12,7 +12,7 @@ export function ViewOnlyBadge() {
 }
 
 export function Avatar({ name, src, size = 32 }: { name: string; src?: string | null; size?: number }) {
-  const initials = name.split(/\s+/).map((p) => p[0]).join("").slice(0, 2).toUpperCase();
+  const initials = name.split(/\s+/).map((p) => p.match(/\p{L}/u)?.[0] ?? "").join("").slice(0, 2).toUpperCase();
   return src ? (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={name} width={size} height={size} className="shrink-0 rounded-full object-cover" style={{ width: size, height: size }} />

@@ -575,7 +575,8 @@
       "invite": "Kutsua ei voitu lähettää. Tarkista sähköpostiosoite.",
       "emailTaken": "Jollakulla on jo tämä sähköposti.",
       "save": "Tallennus epäonnistui."
-    }
+    },
+    "manage": "Hallitse ihmisiä (lisää, muokkaa, kutsu)"
   },
   "trello": {
     "title": "Trello-synkronointi",
@@ -2158,7 +2159,8 @@
     "allDoneTitle": "Täällä kaikki valmista.",
     "teamLabel": "Tiimi",
     "climbTitle": "Nousumme 30 000 euroon",
-    "campVisual": "Perusleirisi"
+    "campVisual": "Perusleirisi",
+    "overviewTool": "Yleiskuva"
   },
   "assist": {
     "label": "Kysy emetiltä tästä osiosta",
@@ -2231,7 +2233,8 @@
       "whatsLate": "Mikä tiimissä on myöhässä ja ketä minun kannattaa muistuttaa?"
     },
     "greeting": "Hei {name}, mitä tehdään tänään kohdassa {section}?",
-    "helper": "Kysy jotain tai kerro, mitä teit. Minä valmistelen, sinä painat Lisää."
+    "helper": "Kysy jotain tai kerro, mitä teit. Minä valmistelen, sinä painat Lisää.",
+    "bubble": "Kysy emetiltä tästä osiosta"
   },
   "home": {
     "needHelp": "Hei {name}, tarvitsetko apua?",
@@ -2321,7 +2324,7 @@
     "shareSave": "Jaot + tallennukset",
     "shareSaveSub": "tavoitettua henkilöä kohden (mediaani)",
     "bestFormat": "Paras formaatti",
-    "dms": "{count} ostopyyntöä yksityisviestinä (30 päivää)",
+    "dms": "DM:t",
     "whereSales": "Mistä myynti tulee",
     "noSales": "Ei vielä myyntiä viimeisen 30 päivän aikana.",
     "formats": "Formaatit, joita ihmiset tallentavat ja jakavat",
@@ -2329,7 +2332,34 @@
     "whatWorks": "Mikä toimii viikko viikolta (katselut viestityypeittäin)",
     "noPosts": "Merkitse julkaisusi ja kirjaa niiden luvut täyttääksesi tämän.",
     "revenueNote": "Myynti viimeisen 30 päivän aikana: {amount}.",
-    "title": "Marketing"
+    "title": "Marketing",
+    "jump": "Siirry",
+    "content": "Sisältö",
+    "links": "Linkit",
+    "pulse": "Syke",
+    "keyPerformance": "Keskeiset luvut",
+    "reach": "Tavoittavuus (30 päivää)",
+    "revenueAll": "Kaikki myynti (30 päivää)",
+    "conversion": "Konversio",
+    "dmsShort": "DM:t",
+    "orders": "Tilaukset (30 päivää)",
+    "analytics": "Analytiikka",
+    "views": "Katselukerrat",
+    "views30": "Katselukerrat (30 päivää)",
+    "socialTraffic": "Somen liikenne",
+    "socialTrafficSub": "Mistä ostajat kuulivat meistä, viimeiset 30 päivää",
+    "salesN": "{count, plural, one {# myynti} other {# myyntiä}}",
+    "dailyTraffic": "Päivittäinen liikenne",
+    "clicks": "Linkkiklikkaukset",
+    "recentActivities": "Viimeaikainen toiminta",
+    "topContent": "Parhaat sisällöt",
+    "search": "Hae julkaisuja",
+    "post": "Julkaisu",
+    "shareSaveShort": "Jaot+tallennukset",
+    "allContent": "Kaikki sisältö",
+    "goal": "Markkinointitavoite",
+    "goalSub": "Markkinoinnista tulleen myynnin osuus",
+    "basedIn": "Sijainti: Bilbao"
   },
   "campDash": {
     "title": "{name}n leiri",
@@ -2379,5 +2409,105 @@
       "ideas": "Tarralaput, jotka voit lähettää taululle.",
       "vault": "Salasanat, jotka vain sinä voit avata."
     }
+  },
+  "personal": {
+    "title": "Hei {name}, tässä on päiväsi",
+    "focus": "Keskittymisaika",
+    "focusSub": "Käynnistä ajastin, kun istut töihin",
+    "start": "Käynnistä ajastin",
+    "pause": "Keskeytä ajastin",
+    "today": "Tänään",
+    "goal": "Päivän tavoite",
+    "todayTasks": "Avoimet tehtäväni",
+    "manage": "Hallitse",
+    "company": "Yrityksen taulu",
+    "noTasks": "Ei avoimia. Hienoa.",
+    "todayMeetings": "Tämän päivän suunnitelmat",
+    "viewAll": "Näytä kaikki",
+    "schedule": "Suunnittele jotain",
+    "myWeek": "Viikkoni",
+    "viewToday": "Tänään",
+    "viewWeek": "Viikko",
+    "free": "Ei erääntyviä",
+    "card": {
+      "done": "Valmis",
+      "late": "Myöhässä",
+      "today": "Erääntyy tänään",
+      "planned": "Suunniteltu"
+    },
+    "activity": "Aktiivisuus",
+    "thisWeek": "Tällä viikolla",
+    "worked": "Missä työni on",
+    "noWork": "Ei vielä tehtäviä",
+    "reminders": "Muistutukset",
+    "add": "Lisää",
+    "whatToRemember": "Mistä muistutan sinua?",
+    "time": "Aika",
+    "priority": "Tärkeys",
+    "status": {
+      "low": "Matala",
+      "medium": "Keskitaso",
+      "high": "Korkea"
+    },
+    "save": "Tallenna muistutus",
+    "done": "Valmis",
+    "undo": "Kumoa",
+    "delete": "Poista muistutus",
+    "noReminders": "Ei muistutuksia. Lisää yksi tälle päivälle.",
+    "saveError": "Tallennus epäonnistui. Yritä uudelleen."
+  },
+  "teamTable": {
+    "search": "Hae ihmisiä",
+    "filter": "Näytä ihmiset, jotka ovat",
+    "name": "Nimi",
+    "statusCol": "Tila",
+    "status": {
+      "inactive": "Passiivinen",
+      "somewhat": "Melko aktiivinen",
+      "active": "Aktiivinen"
+    },
+    "usedApp": "Käytti hallintapaneelia\n(viimeiset 30 päivää)",
+    "didTask": "Viimeisteli tehtävän\n(viimeiset 30 päivää)",
+    "tasksDone": "Valmistuneet tehtävät\n(viimeiset 30 päivää)",
+    "lastActive": "Viimeksi aktiivinen",
+    "never": "Ei koskaan",
+    "today": "Tänään",
+    "daysAgo": "{n, plural, one {# päivä sitten} other {# päivää sitten}}",
+    "monthsAgo": "yli 2 kuukautta sitten",
+    "yes": "Kyllä",
+    "no": "Ei",
+    "noRole": "Ei roolia",
+    "notJoined": "Ei ole vielä kirjautunut",
+    "open": "Avaa {name}",
+    "empty": "Ei osumia.",
+    "note": "Aktiivinen = teki jotain hallintapaneelissa vähintään 3 päivänä viimeisen 30 päivän aikana. Melko aktiivinen = 1–2 päivänä."
+  },
+  "member": {
+    "back": "Tiimi",
+    "inProgress": "Työn alla",
+    "completed": "Valmiit (7 päivää)",
+    "sales": "Myynti",
+    "tasks": "{n, plural, one {tehtävä} other {tehtävää}}",
+    "newThisWeek": "{n} uutta tällä viikolla",
+    "vsLastWeek": "{n} viime viikkoon verrattuna",
+    "vsLastMonth": "{n} viime kuuhun verrattuna",
+    "noPrev": "Ei myyntiä viime kuussa",
+    "perMonth": "tässä kuussa",
+    "noRole": "Ei roolia",
+    "email": "Lähetä sähköposti: {name}",
+    "format": "Missä työskentelee",
+    "ownTeam": "Oma tiimi",
+    "elsewhere": "Muut tiimit",
+    "weekly": "Viikon aktiivisuus",
+    "weeklySub": "Aktiiviset päivät tällä viikolla",
+    "noCurrent": "Ei avointa tehtävää",
+    "untilDue": "eräpäivään",
+    "openTask": "Avaa tehtävä",
+    "topProjects": "Aktiivisuus tiimeittäin tällä viikolla",
+    "noActivity": "Ei aktiivisuutta tällä viikolla",
+    "prevMonth": "Edellinen kuukausi",
+    "nextMonth": "Seuraava kuukausi",
+    "upcoming": "Tulossa",
+    "noUpcoming": "Ei pian erääntyviä"
   }
 }

@@ -1,11 +1,11 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { loadMembers } from "@/lib/boards";
-import { weekStart, GOAL } from "@/lib/metrics";
+import { weekStart } from "@/lib/metrics";
 import { todayISO } from "@/lib/format";
 import { SectionTabs } from "@/components/section-tabs";
-import { CampDashboard, type CampData } from "@/components/camp/camp-dashboard";
+import { PersonalDashboard, type PersonalData } from "@/components/camp/personal-dashboard";
 import { WeekTab, type WeekPlan, type DueTask } from "@/components/camp/week";
 import { AgendaTab, type AgendaItem } from "@/components/camp/agenda";
 import { DocsTab, type Doc } from "@/components/camp/docs";
@@ -19,12 +19,14 @@ type SubDue = { id: string; text: string; due_on: string | null; done: boolean; 
 export default async function CampPage({ searchParams }: { searchParams: Promise<{ tab?: string; doc?: string }> }) {
   const { tab, doc: openDoc } = await searchParams;
   const t = await getTranslations("camp");
+  const tp = await getTranslations("personal");
+  const locale = await getLocale();
   const { me, groups } = await getSession();
   const supabase = await createClient();
   const week = weekStart(Date.now());
   const today = todayISO();
 
-  const [plans, agenda, cards, subtasks, docs, ideas, vaultKey, vaultItems, members, sales, aiKey] = await Promise.all([
+  const [plans, agenda, cards, subtasks, docs, ideas, vaultKey, vaultItems, members, aiKey] = await Promise.all([
     supabase.from("week_plans").select("*").eq("owner_id", me.id).order("week_start", { ascending: false }).limit(8).returns<WeekPlan[]>(),
     supabase.from("agenda_items").select("*").eq("owner_id", me.id).gte("day", today).order("day").order("start_time").returns<AgendaItem[]>(),
     supabase.from("cards").select("id, title, due_at, completed_at, boards(slug, group_id), card_assignees!inner(user_id)")
@@ -36,8 +38,22 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
     supabase.from("vault_keys").select("salt, check_iv, check_data").eq("owner_id", me.id).maybeSingle(),
     supabase.from("vault_items").select("id, iv, data").eq("owner_id", me.id).order("created_at"),
     loadMembers(),
-    supabase.from("sales").select("amount"),
     supabase.from("ai_keys").select("last4").maybeSingle(),
+  ]);
+  const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 7 * 864e5).toISOString();
+  const [openCards, weekCards, myLog, meetingsToday, reminders, boardMeta] = await Promise.all([
+    supabase.from("cards").select("id, title, due_at, board_id, boards(slug, group_id), card_assignees!inner(user_id)")
+      .eq("card_assignees.user_id", me.id).is("completed_at", null).order("due_at", { ascending: true, nullsFirst: false }).limit(12)
+      .returns<{ id: string; title: string; due_at: string | null; board_id: string; boards: { slug: string; group_id: string | null } | null }[]>(),
+    supabase.from("cards").select("id, title, due_at, completed_at, boards(slug, group_id), card_assignees!inner(user_id)")
+      .eq("card_assignees.user_id", me.id).gte("due_at", week).lt("due_at", weekEnd)
+      .returns<{ id: string; title: string; due_at: string; completed_at: string | null; boards: { slug: string; group_id: string | null } | null }[]>(),
+    supabase.from("activity_log").select("created_at").eq("user_id", me.id).gte("created_at", week),
+    supabase.from("meetings").select("id, title, kind, created_at").eq("meeting_date", today),
+    supabase.from("reminders").select("id, title, remind_at, priority, done").eq("owner_id", me.id)
+      .gte("remind_at", today).order("remind_at").limit(8),
+    supabase.from("cards").select("board_id, boards(name, group_id), card_assignees!inner(user_id)").eq("card_assignees.user_id", me.id)
+      .returns<{ board_id: string; boards: { name: string; group_id: string | null } | null }[]>(),
   ]);
 
   const slugOf = (b: { slug: string; group_id: string | null } | null | undefined) =>
@@ -53,38 +69,46 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
     })),
   ].sort((a, b) => a.day.localeCompare(b.day));
 
-  const revenue = (sales.data ?? []).reduce((a, s) => a + Number(s.amount), 0);
   const allDocs = docs.data ?? [];
   const myDocs = allDocs.filter((d) => d.owner_id === me.id);
   const sharedDocs = allDocs.filter((d) => d.owner_id !== me.id);
   const thisWeek = (plans.data ?? []).find((p) => p.week_start === week) ?? null;
-  const openThisWeek = due.filter((d) => d.day < new Date(Date.parse(week) + 7 * 864e5).toISOString().slice(0, 10)).length;
   const firstName = me.full_name.split(" ")[0];
-  const { data: feed } = await supabase.from("calendar_feeds").select("owner_id").eq("owner_id", me.id).maybeSingle();
-  const myCards = await supabase.from("cards").select("completed_at, card_assignees!inner(user_id)").eq("card_assignees.user_id", me.id);
-  const allMine = myCards.data ?? [];
   const prios = (thisWeek?.priorities ?? []).filter((x: string) => x.trim());
   const dayMs = Date.now() - Date.parse(week + "T00:00:00Z");
   const items = agenda.data ?? [];
-  const nowTime = new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" });
-  const nextItem = items.find((x) => x.day === today && !x.done && (x.start_time ?? "99") >= nowTime) ?? items.find((x) => x.day > today && !x.done);
-  const campData: CampData = {
-    name: firstName,
-    priorities: { done: prios.filter((x: string) => x.startsWith("✓ ")).length, total: prios.length },
-    weekDone: Math.min(1, Math.max(0, dayMs / (7 * 864e5))),
-    dueThisWeek: openThisWeek, lateCount: due.filter((x) => x.day < today).length,
-    agendaToday: items.filter((x) => x.day === today).length,
-    next: nextItem ? { title: nextItem.title, time: nextItem.start_time?.slice(0, 5) ?? null } : null,
-    agendaWeek: Array.from({ length: 7 }, (_, i) => { const d = new Date(Date.parse(week + "T00:00:00Z") + i * 864e5).toISOString().slice(0, 10); return items.filter((x) => x.day === d).length; }),
-    docs: myDocs.length, shared: sharedDocs.length, ideas: (ideas.data ?? []).length,
-    setup: { ai: !!aiKey.data, vault: !!vaultKey.data, calendar: !!feed },
-    revenuePct: Math.min(1, revenue / GOAL.revenue),
-    tasksDonePct: allMine.length ? allMine.filter((x) => x.completed_at).length / allMine.length : null,
+
+  const teamName = (b: { group_id: string | null } | null | undefined) => (b?.group_id ? groups.find((g) => g.id === b.group_id)?.name ?? null : null);
+  const tm = (iso: string) => new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" });
+  // Activity: how many things I did each weekday (from the activity log), scaled to the busiest day
+  const perDay = Array.from({ length: 5 }, (_, i) => { const d = new Date(Date.parse(week + "T00:00:00Z") + i * 864e5).toISOString().slice(0, 10); return (myLog.data ?? []).filter((x) => String(x.created_at).slice(0, 10) === d).length; });
+  const peak = Math.max(1, ...perDay);
+  const workedDays = Math.max(1, Math.min(5, Math.ceil(dayMs / 864e5)));
+  const COLORS = ["#ff6a1a", "#ffc23d", "#f5f5f5", "#8b8b93", "#ff9f6b", "#5b5b63"];
+  const byTeam = new Map<string, number>();
+  for (const c of boardMeta.data ?? []) { const k = teamName(c.boards) ?? c.boards?.name ?? tp("company"); byTeam.set(k, (byTeam.get(k) ?? 0) + 1); }
+  const workedTotal = [...byTeam.values()].reduce((a, b) => a + b, 0);
+  const personal: PersonalData = {
+    name: firstName, today, weekStart: week, focusTitle: prios.find((x: string) => !x.startsWith("✓ ")) ?? null,
+    tasks: (openCards.data ?? []).map((c) => ({ id: c.id, title: c.title, href: link(c.boards, c.id), team: teamName(c.boards) })),
+    meetings: [
+      ...items.filter((x) => x.day === today).map((x) => ({ id: x.id, title: x.title, time: x.start_time?.slice(0, 5) ?? null, href: "/camp?tab=agenda#camp-tabs", kind: "agenda" as const })),
+      ...(meetingsToday.data ?? []).map((m) => ({ id: m.id, title: m.title, time: tm(m.created_at), href: "/meetings", kind: "meeting" as const })),
+    ].sort((a, b) => (a.time ?? "99").localeCompare(b.time ?? "99")),
+    week: (weekCards.data ?? []).map((c) => {
+      const day = c.due_at.slice(0, 10);
+      return { id: c.id, title: c.title, day, href: link(c.boards, c.id), team: teamName(c.boards),
+        status: c.completed_at ? "done" as const : day < today ? "late" as const : day === today ? "today" as const : "planned" as const };
+    }),
+    activity: perDay.map((n, i) => ({ label: new Date(Date.parse(week + "T12:00:00Z") + i * 864e5).toLocaleDateString(locale, { weekday: "short", timeZone: "UTC" }), pct: n / peak })),
+    activityPct: perDay.slice(0, workedDays).filter((n) => n > 0).length / workedDays,
+    worked: [...byTeam].sort((a, b) => b[1] - a[1]).slice(0, 6).map(([name, n], i) => ({ name, color: COLORS[i], share: n / workedTotal })),
+    reminders: (reminders.data ?? []) as PersonalData["reminders"],
   };
 
   return (
     <div className="space-y-6">
-      <CampDashboard d={campData} />
+      <PersonalDashboard d={personal} />
       <div id="camp-tabs" className="scroll-mt-20" />
 
       <SectionTabs label={t("sections")} initial={tab} tabs={[

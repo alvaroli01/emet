@@ -416,12 +416,24 @@ select t.check('Member runs the council on an idea', $$insert into lab_councils 
 select t.login(2);
 select t.check('Others cannot overwrite that council', $$update lab_councils set status = 'failed'$$, 'denied');
 
+-- ── Base camp reminders ──────────────────────────────────────
+select t.login(3);
+select t.check('Member adds a reminder', $$insert into reminders (title, remind_at, priority) values ('Call printer', now() + interval '1 hour', 'high')$$, 'ok');
+select t.login(2);
+select t.assert('Others cannot see my reminders', t.num('select count(*) from reminders') = 0);
+select t.check('Others cannot edit my reminders', $$update reminders set done = true$$, 'denied');
+select t.check('Nobody adds a reminder for someone else', $$insert into reminders (owner_id, title, remind_at) select id, 'x', now() from profiles where full_name = 'Rocco'$$, 'denied');
+
+-- ── Team activity totals ────────────────────────────────────
+select t.assert('Members see team activity totals', t.num('select count(*) from team_activity(now() - interval ''30 days'')') > 0);
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',
   $$update profiles set active = false where full_name = 'Mario'$$, 'ok');
 select t.login(5);
 select t.assert('Deactivated member sees nothing', t.num('select count(*) from profiles') = 0);
+select t.assert('Deactivated member gets no activity totals', t.num('select count(*) from team_activity(now() - interval ''30 days'')') = 0);
 
 reset role;
 set role anon;

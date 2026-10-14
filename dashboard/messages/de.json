@@ -575,7 +575,8 @@
       "invite": "Einladung konnte nicht verschickt werden. Prüf die E-Mail-Adresse.",
       "emailTaken": "Diese E-Mail hat schon jemand.",
       "save": "Speichern fehlgeschlagen."
-    }
+    },
+    "manage": "Personen verwalten (hinzufügen, bearbeiten, einladen)"
   },
   "trello": {
     "title": "Trello-Sync",
@@ -2158,7 +2159,8 @@
     "allDoneTitle": "Hier ist alles erledigt.",
     "teamLabel": "Team",
     "climbTitle": "Unser Aufstieg zu 30.000 €",
-    "campVisual": "Dein Basislager"
+    "campVisual": "Dein Basislager",
+    "overviewTool": "Überblick"
   },
   "assist": {
     "label": "Frag emet zu diesem Bereich",
@@ -2231,7 +2233,8 @@
       "whatsLate": "Was ist im Team überfällig, und bei wem sollte ich nachhaken?"
     },
     "greeting": "Hey {name}, was machen wir heute in {section}?",
-    "helper": "Stell eine Frage oder sag mir, was du gemacht hast. Ich bereite es vor, du tippst auf Hinzufügen."
+    "helper": "Stell eine Frage oder sag mir, was du gemacht hast. Ich bereite es vor, du tippst auf Hinzufügen.",
+    "bubble": "Frag emet zu diesem Bereich"
   },
   "home": {
     "needHelp": "Hey {name}, brauchst du Hilfe?",
@@ -2321,7 +2324,7 @@
     "shareSave": "Geteilt + gespeichert",
     "shareSaveSub": "pro erreichter Person (Median)",
     "bestFormat": "Bestes Format",
-    "dms": "{count} DMs mit Kaufwunsch (30 Tage)",
+    "dms": "DMs",
     "whereSales": "Woher die Verkäufe kommen",
     "noSales": "In den letzten 30 Tagen noch keine Verkäufe.",
     "formats": "Formate, die Leute speichern und teilen",
@@ -2329,7 +2332,34 @@
     "whatWorks": "Was funktioniert, Woche für Woche (Aufrufe pro Nachrichtentyp)",
     "noPosts": "Tagge deine Beiträge und trag ihre Zahlen ein, um das zu füllen.",
     "revenueNote": "Verkäufe in den letzten 30 Tagen: {amount}.",
-    "title": "Marketing"
+    "title": "Marketing",
+    "jump": "Gehe zu",
+    "content": "Inhalte",
+    "links": "Links",
+    "pulse": "Puls",
+    "keyPerformance": "Wichtige Kennzahlen",
+    "reach": "Reichweite (30 Tage)",
+    "revenueAll": "Alle Verkäufe (30 Tage)",
+    "conversion": "Konversion",
+    "dmsShort": "DMs",
+    "orders": "Bestellungen (30 Tage)",
+    "analytics": "Analytics",
+    "views": "Aufrufe",
+    "views30": "Aufrufe (30 Tage)",
+    "socialTraffic": "Social-Traffic",
+    "socialTrafficSub": "Wo Käufer von uns gehört haben, letzte 30 Tage",
+    "salesN": "{count, plural, one {# Verkauf} other {# Verkäufe}}",
+    "dailyTraffic": "Täglicher Traffic",
+    "clicks": "Link-Klicks",
+    "recentActivities": "Letzte Aktivitäten",
+    "topContent": "Top-Inhalte",
+    "search": "Beiträge suchen",
+    "post": "Beitrag",
+    "shareSaveShort": "Teilen+Speichern",
+    "allContent": "Alle Inhalte",
+    "goal": "Marketingziel",
+    "goalSub": "Anteil der Verkäufe, die aus dem Marketing kamen",
+    "basedIn": "Sitz in Bilbao"
   },
   "campDash": {
     "title": "{name}s Camp",
@@ -2379,5 +2409,105 @@
       "ideas": "Post-its que puedes mandar a un Board.",
       "vault": "Passwörter, die nur du öffnen kannst."
     }
+  },
+  "personal": {
+    "title": "Hey {name}, das ist dein Tag",
+    "focus": "Fokuszeit",
+    "focusSub": "Starte den Timer, wenn du dich an die Arbeit setzt",
+    "start": "Fokus-Timer starten",
+    "pause": "Fokus-Timer pausieren",
+    "today": "Heute",
+    "goal": "Tagesziel",
+    "todayTasks": "Meine offenen Aufgaben",
+    "manage": "Verwalten",
+    "company": "Firmen-Board",
+    "noTasks": "Nichts offen. Super.",
+    "todayMeetings": "Pläne für heute",
+    "viewAll": "Alle ansehen",
+    "schedule": "Etwas planen",
+    "myWeek": "Meine Woche",
+    "viewToday": "Heute",
+    "viewWeek": "Woche",
+    "free": "Nichts fällig",
+    "card": {
+      "done": "Erledigt",
+      "late": "Überfällig",
+      "today": "Heute fällig",
+      "planned": "Geplant"
+    },
+    "activity": "Aktivität",
+    "thisWeek": "Diese Woche",
+    "worked": "Wo meine Arbeit liegt",
+    "noWork": "Noch keine Aufgaben zugewiesen",
+    "reminders": "Erinnerungen",
+    "add": "Hinzufügen",
+    "whatToRemember": "Woran soll ich dich erinnern?",
+    "time": "Uhrzeit",
+    "priority": "Priorität",
+    "status": {
+      "low": "Niedrig",
+      "medium": "Mittel",
+      "high": "Hoch"
+    },
+    "save": "Erinnerung speichern",
+    "done": "Erledigt",
+    "undo": "Rückgängig",
+    "delete": "Erinnerung löschen",
+    "noReminders": "Keine Erinnerungen. Füge eine für heute hinzu.",
+    "saveError": "Speichern fehlgeschlagen. Versuch es nochmal."
+  },
+  "teamTable": {
+    "search": "Personen suchen",
+    "filter": "Zeige Personen, die",
+    "name": "Name",
+    "statusCol": "Status",
+    "status": {
+      "inactive": "Inaktiv",
+      "somewhat": "Etwas aktiv",
+      "active": "Aktiv"
+    },
+    "usedApp": "Dashboard genutzt\n(letzte 30 Tage)",
+    "didTask": "Aufgabe erledigt\n(letzte 30 Tage)",
+    "tasksDone": "Aufgaben erledigt\n(letzte 30 Tage)",
+    "lastActive": "Zuletzt aktiv",
+    "never": "Nie",
+    "today": "Heute",
+    "daysAgo": "{n, plural, one {vor # Tag} other {vor # Tagen}}",
+    "monthsAgo": "vor über 2 Monaten",
+    "yes": "Ja",
+    "no": "Nein",
+    "noRole": "Keine Rolle",
+    "notJoined": "Noch nicht eingeloggt",
+    "open": "{name} öffnen",
+    "empty": "Niemand passt.",
+    "note": "Aktiv = an 3 oder mehr der letzten 30 Tage im Dashboard etwas getan. Etwas aktiv = 1–2 Tage."
+  },
+  "member": {
+    "back": "Team",
+    "inProgress": "In Arbeit",
+    "completed": "Erledigt (7 Tage)",
+    "sales": "Verkäufe",
+    "tasks": "{n, plural, one {Aufgabe} other {Aufgaben}}",
+    "newThisWeek": "{n} neu diese Woche",
+    "vsLastWeek": "{n} ggü. letzter Woche",
+    "vsLastMonth": "{n} ggü. letztem Monat",
+    "noPrev": "Keine Verkäufe im letzten Monat",
+    "perMonth": "diesen Monat",
+    "noRole": "Keine Rolle",
+    "email": "{name} mailen",
+    "format": "Wo die Person arbeitet",
+    "ownTeam": "Eigenes Team",
+    "elsewhere": "Andere Teams",
+    "weekly": "Wochenaktivität",
+    "weeklySub": "Aktive Tage diese Woche",
+    "noCurrent": "Keine offene Aufgabe",
+    "untilDue": "bis zur Fälligkeit",
+    "openTask": "Aufgabe öffnen",
+    "topProjects": "Aktivität nach Team diese Woche",
+    "noActivity": "Keine Aktivität diese Woche",
+    "prevMonth": "Voriger Monat",
+    "nextMonth": "Nächster Monat",
+    "upcoming": "Demnächst",
+    "noUpcoming": "Bald ist nichts fällig"
   }
 }

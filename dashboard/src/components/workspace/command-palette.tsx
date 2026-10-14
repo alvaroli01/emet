@@ -45,7 +45,7 @@ export function CommandPalette() {
     const question = pending.current; pending.current = null;
     setQ(question ?? ""); setHits([]); setAnswer(null); setSel(0);
     if (question) ask(question); else setTimeout(() => input.current?.focus(), 10);
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [open]);
 
   // Search as you type (debounced); the database decides what this person may see
   useEffect(() => {

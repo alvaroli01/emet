@@ -16,6 +16,8 @@ import { CommunicationsTools } from "@/components/tools/communications";
 import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { ToolWorkspace } from "@/components/shell/tool-workspace";
+import { AssistantBubble } from "@/components/shell/assistant-bubble";
+import { LayoutDashboard, KanbanSquare } from "lucide-react";
 import { SectionAssistant } from "@/components/shell/section-assistant";
 import { createClient } from "@/lib/supabase/server";
 import { PageHero } from "@/components/shell/page-hero";
@@ -78,7 +80,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   const financeDash = slug === "finance" ? await loadFinanceDash(todayISO()) : null;
   const marketingDash = slug === "marketing" ? await loadMarketingDash() : null;
   const allTools = [
-    { id: "board", group: "work", label: t("board"), node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
+    { id: "board", group: "work", label: t("board"), icon: <KanbanSquare size={16} />, node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
     ...toolTabs,
     ...(slug !== "team-leader" ? [{ id: "blockers", group: "work" as const, label: tt("blockers.title"), node: await BlockersTool({ ...props, onlyThisGroup: true }) }] : []),
   ];
@@ -100,13 +102,13 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         "complaints", "content_posts", "campaigns", "design_requests", "experiments", "follower_snapshots",
         "decisions", "morale_checks", "meeting_notes", "outreach", "profiles"]} />
 
+      <ToolWorkspace initial={tab} groups={{ work: th("tabGroups.work"), plan: th("tabGroups.plan"), numbers: th("tabGroups.numbers"), people: th("tabGroups.people") }}
+        tools={[{ id: "overview", group: "overview", label: th("overviewTool"), icon: <LayoutDashboard size={16} />, node: (
+          <div className="space-y-6">
       {slug === "marketing" && marketingDash ? (
-        <MarketingDashboard d={marketingDash} assistant={assistantNode} />
+        <MarketingDashboard d={marketingDash} />
       ) : slug === "finance" && financeDash ? (
-        <>
-          <FinanceDashboard d={financeDash} canEdit={editable} />
-          {assistantNode}
-        </>
+        <FinanceDashboard d={financeDash} canEdit={editable} />
       ) : (
         <PageHero
         section={{ label: th("teamLabel"), icon: <GroupIcon slug={slug} size={14} />, color: group.color }}
@@ -123,7 +125,6 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
           : <HeroTerrain points={hero.series.map((p) => ({ label: th("weekOf", { date: shortDate(p.label, locale) }), value: p.value }))} kind={hero.seriesKind}
                          ariaLabel={th(`series.${hero.seriesKey}`)} />}
         visualTitle={th(`series.${hero.seriesKey}`)}
-        assistant={assistantNode}
         aside={
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex -space-x-2">
@@ -143,7 +144,10 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         </section>
       )}
 
-      <ToolWorkspace initial={tab} groups={{ work: th("tabGroups.work"), plan: th("tabGroups.plan"), numbers: th("tabGroups.numbers"), people: th("tabGroups.people") }} tools={allTools} />
+          </div>
+        ) }, ...allTools]} />
+
+      <AssistantBubble label={ta("bubble")}>{assistantNode}</AssistantBubble>
     </div>
   );
 }
