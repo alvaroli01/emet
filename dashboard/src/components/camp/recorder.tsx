@@ -64,6 +64,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   const browserText = useRef("");
   const raf = useRef(0);
   const startedAt = useRef(0);
+  const segPeak = useRef(0);
   const finished = useRef(false);
 
   const browserSupported = typeof window !== "undefined" && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window);
@@ -124,7 +125,9 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     const buf = new Uint8Array(an.frequencyBinCount);
     const draw = () => {
       an.getByteFrequencyData(buf);
-      setLevel(Array.from({ length: 28 }, (_, i) => buf[Math.min(buf.length - 1, i + 1)] / 255));
+      const bars = Array.from({ length: 28 }, (_, i) => buf[Math.min(buf.length - 1, i + 1)] / 255);
+      segPeak.current = Math.max(segPeak.current, bars.reduce((a, b) => a + b, 0) / bars.length);
+      setLevel(bars);
       raf.current = requestAnimationFrame(draw);
     };
     draw();
@@ -137,9 +140,11 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     const rec = new MediaRecorder(stream.current, { mimeType: type || undefined, audioBitsPerSecond: 32_000 });
     const parts: Blob[] = [];
     rec.ondataavailable = (e) => e.data.size && parts.push(e.data);
+    segPeak.current = 0;
     rec.onstop = () => {
       const blob = new Blob(parts, { type: rec.mimeType });
-      if (blob.size > 2000) enqueue(index, blob);
+      // A silent minute (break, pause) is skipped: nothing to transcribe, and it saves free minutes
+      if (blob.size > 2000 && segPeak.current > 0.015) enqueue(index, blob);
       if (!stopping.current) nextSegment(index + 1);
     };
     rec.start();
