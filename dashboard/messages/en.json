@@ -1076,7 +1076,11 @@
       "decision": "Decision",
       "idea": "Idea",
       "person": "Person"
-    }
+    },
+    "chatTitle": "Ask emet",
+    "newChat": "New chat",
+    "followUp": "Ask a follow-up…",
+    "send": "Send"
   },
   "today": {
     "greeting": {
@@ -2274,7 +2278,16 @@
       "stall": "Stall",
       "online": "Online",
       "other": "Other"
-    }
+    },
+    "askExamples": [
+      "How much did we sell this week?",
+      "Which tasks are overdue?",
+      "Who is working on the stall day?",
+      "Are we on track for €30K?",
+      "What did we decide last meeting?",
+      "Which channel brings the most sales?",
+      "What should I do first today?"
+    ]
   },
   "financeDash": {
     "totalRevenue": "Total revenue",

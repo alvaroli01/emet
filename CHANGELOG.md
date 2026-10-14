@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-14 — Alvaro — Ask emet is now a real conversation (follow-up questions, New chat); Today's ask box types example questions by itself; all text bolder and full contrast (white on dark, black on light). All 7 languages.
 - 2026-10-14 — Alvaro — Text is easy to read over the background photos: more solid glass panels, brighter grey text, darker pills and top bar, soft shadow on titles and Today's ask box, brighter text on Today; fixed a small gauge glitch.
 - 2026-10-14 — Alvaro — A dark photo behind every section that fits what it does (Unsplash, credited in README); new orange logo and favicon; recorder mic is orange; home goal gauge moved to the side of the mountain; 3D removed from Team Leader and Customer; Overview rebuilt as a full company dashboard (goal tiles, forecast, teams table, needs attention, coming up, sales mix, decisions). All 7 languages.
 - 2026-10-14 — Alvaro — Same home look everywhere: Tools column on the right of every section (Overview + Task board + tools), section assistant as a pop-up bubble; new Marketing dashboard (marketing example 2); Base camp rebuilt from "personal dashboard 2" in dark glass with focus timer, week board and private Reminders (migration 0022); Team page is now an activity table and each person has a member page (migration 0023 `team_activity`). All 7 languages.

@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   Search, Sparkles, KanbanSquare, FileText, AudioLines, Gavel, Lightbulb, User, ArrowRight, Loader2, Sun, LayoutDashboard,
-  Tent, Users, CheckSquare, Plus, Mic, CornerDownLeft,
+  Tent, Users, CheckSquare, Plus, Mic, CornerDownLeft, ArrowUp,
 } from "lucide-react";
 import { mdToHtml } from "@/lib/markdown";
+
+type Msg = { role: "user" | "assistant"; text: string | null; error?: string };
 import type { SearchHit } from "@/app/api/search/route";
 
 type Row = { id: string; icon: typeof Search; label: string; hint?: string; run: () => void; ask?: boolean };
@@ -24,7 +26,11 @@ export function CommandPalette() {
   const [hits, setHits] = useState<SearchHit[]>([]);
   const [loading, setLoading] = useState(false);
   const [sel, setSel] = useState(0);
-  const [answer, setAnswer] = useState<{ q: string; text: string | null; error?: string } | null>(null);
+  // Ask emet is a conversation: every question and answer stays on screen and is sent along with the next question
+  const [chat, setChat] = useState<Msg[] | null>(null);
+  const [follow, setFollow] = useState("");
+  const chatEnd = useRef<HTMLDivElement>(null);
+  const busy = !!chat && chat.at(-1)?.role === "assistant" && chat.at(-1)?.text === null && !chat.at(-1)?.error;
   const input = useRef<HTMLInputElement>(null);
   const pending = useRef<string | null>(null);
 
@@ -43,7 +49,7 @@ export function CommandPalette() {
   useEffect(() => {
     if (!open) return;
     const question = pending.current; pending.current = null;
-    setQ(question ?? ""); setHits([]); setAnswer(null); setSel(0);
+    setQ(question ?? ""); setHits([]); setChat(null); setFollow(""); setSel(0);
     if (question) ask(question); else setTimeout(() => input.current?.focus(), 10);
   }, [open]);
 
@@ -60,11 +66,19 @@ export function CommandPalette() {
   }, [q]);
 
   const go = (href: string) => { setOpen(false); router.push(href); };
-  async function ask(question: string) {
-    setAnswer({ q: question, text: null });
-    const res = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question }) }).catch(() => null);
+  async function ask(question: string, prev: Msg[] = []) {
+    setChat([...prev, { role: "user", text: question }, { role: "assistant", text: null }]);
+    const history = prev.filter((m) => m.text && !m.error).map((m) => ({ role: m.role, content: m.text! }));
+    const res = await fetch("/api/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question, history }) }).catch(() => null);
     const data = res ? await res.json().catch(() => ({})) : {};
-    setAnswer({ q: question, text: res?.ok ? data.answer : null, error: res?.ok ? undefined : data.error ?? "failed" });
+    setChat([...prev, { role: "user", text: question }, { role: "assistant", text: res?.ok ? data.answer : null, error: res?.ok ? undefined : data.error ?? "failed" }]);
+  }
+  useEffect(() => { chatEnd.current?.scrollIntoView({ block: "end", behavior: "smooth" }); }, [chat]);
+  function sendFollow(e: React.FormEvent) {
+    e.preventDefault();
+    const text = follow.trim();
+    if (!text || busy || !chat) return;
+    setFollow(""); ask(text, chat);
   }
 
   const rows: Row[] = useMemo(() => {
@@ -91,7 +105,7 @@ export function CommandPalette() {
 
   function onKeyDown(e: React.KeyboardEvent) {
     if (e.key === "Escape") setOpen(false);
-    if (answer) return;
+    if (chat) return;
     if (e.key === "ArrowDown") { e.preventDefault(); setSel((s) => Math.min(rows.length - 1, s + 1)); }
     if (e.key === "ArrowUp") { e.preventDefault(); setSel((s) => Math.max(0, s - 1)); }
     if (e.key === "Enter") { e.preventDefault(); rows[sel]?.run(); }
@@ -103,26 +117,37 @@ export function CommandPalette() {
       <button className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" aria-label={t("close")} onClick={() => setOpen(false)} />
       <div className="relative w-full max-w-xl overflow-hidden rounded-2xl bg-solid shadow-[0_30px_80px_-20px_rgb(0_0_0/0.5)] ring-1 ring-line" onKeyDown={onKeyDown}>
         <div className="flex items-center gap-3 border-b border-line px-4">
-          {answer ? <Sparkles size={18} className="shrink-0 text-trail" /> : <Search size={18} className="shrink-0 text-muted" />}
-          <input ref={input} value={answer ? answer.q : q} readOnly={!!answer} onChange={(e) => setQ(e.target.value)} placeholder={t("placeholder")}
-                 aria-label={t("placeholder")} className="h-14 flex-1 bg-transparent text-base outline-none placeholder:text-muted/70 focus-visible:outline-none" />
-          {loading && !answer && <Loader2 size={16} className="animate-spin text-muted" />}
-          {answer && <button onClick={() => { setAnswer(null); setTimeout(() => input.current?.focus(), 10); }} className="text-xs text-muted hover:text-ink">{t("back")}</button>}
+          {chat ? <Sparkles size={18} className="shrink-0 text-brand" /> : <Search size={18} className="shrink-0 text-muted" />}
+          {chat ? <p className="h-14 flex-1 content-center font-semibold">{t("chatTitle")}</p> : (
+            <input ref={input} value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("placeholder")}
+                   aria-label={t("placeholder")} className="h-14 flex-1 bg-transparent text-base outline-none placeholder:text-muted focus-visible:outline-none" />
+          )}
+          {loading && !chat && <Loader2 size={16} className="animate-spin text-muted" />}
+          {chat && <button onClick={() => { setChat(null); setQ(""); setTimeout(() => input.current?.focus(), 10); }} className="rounded-full px-3 py-1.5 text-xs font-medium text-muted hover:bg-surface-2 hover:text-ink">{t("newChat")}</button>}
         </div>
 
-        {answer ? (
-          <div className="max-h-[60vh] overflow-y-auto p-5" aria-live="polite">
-            {answer.text === null && !answer.error ? (
-              <p className="flex items-center gap-2 text-sm text-muted"><Loader2 size={15} className="animate-spin" /> {t("thinking")}</p>
-            ) : answer.error ? (
-              <p className="text-sm">{answer.error === "no-key" ? t("noKey") : t("askFailed")}</p>
-            ) : (
-              <>
-                <div className="doc-body text-[15px]" dangerouslySetInnerHTML={{ __html: mdToHtml(answer.text ?? "") }} />
-                <p className="mt-4 text-xs text-muted">{t("fromData")}</p>
-              </>
-            )}
-          </div>
+        {chat ? (
+          <>
+            <div className="max-h-[55vh] space-y-4 overflow-y-auto p-4 sm:p-5" aria-live="polite">
+              {chat.map((m, i) => m.role === "user" ? (
+                <p key={i} className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-brand px-4 py-2.5 text-[15px] font-medium text-white">{m.text}</p>
+              ) : m.text === null && !m.error ? (
+                <p key={i} className="flex items-center gap-2 text-sm text-muted"><Loader2 size={15} className="animate-spin" /> {t("thinking")}</p>
+              ) : m.error ? (
+                <p key={i} className="max-w-[90%] rounded-2xl rounded-bl-md bg-surface-2 px-4 py-3 text-sm">{m.error === "no-key" ? t("noKey") : t("askFailed")}</p>
+              ) : (
+                <div key={i} className="doc-body max-w-[92%] rounded-2xl rounded-bl-md bg-surface-2 px-4 py-3 text-[15px]" dangerouslySetInnerHTML={{ __html: mdToHtml(m.text ?? "") }} />
+              ))}
+              <div ref={chatEnd} />
+            </div>
+            <form onSubmit={sendFollow} className="flex items-center gap-2 border-t border-line p-3">
+              <label htmlFor="ask-follow" className="sr-only">{t("followUp")}</label>
+              <input id="ask-follow" autoFocus value={follow} onChange={(e) => setFollow(e.target.value)} placeholder={t("followUp")} autoComplete="off"
+                     className="h-11 min-w-0 flex-1 rounded-full bg-surface-2 px-4 text-[15px] outline-none placeholder:text-muted focus:ring-2 focus:ring-brand/40" />
+              <button disabled={busy || !follow.trim()} aria-label={t("send")} className="grid size-11 shrink-0 place-items-center rounded-full bg-brand text-white transition disabled:opacity-40"><ArrowUp size={18} /></button>
+            </form>
+            <p className="px-4 pb-3 text-[11px] text-muted">{t("fromData")}</p>
+          </>
         ) : (
           <ul className="max-h-[60vh] overflow-y-auto p-2" role="listbox">
             {!q.trim() && <li className="px-3 pt-1 pb-2 text-xs font-medium text-muted">{t("jump")}</li>}
@@ -142,10 +167,10 @@ export function CommandPalette() {
             {q.trim().length >= 2 && !loading && !hits.length && <li className="px-3 py-3 text-sm text-muted">{t("noResults")}</li>}
           </ul>
         )}
-        <div className="flex items-center justify-between border-t border-line px-4 py-2 text-[11px] text-muted">
+        {!chat && <div className="flex items-center justify-between border-t border-line px-4 py-2 text-[11px] text-muted">
           <span>{t("footer")}</span>
           <kbd className="rounded border border-line px-1.5 py-0.5 font-sans">⌘K</kbd>
-        </div>
+        </div>}
       </div>
     </div>,
     document.body,

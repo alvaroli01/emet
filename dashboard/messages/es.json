@@ -1076,7 +1076,11 @@
       "decision": "Decisión",
       "idea": "Idea",
       "person": "Persona"
-    }
+    },
+    "chatTitle": "Pregunta a emet",
+    "newChat": "Nuevo chat",
+    "followUp": "Haz otra pregunta…",
+    "send": "Enviar"
   },
   "today": {
     "greeting": {
@@ -2274,7 +2278,16 @@
       "stall": "Puesto",
       "online": "Online",
       "other": "Otros"
-    }
+    },
+    "askExamples": [
+      "¿Cuánto vendimos esta semana?",
+      "¿Qué tareas están atrasadas?",
+      "¿Quién trabaja el día del puesto?",
+      "¿Vamos bien para los €30K?",
+      "¿Qué decidimos en la última reunión?",
+      "¿Qué canal trae más ventas?",
+      "¿Qué debería hacer primero hoy?"
+    ]
   },
   "financeDash": {
     "totalRevenue": "Ingresos totales",

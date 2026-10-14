@@ -12,8 +12,12 @@ const LANG: Record<string, string> = { en: "English", es: "Spanish", de: "German
  * The data snapshot is read as the asker, so it never contains anything they couldn't open themselves.
  */
 export async function POST(request: NextRequest) {
-  const { question } = (await request.json().catch(() => ({}))) as { question?: string };
+  const { question, history } = (await request.json().catch(() => ({}))) as { question?: string; history?: unknown };
   if (!question?.trim() || question.length > 500) return NextResponse.json({ error: "bad-request" }, { status: 400 });
+  // Earlier turns of the same conversation, so follow-ups ("and last month?") make sense. Only plain text, last 8 turns.
+  const past = (Array.isArray(history) ? history : [])
+    .filter((m): m is { role: "user" | "assistant"; content: string } => !!m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
+    .slice(-8).map((m) => ({ role: m.role, content: m.content.slice(0, 2000) }));
   const supabase = await createClient();
   const { data: keyRow } = await supabase.from("ai_keys").select("key_iv, key_data").maybeSingle();
   if (!keyRow) return NextResponse.json({ error: "no-key" }, { status: 400 });
@@ -65,7 +69,8 @@ export async function POST(request: NextRequest) {
   const body = (model: string) => JSON.stringify({
     model, temperature: 0.2, ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
     messages: [
-      { role: "system", content: `You are "emet", the assistant inside the emet HQ team dashboard. Answer ONLY from the JSON data below; if the data doesn't contain the answer, say so plainly and suggest where in the dashboard to find or add it. Be short and concrete (numbers, names, dates). Use simple Markdown (bold, short lists). Answer in ${LANG[locale] ?? "English"}. Money in euros.\n\nDATA:\n${JSON.stringify(snapshot).slice(0, 24000)}` },
+      { role: "system", content: `You are "emet", the assistant inside the emet HQ team dashboard. This is a conversation: use the earlier messages to understand follow-up questions. Answer ONLY from the JSON data below; if the data doesn't contain the answer, say so plainly and suggest where in the dashboard to find or add it. Be short and concrete (numbers, names, dates). Talk like a teammate: never mention the JSON, field names (like by_week) or "the data". Write money like €1,495.50. Use simple Markdown (bold, short lists). Answer in ${LANG[locale] ?? "English"}. Money in euros.\n\nDATA:\n${JSON.stringify(snapshot).slice(0, 24000)}` },
+      ...past,
       { role: "user", content: question.trim() },
     ],
   });

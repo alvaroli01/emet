@@ -1076,7 +1076,11 @@
       "decision": "Décision",
       "idea": "Idée",
       "person": "Personne"
-    }
+    },
+    "chatTitle": "Demande à emet",
+    "newChat": "Nouveau chat",
+    "followUp": "Pose une autre question…",
+    "send": "Envoyer"
   },
   "today": {
     "greeting": {
@@ -2274,7 +2278,16 @@
       "stall": "Stand",
       "online": "En ligne",
       "other": "Autre"
-    }
+    },
+    "askExamples": [
+      "Combien avons-nous vendu cette semaine ?",
+      "Quelles tâches sont en retard ?",
+      "Qui s'occupe du stand le jour J ?",
+      "Sommes-nous dans les temps pour les €30K ?",
+      "Qu'avons-nous décidé à la dernière réunion ?",
+      "Quel canal rapporte le plus de ventes ?",
+      "Que dois-je faire en premier aujourd'hui ?"
+    ]
   },
   "financeDash": {
     "totalRevenue": "Chiffre d’affaires total",

@@ -14,8 +14,8 @@
   --surface-2: rgb(255 255 255 / 0.08);
   --solid: #141417;
   --border: rgb(255 255 255 / 0.09);
-  --text: #f5f5f7;
-  --muted: rgb(235 235 245 / 0.74);
+  --text: #ffffff;
+  --muted: rgb(255 255 255 / 0.86);
   --brand: #ff6a1a;
   --brand-contrast: #ffffff;
   --brand-soft: rgb(255 106 26 / 0.14);
@@ -55,8 +55,8 @@
   --surface-2: rgb(255 255 255 / 0.7);
   --solid: #f2f2ef;
   --border: rgb(20 20 30 / 0.08);
-  --text: #1c1c22;
-  --muted: rgb(28 28 34 / 0.72);
+  --text: #000000;
+  --muted: rgb(0 0 0 / 0.8);
   --brand: #f26a1b;
   --brand-contrast: #ffffff;
   --brand-soft: rgb(242 106 27 / 0.14);
@@ -158,6 +158,8 @@ body {
   background: var(--page-glow);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
+  /* Medium by default: thin text is hard to read over the background photos */
+  font-weight: 500;
 }
 
 ::selection { background: color-mix(in srgb, var(--climbed) 28%, transparent); color: var(--text); }
@@ -165,10 +167,11 @@ html { touch-action: manipulation; -webkit-text-size-adjust: 100%; -webkit-tap-h
 :focus-visible { outline: 2px solid var(--climbed); outline-offset: 2px; border-radius: 6px; }
 .tabular { font-variant-numeric: tabular-nums; }
 /* Display numerals: tight, heavy, tabular so they don't jump while counting */
-.readout { font-weight: 500; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+.readout { font-weight: 650; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
 /* I/O display headline: big, medium weight, very tight */
 .display { font-weight: 500; letter-spacing: -0.035em; line-height: 1.06; text-wrap: balance; }
-h1, h2, h3 { letter-spacing: -0.02em; }
+/* Unlayered on purpose so titles stay bold even where a utility sets a lighter weight */
+h1, h2, h3 { letter-spacing: -0.02em; font-weight: 650; }
 p, li { text-wrap: pretty; }
 /* The I/O four-colour gradient as text fill */
 .io-text { background: var(--io-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }

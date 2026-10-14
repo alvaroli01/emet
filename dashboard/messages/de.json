@@ -1076,7 +1076,11 @@
       "decision": "Entscheidung",
       "idea": "Idee",
       "person": "Person"
-    }
+    },
+    "chatTitle": "Frag emet",
+    "newChat": "Neuer Chat",
+    "followUp": "Noch eine Frage…",
+    "send": "Senden"
   },
   "today": {
     "greeting": {
@@ -2274,7 +2278,16 @@
       "stall": "Stand",
       "online": "Online",
       "other": "Andere"
-    }
+    },
+    "askExamples": [
+      "Wie viel haben wir diese Woche verkauft?",
+      "Welche Aufgaben sind überfällig?",
+      "Wer arbeitet am Standtag?",
+      "Sind wir auf Kurs für €30K?",
+      "Was haben wir im letzten Meeting beschlossen?",
+      "Welcher Kanal bringt die meisten Verkäufe?",
+      "Was sollte ich heute zuerst tun?"
+    ]
   },
   "financeDash": {
     "totalRevenue": "Gesamtumsatz",

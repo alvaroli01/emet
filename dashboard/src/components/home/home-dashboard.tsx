@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, BarChart3, ArrowUp } from "lucide-react";
@@ -161,11 +161,40 @@ function Gauge({ pct, label, small = false }: { pct: number; label: string; smal
   );
 }
 
+/**
+ * Types a line, waits, deletes it and types the next — a looping placeholder for the ask box (decoration only).
+ * With reduced motion it simply shows the first line.
+ */
+function useTypewriter(lines: string[], paused: boolean) {
+  const [text, setText] = useState(lines[0] ?? "");
+  useEffect(() => {
+    if (paused || lines.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let line = 0, len = lines[0].length, deleting = true, timer: ReturnType<typeof setTimeout>;
+    const step = () => {
+      const full = lines[line];
+      if (deleting) {
+        len--;
+        if (len <= 0) { deleting = false; line = (line + 1) % lines.length; len = 0; }
+      } else {
+        len++;
+        if (len >= lines[line].length) { setText(lines[line]); deleting = true; timer = setTimeout(step, 2200); return; }
+      }
+      setText((deleting ? full : lines[line]).slice(0, Math.max(0, len)));
+      timer = setTimeout(step, deleting ? 28 : 55 + Math.random() * 45);
+    };
+    timer = setTimeout(step, 2600);
+    return () => clearTimeout(timer);
+  }, [lines, paused]);
+  return text;
+}
+
 /** Home: the Bilbao-at-night page — ask box on top, glass cards at the bottom (from the "home page example"). */
 export function HomeDashboard({ d }: { d: HomeData }) {
   const t = useTranslations("home");
   const locale = useLocale();
   const [q, setQ] = useState("");
+  const examples = useMemo(() => [t("askPlaceholder"), ...(t.raw("askExamples") as string[])], [t]);
+  const typed = useTypewriter(examples, q.length > 0);
   const ask = (e: React.FormEvent) => { e.preventDefault(); if (q.trim()) { window.dispatchEvent(new CustomEvent("emet:ask", { detail: q.trim() })); setQ(""); } };
 
   return (
@@ -175,8 +204,13 @@ export function HomeDashboard({ d }: { d: HomeData }) {
         <p className="text-lg font-medium text-white sm:text-xl">{t("needHelp", { name: d.name })} <span aria-hidden>🙋</span></p>
         <label htmlFor="home-ask" className="sr-only">{t("askLabel")}</label>
         <div className="relative mt-1">
-          <input id="home-ask" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("askPlaceholder")} autoComplete="off"
-                 className="w-full bg-transparent text-center text-[clamp(1.6rem,4vw,2.6rem)] font-light tracking-tight text-white caret-[#ff6a1a] outline-none placeholder:text-white/95 focus-visible:outline-none" />
+          {!q && (
+            <p aria-hidden className="pointer-events-none absolute inset-0 flex items-center justify-center text-[clamp(1.6rem,4vw,2.6rem)] font-normal tracking-tight text-white">
+              <span className="truncate">{typed}</span><span className="ml-0.5 inline-block h-[0.9em] w-[3px] animate-pulse rounded-full bg-brand" />
+            </p>
+          )}
+          <input id="home-ask" value={q} onChange={(e) => setQ(e.target.value)} aria-label={t("askLabel")} autoComplete="off"
+                 className="w-full bg-transparent text-center text-[clamp(1.6rem,4vw,2.6rem)] font-light tracking-tight text-white caret-[#ff6a1a] outline-none focus-visible:outline-none" />
           {q && <button aria-label={t("askSend")} className="absolute top-1/2 right-0 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-brand text-white"><ArrowUp size={18} /></button>}
         </div>
       </form>

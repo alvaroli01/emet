@@ -1076,7 +1076,11 @@
       "decision": "Päätös",
       "idea": "Idea",
       "person": "Henkilö"
-    }
+    },
+    "chatTitle": "Kysy emetiltä",
+    "newChat": "Uusi keskustelu",
+    "followUp": "Kysy lisää…",
+    "send": "Lähetä"
   },
   "today": {
     "greeting": {
@@ -2274,7 +2278,16 @@
       "stall": "Kojuni",
       "online": "Verkossa",
       "other": "Muu"
-    }
+    },
+    "askExamples": [
+      "Paljonko myimme tällä viikolla?",
+      "Mitkä tehtävät ovat myöhässä?",
+      "Kuka työskentelee myyntipöydän päivänä?",
+      "Olemmeko matkalla kohti €30K?",
+      "Mitä päätimme edellisessä palaverissa?",
+      "Mikä kanava tuo eniten myyntiä?",
+      "Mitä minun pitäisi tehdä tänään ensin?"
+    ]
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",
