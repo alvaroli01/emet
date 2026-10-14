@@ -1990,23 +1990,23 @@
     "groups": {
       "finance": {
         "title": "Hey {name}, here's where the money stands",
-        "subtitle": "Every euro in and out, logged within 24 hours, so the team always knows how close the summit is."
+        "subtitle": "Money in and out. Log every sale and expense here so we always know where we stand."
       },
       "marketing": {
         "title": "Hey {name}, what are we putting out today?",
-        "subtitle": "Plan it, post it, log the numbers, keep what works."
+        "subtitle": "Plan posts, log how they did, and keep doing what works."
       },
       "customer": {
         "title": "Hey {name}, who are we talking to today?",
-        "subtitle": "Prospects, follow-ups and anyone who needs help after buying."
+        "subtitle": "People who might buy, people who bought, and anyone who needs help."
       },
       "communications": {
         "title": "Hey {name}, what does the team need to hear?",
-        "subtitle": "Decisions, the weekly scorecard and how everyone is feeling."
+        "subtitle": "Team decisions, the weekly scorecard and how everyone feels."
       },
       "team-leader": {
         "title": "Hey {name}, how is the team doing?",
-        "subtitle": "The whole team's health, meetings and outreach in one place."
+        "subtitle": "How every team is doing, our meetings and who we talk to outside."
       },
       "default": {
         "title": "Hey {name}, here's your team",
@@ -2080,53 +2080,59 @@
       "next": "Next up at {time}: {title}",
       "priority": "This week's priority: {title}",
       "revenue": "Team revenue",
-      "profit": "Team profit"
+      "profit": "Team profit",
+      "subtitle": "Here is what needs you today, and how close we are to our goal."
     },
     "overview": {
-      "title": "Hey {name}, here's the whole climb",
+      "title": "How the whole team is doing",
       "blockers": "{count, plural, one {# blocker is holding a team back} other {# blockers are holding teams back}}",
       "complaints": "{count, plural, one {# customer problem is open} other {# customer problems are open}}",
-      "pace": "We need {amount} a week from now on"
+      "pace": "We need {amount} a week from now on",
+      "subtitle": "Our goal: €30,000 in sales and €15,000 profit by June 2027."
     },
     "camp": {
-      "title": "Welcome back to your camp, {name}",
+      "title": "Your own space, {name}",
       "due": "{count, plural, one {# thing is due this week} other {# things are due this week}}",
       "setPriorities": "Set your 3 priorities for this week",
       "shared": "{count, plural, one {# doc was shared with you} other {# docs were shared with you}}",
-      "record": "Record a class or meeting"
+      "record": "Record a class or meeting",
+      "subtitle": "Only you can see this. Plan your week, keep notes and record classes."
     },
     "board": {
-      "title": "Hey {name}, here's everything the company is working on",
+      "title": "Everything the company is working on",
       "late": "{count, plural, one {# card is late} other {# cards are late}}",
       "mine": "{count, plural, one {# card here is yours} other {# cards here are yours}}",
       "none": "Nothing here is assigned to you",
       "open": "Open cards",
       "done": "Done",
-      "ring": "of all cards done"
+      "ring": "of all cards done",
+      "subtitle": "Each card is a job. Drag it to Done when it is finished."
     },
     "team": {
-      "title": "Hey {name}, meet the team",
+      "title": "Everyone in emet",
       "people": "People",
       "joined": "Logged in",
       "noGroup": "Without a group yet"
     },
     "tasks": {
-      "title": "Hey {name}, here's everything on your plate",
+      "title": "Your tasks, {name}",
       "late": "{count, plural, one {# task is late} other {# tasks are late}}",
       "next": "Next: {title} ({date})",
       "clear": "Nothing open. Nice work.",
       "doneWeek": "Done this week",
       "board": "General board",
       "camp": "Base camp",
-      "ring": "of your tasks done"
+      "ring": "of your tasks done",
+      "subtitle": "Every job that has your name on it, from every board."
     },
     "meetings": {
-      "title": "Hey {name}, what did we talk about?",
+      "title": "Meetings we recorded",
       "latest": "Latest: {title} ({date})",
       "none": "No meetings recorded yet. Record the next one so nobody misses it.",
       "processing": "{count, plural, one {# of your recordings is still being written up} other {# of your recordings are still being written up}}",
       "week": "This week",
-      "total": "All recordings"
+      "total": "All recordings",
+      "subtitle": "Press Record in a meeting and emet writes the notes for everyone."
     },
     "lab": {
       "title": "Hey {name}, what could we build?",
@@ -2137,14 +2143,20 @@
       "strong": "Strong (75+)",
       "votes": "Votes",
       "pitch": "Pitch an idea",
-      "scout": "Find clients"
+      "scout": "Find clients",
+      "subtitle": "Write an idea, and emet researches it and tells you honestly if it can work."
     },
     "scout": {
       "title": "Hey {name}, who should we sell to?",
       "due": "{count, plural, one {# lead is waiting for your next step} other {# leads are waiting for your next step}}",
       "strong": "{count, plural, one {# strong lead nobody has contacted yet} other {# strong leads nobody has contacted yet}}"
     },
-    "assistTitle": "Hey {name}, what are we doing in {section} today?"
+    "assistTitle": "Hey {name}, what are we doing in {section} today?",
+    "needsYou": "Needs you",
+    "allDoneTitle": "All done here.",
+    "teamLabel": "Team",
+    "climbTitle": "Our climb to €30,000",
+    "campVisual": "Your base camp"
   },
   "assist": {
     "label": "Ask emet about this section",
@@ -2215,6 +2227,8 @@
       "logProblem": "Log a customer problem",
       "recordDecision": "Record a decision we made",
       "whatsLate": "What's late across the team and who should I chase?"
-    }
+    },
+    "greeting": "Hey {name}, what are we doing in {section} today?",
+    "helper": "Ask a question or tell me what you did. I prepare it, you tap Add."
   }
 }

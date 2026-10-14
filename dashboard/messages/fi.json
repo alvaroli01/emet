@@ -2080,20 +2080,23 @@
       "next": "Seuraavaksi klo {time}: {title}",
       "priority": "Tämän viikon prioriteetti: {title}",
       "revenue": "Tiimin liikevaihto",
-      "profit": "Tiimin voitto"
+      "profit": "Tiimin voitto",
+      "subtitle": "Here is what needs you today, and how close we are to our goal."
     },
     "overview": {
       "title": "Hei {name}, tässä koko nousu",
       "blockers": "{count, plural, one {# este jarruttaa tiimiä} other {# estettä jarruttaa tiimejä}}",
       "complaints": "{count, plural, one {# asiakasongelma on auki} other {# asiakasongelmaa on auki}}",
-      "pace": "Tästä eteenpäin tarvitsemme {amount} viikossa"
+      "pace": "Tästä eteenpäin tarvitsemme {amount} viikossa",
+      "subtitle": "Our goal: €30,000 in sales and €15,000 profit by June 2027."
     },
     "camp": {
       "title": "Tervetuloa takaisin leiriisi, {name}",
       "due": "{count, plural, one {# asia erääntyy tällä viikolla} other {# asiaa erääntyy tällä viikolla}}",
       "setPriorities": "Aseta viikon 3 prioriteettiasi",
       "shared": "{count, plural, one {# dokumentti jaettiin sinulle} other {# dokumenttia jaettiin sinulle}}",
-      "record": "Tallenna luento tai palaveri"
+      "record": "Tallenna luento tai palaveri",
+      "subtitle": "Only you can see this. Plan your week, keep notes and record classes."
     },
     "board": {
       "title": "Hei {name}, tässä kaikki, mitä yritys tekee",
@@ -2102,7 +2105,8 @@
       "none": "Mikään täällä ei ole osoitettu sinulle",
       "open": "Avoimet kortit",
       "done": "Valmis",
-      "ring": "kaikista korteista valmiina"
+      "ring": "kaikista korteista valmiina",
+      "subtitle": "Each card is a job. Drag it to Done when it is finished."
     },
     "team": {
       "title": "Hei {name}, tutustu tiimiin",
@@ -2118,7 +2122,8 @@
       "doneWeek": "Valmiina tällä viikolla",
       "board": "Yleistaulu",
       "camp": "Tukikohta",
-      "ring": "tehtävistäsi valmiina"
+      "ring": "tehtävistäsi valmiina",
+      "subtitle": "Every job that has your name on it, from every board."
     },
     "meetings": {
       "title": "Hei {name}, mistä puhuimme?",
@@ -2126,7 +2131,8 @@
       "none": "Palavereita ei ole vielä tallennettu. Tallenna seuraava, ettei kukaan jää paitsi.",
       "processing": "{count, plural, one {# tallenteesi kirjoitetaan vielä auki} other {# tallennettasi kirjoitetaan vielä auki}}",
       "week": "Tällä viikolla",
-      "total": "Kaikki tallenteet"
+      "total": "Kaikki tallenteet",
+      "subtitle": "Press Record in a meeting and emet writes the notes for everyone."
     },
     "lab": {
       "title": "Hei {name}, mitä voisimme rakentaa?",
@@ -2137,14 +2143,20 @@
       "strong": "Vahvat (75+)",
       "votes": "Äänet",
       "pitch": "Pitchaa idea",
-      "scout": "Etsi asiakkaita"
+      "scout": "Etsi asiakkaita",
+      "subtitle": "Write an idea, and emet researches it and tells you honestly if it can work."
     },
     "scout": {
       "title": "Hei {name}, kenelle meidän pitäisi myydä?",
       "due": "{count, plural, one {# liidi odottaa seuraavaa askeltasi} other {# liidiä odottaa seuraavaa askeltasi}}",
       "strong": "{count, plural, one {# vahva liidi, johon kukaan ei ole vielä ottanut yhteyttä} other {# vahvaa liidiä, joihin kukaan ei ole vielä ottanut yhteyttä}}"
     },
-    "assistTitle": "Hei {name}, mitä tehdään tänään osiossa {section}?"
+    "assistTitle": "Hei {name}, mitä tehdään tänään osiossa {section}?",
+    "needsYou": "Needs you",
+    "allDoneTitle": "All done here.",
+    "teamLabel": "Team",
+    "climbTitle": "Our climb to €30,000",
+    "campVisual": "Your base camp"
   },
   "assist": {
     "label": "Kysy emetiltä tästä osiosta",
@@ -2215,6 +2227,8 @@
       "logProblem": "Kirjaa asiakasongelma",
       "recordDecision": "Kirjaa päätös, jonka teimme",
       "whatsLate": "Mikä tiimissä on myöhässä ja ketä minun kannattaa muistuttaa?"
-    }
+    },
+    "greeting": "Hey {name}, what are we doing in {section} today?",
+    "helper": "Ask a question or tell me what you did. I prepare it, you tap Add."
   }
 }

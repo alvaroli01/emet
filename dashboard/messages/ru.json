@@ -2080,20 +2080,23 @@
       "next": "Дальше в {time}: {title}",
       "priority": "Приоритет недели: {title}",
       "revenue": "Выручка команды",
-      "profit": "Прибыль команды"
+      "profit": "Прибыль команды",
+      "subtitle": "Here is what needs you today, and how close we are to our goal."
     },
     "overview": {
       "title": "Привет, {name}, вот весь наш подъём",
       "blockers": "{count, plural, one {# блокер тормозит команду} few {# блокера тормозят команды} many {# блокеров тормозят команды} other {# блокера тормозят команды}}",
       "complaints": "{count, plural, one {# проблема клиента открыта} few {# проблемы клиентов открыты} many {# проблем клиентов открыто} other {# проблемы клиентов открыты}}",
-      "pace": "Начиная с этого момента нам нужно {amount} в неделю"
+      "pace": "Начиная с этого момента нам нужно {amount} в неделю",
+      "subtitle": "Our goal: €30,000 in sales and €15,000 profit by June 2027."
     },
     "camp": {
       "title": "С возвращением в лагерь, {name}",
       "due": "{count, plural, one {# дело нужно закрыть на этой неделе} few {# дела нужно закрыть на этой неделе} many {# дел нужно закрыть на этой неделе} other {# дела нужно закрыть на этой неделе}}",
       "setPriorities": "Выбери 3 приоритета на эту неделю",
       "shared": "{count, plural, one {# документ открыли для тебя} few {# документа открыли для тебя} many {# документов открыли для тебя} other {# документа открыли для тебя}}",
-      "record": "Записать лекцию или встречу"
+      "record": "Записать лекцию или встречу",
+      "subtitle": "Only you can see this. Plan your week, keep notes and record classes."
     },
     "board": {
       "title": "Привет, {name}, вот всё, над чем работает компания",
@@ -2102,7 +2105,8 @@
       "none": "Тебе здесь ничего не назначено",
       "open": "Открытые карточки",
       "done": "Готово",
-      "ring": "всех карточек готово"
+      "ring": "всех карточек готово",
+      "subtitle": "Each card is a job. Drag it to Done when it is finished."
     },
     "team": {
       "title": "Привет, {name}, знакомься с командой",
@@ -2118,7 +2122,8 @@
       "doneWeek": "Сделано за неделю",
       "board": "Общая доска",
       "camp": "Базовый лагерь",
-      "ring": "твоих задач выполнено"
+      "ring": "твоих задач выполнено",
+      "subtitle": "Every job that has your name on it, from every board."
     },
     "meetings": {
       "title": "Привет, {name}, о чём мы говорили?",
@@ -2126,7 +2131,8 @@
       "none": "Встреч пока не записано. Запиши следующую, чтобы никто ничего не упустил.",
       "processing": "{count, plural, one {# твоя запись ещё расшифровывается} few {# твои записи ещё расшифровываются} many {# твоих записей ещё расшифровываются} other {# твои записи ещё расшифровываются}}",
       "week": "На этой неделе",
-      "total": "Все записи"
+      "total": "Все записи",
+      "subtitle": "Press Record in a meeting and emet writes the notes for everyone."
     },
     "lab": {
       "title": "Привет, {name}, что мы могли бы создать?",
@@ -2137,14 +2143,20 @@
       "strong": "Сильные (75+)",
       "votes": "Голоса",
       "pitch": "Предложить идею",
-      "scout": "Найти клиентов"
+      "scout": "Найти клиентов",
+      "subtitle": "Write an idea, and emet researches it and tells you honestly if it can work."
     },
     "scout": {
       "title": "Привет, {name}, кому нам продавать?",
       "due": "{count, plural, one {# лид ждёт твоего следующего шага} few {# лида ждут твоего следующего шага} many {# лидов ждут твоего следующего шага} other {# лида ждут твоего следующего шага}}",
       "strong": "{count, plural, one {# сильный лид, с которым никто ещё не связался} few {# сильных лида, с которыми никто ещё не связался} many {# сильных лидов, с которыми никто ещё не связался} other {# сильных лида, с которыми никто ещё не связался}}"
     },
-    "assistTitle": "Привет, {name}! Что делаем сегодня в разделе {section}?"
+    "assistTitle": "Привет, {name}! Что делаем сегодня в разделе {section}?",
+    "needsYou": "Needs you",
+    "allDoneTitle": "All done here.",
+    "teamLabel": "Team",
+    "climbTitle": "Our climb to €30,000",
+    "campVisual": "Your base camp"
   },
   "assist": {
     "label": "Спроси emet об этом разделе",
@@ -2215,6 +2227,8 @@
       "logProblem": "Запиши проблему клиента",
       "recordDecision": "Запиши решение, которое мы приняли",
       "whatsLate": "Что просрочено у команды и кого мне поторопить?"
-    }
+    },
+    "greeting": "Hey {name}, what are we doing in {section} today?",
+    "helper": "Ask a question or tell me what you did. I prepare it, you tap Add."
   }
 }

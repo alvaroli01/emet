@@ -38,10 +38,9 @@ export default async function MeetingsPage({ searchParams }: { searchParams: Pro
     <div className="space-y-6">
       <LiveRefresh tables={["meetings"]} />
       <PageHero
-        art={["ring", "cloud", "sparkle", "globe"]}
         section={{ label: tn("meetings"), icon: <AudioLines size={16} /> }}
-        title={th("meetings.title", { name: me.full_name.split(" ")[0] })}
-        subtitle={t("subtitle")}
+        title={th("meetings.title")}
+        subtitle={th("meetings.subtitle")}
         lines={[
           ...(latest ? [{ text: th("meetings.latest", { title: latest.title, date: shortDate(latest.meeting_date, locale) }), tone: "info" as const, href: `/meetings?m=${latest.id}` }] : [{ text: th("meetings.none"), tone: "info" as const }]),
           ...(processing ? [{ text: th("meetings.processing", { count: processing }), tone: "warn" as const }] : []),

@@ -1,13 +1,13 @@
 import { useId } from "react";
 
-/** emet mark: three summit lines in Google's four-colour gradient (the I/O look). */
+/** emet mark: three summit lines on the indigo-to-cyan brand gradient. */
 export function LogoMark({ size = 28 }: { size?: number }) {
   const id = useId();
   return (
     <svg width={size} height={size} viewBox="0 0 28 28" aria-hidden className="shrink-0">
       <defs>
         <linearGradient id={`${id}g`} x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0" stopColor="#4285f4" /><stop offset=".4" stopColor="#34a853" /><stop offset=".7" stopColor="#fbbc04" /><stop offset="1" stopColor="#ea4335" />
+          <stop offset="0" stopColor="#2b39e0" /><stop offset=".55" stopColor="#3949f5" /><stop offset="1" stopColor="#18c5f2" />
         </linearGradient>
       </defs>
       <rect width="28" height="28" rx="8" fill={`url(#${id}g)`} />

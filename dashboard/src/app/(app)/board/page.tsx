@@ -10,7 +10,6 @@ import { ProgressRing } from "@/components/shell/hero-visuals";
 import { KanbanSquare } from "lucide-react";
 
 export default async function GeneralBoardPage() {
-  const t = await getTranslations("board");
   const { viewer, me } = await getSession();
   const data = await loadBoard("general");
   if (!data) notFound();
@@ -25,10 +24,9 @@ export default async function GeneralBoardPage() {
     <div className="space-y-4">
       <LiveRefresh tables={BOARD_TABLES} />
       <PageHero
-        art={["pill", "sparkle", "ring", "globe"]}
         section={{ label: tn("generalBoard"), icon: <KanbanSquare size={16} /> }}
-        title={th("board.title", { name: me.full_name.split(" ")[0] })}
-        subtitle={t("generalHint")}
+        title={th("board.title")}
+        subtitle={th("board.subtitle")}
         lines={[
           ...(late ? [{ text: th("board.late", { count: late }), tone: "bad" as const }] : []),
           ...(mine ? [{ text: th("board.mine", { count: mine }), tone: "info" as const, href: "/my-tasks" }] : [{ text: th("board.none"), tone: "ok" as const }]),

@@ -2080,20 +2080,23 @@
       "next": "Prochain rendez-vous à {time} : {title}",
       "priority": "Priorité de la semaine : {title}",
       "revenue": "CA de l’équipe",
-      "profit": "Bénéfice de l’équipe"
+      "profit": "Bénéfice de l’équipe",
+      "subtitle": "Here is what needs you today, and how close we are to our goal."
     },
     "overview": {
       "title": "Hey {name}, voici toute l’ascension",
       "blockers": "{count, plural, one {# blocage freine une équipe} other {# blocages freinent des équipes}}",
       "complaints": "{count, plural, one {# problème client est ouvert} other {# problèmes clients sont ouverts}}",
-      "pace": "Il nous faut {amount} par semaine à partir de maintenant"
+      "pace": "Il nous faut {amount} par semaine à partir de maintenant",
+      "subtitle": "Our goal: €30,000 in sales and €15,000 profit by June 2027."
     },
     "camp": {
       "title": "Content de te revoir au camp, {name}",
       "due": "{count, plural, one {# chose est à faire cette semaine} other {# choses sont à faire cette semaine}}",
       "setPriorities": "Fixe tes 3 priorités de la semaine",
       "shared": "{count, plural, one {# document a été partagé avec toi} other {# documents ont été partagés avec toi}}",
-      "record": "Enregistrer un cours ou une réunion"
+      "record": "Enregistrer un cours ou une réunion",
+      "subtitle": "Only you can see this. Plan your week, keep notes and record classes."
     },
     "board": {
       "title": "Hey {name}, voilà tout ce sur quoi l’entreprise travaille",
@@ -2102,7 +2105,8 @@
       "none": "Rien ne t’est assigné ici",
       "open": "Cartes ouvertes",
       "done": "Terminé",
-      "ring": "des cartes terminées"
+      "ring": "des cartes terminées",
+      "subtitle": "Each card is a job. Drag it to Done when it is finished."
     },
     "team": {
       "title": "Hey {name}, fais connaissance avec l’équipe",
@@ -2118,7 +2122,8 @@
       "doneWeek": "Terminé cette semaine",
       "board": "Tableau général",
       "camp": "Camp de base",
-      "ring": "de tes tâches terminées"
+      "ring": "de tes tâches terminées",
+      "subtitle": "Every job that has your name on it, from every board."
     },
     "meetings": {
       "title": "Hey {name}, de quoi a-t-on parlé ?",
@@ -2126,7 +2131,8 @@
       "none": "Aucune réunion enregistrée pour l’instant. Enregistre la prochaine pour que personne ne la rate.",
       "processing": "{count, plural, one {# de tes enregistrements est encore en cours de rédaction} other {# de tes enregistrements sont encore en cours de rédaction}}",
       "week": "Cette semaine",
-      "total": "Tous les enregistrements"
+      "total": "Tous les enregistrements",
+      "subtitle": "Press Record in a meeting and emet writes the notes for everyone."
     },
     "lab": {
       "title": "Hey {name}, qu’est-ce qu’on pourrait construire ?",
@@ -2137,14 +2143,20 @@
       "strong": "Solides (75+)",
       "votes": "Votes",
       "pitch": "Proposer une idée",
-      "scout": "Trouver des clients"
+      "scout": "Trouver des clients",
+      "subtitle": "Write an idea, and emet researches it and tells you honestly if it can work."
     },
     "scout": {
       "title": "Hey {name}, à qui devrait-on vendre ?",
       "due": "{count, plural, one {# lead attend ta prochaine étape} other {# leads attendent ta prochaine étape}}",
       "strong": "{count, plural, one {# lead solide que personne n’a encore contacté} other {# leads solides que personne n’a encore contactés}}"
     },
-    "assistTitle": "Salut {name}, on fait quoi aujourd'hui dans {section} ?"
+    "assistTitle": "Salut {name}, on fait quoi aujourd'hui dans {section} ?",
+    "needsYou": "Needs you",
+    "allDoneTitle": "All done here.",
+    "teamLabel": "Team",
+    "climbTitle": "Our climb to €30,000",
+    "campVisual": "Your base camp"
   },
   "assist": {
     "label": "Demande à emet à propos de cette section",
@@ -2215,6 +2227,8 @@
       "logProblem": "Note un problème client",
       "recordDecision": "Enregistre une décision qu'on a prise",
       "whatsLate": "Qu'est-ce qui est en retard dans l'équipe et qui dois-je relancer ?"
-    }
+    },
+    "greeting": "Hey {name}, what are we doing in {section} today?",
+    "helper": "Ask a question or tell me what you did. I prepare it, you tap Add."
   }
 }

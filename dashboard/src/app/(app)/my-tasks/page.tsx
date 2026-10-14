@@ -50,10 +50,9 @@ export default async function MyTasksPage() {
     <div className="space-y-6">
       <LiveRefresh tables={["cards", "card_assignees"]} />
       <PageHero
-        art={["ring", "sparkle", "pill", "coin"]}
         section={{ label: t("title"), icon: <CheckSquare size={16} /> }}
         title={th("tasks.title", { name: me.full_name.split(" ")[0] })}
-        subtitle={t("subtitle", { count: open.length })}
+        subtitle={th("tasks.subtitle")}
         lines={[
           ...(sections[0].items.length ? [{ text: th("tasks.late", { count: sections[0].items.length }), tone: "bad" as const }] : []),
           ...(nextDue ? [{ text: th("tasks.next", { title: nextDue.title, date: shortDate(nextDue.due_at!, locale) }), tone: "info" as const }] : []),

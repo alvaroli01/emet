@@ -1,10 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Space_Grotesk } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { cookies } from "next/headers";
 import { ToastProvider } from "@/components/toast";
 import "./globals.css";
 
+
+// Inter for reading (covers Russian), Space Grotesk for headings and numbers
+const inter = Inter({ subsets: ["latin", "latin-ext", "cyrillic"], variable: "--font-inter", display: "swap" });
+const display = Space_Grotesk({ subsets: ["latin", "latin-ext"], variable: "--font-display-face", display: "swap" });
 
 export const metadata: Metadata = {
   title: "emet HQ",
@@ -26,12 +31,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html
       lang={locale}
+      className={`${inter.variable} ${display.variable}`}
       data-theme={theme === "light" || theme === "dark" ? theme : undefined}
     >
       <head>
-        {/* Google Sans (self-hosted) — preload the Latin file so headlines render in the right font straight away */}
-        <link rel="preload" href="/fonts/google-sans-latin.woff2" as="font" type="font/woff2" crossOrigin="" />
-        <meta name="theme-color" content={theme === "light" ? "#f8f9fa" : "#000000"} />
+        <meta name="theme-color" content={theme === "dark" ? "#07080c" : "#f6f7fb"} />
       </head>
       <body>
         <NextIntlClientProvider>

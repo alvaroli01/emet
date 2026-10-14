@@ -76,7 +76,9 @@ export default async function TodayPage() {
       <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads"]} />
       <PageHero
         section={{ label: new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/Madrid" }), icon: <Sun size={16} /> }}
-        title={t(`greeting.${greet}`, { name: me.full_name.split(" ")[0] }) + " " + th("today.ask")}
+        title={t(`greeting.${greet}`, { name: me.full_name.split(" ")[0] })}
+        subtitle={th("today.subtitle")}
+        visualTitle={th("climbTitle")}
         lines={[
           ...(overdue.length ? [{ text: th("today.late", { count: overdue.length }), tone: "bad" as const, href: "/my-tasks" }] : []),
           ...(dueToday.length ? [{ text: th("today.dueToday", { count: dueToday.length }), tone: "warn" as const, href: "/my-tasks" }] : []),
@@ -91,7 +93,6 @@ export default async function TodayPage() {
         ]}
         actions={actions.map((a, i) => ({ label: a.label, href: a.href, icon: <a.icon size={15} />, primary: i === 0 }))}
         corner={<AskButton />}
-        art={["mountain", "coin", "sparkle", "cloud"]}
         aside={<div className="flex flex-wrap items-center justify-center gap-3"><span className="text-sm text-muted tabular">{nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - all.revenue, locale), n: nextCamp.n }) : t("summitReached")} · {t("daysLeft", { count: p.daysLeft })}</span></div>}
         visual={
           <MountainLazy className="size-full" progress={revPct} nextCampAt={nextCamp ? nextCamp.amount / GOAL.revenue : null}

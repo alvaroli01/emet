@@ -1,32 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useLocale } from "next-intl";
-import { useReducedMotion } from "motion/react";
-import { ArrowRight } from "lucide-react";
-import { BlurFade as MagicBlurFade } from "@/components/ui/blur-fade";
+import { useLocale, useTranslations } from "next-intl";
+import { ChevronRight, CheckCircle2 } from "lucide-react";
 import { NumberTicker } from "@/components/ui/number-ticker";
-import { IoArt, type ShapeName } from "./io-art";
 
 export type HeroLine = { text: string; href?: string; tone?: "ok" | "warn" | "bad" | "info" };
 export type HeroStat = { label: string; value: number | null; kind: "eur" | "num" | "pct"; hint?: string };
 export type HeroAction = { label: string; href: string; icon?: React.ReactNode; primary?: boolean };
 
-/** The hero's one entrance moment; skipped entirely when the device asks for reduced motion. */
-function BlurFade({ children, className, ...props }: React.ComponentProps<typeof MagicBlurFade>) {
-  // Same element tree on server and client (no hydration mismatch); reduced motion just makes it instant
-  const reduce = useReducedMotion();
-  return <MagicBlurFade className={className} {...props} {...(reduce ? { duration: 0, delay: 0, offset: 0, blur: "0px" } : {})}>{children}</MagicBlurFade>;
-}
-
-const toneDot = { ok: "bg-ok", warn: "bg-warn", bad: "bg-bad", info: "bg-trail" } as const;
+const toneDot = { ok: "bg-ok", warn: "bg-warn", bad: "bg-bad", info: "bg-brand" } as const;
 
 /**
- * The top of every section, in the Google I/O style: a centred team chip, a huge personal headline,
- * then either the section's AI assistant (team pages) or link cards with what needs you, the next actions,
- * and below them a wide tile for the section's 3D visual next to its key numbers.
+ * The top of every page, always in the same order so anyone knows where to look:
+ *   1. what this page is (+ the main buttons)   2. the section assistant (team pages)
+ *   3. "Needs you" — or "All done here"          4. the few numbers that matter, each saying what it means
+ *   5. the page's visual (mountain, terrain, globe…) in its own card.
  */
-export function PageHero({ section, title, subtitle, lines = [], stats = [], actions = [], visual, aside, assistant, corner, art = ["sparkle", "globe", "coin", "cloud"] }: {
+export function PageHero({ section, title, subtitle, lines = [], stats = [], actions = [], visual, visualTitle, aside, assistant, corner }: {
   section: { label: string; icon?: React.ReactNode; color?: string };
   title: string;
   subtitle?: string;
@@ -34,88 +25,103 @@ export function PageHero({ section, title, subtitle, lines = [], stats = [], act
   stats?: HeroStat[];
   actions?: HeroAction[];
   visual?: React.ReactNode;
-  /** Extra content under the actions (e.g. the group's members) */
+  /** Short caption above the visual card ("Our climb to €30K") */
+  visualTitle?: string;
+  /** Extra content under the header (e.g. the team's members) */
   aside?: React.ReactNode;
-  /** The section assistant (chat) — replaces the link cards and buttons when present */
+  /** The section assistant (chat) on team pages */
   assistant?: React.ReactNode;
-  /** Small control pinned to the top-right corner (e.g. Ask emet on Today) */
+  /** A control pinned next to the page buttons (e.g. Ask emet) */
   corner?: React.ReactNode;
-  /** The glossy I/O shapes floating behind the headline */
-  art?: ShapeName[];
 }) {
+  const t = useTranslations("hero");
   const locale = useLocale();
-  const color = section.color ?? "var(--trail)";
+  const color = section.color ?? "var(--brand)";
+  const needs = lines.filter((l) => l.tone !== "ok");
+  const allOk = lines.length > 0 && needs.length === 0;
+
   return (
-    <div className="space-y-6 sm:space-y-8">
-      <section className="relative isolate px-1 pt-6 text-center sm:pt-12" style={{ "--tile-tint": color } as React.CSSProperties}>
-        {/* A soft glow of the team's colour behind the headline */}
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-10 -z-10 mx-auto h-72 max-w-3xl rounded-full opacity-25 blur-3xl" style={{ background: `radial-gradient(closest-side, ${color}, transparent)` }} />
-        {corner && <div className="absolute top-0 right-0">{corner}</div>}
-        <BlurFade delay={0.02} offset={10} blur="8px" className="relative isolate py-2 sm:py-6">
-          <IoArt shapes={art} className="-inset-x-4 sm:-inset-x-10" />
-          <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 py-1 pr-3.5 pl-1 text-sm font-medium backdrop-blur">
-            <span aria-hidden className="grid size-6 place-items-center rounded-full text-sm leading-none text-white" style={{ background: color }}>{section.icon}</span>
+    <div className="fade-in space-y-4 sm:space-y-5">
+      <header className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 pt-1">
+        <div className="min-w-0 max-w-3xl">
+          <p className="flex items-center gap-2 text-sm font-medium text-muted">
+            <span aria-hidden className="grid size-7 place-items-center rounded-lg text-white" style={{ background: color }}>{section.icon}</span>
             {section.label}
           </p>
-          <h1 className="display mx-auto mt-5 max-w-[17ch] text-[clamp(2.4rem,8vw,5.5rem)] [text-shadow:0_2px_30px_var(--bg)]">{title}</h1>
-          {subtitle && <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{subtitle}</p>}
-        </BlurFade>
-
-        {assistant && <BlurFade delay={0.12} offset={10} blur="8px" className="mx-auto mt-7 max-w-2xl text-left sm:mt-9">{assistant}</BlurFade>}
-
-        {!assistant && actions.length > 0 && (
-          <BlurFade delay={0.14} offset={10} blur="8px" className="-mx-3 mt-7 flex gap-2 overflow-x-auto px-3 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0">
-            {actions.slice(0, 4).map((a, i) => (
+          <h1 className="display mt-3 text-[clamp(1.65rem,3.2vw,2.4rem)]">{title}</h1>
+          {subtitle && <p className="mt-1.5 text-[15px] leading-relaxed text-muted sm:text-base">{subtitle}</p>}
+          {aside && <div className="mt-3">{aside}</div>}
+        </div>
+        {(actions.length > 0 || corner) && (
+          <div className="-mx-3 flex w-[calc(100%+1.5rem)] gap-2 overflow-x-auto px-3 pb-0.5 [scrollbar-width:none] sm:mx-0 sm:w-auto sm:flex-wrap sm:justify-end sm:px-0">
+            {corner}
+            {actions.slice(0, 3).map((a, i) => (
               <Link key={a.href + a.label} href={a.href}
-                    className={`inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full px-6 text-[15px] font-medium transition active:scale-[0.97] ${a.primary || (i === 0 && !actions.some((x) => x.primary)) ? "bg-brand text-brand-contrast hover:brightness-110" : "border border-line bg-surface text-ink hover:border-muted"}`}>
+                    className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4.5 text-sm font-semibold transition active:scale-[0.97] ${a.primary || (i === 0 && !actions.some((x) => x.primary)) ? "bg-brand text-brand-contrast shadow-[0_8px_20px_-8px_var(--brand)] hover:brightness-110" : "bg-surface text-ink shadow-[var(--shadow)] ring-1 ring-line hover:bg-surface-2"}`}>
                 {a.icon}{a.label}
               </Link>
             ))}
-          </BlurFade>
+          </div>
         )}
+      </header>
 
-        {!assistant && lines.length > 0 && (
-          <BlurFade delay={0.2} offset={10} blur="8px" className="mx-auto mt-7 grid max-w-3xl gap-3 text-left sm:grid-cols-2">
-            {lines.slice(0, 4).map((l) => {
-              const body = (
-                <>
-                  <span aria-hidden className={`size-2 shrink-0 rounded-full ${toneDot[l.tone ?? "info"]}`} />
-                  <span className="min-w-0 flex-1 text-[15px] leading-snug">{l.text}</span>
-                  {l.href && <ArrowRight size={18} className="shrink-0 text-muted transition-transform group-hover:translate-x-1 group-hover:text-ink" />}
-                </>
-              );
-              return l.href
-                ? <Link key={l.text} href={l.href} className="group panel panel-lift flex min-h-14 items-center gap-3 px-5 py-3.5">{body}</Link>
-                : <p key={l.text} className="panel flex min-h-14 items-center gap-3 px-5 py-3.5">{body}</p>;
-            })}
-          </BlurFade>
-        )}
-        {aside && <div className="mx-auto mt-5 flex max-w-3xl justify-center">{aside}</div>}
-      </section>
+      {assistant}
 
-      {(visual || stats.length > 0) && (
-        <BlurFade delay={0.26} offset={10} blur="8px" className={`grid gap-3 sm:gap-4 ${visual && stats.length ? "lg:grid-cols-3" : ""}`}>
-          {visual && <div className="panel relative h-64 overflow-hidden sm:h-80 lg:col-span-2 lg:h-[380px]">{visual}</div>}
-          {stats.length > 0 && (
-            <div className={`grid grid-cols-3 gap-3 sm:gap-4 ${visual ? "lg:grid-cols-1" : ""}`}>
-              {stats.slice(0, 3).map((s) => (
-                <div key={s.label} className="panel flex min-w-0 flex-col justify-between gap-2 p-4 sm:p-5">
-                  <p className="line-clamp-2 text-xs leading-snug text-muted sm:text-sm">{s.label}</p>
-                  <div>
-                    <p className="readout truncate text-2xl leading-none sm:text-4xl">
-                      {s.value === null ? "—" : (
-                        <NumberTicker value={s.kind === "pct" ? Math.round(s.value * 100) : s.kind === "eur" ? Math.round(s.value) : s.value} locale={locale}
-                                      decimalPlaces={s.kind === "num" && !Number.isInteger(s.value) ? 1 : 0}
-                                      options={s.kind === "eur" ? { style: "currency", currency: "EUR", maximumFractionDigits: 0 } : undefined} />
-                      )}{s.kind === "pct" && s.value !== null ? "%" : ""}
-                    </p>
-                    {s.hint && <p className="mt-1.5 truncate text-xs text-muted">{s.hint}</p>}
-                  </div>
-                </div>
-              ))}
-            </div>
+      {(lines.length > 0 || visual) && (
+        <div className={`grid gap-4 ${visual ? "lg:grid-cols-5" : ""}`}>
+          {lines.length > 0 && (allOk ? (
+            <p className={`panel flex min-h-14 items-center gap-3 px-5 py-3 text-[15px] ${visual ? "lg:col-span-3 lg:self-start" : ""}`}>
+              <CheckCircle2 size={20} className="shrink-0 text-ok" /> <span><span className="font-semibold">{t("allDoneTitle")}</span> <span className="text-muted">{lines[0].text}</span></span>
+            </p>
+          ) : (
+            <section aria-labelledby="needs-you" className={`panel overflow-hidden ${visual ? "lg:col-span-3 lg:self-start" : ""}`}>
+              <h2 id="needs-you" className="flex items-center gap-2 px-5 pt-4 pb-2 text-sm font-semibold">
+                <span aria-hidden className="size-2 rounded-full bg-warn" /> {t("needsYou")} <span className="font-normal text-muted">· {needs.length}</span>
+              </h2>
+              <ul className="divide-y divide-line">
+                {lines.slice(0, 5).map((l) => {
+                  const body = (
+                    <>
+                      <span aria-hidden className={`size-2 shrink-0 rounded-full ${toneDot[l.tone ?? "info"]}`} />
+                      <span className="min-w-0 flex-1 text-[15px]">{l.text}</span>
+                      {l.href && <ChevronRight size={17} className="shrink-0 text-muted transition-transform group-hover:translate-x-0.5" />}
+                    </>
+                  );
+                  return (
+                    <li key={l.text}>
+                      {l.href ? <Link href={l.href} className="group flex min-h-13 items-center gap-3 px-5 py-3 transition-colors hover:bg-surface-2/70">{body}</Link>
+                        : <p className="flex min-h-13 items-center gap-3 px-5 py-3">{body}</p>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))}
+          {visual && (
+            <figure className={`panel relative h-64 overflow-hidden sm:h-72 ${lines.length ? "lg:col-span-2 lg:h-auto lg:min-h-[280px]" : "lg:h-80"}`}>
+              {visualTitle && <figcaption className="pointer-events-none absolute top-3.5 left-4 z-10 rounded-full bg-surface/85 px-2.5 py-1 text-xs font-medium text-muted backdrop-blur">{visualTitle}</figcaption>}
+              {visual}
+            </figure>
           )}
-        </BlurFade>
+        </div>
+      )}
+
+      {stats.length > 0 && (
+        <dl className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {stats.slice(0, 4).map((s, i) => (
+            <div key={s.label} className={`panel flex min-w-0 flex-col gap-2 p-4 sm:p-5 ${stats.length === 3 && i === 2 ? "col-span-2 lg:col-span-1" : ""}`}>
+              <dt className="text-[13px] font-medium text-muted">{s.label}</dt>
+              <dd className="readout truncate text-[1.75rem] leading-none sm:text-3xl">
+                {s.value === null ? "—" : (
+                  <NumberTicker value={s.kind === "pct" ? Math.round(s.value * 100) : s.kind === "eur" ? Math.round(s.value) : s.value} locale={locale}
+                                decimalPlaces={s.kind === "num" && !Number.isInteger(s.value) ? 1 : 0}
+                                options={s.kind === "eur" ? { style: "currency", currency: "EUR", maximumFractionDigits: 0 } : undefined} />
+                )}{s.kind === "pct" && s.value !== null ? "%" : ""}
+              </dd>
+              {s.hint && <dd className="text-xs text-muted">{s.hint}</dd>}
+            </div>
+          ))}
+        </dl>
       )}
     </div>
   );

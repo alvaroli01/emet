@@ -31,7 +31,7 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
   const tn = await getTranslations("nav");
   const tg = await getTranslations("group.names");
   const locale = await getLocale();
-  const { me, groups } = await getSession();
+  const { groups } = await getSession();
   const supabase = await createClient();
   const thisWeek = weekStart(Date.now());
 
@@ -84,10 +84,10 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
       <LiveRefresh tables={["sales", "expenses", "cards", "blockers", "activity_log", "complaints", "content_posts", "morale_checks"]} />
 
       <PageHero
-        art={["mountain", "ring", "coin", "sparkle"]}
         section={{ label: tn("overview"), icon: <LayoutDashboard size={16} /> }}
-        title={th("overview.title", { name: me.full_name.split(" ")[0] })}
-        subtitle={t("subtitle")}
+        title={th("overview.title")}
+        subtitle={th("overview.subtitle")}
+        visualTitle={th("climbTitle")}
         lines={[
           ...(openBlockers.length ? [{ text: th("overview.blockers", { count: openBlockers.length }), tone: "warn" as const }] : []),
           ...((complaints.count ?? 0) > 0 ? [{ text: th("overview.complaints", { count: complaints.count ?? 0 }), tone: "bad" as const, href: "/g/customer?tab=complaints" }] : []),

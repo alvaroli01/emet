@@ -19,16 +19,10 @@ import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { SectionAssistant } from "@/components/shell/section-assistant";
 import { createClient } from "@/lib/supabase/server";
 import { PageHero } from "@/components/shell/page-hero";
-import type { ShapeName } from "@/components/shell/io-art";
 import { HeroTerrain, MemberOrbit } from "@/components/shell/hero-visuals";
 import { groupHero } from "@/lib/hero-data";
 import { shortDate, todayISO } from "@/lib/format";
 import { GroupIcon } from "@/components/group-icon";
-
-const ART: Record<string, ShapeName[]> = {
-  finance: ["coin", "mountain", "ring", "sparkle"], marketing: ["sparkle", "globe", "pill", "cloud"], customer: ["globe", "ring", "sparkle", "cloud"],
-  communications: ["cloud", "pill", "sparkle", "ring"], "team-leader": ["mountain", "sparkle", "globe", "coin"],
-};
 
 /** Quick things to ask the assistant in each section (shown as chips under the chat). */
 const STARTERS: Record<string, string[]> = {
@@ -93,9 +87,8 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         "decisions", "morale_checks", "meeting_notes", "outreach", "profiles"]} />
 
       <PageHero
-        art={ART[slug] ?? ["sparkle", "globe", "coin", "cloud"]}
-        section={{ label: t(`names.${slug}`), icon: <GroupIcon slug={slug} size={14} />, color: group.color }}
-        title={th("assistTitle", { name: firstName, section: t(`names.${slug}`) })}
+        section={{ label: th("teamLabel"), icon: <GroupIcon slug={slug} size={14} />, color: group.color }}
+        title={t(`names.${slug}`)}
         subtitle={th(`groups.${heroKey}.subtitle`)}
         lines={hero.needs.length ? hero.needs.map((n) => ({
           text: th(`needs.${n.key}`, { count: n.count, ...(n.values ?? {}) }), tone: n.tone,
@@ -106,9 +99,10 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         visual={slug === "communications"
           ? <MemberOrbit slug={slug} color={group.color} people={members} />
           : <HeroTerrain points={hero.series.map((p) => ({ label: th("weekOf", { date: shortDate(p.label, locale) }), value: p.value }))} kind={hero.seriesKind}
-                         ariaLabel={th(`series.${hero.seriesKey}`)} caption={th(`series.${hero.seriesKey}`)} />}
+                         ariaLabel={th(`series.${hero.seriesKey}`)} />}
+        visualTitle={th(`series.${hero.seriesKey}`)}
         assistant={
-          <SectionAssistant section={slug} groupId={group.id} boardId={board.board.id} listId={[...board.lists].sort((a, b) => a.position - b.position)[0]?.id ?? null}
+          <SectionAssistant section={slug} greeting={ta("greeting", { name: firstName, section: t(`names.${slug}`) })} helper={ta("helper")} groupId={group.id} boardId={board.board.id} listId={[...board.lists].sort((a, b) => a.position - b.position)[0]?.id ?? null}
                             meId={session.me.id} hasKey={!!aiKey} tools={allTools.map((x) => ({ id: x.id, label: x.label }))}
                             starters={[
                               ...hero.needs.slice(0, 2).map((n) => ({ label: th(`needs.${n.key}`, { count: n.count, ...(n.values ?? {}) }), tab: n.tab })),

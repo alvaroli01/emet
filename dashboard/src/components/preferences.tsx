@@ -54,9 +54,9 @@ export function LocaleSync({ saved }: { saved: string | null }) {
 /** Light / dark / follow device */
 export function ThemeToggle() {
   const t = useTranslations("prefs");
-  // Dark is the house style (like Google I/O); light is opt-in and remembered in a cookie
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  useEffect(() => { setTheme(document.documentElement.dataset.theme === "light" ? "light" : "dark"); }, []);
+  // Light is the default; dark is opt-in and remembered in a cookie
+  const [theme, setTheme] = useState<"dark" | "light">("light");
+  useEffect(() => { setTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light"); }, []);
 
   function toggle() {
     const next = theme === "dark" ? "light" : "dark";

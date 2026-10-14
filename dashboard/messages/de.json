@@ -2080,20 +2080,23 @@
       "next": "Als Nächstes um {time}: {title}",
       "priority": "Priorität dieser Woche: {title}",
       "revenue": "Team-Umsatz",
-      "profit": "Team-Gewinn"
+      "profit": "Team-Gewinn",
+      "subtitle": "Here is what needs you today, and how close we are to our goal."
     },
     "overview": {
       "title": "Hey {name}, das ist der ganze Aufstieg",
       "blockers": "{count, plural, one {# Blocker bremst ein Team} other {# Blocker bremsen Teams}}",
       "complaints": "{count, plural, one {# Kundenproblem ist offen} other {# Kundenprobleme sind offen}}",
-      "pace": "Ab jetzt brauchen wir {amount} pro Woche"
+      "pace": "Ab jetzt brauchen wir {amount} pro Woche",
+      "subtitle": "Our goal: €30,000 in sales and €15,000 profit by June 2027."
     },
     "camp": {
       "title": "Willkommen zurück in deinem Camp, {name}",
       "due": "{count, plural, one {# Sache ist diese Woche fällig} other {# Sachen sind diese Woche fällig}}",
       "setPriorities": "Setze deine 3 Prioritäten für diese Woche",
       "shared": "{count, plural, one {# Dokument wurde mit dir geteilt} other {# Dokumente wurden mit dir geteilt}}",
-      "record": "Eine Vorlesung oder ein Meeting aufnehmen"
+      "record": "Eine Vorlesung oder ein Meeting aufnehmen",
+      "subtitle": "Only you can see this. Plan your week, keep notes and record classes."
     },
     "board": {
       "title": "Hey {name}, woran die Firma gerade alles arbeitet",
@@ -2102,7 +2105,8 @@
       "none": "Hier ist dir nichts zugewiesen",
       "open": "Offene Karten",
       "done": "Erledigt",
-      "ring": "aller Karten erledigt"
+      "ring": "aller Karten erledigt",
+      "subtitle": "Each card is a job. Drag it to Done when it is finished."
     },
     "team": {
       "title": "Hey {name}, lern das Team kennen",
@@ -2118,7 +2122,8 @@
       "doneWeek": "Diese Woche erledigt",
       "board": "Allgemeines Board",
       "camp": "Basislager",
-      "ring": "deiner Aufgaben erledigt"
+      "ring": "deiner Aufgaben erledigt",
+      "subtitle": "Every job that has your name on it, from every board."
     },
     "meetings": {
       "title": "Hey {name}, worüber haben wir gesprochen?",
@@ -2126,7 +2131,8 @@
       "none": "Noch keine Meetings aufgenommen. Nimm das nächste auf, damit niemand etwas verpasst.",
       "processing": "{count, plural, one {# deiner Aufnahmen wird noch verschriftlicht} other {# deiner Aufnahmen werden noch verschriftlicht}}",
       "week": "Diese Woche",
-      "total": "Alle Aufnahmen"
+      "total": "Alle Aufnahmen",
+      "subtitle": "Press Record in a meeting and emet writes the notes for everyone."
     },
     "lab": {
       "title": "Hey {name}, was könnten wir bauen?",
@@ -2137,14 +2143,20 @@
       "strong": "Stark (75+)",
       "votes": "Stimmen",
       "pitch": "Idee pitchen",
-      "scout": "Kunden finden"
+      "scout": "Kunden finden",
+      "subtitle": "Write an idea, and emet researches it and tells you honestly if it can work."
     },
     "scout": {
       "title": "Hey {name}, an wen sollten wir verkaufen?",
       "due": "{count, plural, one {# Lead wartet auf deinen nächsten Schritt} other {# Leads warten auf deinen nächsten Schritt}}",
       "strong": "{count, plural, one {# starker Lead, den noch niemand kontaktiert hat} other {# starke Leads, die noch niemand kontaktiert hat}}"
     },
-    "assistTitle": "Hey {name}, was machen wir heute in {section}?"
+    "assistTitle": "Hey {name}, was machen wir heute in {section}?",
+    "needsYou": "Needs you",
+    "allDoneTitle": "All done here.",
+    "teamLabel": "Team",
+    "climbTitle": "Our climb to €30,000",
+    "campVisual": "Your base camp"
   },
   "assist": {
     "label": "Frag emet zu diesem Bereich",
@@ -2215,6 +2227,8 @@
       "logProblem": "Trag ein Kundenproblem ein",
       "recordDecision": "Halt eine Entscheidung fest, die wir getroffen haben",
       "whatsLate": "Was ist im Team überfällig, und bei wem sollte ich nachhaken?"
-    }
+    },
+    "greeting": "Hey {name}, what are we doing in {section} today?",
+    "helper": "Ask a question or tell me what you did. I prepare it, you tap Add."
   }
 }

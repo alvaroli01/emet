@@ -69,10 +69,10 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   return (
     <div className="space-y-6">
       <PageHero
-        art={["mountain", "cloud", "sparkle", "pill"]}
         section={{ label: tn("camp"), icon: <Tent size={16} /> }}
         title={th("camp.title", { name: firstName })}
-        subtitle={t("subtitle")}
+        subtitle={th("camp.subtitle")}
+        visualTitle={th("campVisual")}
         lines={[
           ...(openThisWeek ? [{ text: th("camp.due", { count: openThisWeek }), tone: "warn" as const, href: "/camp?tab=week" }] : []),
           ...(thisWeek?.priorities?.filter((x: string) => x.trim()).length ? [] : [{ text: th("camp.setPriorities"), tone: "info" as const, href: "/camp?tab=week" }]),

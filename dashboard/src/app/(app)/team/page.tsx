@@ -20,9 +20,8 @@ export default async function TeamPage() {
     <div className="space-y-5">
       <LiveRefresh tables={["profiles"]} />
       <PageHero
-        art={["globe", "ring", "sparkle", "cloud"]}
         section={{ label: t("title"), icon: <Users size={16} /> }}
-        title={th("team.title", { name: me.full_name.split(" ")[0] })}
+        title={th("team.title")}
         subtitle={t("subtitle", { count: active.length, joined: active.filter((p) => p.user_id).length })}
         lines={groups.map((g) => ({ text: `${tg(g.slug)}: ${active.filter((p) => p.group_id === g.id).map((p) => p.full_name.split(" ")[0]).join(", ") || "—"}`, tone: "info" as const, href: `/g/${g.slug}` })).slice(0, 4)}
         stats={[

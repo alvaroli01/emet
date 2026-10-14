@@ -22,7 +22,6 @@ export default async function LabPage({ searchParams }: { searchParams: Promise<
   ]);
   const th = await getTranslations("hero");
   const tn = await getTranslations("nav");
-  const tl = await getTranslations("lab");
   const all = ideas.data ?? [];
   const best = [...all].filter((x) => x.score !== null).sort((a, b) => (b.score ?? 0) - (a.score ?? 0))[0];
   const toVote = all.filter((x) => x.status === "analyzed" && !(votes.data ?? []).some((v) => v.idea_id === x.id && v.user_id === me.id)).length;
@@ -31,10 +30,9 @@ export default async function LabPage({ searchParams }: { searchParams: Promise<
     <div className="space-y-6">
       <LiveRefresh tables={["lab_ideas", "lab_votes", "lab_comments"]} />
       <PageHero
-        art={["sparkle", "cloud", "globe", "ring"]}
         section={{ label: tn("lab"), icon: <Lightbulb size={16} /> }}
         title={th("lab.title", { name: me.full_name.split(" ")[0] })}
-        subtitle={tl("subtitle")}
+        subtitle={th("lab.subtitle")}
         lines={[
           ...(best ? [{ text: th("lab.best", { title: best.title, score: best.score ?? 0 }), tone: "ok" as const, href: `/lab?i=${best.id}` }] : []),
           ...(toVote ? [{ text: th("lab.toVote", { count: toVote }), tone: "info" as const }] : []),

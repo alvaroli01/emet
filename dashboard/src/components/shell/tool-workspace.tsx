@@ -36,7 +36,7 @@ export function ToolWorkspace({ tools, initial, groups }: { tools: WorkspaceTool
             {items.map((x) => (
               <li key={x.id}>
                 <button onClick={() => open(x.id)} aria-current={x.id === current?.id ? "page" : undefined}
-                        className={`flex min-h-11 w-full items-center gap-2 rounded-2xl px-3 text-left text-[15px] transition ${x.id === current?.id ? "bg-brand font-medium text-brand-contrast" : "text-ink hover:bg-surface-2"}`}>
+                        className={`flex min-h-11 w-full items-center gap-2 rounded-2xl px-3 text-left text-[15px] transition ${x.id === current?.id ? "bg-brand-soft font-semibold text-link" : "text-ink hover:bg-surface-2"}`}>
                   <span className="flex-1 truncate">{x.label}</span>
                   {x.id !== current?.id && <ChevronRight size={15} className="text-muted" />}
                 </button>
