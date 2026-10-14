@@ -1,6 +1,10 @@
 {
   "common": {
-    "viewOnly": "Vain luku"
+    "viewOnly": "Vain luku",
+    "errorTitle": "Tällä sivulla meni jokin vikaan",
+    "errorText": "Mitään ei hävinnyt. Yritä uudelleen tai palaa Tänään-näkymään.",
+    "tryAgain": "Yritä uudelleen",
+    "goHome": "Siirry Tänään-näkymään"
   },
   "nav": {
     "overview": "Yleiskatsaus",

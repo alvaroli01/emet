@@ -1,6 +1,10 @@
 {
   "common": {
-    "viewOnly": "Somente leitura"
+    "viewOnly": "Somente leitura",
+    "errorTitle": "Algo deu errado nesta página",
+    "errorText": "Nada foi perdido. Tente de novo ou volte para Hoje.",
+    "tryAgain": "Tentar de novo",
+    "goHome": "Ir para Hoje"
   },
   "nav": {
     "overview": "Visão geral",

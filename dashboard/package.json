@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test src/lib/*.test.ts src/lib/ai/*.test.ts src/lib/lab/*.test.ts src/lib/scout/*.test.ts src/lib/assist/*.test.ts",
+    "test": "node --test src/lib/*.test.ts src/lib/ai/*.test.ts src/lib/lab/*.test.ts src/lib/scout/*.test.ts src/lib/assist/*.test.ts src/components/summit/*.test.ts",
     "test:db": "bash supabase/tests/run-local.sh",
     "check:i18n": "node scripts/check-i18n.mjs"
   },

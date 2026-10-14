@@ -1,6 +1,10 @@
 {
   "common": {
-    "viewOnly": "Nur ansehen"
+    "viewOnly": "Nur ansehen",
+    "errorTitle": "Auf dieser Seite ist etwas schiefgelaufen",
+    "errorText": "Nichts ist verloren. Versuch es nochmal oder geh zurück zu Heute.",
+    "tryAgain": "Nochmal versuchen",
+    "goHome": "Zu Heute"
   },
   "nav": {
     "overview": "Übersicht",

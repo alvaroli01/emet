@@ -1,6 +1,10 @@
 {
   "common": {
-    "viewOnly": "Lecture seule"
+    "viewOnly": "Lecture seule",
+    "errorTitle": "Un problème est survenu sur cette page",
+    "errorText": "Rien n’a été perdu. Réessaie ou reviens à Aujourd’hui.",
+    "tryAgain": "Réessayer",
+    "goHome": "Aller à Aujourd’hui"
   },
   "nav": {
     "overview": "Vue d’ensemble",

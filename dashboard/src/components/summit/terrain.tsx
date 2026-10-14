@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { disposeScene } from "./dispose";
 
 /**
  * Data terrain: a series (e.g. revenue per week) as columns standing on a contour-map plate.
@@ -134,7 +135,7 @@ export default function Terrain({ points, format, ariaLabel, className }: Props)
     return () => {
       cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); mo.disconnect(); mq.removeEventListener("change", colors);
       el.removeEventListener("pointerdown", down); el.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up); el.removeEventListener("pointerleave", leave);
-      renderer.dispose(); boxGeo.dispose(); edgeGeo.dispose(); renderer.domElement.remove(); api.current = null;
+      renderer.dispose(); disposeScene(scene); boxGeo.dispose(); edgeGeo.dispose(); renderer.domElement.remove(); api.current = null;
     };
   }, []);
   const api = useRef<(() => void) | null>(null);

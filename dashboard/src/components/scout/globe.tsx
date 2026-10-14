@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { disposeScene } from "@/components/summit/dispose";
 import { mesh } from "topojson-client";
 import type { Topology, GeometryCollection } from "topojson-specification";
 
@@ -190,7 +191,7 @@ export default function Globe({ target, pins, radiusKm, examples, ariaLabel, cla
 
     return () => {
       alive = false; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); mo.disconnect(); mq.removeEventListener("change", colors);
-      renderer.dispose(); scene.traverse((o) => { const m = o as THREE.Mesh; m.geometry?.dispose?.(); });
+      renderer.dispose(); disposeScene(scene);
       renderer.domElement.remove(); api.current = null;
     };
   }, []);

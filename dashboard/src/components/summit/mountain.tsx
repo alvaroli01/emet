@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { disposeScene } from "./dispose";
 
 /**
  * The signature 3D object: a topographic mountain. Altitude = revenue toward the €30K summit.
@@ -420,12 +421,7 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
       host.removeEventListener("keydown", key);
-      scene.traverse((o) => {
-        const m = o as THREE.Mesh;
-        m.geometry?.dispose();
-        const mat = m.material as THREE.Material | undefined;
-        mat?.dispose();
-      });
+      disposeScene(scene);
       renderer.dispose();
       renderer.domElement.remove();
     };

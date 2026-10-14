@@ -1,6 +1,10 @@
 {
   "common": {
-    "viewOnly": "View only"
+    "viewOnly": "View only",
+    "errorTitle": "Something went wrong on this page",
+    "errorText": "Nothing was lost. Try again, or go back to Today.",
+    "tryAgain": "Try again",
+    "goHome": "Go to Today"
   },
   "nav": {
     "overview": "Overview",
