@@ -294,6 +294,19 @@ select t.check('Member cannot add audio to someone else''s meeting',
   $$insert into storage.objects (bucket_id, name) select 'meetings', id || '/chunk-009.webm' from meetings where kind = 'training'$$, 'denied');
 select t.assert('Member cannot see private Base camp recordings of others', t.num($$select count(*) from storage.objects where bucket_id = 'recordings'$$) = 0);
 
+-- ── Drive archive: secrets never reachable; archived parts follow meeting visibility ──
+reset role;
+insert into app_secrets (key, iv, data) values ('google_refresh_token', 'iv', 'enc');
+insert into meeting_audio (meeting_id, part, drive_file_id) select id, 'chunk-000.webm', 'drive-' || kind from meetings;
+set role authenticated;
+select t.login(1);
+select t.check('Even an admin cannot read server secrets', $$select * from app_secrets$$, 'denied');
+select t.login(2);
+select t.assert('Member sees archived parts of team meetings only', t.num('select count(*) from meeting_audio') = 1);
+select t.check('Member cannot add archive entries', $$insert into meeting_audio (meeting_id, part, drive_file_id) select id, 'x', 'y' from meetings limit 1$$, 'denied');
+select t.login(4);
+select t.assert('Leader sees archived parts of leaders'' meetings too', t.num('select count(*) from meeting_audio') = 2);
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',

@@ -844,6 +844,15 @@
       "phone": "Ligação",
       "video": "Videochamada",
       "leaders": "Reunião de líderes"
+    },
+    "drive": {
+      "connectedToast": "Google Drive conectado: o áudio de reuniões com mais de 30 dias vai para lá toda noite.",
+      "failedToast": "Não foi possível conectar o Google Drive. Tente de novo.",
+      "connected": "Áudio com mais de 30 dias vai para o Google Drive ({email}) · {mb} MB lá",
+      "notConnected": "Arquivo no Google Drive não conectado: por enquanto o áudio fica aqui.",
+      "notConfigured": "O arquivo no Google Drive ainda não foi configurado.",
+      "connect": "Conectar Google Drive",
+      "reconnect": "Reconectar"
     }
   }
 }

@@ -844,6 +844,15 @@
       "phone": "Puhelu",
       "video": "Videopuhelu",
       "leaders": "Johtajien kokous"
+    },
+    "drive": {
+      "connectedToast": "Google Drive yhdistetty – yli 30 päivää vanha kokousääni siirretään sinne joka yö.",
+      "failedToast": "Google Driveä ei voitu yhdistää. Yritä uudelleen.",
+      "connected": "Yli 30 päivää vanha ääni siirtyy Google Driveen ({email}) · {mb} Mt siellä",
+      "notConnected": "Google Drive -arkistoa ei ole yhdistetty – ääni pysyy toistaiseksi täällä.",
+      "notConfigured": "Google Drive -arkistoa ei ole vielä otettu käyttöön.",
+      "connect": "Yhdistä Google Drive",
+      "reconnect": "Yhdistä uudelleen"
     }
   }
 }

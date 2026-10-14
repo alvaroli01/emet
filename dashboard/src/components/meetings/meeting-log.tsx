@@ -22,9 +22,11 @@ const ICON = { training: GraduationCap, phone: Phone, video: Video, leaders: Cro
 const TINT: Record<Kind, string> = { training: "#2f7d4f", phone: "#2b6ca3", video: "#5b4ba8", leaders: "#b7791f" };
 const FREE_BYTES = 1024 ** 3;
 
-export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, initialOpen, title }: {
+type Drive = { configured: boolean; connected: boolean; email: string | null; archivedBytes: number; result: string | null };
+
+export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, initialOpen, title, drive }: {
   meetings: MeetingRow[]; names: Record<string, string>; meId: string; isLeader: boolean;
-  ai: { connected: boolean; last4: string | null }; storageBytes: number | null; initialOpen?: string; title: string;
+  ai: { connected: boolean; last4: string | null }; storageBytes: number | null; initialOpen?: string; title: string; drive: Drive | null;
 }) {
   const t = useTranslations("meetings");
   const locale = useLocale();
@@ -34,6 +36,12 @@ export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, 
   const [query, setQuery] = useState("");
   const [openId, setOpenId] = useState<string | null>(initialOpen ?? null);
   const [recording, setRecording] = useState(false);
+  const toast = useToast();
+  useEffect(() => {
+    if (drive?.result === "connected") toast("ok", t("drive.connectedToast"));
+    else if (drive?.result === "failed") toast("error", t("drive.failedToast"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const kinds = KINDS.filter((k) => k !== "leaders" || isLeader);
   const q = query.trim().toLowerCase();
@@ -127,6 +135,21 @@ export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, 
                 <div className={`h-full rounded-full ${storageBytes > FREE_BYTES * 0.8 ? "bg-bad" : storageBytes > FREE_BYTES * 0.6 ? "bg-warn" : "bg-climbed"}`}
                      style={{ width: `${Math.min(100, (storageBytes / FREE_BYTES) * 100)}%` }} />
               </div>
+              {drive && (
+                <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className={`size-1.5 rounded-full ${drive.connected ? "bg-ok" : "bg-warn"}`} aria-hidden />
+                  <span className="flex-1">
+                    {drive.connected
+                      ? t("drive.connected", { email: drive.email ?? "Google Drive", mb: (drive.archivedBytes / 1024 ** 2).toFixed(0) })
+                      : drive.configured ? t("drive.notConnected") : t("drive.notConfigured")}
+                  </span>
+                  {drive.configured && (
+                    <a href="/api/drive/connect" className="font-medium text-ink underline underline-offset-2">
+                      {drive.connected ? t("drive.reconnect") : t("drive.connect")}
+                    </a>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -210,6 +233,7 @@ function Detail({ m, by, canManage, onBack, onDeleted }: { m: MeetingRow; by?: s
 
   async function remove() {
     if (!confirm(t("confirmDelete", { title: m.title }))) return;
+    await fetch(`/api/meetings/${m.id}/audio`, { method: "DELETE" }).catch(() => null);
     const { data: files } = await supabase.storage.from("meetings").list(m.id);
     if (files?.length) await supabase.storage.from("meetings").remove(files.map((f) => `${m.id}/${f.name}`));
     const { error } = await supabase.from("meetings").delete().eq("id", m.id);

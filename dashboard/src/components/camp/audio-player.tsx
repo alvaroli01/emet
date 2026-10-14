@@ -21,6 +21,11 @@ export function AudioPlayer({ ownerId, docId, createdAt, bucket = "recordings", 
 
   useEffect(() => {
     (async () => {
+      if (bucket === "meetings") {
+        const res = await fetch(`/api/meetings/${docId}/audio`).catch(() => null);
+        const data = res?.ok ? ((await res.json()) as { parts: { url: string }[] }) : { parts: [] };
+        return setUrls(data.parts.map((p) => p.url));
+      }
       const folder = folderProp ?? `${ownerId}/${docId}`;
       const { data } = await supabase.storage.from(bucket).list(folder, { sortBy: { column: "name", order: "asc" } });
       const names = (data ?? []).map((f) => `${folder}/${f.name}`);

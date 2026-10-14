@@ -844,6 +844,15 @@
       "phone": "Звонок",
       "video": "Видеозвонок",
       "leaders": "Встреча лидеров"
+    },
+    "drive": {
+      "connectedToast": "Google Drive подключён: аудио встреч старше 30 дней будет переноситься туда каждую ночь.",
+      "failedToast": "Не удалось подключить Google Drive. Попробуй ещё раз.",
+      "connected": "Аудио старше 30 дней переносится в Google Drive ({email}) · там {mb} МБ",
+      "notConnected": "Архив в Google Drive не подключён — пока аудио хранится здесь.",
+      "notConfigured": "Архив в Google Drive ещё не настроен.",
+      "connect": "Подключить Google Drive",
+      "reconnect": "Переподключить"
     }
   }
 }

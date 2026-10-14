@@ -844,6 +844,15 @@
       "phone": "Phone call",
       "video": "Video call",
       "leaders": "Leaders’ meeting"
+    },
+    "drive": {
+      "connectedToast": "Google Drive connected — meeting audio older than 30 days will move there every night.",
+      "failedToast": "Couldn’t connect Google Drive. Try again.",
+      "connected": "Audio older than 30 days moves to Google Drive ({email}) · {mb} MB there",
+      "notConnected": "Google Drive archive not connected — audio stays here for now.",
+      "notConfigured": "Google Drive archive not set up yet.",
+      "connect": "Connect Google Drive",
+      "reconnect": "Reconnect"
     }
   }
 }

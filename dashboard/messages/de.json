@@ -844,6 +844,15 @@
       "phone": "Telefonat",
       "video": "Videoanruf",
       "leaders": "Leitungstreffen"
+    },
+    "drive": {
+      "connectedToast": "Google Drive verbunden – Besprechungsaudio älter als 30 Tage wird jede Nacht dorthin verschoben.",
+      "failedToast": "Google Drive konnte nicht verbunden werden. Versuch es noch einmal.",
+      "connected": "Audio älter als 30 Tage wird nach Google Drive verschoben ({email}) · {mb} MB dort",
+      "notConnected": "Google-Drive-Archiv nicht verbunden – Audio bleibt vorerst hier.",
+      "notConfigured": "Google-Drive-Archiv ist noch nicht eingerichtet.",
+      "connect": "Google Drive verbinden",
+      "reconnect": "Neu verbinden"
     }
   }
 }

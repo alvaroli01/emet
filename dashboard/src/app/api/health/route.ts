@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { archiveBatch } from "@/lib/drive";
 
 /**
  * Daily keep-alive (Vercel Cron). A free Supabase project pauses after 7 days without activity —
@@ -8,6 +9,8 @@ import { createClient } from "@supabase/supabase-js";
  * Housekeeping: deletes recordings older than AUDIO_DAYS (free storage is 1 GB); transcripts stay.
  */
 const AUDIO_DAYS = 60;
+export const maxDuration = 60;
+
 export async function GET(request: NextRequest) {
   const secret = process.env.CRON_SECRET;
   if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
@@ -27,5 +30,7 @@ export async function GET(request: NextRequest) {
     removed += data?.length ?? 0;
   }
   const { data: docsMarked } = await db.rpc("mark_audio_expired", { p_days: AUDIO_DAYS });
-  return NextResponse.json({ ok: true, groups: count, ms, audioRemoved: removed, docsMarked, at: new Date().toISOString() });
+  // Meeting audio older than 30 days → Google Drive (the nightly GitHub job does the bulk; this is the fallback)
+  const archive = await archiveBatch(20_000);
+  return NextResponse.json({ ok: true, groups: count, ms, audioRemoved: removed, docsMarked, archive, at: new Date().toISOString() });
 }
