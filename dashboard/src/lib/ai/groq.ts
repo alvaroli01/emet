@@ -39,6 +39,21 @@ export async function transcribe(key: string, audio: Blob, name: string, languag
   return { text: isPhantom(text) ? "" : text.replace(/([.!?])\s+(you|thank you\.?)$/i, "$1") };
 }
 
+/** Drops empty bullets and headings with nothing under them (the model sometimes leaves a lone "*"). */
+export function cleanNotes(md: string): string {
+  const lines = md.split("\n").filter((l) => !/^\s*([-*]|- \[ \]|\d+\.)\s*$/.test(l));
+  const out: string[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    if (/^#{1,3}\s/.test(lines[i])) {
+      let j = i + 1;
+      while (j < lines.length && !lines[j].trim()) j++;
+      if (j >= lines.length || /^#{1,3}\s/.test(lines[j])) continue;
+    }
+    out.push(lines[i]);
+  }
+  return out.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
 /** Splits a long transcript at sentence ends so each part fits the free tier's per-minute token budget. */
 export function splitTranscript(text: string, maxChars = 14000): string[] {
   const parts: string[] = [];
@@ -95,7 +110,7 @@ export async function makeNotes(key: string, transcript: string): Promise<{ mark
       });
       if (res.ok) {
         const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-        return { markdown: (data.choices?.[0]?.message?.content ?? "").trim() };
+        return { markdown: cleanNotes(data.choices?.[0]?.message?.content ?? "") };
       }
       // Retired or unavailable model → try the next one; anything else (limit, bad key) is final
       if (res.status === 404 || res.status === 400) { last = { kind: "failed", status: res.status }; continue; }

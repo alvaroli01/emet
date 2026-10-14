@@ -8,7 +8,7 @@ import { useToast } from "@/components/toast";
 import { shortDate, todayISO } from "@/lib/format";
 import type { Doc } from "./docs";
 
-const CHUNK_MS = 60_000;
+const CHUNK_MS = 30_000; // text appears every 30 s; each chunk is a standalone file
 type Lang = "auto" | "es" | "en";
 type Chunk = { index: number; state: "waiting" | "sending" | "done" | "limit" | "error"; text: string };
 type Phase = "setup" | "recording" | "finishing";
@@ -29,6 +29,8 @@ async function idbDel(key: string) { const d = await idb(); d.transaction(STORE,
 type Recognition = { lang: string; continuous: boolean; interimResults: boolean; start(): void; stop(): void;
   onresult: ((e: { resultIndex: number; results: ArrayLike<{ isFinal: boolean; 0: { transcript: string } }> }) => void) | null; onend: (() => void) | null };
 
+const res0 = (e: { resultIndex: number; results: ArrayLike<{ 0: { transcript: string } }> }) => e.results[e.results.length - 1]?.[0]?.transcript ?? "";
+
 /** Records a class or meeting and turns it into a named, dated doc: notes on top, full transcript below. */
 export function Recorder({ connected: initiallyConnected, last4: initialLast4, onClose, onCreated }: {
   connected: boolean; last4: string | null; onClose: () => void; onCreated: (doc: Doc) => void;
@@ -43,7 +45,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   const [keyBusy, setKeyBusy] = useState(false);
   const [keyError, setKeyError] = useState("");
   const [mode, setMode] = useState<"groq" | "browser">(initiallyConnected ? "groq" : "browser");
-  const [name, setName] = useState("");
+  const [name, setName] = useState(() => `${t("defaultName")} ${new Date().toLocaleString(locale, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}`);
   const [lang, setLang] = useState<Lang>("auto");
   const [phase, setPhase] = useState<Phase>("setup");
   const [chunks, setChunks] = useState<Chunk[]>([]);
@@ -52,6 +54,8 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   const [level, setLevel] = useState<number[]>(Array(28).fill(0));
   const [waitUntil, setWaitUntil] = useState<number | null>(null);
   const [status, setStatus] = useState("");
+  const [preview, setPreview] = useState("");
+  const scroller = useRef<HTMLDivElement>(null);
 
   const stream = useRef<MediaStream | null>(null);
   const recorder = useRef<MediaRecorder | null>(null);
@@ -72,6 +76,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   const browserSupported = typeof window !== "undefined" && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window);
 
   useEffect(() => () => cleanup(), []);
+  useEffect(() => { scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: "smooth" }); }, [chunks, live, preview]);
   useEffect(() => {
     if (phase !== "recording") return;
     const id = setInterval(() => setSeconds((s) => s + 1), 1000);
@@ -117,8 +122,11 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     owner.current = (me as string | null) ?? null;
     startedAt.current = Date.now();
     setPhase("recording");
-    if (mode === "groq") nextSegment(0);
-    else listen();
+    if (mode === "groq") {
+      nextSegment(0);
+      // A live preview from the browser fills the gap until each accurate chunk arrives (skipped on iOS)
+      if (browserSupported && !/iPhone|iPad|iPod/.test(navigator.userAgent)) listen(true);
+    } else listen();
   }
 
   function meter(s: MediaStream) {
@@ -200,6 +208,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
       if (res?.ok) {
         texts.current[index] = data.text ?? "";
         mark(index, { state: "done", text: data.text ?? "" });
+        setPreview("");
         queue.current.shift();
         idbDel(`${session.current}:${index}`).catch(() => {});
         setWaitUntil(null);
@@ -220,7 +229,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     if (stopping.current && !queue.current.length) finish();
   }
 
-  function listen() {
+  function listen(previewOnly = false) {
     const W = window as unknown as { SpeechRecognition?: new () => Recognition; webkitSpeechRecognition?: new () => Recognition };
     const Ctor = W.SpeechRecognition ?? W.webkitSpeechRecognition;
     if (!Ctor) return;
@@ -235,9 +244,11 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
         if (res.isFinal) browserText.current += res[0].transcript.trim() + " ";
         else interim += res[0].transcript;
       }
-      setLive(browserText.current + interim);
+      if (previewOnly) setPreview(interim || res0(e));
+      else setLive(browserText.current + interim);
     };
     r.onend = () => { if (!stopping.current) try { r.start(); } catch { /* already running */ } };
+    (r as unknown as { onerror: (() => void) | null }).onerror = () => { if (previewOnly) setPreview(""); };
     r.start();
     recognition.current = r;
   }
@@ -294,19 +305,72 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   const pending = chunks.filter((c) => c.state !== "done").length;
   const transcriptSoFar = mode === "groq" ? chunks.filter((c) => c.text).map((c) => c.text).join(" ") : live;
 
+  if (phase !== "setup") return (
+    // While recording: a small floating box, so the rest of the dashboard stays usable
+    <section role="region" aria-label={t("title")} aria-live="polite"
+             className="fixed right-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-50 w-[min(380px,calc(100vw-1.5rem))] rounded-2xl bg-surface p-4 shadow-[0_24px_60px_-16px_rgb(0_0_0/0.45),0_2px_6px_rgb(0_0_0/0.12)] ring-1 ring-line lg:right-6 lg:bottom-6">
+      <div className="flex items-center gap-3">
+        <span className="relative grid size-10 shrink-0 place-items-center">
+          {phase === "recording" && <span className="absolute inset-0 animate-ping rounded-full bg-trail/30 motion-reduce:animate-none" />}
+          <span className={`relative grid size-10 place-items-center rounded-full ${phase === "recording" ? "bg-trail text-white" : "bg-surface-2 text-muted"}`}>
+            {phase === "recording" ? <Mic size={17} /> : <Loader2 size={17} className="animate-spin" />}
+          </span>
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="readout text-xl leading-none">{clock}</p>
+          <p className="mt-0.5 truncate text-xs text-muted">{name}</p>
+        </div>
+        {phase === "recording" && (
+          <button onClick={stop} className="flex h-11 items-center gap-2 rounded-xl bg-ink px-4 text-sm font-semibold text-brand-contrast active:scale-95">
+            <Square size={13} fill="currentColor" /> {t("stop")}
+          </button>
+        )}
+      </div>
+
+      <div aria-hidden className="mt-3 flex h-7 items-end gap-[3px]">
+        {level.map((v, i) => (
+          <span key={i} className="flex-1 rounded-full bg-trail/80 transition-[height] duration-75"
+                style={{ height: `${Math.max(8, (phase === "recording" ? v : 0) * 100)}%`, opacity: 0.35 + v * 0.65 }} />
+        ))}
+      </div>
+
+      <div ref={scroller} className="mt-3 max-h-36 overflow-y-auto rounded-xl bg-surface-2/60 p-3 text-sm leading-relaxed">
+        {transcriptSoFar
+          ? <>{transcriptSoFar}{preview && <span className="text-muted"> {preview}</span>}</>
+          : preview ? <span className="text-muted">{preview}</span>
+          : <span className="text-muted">{mode === "groq" ? t("firstMinute") : t("listening")}</span>}
+      </div>
+
+      {mode === "groq" && chunks.length > 0 && (
+        <p className="mt-2 flex flex-wrap items-center gap-1 text-[11px] text-muted">
+          {chunks.slice(-12).map((c) => (
+            <span key={c.index} title={t(`chunk.${c.state}`)}
+                  className={`size-2 rounded-full ${c.state === "done" ? "bg-ok" : c.state === "sending" ? "animate-pulse bg-climbed" : c.state === "limit" ? "bg-warn" : c.state === "error" ? "bg-bad" : "bg-line"}`} />
+          ))}
+          <span className="ml-1">{pending ? t("pendingChunks", { count: pending }) : t("allTranscribed")}</span>
+        </p>
+      )}
+      {waitUntil && (
+        <p className="mt-2 flex items-start gap-1.5 text-xs">
+          <AlertTriangle size={13} className="mt-0.5 shrink-0 text-warn-text" />
+          {t("limitWait", { minutes: Math.max(1, Math.ceil((waitUntil - Date.now()) / 60000)) })}
+        </p>
+      )}
+      {phase === "finishing" && <p className="mt-2 flex items-center gap-1.5 text-xs text-muted"><Loader2 size={12} className="animate-spin" /> {status || t("finishing")}</p>}
+    </section>
+  );
+
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={t("title")}>
-      <button className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" aria-label={t("close")} onClick={() => phase === "setup" && onClose()} />
-      <div className="relative max-h-[92dvh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-surface p-5 shadow-2xl sm:rounded-3xl sm:p-7">
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={t("title")}>
+      <button className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" aria-label={t("close")} onClick={onClose} />
+      <div className="relative max-h-[92dvh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-surface p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl sm:rounded-3xl sm:p-7">
         <div className="mb-5 flex items-start justify-between gap-3">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">{t("title")}</h2>
             <p className="text-sm text-muted">{t("subtitle")}</p>
           </div>
-          {phase === "setup" && <button onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-surface-2"><X size={18} /></button>}
+          <button onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-surface-2"><X size={18} /></button>
         </div>
-
-        {phase === "setup" && (
           <div className="space-y-5">
             {/* Engine: your own Groq account (best), or the browser */}
             <section className="rounded-2xl bg-surface-2/60 p-4">
@@ -342,7 +406,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
 
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium">{t("nameLabel")}</span>
-              <input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder={t("namePlaceholder")} className="input" />
+              <input value={name} onChange={(e) => setName(e.target.value)} onFocus={(e) => e.target.select()} placeholder={t("namePlaceholder")} className="input" />
               <span className="mt-1 block text-xs text-muted">{t("dateAuto", { date: shortDate(todayISO(), locale) })}</span>
             </label>
 
@@ -363,59 +427,6 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
             </button>
             <p className="text-center text-xs text-muted">{t("micTip")}</p>
           </div>
-        )}
-
-        {phase !== "setup" && (
-          <div className="space-y-5">
-            <div className="flex items-center gap-4">
-              <span className="relative grid size-14 shrink-0 place-items-center">
-                {phase === "recording" && <span className="absolute inset-0 animate-ping rounded-full bg-trail/30 motion-reduce:animate-none" />}
-                <span className={`relative grid size-14 place-items-center rounded-full ${phase === "recording" ? "bg-trail text-white" : "bg-surface-2 text-muted"}`}>
-                  {phase === "recording" ? <Mic size={22} /> : <Loader2 size={22} className="animate-spin" />}
-                </span>
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="readout text-3xl leading-none">{clock}</p>
-                <p className="mt-1 truncate text-sm text-muted">{name}</p>
-              </div>
-              {phase === "recording" && (
-                <button onClick={stop} className="flex items-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-brand-contrast">
-                  <Square size={14} fill="currentColor" /> {t("stop")}
-                </button>
-              )}
-            </div>
-
-            {/* Live input level: if the bars move, the mic hears the room */}
-            <div aria-hidden className="flex h-12 items-end gap-[3px]">
-              {level.map((v, i) => (
-                <span key={i} className="flex-1 rounded-full bg-trail/80 transition-[height] duration-75"
-                      style={{ height: `${Math.max(6, (phase === "recording" ? v : 0) * 100)}%`, opacity: 0.35 + v * 0.65 }} />
-              ))}
-            </div>
-
-            {mode === "groq" && chunks.length > 0 && (
-              <p className="flex flex-wrap items-center gap-1.5 text-xs text-muted">
-                {chunks.map((c) => (
-                  <span key={c.index} title={t(`chunk.${c.state}`)}
-                        className={`size-2.5 rounded-full ${c.state === "done" ? "bg-ok" : c.state === "sending" ? "animate-pulse bg-climbed" : c.state === "limit" ? "bg-warn" : c.state === "error" ? "bg-bad" : "bg-line"}`} />
-                ))}
-                <span className="ml-1">{pending ? t("pendingChunks", { count: pending }) : t("allTranscribed")}</span>
-              </p>
-            )}
-            {waitUntil && (
-              <p className="flex items-start gap-2 rounded-xl bg-surface-2 p-3 text-sm">
-                <AlertTriangle size={16} className="mt-0.5 shrink-0 text-warn-text" />
-                {t("limitWait", { minutes: Math.max(1, Math.ceil((waitUntil - Date.now()) / 60000)) })}
-              </p>
-            )}
-
-            <div className="max-h-56 overflow-y-auto rounded-xl bg-surface-2/60 p-4 text-sm leading-relaxed" aria-live="polite">
-              {transcriptSoFar || <span className="text-muted">{mode === "groq" ? t("firstMinute") : t("listening")}</span>}
-            </div>
-
-            {phase === "finishing" && <p className="flex items-center gap-2 text-sm text-muted"><Loader2 size={15} className="animate-spin" /> {status || t("finishing")}</p>}
-          </div>
-        )}
       </div>
     </div>
   );

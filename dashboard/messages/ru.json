@@ -793,7 +793,8 @@
       "recording": "Запись",
       "part": "Часть {n} из {total}",
       "loadingAudio": "Загружаем аудио…",
-      "downloadAudio": "Скачать эту часть"
+      "downloadAudio": "Скачать эту часть",
+      "defaultName": "Заметки"
     }
   }
 }

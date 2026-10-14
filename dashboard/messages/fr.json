@@ -793,7 +793,8 @@
       "recording": "Enregistrement",
       "part": "Partie {n} sur {total}",
       "loadingAudio": "Chargement de l’audio…",
-      "downloadAudio": "Télécharger cette partie"
+      "downloadAudio": "Télécharger cette partie",
+      "defaultName": "Notes"
     }
   }
 }

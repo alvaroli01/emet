@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { splitTranscript, isPhantom, mainLanguage } from "./groq.ts";
+import { splitTranscript, isPhantom, mainLanguage, cleanNotes } from "./groq.ts";
 
 test("short transcripts stay in one piece", () => {
   assert.deepEqual(splitTranscript("Hola. Esto es corto."), ["Hola. Esto es corto."]);
@@ -23,4 +23,9 @@ test("Whisper's phantom words on silence are dropped, real speech is kept", () =
 test("main language picks the right headings", () => {
   assert.equal(mainLanguage("Hoy en la clase hablamos de precios y de las ventas. And now in English for a minute."), "es");
   assert.equal(mainLanguage("Our goal is to log every sale within a day, and we review it on Friday."), "en");
+});
+
+test("empty sections and lone bullets are removed", () => {
+  const md = "## Resumen\nTexto.\n\n## Tareas\n- [ ] Fran: llamar\n\n## Preguntas pendientes\n\n*\n";
+  assert.equal(cleanNotes(md), "## Resumen\nTexto.\n\n## Tareas\n- [ ] Fran: llamar");
 });

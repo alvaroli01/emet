@@ -793,7 +793,8 @@
       "recording": "Äänitys",
       "part": "Osa {n}/{total}",
       "loadingAudio": "Ladataan ääntä…",
-      "downloadAudio": "Lataa tämä osa"
+      "downloadAudio": "Lataa tämä osa",
+      "defaultName": "Muistiinpanot"
     }
   }
 }

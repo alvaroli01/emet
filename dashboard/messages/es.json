@@ -793,7 +793,8 @@
       "recording": "Grabación",
       "part": "Parte {n} de {total}",
       "loadingAudio": "Cargando audio…",
-      "downloadAudio": "Descargar esta parte"
+      "downloadAudio": "Descargar esta parte",
+      "defaultName": "Notas"
     }
   }
 }
