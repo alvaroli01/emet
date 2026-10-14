@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Mic } from "lucide-react";
@@ -23,9 +24,11 @@ export function HeaderRecord() {
               className="grid size-9 place-items-center rounded-full bg-trail text-white shadow-[var(--shadow)] transition hover:brightness-105 active:scale-95">
         <Mic size={16} />
       </button>
-      {ai && (
+      {/* Portalled to <body>: the top bar's blur would otherwise trap a fixed window inside it */}
+      {ai && createPortal(
         <Recorder connected={ai.connected} last4={ai.last4} onClose={() => setAi(null)}
-                  onCreated={(doc) => { setAi(null); router.push(`/camp?tab=docs&doc=${doc.id}`); router.refresh(); }} />
+                  onCreated={(doc) => { setAi(null); router.push(`/camp?tab=docs&doc=${doc.id}`); router.refresh(); }} />,
+        document.body,
       )}
     </>
   );
