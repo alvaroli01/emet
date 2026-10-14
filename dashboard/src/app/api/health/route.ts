@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { archiveBatch } from "@/lib/drive";
 import { buildWeeklyReport } from "@/lib/weekly-report";
+import { syncBooks, snapshotXlsx } from "@/lib/books";
 
 /**
  * Daily keep-alive (Vercel Cron). A free Supabase project pauses after 7 days without activity —
@@ -44,7 +45,10 @@ export async function GET(request: NextRequest) {
       await db.from("notifications").insert(((people as string[] | null) ?? []).map((u) => ({ user_id: u, kind: "report", data: { week: data.week }, link: "/today", dedupe: `report:${data.week}` })));
     }
   }
+  // Finance: retry any queued Google Sheet writes, then keep a dated .xlsx copy in Drive
+  const books = await syncBooks().catch((e) => ({ error: String(e) }));
+  const snapshot = await snapshotXlsx().catch(() => null);
   // Meeting audio older than 30 days → Google Drive (the nightly GitHub job does the bulk; this is the fallback)
   const archive = await archiveBatch(15_000);
-  return NextResponse.json({ ok: true, groups: count, ms, audioRemoved: removed, docsMarked, repeated, reminders, report, archive, at: new Date().toISOString() });
+  return NextResponse.json({ ok: true, groups: count, ms, audioRemoved: removed, docsMarked, repeated, reminders, report, books, snapshot, archive, at: new Date().toISOString() });
 }

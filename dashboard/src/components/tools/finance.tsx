@@ -1,9 +1,15 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { DataTable, type Field, type Row } from "@/components/data-table";
-import { totals, weekStart } from "@/lib/metrics";
-import { loggedOnTime } from "@/lib/kpis";
-import { eur, pct, todayISO } from "@/lib/format";
+import { type Field, type Row } from "@/components/data-table";
+import { todayISO } from "@/lib/format";
+import { METHODS, cashExpected, type SaleRow, type ExpenseRow, type Project } from "@/lib/finance";
+import { booksStatus } from "@/lib/books";
+import { FinanceOverview } from "@/components/finance/overview";
+import { FinanceProjects } from "@/components/finance/projects";
+import { Ledgers } from "@/components/finance/ledgers";
+import { Stock } from "@/components/finance/stock";
+import { Bookkeeper } from "@/components/finance/bookkeeper";
+import { ClaimButton } from "@/components/finance/claim";
 import { FridayReport } from "./friday-report";
 import type { ToolProps, ToolTab } from "./types";
 
@@ -11,29 +17,44 @@ export const EXPENSE_CATEGORIES = ["stock", "marketing", "tools", "transport", "
 
 export async function FinanceTools({ editable, session, allMembers }: ToolProps): Promise<ToolTab[]> {
   const t = await getTranslations("tools");
-  const locale = await getLocale();
+  const tf = await getTranslations("finance");
   const supabase = await createClient();
-  const [sales, expenses, inventory] = await Promise.all([
+  const today = todayISO();
+  const [sales, expenses, inventory, projects, flags, locks, claims, counts, audit, won, people] = await Promise.all([
     supabase.from("sales").select("*").order("date", { ascending: false }).order("created_at", { ascending: false }).returns<Row[]>(),
     supabase.from("expenses").select("*").order("date", { ascending: false }).order("created_at", { ascending: false }).returns<Row[]>(),
     supabase.from("inventory").select("*").order("product").returns<Row[]>(),
+    supabase.from("projects").select("*").order("created_at").returns<Project[]>(),
+    supabase.from("app_flags").select("key, enabled"),
+    supabase.from("month_locks").select("month"),
+    supabase.from("expense_claims").select("*").order("created_at", { ascending: false }),
+    editable ? supabase.from("cash_counts").select("*").order("counted_at", { ascending: false }).limit(10) : Promise.resolve({ data: [] }),
+    editable ? supabase.from("finance_audit").select("*").order("at", { ascending: false }).limit(100) : Promise.resolve({ data: [] }),
+    supabase.from("prospects").select("id", { count: "exact", head: true }).eq("stage", "won"),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("active", true),
   ]);
-  const s = (sales.data ?? []) as unknown as { date: string; amount: number; cost: number; created_at: string }[];
-  const e = (expenses.data ?? []) as unknown as { date: string; amount: number; created_at: string; category: string; description: string }[];
-  const tot = totals(s, e);
-  const week = weekStart(Date.now());
-  const weekEntries = [...s, ...e].filter((x) => weekStart(x.date) === week);
-  const onTime = weekEntries.length ? weekEntries.filter((x) => loggedOnTime(x.date, x.created_at)).length / weekEntries.length : null;
   const me = session.me.id;
+  const s = (sales.data ?? []) as unknown as SaleRow[];
+  const e = (expenses.data ?? []) as unknown as ExpenseRow[];
+  const p = projects.data ?? [];
+  const projectOptions = p.map((x) => ({ value: x.id, label: x.name }));
+  const methodOptions = METHODS.map((m) => ({ value: m, label: tf(`ledgers.methods.${m}`) }));
   const categoryOptions = EXPENSE_CATEGORIES.map((c) => ({ value: c, label: t(`categories.${c}`) }));
+  const linking = (flags.data ?? []).find((f) => f.key === "product_linking")?.enabled ?? false;
+  const names = Object.fromEntries(allMembers.map((m) => [m.id, m.full_name]));
+  const sync = editable ? await booksStatus().catch(() => ({ connected: false, pending: 0, sheetUrl: null })) : { connected: false, pending: 0, sheetUrl: null };
 
   const salesFields: Field[] = [
     { key: "date", label: t("fields.date"), type: "date", required: true },
     { key: "description", label: t("fields.description"), type: "text", required: true },
     { key: "amount", label: t("fields.amount"), type: "money", required: true },
     { key: "cost", label: t("fields.cost"), type: "money" },
+    { key: "payment_method", label: tf("ledgers.method"), type: "select", options: methodOptions },
+    { key: "project_id", label: tf("ledgers.project"), type: "select", options: projectOptions },
     { key: "channel", label: t("fields.channel"), type: "text", placeholder: "Instagram, market stall…" },
-    { key: "rep_id", label: t("fields.rep"), type: "person" },
+    { key: "rep_id", label: t("fields.rep"), type: "person", list: false },
+    ...(linking ? [{ key: "item_id", label: tf("stock.item"), type: "select", options: (inventory.data ?? []).map((i) => ({ value: i.id, label: String(i.product) })), list: false } as Field,
+      { key: "quantity", label: tf("stock.quantity"), type: "number", list: false } as Field] : []),
     { key: "logged_by", label: t("fields.loggedBy"), type: "person", form: false },
     { key: "in24", label: t("fields.in24"), type: "logged24", date: "date", created: "created_at" },
   ];
@@ -42,6 +63,8 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
     { key: "description", label: t("fields.description"), type: "text", required: true },
     { key: "category", label: t("fields.category"), type: "select", options: categoryOptions },
     { key: "amount", label: t("fields.amount"), type: "money", required: true },
+    { key: "payment_method", label: tf("ledgers.method"), type: "select", options: methodOptions },
+    { key: "project_id", label: tf("ledgers.project"), type: "select", options: projectOptions },
     { key: "logged_by", label: t("fields.loggedBy"), type: "person", form: false },
     { key: "in24", label: t("fields.in24"), type: "logged24", date: "date", created: "created_at" },
   ];
@@ -49,51 +72,38 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
     { key: "product", label: t("fields.product"), type: "text", required: true },
     { key: "sku", label: "SKU", type: "text" },
     { key: "stock", label: t("fields.stock"), type: "number", required: true },
+    { key: "low_stock", label: tf("stock.lowAt"), type: "number" },
     { key: "unit_cost", label: t("fields.unitCost"), type: "money" },
     { key: "price", label: t("fields.price"), type: "money" },
     { key: "margin", label: t("fields.margin"), type: "margin", price: "price", cost: "unit_cost" },
   ];
 
-  const tiles = [
-    { label: t("finance.revenue"), value: eur(tot.revenue, locale) },
-    { label: t("finance.costs"), value: eur(tot.cogs + tot.expenses, locale) },
-    { label: t("finance.profit"), value: eur(tot.profit, locale) },
-    { label: t("finance.margin"), value: pct(tot.margin, locale), note: t("finance.marginNote") },
-    { label: t("finance.loggedOnTime"), value: pct(onTime, locale), note: t("finance.loggedNote") },
-  ];
-
   return [
     {
-      id: "money", label: t("finance.title"),
+      id: "money", label: tf("tabs.overview"),
       node: (
         <div className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <dl className="grid flex-1 grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-5">
-              {tiles.map((x) => (
-                <div key={x.label}>
-                  <dt className="text-xs text-muted">{x.label}</dt>
-                  <dd className="readout text-xl">{x.value}</dd>
-                  {x.note && <dd className="text-[11px] text-muted">{x.note}</dd>}
-                </div>
-              ))}
-            </dl>
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <ClaimButton projects={p} categories={categoryOptions} />
             <FridayReport sales={s} expenses={e} />
+            <a href="/api/books/xlsx" className="inline-flex items-center gap-1.5 rounded-xl bg-surface-2 px-3 py-2 text-sm font-medium hover:bg-line">{tf("books.excel")}</a>
           </div>
-          <DataTable table="sales" title={t("finance.sales")} rows={sales.data ?? []} fields={salesFields} members={allMembers}
-                     canEdit={editable} defaults={{ logged_by: me, date: todayISO() }}
-                     emptyText={t("finance.salesEmpty")} addLabel={t("finance.addSale")} />
-          <DataTable table="expenses" title={t("finance.expenses")} rows={expenses.data ?? []} fields={expenseFields} members={allMembers}
-                     canEdit={editable} defaults={{ logged_by: me }}
-                     emptyText={t("finance.expensesEmpty")} addLabel={t("finance.addExpense")} />
+          <FinanceOverview sales={s} expenses={e} projects={p} members={people.count ?? 1} customersWon={won.count ?? 0} today={today} />
         </div>
       ),
     },
+    { id: "projects", label: tf("tabs.projects"), node: <FinanceProjects projects={p} sales={s} expenses={e} names={names} canEdit={editable} /> },
     {
-      id: "stock", label: t("finance.inventory"),
-      node: (
-        <DataTable table="inventory" title={t("finance.inventory")} rows={inventory.data ?? []} fields={inventoryFields} members={allMembers}
-                   canEdit={editable} emptyText={t("finance.inventoryEmpty")} addLabel={t("finance.addProduct")} />
-      ),
+      id: "ledgers", label: tf("tabs.ledgers"),
+      node: <Ledgers sales={sales.data ?? []} expenses={expenses.data ?? []} salesFields={salesFields} expenseFields={expenseFields} members={allMembers}
+                     projects={p} categories={categoryOptions} canEdit={editable} me={me} today={today} />,
     },
+    { id: "stock", label: tf("tabs.stock"), node: <Stock items={inventory.data ?? []} fields={inventoryFields} sales={s} members={allMembers} canEdit={editable} isAdmin={session.isAdmin} linking={linking} today={today} /> },
+    ...(editable ? [{
+      id: "books", label: tf("tabs.books"),
+      node: <Bookkeeper claims={(claims.data ?? []) as never} counts={(counts.data ?? []) as never} audit={(audit.data ?? []) as never}
+                        locks={(locks.data ?? []).map((l) => l.month)} entries={[...s, ...e].map((x) => ({ date: x.date, created_at: x.created_at, logged_by: x.logged_by, description: x.description }))}
+                        cashExpected={cashExpected(s, e)} projects={p} categories={categoryOptions} names={names} isAdmin={session.isAdmin} me={me} today={today} sync={sync} />,
+    }] : []),
   ];
 }

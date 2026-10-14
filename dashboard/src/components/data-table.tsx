@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Plus, X, Trash2, Clock, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Plus, X, Trash2, Clock, CheckCircle2, AlertTriangle, Undo2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar, ViewOnlyBadge } from "@/components/ui";
@@ -29,7 +29,7 @@ export type Field =
 export type Row = Record<string, unknown> & { id: string };
 
 export function DataTable({
-  table, title, rows, fields, members, canEdit, canAdd = canEdit, addFields, defaults = {}, emptyText, addLabel, footer,
+  table, title, rows, fields, members, canEdit, canAdd = canEdit, addFields, defaults = {}, emptyText, addLabel, footer, onReverse, reverseLabel, onSaved,
 }: {
   table: string;
   title: string;
@@ -46,6 +46,11 @@ export function DataTable({
   emptyText?: string;
   addLabel?: string;
   footer?: React.ReactNode;
+  /** Ledgers: no deleting — the form offers "Reverse" (a cancelling entry) instead */
+  onReverse?: (row: Row) => void;
+  reverseLabel?: string;
+  /** Called after a successful add/edit (e.g. mirror Finance changes to the Google Sheet) */
+  onSaved?: () => void;
 }) {
   const t = useTranslations("table");
   const locale = useLocale();
@@ -88,9 +93,11 @@ export function DataTable({
       : supabase.from(table).insert(payload);
     const { error } = await q;
     if (error) {
-      toast("error", error.code === "42501" || error.message.includes("row-level") ? t("noPermission") : t("saveError"));
+      toast("error", error.code === "42501" || error.message.includes("row-level") ? t("noPermission")
+        : error.message.includes("closed") ? t("closedMonth") : t("saveError"));
       return false;
     }
+    onSaved?.();
     toast("ok", t("saved"));
     setEditing(null);
     router.refresh();
@@ -178,7 +185,8 @@ export function DataTable({
           row={editing === "new" ? null : editing}
           initial={defaults}
           members={members}
-          canDelete={editing !== "new" && canEdit}
+          canDelete={editing !== "new" && canEdit && !onReverse}
+          extra={editing !== "new" && canEdit && onReverse ? { label: reverseLabel ?? "Reverse", onClick: () => { const r = editing; setEditing(null); onReverse(r); } } : undefined}
           onSave={(v) => saveRow(v, editing === "new" ? null : editing)}
           onDelete={() => editing !== "new" && deleteRow(editing)}
           onClose={() => setEditing(null)}
@@ -190,8 +198,9 @@ export function DataTable({
 
 const isNumeric = (f: Field) => f.type === "money" || f.type === "number" || f.type === "margin";
 
-function RowForm({ title, fields, row, initial, members, canDelete, onSave, onDelete, onClose }: {
+function RowForm({ title, fields, row, initial, members, canDelete, extra, onSave, onDelete, onClose }: {
   title: string; fields: Field[]; row: Row | null; initial: Record<string, unknown>; members: Member[]; canDelete: boolean;
+  extra?: { label: string; onClick: () => void };
   onSave: (v: Record<string, unknown>) => Promise<boolean>; onDelete: () => void; onClose: () => void;
 }) {
   const t = useTranslations("table");
@@ -222,6 +231,11 @@ function RowForm({ title, fields, row, initial, members, canDelete, onSave, onDe
           {canDelete && (
             <button type="button" onClick={onDelete} className="inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm text-bad-text hover:bg-surface-2">
               <Trash2 size={14} /> {t("delete")}
+            </button>
+          )}
+          {extra && (
+            <button type="button" onClick={extra.onClick} className="inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm text-warn-text hover:bg-surface-2">
+              <Undo2 size={14} /> {extra.label}
             </button>
           )}
           <button type="button" onClick={onClose} className="ml-auto rounded-xl px-4 py-2 text-sm text-muted hover:text-ink">{t("cancel")}</button>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CalendarClock, ArrowUpRight, Plus, Mic, Lightbulb, FileText, Receipt, Sparkles, Clock, CheckCircle2 } from "lucide-react";
+import { CalendarClock, ArrowUpRight, Plus, Mic, Lightbulb, FileText, Receipt, Clock, CheckCircle2 } from "lucide-react";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { weekStart, GOAL, pace, totals, type Sale, type Expense } from "@/lib/metrics";
@@ -61,7 +61,7 @@ export default async function TodayPage() {
     { href: "/meetings", icon: Mic, label: t("actions.record") },
     { href: "/lab", icon: Lightbulb, label: t("actions.idea") },
     { href: "/camp?tab=docs", icon: FileText, label: t("actions.doc") },
-    ...(canLogSales ? [{ href: "/g/finance?tab=money", icon: Receipt, label: t("actions.sale") }] : []),
+    ...(canLogSales ? [{ href: "/g/finance?tab=books", icon: Receipt, label: t("actions.sale") }] : []),
   ];
 
   return (

@@ -347,6 +347,38 @@ select t.assert('Repeating task created its card', (select count(*) from cards w
 select t.assert('...and moves to next week', (select next_run from recurring_tasks where title = 'Weekly content plan') = current_date + 7);
 set role authenticated;
 
+-- ── Finance upgrade: projects, no deletes, month close, reversals, claims, audit, product linking ──
+select t.login(2);  -- Stefan (Finance)
+select t.check('Finance creates a project', $$insert into projects (name, budget) values ('Campus stall', 100)$$, 'ok');
+select t.check('Finance logs a sale in a project with a payment method',
+  $$insert into sales (date, description, amount, cost, project_id, payment_method, logged_by) select current_date, 'Stall sale', 20, 8, id, 'bizum', public.my_profile_id() from projects where name = 'Campus stall'$$, 'ok');
+select t.check('Nobody can hard-delete a sale (fixes are reversals)', $$delete from sales where description = 'Stall sale'$$, 'denied');
+select t.check('Reversing entry with a reason', $$insert into sales (date, description, amount, cost, reverses_id, reason) select current_date, 'Reversal', -20, -8, id, 'Typo' from sales where description = 'Stall sale'$$, 'ok');
+select t.check('Finance closes last month', $$insert into month_locks (month) values (date_trunc('month', current_date - interval '1 month')::date)$$, 'ok');
+select t.check('A closed month can''t receive entries', $$insert into sales (date, description, amount) values (date_trunc('month', current_date - interval '1 month')::date + 2, 'Late', 5)$$, 'denied');
+select t.assert('Finance sees the audit log', t.num('select count(*) from finance_audit') > 0);
+select t.check('Finance cannot read the sheet queue directly', $$select * from sheet_sync_queue$$, 'denied');
+select t.login(3);  -- Rocco (Marketing)
+select t.check('Non-finance cannot create projects', $$insert into projects (name) values ('Hijack')$$, 'denied');
+select t.check('Non-finance cannot log sales', $$insert into sales (description, amount) values ('x', 1)$$, 'denied');
+select t.assert('Non-finance cannot read the audit log', t.num('select count(*) from finance_audit') = 0);
+select t.check('Any member submits an expense claim', $$insert into expense_claims (amount, description) values (12, 'Tape for the stall')$$, 'ok');
+select t.check('...but cannot approve it themselves', $$update expense_claims set status = 'approved'$$, 'denied');
+select t.check('Non-finance cannot close months', $$insert into month_locks (month) values (date_trunc('month', current_date)::date)$$, 'denied');
+select t.login(5);  -- Mario (Communications)
+select t.assert('Members don''t see other people''s claims', t.num('select count(*) from expense_claims') = 0);
+select t.login(2);
+select t.check('Finance approves the claim', $$update expense_claims set status = 'approved', decided_by = public.my_profile_id(), decided_at = now()$$, 'ok');
+select t.check('Finance adds a stock item', $$insert into inventory (product, stock, unit_cost, price, low_stock) values ('Tote bag', 10, 3, 12, 3)$$, 'ok');
+select t.check('Sale of a stock item (linking off)', $$insert into sales (description, amount, item_id, quantity) select 'Tote', 24, id, 2 from inventory where product = 'Tote bag'$$, 'ok');
+select t.assert('With linking OFF, stock doesn''t change', (select stock from inventory where product = 'Tote bag') = 10);
+select t.login(1);
+select t.check('Admin switches product linking on', $$update app_flags set enabled = true where key = 'product_linking'$$, 'ok');
+select t.login(2);
+select t.check('Sale of a stock item (linking on)', $$insert into sales (description, amount, item_id, quantity) select 'Tote', 24, id, 2 from inventory where product = 'Tote bag'$$, 'ok');
+select t.assert('With linking ON, stock goes down and cost fills in', (select stock from inventory where product = 'Tote bag') = 8
+  and (select cost from sales where description = 'Tote' order by created_at desc limit 1) = 6);
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',

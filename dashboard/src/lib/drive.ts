@@ -16,11 +16,11 @@ export function serviceDb(): SupabaseClient {
 
 export const driveConfigured = () => !!process.env.GOOGLE_CLIENT_ID && !!process.env.GOOGLE_CLIENT_SECRET;
 
-async function getSecret(db: SupabaseClient, key: string): Promise<string | null> {
+export async function getSecret(db: SupabaseClient, key: string): Promise<string | null> {
   const { data } = await db.from("app_secrets").select("iv, data").eq("key", key).maybeSingle();
   return data ? decryptKey({ key_iv: data.iv, key_data: data.data }) : null;
 }
-async function setSecret(db: SupabaseClient, key: string, value: string) {
+export async function setSecret(db: SupabaseClient, key: string, value: string) {
   const e = encryptKey(value);
   await db.from("app_secrets").upsert({ key, iv: e.key_iv, data: e.key_data, updated_at: new Date().toISOString() });
 }
@@ -79,7 +79,7 @@ export async function accessToken(): Promise<string | null> {
   return cached.token;
 }
 
-async function upload(token: string, folderId: string, name: string, blob: Blob): Promise<string | null> {
+export async function upload(token: string, folderId: string, name: string, blob: Blob): Promise<string | null> {
   const boundary = `emet-${crypto.randomUUID()}`;
   const meta = JSON.stringify({ name, parents: [folderId] });
   const body = new Blob([
