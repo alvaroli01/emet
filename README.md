@@ -115,6 +115,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | Meeting log (shared recordings) | ✅ Live (menu → Meeting log) | `dashboard/src/app/(app)/meetings` · migration `0012_meetings.sql` | Anyone records a training session, phone call, video call or leaders’ meeting with the mic inside Meeting log → notes + transcript + audio for the whole team, sorted by date, filter by type. Leaders’ meetings only visible to leaders (database rule, tested). Audio stays 30 days in the dashboard, then moves nightly to the team Google Drive (15 GB free) and still plays from here; admins see a storage meter and connect Drive from this page |
 | Database backups (weekly, encrypted) | ✅ Running, first backup verified (opens, 33 app tables + logins) | Private repo `alvaroli01/emet-backups` (restore steps in its README) | Every Sunday via GitHub Actions, €0, last 12 weeks kept. AES-256 encrypted; the passphrase is kept by Alvaro — without it backups can't be opened |
 | Reliability housekeeping | ✅ Daily | `dashboard/src/app/api/health` (Vercel Cron) | Keeps the free database from pausing; deletes note-taker audio older than 60 days (1 GB free storage). Transcripts and notes are kept forever |
+| Plans: workspace roadmap + deep Marketing section | 📝 Draft for review | [`docs/workspace-roadmap.md`](docs/workspace-roadmap.md) · [`docs/marketing-build-prompt.md`](docs/marketing-build-prompt.md) · research: [`docs/reports/`](docs/reports/) | Roadmap: ideas 2, 4–10 approved. Marketing spec built from a 4-part sourced research report (metrics, marketing ops, free data sources, visualisation) |
 | Shared Claude Code skills (9) | ✅ In the repo, load automatically for everyone | [`.claude/skills/`](.claude/skills/) · versions in [`skills-lock.json`](skills-lock.json) | Database: `supabase`, `supabase-postgres-best-practices` · Server/React: `next-best-practices`, `vercel-react-best-practices` · Design: `impeccable` (main), `design-taste-frontend`, `redesign-existing-projects`, `minimalist-ui` · Testing in a browser: `webapp-testing`. All free. Update with `npx skills update` |
 
 ## 9. Decisions log
@@ -146,6 +147,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-14 | Weekly encrypted database backups in a private GitHub repo; recordings' audio kept 60 days, transcripts forever | Alvaro |
 | 2026-10-14 | Stefan added as a second admin | Alvaro |
 | 2026-10-14 | Meeting log: team meetings are recorded and shared with everyone; leaders’ meetings only with leaders; only the author or an admin can delete one | Alvaro |
+| 2026-10-14 | North star for emet HQ: the team works inside it daily; every feature must save time. Approved roadmap ideas 2, 4, 5, 6, 7, 8, 9, 10 | Alvaro |
 
 ## 10. Open questions
 
