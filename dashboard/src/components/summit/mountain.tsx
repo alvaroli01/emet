@@ -12,6 +12,7 @@ import * as THREE from "three";
 
 export type MountainLabels = {
   summit: string;
+  camp?: string | null;
   here?: string | null;
   nextCamp?: string | null;
 };
@@ -21,7 +22,7 @@ type Props = {
   nextCampAt?: number | null; // 0..1 altitude of the next camp
   labels: MountainLabels;
   ariaLabel: string;
-  variant?: "overview" | "login";
+  variant?: "overview" | "login" | "camp";
   className?: string;
 };
 
@@ -102,6 +103,7 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
   const summitEl = useRef<HTMLSpanElement>(null);
   const hereEl = useRef<HTMLSpanElement>(null);
   const campEl = useRef<HTMLSpanElement>(null);
+  const tentEl = useRef<HTMLSpanElement>(null);
   const target = useRef(progress);
   const campTarget = useRef(nextCampAt ?? null);
   const [failed, setFailed] = useState(false);
@@ -217,6 +219,15 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
     flag.position.copy(summit).add(new THREE.Vector3(0, 0.6, 0));
     world.add(pole, flag);
 
+    // Base camp: your tent at the foot of the trail
+    const tentAt = curve.getPoint(0.05);
+    const tentMat = new THREE.MeshBasicMaterial();
+    const tent = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.34, 4), tentMat);
+    tent.position.copy(tentAt).add(new THREE.Vector3(0.35, 0.15, 0.1));
+    tent.rotation.y = Math.PI / 4;
+    tent.visible = variant === "camp";
+    world.add(tent);
+
     const applyTheme = () => {
       uniforms.uPaper.value.copy(cssColor("--terrain", "#fbfbf8"));
       uniforms.uContour.value.copy(cssColor("--contour", "#a9845c"));
@@ -227,6 +238,7 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
       pinMat.color.copy(cssColor("--trail", "#c9452c"));
       ringMat.color.copy(cssColor("--trail", "#c9452c"));
       flagMat.color.copy(ink);
+      tentMat.color.copy(cssColor("--climbed", "#2b6ca3"));
     };
     applyTheme();
     const themeObs = new MutationObserver(applyTheme);
@@ -344,6 +356,7 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
       place(summitEl.current, summit.clone().add(new THREE.Vector3(0, 0.75, 0)));
       if (frame++ % 8 === 0) hidden.here = goal > 0 && occluded(at.clone().add(new THREE.Vector3(0, 0.3, 0)));
       place(hereEl.current, goal > 0 && !hidden.here ? at.clone().add(new THREE.Vector3(0, 0.7, 0)) : null);
+      if (variant === "camp") place(tentEl.current, tent.position.clone().add(new THREE.Vector3(0, 0.45, 0)));
       const camp = campTarget.current;
       place(campEl.current, camp && camp < 1 ? curve.getPoint(indexAt(camp) / N).add(new THREE.Vector3(0, 0.05, 0)) : null);
 
@@ -386,6 +399,13 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
           {labels.summit}
         </span>
       </span>
+      {labels.camp && (
+        <span ref={tentEl} className={label} style={{ opacity: 0 }}>
+          <span className="-translate-x-1/2 -translate-y-full inline-block rounded-md bg-climbed px-2 py-0.5 text-xs font-semibold text-brand-contrast shadow">
+            {labels.camp}
+          </span>
+        </span>
+      )}
       {labels.nextCamp && (
         <span ref={campEl} className={label} style={{ opacity: 0 }}>
           <span className="ml-3 -translate-y-1/2 inline-block rounded-md border border-dashed border-contour bg-surface/85 px-1.5 py-0.5 text-[11px] font-medium text-muted backdrop-blur-sm">

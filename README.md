@@ -111,6 +111,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 |---|---|---|---|
 | Team dashboard (web app, personal logins, per-group permissions, task boards, 7 languages) | ✅ Built and redesigned ("Summit": topographic look, 3D mountain on Overview and login). 🌐 Online at https://emet-hq.vercel.app (free Supabase project `emet`, Frankfurt + Vercel Hobby). ⏳ No one can log in yet: member emails and an admin get added once roles are decided | Code: [`dashboard/`](dashboard/) · Setup guide: [`dashboard/README.md`](dashboard/README.md) · Spec: [`docs/dashboard-build-prompt.md`](docs/dashboard-build-prompt.md) | Next.js + Supabase free + Vercel Hobby, €0. Permissions enforced in the database (55 tests). Tested in a browser with sample data |
 | Task boards: 1 general company board + 1 per group (6 total) | ✅ Built into the dashboard | Dashboard → General board and each group tab | Drag and drop, assignees, due dates, labels, checklists, comments, My Tasks. Optional Trello sync per board, off by default ([`dashboard/TRELLO_SETUP.md`](dashboard/TRELLO_SETUP.md)) |
+| Base camp: each member's private area (My week + reflection, Agenda, Docs, Idea wall, Password vault) | ✅ Live in the dashboard (Base camp in the menu) | Dashboard → Base camp · tables in `dashboard/supabase/migrations/0008_basecamp.sql` | Private to its owner, even from admins (database-enforced, 15 tests). Docs can be shared read-only and downloaded as Word/PDF/Markdown. Vault is encrypted on the device with a personal passphrase: forgotten = unrecoverable. Step 2 (next): recording note-taker that writes docs (Groq free tier, browser fallback) |
 | Shared Claude Code skills (9) | ✅ In the repo, load automatically for everyone | [`.claude/skills/`](.claude/skills/) · versions in [`skills-lock.json`](skills-lock.json) | Database: `supabase`, `supabase-postgres-best-practices` · Server/React: `next-best-practices`, `vercel-react-best-practices` · Design: `impeccable` (main), `design-taste-frontend`, `redesign-existing-projects`, `minimalist-ui` · Testing in a browser: `webapp-testing`. All free. Update with `npx skills update` |
 
 ## 9. Decisions log
@@ -136,6 +137,8 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-14 | Claude Code skills live in the repo (`.claude/skills/`) so every teammate's Claude uses the same ones | Alvaro |
 | 2026-10-14 | Dashboard look = "Summit": €30K is a mountain summit, a base camp every €5K; one interactive 3D mountain (Overview + login), clean 2D everywhere else | Alvaro |
 | 2026-10-14 | Dashboard put online on free plans: Supabase project `emet` (Frankfurt) + Vercel Hobby at emet-hq.vercel.app; public sign-up off | Alvaro |
+| 2026-10-14 | Every member gets a private Base camp; nobody else (admins included) can read it. Shared team passwords belong in a shared manager like Bitwarden, not personal vaults | Alvaro |
+| 2026-10-14 | Note-taker will use Groq's free tier (Whisper) with automatic fallback to the browser's speech recognition; Spanish + English | Alvaro |
 
 ## 10. Open questions
 

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X } from "lucide-react";
+import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent } from "lucide-react";
 import type { Group } from "@/lib/session";
 import { LogoMark } from "@/components/summit/logo";
 
@@ -15,6 +15,7 @@ function useItems({ groups, myGroupId }: Props) {
   const tg = useTranslations("group.names");
   const top = [
     { href: "/", label: t("overview"), icon: <LayoutDashboard size={17} /> },
+    { href: "/camp", label: t("camp"), icon: <Tent size={17} /> },
     { href: "/board", label: t("generalBoard"), icon: <KanbanSquare size={17} />, emoji: "🏢" },
   ];
   const groupItems = groups.map((g) => ({
@@ -112,7 +113,7 @@ export function BottomNav(props: Props) {
     myGroup
       ? { href: `/g/${myGroup.slug}`, label: t("myTeam"), icon: <span className="text-lg leading-none">{myGroup.emoji}</span> }
       : { href: "/team", label: t("team"), icon: <Users size={20} /> },
-    { href: "/my-tasks", label: t("myTasks"), icon: <CheckSquare size={20} /> },
+    { href: "/camp", label: t("camp"), icon: <Tent size={20} /> },
   ];
 
   return (
