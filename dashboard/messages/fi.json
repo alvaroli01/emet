@@ -785,7 +785,15 @@
       "saveError": "Dokumentin tallennus epäonnistui. Yritä uudelleen.",
       "saved": "Muistiinpanot tallennettu dokumentteihisi",
       "micDenied": "Mikrofonin käyttö estettiin. Salli se selaimessa ja yritä uudelleen.",
-      "keyStopped": "Groq ei enää hyväksy avaintasi. Yhdistä se uudelleen kohdassa Nauhoita muistiinpanot."
+      "keyStopped": "Groq ei enää hyväksy avaintasi. Yhdistä se uudelleen kohdassa Nauhoita muistiinpanot.",
+      "savingAudio": "Tallennetaan ääntä tilillesi…",
+      "audioPartial": "Osaa äänestä ei voitu tallentaa (yhteys). Litterointi on kokonainen.",
+      "pause": "Tauko",
+      "play": "Toista",
+      "recording": "Äänitys",
+      "part": "Osa {n}/{total}",
+      "loadingAudio": "Ladataan ääntä…",
+      "downloadAudio": "Lataa tämä osa"
     }
   }
 }

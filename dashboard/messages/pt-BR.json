@@ -785,7 +785,15 @@
       "saveError": "Não foi possível salvar o doc. Tente de novo.",
       "saved": "Anotações salvas nos seus docs",
       "micDenied": "O acesso ao microfone foi bloqueado. Permita-o no navegador e tente de novo.",
-      "keyStopped": "O Groq parou de aceitar sua chave. Conecte-a de novo em Gravar anotações."
+      "keyStopped": "O Groq parou de aceitar sua chave. Conecte-a de novo em Gravar anotações.",
+      "savingAudio": "Salvando o áudio na sua conta…",
+      "audioPartial": "Alguns minutos de áudio não puderam ser salvos (conexão). A transcrição está completa.",
+      "pause": "Pausar",
+      "play": "Reproduzir",
+      "recording": "Gravação",
+      "part": "Parte {n} de {total}",
+      "loadingAudio": "Carregando áudio…",
+      "downloadAudio": "Baixar esta parte"
     }
   }
 }

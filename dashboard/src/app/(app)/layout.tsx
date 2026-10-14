@@ -6,6 +6,7 @@ import { SyncIndicator } from "@/components/sync-indicator";
 import { LanguageSwitcher, LocaleSync, ThemeToggle } from "@/components/preferences";
 import { Avatar } from "@/components/ui";
 import { LogoMark } from "@/components/summit/logo";
+import { HeaderRecord } from "@/components/camp/header-record";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("shell");
@@ -21,6 +22,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <span className="flex items-center gap-2 whitespace-nowrap font-semibold tracking-tight lg:hidden"><LogoMark size={24} /> emet HQ</span>
           <div className="ml-auto flex items-center gap-1 sm:gap-2">
             <SyncIndicator />
+            <HeaderRecord />
             <LanguageSwitcher profileId={me.id} />
             <ThemeToggle />
             <div className="ml-1 flex items-center gap-2.5">

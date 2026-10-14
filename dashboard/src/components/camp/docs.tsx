@@ -12,19 +12,20 @@ import { mdToHtml } from "@/lib/markdown";
 import { shortDate, todayISO, timeAgo } from "@/lib/format";
 import type { Member } from "@/lib/boards";
 import { Recorder } from "./recorder";
+import { AudioPlayer } from "./audio-player";
 
 export type Doc = {
   id: string; owner_id: string; title: string; body: string; kind: "note" | "meeting"; pinned: boolean; tags: string[];
-  share_all: boolean; shared_with: string[]; doc_date: string; created_at: string; updated_at: string;
+  share_all: boolean; shared_with: string[]; doc_date: string; created_at: string; updated_at: string; audio_parts?: number;
 };
 
-export function DocsTab({ mine, shared, members, meId, ai }: { mine: Doc[]; shared: Doc[]; members: Member[]; meId: string; ai: { connected: boolean; last4: string | null } }) {
+export function DocsTab({ mine, shared, members, meId, ai, initialOpen }: { mine: Doc[]; shared: Doc[]; members: Member[]; meId: string; ai: { connected: boolean; last4: string | null }; initialOpen?: string }) {
   const t = useTranslations("camp.docs");
   const locale = useLocale();
   const toast = useToast();
   const supabase = useMemo(() => createClient(), []);
   const [docs, setDocs] = useState(mine);
-  const [openId, setOpenId] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<string | null>(initialOpen ?? null);
   const [query, setQuery] = useState("");
   const [naming, setNaming] = useState(false);
   const [newName, setNewName] = useState("");
@@ -278,6 +279,8 @@ function Editor({ doc, canEdit, members, meId, ownerName, onBack, onChange, onDe
           </button>
         </div>
       )}
+
+      {canEdit && (doc.audio_parts ?? 0) > 0 && <AudioPlayer ownerId={doc.owner_id} docId={doc.id} />}
 
       {preview ? (
         body.trim() ? (

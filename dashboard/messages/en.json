@@ -785,7 +785,15 @@
       "saveError": "Couldn't save the doc. Try again.",
       "saved": "Notes saved to your docs",
       "micDenied": "Microphone access was blocked. Allow it in the browser and try again.",
-      "keyStopped": "Groq stopped accepting your key. Connect it again in Record notes."
+      "keyStopped": "Groq stopped accepting your key. Connect it again in Record notes.",
+      "savingAudio": "Saving the audio to your account…",
+      "audioPartial": "Some minutes of audio couldn't be saved (connection). The transcript is complete.",
+      "pause": "Pause",
+      "play": "Play",
+      "recording": "Recording",
+      "part": "Part {n} of {total}",
+      "loadingAudio": "Loading audio…",
+      "downloadAudio": "Download this part"
     }
   }
 }

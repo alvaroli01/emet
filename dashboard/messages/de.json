@@ -785,7 +785,15 @@
       "saveError": "Das Dokument konnte nicht gespeichert werden. Versuch es nochmal.",
       "saved": "Notizen in deinen Dokumenten gespeichert",
       "micDenied": "Der Mikrofonzugriff wurde blockiert. Erlaube ihn im Browser und versuch es nochmal.",
-      "keyStopped": "Groq akzeptiert deinen Schlüssel nicht mehr. Verbinde ihn erneut unter „Notizen aufnehmen“."
+      "keyStopped": "Groq akzeptiert deinen Schlüssel nicht mehr. Verbinde ihn erneut unter „Notizen aufnehmen“.",
+      "savingAudio": "Audio wird in deinem Konto gespeichert…",
+      "audioPartial": "Einige Minuten Audio konnten nicht gespeichert werden (Verbindung). Das Transkript ist vollständig.",
+      "pause": "Pause",
+      "play": "Abspielen",
+      "recording": "Aufnahme",
+      "part": "Teil {n} von {total}",
+      "loadingAudio": "Audio wird geladen…",
+      "downloadAudio": "Diesen Teil herunterladen"
     }
   }
 }

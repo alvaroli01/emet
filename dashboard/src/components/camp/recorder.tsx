@@ -65,6 +65,8 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   const raf = useRef(0);
   const startedAt = useRef(0);
   const segPeak = useRef(0);
+  const owner = useRef<string | null>(null);
+  const uploads = useRef<Promise<boolean>[]>([]);
   const finished = useRef(false);
 
   const browserSupported = typeof window !== "undefined" && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window);
@@ -111,6 +113,8 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
       return toast("error", t("micDenied"));
     }
     meter(stream.current);
+    const { data: me } = await supabase.rpc("my_profile_id");
+    owner.current = (me as string | null) ?? null;
     startedAt.current = Date.now();
     setPhase("recording");
     if (mode === "groq") nextSegment(0);
@@ -137,19 +141,37 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   function nextSegment(index: number) {
     if (!stream.current) return;
     const type = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm"].find((m) => MediaRecorder.isTypeSupported(m)) ?? "";
-    const rec = new MediaRecorder(stream.current, { mimeType: type || undefined, audioBitsPerSecond: 32_000 });
+    const rec = new MediaRecorder(stream.current, { mimeType: type || undefined, audioBitsPerSecond: 24_000 });
     const parts: Blob[] = [];
     rec.ondataavailable = (e) => e.data.size && parts.push(e.data);
     segPeak.current = 0;
     rec.onstop = () => {
       const blob = new Blob(parts, { type: rec.mimeType });
-      // A silent minute (break, pause) is skipped: nothing to transcribe, and it saves free minutes
-      if (blob.size > 2000 && segPeak.current > 0.015) enqueue(index, blob);
+      if (blob.size > 2000) {
+        keepAudio(index, blob);
+        // A silent minute (break, pause) is stored but not transcribed: nothing to hear, and it saves free minutes
+        if (segPeak.current > 0.015) enqueue(index, blob);
+      }
       if (!stopping.current) nextSegment(index + 1);
     };
     rec.start();
     recorder.current = rec;
     setTimeout(() => { if (rec.state === "recording") rec.stop(); }, CHUNK_MS);
+  }
+
+  // Every minute of audio goes to the owner's private storage folder (retried a few times on a bad connection)
+  function keepAudio(index: number, blob: Blob) {
+    if (!owner.current) return;
+    const ext = blob.type.includes("mp4") ? "m4a" : "webm";
+    const path = `${owner.current}/${session.current}/chunk-${String(index).padStart(3, "0")}.${ext}`;
+    uploads.current.push((async () => {
+      for (let attempt = 0; attempt < 4; attempt++) {
+        const { error } = await supabase.storage.from("recordings").upload(path, blob, { contentType: blob.type.split(";")[0], upsert: true });
+        if (!error) return true;
+        await new Promise((r) => setTimeout(r, 2000 * (attempt + 1)));
+      }
+      return false;
+    })());
   }
 
   function enqueue(index: number, blob: Blob) {
@@ -237,6 +259,9 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     if (finished.current) return;
     finished.current = true;
     stream.current?.getTracks().forEach((tr) => tr.stop());
+    setStatus(t("savingAudio"));
+    const saved = (await Promise.all(uploads.current)).filter(Boolean).length;
+    if (saved < uploads.current.length) toast("error", t("audioPartial"));
     const transcript = (mode === "groq" ? texts.current.filter(Boolean).join("\n\n") : browserText.current).trim();
     let notes = "";
     if (transcript && mode === "groq") {
@@ -256,9 +281,10 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
       `\n_${t("recordedMeta", { minutes: mins, engine: mode === "groq" ? "Groq Whisper" : t("browserEngine") })}_`,
     ].join("\n");
     const now = new Date().toISOString();
-    const doc: Doc = { id: crypto.randomUUID(), owner_id: "", title: name.trim(), body, kind: "meeting", pinned: false, tags: [],
-      share_all: false, shared_with: [], doc_date: todayISO(), created_at: now, updated_at: now };
-    const { data: row, error } = await supabase.from("docs").insert({ id: doc.id, title: doc.title, body, kind: "meeting", doc_date: doc.doc_date }).select("owner_id").single();
+    const doc: Doc = { id: session.current, owner_id: "", title: name.trim(), body, kind: "meeting", pinned: false, tags: [],
+      share_all: false, shared_with: [], doc_date: todayISO(), created_at: now, updated_at: now, audio_parts: saved };
+    const { data: row, error } = await supabase.from("docs")
+      .insert({ id: doc.id, title: doc.title, body, kind: "meeting", doc_date: doc.doc_date, audio_parts: saved }).select("owner_id").single();
     if (error) { finished.current = false; toast("error", t("saveError")); setStatus(""); return; }
     toast("ok", t("saved"));
     onCreated({ ...doc, owner_id: row.owner_id });

@@ -16,8 +16,8 @@ type CardDue = { id: string; title: string; due_at: string; completed_at: string
 type SubDue = { id: string; text: string; due_on: string | null; done: boolean; cards: { id: string; title: string; boards: { slug: string; group_id: string | null } | null } | null };
 
 /** Base camp: everyone's private working area. Only the owner can see it — the database enforces that. */
-export default async function CampPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
-  const { tab } = await searchParams;
+export default async function CampPage({ searchParams }: { searchParams: Promise<{ tab?: string; doc?: string }> }) {
+  const { tab, doc: openDoc } = await searchParams;
   const t = await getTranslations("camp");
   const locale = await getLocale();
   const { me, groups } = await getSession();
@@ -90,7 +90,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
       <SectionTabs label={t("sections")} initial={tab} tabs={[
         { id: "week", label: t("tabs.week"), node: <WeekTab week={week} plan={thisWeek} past={(plans.data ?? []).filter((p) => p.week_start !== week)} due={due} meId={me.id} /> },
         { id: "agenda", label: t("tabs.agenda"), node: <AgendaTab items={agenda.data ?? []} due={due} today={today} /> },
-        { id: "docs", label: t("tabs.docs"), node: <DocsTab mine={myDocs} shared={sharedDocs} members={members} meId={me.id} ai={{ connected: !!aiKey.data, last4: aiKey.data?.last4 ?? null }} /> },
+        { id: "docs", label: t("tabs.docs"), node: <DocsTab mine={myDocs} shared={sharedDocs} members={members} meId={me.id} ai={{ connected: !!aiKey.data, last4: aiKey.data?.last4 ?? null }} initialOpen={openDoc} /> },
         { id: "ideas", label: t("tabs.ideas"), node: <IdeasTab ideas={ideas.data ?? []} meId={me.id} /> },
         { id: "vault", label: t("tabs.vault"), node: <VaultTab keyRow={vaultKey.data} items={vaultItems.data ?? []} meId={me.id} /> },
       ]} />

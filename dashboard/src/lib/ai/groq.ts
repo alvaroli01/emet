@@ -36,7 +36,7 @@ export async function transcribe(key: string, audio: Blob, name: string, languag
   if (!res.ok) return fail(res);
   const data = (await res.json()) as { text?: string };
   const text = (data.text ?? "").trim();
-  return { text: isPhantom(text) ? "" : text };
+  return { text: isPhantom(text) ? "" : text.replace(/([.!?])\s+(you|thank you\.?)$/i, "$1") };
 }
 
 /** Splits a long transcript at sentence ends so each part fits the free tier's per-minute token budget. */
@@ -54,17 +54,33 @@ export function splitTranscript(text: string, maxChars = 14000): string[] {
   return parts;
 }
 
-const SYSTEM = `You turn a class or meeting transcript into clear notes for a university student team.
-Write everything — including the section headings — in the main language of the transcript (Spanish or English).
-Use Markdown with exactly these sections, skipping any that would be empty:
-## Summary — 2-4 sentences.
-## Key points — bullet list of the important ideas, facts, numbers and definitions.
-## Decisions — bullet list.
-## Action items — "- [ ] who: what (when)" when known.
-## Questions to follow up — bullet list.
-Be faithful to the transcript: never invent facts, names, numbers or dates.`;
+const HEADINGS = {
+  es: ["Resumen", "Puntos clave", "Decisiones", "Tareas", "Preguntas pendientes"],
+  en: ["Summary", "Key points", "Decisions", "Action items", "Open questions"],
+};
+
+/** Spanish or English, from the most common short words (good enough for picking headings). */
+export function mainLanguage(text: string): "es" | "en" {
+  const words = text.toLowerCase().match(/\p{L}+/gu) ?? [];
+  const es = words.filter((w) => ["de", "la", "que", "el", "en", "y", "los", "para", "con", "las", "por", "una", "es"].includes(w)).length;
+  const en = words.filter((w) => ["the", "and", "to", "of", "a", "in", "is", "for", "that", "we", "on", "with", "this"].includes(w)).length;
+  return es >= en ? "es" : "en";
+}
+
+function system(lang: "es" | "en") {
+  const [summary, points, decisions, actions, questions] = HEADINGS[lang];
+  return `You turn a class or meeting transcript into clear notes for a university student team.
+Write in ${lang === "es" ? "Spanish" : "English"}. Use Markdown with exactly these headings, in this order, skipping any section that would be empty:
+## ${summary} — 2-4 sentences.
+## ${points} — bullets: the important ideas, facts, numbers and definitions.
+## ${decisions} — bullets: only decisions actually stated.
+## ${actions} — "- [ ] who: what (when)" for tasks actually assigned or agreed.
+## ${questions} — bullets: only questions that were actually asked and left open. Never write your own questions.
+Be strictly faithful to the transcript: never invent facts, names, numbers, dates or questions. If a word looks mis-transcribed, keep it as heard.`;
+}
 
 export async function makeNotes(key: string, transcript: string): Promise<{ markdown: string } | GroqError> {
+  const lang = mainLanguage(transcript);
   const ask = async (content: string): Promise<{ markdown: string } | GroqError> => {
     let last: GroqError = { kind: "failed", status: 404 };
     for (const model of NOTES_MODELS) {
@@ -74,7 +90,7 @@ export async function makeNotes(key: string, transcript: string): Promise<{ mark
         body: JSON.stringify({
           model, temperature: 0.2,
           ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
-          messages: [{ role: "system", content: SYSTEM }, { role: "user", content }],
+          messages: [{ role: "system", content: system(lang) }, { role: "user", content }],
         }),
       });
       if (res.ok) {
