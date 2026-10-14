@@ -45,7 +45,7 @@ export function MoraleCheck({ week, meId, mine, weekly, comments, canSeeComments
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      <form onSubmit={submit} className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
+      <form onSubmit={submit} className="panel p-5">
         <h3 className="font-semibold">{t("title")}</h3>
         <p className="mb-4 text-xs text-muted">{t("subtitle")}</p>
         <div className="flex justify-between gap-1" role="radiogroup" aria-label={t("question")}>
@@ -66,7 +66,7 @@ export function MoraleCheck({ week, meId, mine, weekly, comments, canSeeComments
         </button>
       </form>
 
-      <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
+      <div className="panel p-5">
         <h3 className="font-semibold">{t("average")}</h3>
         <p className="mb-3 text-xs text-muted">{t("averageHint")}</p>
         {data.length ? (

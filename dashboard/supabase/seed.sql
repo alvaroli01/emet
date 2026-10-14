@@ -10,11 +10,11 @@
 -- Self/peer review data from docs/team-profiles.md is deliberately NOT imported.
 
 insert into public.groups (slug, name, emoji, color, position) values
-  ('team-leader',    'Team Leader',    '👑', '#7C5CFC', 1),
-  ('finance',        'Finance',        '💰', '#10B981', 2),
-  ('customer',       'Customer',       '🤝', '#0EA5E9', 3),
-  ('marketing',      'Marketing',      '📣', '#F43F5E', 4),
-  ('communications', 'Communications', '🗂️', '#F59E0B', 5);
+  ('team-leader',    'Team Leader',    '👑', '#5B4BA8', 1),
+  ('finance',        'Finance',        '💰', '#2F7D4F', 2),
+  ('customer',       'Customer',       '🤝', '#2B6CA3', 3),
+  ('marketing',      'Marketing',      '📣', '#C2412D', 4),
+  ('communications', 'Communications', '🗂️', '#B7791F', 5);
 
 insert into public.boards (slug, name, group_id) values ('general', 'emet', null);
 insert into public.boards (slug, name, group_id)

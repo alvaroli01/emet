@@ -36,7 +36,7 @@ export function Scorecard({ kpis, groups }: { kpis: KpiWithValue[]; groups: Grou
   }
 
   return (
-    <div className="rounded-2xl border border-line bg-surface shadow-sm">
+    <div className="panel">
       <header className="flex flex-wrap items-center gap-2 px-5 pt-4 pb-3">
         <div className="flex-1">
           <h3 className="font-semibold">{t("title")}</h3>

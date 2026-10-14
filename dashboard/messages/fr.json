@@ -48,7 +48,10 @@
       "wrongPassword": "E-mail ou mot de passe incorrect.",
       "linkFailed": "Impossible d’envoyer le lien. Est-ce l’e-mail avec lequel tu as été invité·e ?",
       "emailFirst": "Saisis d’abord ton e-mail."
-    }
+    },
+    "welcome": "Connexion",
+    "mountainLabel": "Montagne 3D : l’ascension vers 30 000 € de chiffre d’affaires d’ici juin 2027",
+    "summit": "Sommet 30 000 €"
   },
   "welcome": {
     "title": "Bienvenue sur emet HQ",
@@ -115,7 +118,14 @@
       "posts": "{count, plural, one {# publication prévue} other {# publications prévues}} cette semaine",
       "morale": "Moral {score}/5",
       "noMorale": "Pas encore de sondage sur le moral"
-    }
+    },
+    "summit": "Sommet {amount}",
+    "camp": "Camp {n} · {amount}",
+    "toCamp": "{amount} avant le camp {n}",
+    "dragHint": "Glisser pour tourner",
+    "mountainLabel": "Montagne 3D : le chiffre d’affaires a gravi {pct} du chemin vers {goal}",
+    "paceTitle": "Rythme",
+    "trend": "Évolution"
   },
   "activity": {
     "empty": "Rien pour l’instant — les changements de chacun apparaissent ici en direct.",
@@ -221,7 +231,8 @@
     "yourTeam": "Ton équipe",
     "noMembers": "Pas encore de membres — un responsable répartit les gens sur la page Équipe.",
     "kpis": "KPI",
-    "board": "Tableau des tâches"
+    "board": "Tableau des tâches",
+    "sections": "Sections"
   },
   "kpi": {
     "target": "Objectif",
@@ -415,7 +426,7 @@
       "prospectsEmpty": "Aucun prospect — ajoute la première personne que tu vas contacter.",
       "addProspect": "Ajouter un prospect",
       "complaints": "Réclamations",
-      "complaintsEmpty": "Aucune réclamation. 🎉",
+      "complaintsEmpty": "Aucune réclamation.",
       "addComplaint": "Enregistrer une réclamation"
     },
     "marketing": {
@@ -456,7 +467,9 @@
       "title": "Outils Communication",
       "decisions": "Journal des décisions",
       "decisionsEmpty": "Aucune décision enregistrée.",
-      "addDecision": "Enregistrer une décision"
+      "addDecision": "Enregistrer une décision",
+      "scorecardTab": "Tableau du vendredi",
+      "moraleTab": "Moral"
     },
     "morale": {
       "title": "Sondage hebdo sur le moral",

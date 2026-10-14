@@ -95,10 +95,11 @@ In Supabase:
 1. **Authentication → URL Configuration**
    - *Site URL*: your Vercel link, e.g. `https://emet-hq.vercel.app`
    - *Redirect URLs*: add `https://emet-hq.vercel.app/**`
-2. **Authentication → Email Templates**. In each template, replace the link `{{ .ConfirmationURL }}` with the line shown:
-   - **Invite user:** `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite`
-   - **Magic link:** `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink`
-   - **Reset password:** `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery`
+2. Email templates: **leave them as they are.** The free plan doesn't allow editing them, and the app handles Supabase's standard invite, login-link and reset emails (`/auth/callback` → `/auth/finish`).
+
+> **Live now:** https://emet-hq.vercel.app (Supabase project `emet`, Vercel project `emet-hq`). Sign-up is off; nobody can log in until a team leader's email is added (step 4).
+>
+> **Deploying on the free Vercel plan:** Vercel Hobby blocks deploys whose git commit author isn't the Vercel account owner (it asks for Pro). Deploy from a copy without git history instead: copy `dashboard/` without `node_modules`, `.next` and `.git`, then run `npx vercel deploy --prod` inside it.
 
 ### 4. Log in and invite the team
 

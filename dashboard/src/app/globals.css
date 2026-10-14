@@ -1,65 +1,86 @@
 @import "tailwindcss";
 
 /* Theme tokens — light by default, dark follows the device (a manual toggle comes in the polish step) */
+/* "Summit" world: a topographic map. Day map = paper + ink; night map = slate + chalk.
+   Status colours are always paired with an icon and a word, never colour alone. */
 :root {
-  --bg: #f7f7f8;
-  --surface: #ffffff;
-  --surface-2: #f1f1f3;
-  --border: #e6e6ea;
-  --text: #16161a;
-  --muted: #6b6b76;
-  --brand: #16161a;
-  --brand-contrast: #ffffff;
-  /* Status (fixed in both modes; always shown with an icon + label, never colour alone) */
-  --ok: #0ca30c;
-  --warn: #fab219;
-  --bad: #d03b3b;
-  --ok-text: #006300;
+  --bg: #f1f2ed;
+  --surface: #fbfbf8;
+  --surface-2: #e7e9e2;
+  --border: #d6d9cf;
+  --text: #1a201c;
+  --muted: #59625b;
+  --brand: #1a201c;
+  --brand-contrast: #fbfbf8;
+  --contour: #a9845c;
+  --terrain: #fbfbf8;
+  --climbed: #2b6ca3;
+  --trail: #c9452c;
+  --ok: #2f8a3e;
+  --warn: #e0a21a;
+  --bad: #c9362f;
+  --ok-text: #1f6b2c;
   --warn-text: #8a5a00;
-  --bad-text: #b42323;
-  /* Chart series (validated palette: slot 1 blue, slot 2 orange) + reference line */
-  --series-1: #2a78d6;
-  --series-2: #eb6834;
-  --series-3: #1baf7a;
-  --grid: #e6e6ea;
+  --bad-text: #a8261f;
+  --series-1: #2b6ca3;
+  --series-2: #c9502e;
+  --series-3: #2f8a5a;
+  --grid: #dcdfd6;
+  --shadow: 0 1px 1px rgb(26 32 28 / 0.04), 0 6px 18px -8px rgb(26 32 28 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(26 32 28 / 0.06), 0 16px 32px -12px rgb(26 32 28 / 0.22);
+  --panel-edge: transparent;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0c0c0e;
-    --surface: #151518;
-    --surface-2: #1d1d21;
-    --border: #2a2a30;
-    --text: #f2f2f4;
-    --muted: #9a9aa5;
-    --brand: #f2f2f4;
-    --brand-contrast: #0c0c0e;
-    --series-1: #3987e5;
-    --series-2: #d95926;
-    --series-3: #199e70;
-    --grid: #2a2a30;
-    --ok-text: #4cc94c;
-    --warn-text: #fab219;
-    --bad-text: #f07070;
-  }
+    --bg: #0d1210;
+    --surface: #141a17;
+    --surface-2: #1c2420;
+    --border: #2a332e;
+    --text: #e9ede7;
+    --muted: #9aa59d;
+    --brand: #e9ede7;
+    --brand-contrast: #0d1210;
+    --contour: #a88b68;
+    --terrain: #46534c;
+    --climbed: #6aa6dc;
+    --trail: #ef6f4f;
+    --ok-text: #6fcf7c;
+    --warn-text: #f0bd4a;
+    --bad-text: #f2827a;
+    --series-1: #6aa6dc;
+    --series-2: #e47a55;
+    --series-3: #4fbf8a;
+    --grid: #2a332e;
+    --shadow: 0 1px 1px rgb(0 0 0 / 0.3), 0 8px 24px -10px rgb(0 0 0 / 0.6);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 18px 36px -12px rgb(0 0 0 / 0.7);
+    --panel-edge: #26302b;
+   }
 }
 :root[data-theme="dark"] {
-  --bg: #0c0c0e;
-  --surface: #151518;
-  --surface-2: #1d1d21;
-  --border: #2a2a30;
-  --text: #f2f2f4;
-  --muted: #9a9aa5;
-  --brand: #f2f2f4;
-  --brand-contrast: #0c0c0e;
-  --series-1: #3987e5;
-  --series-2: #d95926;
-  --series-3: #199e70;
-  --grid: #2a2a30;
-  --ok-text: #4cc94c;
-  --warn-text: #fab219;
-  --bad-text: #f07070;
-}
+    --bg: #0d1210;
+    --surface: #141a17;
+    --surface-2: #1c2420;
+    --border: #2a332e;
+    --text: #e9ede7;
+    --muted: #9aa59d;
+    --brand: #e9ede7;
+    --brand-contrast: #0d1210;
+    --contour: #a88b68;
+    --terrain: #46534c;
+    --climbed: #6aa6dc;
+    --trail: #ef6f4f;
+    --ok-text: #6fcf7c;
+    --warn-text: #f0bd4a;
+    --bad-text: #f2827a;
+    --series-1: #6aa6dc;
+    --series-2: #e47a55;
+    --series-3: #4fbf8a;
+    --grid: #2a332e;
+    --shadow: 0 1px 1px rgb(0 0 0 / 0.3), 0 8px 24px -10px rgb(0 0 0 / 0.6);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 18px 36px -12px rgb(0 0 0 / 0.7);
+    --panel-edge: #26302b;
+ }
 
 @theme inline {
   --color-bg: var(--bg);
@@ -79,15 +100,27 @@
   --color-series-1: var(--series-1);
   --color-series-2: var(--series-2);
   --color-series-3: var(--series-3);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-contour: var(--contour);
+  --color-climbed: var(--climbed);
+  --color-trail: var(--trail);
+  --font-sans: var(--font-archivo);
+  --font-mono: var(--font-archivo);
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-feature-settings: "ss01";
   -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: color-mix(in srgb, var(--climbed) 28%, transparent); color: var(--text); }
+html { scrollbar-color: var(--border) transparent; accent-color: var(--climbed); caret-color: var(--climbed); }
+:focus-visible { outline: 2px solid var(--climbed); outline-offset: 2px; border-radius: 6px; }
+.tabular { font-variant-numeric: tabular-nums; }
+/* Display numerals: Archivo's width axis gives the altimeter readout its stance */
+.readout { font-stretch: 118%; font-weight: 650; letter-spacing: -0.025em; font-variant-numeric: tabular-nums; 
 }
 
 /* Long German / Finnish / Russian words must wrap instead of breaking the layout */
@@ -95,14 +128,26 @@ h1, h2, h3, p, label, li, td { overflow-wrap: break-word; hyphens: auto; }
 button { white-space: nowrap; }
 
 @layer components {
+  /* One elevation system: soft offset shadow on paper; a hairline edge only at night */
+  .panel {
+    @apply rounded-[14px] bg-surface;
+    box-shadow: var(--shadow), inset 0 0 0 1px var(--panel-edge);
+  }
+  .panel-lift { transition: box-shadow 220ms cubic-bezier(.2,.8,.2,1), transform 220ms cubic-bezier(.2,.8,.2,1); }
+  .panel-lift:hover { box-shadow: var(--shadow-lift), inset 0 0 0 1px var(--panel-edge); transform: translateY(-2px); }
+  /* Faint contour lines from the map world, used behind the page header only */
+  .contours {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='240' viewBox='0 0 480 240'%3E%3Cg fill='none' stroke='%23a9845c' stroke-opacity='.22' stroke-width='1'%3E%3Cpath d='M-20 200c60-30 110-60 170-58s100 40 160 30 110-60 190-70'/%3E%3Cpath d='M-20 170c70-34 120-70 180-66s96 44 152 34 116-66 188-78'/%3E%3Cpath d='M-20 140c80-40 128-80 190-74s92 48 144 38 122-72 186-86'/%3E%3Cpath d='M40 120c40-40 90-70 140-62s70 40 110 30 70-40 100-52'/%3E%3Cpath d='M110 100c30-30 60-46 90-40s40 26 70 20'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat-x; background-position: right bottom;
+  }
+  .contours-corner { background-repeat: no-repeat; background-position: right -40px top -60px; }
   .input {
     @apply w-full rounded-xl border border-line bg-surface px-3 py-2.5 text-sm outline-none transition
       placeholder:text-muted/70 focus:border-ink/40 focus:ring-4 focus:ring-ink/5;
   }
 }
 
-/* Progress rings fill up on first load (circumference of r=52 ≈ 326.73) */
-@keyframes ring-in { from { stroke-dashoffset: 326.73; } }
+@keyframes rise { from { transform: scaleX(0); } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

@@ -25,7 +25,7 @@ export async function BlockersTool({ group, editable, session, allMembers, onlyT
   ];
 
   return (
-    <DataTable table="blockers" title={`🚧 ${t("blockers.title")}`} rows={data ?? []} fields={fields} members={allMembers}
+    <DataTable table="blockers" title={t("blockers.title")} rows={data ?? []} fields={fields} members={allMembers}
                canEdit={onlyThisGroup ? editable : session.isAdmin}
                defaults={onlyThisGroup ? { group_id: group.id } : {}}
                emptyText={t("blockers.empty")} addLabel={t("blockers.add")} />

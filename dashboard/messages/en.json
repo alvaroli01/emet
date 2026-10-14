@@ -48,7 +48,10 @@
       "wrongPassword": "Wrong email or password.",
       "linkFailed": "We couldn't send a link. Is this the email a team leader invited?",
       "emailFirst": "Type your email first."
-    }
+    },
+    "welcome": "Log in",
+    "mountainLabel": "3D mountain: the climb to €30,000 revenue by June 2027",
+    "summit": "Summit €30,000"
   },
   "welcome": {
     "title": "Welcome to emet HQ",
@@ -115,7 +118,14 @@
       "posts": "{count, plural, one {# post} other {# posts}} planned this week",
       "morale": "Morale {score}/5",
       "noMorale": "No morale check yet"
-    }
+    },
+    "summit": "Summit {amount}",
+    "camp": "Camp {n} · {amount}",
+    "toCamp": "{amount} to Camp {n}",
+    "dragHint": "Drag to turn",
+    "mountainLabel": "3D mountain: revenue has climbed {pct} of the way to {goal}",
+    "paceTitle": "Pace",
+    "trend": "Over time"
   },
   "activity": {
     "empty": "Nothing yet — changes anyone makes show up here live.",
@@ -221,7 +231,8 @@
     "yourTeam": "Your team",
     "noMembers": "No members yet — a team leader assigns people on the Team page.",
     "kpis": "KPIs",
-    "board": "Task board"
+    "board": "Task board",
+    "sections": "Sections"
   },
   "kpi": {
     "target": "Target",
@@ -415,7 +426,7 @@
       "prospectsEmpty": "No prospects yet — add the first person you'll contact.",
       "addProspect": "Add prospect",
       "complaints": "Complaints",
-      "complaintsEmpty": "No complaints. 🎉",
+      "complaintsEmpty": "No complaints.",
       "addComplaint": "Log a complaint"
     },
     "marketing": {
@@ -456,7 +467,9 @@
       "title": "Communications tools",
       "decisions": "Decision log",
       "decisionsEmpty": "No decisions logged yet.",
-      "addDecision": "Log a decision"
+      "addDecision": "Log a decision",
+      "scorecardTab": "Friday scorecard",
+      "moraleTab": "Morale"
     },
     "morale": {
       "title": "Weekly morale check",

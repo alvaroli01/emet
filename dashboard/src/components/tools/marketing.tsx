@@ -3,11 +3,11 @@ import { createClient } from "@/lib/supabase/server";
 import { DataTable, type Field, type Row } from "@/components/data-table";
 import { weekStart } from "@/lib/metrics";
 import { FollowersChart } from "./followers-chart";
-import type { ToolProps } from "./types";
+import type { ToolProps, ToolTab } from "./types";
 
 export const PLATFORMS = ["Instagram", "TikTok", "LinkedIn", "Facebook", "YouTube", "X", "Other"];
 
-export async function MarketingTools({ editable, session, allMembers }: ToolProps) {
+export async function MarketingTools({ editable, session, allMembers }: ToolProps): Promise<ToolTab[]> {
   const t = await getTranslations("tools");
   const supabase = await createClient();
   const [posts, campaigns, designs, experiments, followers] = await Promise.all([
@@ -66,32 +66,50 @@ export async function MarketingTools({ editable, session, allMembers }: ToolProp
     { key: "followers", label: t("fields.followers"), type: "number", required: true },
   ];
 
-  return (
-    <section className="space-y-4">
-      <h2 className="font-semibold">📣 {t("marketing.title")}</h2>
-      <DataTable table="content_posts" title={t("marketing.calendar")} rows={posts.data ?? []} fields={postFields} members={allMembers}
-                 canEdit={editable} defaults={{ owner_id: session.me.id, status: "planned" }}
-                 emptyText={t("marketing.calendarEmpty")} addLabel={t("marketing.addPost")}
-                 footer={<span className="text-muted">{t("marketing.thisWeek", { planned: thisWeek.length, posted })}</span>} />
-      <DataTable table="campaigns" title={t("marketing.campaigns")} rows={campaigns.data ?? []} fields={campaignFields} members={allMembers}
-                 canEdit={editable} defaults={{ owner_id: session.me.id, status: "planned" }}
-                 emptyText={t("marketing.campaignsEmpty")} addLabel={t("marketing.addCampaign")} />
-      <div className="space-y-4">
-        <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
-          <h3 className="mb-3 font-semibold">{t("marketing.followerGrowth")}</h3>
-          <FollowersChart rows={(followers.data ?? []) as unknown as { platform: string; week_start: string; followers: number }[]} />
+  return [
+    {
+      id: "content", label: t("marketing.calendar"),
+      node: (
+        <DataTable table="content_posts" title={t("marketing.calendar")} rows={posts.data ?? []} fields={postFields} members={allMembers}
+                   canEdit={editable} defaults={{ owner_id: session.me.id, status: "planned" }}
+                   emptyText={t("marketing.calendarEmpty")} addLabel={t("marketing.addPost")}
+                   footer={<span className="text-muted">{t("marketing.thisWeek", { planned: thisWeek.length, posted })}</span>} />
+      ),
+    },
+    {
+      id: "campaigns", label: t("marketing.campaigns"),
+      node: (
+        <div className="space-y-4">
+          <DataTable table="campaigns" title={t("marketing.campaigns")} rows={campaigns.data ?? []} fields={campaignFields} members={allMembers}
+                     canEdit={editable} defaults={{ owner_id: session.me.id, status: "planned" }}
+                     emptyText={t("marketing.campaignsEmpty")} addLabel={t("marketing.addCampaign")} />
+          <DataTable table="experiments" title={t("marketing.experiments")} rows={experiments.data ?? []} fields={experimentFields} members={allMembers}
+                     canEdit={editable} defaults={{ owner_id: session.me.id }}
+                     emptyText={t("marketing.experimentsEmpty")} addLabel={t("marketing.addExperiment")} />
         </div>
-        <DataTable table="follower_snapshots" title={t("marketing.followers")} rows={followers.data ?? []} fields={followerFields}
-                   members={allMembers} canEdit={editable} defaults={{ week_start: week }}
-                   emptyText={t("marketing.followersEmpty")} addLabel={t("marketing.addFollowers")} />
-      </div>
-      <DataTable table="design_requests" title={t("marketing.designQueue")} rows={designs.data ?? []} fields={designFields} members={allMembers}
-                 canEdit={editable} canAdd addFields={["title", "details"]}
-                 defaults={{ requested_by: session.me.id, status: "open" }}
-                 emptyText={t("marketing.designEmpty")} addLabel={t("marketing.requestDesign")} />
-      <DataTable table="experiments" title={t("marketing.experiments")} rows={experiments.data ?? []} fields={experimentFields} members={allMembers}
-                 canEdit={editable} defaults={{ owner_id: session.me.id }}
-                 emptyText={t("marketing.experimentsEmpty")} addLabel={t("marketing.addExperiment")} />
-    </section>
-  );
+      ),
+    },
+    {
+      id: "followers", label: t("marketing.followerGrowth"),
+      node: (
+        <div className="space-y-4">
+          <div className="panel p-5">
+            <FollowersChart rows={(followers.data ?? []) as unknown as { platform: string; week_start: string; followers: number }[]} />
+          </div>
+          <DataTable table="follower_snapshots" title={t("marketing.followers")} rows={followers.data ?? []} fields={followerFields}
+                     members={allMembers} canEdit={editable} defaults={{ week_start: week }}
+                     emptyText={t("marketing.followersEmpty")} addLabel={t("marketing.addFollowers")} />
+        </div>
+      ),
+    },
+    {
+      id: "design", label: t("marketing.designQueue"),
+      node: (
+        <DataTable table="design_requests" title={t("marketing.designQueue")} rows={designs.data ?? []} fields={designFields} members={allMembers}
+                   canEdit={editable} canAdd addFields={["title", "details"]}
+                   defaults={{ requested_by: session.me.id, status: "open" }}
+                   emptyText={t("marketing.designEmpty")} addLabel={t("marketing.requestDesign")} />
+      ),
+    },
+  ];
 }

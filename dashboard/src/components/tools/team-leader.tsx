@@ -5,9 +5,9 @@ import { StatusPill } from "@/components/status";
 import { onTimeRate, groupHealth, type CardLite } from "@/lib/metrics";
 import { pct } from "@/lib/format";
 import { BlockersTool } from "./blockers";
-import type { ToolProps } from "./types";
+import type { ToolProps, ToolTab } from "./types";
 
-export async function TeamLeaderTools(props: ToolProps) {
+export async function TeamLeaderTools(props: ToolProps): Promise<ToolTab[]> {
   const { editable, session, allMembers } = props;
   const t = await getTranslations("tools");
   const tg = await getTranslations("group.names");
@@ -51,37 +51,49 @@ export async function TeamLeaderTools(props: ToolProps) {
     { key: "notes", label: t("fields.notes"), type: "textarea" },
   ];
 
-  return (
-    <section className="space-y-4">
-      <h2 className="font-semibold">👑 {t("leader.title")}</h2>
-
-      <div className="rounded-2xl border border-line bg-surface shadow-sm">
-        <header className="px-5 pt-4 pb-3">
-          <h3 className="font-semibold">{t("leader.onTime")}</h3>
-          <p className="text-xs text-muted">{t("leader.onTimeHint", { rate: pct(teamWide.rate, locale) })}</p>
-        </header>
-        <ul className="divide-y divide-line border-t border-line">
-          {perGroup.map((g) => {
-            const r = onTimeRate(g.cards);
-            return (
-              <li key={g.key} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-2.5 text-sm">
-                <span className="flex-1">{g.label}</span>
-                <span className="tabular-nums text-muted">{t("leader.counts", { onTime: r.onTime, late: r.late, overdue: r.overdueOpen })}</span>
-                <span className="w-12 text-right font-medium tabular-nums">{pct(r.rate, locale)}</span>
-                <StatusPill status={groupHealth(r.overdueOpen, g.blockers, r.rate)} />
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      <BlockersTool {...props} />
-      <DataTable table="meeting_notes" title={t("leader.meetings")} rows={notes.data ?? []} fields={noteFields} members={allMembers}
-                 canEdit={editable} defaults={{ created_by: session.me.id, meeting_date: new Date().toISOString().slice(0, 10) }}
-                 emptyText={t("leader.meetingsEmpty")} addLabel={t("leader.addMeeting")} />
-      <DataTable table="outreach" title={t("leader.outreach")} rows={outreach.data ?? []} fields={outreachFields} members={allMembers}
-                 canEdit={editable} defaults={{ owner_id: session.me.id, kind: "school", status: "to_contact" }}
-                 emptyText={t("leader.outreachEmpty")} addLabel={t("leader.addOutreach")} />
-    </section>
-  );
+  return [
+    {
+      id: "health", label: t("leader.onTime"),
+      node: (
+        <div className="space-y-4">
+          <div className="panel">
+            <header className="px-5 pt-4 pb-3">
+              <h3 className="font-semibold">{t("leader.onTime")}</h3>
+              <p className="text-xs text-muted">{t("leader.onTimeHint", { rate: pct(teamWide.rate, locale) })}</p>
+            </header>
+            <ul className="divide-y divide-line border-t border-line">
+              {perGroup.map((g) => {
+                const r = onTimeRate(g.cards);
+                return (
+                  <li key={g.key} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-2.5 text-sm">
+                    <span className="flex-1">{g.label}</span>
+                    <span className="tabular-nums text-muted">{t("leader.counts", { onTime: r.onTime, late: r.late, overdue: r.overdueOpen })}</span>
+                    <span className="w-12 text-right font-medium tabular-nums">{pct(r.rate, locale)}</span>
+                    <StatusPill status={groupHealth(r.overdueOpen, g.blockers, r.rate)} />
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          {await BlockersTool(props)}
+        </div>
+      ),
+    },
+    {
+      id: "meetings", label: t("leader.meetings"),
+      node: (
+        <DataTable table="meeting_notes" title={t("leader.meetings")} rows={notes.data ?? []} fields={noteFields} members={allMembers}
+                   canEdit={editable} defaults={{ created_by: session.me.id, meeting_date: new Date().toISOString().slice(0, 10) }}
+                   emptyText={t("leader.meetingsEmpty")} addLabel={t("leader.addMeeting")} />
+      ),
+    },
+    {
+      id: "outreach", label: t("leader.outreach"),
+      node: (
+        <DataTable table="outreach" title={t("leader.outreach")} rows={outreach.data ?? []} fields={outreachFields} members={allMembers}
+                   canEdit={editable} defaults={{ owner_id: session.me.id, kind: "school", status: "to_contact" }}
+                   emptyText={t("leader.outreachEmpty")} addLabel={t("leader.addOutreach")} />
+      ),
+    },
+  ];
 }

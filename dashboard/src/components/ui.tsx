@@ -28,5 +28,5 @@ export function Avatar({ name, src, size = 32 }: { name: string; src?: string | 
 }
 
 export function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <section className={`rounded-2xl border border-line bg-surface p-5 shadow-sm ${className}`}>{children}</section>;
+  return <section className={`panel p-5 ${className}`}>{children}</section>;
 }

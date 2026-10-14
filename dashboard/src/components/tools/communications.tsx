@@ -5,9 +5,9 @@ import { loadKpis } from "@/lib/kpi-data";
 import { weekStart } from "@/lib/metrics";
 import { Scorecard } from "./scorecard";
 import { MoraleCheck } from "./morale";
-import type { ToolProps } from "./types";
+import type { ToolProps, ToolTab } from "./types";
 
-export async function CommunicationsTools({ group, editable, session, allMembers }: ToolProps) {
+export async function CommunicationsTools({ group, editable, session, allMembers }: ToolProps): Promise<ToolTab[]> {
   const t = await getTranslations("tools");
   const tg = await getTranslations("group.names");
   const supabase = await createClient();
@@ -32,22 +32,29 @@ export async function CommunicationsTools({ group, editable, session, allMembers
       options: session.groups.map((g) => ({ value: g.id, label: `${g.emoji} ${tg(g.slug)}` })) },
   ];
 
-  return (
-    <section className="space-y-4">
-      <h2 className="font-semibold">🗂️ {t("comms.title")}</h2>
-      <Scorecard kpis={kpis} groups={session.groups} />
-      <DataTable table="decisions" title={t("comms.decisions")} rows={decisions.data ?? []} fields={decisionFields}
-                 members={allMembers} canEdit={editable} defaults={{ date: new Date().toISOString().slice(0, 10), group_id: group.id }}
-                 emptyText={t("comms.decisionsEmpty")} addLabel={t("comms.addDecision")} />
-      <MoraleCheck
-        week={week}
-        meId={session.me.id}
-        mine={mine.data as { score: number; comment: string | null } | null}
-        weekly={(weekly.data as { week_start: string; avg_score: number; responses: number }[] | null) ?? []}
-        comments={(comments.data as { id: string; week_start: string; user_id: string; score: number; comment: string }[] | null) ?? []}
-        canSeeComments={editable}
-        members={allMembers}
-      />
-    </section>
-  );
+  return [
+    { id: "scorecard", label: t("comms.scorecardTab"), node: <Scorecard kpis={kpis} groups={session.groups} /> },
+    {
+      id: "decisions", label: t("comms.decisions"),
+      node: (
+        <DataTable table="decisions" title={t("comms.decisions")} rows={decisions.data ?? []} fields={decisionFields}
+                   members={allMembers} canEdit={editable} defaults={{ date: new Date().toISOString().slice(0, 10), group_id: group.id }}
+                   emptyText={t("comms.decisionsEmpty")} addLabel={t("comms.addDecision")} />
+      ),
+    },
+    {
+      id: "morale", label: t("comms.moraleTab"),
+      node: (
+        <MoraleCheck
+          week={week}
+          meId={session.me.id}
+          mine={mine.data as { score: number; comment: string | null } | null}
+          weekly={(weekly.data as { week_start: string; avg_score: number; responses: number }[] | null) ?? []}
+          comments={(comments.data as { id: string; week_start: string; user_id: string; score: number; comment: string }[] | null) ?? []}
+          canSeeComments={editable}
+          members={allMembers}
+        />
+      ),
+    },
+  ];
 }

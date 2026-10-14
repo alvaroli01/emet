@@ -15,7 +15,7 @@ export default async function GeneralBoardPage() {
     <div className="space-y-4">
       <LiveRefresh tables={BOARD_TABLES} />
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">🏢 {t("generalTitle")}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("generalTitle")}</h1>
         <p className="text-sm text-muted">{t("generalHint")}</p>
       </div>
       <Suspense>

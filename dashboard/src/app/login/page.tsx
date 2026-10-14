@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 import { Loader2, Mail, KeyRound } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LanguageSwitcher } from "@/components/preferences";
+import { MountainLazy } from "@/components/summit/mountain-lazy";
+import { LogoMark } from "@/components/summit/logo";
 
 export default function LoginPage() {
   return (
@@ -66,54 +68,58 @@ function LoginForm() {
   }
 
   return (
-    <main className="relative min-h-dvh grid place-items-center px-4 py-10">
-      <div className="absolute top-3 right-3"><LanguageSwitcher /></div>
-      <div className="w-full max-w-sm">
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 grid size-12 place-items-center rounded-2xl bg-brand text-xl font-semibold text-brand-contrast">e</div>
-          <h1 className="text-2xl font-semibold tracking-tight">emet HQ</h1>
-          <p className="mt-1 text-sm text-muted">{t("tagline")}</p>
+    <main className="grid min-h-dvh lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+      <section className="relative h-[42dvh] min-h-[260px] overflow-hidden border-b border-line bg-bg lg:h-auto lg:border-b-0 lg:border-r">
+        <MountainLazy className="size-full" progress={0} variant="login" ariaLabel={t("mountainLabel")} labels={{ summit: t("summit") }} />
+        <div className="pointer-events-none absolute top-0 left-0 p-5 sm:p-8">
+          <p className="flex items-center gap-2.5 text-lg font-semibold tracking-tight"><LogoMark /> emet HQ</p>
+          <p className="readout mt-4 max-w-md text-2xl leading-tight text-balance sm:mt-6 sm:text-4xl">{t("tagline")}</p>
         </div>
+      </section>
+      <section className="relative grid place-items-center px-4 py-10">
+        <div className="absolute top-3 right-3"><LanguageSwitcher /></div>
+        <div className="w-full max-w-sm">
+          <h1 className="mb-1 text-2xl font-semibold tracking-tight">{t("welcome")}</h1>
+          <p className="mb-6 text-sm text-muted">{t("inviteOnly")}</p>
+          <div className="panel p-6">
+            <div className="mb-5 grid grid-cols-2 rounded-xl bg-surface-2 p-1 text-sm" role="tablist">
+              {(["password", "link"] as const).map((m) => (
+                <button key={m} type="button" role="tab" aria-selected={mode === m}
+                        onClick={() => { setMode(m); setMsg(null); }}
+                        className={`flex items-center justify-center gap-1.5 rounded-lg py-2 font-medium transition ${
+                          mode === m ? "bg-surface shadow-sm" : "text-muted hover:text-ink"}`}>
+                  {m === "password" ? <KeyRound size={15} /> : <Mail size={15} />}
+                  {m === "password" ? t("password") : t("emailLink")}
+                </button>
+              ))}
+            </div>
 
-        <div className="rounded-2xl border border-line bg-surface p-6 shadow-sm">
-          <div className="mb-5 grid grid-cols-2 rounded-xl bg-surface-2 p-1 text-sm" role="tablist">
-            {(["password", "link"] as const).map((m) => (
-              <button key={m} type="button" role="tab" aria-selected={mode === m}
-                      onClick={() => { setMode(m); setMsg(null); }}
-                      className={`flex items-center justify-center gap-1.5 rounded-lg py-2 font-medium transition ${
-                        mode === m ? "bg-surface shadow-sm" : "text-muted hover:text-ink"}`}>
-                {m === "password" ? <KeyRound size={15} /> : <Mail size={15} />}
-                {m === "password" ? t("password") : t("emailLink")}
-              </button>
-            ))}
-          </div>
-
-          <form onSubmit={submit} className="space-y-4">
-            <label className="block">
-              <span className="mb-1.5 block text-sm font-medium">{t("email")}</span>
-              <input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                     className="input" placeholder="you@example.com" />
-            </label>
-            {mode === "password" && (
+            <form onSubmit={submit} className="space-y-4">
               <label className="block">
-                <span className="mb-1.5 block text-sm font-medium">{t("password")}</span>
-                <input type="password" required autoComplete="current-password" value={password}
-                       onChange={(e) => setPassword(e.target.value)} className="input" />
+                <span className="mb-1.5 block text-sm font-medium">{t("email")}</span>
+                <input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                       className="input" placeholder="you@example.com" />
               </label>
-            )}
-            {msg && <p role="status" className={`text-sm ${msg.kind === "error" ? "text-bad-text" : "text-ok-text"}`}>{msg.text}</p>}
-            <button disabled={busy}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand py-2.5 text-sm font-medium text-brand-contrast transition hover:opacity-90 disabled:opacity-60">
-              {busy && <Loader2 size={16} className="animate-spin" />}
-              {mode === "password" ? t("logIn") : t("sendLink")}
-            </button>
-            {mode === "password" && (
-              <button type="button" onClick={forgot} className="w-full text-center text-sm text-muted hover:text-ink">{t("forgot")}</button>
-            )}
-          </form>
+              {mode === "password" && (
+                <label className="block">
+                  <span className="mb-1.5 block text-sm font-medium">{t("password")}</span>
+                  <input type="password" required autoComplete="current-password" value={password}
+                         onChange={(e) => setPassword(e.target.value)} className="input" />
+                </label>
+              )}
+              {msg && <p role="status" className={`text-sm ${msg.kind === "error" ? "text-bad-text" : "text-ok-text"}`}>{msg.text}</p>}
+              <button disabled={busy}
+                      className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand py-2.5 text-sm font-medium text-brand-contrast transition hover:opacity-90 disabled:opacity-60">
+                {busy && <Loader2 size={16} className="animate-spin" />}
+                {mode === "password" ? t("logIn") : t("sendLink")}
+              </button>
+              {mode === "password" && (
+                <button type="button" onClick={forgot} className="w-full text-center text-sm text-muted hover:text-ink">{t("forgot")}</button>
+              )}
+            </form>
+          </div>
         </div>
-        <p className="mt-6 text-center text-xs text-muted">{t("inviteOnly")}</p>
-      </div>
+      </section>
     </main>
   );
 }

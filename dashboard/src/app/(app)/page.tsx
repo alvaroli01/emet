@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CalendarClock, Percent, Timer, AlertOctagon, ArrowRight } from "lucide-react";
+import { CalendarClock, Percent, Timer, AlertOctagon, ArrowRight, Move3d } from "lucide-react";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -9,13 +9,16 @@ import {
 } from "@/lib/metrics";
 import { eur, pct, longDate, timeAgo } from "@/lib/format";
 import { Card } from "@/components/ui";
-import { GoalRing } from "@/components/overview/goal-ring";
+import { MountainLazy } from "@/components/summit/mountain-lazy";
+import { Altimeter } from "@/components/summit/altimeter";
 import { WeeklyChart, CumulativeChart, Legend } from "@/components/overview/charts";
 import { ActivityFeed, type ActivityEntry } from "@/components/activity-feed";
 import { LiveRefresh } from "@/components/live-refresh";
 import { StatusPill, statusFor } from "@/components/status";
 
 const RANGES = ["4", "12", "all"] as const;
+/** Base camps every €5K on the way to the €30K summit */
+const CAMPS = 6;
 
 export default async function OverviewPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
   const { range: rangeParam } = await searchParams;
@@ -62,6 +65,12 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
     communications: lastMorale ? t("kpi.morale", { score: Number(lastMorale.avg_score).toFixed(1) }) : t("kpi.noMorale"),
   };
 
+  const revPct = Math.min(1, Math.max(0, tot.revenue / GOAL.revenue));
+  const profitPct = Math.min(1, Math.max(0, tot.profit / GOAL.profit));
+  const campSize = GOAL.revenue / CAMPS;
+  const nextCampN = Math.floor(tot.revenue / campSize) + 1;
+  const nextCamp = nextCampN <= CAMPS ? { n: nextCampN, amount: nextCampN * campSize } : null;
+
   const marginStatus = statusFor(tot.margin, GOAL.minMargin);
   const onTimeStatus = statusFor(onTime.rate, GOAL.onTimeTarget);
 
@@ -69,31 +78,56 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
     <div className="space-y-6">
       <LiveRefresh tables={["sales", "expenses", "cards", "blockers", "activity_log", "complaints", "content_posts", "morale_checks"]} />
 
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">{t("hi", { name: me.full_name })} 👋</h1>
-          <p className="text-sm text-muted">{t("subtitle")}</p>
+      <section className="panel grid overflow-hidden lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+        <div className="relative z-10 flex flex-col gap-6 p-5 sm:p-7">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight text-balance">{t("hi", { name: me.full_name })}</h1>
+            <p className="text-sm text-muted">{t("subtitle")}</p>
+          </div>
+          <div>
+            <p className="text-sm text-muted">{t("revenue")}</p>
+            <p className="readout text-5xl leading-none sm:text-6xl">{eur(tot.revenue, locale)}</p>
+            <p className="mt-2 text-sm text-muted tabular">{t("of", { goal: eur(GOAL.revenue, locale) })} · {pct(revPct, locale)}</p>
+            <Altimeter value={revPct} steps={CAMPS} color="var(--climbed)" className="mt-4" label={t("ringLabel", { label: t("revenue"), value: eur(tot.revenue, locale), goal: eur(GOAL.revenue, locale), pct: Math.round(revPct * 100) })} />
+            <p className="mt-2 text-sm font-medium tabular">
+              {nextCamp ? t("toCamp", { amount: eur(nextCamp.amount - tot.revenue, locale), n: nextCamp.n }) : t("reached")}
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 border-t border-line pt-5">
+            <div>
+              <p className="text-sm text-muted">{t("profit")}</p>
+              <p className="readout text-2xl">{eur(Math.max(0, tot.profit), locale)}</p>
+              <p className="text-xs text-muted tabular">{t("of", { goal: eur(GOAL.profit, locale) })}</p>
+              <Altimeter value={profitPct} color="var(--series-2)" className="mt-2" label={t("ringLabel", { label: t("profit"), value: eur(Math.max(0, tot.profit), locale), goal: eur(GOAL.profit, locale), pct: Math.round(profitPct * 100) })} />
+            </div>
+            <div>
+              <p className="text-sm text-muted">{t("until", { date: longDate(DEADLINE, locale) })}</p>
+              <p className="readout text-2xl">{t("days", { count: p.daysLeft })}</p>
+              <p className="text-xs text-muted">{t("weeksLeft", { count: p.weeksLeft })}</p>
+            </div>
+          </div>
         </div>
-        <nav aria-label={t("range.label")} className="flex rounded-xl bg-surface-2 p-1 text-sm">
-          {RANGES.map((r) => (
-            <Link key={r} href={r === "12" ? "/" : `/?range=${r}`} scroll={false} aria-current={range === r ? "true" : undefined}
-                  className={`rounded-lg px-3 py-1.5 transition ${range === r ? "bg-surface font-medium shadow-sm" : "text-muted hover:text-ink"}`}>
-              {r === "all" ? t("range.all") : t("range.weeks", { count: Number(r) })}
-            </Link>
-          ))}
-        </nav>
-      </div>
-
-      <Card className="grid gap-6 sm:grid-cols-2">
-        <GoalRing label={t("revenue")} value={tot.revenue} goal={GOAL.revenue} color="var(--series-1)" />
-        <GoalRing label={t("profit")} value={Math.max(0, tot.profit)} goal={GOAL.profit} color="var(--series-2)" />
-      </Card>
+        <div className="relative h-[300px] border-t border-line sm:h-[380px] lg:h-auto lg:min-h-[440px] lg:border-t-0 lg:border-l">
+          <MountainLazy
+            className="size-full"
+            progress={revPct}
+            nextCampAt={nextCamp ? nextCamp.amount / GOAL.revenue : null}
+            ariaLabel={t("mountainLabel", { pct: pct(revPct, locale), goal: eur(GOAL.revenue, locale) })}
+            labels={{
+              summit: t("summit", { amount: eur(GOAL.revenue, locale) }),
+              here: tot.revenue > 0 ? eur(tot.revenue, locale) : null,
+              nextCamp: nextCamp ? t("camp", { n: nextCamp.n, amount: eur(nextCamp.amount, locale) }) : null,
+            }}
+          />
+          <p className="pointer-events-none absolute right-3 bottom-3 flex items-center gap-1 text-xs text-muted"><Move3d size={13} aria-hidden /> {t("dragHint")}</p>
+        </div>
+      </section>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
-          <p className="flex items-center gap-1.5 text-sm text-muted"><CalendarClock size={15} /> {t("until", { date: longDate(DEADLINE, locale) })}</p>
-          <p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums">{t("days", { count: p.daysLeft })}</p>
-          <p className="text-sm text-muted">{t("weeksLeft", { count: p.weeksLeft })}</p>
+          <p className="flex items-center gap-1.5 text-sm text-muted"><CalendarClock size={15} /> {t("paceTitle")}</p>
+          <p className="readout mt-1 text-2xl">{t("perWeek", { amount: eur(p.revenuePerWeekNeeded, locale) })}</p>
+          <p className="text-sm text-muted">{t("paceNeeded")}</p>
           <dl className="mt-3 space-y-1 border-t border-line pt-3 text-sm tabular-nums">
             <div className="flex justify-between gap-2"><dt className="text-muted">{t("paceSoFar")}</dt><dd>{t("perWeek", { amount: eur(p.revenuePerWeekSoFar, locale) })}</dd></div>
             <div className="flex justify-between gap-2"><dt className="text-muted">{t("paceNeeded")}</dt><dd>{t("perWeek", { amount: eur(p.revenuePerWeekNeeded, locale) })}</dd></div>
@@ -102,7 +136,7 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         </Card>
         <Card>
           <p className="flex items-center gap-1.5 text-sm text-muted"><Percent size={15} /> {t("marginSoFar")}</p>
-          <p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums">{pct(tot.margin, locale)}</p>
+          <p className="readout mt-1 text-2xl">{pct(tot.margin, locale)}</p>
           <p className="text-sm text-muted">{t("marginMin")}</p>
           <div className="mt-3 border-t border-line pt-3">
             {marginStatus ? <StatusPill status={marginStatus} label={marginStatus === "good" ? t("aboveMin") : t("belowMin")} />
@@ -111,7 +145,7 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         </Card>
         <Card>
           <p className="flex items-center gap-1.5 text-sm text-muted"><Timer size={15} /> {t("onTime")}</p>
-          <p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums">{pct(onTime.rate, locale)}</p>
+          <p className="readout mt-1 text-2xl">{pct(onTime.rate, locale)}</p>
           <p className="text-sm text-muted">{t("onTimeTarget")}</p>
           <div className="mt-3 border-t border-line pt-3">
             {onTimeStatus ? (
@@ -124,6 +158,17 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         </Card>
       </div>
 
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+        <h2 className="text-lg font-semibold tracking-tight">{t("trend")}</h2>
+        <nav aria-label={t("range.label")} className="flex rounded-xl bg-surface-2 p-1 text-sm">
+          {RANGES.map((r) => (
+            <Link key={r} href={r === "12" ? "/" : `/?range=${r}`} scroll={false} aria-current={range === r ? "true" : undefined}
+                  className={`rounded-lg px-3 py-1.5 transition ${range === r ? "bg-surface font-medium shadow-sm" : "text-muted hover:text-ink"}`}>
+              {r === "all" ? t("range.all") : t("range.weeks", { count: Number(r) })}
+            </Link>
+          ))}
+        </nav>
+      </div>
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -148,17 +193,19 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
       </div>
 
       <section>
-        <h2 className="mb-3 font-semibold">{t("groups")}</h2>
+        <h2 className="mb-3 text-lg font-semibold tracking-tight">{t("groups")}</h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {groups.map((g) => {
             const gc = onTimeRate(groupCards(g.id));
             const gb = openBlockers.filter((b) => b.group_id === g.id).length;
             const health: Health = groupHealth(gc.overdueOpen, gb, gc.rate);
             return (
-              <Link key={g.id} href={`/g/${g.slug}`} style={{ borderLeft: `4px solid ${g.color}` }}
-                    className="group rounded-2xl border border-line bg-surface p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+              <Link key={g.id} href={`/g/${g.slug}`} className="panel panel-lift group relative overflow-hidden p-5">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="font-semibold"><span className="mr-1.5">{g.emoji}</span>{tg(g.slug)}</p>
+                  <p className="flex items-center gap-2.5 font-semibold">
+                    <span aria-hidden className="grid size-8 place-items-center rounded-lg text-base" style={{ background: `color-mix(in srgb, ${g.color} 16%, transparent)` }}>{g.emoji}</span>
+                    {tg(g.slug)}
+                  </p>
                   <StatusPill status={health} />
                 </div>
                 <p className="mt-2 text-sm">{keyKpi[g.slug] ?? ""}</p>
@@ -189,7 +236,7 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
                 );
               })}
             </ul>
-          ) : <p className="py-6 text-center text-sm text-muted">{t("noBlockers")} 🙌</p>}
+          ) : <p className="py-6 text-center text-sm text-muted">{t("noBlockers")}</p>}
         </Card>
         <Card>
           <h2 className="mb-3 flex items-center gap-2 font-semibold">{t("activity")} <span className="size-1.5 rounded-full bg-ok" aria-hidden /></h2>

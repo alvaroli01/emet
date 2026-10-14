@@ -48,7 +48,10 @@
       "wrongPassword": "Väärä sähköposti tai salasana.",
       "linkFailed": "Linkkiä ei voitu lähettää. Onko tämä sähköposti, johon sait kutsun?",
       "emailFirst": "Kirjoita ensin sähköpostisi."
-    }
+    },
+    "welcome": "Kirjaudu sisään",
+    "mountainLabel": "3D-vuori: nousu 30 000 euron liikevaihtoon kesäkuuhun 2027 mennessä",
+    "summit": "Huippu 30 000 €"
   },
   "welcome": {
     "title": "Tervetuloa emet HQ:hon",
@@ -115,7 +118,14 @@
       "posts": "{count, plural, one {# julkaisu} other {# julkaisua}} suunniteltu tälle viikolle",
       "morale": "Fiilis {score}/5",
       "noMorale": "Ei vielä fiiliskyselyä"
-    }
+    },
+    "summit": "Huippu {amount}",
+    "camp": "Leiri {n} · {amount}",
+    "toCamp": "{amount} leiriin {n}",
+    "dragHint": "Vedä kääntääksesi",
+    "mountainLabel": "3D-vuori: liikevaihto on noussut {pct} matkasta kohti tavoitetta {goal}",
+    "paceTitle": "Tahti",
+    "trend": "Kehitys"
   },
   "activity": {
     "empty": "Ei vielä mitään – kaikkien muutokset näkyvät tässä reaaliajassa.",
@@ -221,7 +231,8 @@
     "yourTeam": "Sinun tiimisi",
     "noMembers": "Ei vielä jäseniä – tiiminvetäjä jakaa ihmiset Tiimi-sivulla.",
     "kpis": "Mittarit",
-    "board": "Tehtävätaulu"
+    "board": "Tehtävätaulu",
+    "sections": "Osiot"
   },
   "kpi": {
     "target": "Tavoite",
@@ -415,7 +426,7 @@
       "prospectsEmpty": "Ei vielä liidejä – lisää ensimmäinen henkilö, johon otat yhteyttä.",
       "addProspect": "Lisää liidi",
       "complaints": "Reklamaatiot",
-      "complaintsEmpty": "Ei reklamaatioita. 🎉",
+      "complaintsEmpty": "Ei reklamaatioita.",
       "addComplaint": "Kirjaa reklamaatio"
     },
     "marketing": {
@@ -456,7 +467,9 @@
       "title": "Viestinnän työkalut",
       "decisions": "Päätösloki",
       "decisionsEmpty": "Ei vielä kirjattuja päätöksiä.",
-      "addDecision": "Kirjaa päätös"
+      "addDecision": "Kirjaa päätös",
+      "scorecardTab": "Perjantain tulostaulu",
+      "moraleTab": "Mieliala"
     },
     "morale": {
       "title": "Viikoittainen fiiliskysely",

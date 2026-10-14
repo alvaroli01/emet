@@ -59,7 +59,7 @@ export function TeamManager({ people, groups, meId, isAdmin }: { people: Profile
         )}
       </div>
 
-      <div className="rounded-2xl border border-line bg-surface shadow-sm">
+      <div className="panel">
         <ul className="divide-y divide-line">
           {sorted.map((p) => {
             const g = groupOf(p.group_id);

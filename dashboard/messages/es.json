@@ -48,7 +48,10 @@
       "wrongPassword": "Email o contraseña incorrectos.",
       "linkFailed": "No pudimos enviar el enlace. ¿Es el email con el que te invitaron?",
       "emailFirst": "Escribe primero tu email."
-    }
+    },
+    "welcome": "Inicia sesión",
+    "mountainLabel": "Montaña 3D: la subida hasta 30.000 € de ingresos en junio de 2027",
+    "summit": "Cumbre 30.000 €"
   },
   "welcome": {
     "title": "Bienvenido/a a emet HQ",
@@ -115,7 +118,14 @@
       "posts": "{count, plural, one {# publicación planificada} other {# publicaciones planificadas}} esta semana",
       "morale": "Ánimo {score}/5",
       "noMorale": "Aún no hay encuesta de ánimo"
-    }
+    },
+    "summit": "Cumbre {amount}",
+    "camp": "Campo {n} · {amount}",
+    "toCamp": "{amount} para el Campo {n}",
+    "dragHint": "Arrastra para girar",
+    "mountainLabel": "Montaña 3D: los ingresos han subido {pct} del camino hasta {goal}",
+    "paceTitle": "Ritmo",
+    "trend": "Evolución"
   },
   "activity": {
     "empty": "Nada todavía: los cambios de cualquiera aparecen aquí en directo.",
@@ -221,7 +231,8 @@
     "yourTeam": "Tu equipo",
     "noMembers": "Aún no hay miembros: un líder asigna a la gente en la página Equipo.",
     "kpis": "KPI",
-    "board": "Tablero de tareas"
+    "board": "Tablero de tareas",
+    "sections": "Secciones"
   },
   "kpi": {
     "target": "Objetivo",
@@ -415,7 +426,7 @@
       "prospectsEmpty": "Aún no hay contactos: añade a la primera persona a la que vas a escribir.",
       "addProspect": "Añadir contacto",
       "complaints": "Quejas",
-      "complaintsEmpty": "Ninguna queja. 🎉",
+      "complaintsEmpty": "Ninguna queja.",
       "addComplaint": "Registrar queja"
     },
     "marketing": {
@@ -456,7 +467,9 @@
       "title": "Herramientas de Comunicación",
       "decisions": "Registro de decisiones",
       "decisionsEmpty": "Aún no hay decisiones registradas.",
-      "addDecision": "Registrar decisión"
+      "addDecision": "Registrar decisión",
+      "scorecardTab": "Marcador del viernes",
+      "moraleTab": "Ánimo"
     },
     "morale": {
       "title": "Encuesta semanal de ánimo",

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X } from "lucide-react";
 import type { Group } from "@/lib/session";
+import { LogoMark } from "@/components/summit/logo";
 
 type Props = { groups: Group[]; myGroupId: string | null };
 
@@ -43,7 +44,7 @@ function NavLink({ href, active, children, onClick }: {
       onClick={onClick}
       aria-current={active ? "page" : undefined}
       className={`flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm transition ${
-        active ? "bg-surface-2 font-medium text-ink" : "text-muted hover:bg-surface-2/60 hover:text-ink"
+        active ? "bg-surface-2 font-medium text-ink shadow-[inset_2px_0_0_var(--trail)]" : "text-muted hover:bg-surface-2/60 hover:text-ink"
       }`}
     >
       {children}
@@ -62,14 +63,14 @@ function NavList(props: Props & { onNavigate?: () => void }) {
           <span>{i.label}</span>
         </NavLink>
       ))}
-      <p className="mt-5 mb-1 px-2.5 text-[11px] font-medium uppercase tracking-wider text-muted">{t("groups")}</p>
+      <p className="mt-5 mb-1 px-2.5 text-xs font-medium text-muted">{t("groups")}</p>
       {groupItems.map((i) => (
         <NavLink key={i.href} href={i.href} active={isActive(path, i.href)} onClick={props.onNavigate}>
           <span className="grid size-[17px] place-items-center text-[14px] leading-none">{i.emoji}</span>
           <span className="flex-1">{i.label}</span>
           {i.mine && (
-            <span className="rounded-full px-1.5 py-0.5 text-[10px] font-medium"
-                  style={{ background: `${i.color}22`, color: i.color }}>
+            <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-1.5 py-0.5 text-[10px] font-medium text-ink">
+              <span aria-hidden className="size-1.5 rounded-full" style={{ background: i.color }} />
               {t("yourTeam")}
             </span>
           )}
@@ -91,7 +92,7 @@ export function Sidebar(props: Props) {
   return (
     <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-line bg-surface px-3 py-4 lg:flex">
       <Link href="/" className="mb-6 flex items-center gap-2 px-2.5">
-        <span className="grid size-7 place-items-center rounded-lg bg-brand text-sm font-semibold text-brand-contrast">e</span>
+        <LogoMark />
         <span className="font-semibold tracking-tight">emet HQ</span>
       </Link>
       <NavList {...props} />
@@ -119,7 +120,8 @@ export function BottomNav(props: Props) {
       <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
         {items.map((i) => (
           <Link key={i.href} href={i.href}
-                className={`flex flex-col items-center gap-0.5 py-2 text-[11px] ${isActive(path, i.href) ? "text-ink" : "text-muted"}`}>
+                aria-current={isActive(path, i.href) ? "page" : undefined}
+                className={`flex flex-col items-center gap-0.5 py-2 text-[11px] transition-colors ${isActive(path, i.href) ? "font-medium text-ink" : "text-muted"}`}>
             {i.icon}
             <span className="truncate">{i.label}</span>
           </Link>
@@ -135,7 +137,7 @@ export function BottomNav(props: Props) {
           <button aria-label={t("close")} onClick={() => setOpen(false)} className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-3xl bg-surface p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
             <div className="mb-3 flex items-center justify-between">
-              <span className="font-semibold">emet HQ</span>
+              <span className="flex items-center gap-2 font-semibold"><LogoMark size={24} /> emet HQ</span>
               <button onClick={() => setOpen(false)} aria-label={t("close")} className="rounded-lg p-1.5 hover:bg-surface-2">
                 <X size={18} />
               </button>

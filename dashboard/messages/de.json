@@ -48,7 +48,10 @@
       "wrongPassword": "E-Mail oder Passwort falsch.",
       "linkFailed": "Wir konnten keinen Link schicken. Ist das die E-Mail, mit der du eingeladen wurdest?",
       "emailFirst": "Gib zuerst deine E-Mail ein."
-    }
+    },
+    "welcome": "Anmelden",
+    "mountainLabel": "3D-Berg: der Aufstieg zu 30.000 € Umsatz bis Juni 2027",
+    "summit": "Gipfel 30.000 €"
   },
   "welcome": {
     "title": "Willkommen bei emet HQ",
@@ -115,7 +118,14 @@
       "posts": "{count, plural, one {# Post} other {# Posts}} diese Woche geplant",
       "morale": "Stimmung {score}/5",
       "noMorale": "Noch keine Stimmungsabfrage"
-    }
+    },
+    "summit": "Gipfel {amount}",
+    "camp": "Lager {n} · {amount}",
+    "toCamp": "Noch {amount} bis Lager {n}",
+    "dragHint": "Zum Drehen ziehen",
+    "mountainLabel": "3D-Berg: Der Umsatz hat {pct} des Wegs zu {goal} geschafft",
+    "paceTitle": "Tempo",
+    "trend": "Verlauf"
   },
   "activity": {
     "empty": "Noch nichts – Änderungen von allen erscheinen hier live.",
@@ -221,7 +231,8 @@
     "yourTeam": "Dein Team",
     "noMembers": "Noch keine Mitglieder – die Teamleitung teilt Leute auf der Team-Seite zu.",
     "kpis": "KPIs",
-    "board": "Aufgabenboard"
+    "board": "Aufgabenboard",
+    "sections": "Bereiche"
   },
   "kpi": {
     "target": "Ziel",
@@ -415,7 +426,7 @@
       "prospectsEmpty": "Noch keine Kontakte – trag die erste Person ein, die du ansprichst.",
       "addProspect": "Kontakt hinzufügen",
       "complaints": "Beschwerden",
-      "complaintsEmpty": "Keine Beschwerden. 🎉",
+      "complaintsEmpty": "Keine Beschwerden.",
       "addComplaint": "Beschwerde erfassen"
     },
     "marketing": {
@@ -456,7 +467,9 @@
       "title": "Kommunikations-Tools",
       "decisions": "Entscheidungsprotokoll",
       "decisionsEmpty": "Noch keine Entscheidungen erfasst.",
-      "addDecision": "Entscheidung erfassen"
+      "addDecision": "Entscheidung erfassen",
+      "scorecardTab": "Freitags-Scorecard",
+      "moraleTab": "Stimmung"
     },
     "morale": {
       "title": "Wöchentliche Stimmungsabfrage",

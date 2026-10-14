@@ -14,9 +14,10 @@ import { CustomerTools } from "@/components/tools/customer";
 import { MarketingTools } from "@/components/tools/marketing";
 import { CommunicationsTools } from "@/components/tools/communications";
 import { TeamLeaderTools } from "@/components/tools/team-leader";
-import type { ToolProps } from "@/components/tools/types";
+import type { ToolProps, ToolTab } from "@/components/tools/types";
+import { SectionTabs } from "@/components/section-tabs";
 
-const TOOLS: Record<string, (p: ToolProps) => Promise<React.ReactNode>> = {
+const TOOLS: Record<string, (p: ToolProps) => Promise<ToolTab[]>> = {
   finance: FinanceTools,
   customer: CustomerTools,
   marketing: MarketingTools,
@@ -24,8 +25,9 @@ const TOOLS: Record<string, (p: ToolProps) => Promise<React.ReactNode>> = {
   "team-leader": TeamLeaderTools,
 };
 
-export default async function GroupPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function GroupPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ tab?: string }> }) {
   const { slug } = await params;
+  const { tab } = await searchParams;
   const t = await getTranslations("group");
   const session = await getSession();
   const group = session.groups.find((g) => g.slug === slug);
@@ -40,19 +42,23 @@ export default async function GroupPage({ params }: { params: Promise<{ slug: st
   const editable = session.canEditGroup(group.id);
   const Tools = TOOLS[slug];
   const props: ToolProps = { group, editable, session, allMembers: board.members };
+  const groupKpis = kpis.filter((k) => k.group_id === group.id);
+  const tt = await getTranslations("tools");
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <LiveRefresh tables={[...BOARD_TABLES, "kpi_targets", "blockers", "sales", "expenses", "inventory", "prospects",
         "complaints", "content_posts", "campaigns", "design_requests", "experiments", "follower_snapshots",
         "decisions", "morale_checks", "meeting_notes", "outreach", "profiles"]} />
 
-      <header className="rounded-2xl border border-line bg-surface p-5 shadow-sm" style={{ borderTop: `4px solid ${group.color}` }}>
+      <header className="panel contours contours-corner p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="text-3xl leading-none">{group.emoji}</span>
+          <span aria-hidden className="grid size-12 place-items-center rounded-xl text-2xl leading-none"
+                style={{ background: `color-mix(in srgb, ${group.color} 16%, transparent)` }}>{group.emoji}</span>
           <h1 className="text-2xl font-semibold tracking-tight">{t(`names.${slug}`)}</h1>
           {session.me.group_id === group.id && (
-            <span className="rounded-full px-2 py-0.5 text-xs font-medium" style={{ background: `${group.color}22`, color: group.color }}>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium">
+              <span aria-hidden className="size-1.5 rounded-full" style={{ background: group.color }} />
               {t("yourTeam")}
             </span>
           )}
@@ -67,23 +73,18 @@ export default async function GroupPage({ params }: { params: Promise<{ slug: st
             </div>
           )) : <p className="text-sm text-muted">{t("noMembers")}</p>}
         </div>
+        {groupKpis.length > 0 && (
+          <div className="mt-5 border-t border-line pt-4">
+            <KpiCards kpis={groupKpis} canEdit={editable} inline />
+          </div>
+        )}
       </header>
 
-      {kpis.some((k) => k.group_id === group.id) && (
-        <section>
-          <h2 className="mb-3 font-semibold">{t("kpis")}</h2>
-          <KpiCards kpis={kpis.filter((k) => k.group_id === group.id)} canEdit={editable} />
-        </section>
-      )}
-
-      <section>
-        <h2 className="mb-3 font-semibold">{t("board")}</h2>
-        <Suspense><Board data={board} viewer={session.viewer} /></Suspense>
-      </section>
-
-      {Tools && await Tools(props)}
-
-      {slug !== "team-leader" && <BlockersTool {...props} onlyThisGroup />}
+      <SectionTabs label={t("sections")} initial={tab} tabs={[
+        { id: "board", label: t("board"), node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
+        ...(Tools ? await Tools(props) : []),
+        ...(slug !== "team-leader" ? [{ id: "blockers", label: tt("blockers.title"), node: await BlockersTool({ ...props, onlyThisGroup: true }) }] : []),
+      ]} />
     </div>
   );
 }

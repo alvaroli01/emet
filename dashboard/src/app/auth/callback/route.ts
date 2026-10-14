@@ -14,5 +14,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
+  // No ?code: the login may be in the URL fragment (standard free-plan emails). Browsers keep the
+  // fragment across this redirect, so the client page can finish the login.
+  if (!code) return NextResponse.redirect(`${origin}/auth/finish?next=${encodeURIComponent(next)}`);
   return NextResponse.redirect(`${origin}/login?error=link`);
 }

@@ -110,7 +110,7 @@ export function DataTable({
     .filter((f) => row || canEdit || !addFields || addFields.includes(f.key));
 
   return (
-    <section className="rounded-2xl border border-line bg-surface shadow-sm">
+    <section className="panel">
       <header className="flex flex-wrap items-center gap-2 px-5 pt-4 pb-3">
         <h3 className="flex-1 font-semibold">{title}</h3>
         {!canEdit && !canAdd && <ViewOnlyBadge />}

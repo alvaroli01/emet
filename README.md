@@ -109,7 +109,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 
 | System | Status | Where | Notes |
 |---|---|---|---|
-| Team dashboard (web app, personal logins, per-group permissions, task boards, 7 languages) | ✅ Built (all 7 steps). ⏳ Not online yet: needs the free Supabase + Vercel setup | Code: [`dashboard/`](dashboard/) · Setup guide: [`dashboard/README.md`](dashboard/README.md) · Spec: [`docs/dashboard-build-prompt.md`](docs/dashboard-build-prompt.md) | Next.js + Supabase free + Vercel Hobby, €0. Permissions enforced in the database (55 tests). Tested in a browser with sample data |
+| Team dashboard (web app, personal logins, per-group permissions, task boards, 7 languages) | ✅ Built and redesigned ("Summit": topographic look, 3D mountain on Overview and login). 🌐 Online at https://emet-hq.vercel.app (free Supabase project `emet`, Frankfurt + Vercel Hobby). ⏳ No one can log in yet: member emails and an admin get added once roles are decided | Code: [`dashboard/`](dashboard/) · Setup guide: [`dashboard/README.md`](dashboard/README.md) · Spec: [`docs/dashboard-build-prompt.md`](docs/dashboard-build-prompt.md) | Next.js + Supabase free + Vercel Hobby, €0. Permissions enforced in the database (55 tests). Tested in a browser with sample data |
 | Task boards: 1 general company board + 1 per group (6 total) | ✅ Built into the dashboard | Dashboard → General board and each group tab | Drag and drop, assignees, due dates, labels, checklists, comments, My Tasks. Optional Trello sync per board, off by default ([`dashboard/TRELLO_SETUP.md`](dashboard/TRELLO_SETUP.md)) |
 | Shared Claude Code skills (9) | ✅ In the repo, load automatically for everyone | [`.claude/skills/`](.claude/skills/) · versions in [`skills-lock.json`](skills-lock.json) | Database: `supabase`, `supabase-postgres-best-practices` · Server/React: `next-best-practices`, `vercel-react-best-practices` · Design: `impeccable` (main), `design-taste-frontend`, `redesign-existing-projects`, `minimalist-ui` · Testing in a browser: `webapp-testing`. All free. Update with `npx skills update` |
 
@@ -134,6 +134,8 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-13 | Morale comments are private to Communications + team leaders; everyone sees the anonymous weekly average | Alvaro |
 | 2026-10-13 | Anyone can request a design from Marketing; only Marketing works the queue | Alvaro |
 | 2026-10-14 | Claude Code skills live in the repo (`.claude/skills/`) so every teammate's Claude uses the same ones | Alvaro |
+| 2026-10-14 | Dashboard look = "Summit": €30K is a mountain summit, a base camp every €5K; one interactive 3D mountain (Overview + login), clean 2D everywhere else | Alvaro |
+| 2026-10-14 | Dashboard put online on free plans: Supabase project `emet` (Frankfurt) + Vercel Hobby at emet-hq.vercel.app; public sign-up off | Alvaro |
 
 ## 10. Open questions
 

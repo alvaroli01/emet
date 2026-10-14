@@ -5,11 +5,11 @@ import { totals, weekStart } from "@/lib/metrics";
 import { loggedOnTime } from "@/lib/kpis";
 import { eur, pct, todayISO } from "@/lib/format";
 import { FridayReport } from "./friday-report";
-import type { ToolProps } from "./types";
+import type { ToolProps, ToolTab } from "./types";
 
 export const EXPENSE_CATEGORIES = ["stock", "marketing", "tools", "transport", "printing", "events", "other"] as const;
 
-export async function FinanceTools({ editable, session, allMembers }: ToolProps) {
+export async function FinanceTools({ editable, session, allMembers }: ToolProps): Promise<ToolTab[]> {
   const t = await getTranslations("tools");
   const locale = await getLocale();
   const supabase = await createClient();
@@ -62,29 +62,38 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
     { label: t("finance.loggedOnTime"), value: pct(onTime, locale), note: t("finance.loggedNote") },
   ];
 
-  return (
-    <section className="space-y-4">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <h2 className="font-semibold">💰 {t("finance.title")}</h2>
-        <FridayReport sales={s} expenses={e} />
-      </div>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        {tiles.map((x) => (
-          <div key={x.label} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-            <p className="text-xs text-muted">{x.label}</p>
-            <p className="mt-1 text-xl font-semibold tabular-nums">{x.value}</p>
-            {x.note && <p className="text-[11px] text-muted">{x.note}</p>}
+  return [
+    {
+      id: "money", label: t("finance.title"),
+      node: (
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <dl className="grid flex-1 grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-5">
+              {tiles.map((x) => (
+                <div key={x.label}>
+                  <dt className="text-xs text-muted">{x.label}</dt>
+                  <dd className="readout text-xl">{x.value}</dd>
+                  {x.note && <dd className="text-[11px] text-muted">{x.note}</dd>}
+                </div>
+              ))}
+            </dl>
+            <FridayReport sales={s} expenses={e} />
           </div>
-        ))}
-      </div>
-      <DataTable table="sales" title={t("finance.sales")} rows={sales.data ?? []} fields={salesFields} members={allMembers}
-                 canEdit={editable} defaults={{ logged_by: me, date: todayISO() }}
-                 emptyText={t("finance.salesEmpty")} addLabel={t("finance.addSale")} />
-      <DataTable table="expenses" title={t("finance.expenses")} rows={expenses.data ?? []} fields={expenseFields} members={allMembers}
-                 canEdit={editable} defaults={{ logged_by: me }}
-                 emptyText={t("finance.expensesEmpty")} addLabel={t("finance.addExpense")} />
-      <DataTable table="inventory" title={t("finance.inventory")} rows={inventory.data ?? []} fields={inventoryFields} members={allMembers}
-                 canEdit={editable} emptyText={t("finance.inventoryEmpty")} addLabel={t("finance.addProduct")} />
-    </section>
-  );
+          <DataTable table="sales" title={t("finance.sales")} rows={sales.data ?? []} fields={salesFields} members={allMembers}
+                     canEdit={editable} defaults={{ logged_by: me, date: todayISO() }}
+                     emptyText={t("finance.salesEmpty")} addLabel={t("finance.addSale")} />
+          <DataTable table="expenses" title={t("finance.expenses")} rows={expenses.data ?? []} fields={expenseFields} members={allMembers}
+                     canEdit={editable} defaults={{ logged_by: me }}
+                     emptyText={t("finance.expensesEmpty")} addLabel={t("finance.addExpense")} />
+        </div>
+      ),
+    },
+    {
+      id: "stock", label: t("finance.inventory"),
+      node: (
+        <DataTable table="inventory" title={t("finance.inventory")} rows={inventory.data ?? []} fields={inventoryFields} members={allMembers}
+                   canEdit={editable} emptyText={t("finance.inventoryEmpty")} addLabel={t("finance.addProduct")} />
+      ),
+    },
+  ];
 }

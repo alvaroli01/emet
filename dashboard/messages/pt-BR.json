@@ -48,7 +48,10 @@
       "wrongPassword": "E-mail ou senha incorretos.",
       "linkFailed": "Não conseguimos enviar o link. Esse é o e-mail em que você recebeu o convite?",
       "emailFirst": "Digite seu e-mail primeiro."
-    }
+    },
+    "welcome": "Entrar",
+    "mountainLabel": "Montanha 3D: a subida até € 30.000 de receita até junho de 2027",
+    "summit": "Cume € 30.000"
   },
   "welcome": {
     "title": "Boas-vindas ao emet HQ",
@@ -115,7 +118,14 @@
       "posts": "{count, plural, one {# post planejado} other {# posts planejados}} nesta semana",
       "morale": "Ânimo {score}/5",
       "noMorale": "Ainda sem pesquisa de ânimo"
-    }
+    },
+    "summit": "Cume {amount}",
+    "camp": "Acampamento {n} · {amount}",
+    "toCamp": "Faltam {amount} para o acampamento {n}",
+    "dragHint": "Arraste para girar",
+    "mountainLabel": "Montanha 3D: a receita já subiu {pct} do caminho até {goal}",
+    "paceTitle": "Ritmo",
+    "trend": "Evolução"
   },
   "activity": {
     "empty": "Nada ainda — as mudanças de qualquer pessoa aparecem aqui ao vivo.",
@@ -221,7 +231,8 @@
     "yourTeam": "Seu time",
     "noMembers": "Ainda sem membros — um líder distribui as pessoas na página Equipe.",
     "kpis": "KPIs",
-    "board": "Quadro de tarefas"
+    "board": "Quadro de tarefas",
+    "sections": "Seções"
   },
   "kpi": {
     "target": "Meta",
@@ -415,7 +426,7 @@
       "prospectsEmpty": "Nenhum contato ainda — adicione a primeira pessoa que você vai abordar.",
       "addProspect": "Adicionar contato",
       "complaints": "Reclamações",
-      "complaintsEmpty": "Nenhuma reclamação. 🎉",
+      "complaintsEmpty": "Nenhuma reclamação.",
       "addComplaint": "Registrar reclamação"
     },
     "marketing": {
@@ -456,7 +467,9 @@
       "title": "Ferramentas de Comunicação",
       "decisions": "Registro de decisões",
       "decisionsEmpty": "Nenhuma decisão registrada ainda.",
-      "addDecision": "Registrar decisão"
+      "addDecision": "Registrar decisão",
+      "scorecardTab": "Placar de sexta",
+      "moraleTab": "Ânimo"
     },
     "morale": {
       "title": "Pesquisa semanal de ânimo",

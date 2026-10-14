@@ -26,7 +26,7 @@ export function useMetricName() {
 }
 
 /** KPI cards for one group: current value vs target. Targets are editable by the group. */
-export function KpiCards({ kpis, canEdit }: { kpis: KpiWithValue[]; canEdit: boolean }) {
+export function KpiCards({ kpis, canEdit, inline = false }: { kpis: KpiWithValue[]; canEdit: boolean; inline?: boolean }) {
   const t = useTranslations("kpi");
   const locale = useLocale();
   const name = useMetricName();
@@ -46,14 +46,14 @@ export function KpiCards({ kpis, canEdit }: { kpis: KpiWithValue[]; canEdit: boo
 
   if (!kpis.length) return null;
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className={inline ? "grid grid-cols-2 gap-x-4 gap-y-5 lg:flex lg:gap-0 lg:divide-x lg:divide-line" : "grid gap-3 sm:grid-cols-2 lg:grid-cols-3"}>
       {kpis.map((k) => {
         const status = kpiStatus(k.metric, k.current, k.target);
         return (
-          <div key={k.id} className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
+          <div key={k.id} className={inline ? "min-w-0 lg:min-w-[210px] lg:px-6 lg:first:pl-0" : "panel panel-lift p-4"}>
             <p className="text-sm text-muted">{name(k.metric)}</p>
             {k.role_title && <p className="text-[11px] text-muted/80">{k.role_title} · {t(`period.${k.period}`)}</p>}
-            <p className="mt-1.5 text-2xl font-semibold tracking-tight tabular-nums">{formatKpi(k.current, k.unit, locale)}</p>
+            <p className="readout mt-1.5 text-2xl">{formatKpi(k.current, k.unit, locale)}</p>
             <div className="mt-2 flex items-center justify-between gap-2 text-sm">
               {editing === k.id ? (
                 <form className="flex items-center gap-1.5" onSubmit={(e) => { e.preventDefault(); saveTarget(k.id); }}>

@@ -241,7 +241,7 @@ function Column({ list, ids, cards, members, rights, onOpen, onAdd, onRename, on
   const done = isDoneList(list);
 
   return (
-    <section data-board-list className="flex w-[82vw] max-w-[300px] shrink-0 snap-start flex-col rounded-2xl bg-surface-2/70 sm:w-72">
+    <section data-board-list className="flex w-[82vw] max-w-[300px] shrink-0 snap-start flex-col rounded-[14px] bg-surface-2/60 sm:w-72 xl:w-auto xl:max-w-none xl:min-w-[230px] xl:flex-1">
       <header className="flex items-center gap-2 px-3 pt-3 pb-2">
         {editing ? (
           <form className="flex-1" onSubmit={(e) => { e.preventDefault(); if (name.trim()) onRename(list.id, name.trim()); setEditing(false); }}>
@@ -251,7 +251,7 @@ function Column({ list, ids, cards, members, rights, onOpen, onAdd, onRename, on
         ) : (
           <h3 className="flex-1 text-sm font-semibold">{listName(list.name)}</h3>
         )}
-        <span className="rounded-full bg-surface px-2 text-xs text-muted tabular-nums">{ids.length}</span>
+        <span className="text-xs text-muted tabular-nums">{ids.length}</span>
         {rights.canEditLists && (
           <div className="relative">
             <button onClick={() => setMenu((m) => !m)} aria-label={t("listMenu")} className="rounded-md p-1 text-muted hover:bg-surface hover:text-ink">
@@ -333,8 +333,10 @@ export function CardTile({ card, members, done, dragging }: { card: BoardCard; m
   const people = card.assignees.map((id) => members.find((m) => m.id === id)).filter(Boolean) as Member[];
 
   return (
-    <article suppressHydrationWarning className={`cursor-pointer rounded-xl border bg-surface p-3 text-sm shadow-sm transition hover:border-ink/20 ${
-      overdue ? "border-bad/60" : "border-line"} ${dragging ? "rotate-2 shadow-xl" : ""}`}>
+    <article suppressHydrationWarning style={{ boxShadow: dragging ? "var(--shadow-lift)" : "var(--shadow), inset 0 0 0 1px var(--panel-edge)" }}
+      className={`relative cursor-grab touch-manipulation rounded-[10px] bg-surface p-3 text-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-px active:cursor-grabbing ${
+      dragging ? "-rotate-2 scale-[1.03]" : ""}`}>
+      {overdue && <span aria-hidden className="absolute top-3 right-3 size-2 rounded-full bg-bad" />}
       {card.labels.length > 0 && (
         <div className="mb-2 flex flex-wrap gap-1">{card.labels.map((l) => <LabelChip key={l} label={l} />)}</div>
       )}
@@ -368,7 +370,7 @@ function AddList({ onAdd }: { onAdd: (name: string) => void }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   return (
-    <div className="w-[82vw] max-w-[300px] shrink-0 snap-start sm:w-72">
+    <div className="w-[82vw] max-w-[300px] shrink-0 snap-start sm:w-72 xl:w-56">
       {open ? (
         <form className="rounded-2xl bg-surface-2/70 p-2" onSubmit={(e) => { e.preventDefault(); if (name.trim()) { onAdd(name.trim()); setName(""); setOpen(false); } }}>
           <input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder={t("listName")} className="input" />

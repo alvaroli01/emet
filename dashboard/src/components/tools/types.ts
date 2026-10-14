@@ -8,3 +8,6 @@ export type ToolProps = {
   session: Session;
   allMembers: Member[];
 };
+
+/** One tab on a group page: its label and its content (rendered on the server). */
+export type ToolTab = { id: string; label: string; node: React.ReactNode };
