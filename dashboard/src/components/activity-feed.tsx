@@ -60,7 +60,7 @@ export function ActivityFeed({ entries, names, groups }: {
             <div className="min-w-0 flex-1 text-sm leading-snug">
               <p><span className="font-medium">{who}</span> <span className="text-muted">{describe(e)}</span></p>
               <p className="text-xs text-muted">
-                {g ? `${g.emoji} ${tg(g.slug)}` : `🏢 ${t("general")}`} · <time dateTime={e.created_at}>{timeAgo(e.created_at, locale)}</time>
+                {g ? tg(g.slug) : t("general")} · <time dateTime={e.created_at}>{timeAgo(e.created_at, locale)}</time>
               </p>
             </div>
           </li>

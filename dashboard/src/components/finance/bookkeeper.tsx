@@ -167,7 +167,7 @@ export function Bookkeeper({ claims, counts, audit, locks, entries, cashExpected
         {sync.sheetUrl && <a href={sync.sheetUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-sm text-muted hover:text-ink"><ExternalLink size={14} /> {t("openSheet")}</a>}
         <button onClick={retry} disabled={syncing || !sync.connected} className="flex items-center gap-1.5 rounded-xl bg-surface-2 px-3 py-2 text-sm font-medium hover:bg-line disabled:opacity-50">
           {syncing ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />} {t("retry")}</button>
-        <a href="/api/books/xlsx" className="flex items-center gap-1.5 rounded-xl bg-ink px-3 py-2 text-sm font-medium text-brand-contrast"><Download size={14} /> {t("excel")}</a>
+        <a href="/api/books/xlsx" className="flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Download size={14} /> {t("excel")}</a>
       </section>
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -187,7 +187,7 @@ export function Bookkeeper({ claims, counts, audit, locks, entries, cashExpected
             <div className="flex flex-wrap gap-1.5">
               {METHODS.map((m) => (
                 <button key={m} type="button" onClick={() => setQ({ ...q, method: m })} aria-pressed={q.method === m}
-                        className={`rounded-full px-3 py-1 text-xs ${q.method === m ? "bg-ink text-brand-contrast" : "bg-surface-2 text-muted"}`}>{tm(m)}</button>
+                        className={`rounded-full px-3 py-1 text-xs ${q.method === m ? "bg-brand text-brand-contrast" : "bg-surface-2 text-muted"}`}>{tm(m)}</button>
               ))}
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -197,7 +197,7 @@ export function Bookkeeper({ claims, counts, audit, locks, entries, cashExpected
               </select>
             </div>
             {q.kind === "expense" && <ReceiptInput file={file} onFile={setFile} label={t("receipt")} />}
-            <button disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-ink py-2.5 text-sm font-semibold text-brand-contrast disabled:opacity-60">
+            <button disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand py-2.5 text-sm font-semibold text-brand-contrast disabled:opacity-60">
               {busy ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />} {t("save")}
             </button>
           </form>
@@ -217,7 +217,7 @@ export function Bookkeeper({ claims, counts, audit, locks, entries, cashExpected
                     {c.receipt_path && <button onClick={() => openReceipt(c.receipt_path!)} className="text-xs underline underline-offset-2">{t("viewReceipt")}</button>}
                     <span className="flex-1" />
                     <button onClick={() => decide(c, false)} className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs text-bad-text hover:bg-surface"><X size={12} /> {t("reject")}</button>
-                    <button onClick={() => decide(c, true)} className="flex items-center gap-1 rounded-lg bg-ink px-2.5 py-1 text-xs text-brand-contrast"><Check size={12} /> {t("approve")}</button>
+                    <button onClick={() => decide(c, true)} className="flex items-center gap-1 rounded-lg bg-brand px-2.5 py-1 text-xs text-brand-contrast"><Check size={12} /> {t("approve")}</button>
                   </div>
                 </li>
               ))}
@@ -242,7 +242,7 @@ export function Bookkeeper({ claims, counts, audit, locks, entries, cashExpected
             <p className="text-sm">{t("expected")} <span className="readout">{eur(cashExpected, locale)}</span></p>
             <div className="flex gap-2">
               <input required type="number" min="0" step="0.01" inputMode="decimal" value={counted} onChange={(e) => setCounted(e.target.value)} placeholder={t("counted")} aria-label={t("counted")} className="input readout" />
-              <button className="shrink-0 rounded-xl bg-ink px-4 text-sm font-medium text-brand-contrast">{t("saveCount")}</button>
+              <button className="shrink-0 rounded-xl bg-brand px-4 text-sm font-medium text-brand-contrast">{t("saveCount")}</button>
             </div>
             {counted && <p className={`text-sm ${Math.abs(Number(counted) - cashExpected) < 0.01 ? "text-ok-text" : "text-bad-text"}`}>{t("gap", { gap: eur(Number(counted) - cashExpected, locale) })}</p>}
             <input value={note} onChange={(e) => setNote(e.target.value)} placeholder={t("note")} aria-label={t("note")} className="input" />
@@ -266,7 +266,7 @@ export function Bookkeeper({ claims, counts, audit, locks, entries, cashExpected
                   {closed ? <Lock size={14} className="text-ok-text" /> : <Unlock size={14} className="text-muted" />}
                   <span className="flex-1 first-letter:uppercase">{monthName(m)}</span>
                   {closed ? (isAdmin ? <button onClick={() => lock(m, false)} className="text-xs text-muted underline">{t("reopen")}</button> : <span className="text-xs text-ok-text">{t("closedLabel")}</span>)
-                    : <button onClick={() => lock(m, true)} className="rounded-lg bg-ink px-2.5 py-1 text-xs text-brand-contrast">{t("close")}</button>}
+                    : <button onClick={() => lock(m, true)} className="rounded-lg bg-brand px-2.5 py-1 text-xs text-brand-contrast">{t("close")}</button>}
                 </li>); })}
             </ul>
           ) : <p className="text-sm text-muted">{t("noMonths")}</p>}
@@ -311,7 +311,7 @@ export function Bookkeeper({ claims, counts, audit, locks, entries, cashExpected
                 ))}
               </ul>
               <div className="flex gap-2"><button onClick={() => setCsv(null)} className="rounded-xl px-3 py-2 text-muted">{t("cancel")}</button>
-                <button onClick={importCsv} disabled={!preview.some((p) => p.ok)} className="flex-1 rounded-xl bg-ink py-2 font-medium text-brand-contrast disabled:opacity-50">{t("importN", { count: preview.filter((p) => p.ok).length })}</button></div>
+                <button onClick={importCsv} disabled={!preview.some((p) => p.ok)} className="flex-1 rounded-xl bg-brand py-2 font-medium text-brand-contrast disabled:opacity-50">{t("importN", { count: preview.filter((p) => p.ok).length })}</button></div>
             </div>
           )}
         </section>

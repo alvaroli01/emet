@@ -348,7 +348,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
           <p className="mt-0.5 truncate text-xs text-muted">{name}</p>
         </div>
         {phase === "recording" && (
-          <button onClick={stop} className="flex h-11 items-center gap-2 rounded-xl bg-ink px-4 text-sm font-semibold text-brand-contrast active:scale-95">
+          <button onClick={stop} className="flex h-11 items-center gap-2 rounded-xl bg-brand px-4 text-sm font-semibold text-brand-contrast active:scale-95">
             <Square size={13} fill="currentColor" /> {t("stop")}
           </button>
         )}
@@ -443,7 +443,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
                 <div className="grid grid-cols-2 gap-1.5 text-sm">
                   {destination.kinds.map((k) => (
                     <button key={k.value} type="button" onClick={() => setKind(k.value)} aria-pressed={kind === k.value}
-                            className={`rounded-xl px-3 py-2 text-left transition ${kind === k.value ? "bg-ink font-medium text-brand-contrast" : "bg-surface-2 text-muted hover:text-ink"}`}>
+                            className={`rounded-xl px-3 py-2 text-left transition ${kind === k.value ? "bg-brand font-medium text-brand-contrast" : "bg-surface-2 text-muted hover:text-ink"}`}>
                       {k.label}
                     </button>
                   ))}

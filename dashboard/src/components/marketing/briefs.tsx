@@ -43,7 +43,7 @@ export function Briefs({ briefs, members, campaigns, canEdit, me, leaderId }: { 
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-muted">{t("intro")}</p>
-        {canEdit && <button onClick={() => setEditing("new")} className="flex shrink-0 items-center gap-1.5 rounded-xl bg-ink px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>}
+        {canEdit && <button onClick={() => setEditing("new")} className="flex shrink-0 items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>}
       </div>
       {briefs.length ? (
         <ul className="grid gap-3 md:grid-cols-2">

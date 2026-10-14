@@ -23,7 +23,7 @@ export default async function TeamPage() {
         section={{ label: t("title"), icon: <Users size={16} /> }}
         title={th("team.title", { name: me.full_name.split(" ")[0] })}
         subtitle={t("subtitle", { count: active.length, joined: active.filter((p) => p.user_id).length })}
-        lines={groups.map((g) => ({ text: `${g.emoji} ${tg(g.slug)}: ${active.filter((p) => p.group_id === g.id).map((p) => p.full_name.split(" ")[0]).join(", ") || "—"}`, tone: "info" as const, href: `/g/${g.slug}` })).slice(0, 4)}
+        lines={groups.map((g) => ({ text: `${tg(g.slug)}: ${active.filter((p) => p.group_id === g.id).map((p) => p.full_name.split(" ")[0]).join(", ") || "—"}`, tone: "info" as const, href: `/g/${g.slug}` })).slice(0, 4)}
         stats={[
           { label: th("team.people"), value: active.length, kind: "num" },
           { label: th("team.joined"), value: active.filter((p) => p.user_id).length, kind: "num" },

@@ -87,7 +87,13 @@ export default function Terrain({ points, format, ariaLabel, className }: Props)
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let w = 0, h = 0, grow = 0, raf = 0, visible = true, spin = -0.2, drag: { x: number; s: number } | null = null, idle = true;
-    const resize = () => { w = el.clientWidth; h = el.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix(); draw(); };
+    const resize = () => {
+      w = el.clientWidth; h = el.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / Math.max(1, h);
+      // Narrow/tall tiles (phones, sidebars) need the camera further back so the whole plate fits the width
+      const k = Math.max(1, 1.45 / camera.aspect);
+      camera.position.set(0, 5.6 * k, 9.6 * k); camera.lookAt(0, 0.7, 0);
+      camera.updateProjectionMatrix(); draw();
+    };
     const ro = new ResizeObserver(resize); ro.observe(el);
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) loop(); }); io.observe(el);
     const mo = new MutationObserver(colors); mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
@@ -138,7 +144,7 @@ export default function Terrain({ points, format, ariaLabel, className }: Props)
     <div className={`relative ${className ?? ""}`} role="img" aria-label={ariaLabel}>
       <div ref={host} className="absolute inset-0 cursor-grab active:cursor-grabbing" />
       {tip && (
-        <div className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+10px)] rounded-lg bg-ink px-2.5 py-1.5 text-xs whitespace-nowrap text-brand-contrast shadow-lg" style={{ left: tip.x, top: tip.y }}>
+        <div className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+10px)] rounded-lg bg-ink px-2.5 py-1.5 text-xs whitespace-nowrap text-bg shadow-lg" style={{ left: tip.x, top: tip.y }}>
           <span className="opacity-70">{tip.label}</span> <span className="font-semibold">{tip.value}</span>
         </div>
       )}

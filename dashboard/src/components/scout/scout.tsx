@@ -53,7 +53,7 @@ export function Scout({ projects, searches, leads, members, meId, meName, canSco
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div className="max-w-2xl">
           <p className="flex items-center gap-2 text-sm text-muted"><Radar size={15} /> {t("title")}</p>
-          <h1 className="mt-2 text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.08] font-[650] tracking-[-0.02em] text-balance" style={{ fontStretch: "112%" }}>{th("scout.title", { name: meName })}</h1>
+          <h1 className="mt-2 text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.08] font-[650] tracking-[-0.02em] text-balance">{th("scout.title", { name: meName })}</h1>
           <p className="mt-1.5 text-[15px] text-muted">{t("intro")}</p>
           {(myDue > 0 || strongNew > 0) && (
             <ul className="mt-3 space-y-1 text-[15px]">
@@ -69,7 +69,7 @@ export function Scout({ projects, searches, leads, members, meId, meName, canSco
               {projects.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
             </select>
             {canScout && project && <button onClick={() => setEditing(project)} aria-label={t("editProject")} className="rounded-xl p-2.5 text-muted hover:bg-surface-2 hover:text-ink"><Pencil size={16} /></button>}
-            {canScout && <button onClick={() => setEditing("new")} className="flex items-center gap-1.5 rounded-xl bg-ink px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("newProject")}</button>}
+            {canScout && <button onClick={() => setEditing("new")} className="flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("newProject")}</button>}
           </div>
         )}
       </header>
@@ -81,7 +81,7 @@ export function Scout({ projects, searches, leads, members, meId, meName, canSco
           <div>
             <h2 className="text-lg font-semibold">{t("emptyTitle")}</h2>
             <p className="mt-2 max-w-prose text-sm text-muted">{t("emptyText")}</p>
-            {canScout ? <button onClick={() => setEditing("new")} className="mt-4 flex items-center gap-1.5 rounded-xl bg-ink px-4 py-2.5 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("newProject")}</button>
+            {canScout ? <button onClick={() => setEditing("new")} className="mt-4 flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("newProject")}</button>
               : <p className="mt-4 text-sm text-muted">{t("viewOnly")}</p>}
           </div>
           <Hero target={null} pins={[]} radiusKm={3} />
@@ -248,7 +248,7 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
             </details>
           ) : <p className="text-xs text-muted">{t("firstRunNote")}</p>}
           {canScout ? (
-            <button disabled={running || !city.trim()} className="flex w-full items-center justify-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-sm font-medium text-brand-contrast disabled:opacity-60">
+            <button disabled={running || !city.trim()} className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-brand-contrast disabled:opacity-60">
               {running ? <Loader2 size={15} className="animate-spin" /> : <Search size={15} />} {running ? t("searching") : t("find")}
             </button>
           ) : <p className="text-xs text-muted">{t("viewOnly")}</p>}

@@ -12,6 +12,9 @@ type Range = "week" | "month" | "all" | "custom";
 const DONUT = ["#2b6ca3", "#c9502e", "#2f8a5a", "#b7791f", "#5b4ba8", "#8a5a7a", "#59625b"];
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 
+const KEY_CARDS = ["revenue", "net", "netMargin", "cash", "orders", "breakEven"];
+/** Key cards first in this order, the rest after them in their usual order */
+const rank = (k: string) => { const i = KEY_CARDS.indexOf(k); return i === -1 ? 100 : i; };
 export function FinanceOverview({ sales, expenses, projects, members, customersWon, today }: {
   sales: SaleRow[]; expenses: ExpenseRow[]; projects: Project[]; members: number; customersWon: number; today: string;
 }) {
@@ -19,6 +22,7 @@ export function FinanceOverview({ sales, expenses, projects, members, customersW
   const tc = useTranslations("tools.categories");
   const locale = useLocale();
   const [range, setRange] = useState<Range>("month");
+  const [allCards, setAllCards] = useState(false);
   const [from, setFrom] = useState(today.slice(0, 8) + "01");
   const [to, setTo] = useState(today);
 
@@ -96,9 +100,15 @@ export function FinanceOverview({ sales, expenses, projects, members, customersW
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        {cards.map((c) => <MetricCard key={c.key} label={t(`cards.${c.key}`)} value={c.value} explain={t(`explain.${c.key}`)} tone={c.tone} />)}
+      {/* The 6 numbers people check daily first; the other 8 on demand, so the page doesn't open on a wall of cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {[...cards].sort((a, b) => rank(a.key) - rank(b.key)).filter((c) => allCards || KEY_CARDS.includes(c.key))
+          .map((c) => <MetricCard key={c.key} label={t(`cards.${c.key}`)} value={c.value} explain={t(`explain.${c.key}`)} tone={c.tone} />)}
       </div>
+      <button onClick={() => setAllCards((v) => !v)} aria-expanded={allCards}
+              className="mx-auto flex min-h-10 items-center gap-1.5 rounded-full bg-surface px-4 text-sm font-medium shadow-[var(--shadow)] ring-1 ring-line hover:bg-surface-2">
+        {allCards ? t("showFewer") : t("showAll", { count: cards.length - KEY_CARDS.length })}
+      </button>
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <Panel title={t("charts.waterfall")}>

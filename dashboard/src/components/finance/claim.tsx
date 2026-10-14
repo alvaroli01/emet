@@ -86,7 +86,7 @@ export function ClaimButton({ projects, categories }: { projects: { id: string; 
               <option value="">{t("general")}</option>{projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
             <ReceiptInput file={file} onFile={setFile} label={t("receipt")} />
-            <button disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-ink py-2.5 text-sm font-semibold text-brand-contrast disabled:opacity-60">
+            <button disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand py-2.5 text-sm font-semibold text-brand-contrast disabled:opacity-60">
               {busy && <Loader2 size={15} className="animate-spin" />}{t("submit")}
             </button>
           </form>

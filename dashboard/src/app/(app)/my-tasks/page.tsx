@@ -86,7 +86,7 @@ export default async function MyTasksPage() {
                         <span className="size-4 shrink-0 rounded-full border-2 border-line" aria-hidden />}
                       <div className="min-w-0 flex-1">
                         <p className={`text-sm ${key === "done" ? "text-muted line-through" : ""}`}>{r.title}</p>
-                        <p className="text-xs text-muted">{g ? `${g.emoji} ${tg(g.slug)}` : `🏢 ${t("general")}`} · {listName(r.board_lists?.name)}</p>
+                        <p className="text-xs text-muted">{g ? tg(g.slug) : t("general")} · {listName(r.board_lists?.name)}</p>
                       </div>
                       {r.due_at && (
                         <span className={`inline-flex shrink-0 items-center gap-1 text-xs ${key === "overdue" ? "font-medium text-bad-text" : "text-muted"}`}>

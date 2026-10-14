@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useLocale } from "next-intl";
 import { useReducedMotion } from "motion/react";
+import { ChevronRight } from "lucide-react";
 import { BlurFade as MagicBlurFade } from "@/components/ui/blur-fade";
 import { NumberTicker } from "@/components/ui/number-ticker";
 
@@ -16,12 +17,12 @@ function BlurFade({ children, className, ...props }: React.ComponentProps<typeof
   return reduce ? <div className={className}>{children}</div> : <MagicBlurFade className={className} {...props}>{children}</MagicBlurFade>;
 }
 
-const toneDot = { ok: "bg-ok", warn: "bg-warn", bad: "bg-bad", info: "bg-climbed" } as const;
+const toneDot = { ok: "bg-ok", warn: "bg-warn", bad: "bg-bad", info: "bg-brand" } as const;
 
 /**
- * The top of every section: who you are, what needs you here today, the few numbers that matter,
- * the next actions — and one visual for the section (mountain, terrain, globe, team sphere…).
- * The section's detailed data lives below it, in grouped tabs.
+ * The top of every section, as bento tiles: a greeting tile washed in the team's colour (who you are, what needs you
+ * here, next actions), one tile per key number, and a tile for the section's visual (mountain, terrain, globe…).
+ * Phones stack them: greeting → numbers → visual. The detailed data lives below, in grouped tabs.
  */
 export function PageHero({ section, title, subtitle, lines = [], stats = [], actions = [], visual, aside }: {
   section: { label: string; icon?: React.ReactNode; color?: string };
@@ -31,79 +32,85 @@ export function PageHero({ section, title, subtitle, lines = [], stats = [], act
   stats?: HeroStat[];
   actions?: HeroAction[];
   visual?: React.ReactNode;
-  /** Extra content under the actions (e.g. the group's members) */
+  /** Extra content inside the greeting tile (e.g. the group's members) */
   aside?: React.ReactNode;
 }) {
   const locale = useLocale();
+  const tint = { "--tile-tint": section.color ?? "var(--brand)" } as React.CSSProperties;
   return (
-    <section className="panel relative grid overflow-hidden lg:min-h-[300px] lg:grid-cols-[minmax(0,1fr)_minmax(0,44%)]">
-      <div aria-hidden className="contours contours-corner pointer-events-none absolute inset-0 opacity-70" />
-      <div className="relative z-10 flex flex-col gap-5 p-5 sm:p-7">
-        <BlurFade delay={0.02} offset={6} blur="4px">
-          <p className="flex items-center gap-2 text-sm text-muted">
-            {section.icon && <span aria-hidden className="grid size-7 place-items-center rounded-lg text-base leading-none" style={{ background: section.color ? `color-mix(in srgb, ${section.color} 16%, transparent)` : "var(--surface-2)" }}>{section.icon}</span>}
+    <section className="grid gap-3 sm:gap-4 lg:grid-cols-12" style={tint}>
+      <BlurFade delay={0.02} offset={8} blur="6px" className={`panel tint relative flex flex-col gap-5 overflow-hidden p-5 sm:p-7 ${visual ? "lg:col-span-7" : "lg:col-span-12"}`}>
+        <div aria-hidden className="contours contours-corner pointer-events-none absolute inset-0" />
+        <div className="relative">
+          <p className="inline-flex items-center gap-2 rounded-full bg-surface/80 py-1 pr-3 pl-1 text-sm font-medium shadow-[var(--shadow)]">
+            <span aria-hidden className="grid size-6 place-items-center rounded-full text-sm leading-none text-white" style={{ background: section.color ?? "var(--brand)" }}>{section.icon}</span>
             {section.label}
           </p>
-          <h1 className="mt-3 max-w-[22ch] text-[clamp(1.7rem,3.4vw,2.6rem)] leading-[1.06] font-[650] tracking-[-0.02em] text-balance" style={{ fontStretch: "112%" }}>{title}</h1>
-          {subtitle && <p className="mt-2 max-w-prose text-[15px] text-muted">{subtitle}</p>}
-        </BlurFade>
+          <h1 className="mt-4 max-w-[24ch] text-[clamp(1.6rem,4.2vw,2.5rem)] leading-[1.08] font-semibold tracking-[-0.03em] text-balance">{title}</h1>
+          {subtitle && <p className="mt-2 max-w-prose text-[15px] leading-relaxed text-muted">{subtitle}</p>}
+        </div>
 
         {lines.length > 0 && (
-          <BlurFade delay={0.12} offset={6} blur="4px">
-            <ul className="space-y-1.5">
-              {lines.slice(0, 4).map((l) => {
-                const body = <><span aria-hidden className={`mt-[7px] size-2 shrink-0 rounded-full ${toneDot[l.tone ?? "info"]}`} /><span>{l.text}</span></>;
-                return (
-                  <li key={l.text}>
-                    {l.href ? <Link href={l.href} className="group flex gap-2.5 text-[15px] hover:underline hover:decoration-line hover:underline-offset-4">{body}</Link>
-                      : <p className="flex gap-2.5 text-[15px]">{body}</p>}
-                  </li>
-                );
-              })}
-            </ul>
-          </BlurFade>
-        )}
-
-        {stats.length > 0 && (
-          <BlurFade delay={0.2} offset={6} blur="4px">
-            <dl className="flex flex-wrap gap-x-7 gap-y-3">
-              {stats.map((s) => (
-                <div key={s.label} className="min-w-0">
-                  <dt className="text-xs text-muted">{s.label}</dt>
-                  <dd className="readout text-2xl leading-tight">
-                    {s.value === null ? "—" : (
-                      <NumberTicker value={s.kind === "pct" ? Math.round(s.value * 100) : s.kind === "eur" ? Math.round(s.value) : s.value} locale={locale}
-                                    decimalPlaces={s.kind === "num" && !Number.isInteger(s.value) ? 1 : 0}
-                                    options={s.kind === "eur" ? { style: "currency", currency: "EUR", maximumFractionDigits: 0 } : undefined} />
-                    )}{s.kind === "pct" && s.value !== null ? "%" : ""}
-                  </dd>
-                  {s.hint && <dd className="text-xs text-muted">{s.hint}</dd>}
-                </div>
-              ))}
-            </dl>
-          </BlurFade>
+          <ul className="relative divide-y divide-line overflow-hidden rounded-2xl bg-surface/85 shadow-[var(--shadow)] ring-1 ring-line/60">
+            {lines.slice(0, 4).map((l) => {
+              const body = (
+                <>
+                  <span aria-hidden className={`size-2 shrink-0 rounded-full ${toneDot[l.tone ?? "info"]}`} />
+                  <span className="min-w-0 flex-1 text-[15px]">{l.text}</span>
+                  {l.href && <ChevronRight size={16} className="shrink-0 text-muted transition-transform group-hover:translate-x-0.5" />}
+                </>
+              );
+              return (
+                <li key={l.text}>
+                  {l.href ? <Link href={l.href} className="group flex min-h-12 items-center gap-3 px-4 py-2.5 transition-colors hover:bg-surface-2/60">{body}</Link>
+                    : <p className="flex min-h-12 items-center gap-3 px-4 py-2.5">{body}</p>}
+                </li>
+              );
+            })}
+          </ul>
         )}
 
         {(actions.length > 0 || aside) && (
-          <BlurFade delay={0.28} offset={6} blur="4px" className="mt-auto space-y-4">
+          <div className="relative mt-auto space-y-4">
             {actions.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {actions.slice(0, 4).map((a) => (
+              // Phones: one swipeable row of buttons instead of a wrapped pile
+              <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-0.5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:px-0">
+                {actions.slice(0, 4).map((a, i) => (
                   <Link key={a.href + a.label} href={a.href}
-                        className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition ${a.primary ? "bg-ink text-brand-contrast hover:opacity-90" : "bg-surface-2 hover:bg-line"}`}>
+                        className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-medium transition active:scale-[0.97] ${a.primary || (i === 0 && !actions.some((x) => x.primary)) ? "bg-brand text-brand-contrast shadow-[0_6px_16px_-6px_color-mix(in_srgb,var(--brand)_60%,transparent)] hover:brightness-110" : "bg-surface text-ink shadow-[var(--shadow)] ring-1 ring-line hover:bg-surface-2"}`}>
                     {a.icon}{a.label}
                   </Link>
                 ))}
               </div>
             )}
             {aside}
-          </BlurFade>
+          </div>
         )}
-      </div>
+      </BlurFade>
 
       {visual && (
-        <div className="relative order-first h-52 border-b border-line sm:h-64 lg:order-none lg:h-auto lg:border-b-0 lg:border-l">
+        <BlurFade delay={0.1} offset={8} blur="6px" className="panel relative order-last h-60 overflow-hidden sm:h-72 lg:order-none lg:col-span-5 lg:row-span-2 lg:h-auto lg:min-h-[340px]">
           {visual}
+        </BlurFade>
+      )}
+
+      {stats.length > 0 && (
+        <div className={`grid grid-cols-3 gap-3 sm:gap-4 ${visual ? "lg:col-span-7" : "lg:col-span-12"}`}>
+          {stats.slice(0, 3).map((s, i) => (
+            <BlurFade key={s.label} delay={0.16 + i * 0.05} offset={8} blur="6px" className="panel flex min-w-0 flex-col justify-between gap-2 p-3.5 sm:p-5">
+              <p className="line-clamp-2 text-xs leading-snug text-muted sm:text-sm">{s.label}</p>
+              <div>
+                <p className="readout truncate text-xl leading-none sm:text-3xl">
+                  {s.value === null ? "—" : (
+                    <NumberTicker value={s.kind === "pct" ? Math.round(s.value * 100) : s.kind === "eur" ? Math.round(s.value) : s.value} locale={locale}
+                                  decimalPlaces={s.kind === "num" && !Number.isInteger(s.value) ? 1 : 0}
+                                  options={s.kind === "eur" ? { style: "currency", currency: "EUR", maximumFractionDigits: 0 } : undefined} />
+                  )}{s.kind === "pct" && s.value !== null ? "%" : ""}
+                </p>
+                {s.hint && <p className="mt-1.5 truncate text-xs text-muted">{s.hint}</p>}
+              </div>
+            </BlurFade>
+          ))}
         </div>
       )}
     </section>

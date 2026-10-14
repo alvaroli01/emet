@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CalendarClock, Percent, Timer, AlertOctagon, ArrowRight, Move3d, LayoutDashboard } from "lucide-react";
 import { PageHero } from "@/components/shell/page-hero";
+import { SectionTabs } from "@/components/section-tabs";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -16,13 +17,14 @@ import { WeeklyChart, CumulativeChart, Legend } from "@/components/overview/char
 import { ActivityFeed, type ActivityEntry } from "@/components/activity-feed";
 import { LiveRefresh } from "@/components/live-refresh";
 import { StatusPill, statusFor } from "@/components/status";
+import { GroupBadge } from "@/components/group-icon";
 
 const RANGES = ["4", "12", "all"] as const;
 /** Base camps every €5K on the way to the €30K summit */
 const CAMPS = 6;
 
-export default async function OverviewPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
-  const { range: rangeParam } = await searchParams;
+export default async function OverviewPage({ searchParams }: { searchParams: Promise<{ range?: string; tab?: string }> }) {
+  const { range: rangeParam, tab } = await searchParams;
   const range = RANGES.find((r) => r === rangeParam) ?? "12";
   const t = await getTranslations("overview");
   const th = await getTranslations("hero");
@@ -120,6 +122,57 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         }
       />
 
+      <SectionTabs label={t("sections")} initial={tab} tabs={[
+        { id: "teams", label: t("groups"), node: (
+          <div className="space-y-4">
+      <section>
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {groups.map((g) => {
+            const gc = onTimeRate(groupCards(g.id));
+            const gb = openBlockers.filter((b) => b.group_id === g.id).length;
+            const health: Health = groupHealth(gc.overdueOpen, gb, gc.rate);
+            return (
+              <Link key={g.id} href={`/g/${g.slug}`} className="panel panel-lift group relative overflow-hidden p-5">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="flex items-center gap-2.5 font-semibold">
+                    <GroupBadge slug={g.slug} color={g.color} size={32} />
+                    {tg(g.slug)}
+                  </p>
+                  <StatusPill status={health} />
+                </div>
+                <p className="mt-2 text-sm">{keyKpi[g.slug] ?? ""}</p>
+                <p className="mt-1 text-xs text-muted tabular-nums">
+                  {t("groupLine", { overdue: gc.overdueOpen, blockers: gb, rate: pct(gc.rate, locale) })}
+                </p>
+                <p className="mt-3 flex items-center gap-1 text-xs font-medium text-muted group-hover:text-ink">{t("openTab")} <ArrowRight size={13} /></p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+        <Card>
+          <h2 className="mb-3 flex items-center gap-1.5 font-semibold"><AlertOctagon size={16} /> {t("blockers")}</h2>
+          {openBlockers.length ? (
+            <ul className="divide-y divide-line">
+              {openBlockers.map((b) => {
+                const g = groupMap[b.group_id];
+                return (
+                  <li key={b.id} className="py-2.5 text-sm">
+                    <p>{b.description}</p>
+                    <p className="text-xs text-muted">
+                      {g ? tg(g.slug) : ""}{b.owner_id ? ` · ${names[b.owner_id] ?? ""}` : ""} · {timeAgo(b.created_at, locale)}
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : <p className="py-6 text-center text-sm text-muted">{t("noBlockers")}</p>}
+        </Card>
+          </div>
+        ) },
+        { id: "money", label: t("trend"), node: (
+          <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
           <p className="flex items-center gap-1.5 text-sm text-muted"><CalendarClock size={15} /> {t("paceTitle")}</p>
@@ -159,7 +212,7 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         <h2 className="text-lg font-semibold tracking-tight">{t("trend")}</h2>
         <nav aria-label={t("range.label")} className="flex rounded-xl bg-surface-2 p-1 text-sm">
           {RANGES.map((r) => (
-            <Link key={r} href={r === "12" ? "/" : `/?range=${r}`} scroll={false} aria-current={range === r ? "true" : undefined}
+            <Link key={r} href={r === "12" ? "/?tab=money" : `/?range=${r}&tab=money`} scroll={false} aria-current={range === r ? "true" : undefined}
                   className={`rounded-lg px-3 py-1.5 transition ${range === r ? "bg-surface font-medium shadow-sm" : "text-muted hover:text-ink"}`}>
               {r === "all" ? t("range.all") : t("range.weeks", { count: Number(r) })}
             </Link>
@@ -189,57 +242,17 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         </Card>
       </div>
 
-      <section>
-        <h2 className="mb-3 text-lg font-semibold tracking-tight">{t("groups")}</h2>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {groups.map((g) => {
-            const gc = onTimeRate(groupCards(g.id));
-            const gb = openBlockers.filter((b) => b.group_id === g.id).length;
-            const health: Health = groupHealth(gc.overdueOpen, gb, gc.rate);
-            return (
-              <Link key={g.id} href={`/g/${g.slug}`} className="panel panel-lift group relative overflow-hidden p-5">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="flex items-center gap-2.5 font-semibold">
-                    <span aria-hidden className="grid size-8 place-items-center rounded-lg text-base" style={{ background: `color-mix(in srgb, ${g.color} 16%, transparent)` }}>{g.emoji}</span>
-                    {tg(g.slug)}
-                  </p>
-                  <StatusPill status={health} />
-                </div>
-                <p className="mt-2 text-sm">{keyKpi[g.slug] ?? ""}</p>
-                <p className="mt-1 text-xs text-muted tabular-nums">
-                  {t("groupLine", { overdue: gc.overdueOpen, blockers: gb, rate: pct(gc.rate, locale) })}
-                </p>
-                <p className="mt-3 flex items-center gap-1 text-xs font-medium text-muted group-hover:text-ink">{t("openTab")} <ArrowRight size={13} /></p>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <h2 className="mb-3 flex items-center gap-1.5 font-semibold"><AlertOctagon size={16} /> {t("blockers")}</h2>
-          {openBlockers.length ? (
-            <ul className="divide-y divide-line">
-              {openBlockers.map((b) => {
-                const g = groupMap[b.group_id];
-                return (
-                  <li key={b.id} className="py-2.5 text-sm">
-                    <p>{b.description}</p>
-                    <p className="text-xs text-muted">
-                      {g ? `${g.emoji} ${tg(g.slug)}` : ""}{b.owner_id ? ` · ${names[b.owner_id] ?? ""}` : ""} · {timeAgo(b.created_at, locale)}
-                    </p>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : <p className="py-6 text-center text-sm text-muted">{t("noBlockers")}</p>}
-        </Card>
+          </div>
+        ) },
+        { id: "activity", label: t("activity"), node: (
+          <div className="max-w-3xl">
         <Card>
           <h2 className="mb-3 flex items-center gap-2 font-semibold">{t("activity")} <span className="size-1.5 rounded-full bg-ok" aria-hidden /></h2>
           <ActivityFeed entries={activity.data ?? []} names={names} groups={groupMap} />
         </Card>
-      </div>
+          </div>
+        ) },
+      ]} />
     </div>
   );
 }

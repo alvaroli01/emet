@@ -2,7 +2,8 @@
 
 import { useMemo } from "react";
 import { useLocale } from "next-intl";
-import { Mic } from "lucide-react";
+import { Mic, Lightbulb } from "lucide-react";
+import { GroupIcon } from "@/components/group-icon";
 import { TerrainLazy } from "@/components/summit/mountain-lazy";
 import { IconCloud } from "@/components/ui/icon-cloud";
 import { OrbitingCircles } from "@/components/ui/orbiting-circles";
@@ -38,8 +39,8 @@ export function TeamSphere({ people }: { people: Person[] }) {
   return <div className="grid size-full place-items-center p-4 [&_canvas]:max-h-full [&_canvas]:max-w-full"><IconCloud images={images} /></div>;
 }
 
-/** A group's people orbiting its emoji: who is in this section, at a glance. */
-export function MemberOrbit({ emoji, people, color }: { emoji: string; people: Person[]; color: string }) {
+/** A group's people orbiting its icon: who is in this section, at a glance. */
+export function MemberOrbit({ slug, people, color }: { slug: string; people: Person[]; color: string }) {
   const inner = people.slice(0, 4), outer = people.slice(4, 10);
   const face = (p: Person, i: number) => (
     <span key={p.id} title={p.full_name} className="grid size-full place-items-center overflow-hidden rounded-full border-2 border-surface text-[11px] font-semibold text-brand-contrast shadow-sm"
@@ -50,7 +51,7 @@ export function MemberOrbit({ emoji, people, color }: { emoji: string; people: P
   );
   return (
     <div className="relative flex size-full items-center justify-center overflow-hidden">
-      <span aria-hidden className="z-10 grid size-16 place-items-center rounded-2xl text-3xl shadow-sm" style={{ background: `color-mix(in srgb, ${color} 18%, var(--surface))` }}>{emoji}</span>
+      <span aria-hidden className="z-10 grid size-16 place-items-center rounded-2xl text-white shadow-lg" style={{ background: color }}><GroupIcon slug={slug} size={28} /></span>
       {inner.length > 0 && <OrbitingCircles iconSize={36} radius={70} speed={0.6}>{inner.map(face)}</OrbitingCircles>}
       {outer.length > 0 && <OrbitingCircles iconSize={30} radius={118} reverse speed={0.4}>{outer.map((p, i) => face(p, i + 4))}</OrbitingCircles>}
     </div>
@@ -76,7 +77,7 @@ export function MicRipple() {
   return (
     <div className="relative size-full overflow-hidden">
       <Ripple mainCircleSize={120} numCircles={6} mainCircleOpacity={0.18} />
-      <span aria-hidden className="absolute top-1/2 left-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-trail text-white shadow-lg"><Mic size={26} /></span>
+      <span aria-hidden className="absolute top-1/2 left-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-brand text-white shadow-lg"><Mic size={26} /></span>
     </div>
   );
 }
@@ -90,7 +91,7 @@ export function IdeaOrbit({ ideas }: { ideas: { id: string; title: string; score
   const inner = ideas.slice(0, 5), outer = ideas.slice(5, 11);
   return (
     <div className="relative flex size-full items-center justify-center overflow-hidden">
-      <span aria-hidden className="z-10 grid size-16 place-items-center rounded-full bg-[color-mix(in_srgb,var(--warn)_25%,var(--surface))] text-3xl shadow-sm">💡</span>
+      <span aria-hidden className="z-10 grid size-16 place-items-center rounded-full bg-warn text-white shadow-lg"><Lightbulb size={28} /></span>
       {inner.length > 0 && <OrbitingCircles iconSize={36} radius={72} speed={0.5}>{inner.map(chip)}</OrbitingCircles>}
       {outer.length > 0 && <OrbitingCircles iconSize={30} radius={120} reverse speed={0.35}>{outer.map(chip)}</OrbitingCircles>}
     </div>

@@ -33,7 +33,7 @@ export function Campaigns({ title, campaigns, items, metrics, members, canEdit, 
   };
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between gap-2"><h3 className="font-semibold">{title}</h3>{canEdit && <button onClick={() => setEditing("new")} className="flex items-center gap-1.5 rounded-xl bg-ink px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>}</div>
+      <div className="flex items-center justify-between gap-2"><h3 className="font-semibold">{title}</h3>{canEdit && <button onClick={() => setEditing("new")} className="flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>}</div>
       {campaigns.length ? (
         <ul className="grid gap-3 md:grid-cols-2">
           {campaigns.map((c) => {

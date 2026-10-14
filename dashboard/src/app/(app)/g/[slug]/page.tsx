@@ -20,6 +20,7 @@ import { PageHero } from "@/components/shell/page-hero";
 import { HeroTerrain, MemberOrbit } from "@/components/shell/hero-visuals";
 import { groupHero } from "@/lib/hero-data";
 import { shortDate, todayISO } from "@/lib/format";
+import { GroupIcon } from "@/components/group-icon";
 
 /** The hero's buttons per group: the first is the main action. `edit` = only for people who can edit this group. */
 const ACTIONS: Record<string, { key: string; tab?: string; href?: string; edit?: boolean }[]> = {
@@ -71,7 +72,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         "decisions", "morale_checks", "meeting_notes", "outreach", "profiles"]} />
 
       <PageHero
-        section={{ label: t(`names.${slug}`), icon: group.emoji, color: group.color }}
+        section={{ label: t(`names.${slug}`), icon: <GroupIcon slug={slug} size={14} />, color: group.color }}
         title={th(`groups.${heroKey}.title`, { name: firstName })}
         subtitle={th(`groups.${heroKey}.subtitle`)}
         lines={hero.needs.length ? hero.needs.map((n) => ({
@@ -81,7 +82,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         stats={hero.stats.map((x) => ({ label: th(`stats.${x.key}`), value: x.value, kind: x.kind }))}
         actions={(ACTIONS[slug] ?? []).filter((a) => !a.edit || editable).map((a, i) => ({ label: th(`actions.${a.key}`), href: a.href ?? `/g/${slug}?tab=${a.tab}`, primary: i === 0 }))}
         visual={slug === "communications"
-          ? <MemberOrbit emoji={group.emoji} color={group.color} people={members} />
+          ? <MemberOrbit slug={slug} color={group.color} people={members} />
           : <HeroTerrain points={hero.series.map((p) => ({ label: th("weekOf", { date: shortDate(p.label, locale) }), value: p.value }))} kind={hero.seriesKind}
                          ariaLabel={th(`series.${hero.seriesKey}`)} caption={th(`series.${hero.seriesKey}`)} />}
         aside={

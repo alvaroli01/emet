@@ -6,88 +6,89 @@
   @media (prefers-color-scheme: dark) { &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) { @slot; } }
 }
 
-/* Theme tokens — light by default, dark follows the device (a manual toggle comes in the polish step) */
-/* "Summit" world: a topographic map. Day map = paper + ink; night map = slate + chalk.
-   Status colours are always paired with an icon and a word, never colour alone. */
+/* Theme tokens — "Studio": a bright workspace of white bento tiles on a soft grey canvas, one iris accent,
+   and a soft tint per team. Status colours are always paired with an icon and a word, never colour alone. */
 :root {
   --foreground: var(--text); /* used by Magic UI ripple */
-  --bg: #f1f2ed;
-  --surface: #fbfbf8;
-  --surface-2: #e7e9e2;
-  --border: #d6d9cf;
-  --text: #1a201c;
-  --muted: #59625b;
-  --brand: #1a201c;
-  --brand-contrast: #fbfbf8;
-  --contour: #a9845c;
-  --terrain: #fbfbf8;
-  --climbed: #2b6ca3;
-  --trail: #c9452c;
-  --ok: #2f8a3e;
-  --warn: #e0a21a;
-  --bad: #c9362f;
-  --ok-text: #1f6b2c;
-  --warn-text: #8a5a00;
-  --bad-text: #a8261f;
-  --series-1: #2b6ca3;
-  --series-2: #c9502e;
-  --series-3: #2f8a5a;
-  --grid: #dcdfd6;
-  --shadow: 0 1px 1px rgb(26 32 28 / 0.04), 0 6px 18px -8px rgb(26 32 28 / 0.14);
-  --shadow-lift: 0 2px 4px rgb(26 32 28 / 0.06), 0 16px 32px -12px rgb(26 32 28 / 0.22);
-  --panel-edge: transparent;
+  --bg: #f4f4f8;
+  --surface: #ffffff;
+  --surface-2: #efeff5;
+  --border: #e4e4ee;
+  --text: #15151f;
+  --muted: #666679;
+  --brand: #5b4bff;
+  --brand-contrast: #ffffff;
+  --contour: #c9c3ff;
+  --terrain: #ffffff;
+  --climbed: #5b4bff;
+  --trail: #5b4bff;
+  --ok: #18c29c;
+  --warn: #f5a524;
+  --bad: #f04461;
+  --ok-text: #0b7a61;
+  --warn-text: #8a5300;
+  --bad-text: #b4213c;
+  --series-1: #5b4bff;
+  --series-2: #ff7a59;
+  --series-3: #18c29c;
+  --grid: #ececf3;
+  --shadow: 0 1px 2px rgb(21 21 31 / 0.04), 0 1px 1px rgb(21 21 31 / 0.02);
+  --shadow-lift: 0 2px 6px rgb(21 21 31 / 0.05), 0 18px 40px -16px rgb(91 75 255 / 0.28);
+  --panel-edge: #e4e4ee;
+  /* Team tints */
+  --tint-finance: #18c29c; --tint-marketing: #ff7a59; --tint-customer: #2e9bff; --tint-communications: #f5a524; --tint-team-leader: #5b4bff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0d1210;
-    --surface: #141a17;
-    --surface-2: #1c2420;
-    --border: #2a332e;
-    --text: #e9ede7;
-    --muted: #9aa59d;
-    --brand: #e9ede7;
-    --brand-contrast: #0d1210;
-    --contour: #a88b68;
-    --terrain: #46534c;
-    --climbed: #6aa6dc;
-    --trail: #ef6f4f;
-    --ok-text: #6fcf7c;
-    --warn-text: #f0bd4a;
-    --bad-text: #f2827a;
-    --series-1: #6aa6dc;
-    --series-2: #e47a55;
-    --series-3: #4fbf8a;
-    --grid: #2a332e;
-    --shadow: 0 1px 1px rgb(0 0 0 / 0.3), 0 8px 24px -10px rgb(0 0 0 / 0.6);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 18px 36px -12px rgb(0 0 0 / 0.7);
-    --panel-edge: #26302b;
-   }
+    --bg: #0e0e14;
+    --surface: #17171f;
+    --surface-2: #20202b;
+    --border: #2a2a37;
+    --text: #f2f2f8;
+    --muted: #9d9db2;
+    --brand: #7c6dff;
+    --brand-contrast: #ffffff;
+    --contour: #3b3580;
+    --terrain: #1d1d27;
+    --climbed: #8b7dff;
+    --trail: #8b7dff;
+    --ok-text: #4fe0b9;
+    --warn-text: #ffc35c;
+    --bad-text: #ff8098;
+    --series-1: #8b7dff;
+    --series-2: #ff9478;
+    --series-3: #3ad7b0;
+    --grid: #262632;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.4), 0 18px 40px -16px rgb(124 109 255 / 0.35);
+    --panel-edge: #2a2a37;
+  }
 }
 :root[data-theme="dark"] {
-    --bg: #0d1210;
-    --surface: #141a17;
-    --surface-2: #1c2420;
-    --border: #2a332e;
-    --text: #e9ede7;
-    --muted: #9aa59d;
-    --brand: #e9ede7;
-    --brand-contrast: #0d1210;
-    --contour: #a88b68;
-    --terrain: #46534c;
-    --climbed: #6aa6dc;
-    --trail: #ef6f4f;
-    --ok-text: #6fcf7c;
-    --warn-text: #f0bd4a;
-    --bad-text: #f2827a;
-    --series-1: #6aa6dc;
-    --series-2: #e47a55;
-    --series-3: #4fbf8a;
-    --grid: #2a332e;
-    --shadow: 0 1px 1px rgb(0 0 0 / 0.3), 0 8px 24px -10px rgb(0 0 0 / 0.6);
-    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 18px 36px -12px rgb(0 0 0 / 0.7);
-    --panel-edge: #26302b;
- }
+    --bg: #0e0e14;
+    --surface: #17171f;
+    --surface-2: #20202b;
+    --border: #2a2a37;
+    --text: #f2f2f8;
+    --muted: #9d9db2;
+    --brand: #7c6dff;
+    --brand-contrast: #ffffff;
+    --contour: #3b3580;
+    --terrain: #1d1d27;
+    --climbed: #8b7dff;
+    --trail: #8b7dff;
+    --ok-text: #4fe0b9;
+    --warn-text: #ffc35c;
+    --bad-text: #ff8098;
+    --series-1: #8b7dff;
+    --series-2: #ff9478;
+    --series-3: #3ad7b0;
+    --grid: #262632;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-lift: 0 2px 6px rgb(0 0 0 / 0.4), 0 18px 40px -16px rgb(124 109 255 / 0.35);
+    --panel-edge: #2a2a37;
+}
 
 @theme inline {
   --color-bg: var(--bg);
@@ -128,8 +129,8 @@
   --color-border: var(--border);
   --color-input: var(--border);
   --color-ring: var(--climbed);
-  --font-sans: var(--font-archivo);
-  --font-mono: var(--font-archivo);
+  --font-sans: var(--font-onest);
+  --font-mono: var(--font-onest);
   --animate-orbit: orbit calc(var(--duration)*1s) linear infinite;
   --animate-ripple: ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite;
   @keyframes orbit {
@@ -153,8 +154,8 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-archivo), system-ui, sans-serif;
-  font-feature-settings: "ss01";
+  font-family: var(--font-onest), system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01";
   -webkit-font-smoothing: antialiased;
 }
 
@@ -162,31 +163,34 @@ body {
 html { touch-action: manipulation; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; scrollbar-color: var(--border) transparent; accent-color: var(--climbed); caret-color: var(--climbed); }
 :focus-visible { outline: 2px solid var(--climbed); outline-offset: 2px; border-radius: 6px; }
 .tabular { font-variant-numeric: tabular-nums; }
-/* Display numerals: Archivo's width axis gives the altimeter readout its stance */
-.readout { font-stretch: 118%; font-weight: 650; letter-spacing: -0.025em; font-variant-numeric: tabular-nums; 
-}
+/* Display numerals: tight, heavy, tabular so they don't jump while counting */
+.readout { font-weight: 650; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
 
 /* Long German / Finnish / Russian words must wrap instead of breaking the layout */
 h1, h2, h3, p, label, li, td { overflow-wrap: break-word; hyphens: auto; }
 button { white-space: nowrap; }
 
 @layer components {
-  /* One elevation system: soft offset shadow on paper; a hairline edge only at night */
+  /* Bento tiles: white, hairline edge, generous radius; they lift with an iris glow on hover */
   .panel {
-    @apply rounded-[14px] bg-surface;
+    @apply rounded-[22px] bg-surface;
     box-shadow: var(--shadow), inset 0 0 0 1px var(--panel-edge);
   }
-  .panel-lift { transition: box-shadow 220ms cubic-bezier(.2,.8,.2,1), transform 220ms cubic-bezier(.2,.8,.2,1); }
-  .panel-lift:hover { box-shadow: var(--shadow-lift), inset 0 0 0 1px var(--panel-edge); transform: translateY(-2px); }
-  /* Faint contour lines from the map world, used behind the page header only */
+  .panel-lift { transition: box-shadow 200ms cubic-bezier(.2,.8,.2,1), transform 200ms cubic-bezier(.2,.8,.2,1); }
+  .panel-lift:hover { box-shadow: var(--shadow-lift), inset 0 0 0 1px color-mix(in srgb, var(--brand) 35%, var(--panel-edge)); transform: translateY(-2px); }
+  .panel-lift:active { transform: scale(0.99); }
+  /* Soft dot grid (replaces the old contour lines wherever they were used) */
   .contours {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='240' viewBox='0 0 480 240'%3E%3Cg fill='none' stroke='%23a9845c' stroke-opacity='.22' stroke-width='1'%3E%3Cpath d='M-20 200c60-30 110-60 170-58s100 40 160 30 110-60 190-70'/%3E%3Cpath d='M-20 170c70-34 120-70 180-66s96 44 152 34 116-66 188-78'/%3E%3Cpath d='M-20 140c80-40 128-80 190-74s92 48 144 38 122-72 186-86'/%3E%3Cpath d='M40 120c40-40 90-70 140-62s70 40 110 30 70-40 100-52'/%3E%3Cpath d='M110 100c30-30 60-46 90-40s40 26 70 20'/%3E%3C/g%3E%3C/svg%3E");
-    background-repeat: repeat-x; background-position: right bottom;
+    background-image: radial-gradient(color-mix(in srgb, var(--muted) 22%, transparent) 1px, transparent 1.2px);
+    background-size: 18px 18px;
+    mask-image: radial-gradient(ellipse at 85% 0%, #000 0%, transparent 65%);
   }
-  .contours-corner { background-repeat: no-repeat; background-position: right -40px top -60px; }
+  .contours-corner { mask-image: radial-gradient(ellipse at 100% 0%, #000 0%, transparent 55%); }
+  /* A tile washed with its team's colour */
+  .tint { background: color-mix(in srgb, var(--tile-tint, var(--brand)) 9%, var(--surface)); }
   .input {
     @apply w-full rounded-xl border border-line bg-surface px-3 py-2.5 text-sm outline-none transition
-      placeholder:text-muted/70 focus:border-ink/40 focus:ring-4 focus:ring-ink/5;
+      placeholder:text-muted/70 focus:border-brand/50 focus:ring-4 focus:ring-brand/10;
   }
 }
 

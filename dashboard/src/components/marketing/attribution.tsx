@@ -58,7 +58,7 @@ export function Attribution({ links, clicks, sales, codeChannel, funnel, canEdit
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
         <Panel title={t("funnelTitle")}>{funnel.some((s) => s.value) ? <Funnel steps={funnel} /> : <Empty text={t("funnelEmpty")} />}</Panel>
-        <Panel title={t("links")} action={canEdit && <button onClick={() => setAdding(true)} className="flex items-center gap-1 rounded-lg bg-ink px-2.5 py-1.5 text-xs font-medium text-brand-contrast"><Plus size={13} /> {t("newLink")}</button>}>
+        <Panel title={t("links")} action={canEdit && <button onClick={() => setAdding(true)} className="flex items-center gap-1 rounded-lg bg-brand px-2.5 py-1.5 text-xs font-medium text-brand-contrast"><Plus size={13} /> {t("newLink")}</button>}>
           {links.length ? (
             <ul className="divide-y divide-line">
               {links.map((l) => (

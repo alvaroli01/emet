@@ -1,10 +1,9 @@
 import { getTranslations } from "next-intl/server";
-import { LogOut } from "lucide-react";
 import { getSession } from "@/lib/session";
 import { Sidebar, BottomNav } from "@/components/nav";
 import { SyncIndicator } from "@/components/sync-indicator";
-import { LanguageSwitcher, LocaleSync, ThemeToggle } from "@/components/preferences";
-import { Avatar } from "@/components/ui";
+import { LocaleSync } from "@/components/preferences";
+import { UserMenu } from "@/components/shell/user-menu";
 import { LogoMark } from "@/components/summit/logo";
 import { HeaderRecord } from "@/components/camp/header-record";
 import { NotificationsBell } from "@/components/workspace/notifications";
@@ -20,32 +19,18 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <LocaleSync saved={me.locale} />
       <Sidebar groups={groups} myGroupId={me.group_id} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex items-center justify-between gap-2 border-b border-line bg-bg/85 px-4 py-2.5 backdrop-blur lg:px-8">
-          <span className="flex items-center gap-2 whitespace-nowrap font-semibold tracking-tight lg:hidden"><LogoMark size={24} /> emet HQ</span>
-          <div className="ml-auto flex items-center gap-0.5 sm:gap-2">
+        <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-2 border-b border-line bg-bg/80 px-3 backdrop-blur-xl sm:px-4 lg:h-16 lg:px-8">
+          <span className="flex items-center gap-2 font-semibold tracking-tight lg:hidden"><LogoMark size={26} /> <span className="hidden min-[380px]:inline">emet HQ</span></span>
+          <div className="ml-auto flex items-center gap-1 sm:gap-1.5">
             <span className="hidden sm:contents"><SyncIndicator /></span>
             <SearchButton />
             <NotificationsBell meId={me.id} />
             <HeaderRecord />
-            <LanguageSwitcher profileId={me.id} />
-            <span className="hidden sm:contents"><ThemeToggle /></span>
-            <div className="ml-1 flex items-center gap-2.5">
-              <Avatar name={me.full_name} src={me.avatar_url} />
-              <div className="hidden text-right leading-tight sm:block">
-                <p className="text-sm font-medium">{me.full_name}</p>
-                <p className="text-xs text-muted">
-                  {myGroup ? `${myGroup.emoji} ${me.role_title ?? tg(myGroup.slug)}` : t("noGroupYet")}
-                </p>
-              </div>
-            </div>
-            <form action="/auth/signout" method="post">
-              <button aria-label={t("logOut")} title={t("logOut")} className="rounded-lg p-2 text-muted hover:bg-surface-2 hover:text-ink">
-                <LogOut size={17} />
-              </button>
-            </form>
+            <UserMenu name={me.full_name} avatar={me.avatar_url} profileId={me.id}
+                      subtitle={myGroup ? (me.role_title ?? tg(myGroup.slug)) : t("noGroupYet")} />
           </div>
         </header>
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-6 pb-28 lg:px-8 lg:pb-12">{children}</main>
+        <main className="mx-auto w-full max-w-7xl flex-1 px-3 pt-4 pb-28 sm:px-4 sm:pt-6 lg:px-8 lg:pb-12">{children}</main>
       </div>
       <BottomNav groups={groups} myGroupId={me.group_id} />
       <CommandPalette />

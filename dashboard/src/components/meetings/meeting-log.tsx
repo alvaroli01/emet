@@ -98,7 +98,7 @@ export function MeetingLog({ meetings, names, meId, isLeader, ai, storageBytes, 
               return (
                 <button key={k} onClick={() => setFilter(k)} aria-pressed={filter === k}
                         className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition ${
-                          filter === k ? "bg-ink text-brand-contrast" : "bg-surface text-muted shadow-[var(--shadow)] hover:text-ink"}`}>
+                          filter === k ? "bg-brand text-brand-contrast" : "bg-surface text-muted shadow-[var(--shadow)] hover:text-ink"}`}>
                   <Icon size={14} /> {k === "all" ? t("all") : t(`kinds.${k}`)} <span className="tabular-nums opacity-70">{n}</span>
                 </button>
               );

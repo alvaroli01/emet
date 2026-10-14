@@ -103,7 +103,7 @@ export function IdeaLab({ ideas, votes, comments, names, meId, isAdmin, hasKey: 
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("titlePlaceholder")} aria-label={t("titleLabel")} maxLength={140} className="input text-base font-medium" />
           <textarea value={pitch} onChange={(e) => setPitch(e.target.value)} placeholder={t("pitchPlaceholder")} aria-label={t("pitchLabel")} rows={2} maxLength={4000} className="input resize-y" />
           <button disabled={title.trim().length < 2 || !!progress}
-                  className="flex h-[46px] items-center justify-center gap-2 rounded-xl bg-ink px-4 text-sm font-semibold text-brand-contrast transition active:scale-[0.98] disabled:opacity-50">
+                  className="flex h-[46px] items-center justify-center gap-2 rounded-xl bg-brand px-4 text-sm font-semibold text-brand-contrast transition active:scale-[0.98] disabled:opacity-50">
             <Sparkles size={16} /> {hasKey ? t("analyze") : t("addOnly")}
           </button>
           <div className="flex flex-wrap gap-1.5 lg:col-span-3">
@@ -111,7 +111,7 @@ export function IdeaLab({ ideas, votes, comments, names, meId, isAdmin, hasKey: 
               const Icon = KIND_ICON[k];
               return (
                 <button key={k} type="button" onClick={() => setKind(k)} aria-pressed={kind === k}
-                        className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition ${kind === k ? "bg-ink text-brand-contrast" : "bg-surface-2 text-muted hover:text-ink"}`}>
+                        className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition ${kind === k ? "bg-brand text-brand-contrast" : "bg-surface-2 text-muted hover:text-ink"}`}>
                   <Icon size={14} /> {t(`kinds.${k}`)}
                 </button>
               );
@@ -273,7 +273,7 @@ function Detail({ idea, names, meId, isAdmin, hasKey, votes, comments, parent, v
         <span className="text-xs text-muted">{idea.created_by ? names[idea.created_by] : "—"} · {timeAgo(idea.created_at, locale)}</span>
         <span className="ml-auto flex items-center gap-1">
           <button onClick={vote} aria-pressed={mine}
-                  className={`flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm transition ${mine ? "bg-ink text-brand-contrast" : "text-muted hover:bg-surface-2 hover:text-ink"}`}>
+                  className={`flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm transition ${mine ? "bg-brand text-brand-contrast" : "text-muted hover:bg-surface-2 hover:text-ink"}`}>
             <ThumbsUp size={15} /> <span className="tabular-nums">{votes.length}</span>
           </button>
           {canManage && hasKey && !progress && (
@@ -294,7 +294,7 @@ function Detail({ idea, names, meId, isAdmin, hasKey, votes, comments, parent, v
       ) : !a ? (
         <div className="mt-6 rounded-xl bg-surface-2/60 p-5 text-sm">
           {idea.status === "failed" ? <p className="mb-3">{t("analysisFailed")}</p> : <p className="mb-3 text-muted">{hasKey ? t("notAnalyzed") : t("needKey")}</p>}
-          {canManage && hasKey && <button onClick={onRun} className="flex items-center gap-2 rounded-xl bg-ink px-4 py-2 font-medium text-brand-contrast"><Sparkles size={15} /> {t("analyze")}</button>}
+          {canManage && hasKey && <button onClick={onRun} className="flex items-center gap-2 rounded-xl bg-brand px-4 py-2 font-medium text-brand-contrast"><Sparkles size={15} /> {t("analyze")}</button>}
         </div>
       ) : (
         <div className="mt-6 space-y-7">
@@ -381,7 +381,7 @@ function Detail({ idea, names, meId, isAdmin, hasKey, votes, comments, parent, v
                       {done ? (
                         <button onClick={() => onOpen(done.id)} className="mt-3 self-start text-xs font-medium underline underline-offset-2">{t("openVariation")}{done.score !== null ? ` · ${done.score}/100` : ""}</button>
                       ) : (
-                        <button onClick={() => onExplore(v)} className="mt-3 flex items-center gap-1.5 self-start rounded-lg bg-ink px-2.5 py-1.5 text-xs font-medium text-brand-contrast">
+                        <button onClick={() => onExplore(v)} className="mt-3 flex items-center gap-1.5 self-start rounded-lg bg-brand px-2.5 py-1.5 text-xs font-medium text-brand-contrast">
                           <GitBranch size={12} /> {t("explore")}
                         </button>
                       )}
@@ -425,7 +425,7 @@ function Detail({ idea, names, meId, isAdmin, hasKey, votes, comments, parent, v
         </ul>
         <form onSubmit={send} className="mt-3 flex gap-2">
           <input value={comment} onChange={(e) => setComment(e.target.value)} placeholder={t("commentPlaceholder")} className="input py-2" maxLength={2000} />
-          <button className="rounded-xl bg-ink px-3 text-sm font-medium text-brand-contrast">{t("send")}</button>
+          <button className="rounded-xl bg-brand px-3 text-sm font-medium text-brand-contrast">{t("send")}</button>
         </form>
       </section>
     </article>
@@ -452,7 +452,7 @@ function Running({ progress }: { progress: NonNullable<Progress> }) {
       <ol className="space-y-3">
         {steps.map((s, i) => (
           <li key={s} className={`flex items-center gap-3 text-sm ${i > at ? "text-muted" : ""}`}>
-            <span className={`grid size-7 place-items-center rounded-full ${i < at ? "bg-ok text-white" : i === at ? "bg-ink text-brand-contrast" : "bg-surface text-muted"}`}>
+            <span className={`grid size-7 place-items-center rounded-full ${i < at ? "bg-ok text-white" : i === at ? "bg-brand text-brand-contrast" : "bg-surface text-muted"}`}>
               {i < at ? <Check size={14} /> : i === at ? <Loader2 size={14} className="animate-spin" /> : i + 1}
             </span>
             <span><span className="font-medium">{t(`steps.${s}`)}</span>{i === at && <span className="block text-xs text-muted">{t(`steps.${s}Hint`)}</span>}</span>
@@ -484,7 +484,7 @@ export function KeyNotice({ onConnected }: { onConnected: () => void }) {
       <KeyRound size={15} className="shrink-0 text-muted" />
       <span className="min-w-48 flex-1 text-muted">{t("keyNotice")} <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" className="text-climbed underline">console.groq.com/keys</a></span>
       <input ref={input} type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="gsk_…" aria-label="Groq API key" className="input w-48 py-1.5" autoComplete="off" />
-      <button disabled={busy || !key} className="flex items-center gap-1.5 rounded-lg bg-ink px-3 py-1.5 font-medium text-brand-contrast disabled:opacity-60">
+      <button disabled={busy || !key} className="flex items-center gap-1.5 rounded-lg bg-brand px-3 py-1.5 font-medium text-brand-contrast disabled:opacity-60">
         {busy && <Loader2 size={13} className="animate-spin" />}{t("connect")}
       </button>
       {error && <span role="alert" className="w-full text-xs text-bad-text"><X size={12} className="inline" /> {error}</span>}

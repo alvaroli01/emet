@@ -162,7 +162,7 @@ function MemberForm({ profile, groups, adminMode, onClose, onSaved }: {
             <label className="block"><span className="mb-1.5 block text-sm font-medium">{t("fields.group")}</span>
               <select value={v.group_id} onChange={(e) => set("group_id", e.target.value)} className="input">
                 <option value="">{t("noGroup")}</option>
-                {groups.map((g) => <option key={g.id} value={g.id}>{g.emoji} {tg(g.slug)}</option>)}
+                {groups.map((g) => <option key={g.id} value={g.id}>{tg(g.slug)}</option>)}
               </select></label>
             <label className="block"><span className="mb-1.5 block text-sm font-medium">{t("fields.role")}</span>
               <input list="role-options" value={v.role_title} onChange={(e) => set("role_title", e.target.value)} placeholder={t("roleTbd")} className="input" />

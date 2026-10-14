@@ -21,7 +21,8 @@
     "sectionWorkspace": "Espace de travail",
     "sectionTools": "Outils",
     "expand": "Déplier le menu",
-    "collapse": "Replier le menu"
+    "collapse": "Replier le menu",
+    "mobileNav": "Principal"
   },
   "shell": {
     "noGroupYet": "Pas encore de groupe",
@@ -30,7 +31,8 @@
       "connecting": "Connexion",
       "synced": "Synchronisé",
       "offline": "Hors ligne"
-    }
+    },
+    "account": "Ton compte"
   },
   "prefs": {
     "language": "Langue",
@@ -134,7 +136,8 @@
     "dragHint": "Glisser pour tourner",
     "mountainLabel": "Montagne 3D : le chiffre d’affaires a gravi {pct} du chemin vers {goal}",
     "paceTitle": "Rythme",
-    "trend": "Évolution"
+    "trend": "Évolution",
+    "sections": "Sections de la vue d’ensemble"
   },
   "activity": {
     "empty": "Rien pour l’instant — les changements de chacun apparaissent ici en direct.",
@@ -1454,7 +1457,9 @@
         "projects": "projet"
       },
       "noAudit": "Aucune modification pour l’instant."
-    }
+    },
+    "showAll": "Afficher {count} chiffres de plus",
+    "showFewer": "Afficher moins"
   },
   "marketing": {
     "tabs": {

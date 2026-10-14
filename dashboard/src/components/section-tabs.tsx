@@ -27,25 +27,24 @@ export function SectionTabs({ tabs, initial, label, groups }: { tabs: SectionTab
 
   return (
     <div>
-      <div className="sticky top-[52px] z-10 -mx-4 mb-5 border-b border-line bg-bg/90 px-4 backdrop-blur lg:-mx-8 lg:px-8">
+      <div className="sticky top-14 z-10 -mx-3 mb-4 space-y-2 bg-bg/85 px-3 py-2.5 backdrop-blur-xl sm:-mx-4 sm:px-4 lg:top-16 lg:-mx-8 lg:px-8">
         {cats.length > 1 && (
-          <div role="group" aria-label={label} className="flex gap-1 overflow-x-auto pt-3 [scrollbar-width:none]">
+          <div role="group" aria-label={label} className="inline-flex max-w-full gap-1 overflow-x-auto rounded-full bg-surface p-1 shadow-[var(--shadow)] ring-1 ring-line [scrollbar-width:none]">
             {cats.map((c) => (
               <button key={c} type="button" aria-pressed={c === activeCat} onClick={() => open(tabs.find((t) => (t.group ?? "other") === c)!.id)}
-                      className={`shrink-0 rounded-full px-3.5 py-1.5 text-sm transition ${c === activeCat ? "bg-ink font-medium text-brand-contrast" : "text-muted hover:bg-surface-2 hover:text-ink"}`}>
+                      className={`min-h-9 shrink-0 rounded-full px-4 text-sm transition ${c === activeCat ? "bg-brand font-medium text-brand-contrast" : "text-muted hover:text-ink"}`}>
                 {groups![c] ?? c}
-                <span className={`ml-1.5 text-xs ${c === activeCat ? "opacity-70" : "opacity-60"}`}>{tabs.filter((t) => (t.group ?? "other") === c).length}</span>
+                <span className={`ml-1.5 text-xs ${c === activeCat ? "opacity-75" : "opacity-60"}`}>{tabs.filter((t) => (t.group ?? "other") === c).length}</span>
               </button>
             ))}
           </div>
         )}
-        <div role="tablist" aria-label={label} className="flex gap-1 overflow-x-auto [scrollbar-width:none]">
+        <div role="tablist" aria-label={label} className="-mx-3 flex gap-1.5 overflow-x-auto px-3 [scrollbar-width:none] sm:mx-0 sm:px-0">
           {visible.map((t) => (
             <button key={t.id} role="tab" type="button" id={`tab-${t.id}`} aria-selected={active === t.id} aria-controls={`panel-${t.id}`}
                     onClick={() => open(t.id)}
-                    className={`relative flex shrink-0 items-center gap-1.5 px-3 py-3 text-sm transition-colors ${active === t.id ? "font-medium text-ink" : "text-muted hover:text-ink"}`}>
+                    className={`flex min-h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm transition ${active === t.id ? "bg-surface font-medium text-ink shadow-[var(--shadow)] ring-1 ring-line" : "text-muted hover:bg-surface/60 hover:text-ink"}`}>
               {t.icon}{t.label}
-              <span aria-hidden className={`absolute inset-x-2 -bottom-px h-0.5 rounded-full bg-trail transition-transform duration-300 ${active === t.id ? "scale-x-100" : "scale-x-0"}`} />
             </button>
           ))}
         </div>

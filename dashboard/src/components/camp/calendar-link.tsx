@@ -30,12 +30,12 @@ export function CalendarLink() {
       <h2 className="flex items-center gap-2 font-semibold"><CalendarPlus size={17} /> {t("title")}</h2>
       <p className="mt-1 mb-4 text-sm text-muted">{t("hint")}</p>
       {token === undefined ? <Loader2 size={16} className="animate-spin text-muted" /> : !token ? (
-        <button onClick={() => create()} className="rounded-xl bg-ink px-4 py-2 text-sm font-medium text-brand-contrast">{t("create")}</button>
+        <button onClick={() => create()} className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-contrast">{t("create")}</button>
       ) : (
         <div className="space-y-3">
           <div className="flex flex-wrap gap-2">
             <a href={`https://calendar.google.com/calendar/u/0/r?cid=${encodeURIComponent(webcal)}`} target="_blank" rel="noopener noreferrer"
-               className="rounded-xl bg-ink px-3.5 py-2 text-sm font-medium text-brand-contrast">{t("google")}</a>
+               className="rounded-xl bg-brand px-3.5 py-2 text-sm font-medium text-brand-contrast">{t("google")}</a>
             <a href={webcal} className="rounded-xl bg-surface-2 px-3.5 py-2 text-sm font-medium hover:bg-line">{t("apple")}</a>
             <button onClick={async () => { await navigator.clipboard.writeText(https); toast("ok", t("copied")); }}
                     className="flex items-center gap-1.5 rounded-xl bg-surface-2 px-3.5 py-2 text-sm font-medium hover:bg-line"><Copy size={14} /> {t("copy")}</button>

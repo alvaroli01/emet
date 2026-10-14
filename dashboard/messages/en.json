@@ -21,7 +21,8 @@
     "sectionWorkspace": "Workspace",
     "sectionTools": "Tools",
     "expand": "Expand menu",
-    "collapse": "Collapse menu"
+    "collapse": "Collapse menu",
+    "mobileNav": "Main"
   },
   "shell": {
     "noGroupYet": "No group yet",
@@ -30,7 +31,8 @@
       "connecting": "Connecting",
       "synced": "Synced",
       "offline": "Offline"
-    }
+    },
+    "account": "Your account"
   },
   "prefs": {
     "language": "Language",
@@ -134,7 +136,8 @@
     "dragHint": "Drag to turn",
     "mountainLabel": "3D mountain: revenue has climbed {pct} of the way to {goal}",
     "paceTitle": "Pace",
-    "trend": "Over time"
+    "trend": "Over time",
+    "sections": "Overview sections"
   },
   "activity": {
     "empty": "Nothing yet — changes anyone makes show up here live.",
@@ -1454,7 +1457,9 @@
         "projects": "project"
       },
       "noAudit": "No changes yet."
-    }
+    },
+    "showAll": "Show {count} more numbers",
+    "showFewer": "Show fewer"
   },
   "marketing": {
     "tabs": {

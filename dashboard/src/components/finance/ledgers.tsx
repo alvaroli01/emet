@@ -52,7 +52,7 @@ export function Ledgers({ sales, expenses, salesFields, expenseFields, members, 
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         <button onClick={() => setOpen((v) => !v)} aria-expanded={open}
-                className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm ${active ? "bg-ink text-brand-contrast" : "bg-surface-2 text-muted hover:text-ink"}`}>
+                className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm ${active ? "bg-brand text-brand-contrast" : "bg-surface-2 text-muted hover:text-ink"}`}>
           <Filter size={14} /> {t("filters")}{active ? ` · ${Object.values(f).filter(Boolean).length}` : ""}
         </button>
         {active && <button onClick={() => setF(EMPTY)} className="flex items-center gap-1 text-xs text-muted hover:text-ink"><X size={12} /> {t("clear")}</button>}

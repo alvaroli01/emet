@@ -62,7 +62,7 @@ export function AgendaTab({ items: initial, due, today }: { items: AgendaItem[];
           return (
             <button key={d} role="option" aria-selected={active} onClick={() => setDay(d)}
                     className={`flex w-16 shrink-0 snap-start flex-col items-center rounded-[12px] py-2.5 transition-[background,box-shadow,transform] duration-200 ${
-                      active ? "bg-ink text-brand-contrast shadow-[var(--shadow-lift)]" : "bg-surface text-ink shadow-[var(--shadow)] hover:-translate-y-0.5"}`}>
+                      active ? "bg-brand text-brand-contrast shadow-[var(--shadow-lift)]" : "bg-surface text-ink shadow-[var(--shadow)] hover:-translate-y-0.5"}`}>
               <span className={`text-[11px] ${active ? "opacity-80" : "text-muted"}`}>{d === today ? t("today") : fmt(d, { weekday: "short" })}</span>
               <span className="readout text-xl leading-tight">{fmt(d, { day: "numeric" })}</span>
               <span aria-label={t("itemsCount", { count: n })} className={`mt-0.5 h-1.5 w-1.5 rounded-full ${n ? (active ? "bg-brand-contrast" : "bg-trail") : "bg-transparent"}`} />

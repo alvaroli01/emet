@@ -57,7 +57,7 @@ export function FinanceProjects({ projects, sales, expenses, names, canEdit }: {
           {matches.map((v) => <option key={v.id} value={v.id}>{v.name}</option>)}
         </select>
         {canEdit && (
-          <button onClick={() => setCreating(true)} className="ml-auto flex items-center gap-1.5 rounded-xl bg-ink px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>
+          <button onClick={() => setCreating(true)} className="ml-auto flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>
         )}
       </div>
 

@@ -34,7 +34,7 @@ export function ContentPipeline({ items, metrics, glossary, members, canEdit, me
           <button role="tab" aria-selected={view === "pipeline"} onClick={() => setView("pipeline")} className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 ${view === "pipeline" ? "bg-surface font-medium shadow-sm" : "text-muted"}`}><Rows3 size={14} /> {t("pipeline")}</button>
           <button role="tab" aria-selected={view === "leaderboard"} onClick={() => setView("leaderboard")} className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 ${view === "leaderboard" ? "bg-surface font-medium shadow-sm" : "text-muted"}`}><LayoutGrid size={14} /> {t("leaderboard")}</button>
         </div>
-        {canEdit && <button onClick={() => setEditing("new")} className="ml-auto flex items-center gap-1.5 rounded-xl bg-ink px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>}
+        {canEdit && <button onClick={() => setEditing("new")} className="ml-auto flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>}
       </div>
 
       {view === "pipeline" ? (
@@ -73,7 +73,7 @@ export function ContentPipeline({ items, metrics, glossary, members, canEdit, me
           {ranked.map(({ c, m, ssr, ratio, hit }, i) => (
             <li key={c.id} className="panel p-4">
               <div className="flex items-start gap-3">
-                <span className={`readout grid size-9 shrink-0 place-items-center rounded-xl text-sm ${i < 3 ? "bg-ink text-brand-contrast" : "bg-surface-2"}`}>{i + 1}</span>
+                <span className={`readout grid size-9 shrink-0 place-items-center rounded-xl text-sm ${i < 3 ? "bg-brand text-brand-contrast" : "bg-surface-2"}`}>{i + 1}</span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">{c.title}</p>
                   <p className="text-xs text-muted">{c.tags?.format ?? c.platform}{c.tags?.hook_message ? ` · ${c.tags.hook_message}` : ""}</p>

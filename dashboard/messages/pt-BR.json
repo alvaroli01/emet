@@ -21,7 +21,8 @@
     "sectionWorkspace": "Espaço de trabalho",
     "sectionTools": "Ferramentas",
     "expand": "Expandir menu",
-    "collapse": "Recolher menu"
+    "collapse": "Recolher menu",
+    "mobileNav": "Principal"
   },
   "shell": {
     "noGroupYet": "Ainda sem grupo",
@@ -30,7 +31,8 @@
       "connecting": "Conectando",
       "synced": "Sincronizado",
       "offline": "Offline"
-    }
+    },
+    "account": "Sua conta"
   },
   "prefs": {
     "language": "Idioma",
@@ -134,7 +136,8 @@
     "dragHint": "Arraste para girar",
     "mountainLabel": "Montanha 3D: a receita já subiu {pct} do caminho até {goal}",
     "paceTitle": "Ritmo",
-    "trend": "Evolução"
+    "trend": "Evolução",
+    "sections": "Seções da visão geral"
   },
   "activity": {
     "empty": "Nada ainda — as mudanças de qualquer pessoa aparecem aqui ao vivo.",
@@ -1454,7 +1457,9 @@
         "projects": "projeto"
       },
       "noAudit": "Ainda não há alterações."
-    }
+    },
+    "showAll": "Mostrar mais {count} números",
+    "showFewer": "Mostrar menos"
   },
   "marketing": {
     "tabs": {
