@@ -32,7 +32,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
                       subtitle={myGroup ? (me.role_title ?? tg(myGroup.slug)) : t("noGroupYet")} />
           </div>
         </TopBarFrame>
-        <main className="mx-auto w-full max-w-[1400px] flex-1 px-3 pt-3 pb-28 sm:px-4 sm:pt-5 lg:px-6 lg:pb-10">{children}</main>
+        <main className="on-photo mx-auto w-full max-w-[1400px] flex-1 px-3 pt-3 pb-28 sm:px-4 sm:pt-5 lg:px-6 lg:pb-10">{children}</main>
       </div>
       <BottomNav groups={groups} myGroupId={me.group_id} />
       <CommandPalette />

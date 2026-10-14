@@ -148,13 +148,14 @@ function Gauge({ pct, label, small = false }: { pct: number; label: string; smal
           const f = i / (ticks - 1), a = Math.PI * (1 - f);
           const r1 = 84, r2 = i % 5 === 0 ? 70 : 75;
           const on = f <= pct;
-          return <line key={i} x1={100 + r1 * Math.cos(a)} y1={100 - r1 * Math.sin(a)} x2={100 + r2 * Math.cos(a)} y2={100 - r2 * Math.sin(a)}
+          const r = (v: number) => Math.round(v * 100) / 100;
+          return <line key={i} x1={r(100 + r1 * Math.cos(a))} y1={r(100 - r1 * Math.sin(a))} x2={r(100 + r2 * Math.cos(a))} y2={r(100 - r2 * Math.sin(a))}
                        stroke={on ? "#ffffff" : "rgb(255 255 255 / 0.28)"} strokeWidth={i % 5 === 0 ? 3 : 2} strokeLinecap="round" />;
         })}
-        {(() => { const a = Math.PI * (1 - pct); return <line x1="100" y1="100" x2={100 + 60 * Math.cos(a)} y2={100 - 60 * Math.sin(a)} stroke="#ff6a1a" strokeWidth="3" strokeLinecap="round" />; })()}
+        {(() => { const a = Math.PI * (1 - pct); return <line x1="100" y1="100" x2={Math.round((100 + 60 * Math.cos(a)) * 100) / 100} y2={Math.round((100 - 60 * Math.sin(a)) * 100) / 100} stroke="#ff6a1a" strokeWidth="3" strokeLinecap="round" />; })()}
         <circle cx="100" cy="100" r="5" fill="#ff6a1a" />
       </svg>
-      <p className={`absolute inset-x-0 top-[34%] text-center text-white/75 ${small ? "text-[9px]" : "text-[11px]"}`}>{label}</p>
+      <p className={`absolute inset-x-0 top-[34%] text-center text-white/90 ${small ? "text-[9px]" : "text-[11px]"}`}>{label}</p>
       <p className={`readout absolute inset-x-0 top-[50%] text-center text-white ${small ? "text-2xl" : "text-4xl"}`}>{Math.round(pct * 100)}%</p>
     </div>
   );
@@ -175,7 +176,7 @@ export function HomeDashboard({ d }: { d: HomeData }) {
         <label htmlFor="home-ask" className="sr-only">{t("askLabel")}</label>
         <div className="relative mt-1">
           <input id="home-ask" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("askPlaceholder")} autoComplete="off"
-                 className="w-full bg-transparent text-center text-[clamp(1.6rem,4vw,2.6rem)] font-light tracking-tight text-white caret-[#ff6a1a] outline-none placeholder:text-white/70 focus-visible:outline-none" />
+                 className="w-full bg-transparent text-center text-[clamp(1.6rem,4vw,2.6rem)] font-light tracking-tight text-white caret-[#ff6a1a] outline-none placeholder:text-white/95 focus-visible:outline-none" />
           {q && <button aria-label={t("askSend")} className="absolute top-1/2 right-0 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-brand text-white"><ArrowUp size={18} /></button>}
         </div>
       </form>
@@ -259,12 +260,12 @@ export function HomeDashboard({ d }: { d: HomeData }) {
             <Gauge pct={d.goal.pct} label={t("toSummit")} small />
           </div>
           <div className="pointer-events-none absolute inset-x-4 bottom-5 text-left">
-            <p className="flex items-center gap-1.5 text-lg font-medium text-white"><Target size={17} /> {eur(d.goal.revenue, locale)} <span className="text-white/60">/ {eur(d.goal.goal, locale)}</span></p>
-            <p className="mt-0.5 text-xs text-white/70">{t("daysLeft", { count: d.goal.daysLeft })}</p>
+            <p className="flex items-center gap-1.5 text-lg font-medium text-white"><Target size={17} /> {eur(d.goal.revenue, locale)} <span className="text-white/80">/ {eur(d.goal.goal, locale)}</span></p>
+            <p className="mt-0.5 text-xs text-white/85">{t("daysLeft", { count: d.goal.daysLeft })}</p>
           </div>
         </section>
       </div>
-      <p className="mt-3 text-right text-[10px] text-white/40">{t("photoCredit")}</p>
+      <p className="mt-3 text-right text-[10px] text-white/65">{t("photoCredit")}</p>
     </div>
   );
 }

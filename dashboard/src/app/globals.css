@@ -10,12 +10,12 @@
 :root {
   --foreground: var(--text); /* used by Magic UI ripple */
   --bg: #08080a;
-  --surface: rgb(28 28 32 / 0.62);
-  --surface-2: rgb(255 255 255 / 0.06);
+  --surface: rgb(18 18 22 / 0.8);
+  --surface-2: rgb(255 255 255 / 0.08);
   --solid: #141417;
   --border: rgb(255 255 255 / 0.09);
   --text: #f5f5f7;
-  --muted: rgb(235 235 245 / 0.58);
+  --muted: rgb(235 235 245 / 0.74);
   --brand: #ff6a1a;
   --brand-contrast: #ffffff;
   --brand-soft: rgb(255 106 26 / 0.14);
@@ -23,7 +23,7 @@
   --live: #3ddc97;
   --glass-hi: rgb(255 255 255 / 0.14);
   --glass-edge: rgb(255 255 255 / 0.08);
-  --glass-blur: 22px;
+  --glass-blur: 28px;
   --shade: 8 8 10;
   --contour: #4a3a30;
   --terrain: #1a1714;
@@ -50,12 +50,13 @@
 :root[data-theme="light"], .light-glass {
   --bg: #d8d8d3;
   --shade: 226 226 221;
-  --surface: rgb(255 255 255 / 0.55);
-  --surface-2: rgb(255 255 255 / 0.55);
+  --pill: rgb(255 255 255 / 0.78);
+  --surface: rgb(255 255 255 / 0.82);
+  --surface-2: rgb(255 255 255 / 0.7);
   --solid: #f2f2ef;
   --border: rgb(20 20 30 / 0.08);
   --text: #1c1c22;
-  --muted: rgb(28 28 34 / 0.6);
+  --muted: rgb(28 28 34 / 0.72);
   --brand: #f26a1b;
   --brand-contrast: #ffffff;
   --brand-soft: rgb(242 106 27 / 0.14);
@@ -185,9 +186,13 @@ button { white-space: nowrap; }
     box-shadow: inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-edge), var(--shadow);
   }
   .panel { @apply rounded-[22px]; }
+  /* Text that sits straight on a background photo (page titles, Today's ask box) gets a soft shadow */
+  .on-photo :where(h1, h2, header p, header span, form > p, input) { text-shadow: 0 1px 3px rgb(0 0 0 / 0.65), 0 0 18px rgb(0 0 0 / 0.35); }
+  :root[data-theme="light"] .on-photo :where(h1, h2, header p, header span, form > p, input) { text-shadow: 0 1px 2px rgb(255 255 255 / 0.7); }
+  .panel :where(h1, h2, p, span), .glass :where(h1, h2, p, span) { text-shadow: none; }
   .glass-pill {
     @apply inline-flex items-center gap-2 rounded-full;
-    background: var(--surface-2);
+    background: var(--pill, rgb(18 18 22 / 0.62));
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     backdrop-filter: blur(18px) saturate(160%);
     box-shadow: inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-edge);

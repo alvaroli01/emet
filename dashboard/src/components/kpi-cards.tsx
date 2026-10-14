@@ -52,7 +52,7 @@ export function KpiCards({ kpis, canEdit, inline = false }: { kpis: KpiWithValue
         return (
           <div key={k.id} className={inline ? "min-w-0 lg:min-w-[210px] lg:px-6 lg:first:pl-0" : "panel panel-lift p-4"}>
             <p className="text-sm text-muted">{name(k.metric)}</p>
-            {k.role_title && <p className="text-[11px] text-muted/80">{k.role_title} · {t(`period.${k.period}`)}</p>}
+            {k.role_title && <p className="text-[11px] text-muted">{k.role_title} · {t(`period.${k.period}`)}</p>}
             <p className="readout mt-1.5 text-2xl">{formatKpi(k.current, k.unit, locale)}</p>
             <div className="mt-2 flex items-center justify-between gap-2 text-sm">
               {editing === k.id ? (
