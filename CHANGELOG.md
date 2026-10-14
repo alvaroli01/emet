@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-14 — Alvaro — Workspace tools (roadmap 2, 4, 5, 6, 7, 8, 10): Today screen (new landing page), live notifications bell, ⌘K search + Ask emet, board templates and repeating cards, automatic Friday report (daily job, Fridays), private calendar feed. Migration `0015_workspace.sql` (119 permission tests). Phone top bar compacted.
 - 2026-10-14 — Alvaro — Idea lab: post business ideas; AI researches them on the web (Groq gpt-oss with web search, sources kept) and gives an honest verdict scored by the app from 7 weighted criteria, the numbers to reach €30K, a 7-day €0 test that becomes board tasks, and stronger versions to explore; votes and comments for the whole team (migration `0014_idea_lab.sql`, 106 permission tests, scoring unit tests).
 - 2026-10-14 — Alvaro — Research report on marketing ops/metrics/data/visualisation (`docs/reports/`, notes in `docs/research_notes/`), draft Marketing section build prompt (`docs/marketing-build-prompt.md`) and workspace roadmap with the approved ideas (`docs/workspace-roadmap.md`). Rocco and Sasha added as view-only members.
 - 2026-10-14 — Alvaro — Meeting audio archive: after 30 days, Meeting log audio moves nightly to the team's Google Drive (15 GB free, `drive.file` access only) and keeps playing from the Meeting log through a permission-checked proxy (migration `0013_drive_archive.sql`, 95 permission tests). Admins connect Drive from the Meeting log. Sasha added as view-only.

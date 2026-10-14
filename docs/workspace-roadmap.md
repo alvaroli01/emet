@@ -3,7 +3,7 @@
 > **North star:** the team should do its daily work *inside* emet HQ. Every feature must remove a step, a chat message or a
 > spreadsheet, and save time. (Decided by Alvaro, 2026-10-14.)
 
-## Approved (2026-10-14)
+## Approved (2026-10-14) — built: 2, 4, 5, 6, 7, 8, 10 · postponed: 9 (phone app)
 
 | # | Feature | What it does | Saves |
 |---|---|---|---|

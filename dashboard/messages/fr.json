@@ -15,7 +15,8 @@
     "close": "Fermer",
     "camp": "Camp de base",
     "meetings": "Journal des réunions",
-    "lab": "Labo d’idées"
+    "lab": "Labo d’idées",
+    "today": "Aujourd’hui"
   },
   "shell": {
     "noGroupYet": "Pas encore de groupe",
@@ -218,7 +219,16 @@
     "nobody": "Personne",
     "showEveryone": "Afficher tout le monde",
     "sectionOnly": "Seulement cette section",
-    "addedBy": "Ajoutée par {name} · {when}"
+    "addedBy": "Ajoutée par {name} · {when}",
+    "repeat": "Répéter",
+    "cadence": {
+      "off": "Ne se répète pas",
+      "weekly": "Chaque semaine",
+      "biweekly": "Toutes les 2 semaines",
+      "monthly": "Chaque mois"
+    },
+    "nextRepeat": "Prochaine copie : {date}",
+    "repeatSet": "Elle reviendra le {date}"
   },
   "myTasks": {
     "title": "Mes tâches",
@@ -801,6 +811,20 @@
       "meetingType": "Type de réunion",
       "subtitleMeeting": "Partagé avec toute l’équipe : vous recevez les notes, la transcription et l’audio.",
       "savedMeeting": "Réunion enregistrée dans le Journal des réunions"
+    },
+    "calendar": {
+      "title": "Ajouter à votre calendrier",
+      "hint": "Vos échéances, petites tâches et votre agenda apparaissent dans Google Calendar, Apple ou Outlook et se mettent à jour tout seuls.",
+      "create": "Créer mon lien de calendrier",
+      "google": "Ajouter à Google Calendar",
+      "apple": "Apple / Outlook",
+      "copy": "Copier le lien",
+      "copied": "Lien copié",
+      "private": "Ce lien est privé, il n’est que pour vous.",
+      "reset": "Le réinitialiser",
+      "confirmReset": "Créer un nouveau lien ? L’ancien ne fonctionnera plus et vous devrez ajouter le nouveau à votre calendrier.",
+      "resetDone": "Nouveau lien prêt – ajoutez-le de nouveau à votre calendrier",
+      "error": "Impossible de créer le lien. Réessayez."
     }
   },
   "meetings": {
@@ -943,5 +967,162 @@
     "keyNotice": "L’IA utilise votre propre compte Groq gratuit (la même clé que pour la prise de notes) :",
     "keyError": "Groq n’a pas accepté cette clé.",
     "connect": "Connecter"
+  },
+  "notifications": {
+    "title": "{count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}}",
+    "heading": "Notifications",
+    "readAll": "Tout marquer comme lu",
+    "empty": "Vous êtes à jour.",
+    "kinds": {
+      "assigned": "Vous avez été assigné(e) à « {title} »",
+      "card_comment": "Nouveau commentaire sur « {title} » : {excerpt}",
+      "meeting": "Nouveauté dans le Journal des réunions ({type}) : « {title} »",
+      "idea": "Nouvelle idée dans le Labo d’idées : « {title} »",
+      "idea_comment": "Nouveau commentaire sur l’idée « {title} » : {excerpt}",
+      "doc_shared": "Un document a été partagé avec vous : « {title} »",
+      "design_request": "Nouvelle demande de design : « {title} »",
+      "due_soon": "À rendre demain : « {title} »",
+      "report": "Le rapport de cette semaine est prêt"
+    }
+  },
+  "palette": {
+    "label": "Rechercher et demander",
+    "short": "Rechercher",
+    "placeholder": "Cherchez partout ou posez une question…",
+    "close": "Fermer",
+    "back": "Retour",
+    "jump": "Aller à",
+    "newIdea": "Nouvelle idée",
+    "newDoc": "Nouveau document",
+    "recordMeeting": "Enregistrer une réunion",
+    "ask": "Demander à emet : « {q} »",
+    "askHint": "Réponse basée sur les données en direct de l’équipe",
+    "thinking": "Je consulte les données de l’équipe…",
+    "noKey": "Demander à emet utilise votre compte Groq gratuit. Connectez-le dans Camp de base → Documents → micro, ou dans le Labo d’idées.",
+    "askFailed": "Impossible de répondre pour le moment. Réessayez dans une minute.",
+    "fromData": "Réponse basée sur les données d’emet HQ que vous pouvez voir. Vérifiez les chiffres importants dans leur onglet.",
+    "noResults": "Aucun résultat.",
+    "footer": "↑↓ pour naviguer · Entrée pour ouvrir · Échap pour fermer",
+    "types": {
+      "card": "Tâche",
+      "doc": "Document",
+      "meeting": "Réunion",
+      "decision": "Décision",
+      "idea": "Idée",
+      "person": "Personne"
+    }
+  },
+  "today": {
+    "greeting": {
+      "morning": "Bonjour, {name}",
+      "afternoon": "Bon après-midi, {name}",
+      "evening": "Bonsoir, {name}"
+    },
+    "ask": "Demander à emet",
+    "quick": "Actions rapides",
+    "actions": {
+      "task": "Ajouter une tâche",
+      "record": "Enregistrer une réunion",
+      "idea": "Nouvelle idée",
+      "doc": "Nouveau document",
+      "sale": "Enregistrer une vente"
+    },
+    "due": "À faire aujourd’hui",
+    "allTasks": "Toutes mes tâches",
+    "late": "En retard · {date}",
+    "todayLabel": "Aujourd’hui",
+    "nothingDue": "Rien à rendre aujourd’hui. Le bon moment pour prendre de l’avance.",
+    "priorities": "Priorités de la semaine",
+    "edit": "Modifier",
+    "set": "Les définir",
+    "noPriorities": "Pas encore de priorités : choisissez-en 3 dans le Camp de base.",
+    "agenda": "Agenda du jour",
+    "open": "Ouvrir",
+    "noAgenda": "Rien de prévu aujourd’hui.",
+    "goal": "Objectif de l’équipe : 30 000 € de chiffre d’affaires",
+    "daysLeft": "{count, plural, one {# jour restant} other {# jours restants}}",
+    "needed": "Nécessaire à partir de maintenant : {amount} par semaine"
+  },
+  "report": {
+    "title": "Rapport hebdomadaire · semaine du {date}",
+    "revenue": "Chiffre d’affaires",
+    "profit": "Bénéfice",
+    "sales": "Ventes",
+    "tasksDone": "Tâches terminées",
+    "overdue": "Tâches en retard",
+    "onTime": "Taux de ponctualité",
+    "blockers": "Blocages ouverts",
+    "meetings": "Réunions",
+    "sinceStart": "Depuis le début",
+    "needed": "Nécessaire : {amount} par semaine · {days} jours restants",
+    "topIdea": "Meilleure idée de la semaine : {title} ({score}/100)",
+    "copy": "Copier pour le chat",
+    "copied": "Copié – collez-le dans le chat du groupe"
+  },
+  "templates": {
+    "use": "Utiliser un modèle",
+    "productLaunch": {
+      "title": "Lancement de produit",
+      "hint": "De l’idée aux premières ventes",
+      "items": [
+        "Définir le produit, le prix et la marge",
+        "Commander des échantillons et vérifier la qualité",
+        "Prendre les photos du produit",
+        "Rédiger le post et les stories de lancement",
+        "Mettre en place le moyen de paiement",
+        "Planifier le jour du lancement",
+        "Enregistrer les premières ventes"
+      ]
+    },
+    "stallDay": {
+      "title": "Journée de stand",
+      "hint": "Vente en direct sur le campus",
+      "items": [
+        "Réserver l’emplacement et obtenir l’autorisation",
+        "Préparer le stock et la monnaie",
+        "Imprimer les prix et le QR code",
+        "Établir le planning des équipes",
+        "Publier la veille pour l’annoncer",
+        "Enregistrer chaque vente pendant la journée",
+        "Compter la caisse et le stock à la fin"
+      ]
+    },
+    "event": {
+      "title": "Événement",
+      "hint": "Soirée, atelier ou rencontre",
+      "items": [
+        "Choisir la date, le lieu et le budget",
+        "Vérifier les autorisations et l’assurance",
+        "Fixer le prix du billet et le lien de vente",
+        "Créer l’affiche et les publications",
+        "Vendre les billets",
+        "Déroulé et rôles du jour J",
+        "Chiffres et enseignements après l’événement"
+      ]
+    },
+    "campaign": {
+      "title": "Campagne marketing",
+      "hint": "Un objectif, plusieurs publications",
+      "items": [
+        "Rédiger le brief (objectif, cible, message)",
+        "Planifier les publications et les dates",
+        "Créer le contenu",
+        "Faire valider par le responsable marketing",
+        "Publier et répondre aux commentaires",
+        "Mesurer les résultats après 7 jours",
+        "Noter ce qui a fonctionné"
+      ]
+    },
+    "fridayReport": {
+      "title": "Rapport du vendredi",
+      "hint": "Chiffres de la semaine et tableau de bord",
+      "items": [
+        "Vérifier que toutes les ventes et dépenses sont enregistrées",
+        "Relire le rapport de la semaine dans Aujourd’hui",
+        "Mettre à jour les chiffres des KPI",
+        "Partager le rapport dans le chat du groupe",
+        "Noter 3 décisions pour la semaine prochaine"
+      ]
+    }
   }
 }

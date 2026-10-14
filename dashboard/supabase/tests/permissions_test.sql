@@ -324,6 +324,29 @@ select t.check('Author updates the analysis of their idea', $$update lab_ideas s
 select t.login(1);
 select t.check('Admin can remove a comment', $$delete from lab_comments where body = 'Love it'$$, 'ok');
 
+-- ── Notifications, repeating tasks, calendar feeds ──────────
+select t.login(3);  -- Rocco (Marketing)
+select t.check('Marketing member adds a card on their board',
+  $$insert into cards (board_id, list_id, title, created_by) select b.id, l.id, 'Shoot product photos', public.my_profile_id() from boards b join board_lists l on l.board_id = b.id where b.slug = 'marketing' order by l.position limit 1$$, 'ok');
+select t.check('...and assigns Stefan', $$insert into card_assignees (card_id, user_id) select c.id, p.id from cards c, profiles p where c.title = 'Shoot product photos' and p.full_name = 'Stefan'$$, 'ok');
+select t.assert('Rocco cannot read Stefan''s notifications', t.num($$select count(*) from notifications where data->>'title' = 'Shoot product photos'$$) = 0);
+select t.check('Nobody can create notifications directly', $$insert into notifications (user_id, kind) select id, 'assigned' from profiles limit 1$$, 'denied');
+select t.check('Marketing member makes a weekly repeating task',
+  $$insert into recurring_tasks (board_id, title, cadence, next_run) select id, 'Weekly content plan', 'weekly', current_date from boards where slug = 'marketing'$$, 'ok');
+select t.login(2);  -- Stefan (Finance)
+select t.assert('Stefan was notified about the assignment', t.num($$select count(*) from notifications where data->>'title' = 'Shoot product photos'$$) = 1);
+select t.check('Stefan marks it read', $$update notifications set read_at = now() where data->>'title' = 'Shoot product photos'$$, 'ok');
+select t.check('Finance member cannot add repeating tasks to Marketing''s board',
+  $$insert into recurring_tasks (board_id, title, cadence, next_run) select id, 'Hijack', 'weekly', current_date from boards where slug = 'marketing'$$, 'denied');
+select t.check('Member creates their own calendar feed', $$insert into calendar_feeds default values$$, 'ok');
+select t.login(3);
+select t.assert('Others cannot see someone else''s calendar feed', t.num('select count(*) from calendar_feeds') = 0);
+reset role;
+select t.assert('Repeating task runs', public.run_recurring() >= 1);
+select t.assert('Repeating task created its card', (select count(*) from cards where title = 'Weekly content plan') = 1);
+select t.assert('...and moves to next week', (select next_run from recurring_tasks where title = 'Weekly content plan') = current_date + 7);
+set role authenticated;
+
 -- ── Removed member / logged-out visitor ──────────────────────
 select t.login(1);
 select t.check('Admin deactivates a member',

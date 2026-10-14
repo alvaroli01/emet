@@ -18,6 +18,7 @@ import type { BoardCard, BoardData, ListRow, Member } from "@/lib/boards";
 import { CardDialog } from "./card-dialog";
 import { LabelChip, useListName } from "./labels";
 import { TrelloPanel } from "./trello-panel";
+import { TemplateMenu } from "./templates";
 import { pushToTrello } from "./trello-push";
 
 
@@ -160,6 +161,24 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
     if (data.board.trello_sync_enabled) pushToTrello({ cardId: id, op: "upsert" });
   }
 
+  // A template = one project card (assigned to you) with its small tasks, in the first list
+  async function applyTemplate(title: string, items: string[]) {
+    const listId = lists[0]?.id;
+    if (!listId) return;
+    const ids = order[listId];
+    const last = ids.length ? cards[ids[ids.length - 1]]?.position ?? 0 : 0;
+    const id = crypto.randomUUID();
+    const { error } = await supabase.from("cards").insert({ id, board_id: data.board.id, list_id: listId, title, position: last + 1, created_by: viewer.meId });
+    if (error) return toast("error", t("errors.save"));
+    await supabase.from("card_assignees").insert({ card_id: id, user_id: viewer.meId });
+    await supabase.from("card_checklist_items").insert(items.map((text, i) => ({ card_id: id, text, position: i + 1 })));
+    const card: BoardCard = { id, board_id: data.board.id, list_id: listId, title, description: null, due_at: null, completed_at: null, position: last + 1,
+      labels: [], created_by: viewer.meId, created_at: new Date().toISOString(), assignees: [viewer.meId], checklist: { done: 0, total: items.length }, comments: 0 };
+    setCards((c) => ({ ...c, [id]: card }));
+    setOrder((o) => ({ ...o, [listId]: [...o[listId], id] }));
+    setOpenId(id);
+  }
+
   async function addList(name: string) {
     const position = (lists.at(-1)?.position ?? 0) + 1;
     const { data: row, error } = await supabase.from("board_lists").insert({ board_id: data.board.id, name, position }).select("*").single();
@@ -200,8 +219,10 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
 
   return (
     <div>
-      {!rights.canAdd && (
+      {!rights.canAdd ? (
         <div className="mb-3"><ViewOnlyBadge /></div>
+      ) : (
+        <div className="mb-2 flex justify-end"><TemplateMenu onUse={applyTemplate} /></div>
       )}
       <DndContext id={dndId} sensors={sensors} collisionDetection={closestCorners}
                   onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd}

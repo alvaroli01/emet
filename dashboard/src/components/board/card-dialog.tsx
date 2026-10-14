@@ -31,6 +31,7 @@ export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, t
   const [newComment, setNewComment] = useState("");
   const [customLabel, setCustomLabel] = useState("");
   const [everyone, setEveryone] = useState(false);
+  const [repeat, setRepeat] = useState<{ id: string; cadence: string; next_run: string } | null>(null);
   const names = Object.fromEntries(members.map((m) => [m.id, m]));
   // People of this section first (the whole team on the general board); anyone already assigned stays visible
   const section = groupId ? members.filter((m) => m.group_id === groupId) : members;
@@ -53,6 +54,29 @@ export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, t
       setComments((b.data as Comment[]) ?? []);
     })();
   }, [card.id, supabase]);
+
+  useEffect(() => {
+    supabase.from("recurring_tasks").select("id, cadence, next_run").eq("source_card", card.id).eq("active", true).maybeSingle()
+      .then(({ data }) => setRepeat(data ?? null));
+  }, [card.id, supabase]);
+
+  // Repeat: the card comes back on the same board every week / 2 weeks / month, assigned to the same person
+  async function setCadence(cadence: string) {
+    if (repeat) await supabase.from("recurring_tasks").delete().eq("id", repeat.id);
+    if (cadence === "off") { setRepeat(null); return; }
+    const base = card.due_at ? new Date(card.due_at) : new Date();
+    const next = new Date(base);
+    if (cadence === "weekly") next.setDate(next.getDate() + 7);
+    else if (cadence === "biweekly") next.setDate(next.getDate() + 14);
+    else next.setMonth(next.getMonth() + 1);
+    const { data, error } = await supabase.from("recurring_tasks").insert({
+      board_id: card.board_id, title: card.title, description: card.description, assignee_id: card.assignees[0] ?? null,
+      cadence, next_run: next.toISOString().slice(0, 10), source_card: card.id,
+    }).select("id, cadence, next_run").single();
+    if (error) return toast("error", t("errors.save"));
+    setRepeat(data);
+    toast("ok", t("repeatSet", { date: next.toLocaleDateString(locale, { day: "numeric", month: "short" }) }));
+  }
 
   async function save(patch: Partial<BoardCard>) {
     onChange({ ...card, ...patch }, card.id);
@@ -264,6 +288,13 @@ export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, t
               <input type="date" disabled={!canEdit} value={dueValue}
                      onChange={(e) => save({ due_at: e.target.value ? new Date(e.target.value + "T21:59:00Z").toISOString() : null })}
                      className="input py-1.5" />
+            </section>
+            <section>
+              <h3 className="mb-2 text-sm font-semibold">{t("repeat")}</h3>
+              <select disabled={!canEdit} value={repeat?.cadence ?? "off"} onChange={(e) => setCadence(e.target.value)} aria-label={t("repeat")} className="input py-1.5">
+                {["off", "weekly", "biweekly", "monthly"].map((c) => <option key={c} value={c}>{t(`cadence.${c}`)}</option>)}
+              </select>
+              {repeat && <p className="mt-1 text-xs text-muted">{t("nextRepeat", { date: new Date(repeat.next_run + "T12:00:00Z").toLocaleDateString(locale, { day: "numeric", month: "short" }) })}</p>}
             </section>
             <section>
               <h3 className="mb-2 text-sm font-semibold">{t("assignees")}</h3>

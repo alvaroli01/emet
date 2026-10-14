@@ -15,7 +15,8 @@
     "close": "Schließen",
     "camp": "Basislager",
     "meetings": "Besprechungsprotokoll",
-    "lab": "Ideenlabor"
+    "lab": "Ideenlabor",
+    "today": "Heute"
   },
   "shell": {
     "noGroupYet": "Noch keine Gruppe",
@@ -218,7 +219,16 @@
     "nobody": "Niemand",
     "showEveryone": "Alle anzeigen",
     "sectionOnly": "Nur dieser Bereich",
-    "addedBy": "Hinzugefügt von {name} · {when}"
+    "addedBy": "Hinzugefügt von {name} · {when}",
+    "repeat": "Wiederholen",
+    "cadence": {
+      "off": "Wiederholt sich nicht",
+      "weekly": "Jede Woche",
+      "biweekly": "Alle 2 Wochen",
+      "monthly": "Jeden Monat"
+    },
+    "nextRepeat": "Nächste Kopie: {date}",
+    "repeatSet": "Kommt am {date} wieder"
   },
   "myTasks": {
     "title": "Meine Aufgaben",
@@ -801,6 +811,20 @@
       "meetingType": "Art der Besprechung",
       "subtitleMeeting": "Wird mit dem ganzen Team geteilt: Du bekommst Notizen, das Transkript und das Audio.",
       "savedMeeting": "Besprechung im Besprechungsprotokoll gespeichert"
+    },
+    "calendar": {
+      "title": "Zu deinem Kalender hinzufügen",
+      "hint": "Deine Fälligkeitstermine, kleinen Aufgaben und der Tagesplan erscheinen in Google Calendar, Apple oder Outlook und aktualisieren sich von selbst.",
+      "create": "Meinen Kalenderlink erstellen",
+      "google": "Zu Google Calendar hinzufügen",
+      "apple": "Apple / Outlook",
+      "copy": "Link kopieren",
+      "copied": "Link kopiert",
+      "private": "Dieser Link ist nur für dich privat.",
+      "reset": "Zurücksetzen",
+      "confirmReset": "Neuen Link erstellen? Der alte funktioniert dann nicht mehr und du musst den neuen zu deinem Kalender hinzufügen.",
+      "resetDone": "Neuer Link bereit – füge ihn erneut zu deinem Kalender hinzu",
+      "error": "Der Link konnte nicht erstellt werden. Versuch es noch einmal."
     }
   },
   "meetings": {
@@ -943,5 +967,162 @@
     "keyNotice": "Die KI nutzt dein eigenes kostenloses Groq-Konto (derselbe Schlüssel wie beim Notizen-Mitschreiber):",
     "keyError": "Groq hat diesen Schlüssel nicht akzeptiert.",
     "connect": "Verbinden"
+  },
+  "notifications": {
+    "title": "{count, plural, =0 {Benachrichtigungen} one {Benachrichtigungen, # ungelesen} other {Benachrichtigungen, # ungelesen}}",
+    "heading": "Benachrichtigungen",
+    "readAll": "Alle als gelesen markieren",
+    "empty": "Du bist auf dem neuesten Stand.",
+    "kinds": {
+      "assigned": "Dir wurde „{title}“ zugewiesen",
+      "card_comment": "Neuer Kommentar zu „{title}“: {excerpt}",
+      "meeting": "Neu im Besprechungsprotokoll ({type}): „{title}“",
+      "idea": "Neue Idee im Ideenlabor: „{title}“",
+      "idea_comment": "Neuer Kommentar zur Idee „{title}“: {excerpt}",
+      "doc_shared": "Ein Dokument wurde mit dir geteilt: „{title}“",
+      "design_request": "Neue Designanfrage: „{title}“",
+      "due_soon": "Morgen fällig: „{title}“",
+      "report": "Der Bericht dieser Woche ist fertig"
+    }
+  },
+  "palette": {
+    "label": "Suchen und fragen",
+    "short": "Suchen",
+    "placeholder": "Alles durchsuchen oder eine Frage stellen…",
+    "close": "Schließen",
+    "back": "Zurück",
+    "jump": "Gehe zu",
+    "newIdea": "Neue Idee",
+    "newDoc": "Neues Dokument",
+    "recordMeeting": "Besprechung aufnehmen",
+    "ask": "Frag emet: „{q}“",
+    "askHint": "Beantwortet mit den Live-Daten des Teams",
+    "thinking": "Ich sehe mir die Daten des Teams an…",
+    "noKey": "Frag emet nutzt dein kostenloses Groq-Konto. Verbinde es im Basislager → Dokumente → Mikrofon oder im Ideenlabor.",
+    "askFailed": "Gerade keine Antwort möglich. Versuch es in einer Minute noch einmal.",
+    "fromData": "Beantwortet mit emet-HQ-Daten, die du sehen kannst. Prüfe wichtige Zahlen im jeweiligen Tab.",
+    "noResults": "Nichts gefunden.",
+    "footer": "↑↓ zum Bewegen · Enter zum Öffnen · Esc zum Schließen",
+    "types": {
+      "card": "Aufgabe",
+      "doc": "Dokument",
+      "meeting": "Besprechung",
+      "decision": "Entscheidung",
+      "idea": "Idee",
+      "person": "Person"
+    }
+  },
+  "today": {
+    "greeting": {
+      "morning": "Guten Morgen, {name}",
+      "afternoon": "Guten Tag, {name}",
+      "evening": "Guten Abend, {name}"
+    },
+    "ask": "Frag emet",
+    "quick": "Schnellaktionen",
+    "actions": {
+      "task": "Aufgabe hinzufügen",
+      "record": "Besprechung aufnehmen",
+      "idea": "Neue Idee",
+      "doc": "Neues Dokument",
+      "sale": "Verkauf erfassen"
+    },
+    "due": "Heute fällig",
+    "allTasks": "Alle meine Aufgaben",
+    "late": "Überfällig · {date}",
+    "todayLabel": "Heute",
+    "nothingDue": "Heute ist nichts fällig. Ein guter Moment, um vorzuarbeiten.",
+    "priorities": "Prioritäten dieser Woche",
+    "edit": "Bearbeiten",
+    "set": "Festlegen",
+    "noPriorities": "Noch keine Prioritäten – wähle 3 im Basislager.",
+    "agenda": "Tagesplan",
+    "open": "Öffnen",
+    "noAgenda": "Heute ist nichts geplant.",
+    "goal": "Teamziel: 30.000 € Umsatz",
+    "daysLeft": "{count, plural, one {noch # Tag} other {noch # Tage}}",
+    "needed": "Ab jetzt nötig: {amount} pro Woche"
+  },
+  "report": {
+    "title": "Wochenbericht · Woche vom {date}",
+    "revenue": "Umsatz",
+    "profit": "Gewinn",
+    "sales": "Verkäufe",
+    "tasksDone": "Erledigte Aufgaben",
+    "overdue": "Überfällige Aufgaben",
+    "onTime": "Pünktlichkeitsquote",
+    "blockers": "Offene Blocker",
+    "meetings": "Besprechungen",
+    "sinceStart": "Seit dem Start",
+    "needed": "Nötig: {amount} pro Woche · noch {days} Tage",
+    "topIdea": "Top-Idee dieser Woche: {title} ({score}/100)",
+    "copy": "Für den Chat kopieren",
+    "copied": "Kopiert – füge es in den Gruppenchat ein"
+  },
+  "templates": {
+    "use": "Vorlage verwenden",
+    "productLaunch": {
+      "title": "Produktlaunch",
+      "hint": "Von der Idee zu den ersten Verkäufen",
+      "items": [
+        "Produkt, Preis und Marge festlegen",
+        "Muster bestellen und Qualität prüfen",
+        "Produktfotos machen",
+        "Launch-Beitrag und Stories schreiben",
+        "Bezahlmöglichkeit einrichten",
+        "Launch-Tag planen",
+        "Erste Verkäufe erfassen"
+      ]
+    },
+    "stallDay": {
+      "title": "Standtag",
+      "hint": "Persönlicher Verkauf auf dem Campus",
+      "items": [
+        "Platz reservieren und Erlaubnis einholen",
+        "Ware und Wechselgeld vorbereiten",
+        "Preise und QR-Code drucken",
+        "Schichtplan erstellen",
+        "Am Tag davor darüber posten",
+        "Jeden Verkauf während des Tages erfassen",
+        "Kasse und Bestand am Ende zählen"
+      ]
+    },
+    "event": {
+      "title": "Event",
+      "hint": "Party, Workshop oder Treffen",
+      "items": [
+        "Datum, Ort und Budget wählen",
+        "Genehmigungen und Versicherung prüfen",
+        "Ticketpreis und Verkaufslink festlegen",
+        "Plakat und Beiträge erstellen",
+        "Tickets verkaufen",
+        "Ablaufplan und Rollen für den Tag",
+        "Zahlen und Erkenntnisse nach dem Event"
+      ]
+    },
+    "campaign": {
+      "title": "Marketingkampagne",
+      "hint": "Ein Ziel, mehrere Beiträge",
+      "items": [
+        "Briefing schreiben (Ziel, Zielgruppe, Botschaft)",
+        "Beiträge und Termine planen",
+        "Inhalte erstellen",
+        "Mit der Marketingleitung abstimmen",
+        "Veröffentlichen und auf Kommentare antworten",
+        "Ergebnisse nach 7 Tagen messen",
+        "Aufschreiben, was funktioniert hat"
+      ]
+    },
+    "fridayReport": {
+      "title": "Freitagsbericht",
+      "hint": "Wochenzahlen und Scorecard",
+      "items": [
+        "Prüfen, ob alle Verkäufe und Ausgaben erfasst sind",
+        "Bericht dieser Woche unter Heute ansehen",
+        "KPI-Zahlen aktualisieren",
+        "Bericht im Gruppenchat teilen",
+        "3 Entscheidungen für nächste Woche notieren"
+      ]
+    }
   }
 }

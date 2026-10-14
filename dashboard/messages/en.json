@@ -15,7 +15,8 @@
     "close": "Close",
     "camp": "Base camp",
     "meetings": "Meeting log",
-    "lab": "Idea lab"
+    "lab": "Idea lab",
+    "today": "Today"
   },
   "shell": {
     "noGroupYet": "No group yet",
@@ -218,7 +219,16 @@
     "nobody": "No one",
     "showEveryone": "Show everyone",
     "sectionOnly": "Only this section",
-    "addedBy": "Added by {name} · {when}"
+    "addedBy": "Added by {name} · {when}",
+    "repeat": "Repeat",
+    "cadence": {
+      "off": "Doesn’t repeat",
+      "weekly": "Every week",
+      "biweekly": "Every 2 weeks",
+      "monthly": "Every month"
+    },
+    "nextRepeat": "Next copy: {date}",
+    "repeatSet": "It will come back on {date}"
   },
   "myTasks": {
     "title": "My Tasks",
@@ -801,6 +811,20 @@
       "meetingType": "Type of meeting",
       "subtitleMeeting": "Shared with the whole team: you get notes, the transcript and the audio.",
       "savedMeeting": "Meeting saved to the Meeting log"
+    },
+    "calendar": {
+      "title": "Add to your calendar",
+      "hint": "Your due dates, small tasks and agenda appear in Google, Apple or Outlook Calendar and update by themselves.",
+      "create": "Create my calendar link",
+      "google": "Add to Google Calendar",
+      "apple": "Apple / Outlook",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "private": "This link is private to you.",
+      "reset": "Reset it",
+      "confirmReset": "Make a new link? The old one stops working and you’ll need to add the new one to your calendar.",
+      "resetDone": "New link ready — add it to your calendar again",
+      "error": "Couldn’t create the link. Try again."
     }
   },
   "meetings": {
@@ -943,5 +967,162 @@
     "keyNotice": "The AI uses your own free Groq account (same key as the note-taker):",
     "keyError": "Groq didn’t accept that key.",
     "connect": "Connect"
+  },
+  "notifications": {
+    "title": "{count, plural, =0 {Notifications} one {Notifications, # unread} other {Notifications, # unread}}",
+    "heading": "Notifications",
+    "readAll": "Mark all read",
+    "empty": "You’re all caught up.",
+    "kinds": {
+      "assigned": "You were assigned to “{title}”",
+      "card_comment": "New comment on “{title}”: {excerpt}",
+      "meeting": "New {type} in the Meeting log: “{title}”",
+      "idea": "New idea in the Idea lab: “{title}”",
+      "idea_comment": "New comment on the idea “{title}”: {excerpt}",
+      "doc_shared": "A doc was shared with you: “{title}”",
+      "design_request": "New design request: “{title}”",
+      "due_soon": "Due tomorrow: “{title}”",
+      "report": "This week’s report is ready"
+    }
+  },
+  "palette": {
+    "label": "Search and ask",
+    "short": "Search",
+    "placeholder": "Search everything or ask a question…",
+    "close": "Close",
+    "back": "Back",
+    "jump": "Go to",
+    "newIdea": "New idea",
+    "newDoc": "New doc",
+    "recordMeeting": "Record a meeting",
+    "ask": "Ask emet: “{q}”",
+    "askHint": "Answered from the team’s live data",
+    "thinking": "Looking at the team’s data…",
+    "noKey": "Ask emet uses your free Groq account. Connect it in Base camp → Docs → microphone, or in the Idea lab.",
+    "askFailed": "Couldn’t answer right now. Try again in a minute.",
+    "fromData": "Answered from emet HQ data you can see. Check important numbers in their tab.",
+    "noResults": "Nothing found.",
+    "footer": "↑↓ to move · Enter to open · Esc to close",
+    "types": {
+      "card": "Task",
+      "doc": "Doc",
+      "meeting": "Meeting",
+      "decision": "Decision",
+      "idea": "Idea",
+      "person": "Person"
+    }
+  },
+  "today": {
+    "greeting": {
+      "morning": "Good morning, {name}",
+      "afternoon": "Good afternoon, {name}",
+      "evening": "Good evening, {name}"
+    },
+    "ask": "Ask emet",
+    "quick": "Quick actions",
+    "actions": {
+      "task": "Add a task",
+      "record": "Record a meeting",
+      "idea": "New idea",
+      "doc": "New doc",
+      "sale": "Log a sale"
+    },
+    "due": "Due today",
+    "allTasks": "All my tasks",
+    "late": "Late · {date}",
+    "todayLabel": "Today",
+    "nothingDue": "Nothing due today. Good moment to get ahead.",
+    "priorities": "This week’s priorities",
+    "edit": "Edit",
+    "set": "Set them",
+    "noPriorities": "No priorities yet — pick 3 in Base camp.",
+    "agenda": "Today’s agenda",
+    "open": "Open",
+    "noAgenda": "Nothing planned today.",
+    "goal": "Team goal: €30K revenue",
+    "daysLeft": "{count, plural, one {# day left} other {# days left}}",
+    "needed": "Needed from now: {amount} per week"
+  },
+  "report": {
+    "title": "Weekly report · week of {date}",
+    "revenue": "Revenue",
+    "profit": "Profit",
+    "sales": "Sales",
+    "tasksDone": "Tasks done",
+    "overdue": "Overdue tasks",
+    "onTime": "On-time rate",
+    "blockers": "Open blockers",
+    "meetings": "Meetings",
+    "sinceStart": "Since the start",
+    "needed": "Needed: {amount} per week · {days} days left",
+    "topIdea": "Top idea this week: {title} ({score}/100)",
+    "copy": "Copy for the chat",
+    "copied": "Copied — paste it in the group chat"
+  },
+  "templates": {
+    "use": "Use a template",
+    "productLaunch": {
+      "title": "Product launch",
+      "hint": "From idea to first sales",
+      "items": [
+        "Define the product, price and margin",
+        "Order samples and check quality",
+        "Take product photos",
+        "Write the launch post and stories",
+        "Set up how people pay",
+        "Plan the launch day",
+        "Log the first sales"
+      ]
+    },
+    "stallDay": {
+      "title": "Stall day",
+      "hint": "Selling in person on campus",
+      "items": [
+        "Book the place and get permission",
+        "Prepare stock and change",
+        "Print prices and the QR code",
+        "Make the shift rota",
+        "Post about it the day before",
+        "Log every sale during the day",
+        "Count cash and stock at the end"
+      ]
+    },
+    "event": {
+      "title": "Event",
+      "hint": "Party, workshop or meetup",
+      "items": [
+        "Choose date, venue and budget",
+        "Check permits and insurance",
+        "Set ticket price and sales link",
+        "Make the poster and posts",
+        "Sell tickets",
+        "Run-of-show and roles on the day",
+        "Post-event numbers and lessons"
+      ]
+    },
+    "campaign": {
+      "title": "Marketing campaign",
+      "hint": "One goal, several posts",
+      "items": [
+        "Write the brief (goal, audience, message)",
+        "Plan the posts and dates",
+        "Create the content",
+        "Approve with the marketing leader",
+        "Publish and reply to comments",
+        "Measure results after 7 days",
+        "Write what worked"
+      ]
+    },
+    "fridayReport": {
+      "title": "Friday report",
+      "hint": "Weekly numbers and scorecard",
+      "items": [
+        "Check all sales and expenses are logged",
+        "Review this week’s report on Today",
+        "Update KPI numbers",
+        "Share the report in the group chat",
+        "Note 3 decisions for next week"
+      ]
+    }
   }
 }

@@ -15,7 +15,8 @@
     "close": "Sulje",
     "camp": "Perusleiri",
     "meetings": "Kokousloki",
-    "lab": "Ideapaja"
+    "lab": "Ideapaja",
+    "today": "Tänään"
   },
   "shell": {
     "noGroupYet": "Ei vielä ryhmää",
@@ -218,7 +219,16 @@
     "nobody": "Ei kukaan",
     "showEveryone": "Näytä kaikki",
     "sectionOnly": "Vain tämä osio",
-    "addedBy": "Lisännyt {name} · {when}"
+    "addedBy": "Lisännyt {name} · {when}",
+    "repeat": "Toista",
+    "cadence": {
+      "off": "Ei toistu",
+      "weekly": "Joka viikko",
+      "biweekly": "Joka 2. viikko",
+      "monthly": "Joka kuukausi"
+    },
+    "nextRepeat": "Seuraava kopio: {date}",
+    "repeatSet": "Palaa takaisin {date}"
   },
   "myTasks": {
     "title": "Omat tehtävät",
@@ -801,6 +811,20 @@
       "meetingType": "Kokouksen tyyppi",
       "subtitleMeeting": "Jaetaan koko tiimille: saat muistiinpanot, litteroinnin ja äänen.",
       "savedMeeting": "Kokous tallennettu kokouslokiin"
+    },
+    "calendar": {
+      "title": "Lisää kalenteriisi",
+      "hint": "Eräpäiväsi, pienet tehtäväsi ja agendasi näkyvät Google-, Apple- tai Outlook-kalenterissa ja päivittyvät itsestään.",
+      "create": "Luo kalenterilinkkini",
+      "google": "Lisää Google Calendariin",
+      "apple": "Apple / Outlook",
+      "copy": "Kopioi linkki",
+      "copied": "Linkki kopioitu",
+      "private": "Tämä linkki on yksityinen, vain sinulle.",
+      "reset": "Nollaa se",
+      "confirmReset": "Luodaanko uusi linkki? Vanha lakkaa toimimasta ja uusi täytyy lisätä kalenteriisi.",
+      "resetDone": "Uusi linkki valmis – lisää se kalenteriisi uudelleen",
+      "error": "Linkin luominen ei onnistunut. Yritä uudelleen."
     }
   },
   "meetings": {
@@ -943,5 +967,162 @@
     "keyNotice": "Tekoäly käyttää omaa ilmaista Groq-tiliäsi (sama avain kuin muistiinpanojen kirjaajassa):",
     "keyError": "Groq ei hyväksynyt avainta.",
     "connect": "Yhdistä"
+  },
+  "notifications": {
+    "title": "{count, plural, =0 {Ilmoitukset} one {Ilmoitukset, # lukematon} other {Ilmoitukset, # lukematonta}}",
+    "heading": "Ilmoitukset",
+    "readAll": "Merkitse kaikki luetuiksi",
+    "empty": "Olet ajan tasalla.",
+    "kinds": {
+      "assigned": "Sinut määrättiin tehtävään ”{title}”",
+      "card_comment": "Uusi kommentti kohteessa ”{title}”: {excerpt}",
+      "meeting": "Uutta kokouslokissa ({type}): ”{title}”",
+      "idea": "Uusi idea Ideapajassa: ”{title}”",
+      "idea_comment": "Uusi kommentti ideaan ”{title}”: {excerpt}",
+      "doc_shared": "Dokumentti jaettiin sinulle: ”{title}”",
+      "design_request": "Uusi suunnittelupyyntö: ”{title}”",
+      "due_soon": "Erääntyy huomenna: ”{title}”",
+      "report": "Tämän viikon raportti on valmis"
+    }
+  },
+  "palette": {
+    "label": "Hae ja kysy",
+    "short": "Hae",
+    "placeholder": "Hae mistä tahansa tai kysy jotain…",
+    "close": "Sulje",
+    "back": "Takaisin",
+    "jump": "Siirry",
+    "newIdea": "Uusi idea",
+    "newDoc": "Uusi dokumentti",
+    "recordMeeting": "Nauhoita kokous",
+    "ask": "Kysy emetiltä: ”{q}”",
+    "askHint": "Vastaus tiimin reaaliaikaisesta datasta",
+    "thinking": "Katson tiimin dataa…",
+    "noKey": "Kysy emetiltä käyttää ilmaista Groq-tiliäsi. Yhdistä se Perusleirissä → Dokumentit → mikrofoni tai Ideapajassa.",
+    "askFailed": "Vastaaminen ei onnistunut nyt. Yritä minuutin kuluttua uudelleen.",
+    "fromData": "Vastaus perustuu emet HQ:n dataan, jonka voit nähdä. Tarkista tärkeät luvut niiden omalta välilehdeltä.",
+    "noResults": "Mitään ei löytynyt.",
+    "footer": "↑↓ liikkumiseen · Enter avaa · Esc sulkee",
+    "types": {
+      "card": "Tehtävä",
+      "doc": "Dokumentti",
+      "meeting": "Kokous",
+      "decision": "Päätös",
+      "idea": "Idea",
+      "person": "Henkilö"
+    }
+  },
+  "today": {
+    "greeting": {
+      "morning": "Hyvää huomenta, {name}",
+      "afternoon": "Hyvää päivää, {name}",
+      "evening": "Hyvää iltaa, {name}"
+    },
+    "ask": "Kysy emetiltä",
+    "quick": "Pikatoiminnot",
+    "actions": {
+      "task": "Lisää tehtävä",
+      "record": "Nauhoita kokous",
+      "idea": "Uusi idea",
+      "doc": "Uusi dokumentti",
+      "sale": "Kirjaa myynti"
+    },
+    "due": "Erääntyy tänään",
+    "allTasks": "Kaikki tehtäväni",
+    "late": "Myöhässä · {date}",
+    "todayLabel": "Tänään",
+    "nothingDue": "Mitään ei erääntyisi tänään. Hyvä hetki tehdä etukäteen.",
+    "priorities": "Tämän viikon prioriteetit",
+    "edit": "Muokkaa",
+    "set": "Aseta ne",
+    "noPriorities": "Ei vielä prioriteetteja – valitse 3 Perusleirissä.",
+    "agenda": "Tämän päivän agenda",
+    "open": "Avaa",
+    "noAgenda": "Tänään ei ole mitään suunniteltuna.",
+    "goal": "Tiimin tavoite: 30 000 € liikevaihto",
+    "daysLeft": "{count, plural, one {# päivä jäljellä} other {# päivää jäljellä}}",
+    "needed": "Tästä eteenpäin tarvitaan: {amount} viikossa"
+  },
+  "report": {
+    "title": "Viikkoraportti · viikko alkaen {date}",
+    "revenue": "Liikevaihto",
+    "profit": "Voitto",
+    "sales": "Myynnit",
+    "tasksDone": "Valmiit tehtävät",
+    "overdue": "Myöhässä olevat tehtävät",
+    "onTime": "Ajallaan-osuus",
+    "blockers": "Avoimet esteet",
+    "meetings": "Kokoukset",
+    "sinceStart": "Alusta asti",
+    "needed": "Tarvitaan: {amount} viikossa · {days} päivää jäljellä",
+    "topIdea": "Viikon paras idea: {title} ({score}/100)",
+    "copy": "Kopioi chattiin",
+    "copied": "Kopioitu – liitä se ryhmächattiin"
+  },
+  "templates": {
+    "use": "Käytä pohjaa",
+    "productLaunch": {
+      "title": "Tuotelanseeraus",
+      "hint": "Ideasta ensimmäisiin myynteihin",
+      "items": [
+        "Määritä tuote, hinta ja kate",
+        "Tilaa näytteet ja tarkista laatu",
+        "Ota tuotekuvat",
+        "Kirjoita lanseerauspostaus ja storyt",
+        "Järjestä maksutapa",
+        "Suunnittele lanseerauspäivä",
+        "Kirjaa ensimmäiset myynnit"
+      ]
+    },
+    "stallDay": {
+      "title": "Myyntipisteen päivä",
+      "hint": "Myyntiä kasvokkain kampuksella",
+      "items": [
+        "Varaa paikka ja hanki lupa",
+        "Valmistele varasto ja vaihtoraha",
+        "Tulosta hinnat ja QR-koodi",
+        "Tee vuorolista",
+        "Postaa asiasta edellisenä päivänä",
+        "Kirjaa jokainen myynti päivän aikana",
+        "Laske kassa ja varasto lopuksi"
+      ]
+    },
+    "event": {
+      "title": "Tapahtuma",
+      "hint": "Juhlat, työpaja tai tapaaminen",
+      "items": [
+        "Valitse päivämäärä, paikka ja budjetti",
+        "Tarkista luvat ja vakuutus",
+        "Määritä lipun hinta ja myyntilinkki",
+        "Tee juliste ja postaukset",
+        "Myy liput",
+        "Tapahtumapäivän ohjelma ja roolit",
+        "Tapahtuman luvut ja opit"
+      ]
+    },
+    "campaign": {
+      "title": "Markkinointikampanja",
+      "hint": "Yksi tavoite, useita postauksia",
+      "items": [
+        "Kirjoita brief (tavoite, kohderyhmä, viesti)",
+        "Suunnittele postaukset ja päivämäärät",
+        "Tee sisältö",
+        "Hyväksytä markkinointivastaavalla",
+        "Julkaise ja vastaa kommentteihin",
+        "Mittaa tulokset 7 päivän jälkeen",
+        "Kirjoita ylös, mikä toimi"
+      ]
+    },
+    "fridayReport": {
+      "title": "Perjantairaportti",
+      "hint": "Viikon luvut ja tulostaulu",
+      "items": [
+        "Tarkista, että kaikki myynnit ja kulut on kirjattu",
+        "Katso tämän viikon raportti Tänään-sivulta",
+        "Päivitä KPI-luvut",
+        "Jaa raportti ryhmächatissa",
+        "Kirjaa 3 päätöstä ensi viikolle"
+      ]
+    }
   }
 }

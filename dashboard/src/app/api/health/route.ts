@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { archiveBatch } from "@/lib/drive";
+import { buildWeeklyReport } from "@/lib/weekly-report";
 
 /**
  * Daily keep-alive (Vercel Cron). A free Supabase project pauses after 7 days without activity —
@@ -30,7 +31,20 @@ export async function GET(request: NextRequest) {
     removed += data?.length ?? 0;
   }
   const { data: docsMarked } = await db.rpc("mark_audio_expired", { p_days: AUDIO_DAYS });
+  // Workspace automation: repeating tasks, "due tomorrow" reminders, the Friday report
+  const [{ data: repeated }, { data: reminders }] = await Promise.all([db.rpc("run_recurring"), db.rpc("notify_due_tomorrow")]);
+  let report: string | null = null;
+  const madrid = new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Madrid" }));
+  if (madrid.getDay() === 5) {
+    const data = await buildWeeklyReport(db);
+    const { error: exists } = await db.from("weekly_reports").insert({ week_start: data.week, data });
+    if (!exists) {
+      report = data.week;
+      const { data: people } = await db.rpc("active_member_ids");
+      await db.from("notifications").insert(((people as string[] | null) ?? []).map((u) => ({ user_id: u, kind: "report", data: { week: data.week }, link: "/today", dedupe: `report:${data.week}` })));
+    }
+  }
   // Meeting audio older than 30 days → Google Drive (the nightly GitHub job does the bulk; this is the fallback)
-  const archive = await archiveBatch(20_000);
-  return NextResponse.json({ ok: true, groups: count, ms, audioRemoved: removed, docsMarked, archive, at: new Date().toISOString() });
+  const archive = await archiveBatch(15_000);
+  return NextResponse.json({ ok: true, groups: count, ms, audioRemoved: removed, docsMarked, repeated, reminders, report, archive, at: new Date().toISOString() });
 }

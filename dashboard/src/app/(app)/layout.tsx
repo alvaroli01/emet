@@ -7,6 +7,8 @@ import { LanguageSwitcher, LocaleSync, ThemeToggle } from "@/components/preferen
 import { Avatar } from "@/components/ui";
 import { LogoMark } from "@/components/summit/logo";
 import { HeaderRecord } from "@/components/camp/header-record";
+import { NotificationsBell } from "@/components/workspace/notifications";
+import { CommandPalette, SearchButton } from "@/components/workspace/command-palette";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("shell");
@@ -20,11 +22,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-20 flex items-center justify-between gap-2 border-b border-line bg-bg/85 px-4 py-2.5 backdrop-blur lg:px-8">
           <span className="flex items-center gap-2 whitespace-nowrap font-semibold tracking-tight lg:hidden"><LogoMark size={24} /> emet HQ</span>
-          <div className="ml-auto flex items-center gap-1 sm:gap-2">
-            <SyncIndicator />
+          <div className="ml-auto flex items-center gap-0.5 sm:gap-2">
+            <span className="hidden sm:contents"><SyncIndicator /></span>
+            <SearchButton />
+            <NotificationsBell meId={me.id} />
             <HeaderRecord />
             <LanguageSwitcher profileId={me.id} />
-            <ThemeToggle />
+            <span className="hidden sm:contents"><ThemeToggle /></span>
             <div className="ml-1 flex items-center gap-2.5">
               <Avatar name={me.full_name} src={me.avatar_url} />
               <div className="hidden text-right leading-tight sm:block">
@@ -44,6 +48,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-6 pb-28 lg:px-8 lg:pb-12">{children}</main>
       </div>
       <BottomNav groups={groups} myGroupId={me.group_id} />
+      <CommandPalette />
     </div>
   );
 }

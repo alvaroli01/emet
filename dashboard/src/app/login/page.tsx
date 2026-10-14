@@ -33,8 +33,8 @@ function LoginForm() {
   );
 
   const supabase = createClient();
-  const next = params.get("next") ?? "/";
-  const safeNext = next.startsWith("/") && !next.startsWith("//") ? next : "/";
+  const next = params.get("next") ?? "/today";
+  const safeNext = next.startsWith("/") && !next.startsWith("//") ? next : "/today";
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

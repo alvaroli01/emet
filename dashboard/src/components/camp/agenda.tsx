@@ -7,6 +7,7 @@ import { Plus, Trash2, Check, KanbanSquare } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import type { DueTask } from "./week";
+import { CalendarLink } from "./calendar-link";
 
 export type AgendaItem = { id: string; title: string; day: string; start_time: string | null; end_time: string | null; done: boolean };
 
@@ -102,6 +103,7 @@ export function AgendaTab({ items: initial, due, today }: { items: AgendaItem[];
           </ul>
         )}
       </section>
+      <CalendarLink />
     </div>
   );
 }
