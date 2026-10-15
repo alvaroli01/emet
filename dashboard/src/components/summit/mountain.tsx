@@ -324,8 +324,8 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
       tentMat.color.copy(cssColor("--climbed", "#2b6ca3"));
       if (money) {
         // Warm night rock with gold contour lines, so the mountain reads on the dark card
-        uniforms.uPaper.value.set(0x3a2a1a);
-        uniforms.uContour.value.set(0xc8913a);
+        uniforms.uPaper.value.set(0x4d3820);
+        uniforms.uContour.value.set(0xe0a548);
         uniforms.uClimbed.value.set(0xffb43d);
         trailMat.color.set(0xffd166); pinMat.color.set(0xffd166); ringMat.color.set(0xffc23d);
       }
@@ -348,6 +348,12 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
       if (variant === "login" && width / h > 1.4) camera.setViewOffset(width, h, -width * 0.14, 0, width, h);
       else if (variant === "login") camera.setViewOffset(width, h, 0, -h * 0.24, width, h); // phones: drop it below the headline
       else camera.clearViewOffset();
+      // Money (Today's tall card): step back so the whole mountain fits, further on narrow frames
+      if (variant === "money") {
+        const back = 1.45 * Math.max(1, Math.pow(0.9 / (width / h), 0.55));
+        camera.position.set(0, 6.2 * back * 0.92, 11.6 * back);
+        camera.lookAt(0, 1.5, 0);
+      }
       camera.updateProjectionMatrix();
     };
     const ro = new ResizeObserver(resize);
