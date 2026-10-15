@@ -826,7 +826,13 @@
       "keptUntil": "Audio gespeichert bis {date}",
       "meetingType": "Art der Besprechung",
       "subtitleMeeting": "Wird mit dem ganzen Team geteilt: Du bekommst Notizen, das Transkript und das Audio.",
-      "savedMeeting": "Besprechung im Besprechungsprotokoll gespeichert"
+      "savedMeeting": "Besprechung im Besprechungsprotokoll gespeichert",
+      "redo": "Transkript neu erstellen",
+      "redoHint": "Liest das gespeicherte Audio erneut und speichert ein frisches Transkript als neues Dokument (verbraucht deine Groq-Minuten)",
+      "redoProgress": "Transkribiere {done}/{total}…",
+      "redoWaiting": "Gratis-Limit erreicht, warte…",
+      "redoneTitle": "{title} (Transkript neu erstellt)",
+      "redoneSaved": "Neues Transkript gespeichert"
     },
     "calendar": {
       "title": "Zu deinem Kalender hinzufügen",
@@ -1048,7 +1054,8 @@
       "doc_shared": "Ein Dokument wurde mit dir geteilt: „{title}“",
       "design_request": "Neue Designanfrage: „{title}“",
       "due_soon": "Morgen fällig: „{title}“",
-      "report": "Der Bericht dieser Woche ist fertig"
+      "report": "Der Bericht dieser Woche ist fertig",
+      "team_task": "Neue Aufgabe vom Teamleiter: „{title}“"
     }
   },
   "palette": {
@@ -2579,5 +2586,33 @@
     "bestSellers": "Bestseller",
     "decisions": "Letzte Entscheidungen",
     "noDecisions": "Noch keine Entscheidungen erfasst."
+  },
+  "teamTasks": {
+    "tool": "Aufgaben verteilen",
+    "newTask": "Aufgabe vergeben",
+    "onlyLeaders": "Das sehen nur Teamleiter. Alle, die du auswählst, bekommen eine Benachrichtigung und sehen die Aufgabe unter Meine Aufgaben.",
+    "what": "Aufgabe",
+    "whatPlaceholder": "z. B. Eine Story über den Stand posten",
+    "details": "Details (optional)",
+    "detailsPlaceholder": "Alles, was sie wissen müssen",
+    "due": "Fällig am (optional)",
+    "who": "Wer soll es machen?",
+    "picked": "{count, plural, =0 {noch niemand ausgewählt} one {# Person} other {# Personen}}",
+    "everyone": "Alle",
+    "me": "Ich",
+    "clear": "Leeren",
+    "give": "{count, plural, =0 {Aufgabe vergeben} one {An # Person vergeben} other {An # Personen vergeben}}",
+    "sent": "{count, plural, one {Aufgabe an # Person vergeben} other {Aufgabe an # Personen vergeben}}",
+    "saveError": "Speichern fehlgeschlagen. Versuch es nochmal.",
+    "given": "Von dir vergebene Aufgaben",
+    "noneGiven": "Noch keine Aufgaben vergeben.",
+    "delete": "Aufgabe löschen",
+    "confirmDelete": "Diese Aufgabe für alle löschen?",
+    "progress": "{done}/{total} erledigt",
+    "finished": "erledigt",
+    "notYet": "noch nicht",
+    "fromLeader": "Vom Teamleiter",
+    "tick": "„{title}“ als erledigt markieren",
+    "untick": "„{title}“ als nicht erledigt markieren"
   }
 }

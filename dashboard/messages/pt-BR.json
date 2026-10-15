@@ -826,7 +826,13 @@
       "keptUntil": "áudio guardado até {date}",
       "meetingType": "Tipo de reunião",
       "subtitleMeeting": "Compartilhado com o time inteiro: você recebe anotações, a transcrição e o áudio.",
-      "savedMeeting": "Reunião salva no Registro de reuniões"
+      "savedMeeting": "Reunião salva no Registro de reuniões",
+      "redo": "Refazer transcrição",
+      "redoHint": "Lê o áudio salvo de novo e salva uma transcrição nova como um novo doc (usa seus minutos do Groq)",
+      "redoProgress": "Transcrevendo {done}/{total}…",
+      "redoWaiting": "Limite gratuito atingido, aguardando…",
+      "redoneTitle": "{title} (transcrição refeita)",
+      "redoneSaved": "Nova transcrição salva"
     },
     "calendar": {
       "title": "Adicione ao seu calendário",
@@ -1048,7 +1054,8 @@
       "doc_shared": "Um documento foi compartilhado com você: “{title}”",
       "design_request": "Novo pedido de design: “{title}”",
       "due_soon": "Vence amanhã: “{title}”",
-      "report": "O relatório desta semana está pronto"
+      "report": "O relatório desta semana está pronto",
+      "team_task": "Nova tarefa do líder da equipe: “{title}”"
     }
   },
   "palette": {
@@ -2579,5 +2586,33 @@
     "bestSellers": "Mais vendidos",
     "decisions": "Últimas decisões",
     "noDecisions": "Nenhuma decisão registrada ainda."
+  },
+  "teamTasks": {
+    "tool": "Atribuir tarefas",
+    "newTask": "Dar uma tarefa",
+    "onlyLeaders": "Só os líderes da equipe veem isto. Quem você escolher recebe uma notificação e vê em Minhas tarefas.",
+    "what": "Tarefa",
+    "whatPlaceholder": "ex.: Postar um story sobre a barraca",
+    "details": "Detalhes (opcional)",
+    "detailsPlaceholder": "Tudo o que precisam saber",
+    "due": "Prazo (opcional)",
+    "who": "Quem deve fazer?",
+    "picked": "{count, plural, =0 {ninguém escolhido ainda} one {# pessoa} other {# pessoas}}",
+    "everyone": "Todos",
+    "me": "Eu",
+    "clear": "Limpar",
+    "give": "{count, plural, =0 {Dar tarefa} one {Dar para # pessoa} other {Dar para # pessoas}}",
+    "sent": "{count, plural, one {Tarefa dada para # pessoa} other {Tarefa dada para # pessoas}}",
+    "saveError": "Não foi possível salvar. Tente de novo.",
+    "given": "Tarefas que você deu",
+    "noneGiven": "Nenhuma tarefa dada ainda.",
+    "delete": "Excluir tarefa",
+    "confirmDelete": "Excluir esta tarefa para todos?",
+    "progress": "{done}/{total} concluídas",
+    "finished": "concluída",
+    "notYet": "ainda não",
+    "fromLeader": "Do líder da equipe",
+    "tick": "Marcar “{title}” como feita",
+    "untick": "Marcar “{title}” como não feita"
   }
 }

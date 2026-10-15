@@ -826,7 +826,13 @@
       "keptUntil": "audio conservé jusqu’au {date}",
       "meetingType": "Type de réunion",
       "subtitleMeeting": "Partagé avec toute l’équipe : vous recevez les notes, la transcription et l’audio.",
-      "savedMeeting": "Réunion enregistrée dans le Journal des réunions"
+      "savedMeeting": "Réunion enregistrée dans le Journal des réunions",
+      "redo": "Refaire la transcription",
+      "redoHint": "Relit l’audio enregistré et sauvegarde une nouvelle transcription dans un nouveau doc (utilise tes minutes Groq)",
+      "redoProgress": "Transcription {done}/{total}…",
+      "redoWaiting": "Limite gratuite atteinte, en attente…",
+      "redoneTitle": "{title} (transcription refaite)",
+      "redoneSaved": "Nouvelle transcription enregistrée"
     },
     "calendar": {
       "title": "Ajouter à votre calendrier",
@@ -1048,7 +1054,8 @@
       "doc_shared": "Un document a été partagé avec vous : « {title} »",
       "design_request": "Nouvelle demande de design : « {title} »",
       "due_soon": "À rendre demain : « {title} »",
-      "report": "Le rapport de cette semaine est prêt"
+      "report": "Le rapport de cette semaine est prêt",
+      "team_task": "Nouvelle tâche du chef d’équipe : « {title} »"
     }
   },
   "palette": {
@@ -2579,5 +2586,33 @@
     "bestSellers": "Meilleures ventes",
     "decisions": "Dernières décisions",
     "noDecisions": "Aucune décision enregistrée pour l'instant."
+  },
+  "teamTasks": {
+    "tool": "Attribuer des tâches",
+    "newTask": "Donner une tâche",
+    "onlyLeaders": "Seuls les chefs d’équipe voient ceci. Les personnes choisies reçoivent une notification et la voient dans Mes tâches.",
+    "what": "Tâche",
+    "whatPlaceholder": "ex. Publier une story sur le stand",
+    "details": "Détails (facultatif)",
+    "detailsPlaceholder": "Tout ce qu’il faut savoir",
+    "due": "Date limite (facultatif)",
+    "who": "Qui doit s’en charger ?",
+    "picked": "{count, plural, =0 {personne de choisi pour l’instant} one {# personne} other {# personnes}}",
+    "everyone": "Tout le monde",
+    "me": "Moi",
+    "clear": "Effacer",
+    "give": "{count, plural, =0 {Donner la tâche} one {Donner à # personne} other {Donner à # personnes}}",
+    "sent": "{count, plural, one {Tâche donnée à # personne} other {Tâche donnée à # personnes}}",
+    "saveError": "Échec de l’enregistrement. Réessaie.",
+    "given": "Tâches que tu as données",
+    "noneGiven": "Aucune tâche donnée pour l’instant.",
+    "delete": "Supprimer la tâche",
+    "confirmDelete": "Supprimer cette tâche pour tout le monde ?",
+    "progress": "{done}/{total} terminées",
+    "finished": "terminée",
+    "notYet": "pas encore",
+    "fromLeader": "Du chef d’équipe",
+    "tick": "Marquer « {title} » comme fait",
+    "untick": "Marquer « {title} » comme non fait"
   }
 }

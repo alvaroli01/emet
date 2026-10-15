@@ -6,7 +6,20 @@ export const NOTES_MODELS = ["openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/
 
 // What Whisper tends to "hear" in silence or noise; never worth keeping as a whole chunk
 const PHANTOMS = /^(you|thank you\.?|thanks for watching!?|bye\.?|gracias\.?|¡?gracias por ver!?|subt[ií]tulos.*|amara\.org.*|\.+)$/i;
-export const isPhantom = (text: string) => PHANTOMS.test(text.trim());
+// Only dots, ellipses, commas etc. (". . . . ." with spaces too) — Whisper's way of saying it heard nothing it understood
+const ONLY_PUNCT = /^[\s.…,;:!?¡¿\-–—'"]*$/;
+export const isPhantom = (text: string) => ONLY_PUNCT.test(text) || PHANTOMS.test(text.trim());
+
+/**
+ * The hint sent with the next chunk (the end of the last one). A hint that is mostly dots makes Whisper answer the
+ * next chunk with dots too — and the one after — so the transcript dies while the audio is fine. Junk hints are dropped.
+ */
+export function usablePrompt(prev?: string): string | undefined {
+  const text = (prev ?? "").replace(/(\s*[.…]\s*){2,}/g, ". ").replace(/\s+/g, " ").trim().replace(/^\.\s*/, "");
+  const words = text.match(/\p{L}{2,}/gu) ?? [];
+  if (words.length < 3) return undefined;
+  return text.slice(-300).replace(/^\S*\s/, (m) => (text.length > 300 ? "" : m)).trim();
+}
 
 export type GroqError = { kind: "limit"; retryAfter: number } | { kind: "bad-key" } | { kind: "failed"; status: number };
 
@@ -31,11 +44,14 @@ export async function transcribe(key: string, audio: Blob, name: string, languag
   form.append("temperature", "0");
   if (language) form.append("language", language);
   // The end of the previous chunk keeps names and wording consistent across chunk boundaries
-  if (prompt) form.append("prompt", prompt.slice(-400));
+  const hint = usablePrompt(prompt);
+  if (hint) form.append("prompt", hint);
   const res = await fetch(`${API}/audio/transcriptions`, { method: "POST", headers: { Authorization: `Bearer ${key}` }, body: form });
   if (!res.ok) return fail(res);
   const data = (await res.json()) as { text?: string };
-  const text = (data.text ?? "").trim();
+  const text = (data.text ?? "").replace(/(\s*\.\s*){4,}/g, ". ").trim();
+  // Nothing understood although a hint was given: the hint may have misled Whisper, so try once more without it
+  if (isPhantom(text) && hint) return transcribe(key, audio, name, language, undefined);
   return { text: isPhantom(text) ? "" : text.replace(/([.!?])\s+(you|thank you\.?)$/i, "$1") };
 }
 

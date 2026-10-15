@@ -826,7 +826,13 @@
       "keptUntil": "audio kept until {date}",
       "meetingType": "Type of meeting",
       "subtitleMeeting": "Shared with the whole team: you get notes, the transcript and the audio.",
-      "savedMeeting": "Meeting saved to the Meeting log"
+      "savedMeeting": "Meeting saved to the Meeting log",
+      "redo": "Redo transcript",
+      "redoHint": "Reads the saved audio again and saves a fresh transcript as a new doc (uses your Groq minutes)",
+      "redoProgress": "Transcribing {done}/{total}…",
+      "redoWaiting": "Free limit reached, waiting…",
+      "redoneTitle": "{title} (transcript redone)",
+      "redoneSaved": "New transcript saved"
     },
     "calendar": {
       "title": "Add to your calendar",
@@ -1048,7 +1054,8 @@
       "doc_shared": "A doc was shared with you: “{title}”",
       "design_request": "New design request: “{title}”",
       "due_soon": "Due tomorrow: “{title}”",
-      "report": "This week’s report is ready"
+      "report": "This week’s report is ready",
+      "team_task": "New task from the team leader: “{title}”"
     }
   },
   "palette": {
@@ -2579,5 +2586,33 @@
     "bestSellers": "Best sellers",
     "decisions": "Latest decisions",
     "noDecisions": "No decisions logged yet."
+  },
+  "teamTasks": {
+    "tool": "Assign tasks",
+    "newTask": "Give a task",
+    "onlyLeaders": "Only team leaders see this. Everyone you pick gets a notification and sees it in My Tasks.",
+    "what": "Task",
+    "whatPlaceholder": "e.g. Post one story about the stall",
+    "details": "Details (optional)",
+    "detailsPlaceholder": "Anything they need to know",
+    "due": "Due date (optional)",
+    "who": "Who should do it?",
+    "picked": "{count, plural, =0 {nobody picked yet} one {# person} other {# people}}",
+    "everyone": "Everyone",
+    "me": "Me",
+    "clear": "Clear",
+    "give": "{count, plural, =0 {Give task} one {Give to # person} other {Give to # people}}",
+    "sent": "{count, plural, one {Task given to # person} other {Task given to # people}}",
+    "saveError": "Couldn't save. Try again.",
+    "given": "Tasks you gave",
+    "noneGiven": "No tasks given yet.",
+    "delete": "Delete task",
+    "confirmDelete": "Delete this task for everyone?",
+    "progress": "{done}/{total} finished",
+    "finished": "finished",
+    "notYet": "not yet",
+    "fromLeader": "From the team leader",
+    "tick": "Mark “{title}” as done",
+    "untick": "Mark “{title}” as not done"
   }
 }

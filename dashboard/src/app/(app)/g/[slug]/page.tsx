@@ -17,7 +17,9 @@ import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { AssistantBubble } from "@/components/shell/assistant-bubble";
-import { LayoutDashboard, KanbanSquare } from "lucide-react";
+import { LayoutDashboard, KanbanSquare, ListChecks } from "lucide-react";
+import { AssignTasks } from "@/components/tools/team-tasks";
+import { loadTeamTasks } from "@/lib/team-tasks";
 import { SectionAssistant } from "@/components/shell/section-assistant";
 import { createClient } from "@/lib/supabase/server";
 import { PageHero } from "@/components/shell/page-hero";
@@ -78,7 +80,15 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   const { data: aiKey } = await (await createClient()).from("ai_keys").select("last4").maybeSingle();
   const financeDash = slug === "finance" ? await loadFinanceDash(todayISO()) : null;
   const marketingDash = slug === "marketing" ? await loadMarketingDash() : null;
+  // Team leader only: give tasks to everyone / several people / yourself (only leaders and admins see this tool)
+  const tk = await getTranslations("teamTasks");
+  const assignTool = slug === "team-leader" && session.isAdmin ? [{
+    id: "assign", group: "work" as const, label: tk("tool"), icon: <ListChecks size={16} />,
+    node: <AssignTasks tasks={await loadTeamTasks()} people={board.members} meId={session.me.id}
+                       teams={session.groups.map((g) => ({ id: g.id, name: t(`names.${g.slug}`) }))} />,
+  }] : [];
   const allTools = [
+    ...assignTool,
     { id: "board", group: "work", label: t("board"), icon: <KanbanSquare size={16} />, node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
     ...toolTabs,
     ...(slug !== "team-leader" ? [{ id: "blockers", group: "work" as const, label: tt("blockers.title"), node: await BlockersTool({ ...props, onlyThisGroup: true }) }] : []),
@@ -99,7 +109,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     <div className="space-y-6">
       <LiveRefresh tables={[...BOARD_TABLES, "kpi_targets", "blockers", "sales", "expenses", "inventory", "prospects",
         "complaints", "content_posts", "campaigns", "design_requests", "experiments", "follower_snapshots",
-        "decisions", "morale_checks", "meeting_notes", "outreach", "profiles"]} />
+        "decisions", "morale_checks", "meeting_notes", "outreach", "profiles", "team_tasks", "team_task_people"]} />
 
       <ToolWorkspace initial={tab} groups={{ work: th("tabGroups.work"), plan: th("tabGroups.plan"), numbers: th("tabGroups.numbers"), people: th("tabGroups.people") }}
         tools={[{ id: "overview", group: "overview", label: th("overviewTool"), icon: <LayoutDashboard size={16} />, node: (

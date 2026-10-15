@@ -826,7 +826,13 @@
       "keptUntil": "ääni säilytetään {date} asti",
       "meetingType": "Kokouksen tyyppi",
       "subtitleMeeting": "Jaetaan koko tiimille: saat muistiinpanot, litteroinnin ja äänen.",
-      "savedMeeting": "Kokous tallennettu kokouslokiin"
+      "savedMeeting": "Kokous tallennettu kokouslokiin",
+      "redo": "Tee litterointi uudelleen",
+      "redoHint": "Lukee tallennetun äänen uudelleen ja tallentaa uuden litteroinnin uutena dokumenttina (kuluttaa Groq-minuuttejasi)",
+      "redoProgress": "Litteroidaan {done}/{total}…",
+      "redoWaiting": "Ilmainen raja täynnä, odotetaan…",
+      "redoneTitle": "{title} (litterointi tehty uudelleen)",
+      "redoneSaved": "Uusi litterointi tallennettu"
     },
     "calendar": {
       "title": "Lisää kalenteriisi",
@@ -1048,7 +1054,8 @@
       "doc_shared": "Dokumentti jaettiin sinulle: ”{title}”",
       "design_request": "Uusi suunnittelupyyntö: ”{title}”",
       "due_soon": "Erääntyy huomenna: ”{title}”",
-      "report": "Tämän viikon raportti on valmis"
+      "report": "Tämän viikon raportti on valmis",
+      "team_task": "Uusi tehtävä tiimin vetäjältä: “{title}”"
     }
   },
   "palette": {
@@ -2579,5 +2586,33 @@
     "bestSellers": "Myydyimmät",
     "decisions": "Viimeisimmät päätökset",
     "noDecisions": "Päätöksiä ei ole vielä kirjattu."
+  },
+  "teamTasks": {
+    "tool": "Jaa tehtäviä",
+    "newTask": "Anna tehtävä",
+    "onlyLeaders": "Vain tiimin vetäjät näkevät tämän. Valitut saavat ilmoituksen ja näkevät tehtävän kohdassa Omat tehtävät.",
+    "what": "Tehtävä",
+    "whatPlaceholder": "esim. Julkaise story osastosta",
+    "details": "Lisätiedot (valinnainen)",
+    "detailsPlaceholder": "Kaikki, mitä he tarvitsevat tietää",
+    "due": "Määräpäivä (valinnainen)",
+    "who": "Kenen pitäisi tehdä se?",
+    "picked": "{count, plural, =0 {ketään ei ole vielä valittu} one {# henkilö} other {# henkilöä}}",
+    "everyone": "Kaikki",
+    "me": "Minä",
+    "clear": "Tyhjennä",
+    "give": "{count, plural, =0 {Anna tehtävä} one {Anna # henkilölle} other {Anna # henkilölle}}",
+    "sent": "{count, plural, one {Tehtävä annettu # henkilölle} other {Tehtävä annettu # henkilölle}}",
+    "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
+    "given": "Antamasi tehtävät",
+    "noneGiven": "Ei vielä annettuja tehtäviä.",
+    "delete": "Poista tehtävä",
+    "confirmDelete": "Poistetaanko tämä tehtävä kaikilta?",
+    "progress": "{done}/{total} valmis",
+    "finished": "valmis",
+    "notYet": "ei vielä",
+    "fromLeader": "Tiimin vetäjältä",
+    "tick": "Merkitse “{title}” tehdyksi",
+    "untick": "Merkitse “{title}” tekemättömäksi"
   }
 }

@@ -8,6 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui";
 import { LiveRefresh } from "@/components/live-refresh";
 import { shortDate } from "@/lib/format";
+import { MyTeamTasks } from "@/components/tools/team-tasks";
+import { loadTeamTasks } from "@/lib/team-tasks";
 
 type Row = {
   id: string; title: string; due_at: string | null; completed_at: string | null; labels: string[];
@@ -32,6 +34,7 @@ export default async function MyTasksPage() {
     .eq("card_assignees.user_id", me.id)
     .returns<Row[]>();
 
+  const teamTasks = await loadTeamTasks(me.id);
   const now = Date.now();
   const rows = data ?? [];
   const open = rows.filter((r) => !r.completed_at);
@@ -48,7 +51,7 @@ export default async function MyTasksPage() {
 
   return (
     <div className="space-y-6">
-      <LiveRefresh tables={["cards", "card_assignees"]} />
+      <LiveRefresh tables={["cards", "card_assignees", "team_tasks", "team_task_people"]} />
       <PageHero
         section={{ label: t("title"), icon: <CheckSquare size={16} /> }}
         title={th("tasks.title", { name: me.full_name.split(" ")[0] })}
@@ -66,7 +69,8 @@ export default async function MyTasksPage() {
         actions={[{ label: th("tasks.board"), href: "/board", primary: true }, { label: th("tasks.camp"), href: "/camp" }]}
         visual={<ProgressRing value={sections[3].items.length} max={rows.length} label={th("tasks.ring")} />}
       />
-      {!rows.length && (
+      <MyTeamTasks tasks={teamTasks} meId={me.id} />
+      {!rows.length && !teamTasks.length && (
         <Card className="text-center text-sm text-muted">{t("empty")}</Card>
       )}
       {sections.map(({ key, items }) => items.length > 0 && (

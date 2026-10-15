@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-15 — Alvaro — Team tasks: leaders give tasks to everyone / a team / several people / themselves, people tick them off in My Tasks, everyone sees who finished, notifications on new tasks (migration 0024, 9 new permission tests). Alvaro moved into Team Leader. Fixed long recordings turning into ". . ." after a quiet moment; added Redo transcript from saved audio. All 7 languages.
 - 2026-10-14 — Alvaro — Today's top bar (Synced, bell, your name and role) is always white so it reads over the photo, even in the light theme.
 - 2026-10-14 — Alvaro — Page titles sit in a glass box (team logo → members line on team pages; subtitle + title on Marketing) so they read clearly over the photos.
 - 2026-10-14 — Alvaro — Finance background is now calm gold coins on dark, blurred and darker, so numbers and charts are easy to read.

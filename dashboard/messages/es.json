@@ -826,7 +826,13 @@
       "keptUntil": "audio guardado hasta el {date}",
       "meetingType": "Tipo de reunión",
       "subtitleMeeting": "Se comparte con todo el equipo: recibes apuntes, la transcripción y el audio.",
-      "savedMeeting": "Reunión guardada en el Registro de reuniones"
+      "savedMeeting": "Reunión guardada en el Registro de reuniones",
+      "redo": "Rehacer transcripción",
+      "redoHint": "Vuelve a leer el audio guardado y guarda una transcripción nueva como doc nuevo (usa tus minutos de Groq)",
+      "redoProgress": "Transcribiendo {done}/{total}…",
+      "redoWaiting": "Límite gratuito alcanzado, esperando…",
+      "redoneTitle": "{title} (transcripción rehecha)",
+      "redoneSaved": "Nueva transcripción guardada"
     },
     "calendar": {
       "title": "Añade a tu calendario",
@@ -1048,7 +1054,8 @@
       "doc_shared": "Te compartieron un documento: «{title}»",
       "design_request": "Nueva solicitud de diseño: «{title}»",
       "due_soon": "Vence mañana: «{title}»",
-      "report": "El informe de esta semana está listo"
+      "report": "El informe de esta semana está listo",
+      "team_task": "Nueva tarea del líder del equipo: “{title}”"
     }
   },
   "palette": {
@@ -2579,5 +2586,33 @@
     "bestSellers": "Más vendidos",
     "decisions": "Últimas decisiones",
     "noDecisions": "Aún no hay decisiones registradas."
+  },
+  "teamTasks": {
+    "tool": "Asignar tareas",
+    "newTask": "Dar una tarea",
+    "onlyLeaders": "Solo lo ven los líderes del equipo. Quien elijas recibe una notificación y la ve en Mis tareas.",
+    "what": "Tarea",
+    "whatPlaceholder": "p. ej. Publicar una story sobre el puesto",
+    "details": "Detalles (opcional)",
+    "detailsPlaceholder": "Lo que necesiten saber",
+    "due": "Fecha límite (opcional)",
+    "who": "¿Quién debe hacerla?",
+    "picked": "{count, plural, =0 {nadie elegido todavía} one {# persona} other {# personas}}",
+    "everyone": "Todos",
+    "me": "Yo",
+    "clear": "Borrar",
+    "give": "{count, plural, =0 {Dar tarea} one {Dar a # persona} other {Dar a # personas}}",
+    "sent": "{count, plural, one {Tarea dada a # persona} other {Tarea dada a # personas}}",
+    "saveError": "No se pudo guardar. Inténtalo de nuevo.",
+    "given": "Tareas que has dado",
+    "noneGiven": "Aún no has dado ninguna tarea.",
+    "delete": "Eliminar tarea",
+    "confirmDelete": "¿Eliminar esta tarea para todos?",
+    "progress": "{done}/{total} terminadas",
+    "finished": "terminada",
+    "notYet": "todavía no",
+    "fromLeader": "Del líder del equipo",
+    "tick": "Marcar “{title}” como hecha",
+    "untick": "Marcar “{title}” como no hecha"
   }
 }

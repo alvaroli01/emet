@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { splitTranscript, isPhantom, mainLanguage, cleanNotes } from "./groq.ts";
+import { splitTranscript, isPhantom, mainLanguage, cleanNotes, usablePrompt } from "./groq.ts";
 
 test("short transcripts stay in one piece", () => {
   assert.deepEqual(splitTranscript("Hola. Esto es corto."), ["Hola. Esto es corto."]);
@@ -28,4 +28,18 @@ test("main language picks the right headings", () => {
 test("empty sections and lone bullets are removed", () => {
   const md = "## Resumen\nTexto.\n\n## Tareas\n- [ ] Fran: llamar\n\n## Preguntas pendientes\n\n*\n";
   assert.equal(cleanNotes(md), "## Resumen\nTexto.\n\n## Tareas\n- [ ] Fran: llamar");
+});
+
+test("spaced dots and punctuation-only output count as nothing heard", () => {
+  assert.equal(isPhantom(". . . . . ."), true);
+  assert.equal(isPhantom(" … ,  . "), true);
+  assert.equal(isPhantom("We sold 3 bags."), false);
+});
+
+test("a junk hint is never passed on to the next chunk", () => {
+  assert.equal(usablePrompt(". . . . . . . ."), undefined);
+  assert.equal(usablePrompt(""), undefined);
+  assert.equal(usablePrompt("ok . . . . . . . . . . . ."), undefined);
+  assert.equal(usablePrompt("Rocco said the stall opens at ten. . . ."), "Rocco said the stall opens at ten.");
+  assert.equal(usablePrompt("x".repeat(10) + " real words here " + "y".repeat(500))!.length <= 300, true);
 });

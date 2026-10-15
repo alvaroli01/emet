@@ -424,6 +424,20 @@ select t.assert('Others cannot see my reminders', t.num('select count(*) from re
 select t.check('Others cannot edit my reminders', $$update reminders set done = true$$, 'denied');
 select t.check('Nobody adds a reminder for someone else', $$insert into reminders (owner_id, title, remind_at) select id, 'x', now() from profiles where full_name = 'Rocco'$$, 'denied');
 
+-- ── Team tasks from the team leader ─────────────────────────
+select t.login(4);  -- Lassi (Team Leader)
+select t.check('Team leader gives a task', $$insert into team_tasks (title) values ('Post one story each')$$, 'ok');
+select t.check('Team leader gives it to Rocco and Stefan', $$insert into team_task_people (task_id, user_id) select tt.id, p.id from team_tasks tt, profiles p where p.full_name in ('Rocco', 'Stefan')$$, 'ok');
+select t.login(3);  -- Rocco
+select t.assert('Rocco is told about the task', t.num($$select count(*) from notifications where kind = 'team_task'$$) = 1);
+select t.check('Members cannot give tasks', $$insert into team_tasks (title) values ('x')$$, 'denied');
+select t.check('Rocco ticks his own task', $$update team_task_people set done_at = now() where user_id = my_profile_id()$$, 'ok');
+select t.assert('Rocco cannot tick Stefan''s task', t.num($$with u as (update team_task_people set done_at = now() where user_id <> my_profile_id() returning 1) select count(*) from u$$) = 0);
+select t.check('Rocco cannot move his task to someone else', $$update team_task_people set user_id = (select id from profiles where full_name = 'Mario') where user_id = my_profile_id()$$, 'denied');
+select t.login(5);  -- Mario, not on the task
+select t.assert('Everyone sees who finished', t.num('select count(*) from team_task_people where done_at is not null') = 1);
+select t.check('Members cannot delete tasks', $$delete from team_tasks$$, 'denied');
+
 -- ── Team activity totals ────────────────────────────────────
 select t.assert('Members see team activity totals', t.num('select count(*) from team_activity(now() - interval ''30 days'')') > 0);
 
