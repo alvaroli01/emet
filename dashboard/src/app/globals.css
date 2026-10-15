@@ -228,6 +228,15 @@ button { white-space: nowrap; }
 /* One soft entrance per page — CSS only, so content is never stuck invisible if a script is slow */
 @keyframes fade-in { from { opacity: 0; transform: translateY(6px); } }
 .fade-in { animation: fade-in 320ms cubic-bezier(.23,1,.32,1) both; }
+/* Team health waves flow left forever (each layer is 2× wide, moved by half) */
+@keyframes wave-flow { to { transform: translateX(-50%); } }
+.wave-flow { animation: wave-flow 9s linear infinite; will-change: transform; }
+/* Today's week calendar: cards rise in one after another; the card happening now glows softly */
+@keyframes cal-in { from { opacity: 0; transform: translateY(6px) scale(.98); } }
+.cal-in { animation: cal-in 420ms cubic-bezier(.23,1,.32,1) both; }
+@keyframes cal-live { 50% { box-shadow: 0 0 0 4px rgb(255 106 26 / 0.18), 0 0 18px rgb(255 106 26 / 0.35); } }
+.cal-live { animation: cal-in 420ms cubic-bezier(.23,1,.32,1) both, cal-live 2.4s ease-in-out 420ms infinite; }
+@media (prefers-reduced-motion: reduce) { .wave-flow, .cal-live { animation: none; } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

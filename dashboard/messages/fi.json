@@ -2298,7 +2298,15 @@
     "demoOn": "Demoluvut",
     "demoOff": "Näytä oikeat luvut",
     "demoBadge": "DEMO — esimerkkilukuja esittelyyn, ei oikeaa myyntiä",
-    "demoHint": "Täyttää Tänään-näkymän esimerkkiluvuilla esitystä varten. Mitään ei tallenneta; vain johtajat näkevät tämän painikkeen."
+    "demoHint": "Täyttää Tänään-näkymän esimerkkiluvuilla esitystä varten. Mitään ei tallenneta; vain johtajat näkevät tämän painikkeen.",
+    "scheduleOpen": "Avaa",
+    "calNow": "Nyt",
+    "calEmpty": "Tällä viikolla ei suunnitelmia — lisää niitä Perusleirissä.",
+    "cal": {
+      "done": "Valmis",
+      "late": "Myöhässä",
+      "open": "Suunniteltu"
+    }
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",

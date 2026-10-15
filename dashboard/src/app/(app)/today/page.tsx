@@ -4,11 +4,28 @@ import { CalendarClock, ArrowUpRight, Clock, CheckCircle2 } from "lucide-react";
 import { HomeDashboard, type HomeData } from "@/components/home/home-dashboard";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
-import { weekStart, GOAL, pace, totals, onTimeRate, weekly, type Sale, type Expense, type CardLite } from "@/lib/metrics";
+import { weekStart, GOAL, pace, totals, onTimeRate, type Sale, type Expense, type CardLite } from "@/lib/metrics";
 import { todayISO, shortDate } from "@/lib/format";
 import { LiveRefresh } from "@/components/live-refresh";
 import { ReportCard } from "@/components/workspace/report-card";
 import type { WeeklyReport } from "@/lib/weekly-report";
+
+/** Example week for the Demo numbers switch: a few timed plans and due tasks around today (never saved). */
+function demoCalendar(days: string[], today: string): HomeData["calendar"]["items"] {
+  const rows: [number, string, string | null, string | null, string?][] = [
+    [0, "Design brief review", "09:00", "10:30"], [0, "Stall stock count", null, null, "Stall"],
+    [1, "Typography & layout", "10:00", "12:00"], [1, "Supplier call", "15:00", "15:30"],
+    [2, "Team check-in", "09:30", "10:00"], [2, "Plan the weekend reel", "11:00", "13:00"], [2, "Price list for the stall", null, null, "Finance"],
+    [3, "Client presentation", "10:00", "11:30"], [3, "Prototype the new label", "14:00", "16:00"],
+    [4, "Conduct user testing", "09:00", "10:00"], [4, "Weekly report", "16:00", "17:00"],
+    [5, "Market stall", "10:00", "14:00"],
+  ];
+  return rows.map(([d, title, start, end, team], k) => {
+    const day = days[d];
+    return { id: `demo${k}`, title, day, start, end, team, href: "/camp?tab=agenda#camp-tabs",
+             status: day < today ? (k % 3 ? "done" as const : "late" as const) : "open" as const };
+  });
+}
 
 type Due = { id: string; title: string; day: string; href: string; parent?: string };
 
@@ -39,13 +56,18 @@ export default async function TodayPage({ searchParams }: { searchParams: Promis
       .not("next_step_at", "is", null).lte("next_step_at", today).not("status", "in", "(won,lost,ignored)"),
   ]);
   const since30 = new Date(Date.now() - 30 * DAY).toISOString().slice(0, 10);
-  const [weekSales, doneCards, dueCards, blockers, morale, myDone] = await Promise.all([
+  const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 6 * DAY).toISOString().slice(0, 10);
+  const [weekSales, doneCards, dueCards, blockers, morale, myDone, weekAgenda, weekTasks] = await Promise.all([
     supabase.from("sales").select("date, amount, heard_about, channel").gte("date", lastMonday),
     supabase.from("cards").select("completed_at").not("completed_at", "is", null).gte("completed_at", lastMonday),
     supabase.from("cards").select("board_id, due_at, completed_at").not("due_at", "is", null),
     supabase.from("blockers").select("id", { count: "exact", head: true }).eq("status", "open"),
     supabase.from("morale_checks").select("score").eq("week_start", week),
     supabase.from("cards").select("completed_at, card_assignees!inner(user_id)").eq("card_assignees.user_id", me.id).not("completed_at", "is", null).gte("completed_at", since30),
+    // My week calendar: my own agenda plus tasks assigned to me that are due this week
+    supabase.from("agenda_items").select("id, title, day, start_time, end_time, done").eq("owner_id", me.id).gte("day", week).lte("day", weekEnd).order("start_time"),
+    supabase.from("cards").select("id, title, due_at, completed_at, boards(group_id), card_assignees!inner(user_id)")
+      .eq("card_assignees.user_id", me.id).gte("due_at", `${week}T00:00:00Z`).lte("due_at", `${weekEnd}T23:59:59Z`),
   ]);
 
   const slug = (gid: string | null | undefined) => (gid ? groups.find((g) => g.id === gid)?.slug : undefined);
@@ -79,9 +101,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Promis
   const moneyDays = Array.from({ length: 7 }, (_, i) => ws.filter((x) => dayIdx(x.date) === i).reduce((a, x) => a + Number(x.amount), 0));
   const ot = onTimeRate((dueCards.data ?? []) as CardLite[]);
   const moods = (morale.data ?? []).map((m) => Number(m.score)).filter((n) => n > 0);
-  const wk = weekly(sales.data ?? [], expenses.data ?? [], 10);
   const healthScore = ot.rate === null && !moods.length ? null : Math.round(((ot.rate ?? 0.7) * 0.6 + (moods.length ? (moods.reduce((a, b) => a + b, 0) / moods.length) / 5 : 0.7) * 0.3 + (blockers.count ? 0 : 0.1)) * 100);
-  const myDoneDays = Array.from({ length: 30 }, (_, i) => { const d = new Date(Date.now() - (29 - i) * DAY).toISOString().slice(0, 10); return (myDone.data ?? []).filter((x) => x.completed_at!.slice(0, 10) === d).length; });
   const prioDone = priorities.filter((x: string) => x.startsWith("✓ ")).length;
   const doneWeekMine = (myDone.data ?? []).filter((x) => x.completed_at!.slice(0, 10) >= week).length;
   const focusScore = priorities.length || doneWeekMine ? Math.min(100, Math.round((priorities.length ? (prioDone / priorities.length) * 60 : 30) + Math.min(40, doneWeekMine * 8) - overdue.length * 5)) : null;
@@ -95,8 +115,19 @@ export default async function TodayPage({ searchParams }: { searchParams: Promis
     money: { days: moneyDays, week: moneyDays.reduce((a, b) => a + b, 0) },
     goal: { revenue: all.revenue, goal: GOAL.revenue, pct: revPct, daysLeft: p.daysLeft, nextCampAt: nextCamp ? nextCamp.amount / GOAL.revenue : null,
             teams: groups.map((g) => ({ slug: g.slug, color: g.color, label: tg(g.slug), mine: g.id === me.group_id })) },
-    health: { score: healthScore, series: [wk.map((x) => x.revenue), wk.map((x) => Math.max(0, x.profit)), wk.map((_, i) => i + 1)], onTime: ot.rate, blockers: blockers.count ?? 0, mood: moods.length ? moods.reduce((a, b) => a + b, 0) / moods.length : null },
-    focus: { score: focusScore, bars: myDoneDays, dueToday: dueToday.length, late: overdue.length, doneWeek: doneWeekMine },
+    health: { score: healthScore, onTime: ot.rate, blockers: blockers.count ?? 0, mood: moods.length ? moods.reduce((a, b) => a + b, 0) / moods.length : null },
+    focus: { score: focusScore, dueToday: dueToday.length, late: overdue.length, doneWeek: doneWeekMine },
+    calendar: {
+      today,
+      days: Array.from({ length: 7 }, (_, i) => new Date(Date.parse(week + "T00:00:00Z") + i * DAY).toISOString().slice(0, 10)),
+      items: [
+        ...(weekAgenda.data ?? []).map((a) => ({ id: a.id, title: a.title, day: a.day, start: a.start_time?.slice(0, 5) ?? null, end: a.end_time?.slice(0, 5) ?? null,
+          status: a.done ? "done" as const : a.day < today ? "late" as const : "open" as const, href: "/camp?tab=agenda#camp-tabs" })),
+        ...((weekTasks.data ?? []) as unknown as { id: string; title: string; due_at: string; completed_at: string | null; boards: { group_id: string | null } | null }[])
+          .map((c) => ({ id: c.id, title: c.title, day: c.due_at.slice(0, 10), start: null, end: null, team: slug(c.boards?.group_id) ? tg(slug(c.boards?.group_id)!) : undefined,
+            status: c.completed_at ? "done" as const : c.due_at.slice(0, 10) < today ? "late" as const : "open" as const, href: href(c.boards?.group_id, c.id) })),
+      ],
+    },
   };
   // Demo numbers for presenting the dashboard (leaders/admins only, ?demo=1). Shown with a DEMO badge, never saved.
   const demo = isAdmin && (await searchParams).demo === "1";
@@ -107,8 +138,9 @@ export default async function TodayPage({ searchParams }: { searchParams: Promis
       tasks: { thisWeek: [3, 7, 12, 15, 19, 22, 24], lastWeek: [2, 5, 8, 11, 13, 16, 18], done: 24, delta: 6 },
       money: { days, week: 2140 },
       goal: { ...home.goal, revenue: 6850, pct: 6850 / GOAL.revenue, nextCampAt: 10000 / GOAL.revenue },
-      health: { score: 78, series: [[620, 940, 1280, 1650, 2140], [300, 470, 650, 840, 1090], [1, 2, 3, 4, 5]], onTime: 0.86, blockers: 1, mood: 4.1 },
-      focus: { score: 72, bars: [2, 3, 5, 4, 6, 3, 1], dueToday: 2, late: 0, doneWeek: 9 },
+      health: { score: 78, onTime: 0.86, blockers: 1, mood: 4.1 },
+      focus: { score: 72, dueToday: 2, late: 0, doneWeek: 9 },
+      calendar: { ...home.calendar, items: demoCalendar(home.calendar.days, today) },
     } satisfies Partial<HomeData>);
   }
   const reportIsFresh = report.data && report.data.week_start === week;

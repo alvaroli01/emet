@@ -3,11 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, BarChart3, ArrowUp, Sparkles } from "lucide-react";
+import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, ArrowUp, Sparkles } from "lucide-react";
 import { MountainLazy } from "@/components/summit/mountain-lazy";
 import { GroupIcon } from "@/components/group-icon";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { eur } from "@/lib/format";
+import { WeekCalendar, type CalendarItem } from "@/components/home/week-calendar";
 
 export type HomeData = {
   name: string;
@@ -17,8 +18,9 @@ export type HomeData = {
   tasks: { thisWeek: number[]; lastWeek: number[]; done: number; delta: number };
   money: { days: number[]; week: number };
   goal: { revenue: number; goal: number; pct: number; daysLeft: number; nextCampAt: number | null; teams: { slug: string; color: string; label: string; mine: boolean }[] };
-  health: { score: number | null; series: number[][]; onTime: number | null; blockers: number; mood: number | null };
-  focus: { score: number | null; bars: number[]; dueToday: number; late: number; doneWeek: number };
+  health: { score: number | null; onTime: number | null; blockers: number; mood: number | null };
+  focus: { score: number | null; dueToday: number; late: number; doneWeek: number };
+  calendar: { today: string; days: string[]; items: CalendarItem[] };
 };
 
 /** One glass card with the round icon chip and a "Last 7 days" style note — the building block of Home. */
@@ -105,34 +107,34 @@ function BlockColumns({ values }: { values: number[] }) {
   );
 }
 
-/** Three soft waves built from real weekly series (revenue, profit, tasks) — the "wellness" look. */
-function Waves({ series }: { series: number[][] }) {
-  const W = 320, H = 70;
-  const colors = ["#ff7a2e", "#ffc23d", "#f5f5f7"];
-  const line = (s: number[]) => {
-    const max = Math.max(1, ...s), n = Math.max(2, s.length);
-    const pts = s.map((v, i) => [(i / (n - 1)) * W, H / 2 - ((v / max) - 0.5) * H * 0.8] as const);
-    return pts.reduce((d, [x, y], i) => {
-      if (!i) return `M ${x} ${y}`;
-      const [px, py] = pts[i - 1], cx = (px + x) / 2;
-      return `${d} C ${cx} ${py}, ${cx} ${y}, ${x} ${y}`;
-    }, "");
+/**
+ * The "Wellness score" waves from the home page picture: three soft sine waves (orange, gold, white) that keep
+ * flowing across and weaving through each other. Each wave is drawn twice as wide and slid left by exactly one
+ * width, so the loop is seamless; each has its own speed so they keep crossing. A healthier team flows calmer.
+ */
+const WAVES = [
+  { color: "#ff7a2e", amp: 0.34, cycles: 2, phase: 0, speed: 1, opacity: 0.95 },
+  { color: "#ffc23d", amp: 0.26, cycles: 3, phase: 1.6, speed: 1.45, opacity: 0.9 },
+  { color: "#f5f5f7", amp: 0.2, cycles: 2, phase: 3.1, speed: 0.75, opacity: 0.45 },
+];
+function Waves({ score }: { score: number | null }) {
+  const W = 320, H = 70, mid = H / 2;
+  const base = score === null ? 0 : score >= 75 ? 9 : score >= 50 ? 7 : 5; // seconds per loop
+  const wave = (amp: number, cycles: number, phase: number) => {
+    const n = 96;
+    return Array.from({ length: n + 1 }, (_, i) => {
+      const x = (i / n) * W * 2, yy = mid + Math.sin((x / W) * cycles * Math.PI * 2 + phase) * amp * H;
+      return `${i ? "L" : "M"} ${Math.round(x * 10) / 10} ${Math.round(yy * 10) / 10}`;
+    }).join(" ");
   };
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="mt-3 h-20 w-full" preserveAspectRatio="none" aria-hidden>
-      {series.map((s, i) => <path key={i} d={line(s.length > 1 ? s : [0, 0])} fill="none" stroke={colors[i]} strokeOpacity={i === 2 ? 0.45 : 0.9} strokeWidth="2" vectorEffect="non-scaling-stroke" />)}
-    </svg>
-  );
-}
-
-/** A dense waveform of daily activity with the middle (today-ish) highlighted. */
-function Waveform({ bars }: { bars: number[] }) {
-  const max = Math.max(1, ...bars);
-  const mid = bars.length - 1;
-  return (
-    <div className="mt-3 flex h-20 items-center gap-[3px]" aria-hidden>
-      {bars.map((v, i) => (
-        <span key={i} className="flex-1 rounded-full" style={{ height: `${12 + (v / max) * 88}%`, background: i === mid ? "#ff6a1a" : "var(--muted)", opacity: i === mid ? 1 : 0.35 + (v / max) * 0.4 }} />
+    <div aria-hidden className="relative mt-3 h-20 w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
+      {WAVES.map((w, i) => (
+        <div key={i} className={`absolute inset-y-0 left-0 w-[200%] ${base ? "wave-flow" : ""}`} style={{ animationDuration: `${base * w.speed}s` }}>
+          <svg viewBox={`0 0 ${W * 2} ${H}`} preserveAspectRatio="none" className="size-full">
+            <path d={base ? wave(w.amp, w.cycles, w.phase) : `M 0 ${mid} H ${W * 2}`} fill="none" stroke={w.color} strokeOpacity={base ? w.opacity : 0.25} strokeWidth="2" vectorEffect="non-scaling-stroke" />
+          </svg>
+        </div>
       ))}
     </div>
   );
@@ -260,7 +262,7 @@ export function HomeDashboard({ d, demo = false, canDemo = false }: { d: HomeDat
               <p className="readout text-3xl text-[#ff7a2e]">{d.health.score ?? "—"}</p>
               <p className="text-sm font-medium">{d.health.score === null ? t("noData") : d.health.score >= 75 ? t("good") : d.health.score >= 50 ? t("ok") : t("needsCare")}</p>
             </div>
-            <Waves series={d.health.series} />
+            <Waves score={d.health.score} />
             <dl className="mt-2 grid grid-cols-3 text-xs">
               <div><dt className="text-muted">{t("onTime")}</dt><dd className="readout text-lg">{d.health.onTime === null ? "—" : `${Math.round(d.health.onTime * 100)}%`}</dd></div>
               <div className="text-center"><HeartPulse size={18} className="mx-auto text-muted" /><dd className="mt-0.5 text-muted">{t("insights")}</dd></div>
@@ -269,18 +271,16 @@ export function HomeDashboard({ d, demo = false, canDemo = false }: { d: HomeDat
           </section>
 
           <section className="panel p-4 sm:col-span-2 sm:p-5 lg:col-span-2">
-            <h2 className="text-[15px] font-medium">{t("yourWeek")}</h2>
-            <div className="mt-1 text-center">
-              <p className="readout text-3xl text-[#ff7a2e]">{d.focus.score ?? "—"}</p>
-              <p className="text-sm font-medium">{t("focusScore")}</p>
-              <p className="text-xs text-muted">{t("doneThisWeek", { count: d.focus.doneWeek })}</p>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-[15px] font-medium">{t("yourWeek")}</h2>
+              <div className="flex items-center gap-1.5 text-xs">
+                {d.focus.score !== null && <span className="rounded-full bg-surface-2 px-2.5 py-1">{t("focusScore")} <b className="readout text-[#ff7a2e]">{d.focus.score}</b></span>}
+                <span className="rounded-full bg-surface-2 px-2.5 py-1">{t("dueToday")} <b className="readout">{d.focus.dueToday}</b></span>
+                {d.focus.late > 0 && <span className="rounded-full bg-bad/20 px-2.5 py-1 text-bad-text">{t("late")} <b className="readout">{d.focus.late}</b></span>}
+                <Link href="/camp?tab=agenda#camp-tabs" className="glass-pill h-7 px-3 text-white">{t("scheduleOpen")}</Link>
+              </div>
             </div>
-            <Waveform bars={d.focus.bars} />
-            <dl className="mt-2 grid grid-cols-3 text-xs">
-              <div><dt className="text-muted">{t("dueToday")}</dt><dd className="readout text-lg">{d.focus.dueToday}</dd></div>
-              <div className="text-center"><BarChart3 size={18} className="mx-auto text-muted" /><dd className="mt-0.5 text-muted">{t("insights")}</dd></div>
-              <div className="text-right"><dt className="text-muted">{t("late")}</dt><dd className={`readout text-lg ${d.focus.late ? "text-bad-text" : ""}`}>{d.focus.late}</dd></div>
-            </dl>
+            <WeekCalendar days={d.calendar.days} today={d.calendar.today} items={d.calendar.items} />
           </section>
         </div>
 

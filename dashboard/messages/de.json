@@ -2298,7 +2298,15 @@
     "demoOn": "Demo-Zahlen",
     "demoOff": "Echte Zahlen anzeigen",
     "demoBadge": "DEMO — Beispielzahlen für Präsentationen, keine echten Verkäufe",
-    "demoHint": "Füllt Heute mit Beispielzahlen für eine Präsentation. Es wird nichts gespeichert; nur Leader sehen diese Schaltfläche."
+    "demoHint": "Füllt Heute mit Beispielzahlen für eine Präsentation. Es wird nichts gespeichert; nur Leader sehen diese Schaltfläche.",
+    "scheduleOpen": "Öffnen",
+    "calNow": "Jetzt",
+    "calEmpty": "Diese Woche nichts geplant — füge Pläne im Basislager hinzu.",
+    "cal": {
+      "done": "Erledigt",
+      "late": "Überfällig",
+      "open": "Geplant"
+    }
   },
   "financeDash": {
     "totalRevenue": "Gesamtumsatz",

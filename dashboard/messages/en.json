@@ -2298,7 +2298,15 @@
     "demoOn": "Demo numbers",
     "demoOff": "Show real numbers",
     "demoBadge": "DEMO — example numbers for presenting, not real sales",
-    "demoHint": "Fills Today with example numbers for a presentation. Nothing is saved; only leaders see this button."
+    "demoHint": "Fills Today with example numbers for a presentation. Nothing is saved; only leaders see this button.",
+    "scheduleOpen": "Open",
+    "calNow": "Now",
+    "calEmpty": "Nothing planned this week — add plans in Base camp.",
+    "cal": {
+      "done": "Done",
+      "late": "Late",
+      "open": "Planned"
+    }
   },
   "financeDash": {
     "totalRevenue": "Total revenue",

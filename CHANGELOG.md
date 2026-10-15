@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-15 — Alvaro — Today: "Your week" is now a week calendar like "personal dashboard 2" (day columns, hours, your plans and due tasks, today tinted red, live red now line); Team health has the flowing "Wellness score" waves from the home page picture, calmer when the team is healthy. All 7 languages.
 - 2026-10-15 — Alvaro — Added `[DEMO]` class data to the live database (scripts and removal in `dashboard/supabase/demo/`); to be removed after the presentation.
 - 2026-10-15 — Alvaro — Gold money mountain on Today; Demo numbers switch for presenting (nothing saved, DEMO badge); "Assign a task" shortcut on My Tasks for leaders.
 - 2026-10-15 — Alvaro — Team tasks: leaders give tasks to everyone / a team / several people / themselves, people tick them off in My Tasks, everyone sees who finished, notifications on new tasks (migration 0024, 9 new permission tests). Alvaro moved into Team Leader. Fixed long recordings turning into ". . ." after a quiet moment; added Redo transcript from saved audio. All 7 languages.

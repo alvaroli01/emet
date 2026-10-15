@@ -2298,7 +2298,15 @@
     "demoOn": "Números de demo",
     "demoOff": "Mostrar números reales",
     "demoBadge": "DEMO — números de ejemplo para presentar, no son ventas reales",
-    "demoHint": "Rellena Hoy con números de ejemplo para una presentación. No se guarda nada; solo los líderes ven este botón."
+    "demoHint": "Rellena Hoy con números de ejemplo para una presentación. No se guarda nada; solo los líderes ven este botón.",
+    "scheduleOpen": "Abrir",
+    "calNow": "Ahora",
+    "calEmpty": "Nada planeado esta semana — añade planes en Campo base.",
+    "cal": {
+      "done": "Hecho",
+      "late": "Atrasado",
+      "open": "Planeado"
+    }
   },
   "financeDash": {
     "totalRevenue": "Ingresos totales",
