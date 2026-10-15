@@ -2294,7 +2294,11 @@
       "Mitä päätimme edellisessä palaverissa?",
       "Mikä kanava tuo eniten myyntiä?",
       "Mitä minun pitäisi tehdä tänään ensin?"
-    ]
+    ],
+    "demoOn": "Demoluvut",
+    "demoOff": "Näytä oikeat luvut",
+    "demoBadge": "DEMO — esimerkkilukuja esittelyyn, ei oikeaa myyntiä",
+    "demoHint": "Täyttää Tänään-näkymän esimerkkiluvuilla esitystä varten. Mitään ei tallenneta; vain johtajat näkevät tämän painikkeen."
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",
@@ -2613,6 +2617,7 @@
     "notYet": "ei vielä",
     "fromLeader": "Tiimin vetäjältä",
     "tick": "Merkitse “{title}” tehdyksi",
-    "untick": "Merkitse “{title}” tekemättömäksi"
+    "untick": "Merkitse “{title}” tekemättömäksi",
+    "assignButton": "Anna tehtävä"
   }
 }

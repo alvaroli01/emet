@@ -26,7 +26,7 @@ export default async function MyTasksPage() {
     return key ? tl(key) : n;
   };
   const locale = await getLocale();
-  const { me, groups } = await getSession();
+  const { me, groups, isAdmin } = await getSession();
   const supabase = await createClient();
   const { data } = await supabase
     .from("cards")
@@ -66,7 +66,10 @@ export default async function MyTasksPage() {
           { label: t("sections.upcoming"), value: sections[1].items.length, kind: "num" },
           { label: th("tasks.doneWeek"), value: doneWeek, kind: "num" },
         ]}
-        actions={[{ label: th("tasks.board"), href: "/board", primary: true }, { label: th("tasks.camp"), href: "/camp" }]}
+        actions={[
+          ...(isAdmin ? [{ label: (await getTranslations("teamTasks"))("assignButton"), href: "/g/team-leader?tab=assign", primary: true }] : []),
+          { label: th("tasks.board"), href: "/board", primary: !isAdmin }, { label: th("tasks.camp"), href: "/camp" },
+        ]}
         visual={<ProgressRing value={sections[3].items.length} max={rows.length} label={th("tasks.ring")} />}
       />
       <MyTeamTasks tasks={teamTasks} meId={me.id} />

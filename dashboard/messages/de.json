@@ -2294,7 +2294,11 @@
       "Was haben wir im letzten Meeting beschlossen?",
       "Welcher Kanal bringt die meisten Verkäufe?",
       "Was sollte ich heute zuerst tun?"
-    ]
+    ],
+    "demoOn": "Demo-Zahlen",
+    "demoOff": "Echte Zahlen anzeigen",
+    "demoBadge": "DEMO — Beispielzahlen für Präsentationen, keine echten Verkäufe",
+    "demoHint": "Füllt Heute mit Beispielzahlen für eine Präsentation. Es wird nichts gespeichert; nur Leader sehen diese Schaltfläche."
   },
   "financeDash": {
     "totalRevenue": "Gesamtumsatz",
@@ -2613,6 +2617,7 @@
     "notYet": "noch nicht",
     "fromLeader": "Vom Teamleiter",
     "tick": "„{title}“ als erledigt markieren",
-    "untick": "„{title}“ als nicht erledigt markieren"
+    "untick": "„{title}“ als nicht erledigt markieren",
+    "assignButton": "Aufgabe vergeben"
   }
 }

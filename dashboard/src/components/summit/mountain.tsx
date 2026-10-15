@@ -23,7 +23,7 @@ type Props = {
   nextCampAt?: number | null; // 0..1 altitude of the next camp
   labels: MountainLabels;
   ariaLabel: string;
-  variant?: "overview" | "login" | "camp";
+  variant?: "overview" | "login" | "camp" | "money";
   className?: string;
 };
 
@@ -134,10 +134,16 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
     const camera = new THREE.PerspectiveCamera(variant === "login" ? 30 : 32, 1, 0.1, 100);
     if (variant === "login") camera.position.set(0, 5.4, 14.5);
     else camera.position.set(0, 6.2, 11.6);
-    camera.lookAt(0, variant === "login" ? 2.3 : 1.1, 0);
+    camera.lookAt(0, variant === "login" ? 2.3 : variant === "money" ? 2.1 : 1.1, 0);
 
     const world = new THREE.Group();
     scene.add(world);
+    // "money" (Today): gold climb, shiny lit coins, a glowing € summit and drifting gold sparkles
+    const money = variant === "money";
+    scene.add(new THREE.AmbientLight(0xffffff, 0.75));
+    const sun = new THREE.DirectionalLight(0xffe2b0, 2.2);
+    sun.position.set(-3, 6, 5);
+    scene.add(sun);
 
     // Terrain
     const geo = new THREE.PlaneGeometry(RADIUS * 2, RADIUS * 2, 180, 180);
@@ -186,16 +192,20 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
 
     const inkMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.32 });
     const trailMat = new THREE.MeshBasicMaterial();
+    const glowMat = new THREE.MeshBasicMaterial({ color: 0xffc23d, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false });
+    let glowTube: THREE.Mesh | null = null;
     const fullTube = new THREE.TubeGeometry(curve, 400, 0.022, 6, false);
     world.add(new THREE.Mesh(fullTube, inkMat));
     let doneTube: THREE.Mesh | null = null;
     const setDone = (a: number) => {
       if (doneTube) { world.remove(doneTube); doneTube.geometry.dispose(); doneTube = null; }
+      if (glowTube) { world.remove(glowTube); glowTube.geometry.dispose(); glowTube = null; }
       const i = indexAt(a);
       if (i < 2) return;
       const sub = new THREE.CatmullRomCurve3(pts.slice(0, i + 1));
-      doneTube = new THREE.Mesh(new THREE.TubeGeometry(sub, Math.max(8, i * 2), 0.04, 8, false), trailMat);
+      doneTube = new THREE.Mesh(new THREE.TubeGeometry(sub, Math.max(8, i * 2), money ? 0.05 : 0.04, 8, false), trailMat);
       world.add(doneTube);
+      if (money) { glowTube = new THREE.Mesh(new THREE.TubeGeometry(sub, Math.max(8, i * 2), 0.14, 8, false), glowMat); world.add(glowTube); }
     };
 
     // Marker: a pin with a pulsing ring
@@ -221,12 +231,12 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
     const flagShape = new THREE.Shape([new THREE.Vector2(0, 0), new THREE.Vector2(0.32, -0.09), new THREE.Vector2(0, -0.18)]);
     const flag = new THREE.Mesh(new THREE.ShapeGeometry(flagShape), flagMat);
     flag.position.copy(summit).add(new THREE.Vector3(0, 0.6, 0));
-    world.add(pole, flag);
+    if (!money) world.add(pole, flag);
 
     // Money on the mountain: a gold coin on the trail for every €1K climbed, a coin stack at each €5K camp
     // reached, and a big € coin turning above the summit (the goal).
-    const goldTop = new THREE.MeshBasicMaterial({ color: 0xfbbc04 });
-    const goldSide = new THREE.MeshBasicMaterial({ color: 0xc58b00 });
+    const goldTop = new THREE.MeshStandardMaterial({ color: 0xffc23d, metalness: 0.85, roughness: 0.28, emissive: 0x6a4000, emissiveIntensity: 0.45 });
+    const goldSide = new THREE.MeshStandardMaterial({ color: 0xd99400, metalness: 0.9, roughness: 0.35, emissive: 0x3a2200, emissiveIntensity: 0.4 });
     const coinMats = [goldSide, goldTop, goldTop];
     const coinGeo = new THREE.CylinderGeometry(0.085, 0.085, 0.022, 28);
     const coins: { mesh: THREE.Mesh; at: number; phase: number; base: number }[] = [];
@@ -236,6 +246,7 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
       const mesh = new THREE.Mesh(coinGeo, coinMats);
       mesh.rotation.x = Math.PI / 2; // stand the coin on its edge
       mesh.position.set(p.x, p.y + 0.16, p.z);
+      if (money) mesh.scale.setScalar(1.3);
       mesh.visible = false;
       world.add(mesh);
       coins.push({ mesh, at: a, phase: k * 0.7, base: p.y + 0.16 });
@@ -252,11 +263,43 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
     const euroCanvas = document.createElement("canvas");
     euroCanvas.width = euroCanvas.height = 128;
     const ec = euroCanvas.getContext("2d");
-    if (ec) { ec.fillStyle = "#fbbc04"; ec.fillRect(0, 0, 128, 128); ec.fillStyle = "#9a6b00"; ec.font = "bold 86px sans-serif"; ec.textAlign = "center"; ec.textBaseline = "middle"; ec.fillText("€", 64, 70); }
+    if (ec) {
+      const g = ec.createRadialGradient(50, 44, 6, 64, 64, 70);
+      g.addColorStop(0, "#fff1b8"); g.addColorStop(0.45, "#ffc23d"); g.addColorStop(1, "#c98200");
+      ec.fillStyle = g; ec.fillRect(0, 0, 128, 128);
+      ec.strokeStyle = "rgba(120,70,0,0.55)"; ec.lineWidth = 6; ec.beginPath(); ec.arc(64, 64, 54, 0, Math.PI * 2); ec.stroke();
+      ec.font = "bold 80px sans-serif"; ec.textAlign = "center"; ec.textBaseline = "middle";
+      ec.fillStyle = "rgba(255,255,255,0.5)"; ec.fillText("€", 66, 72);
+      ec.fillStyle = "#8a5600"; ec.fillText("€", 64, 70);
+    }
     const euroTex = new THREE.CanvasTexture(euroCanvas);
     const bigCoin = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.05, 40), [goldSide, new THREE.MeshBasicMaterial({ map: euroTex }), new THREE.MeshBasicMaterial({ map: euroTex })]);
     bigCoin.rotation.x = Math.PI / 2;
+    if (money) bigCoin.scale.setScalar(1.6);
     world.add(bigCoin);
+
+    // Golden halo behind the summit coin, and gold sparkles drifting up around the mountain
+    const glowCanvas = document.createElement("canvas");
+    glowCanvas.width = glowCanvas.height = 128;
+    const gc = glowCanvas.getContext("2d");
+    if (gc) { const g = gc.createRadialGradient(64, 64, 0, 64, 64, 64); g.addColorStop(0, "rgba(255,200,80,0.9)"); g.addColorStop(0.35, "rgba(255,160,40,0.35)"); g.addColorStop(1, "rgba(255,140,20,0)"); gc.fillStyle = g; gc.fillRect(0, 0, 128, 128); }
+    const glowTex = new THREE.CanvasTexture(glowCanvas);
+    const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true }));
+    halo.scale.setScalar(2.2);
+    halo.visible = money;
+    world.add(halo);
+    const SPARKS = money ? 140 : 0;
+    const sparkPos = new Float32Array(SPARKS * 3);
+    const sparkSpeed: number[] = [];
+    for (let k = 0; k < SPARKS; k++) {
+      const r = 0.6 + Math.random() * 3.2, a = Math.random() * Math.PI * 2;
+      sparkPos.set([PEAK.x + Math.cos(a) * r, Math.random() * 4.2, PEAK.y + Math.sin(a) * r], k * 3);
+      sparkSpeed.push(0.12 + Math.random() * 0.35);
+    }
+    const sparkGeo = new THREE.BufferGeometry();
+    sparkGeo.setAttribute("position", new THREE.BufferAttribute(sparkPos, 3));
+    const sparks = new THREE.Points(sparkGeo, new THREE.PointsMaterial({ map: glowTex, color: 0xffd36b, size: 0.16, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false }));
+    if (money) world.add(sparks);
 
     // Base camp: your tent at the foot of the trail
     const tentAt = curve.getPoint(0.05);
@@ -279,6 +322,13 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
       ringMat.color.copy(cssColor("--trail", "#c9452c"));
       flagMat.color.copy(ink);
       tentMat.color.copy(cssColor("--climbed", "#2b6ca3"));
+      if (money) {
+        // Warm night rock with gold contour lines, so the mountain reads on the dark card
+        uniforms.uPaper.value.set(0x3a2a1a);
+        uniforms.uContour.value.set(0xc8913a);
+        uniforms.uClimbed.value.set(0xffb43d);
+        trailMat.color.set(0xffd166); pinMat.color.set(0xffd166); ringMat.color.set(0xffc23d);
+      }
     };
     applyTheme();
     const themeObs = new MutationObserver(applyTheme);
@@ -393,6 +443,15 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
       for (const st of stacks) st.group.visible = st.at <= shown + 1e-6;
       bigCoin.position.set(summit.x, bigCoinBase + (reduced ? 0 : Math.sin(tsec * 1.2) * 0.06), summit.z);
       if (!reduced) bigCoin.rotation.z = tsec * 0.9;
+      if (money) {
+        halo.position.copy(bigCoin.position);
+        halo.scale.setScalar(2.2 + (reduced ? 0 : Math.sin(tsec * 1.6) * 0.18));
+        if (!reduced) {
+          const arr = sparkGeo.attributes.position as THREE.BufferAttribute;
+          for (let k = 0; k < SPARKS; k++) { let y = arr.getY(k) + sparkSpeed[k] * dt; if (y > 4.4) y = 0; arr.setY(k, y); }
+          arr.needsUpdate = true;
+        }
+      }
 
       const i = indexAt(shown);
       const at = curve.getPoint(i / N);

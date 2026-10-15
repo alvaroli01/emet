@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, BarChart3, ArrowUp } from "lucide-react";
+import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, BarChart3, ArrowUp, Sparkles } from "lucide-react";
 import { MountainLazy } from "@/components/summit/mountain-lazy";
 import { GroupIcon } from "@/components/group-icon";
 import { NumberTicker } from "@/components/ui/number-ticker";
@@ -189,7 +189,7 @@ function useTypewriter(lines: string[], paused: boolean) {
 }
 
 /** Home: the Bilbao-at-night page — ask box on top, glass cards at the bottom (from the "home page example"). */
-export function HomeDashboard({ d }: { d: HomeData }) {
+export function HomeDashboard({ d, demo = false, canDemo = false }: { d: HomeData; demo?: boolean; canDemo?: boolean }) {
   const t = useTranslations("home");
   const locale = useLocale();
   const [q, setQ] = useState("");
@@ -224,7 +224,16 @@ export function HomeDashboard({ d }: { d: HomeData }) {
         <span className="glass-pill h-11 shrink-0 px-4 text-sm text-white"><CalendarDays size={16} /> {d.weekLabel}</span>
         {d.canLogSale && <Link href="/g/finance?tab=books" className="glass-pill h-11 shrink-0 px-4 text-sm text-white"><Plus size={16} /> {t("logSale")}</Link>}
         <Link href="/today#report" className="glass-pill h-11 shrink-0 px-4 text-sm text-white"><FileText size={16} /> {t("report")}</Link>
+        {canDemo && (
+          <Link href={demo ? "/today" : "/today?demo=1"} title={t("demoHint")} aria-pressed={demo}
+                className={`glass-pill h-11 shrink-0 px-4 text-sm font-semibold ${demo ? "!bg-[#ffc23d] text-black" : "text-white"}`}>
+            <Sparkles size={16} /> {demo ? t("demoOff") : t("demoOn")}
+          </Link>
+        )}
       </div>
+      {demo && (
+        <p role="status" className="mb-3 self-center rounded-full bg-[#ffc23d] px-4 py-1.5 text-center text-sm font-bold text-black shadow-lg sm:self-end">{t("demoBadge")}</p>
+      )}
 
       {/* Glass cards */}
       <div className="grid gap-3 lg:grid-cols-[minmax(0,3fr)_minmax(260px,1fr)] lg:gap-4">
@@ -278,7 +287,8 @@ export function HomeDashboard({ d }: { d: HomeData }) {
         {/* Goal: the 3D mountain with coins behind a speed-style gauge, teams on top */}
         <section className="panel relative isolate min-h-[420px] overflow-hidden p-4 sm:p-5">
           <div className="absolute inset-0 -z-10 opacity-90">
-            <MountainLazy className="size-full" progress={d.goal.pct} nextCampAt={d.goal.nextCampAt} ariaLabel={t("goalAria", { pct: Math.round(d.goal.pct * 100) })} labels={{ summit: "" }} />
+            <MountainLazy className="size-full" variant="money" progress={d.goal.pct} nextCampAt={d.goal.nextCampAt} ariaLabel={t("goalAria", { pct: Math.round(d.goal.pct * 100) })}
+                          labels={{ summit: eur(d.goal.goal, locale), here: d.goal.revenue > 0 ? eur(d.goal.revenue, locale) : null }} />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-black/10 to-black/80" />
           </div>
           <div className="flex justify-center gap-1.5">

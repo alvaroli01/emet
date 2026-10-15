@@ -2294,7 +2294,11 @@
       "¿Qué decidimos en la última reunión?",
       "¿Qué canal trae más ventas?",
       "¿Qué debería hacer primero hoy?"
-    ]
+    ],
+    "demoOn": "Números de demo",
+    "demoOff": "Mostrar números reales",
+    "demoBadge": "DEMO — números de ejemplo para presentar, no son ventas reales",
+    "demoHint": "Rellena Hoy con números de ejemplo para una presentación. No se guarda nada; solo los líderes ven este botón."
   },
   "financeDash": {
     "totalRevenue": "Ingresos totales",
@@ -2613,6 +2617,7 @@
     "notYet": "todavía no",
     "fromLeader": "Del líder del equipo",
     "tick": "Marcar “{title}” como hecha",
-    "untick": "Marcar “{title}” como no hecha"
+    "untick": "Marcar “{title}” como no hecha",
+    "assignButton": "Asignar una tarea"
   }
 }

@@ -13,7 +13,7 @@ import type { WeeklyReport } from "@/lib/weekly-report";
 type Due = { id: string; title: string; day: string; href: string; parent?: string };
 
 /** Today: everything one person needs to start the day, on one screen. */
-export default async function TodayPage() {
+export default async function TodayPage({ searchParams }: { searchParams: Promise<{ demo?: string }> }) {
   const t = await getTranslations("today");
   const locale = await getLocale();
   const { me, myGroup, groups, isAdmin } = await getSession();
@@ -98,13 +98,26 @@ export default async function TodayPage() {
     health: { score: healthScore, series: [wk.map((x) => x.revenue), wk.map((x) => Math.max(0, x.profit)), wk.map((_, i) => i + 1)], onTime: ot.rate, blockers: blockers.count ?? 0, mood: moods.length ? moods.reduce((a, b) => a + b, 0) / moods.length : null },
     focus: { score: focusScore, bars: myDoneDays, dueToday: dueToday.length, late: overdue.length, doneWeek: doneWeekMine },
   };
+  // Demo numbers for presenting the dashboard (leaders/admins only, ?demo=1). Shown with a DEMO badge, never saved.
+  const demo = isAdmin && (await searchParams).demo === "1";
+  if (demo) {
+    const days = [180, 260, 410, 320, 380, 290, 300];
+    Object.assign(home, {
+      sales: { week: 2140, count: 26, rows: [{ label: home.sales.rows[0]?.label ?? "Stall", days: [3, 4, 6, 5, 6, 4, 4] }, ...home.sales.rows.slice(1, 3).map((r, i) => ({ ...r, days: i ? [1, 0, 2, 1, 1, 2, 1] : [1, 2, 3, 2, 2, 1, 2] }))] },
+      tasks: { thisWeek: [3, 7, 12, 15, 19, 22, 24], lastWeek: [2, 5, 8, 11, 13, 16, 18], done: 24, delta: 6 },
+      money: { days, week: 2140 },
+      goal: { ...home.goal, revenue: 6850, pct: 6850 / GOAL.revenue, nextCampAt: 10000 / GOAL.revenue },
+      health: { score: 78, series: [[620, 940, 1280, 1650, 2140], [300, 470, 650, 840, 1090], [1, 2, 3, 4, 5]], onTime: 0.86, blockers: 1, mood: 4.1 },
+      focus: { score: 72, bars: [2, 3, 5, 4, 6, 3, 1], dueToday: 2, late: 0, doneWeek: 9 },
+    } satisfies Partial<HomeData>);
+  }
   const reportIsFresh = report.data && report.data.week_start === week;
 
 
   return (
     <div className="space-y-5">
       <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads"]} />
-      <HomeDashboard d={home} />
+      <HomeDashboard d={home} demo={demo} canDemo={isAdmin} />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <section className="panel p-5">
