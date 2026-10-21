@@ -833,7 +833,15 @@
       "redoProgress": "Litteroidaan {done}/{total}…",
       "redoWaiting": "Ilmainen raja täynnä, odotetaan…",
       "redoneTitle": "{title} (litterointi tehty uudelleen)",
-      "redoneSaved": "Uusi litterointi tallennettu"
+      "redoneSaved": "Uusi litterointi tallennettu",
+      "uploadFile": "Lataa äänitiedosto",
+      "uploadTip": "Ääniviesti, WhatsApp-ääni, mp3, m4a, wav… enintään 90 minuuttia",
+      "uploadNeedsKey": "Yhdistä Groq-tilisi yllä ladataksesi äänitiedostoja",
+      "readingFile": "Luetaan äänitiedostoa…",
+      "transcribingFile": "Tiedostoasi litteroidaan…",
+      "fileUnreadable": "Tätä äänitiedostoa ei voi lukea. Kokeile mp3-, m4a- tai wav-tiedostoa.",
+      "fileTooLong": "Ääni on liian pitkä – enintään 90 minuuttia tiedostoa kohden",
+      "uploadedMeta": "Äänitiedostosta ”{file}” · {minutes} min · litteroitu Groq Whisperillä"
     },
     "calendar": {
       "title": "Lisää kalenteriisi",

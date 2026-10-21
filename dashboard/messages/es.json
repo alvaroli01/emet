@@ -833,7 +833,15 @@
       "redoProgress": "Transcribiendo {done}/{total}…",
       "redoWaiting": "Límite gratuito alcanzado, esperando…",
       "redoneTitle": "{title} (transcripción rehecha)",
-      "redoneSaved": "Nueva transcripción guardada"
+      "redoneSaved": "Nueva transcripción guardada",
+      "uploadFile": "Subir un archivo de audio",
+      "uploadTip": "Nota de voz, audio de WhatsApp, mp3, m4a, wav… hasta 90 minutos",
+      "uploadNeedsKey": "Conecta tu cuenta de Groq arriba para subir audios",
+      "readingFile": "Leyendo el archivo de audio…",
+      "transcribingFile": "Transcribiendo tu archivo…",
+      "fileUnreadable": "No se puede leer este audio. Prueba con mp3, m4a o wav.",
+      "fileTooLong": "Este audio es demasiado largo: hasta 90 minutos por archivo",
+      "uploadedMeta": "Del archivo de audio «{file}» · {minutes} min · transcrito con Groq Whisper"
     },
     "calendar": {
       "title": "Añade a tu calendario",

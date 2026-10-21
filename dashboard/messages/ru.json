@@ -833,7 +833,15 @@
       "redoProgress": "Расшифровка {done}/{total}…",
       "redoWaiting": "Бесплатный лимит исчерпан, ждём…",
       "redoneTitle": "{title} (расшифровка переделана)",
-      "redoneSaved": "Новая расшифровка сохранена"
+      "redoneSaved": "Новая расшифровка сохранена",
+      "uploadFile": "Загрузить аудиофайл",
+      "uploadTip": "Голосовая заметка, аудио из WhatsApp, mp3, m4a, wav… до 90 минут",
+      "uploadNeedsKey": "Подключите аккаунт Groq выше, чтобы загружать аудио",
+      "readingFile": "Читаем аудиофайл…",
+      "transcribingFile": "Расшифровываем файл…",
+      "fileUnreadable": "Не удаётся прочитать этот аудиофайл. Попробуйте mp3, m4a или wav.",
+      "fileTooLong": "Аудио слишком длинное — до 90 минут на файл",
+      "uploadedMeta": "Из аудиофайла «{file}» · {minutes} мин · расшифровано Groq Whisper"
     },
     "calendar": {
       "title": "Добавить в календарь",

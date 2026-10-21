@@ -833,7 +833,15 @@
       "redoProgress": "Transcrevendo {done}/{total}…",
       "redoWaiting": "Limite gratuito atingido, aguardando…",
       "redoneTitle": "{title} (transcrição refeita)",
-      "redoneSaved": "Nova transcrição salva"
+      "redoneSaved": "Nova transcrição salva",
+      "uploadFile": "Enviar um arquivo de áudio",
+      "uploadTip": "Memo de voz, áudio do WhatsApp, mp3, m4a, wav… até 90 minutos",
+      "uploadNeedsKey": "Conecte sua conta Groq acima para enviar áudios",
+      "readingFile": "Lendo o arquivo de áudio…",
+      "transcribingFile": "Transcrevendo seu arquivo…",
+      "fileUnreadable": "Não foi possível ler este áudio. Tente mp3, m4a ou wav.",
+      "fileTooLong": "Este áudio é longo demais — até 90 minutos por arquivo",
+      "uploadedMeta": "Do arquivo de áudio “{file}” · {minutes} min · transcrito com Groq Whisper"
     },
     "calendar": {
       "title": "Adicione ao seu calendário",

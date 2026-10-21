@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Mic, Square, Loader2, X, KeyRound, ExternalLink, Check, AlertTriangle, Unplug } from "lucide-react";
+import { Mic, Square, Loader2, X, KeyRound, ExternalLink, Check, AlertTriangle, Unplug, FileAudio } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { shortDate, todayISO } from "@/lib/format";
 import type { Doc } from "./docs";
+import { decodeFile, planPieces, toWav, isSilent, MAX_SECONDS, SAMPLE_RATE } from "@/lib/ai/audio-file";
 
 const CHUNK_MS = 30_000; // text appears every 30 s; each chunk is a standalone file
 type Lang = "auto" | "es" | "en";
@@ -85,6 +86,10 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   const [kind, setKind] = useState(destination?.kinds?.[0]?.value);
   const uploads = useRef<Promise<boolean>[]>([]);
   const finished = useRef(false);
+  // Uploaded audio file instead of the microphone
+  const fileName = useRef<string | null>(null);
+  const fileSeconds = useRef(0);
+  const picker = useRef<HTMLInputElement>(null);
 
   const browserSupported = typeof window !== "undefined" && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window);
 
@@ -148,6 +153,36 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     } else listen();
   }
 
+  /* ── Uploaded audio file: decoded in the browser, sent in 2-minute pieces, then the same notes as a recording ── */
+  async function fromFile(file: File) {
+    if (!name.trim() || !connected) return;
+    if (file.size > 300 * 1024 * 1024) return toast("error", t("fileTooLong"));
+    setPhase("finishing"); setStatus(t("readingFile"));
+    let samples: Float32Array;
+    try { samples = await decodeFile(file); } catch { setPhase("setup"); setStatus(""); return toast("error", t("fileUnreadable")); }
+    const secs = samples.length / SAMPLE_RATE;
+    if (secs > MAX_SECONDS) { setPhase("setup"); setStatus(""); return toast("error", t("fileTooLong")); }
+    const { data: me } = await supabase.rpc("my_profile_id");
+    owner.current = (me as string | null) ?? null;
+    if (destination) {
+      const made = await destination.prepare({ name: name.trim(), kind });
+      if (!made) { setPhase("setup"); setStatus(""); return toast("error", t("saveError")); }
+      session.current = made.id;
+    }
+    fileName.current = file.name;
+    fileSeconds.current = secs;
+    setSeconds(Math.round(secs));
+    startedAt.current = Date.now();
+    stopping.current = true; // nothing else is coming: the notes are written once the last piece is back
+    setStatus(t("transcribingFile"));
+    let sent = 0;
+    planPieces(samples.length).forEach((p, i) => {
+      const piece = samples.subarray(p.start, p.end);
+      if (!isSilent(piece)) { enqueue(i, toWav(piece)); sent++; }
+    });
+    if (!sent) finish();
+  }
+
   function meter(s: MediaStream) {
     const ctx = new AudioContext();
     const an = ctx.createAnalyser();
@@ -202,7 +237,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   }
 
   function enqueue(index: number, blob: Blob) {
-    idbPut(`${session.current}:${index}`, blob).catch(() => {});
+    if (!fileName.current) idbPut(`${session.current}:${index}`, blob).catch(() => {});
     setChunks((c) => [...c, { index, state: "waiting", text: "" }]);
     queue.current.push({ index, blob });
     pump();
@@ -218,8 +253,9 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
       const { index, blob } = queue.current[0];
       mark(index, { state: "sending" });
       const form = new FormData();
-      form.append("audio", blob, `chunk-${index}.${blob.type.includes("mp4") ? "m4a" : "webm"}`);
-      form.append("name", `chunk-${index}.${blob.type.includes("mp4") ? "m4a" : "webm"}`);
+      const ext = blob.type.includes("wav") ? "wav" : blob.type.includes("mp4") ? "m4a" : "webm";
+      form.append("audio", blob, `chunk-${index}.${ext}`);
+      form.append("name", `chunk-${index}.${ext}`);
       form.append("language", lang === "auto" ? "" : lang);
       form.append("prompt", texts.current.filter(Boolean).slice(-1)[0] ?? "");
       const res = await fetch("/api/transcribe", { method: "POST", body: form }).catch(() => null);
@@ -304,7 +340,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
         else break;
       }
     }
-    const mins = Math.max(1, Math.round((Date.now() - startedAt.current) / 60000));
+    const mins = Math.max(1, Math.round((fileName.current ? fileSeconds.current * 1000 : Date.now() - startedAt.current) / 60000));
     if (destination) {
       const ok = await destination.save({ id: session.current, name: name.trim(), kind, notes: notes || (transcript ? "" : `_${t("nothingHeard")}_`),
         transcript, minutes: mins, audioParts: saved });
@@ -316,7 +352,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     const body = [
       notes || (transcript ? `_${t("noNotes")}_` : `_${t("nothingHeard")}_`),
       transcript ? `\n## ${t("transcriptHeading")}\n\n${transcript}` : "",
-      `\n_${t("recordedMeta", { minutes: mins, engine: mode === "groq" ? "Groq Whisper" : t("browserEngine") })}_`,
+      `\n_${fileName.current ? t("uploadedMeta", { file: fileName.current, minutes: mins }) : t("recordedMeta", { minutes: mins, engine: mode === "groq" ? "Groq Whisper" : t("browserEngine") })}_`,
     ].join("\n");
     const now = new Date().toISOString();
     const doc: Doc = { id: session.current, owner_id: "", title: name.trim(), body, kind: "meeting", pinned: false, tags: [],
@@ -345,7 +381,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
         </span>
         <div className="min-w-0 flex-1">
           <p className="readout text-xl leading-none">{clock}</p>
-          <p className="mt-0.5 truncate text-xs text-muted">{name}</p>
+          <p className="mt-0.5 truncate text-xs text-muted">{fileName.current ? `${name} · ${fileName.current}` : name}</p>
         </div>
         {phase === "recording" && (
           <button onClick={stop} className="flex h-11 items-center gap-2 rounded-xl bg-brand px-4 text-sm font-semibold text-brand-contrast active:scale-95">
@@ -468,6 +504,13 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
                 <Mic size={19} /> {t("start")}
               </button>
               <p className="mt-2 text-center text-xs text-muted">{t("micTip")}</p>
+              <button type="button" onClick={() => picker.current?.click()} disabled={!name.trim() || !connected}
+                      className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-surface-2 py-3 text-sm font-semibold ring-1 ring-line transition hover:bg-line disabled:opacity-50">
+                <FileAudio size={17} /> {t("uploadFile")}
+              </button>
+              <p className="mt-1.5 text-center text-xs text-muted">{connected ? t("uploadTip") : t("uploadNeedsKey")}</p>
+              <input ref={picker} type="file" hidden accept="audio/*,.m4a,.mp3,.wav,.ogg,.opus,.webm,.aac,.flac"
+                     onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) fromFile(f); }} />
             </div>
           </div>
       </div>
