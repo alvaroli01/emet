@@ -2,6 +2,9 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro (via Claude) — Synced work from Alvaro's laptop that had never been pushed: dark theme only (light switch removed) and Today calendar fixes. Added `docs/design-references/` (7 reference pictures + a guide mapping each one to its screen) and the `obsidian/emet/` knowledge vault. README: leaders and groups filled in, Team Contract and leadership decisions logged, skills count fixed (13), login status updated.
+- 2026-10-15 — Alvaro — Dark theme only: light theme switch removed from the avatar menu. Fixed the Today calendar drawing cards as empty boxes with stray lines (fade-in animation broke Chrome's painting) and its columns not lining up with the day headers.
+- 2026-10-15 — Alvaro — Today calendar fixes: "Open" button visible in the light theme, calendar opens on the full hour so cards aren't cut, short plans fit on one line, late cards readable in both themes.
 - 2026-10-15 — Alvaro — Today: "Your week" is now a week calendar like "personal dashboard 2" (day columns, hours, your plans and due tasks, today tinted red, live red now line); Team health has the flowing "Wellness score" waves from the home page picture, calmer when the team is healthy. All 7 languages.
 - 2026-10-15 — Alvaro — Added `[DEMO]` class data to the live database (scripts and removal in `dashboard/supabase/demo/`); to be removed after the presentation.
 - 2026-10-15 — Alvaro — Gold money mountain on Today; Demo numbers switch for presenting (nothing saved, DEMO badge); "Assign a task" shortcut on My Tasks for leaders.

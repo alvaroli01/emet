@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { LogOut, ChevronDown } from "lucide-react";
 import { Avatar } from "@/components/ui";
-import { LanguageSwitcher, ThemeToggle } from "@/components/preferences";
+import { LanguageSwitcher } from "@/components/preferences";
 
 /** Your avatar opens a small menu with language, theme and log out — keeps the top bar to the essentials. */
 export function UserMenu({ name, avatar, subtitle, profileId }: { name: string; avatar: string | null; subtitle: string; profileId: string }) {
@@ -36,7 +36,6 @@ export function UserMenu({ name, avatar, subtitle, profileId }: { name: string; 
           </div>
           <div className="flex items-center justify-between gap-2 rounded-xl px-1.5 py-1">
             <LanguageSwitcher profileId={profileId} />
-            <ThemeToggle />
           </div>
           <div className="my-1 h-px bg-line" />
           <form action="/auth/signout" method="post">

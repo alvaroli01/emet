@@ -231,11 +231,13 @@ button { white-space: nowrap; }
 /* Team health waves flow left forever (each layer is 2× wide, moved by half) */
 @keyframes wave-flow { to { transform: translateX(-50%); } }
 .wave-flow { animation: wave-flow 9s linear infinite; will-change: transform; }
-/* Today's week calendar: cards rise in one after another; the card happening now glows softly */
-@keyframes cal-in { from { opacity: 0; transform: translateY(6px) scale(.98); } }
-.cal-in { animation: cal-in 420ms cubic-bezier(.23,1,.32,1) both; }
+/* Today's week calendar: cards fade in one after another; the card happening now glows softly.
+   Opacity only and "backwards" fill: a transform or "both" fill keeps each card on its own layer, and Chrome then
+   fails to paint those layers inside the scrolling calendar under the blurred glass panel (cards showed as empty boxes). */
+@keyframes cal-in { from { opacity: 0; } }
+.cal-in { animation: cal-in 420ms ease-out backwards; }
 @keyframes cal-live { 50% { box-shadow: 0 0 0 4px rgb(255 106 26 / 0.18), 0 0 18px rgb(255 106 26 / 0.35); } }
-.cal-live { animation: cal-in 420ms cubic-bezier(.23,1,.32,1) both, cal-live 2.4s ease-in-out 420ms infinite; }
+.cal-live { animation: cal-in 420ms ease-out backwards, cal-live 2.4s ease-in-out 420ms infinite; }
 @media (prefers-reduced-motion: reduce) { .wave-flow, .cal-live { animation: none; } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }

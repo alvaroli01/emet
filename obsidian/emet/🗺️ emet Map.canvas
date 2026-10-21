@@ -1,0 +1,207 @@
+{
+ "nodes": [
+  {
+   "id": "goal",
+   "type": "text",
+   "text": "# 🏔️ emet\n**€30K revenue · €15K profit · June 2027**\n50% margin · €0 tools · 15 people",
+   "x": -200,
+   "y": -420,
+   "width": 420,
+   "height": 160,
+   "color": "2"
+  },
+  {
+   "id": "company",
+   "type": "file",
+   "file": "emet/01 Company/What emet is.md",
+   "x": -760,
+   "y": -150,
+   "width": 260,
+   "height": 120,
+   "color": "4"
+  },
+  {
+   "id": "money",
+   "type": "file",
+   "file": "emet/01 Company/Goal & Money.md",
+   "x": -760,
+   "y": 10,
+   "width": 260,
+   "height": 120,
+   "color": "4"
+  },
+  {
+   "id": "rules",
+   "type": "file",
+   "file": "emet/01 Company/Ground rules.md",
+   "x": -760,
+   "y": 170,
+   "width": 260,
+   "height": 120,
+   "color": "4"
+  },
+  {
+   "id": "open",
+   "type": "file",
+   "file": "emet/01 Company/Open questions.md",
+   "x": -760,
+   "y": 330,
+   "width": 260,
+   "height": 120,
+   "color": "1"
+  },
+  {
+   "id": "team",
+   "type": "file",
+   "file": "emet/02 Team/Team structure.md",
+   "x": -200,
+   "y": -150,
+   "width": 260,
+   "height": 120,
+   "color": "5"
+  },
+  {
+   "id": "who",
+   "type": "file",
+   "file": "emet/02 Team/Who's who.md",
+   "x": -200,
+   "y": 10,
+   "width": 260,
+   "height": 120,
+   "color": "5"
+  },
+  {
+   "id": "hq",
+   "type": "file",
+   "file": "emet/03 Systems/emet HQ (dashboard).md",
+   "x": 360,
+   "y": -150,
+   "width": 260,
+   "height": 120,
+   "color": "6"
+  },
+  {
+   "id": "map",
+   "type": "file",
+   "file": "emet/03 Systems/Systems map.md",
+   "x": 360,
+   "y": 10,
+   "width": 260,
+   "height": 120,
+   "color": "6"
+  },
+  {
+   "id": "lab",
+   "type": "file",
+   "file": "emet/03 Systems/Idea lab.md",
+   "x": 360,
+   "y": 170,
+   "width": 260,
+   "height": 120,
+   "color": "3"
+  },
+  {
+   "id": "scout",
+   "type": "file",
+   "file": "emet/03 Systems/Scout (lead finder).md",
+   "x": 360,
+   "y": 330,
+   "width": 260,
+   "height": 120,
+   "color": "3"
+  },
+  {
+   "id": "time",
+   "type": "file",
+   "file": "emet/04 History/Timeline.md",
+   "x": -200,
+   "y": 170,
+   "width": 260,
+   "height": 120,
+   "color": "2"
+  },
+  {
+   "id": "dec",
+   "type": "file",
+   "file": "emet/04 History/Decisions log.md",
+   "x": -200,
+   "y": 330,
+   "width": 260,
+   "height": 120,
+   "color": "2"
+  },
+  {
+   "id": "next",
+   "type": "file",
+   "file": "emet/01 Company/Next steps.md",
+   "x": -200,
+   "y": 490,
+   "width": 260,
+   "height": 120,
+   "color": "1"
+  }
+ ],
+ "edges": [
+  {
+   "id": "goal-company",
+   "fromNode": "goal",
+   "toNode": "company"
+  },
+  {
+   "id": "goal-team",
+   "fromNode": "goal",
+   "toNode": "team"
+  },
+  {
+   "id": "goal-hq",
+   "fromNode": "goal",
+   "toNode": "hq"
+  },
+  {
+   "id": "company-money",
+   "fromNode": "company",
+   "toNode": "money"
+  },
+  {
+   "id": "money-rules",
+   "fromNode": "money",
+   "toNode": "rules"
+  },
+  {
+   "id": "rules-open",
+   "fromNode": "rules",
+   "toNode": "open"
+  },
+  {
+   "id": "team-who",
+   "fromNode": "team",
+   "toNode": "who"
+  },
+  {
+   "id": "hq-map",
+   "fromNode": "hq",
+   "toNode": "map"
+  },
+  {
+   "id": "map-lab",
+   "fromNode": "map",
+   "toNode": "lab"
+  },
+  {
+   "id": "lab-scout",
+   "fromNode": "lab",
+   "toNode": "scout",
+   "label": "strong idea"
+  },
+  {
+   "id": "open-next",
+   "fromNode": "open",
+   "toNode": "next"
+  },
+  {
+   "id": "time-dec",
+   "fromNode": "time",
+   "toNode": "dec"
+  }
+ ]
+}

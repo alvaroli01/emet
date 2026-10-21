@@ -46,7 +46,8 @@ export function WeekCalendar({ days, today, items }: { days: string[]; today: st
   // Open on the current hour (or the first plan) instead of 8 am
   useEffect(() => {
     if (!scroller.current || now === null) return;
-    scroller.current.scrollTop = Math.max(0, (nowY ?? (starts.length ? y(Math.min(...starts)) : 0)) - ROW);
+    const at = now >= from * 60 && now <= to * 60 ? now : starts.length ? Math.min(...starts) : from * 60;
+    scroller.current.scrollTop = Math.max(0, y(Math.floor(at / 60) * 60) - ROW);
     // only once, when "now" first becomes known
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [now === null]);
@@ -75,8 +76,8 @@ export function WeekCalendar({ days, today, items }: { days: string[]; today: st
           })}
         </div>
 
-        {/* Hour grid */}
-        <div ref={scroller} className="relative max-h-[320px] overflow-y-auto [scrollbar-width:thin]">
+        {/* Hour grid (scrollbar hidden so its columns stay as wide as the day headers above) */}
+        <div ref={scroller} className="relative max-h-[320px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="relative grid gap-1.5 pl-12" style={{ gridTemplateColumns: `repeat(${cols.length}, minmax(0,1fr))`, height: hours.length * ROW }}>
             {/* Hour labels and lines */}
             {hours.map((h) => (
@@ -93,16 +94,22 @@ export function WeekCalendar({ days, today, items }: { days: string[]; today: st
                     const live = isLive(x);
                     return (
                       <Link key={x.id} href={x.href} title={x.title}
-                            className={`cal-in absolute inset-x-1 overflow-hidden rounded-xl p-2 text-left ring-1 transition hover:ring-brand/60
+                            className={`cal-in absolute inset-x-1 overflow-hidden rounded-xl text-left ${h < 44 ? "px-2 py-1.5" : "p-2"} ring-1 transition hover:ring-brand/60
                               ${live ? "cal-live bg-[linear-gradient(160deg,rgb(255_106_26/0.45),rgb(255_106_26/0.15))] ring-brand/60"
-                                : x.status === "late" ? "bg-[rgb(127_29_29/0.55)] ring-bad/40" : "bg-solid/80 ring-line"}`}
+                                : x.status === "late" ? "bg-bad/15 ring-bad/40" : "bg-solid/80 ring-line"}`}
                             style={{ top, height: h, animationDelay: `${(ci * 3 + k) * 50}ms` }}>
-                        <span className={`flex items-center gap-1 text-[10px] font-medium ${x.status === "done" ? "text-muted" : x.status === "late" ? "text-bad-text" : "text-[#ffb27a]"}`}>
-                          <span className={`size-1.5 rounded-full ${live ? "animate-pulse bg-white" : DOT[x.status]}`} />
-                          {live ? t("calNow") : t(`cal.${x.status}`)}
-                        </span>
-                        <span className={`mt-0.5 block text-xs leading-tight font-medium ${x.status === "done" ? "text-muted line-through" : ""}`}>{x.title}</span>
-                        {h > 50 && <span className="mt-1 flex items-center gap-1 text-[10px] text-muted"><Clock size={10} /> {x.start}{x.end ? `–${x.end}` : ""}</span>}
+                        {h < 44 ? (
+                          <span className={`flex items-center gap-1.5 text-[11px] leading-tight font-medium ${x.status === "done" ? "text-muted line-through" : ""}`}>
+                            <span className={`size-1.5 shrink-0 rounded-full ${live ? "animate-pulse bg-white" : DOT[x.status]}`} /><span className="truncate">{x.title}</span>
+                          </span>
+                        ) : (<>
+                          <span className={`flex items-center gap-1 text-[10px] font-medium ${x.status === "done" ? "text-muted" : x.status === "late" ? "text-bad-text" : "text-[#ffb27a]"}`}>
+                            <span className={`size-1.5 rounded-full ${live ? "animate-pulse bg-white" : DOT[x.status]}`} />
+                            {live ? t("calNow") : t(`cal.${x.status}`)}
+                          </span>
+                          <span className={`mt-0.5 block text-xs leading-tight font-medium ${x.status === "done" ? "text-muted line-through" : ""}`}>{x.title}</span>
+                          {h > 50 && <span className="mt-1 flex items-center gap-1 text-[10px] text-muted"><Clock size={10} /> {x.start}{x.end ? `–${x.end}` : ""}</span>}
+                        </>)}
                       </Link>
                     );
                   })}

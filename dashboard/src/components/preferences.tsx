@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Languages, Moon, Sun } from "lucide-react";
+import { Languages } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { LOCALES, LOCALE_COOKIE, LOCALE_NAMES, type Locale } from "@/i18n/config";
 
@@ -48,28 +48,4 @@ export function LocaleSync({ saved }: { saved: string | null }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return null;
-}
-
-
-/** Light / dark / follow device */
-export function ThemeToggle() {
-  const t = useTranslations("prefs");
-  // Dark glass is the default; light glass is opt-in and remembered in a cookie
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  useEffect(() => { setTheme(document.documentElement.dataset.theme === "light" ? "light" : "dark"); }, []);
-
-  function toggle() {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.dataset.theme = next;
-    setCookie("emet-theme", next);
-  }
-
-  const Icon = theme === "light" ? Sun : Moon;
-  return (
-    <button onClick={toggle} title={t(`theme.${theme}`)} aria-label={t(`theme.${theme}`)}
-            className="rounded-lg p-2 text-muted hover:bg-surface-2 hover:text-ink">
-      <Icon size={17} />
-    </button>
-  );
 }

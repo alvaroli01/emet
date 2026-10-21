@@ -277,7 +277,7 @@ export function HomeDashboard({ d, demo = false, canDemo = false }: { d: HomeDat
                 {d.focus.score !== null && <span className="rounded-full bg-surface-2 px-2.5 py-1">{t("focusScore")} <b className="readout text-[#ff7a2e]">{d.focus.score}</b></span>}
                 <span className="rounded-full bg-surface-2 px-2.5 py-1">{t("dueToday")} <b className="readout">{d.focus.dueToday}</b></span>
                 {d.focus.late > 0 && <span className="rounded-full bg-bad/20 px-2.5 py-1 text-bad-text">{t("late")} <b className="readout">{d.focus.late}</b></span>}
-                <Link href="/camp?tab=agenda#camp-tabs" className="glass-pill h-7 px-3 text-white">{t("scheduleOpen")}</Link>
+                <Link href="/camp?tab=agenda#camp-tabs" className="rounded-full bg-surface-2 px-2.5 py-1 font-medium hover:text-link">{t("scheduleOpen")}</Link>
               </div>
             </div>
             <WeekCalendar days={d.calendar.days} today={d.calendar.today} items={d.calendar.items} />

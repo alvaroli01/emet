@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
-import { cookies } from "next/headers";
 import { ToastProvider } from "@/components/toast";
 import "./globals.css";
 
@@ -19,24 +18,18 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f1f2ed" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d1210" },
-  ],
+  themeColor: "#08080a",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale();
-  const theme = (await cookies()).get("emet-theme")?.value;
   return (
     <html
       lang={locale}
       className={`${geist.variable} ${geistMono.variable}`}
-      data-theme={theme === "light" || theme === "dark" ? theme : undefined}
+      // Dark only: the light theme was removed (2026-10-15), so an old "emet-theme" cookie is ignored
+      data-theme="dark"
     >
-      <head>
-        <meta name="theme-color" content={theme === "light" ? "#d8d8d3" : "#08080a"} />
-      </head>
       <body>
         <NextIntlClientProvider>
           <ToastProvider>{children}</ToastProvider>
