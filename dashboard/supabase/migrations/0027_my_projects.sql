@@ -183,10 +183,10 @@ begin
   if exists (select 1 from information_schema.schemata where schema_name = 'storage') then
     insert into storage.buckets (id, name, public, file_size_limit) values ('projects', 'projects', false, 26214400) on conflict (id) do nothing;
     create policy projects_files_read on storage.objects for select to authenticated
-      using (bucket_id = 'projects' and public.is_project_member(((storage.foldername(name))[1])::uuid));
+      using (case when bucket_id = 'projects' and (storage.foldername(name))[1] ~ '^[0-9a-f-]{36}$' then public.is_project_member(((storage.foldername(name))[1])::uuid) else false end);
     create policy projects_files_insert on storage.objects for insert to authenticated
-      with check (bucket_id = 'projects' and public.is_project_member(((storage.foldername(name))[1])::uuid));
+      with check (case when bucket_id = 'projects' and (storage.foldername(name))[1] ~ '^[0-9a-f-]{36}$' then public.is_project_member(((storage.foldername(name))[1])::uuid) else false end);
     create policy projects_files_delete on storage.objects for delete to authenticated
-      using (bucket_id = 'projects' and public.is_project_member(((storage.foldername(name))[1])::uuid));
+      using (case when bucket_id = 'projects' and (storage.foldername(name))[1] ~ '^[0-9a-f-]{36}$' then public.is_project_member(((storage.foldername(name))[1])::uuid) else false end);
   end if;
 end $$;
