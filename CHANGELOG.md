@@ -2,12 +2,13 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Removed all `[DEMO]` class data from the live database (55 sales, 15 tasks, 14 DMs, posts, stock, prospects, decisions, blockers, complaints, expenses and their activity/notifications); 0 demo rows left.
 - 2026-10-21 — Alvaro — Added the 11 Replica skills (Jakeschincariol/replica-skill, MIT, free) to `.claude/skills/`: recon, architect, design, build, backend, test, diff, entrepreneur, brand, launch, deploy. Locked in `skills-lock.json`; README section 8 and 9 updated.
 - 2026-10-21 — Alvaro (via Claude) — Synced work from Alvaro's laptop that had never been pushed: dark theme only (light switch removed) and Today calendar fixes. Added `docs/design-references/` (7 reference pictures + a guide mapping each one to its screen) and the `obsidian/emet/` knowledge vault. README: leaders and groups filled in, Team Contract and leadership decisions logged, skills count fixed (13), login status updated.
 - 2026-10-15 — Alvaro — Dark theme only: light theme switch removed from the avatar menu. Fixed the Today calendar drawing cards as empty boxes with stray lines (fade-in animation broke Chrome's painting) and its columns not lining up with the day headers.
 - 2026-10-15 — Alvaro — Today calendar fixes: "Open" button visible in the light theme, calendar opens on the full hour so cards aren't cut, short plans fit on one line, late cards readable in both themes.
 - 2026-10-15 — Alvaro — Today: "Your week" is now a week calendar like "personal dashboard 2" (day columns, hours, your plans and due tasks, today tinted red, live red now line); Team health has the flowing "Wellness score" waves from the home page picture, calmer when the team is healthy. All 7 languages.
-- 2026-10-15 — Alvaro — Added `[DEMO]` class data to the live database (scripts and removal in `dashboard/supabase/demo/`); to be removed after the presentation.
+- 2026-10-15 — Alvaro — Added `[DEMO]` class data to the live database (scripts and removal in `dashboard/supabase/demo/`); removed again on 2026-10-21.
 - 2026-10-15 — Alvaro — Gold money mountain on Today; Demo numbers switch for presenting (nothing saved, DEMO badge); "Assign a task" shortcut on My Tasks for leaders.
 - 2026-10-15 — Alvaro — Team tasks: leaders give tasks to everyone / a team / several people / themselves, people tick them off in My Tasks, everyone sees who finished, notifications on new tasks (migration 0024, 9 new permission tests). Alvaro moved into Team Leader. Fixed long recordings turning into ". . ." after a quiet moment; added Redo transcript from saved audio. All 7 languages.
 - 2026-10-14 — Alvaro — Today's top bar (Synced, bell, your name and role) is always white so it reads over the photo, even in the light theme.
