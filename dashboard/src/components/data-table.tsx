@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Plus, X, Trash2, Clock, CheckCircle2, AlertTriangle, Undo2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
+import { BodyPortal } from "@/components/body-portal";
 import { Avatar, ViewOnlyBadge } from "@/components/ui";
 import { eur, shortDate, dateTime, num } from "@/lib/format";
 import type { Member } from "@/lib/boards";
@@ -308,6 +309,7 @@ function fromInput(f: Field, v: unknown) {
 
 export function Modal({ title, onClose, children, wide }: { title: string; onClose: () => void; children: React.ReactNode; wide?: boolean }) {
   return (
+    <BodyPortal>
     <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={title}>
       <button className="absolute inset-0 bg-black/40" aria-label="Close" onClick={onClose} />
       <div className={`relative max-h-[92dvh] w-full ${wide ? "max-w-2xl" : "max-w-md"} overflow-y-auto rounded-t-3xl bg-solid p-5 shadow-2xl ring-1 ring-line sm:rounded-3xl sm:p-6`}>
@@ -318,6 +320,7 @@ export function Modal({ title, onClose, children, wide }: { title: string; onClo
         {children}
       </div>
     </div>
+    </BodyPortal>
   );
 }
 

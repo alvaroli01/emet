@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Mic, Square, Loader2, X, KeyRound, ExternalLink, Check, AlertTriangle, Unplug, FileAudio } from "lucide-react";
+import { BodyPortal } from "@/components/body-portal";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { shortDate, todayISO } from "@/lib/format";
@@ -424,6 +425,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   );
 
   return (
+    <BodyPortal>
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={t("title")}>
       <button className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" aria-label={t("close")} onClick={onClose} />
       <div className="relative max-h-[92dvh] w-full max-w-xl overflow-y-auto rounded-t-3xl bg-solid p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl sm:rounded-3xl sm:p-7">
@@ -515,5 +517,6 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
           </div>
       </div>
     </div>
+    </BodyPortal>
   );
 }

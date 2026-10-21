@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { X, Trash2, Plus, Check, Lock } from "lucide-react";
+import { BodyPortal } from "@/components/body-portal";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
@@ -164,6 +165,7 @@ export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, c
   const dueValue = card.due_at ? new Date(card.due_at).toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" }) : "";
 
   return (
+    <BodyPortal>
     <div className="fixed inset-0 z-40 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={card.title}>
       <button className="absolute inset-0 bg-black/40" aria-label={t("close")} onClick={onClose} />
       <div className="relative max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-3xl bg-solid p-5 shadow-2xl ring-1 ring-line sm:rounded-3xl sm:p-6">
@@ -344,5 +346,6 @@ export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, c
         </div>
       </div>
     </div>
+    </BodyPortal>
   );
 }

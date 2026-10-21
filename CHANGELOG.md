@@ -2,6 +2,8 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Fix: every pop-up form (shared Modal, task card window, recorder) now opens above the top bar — the search box no longer covers forms in any section. Scout log says why a web search finds nothing (results read, places named, confirmed).
+
 - 2026-10-21 — Alvaro — Scout team key pool: "Lend my AI key to Scout" switch; when one Groq key runs out the next one steps in automatically (lent keys capped at 60% of their daily allowance so owners keep the rest), then free Mistral backup keys; Groq, Mistral, lending to Scout and Google Calendar are all in avatar menu → My connections (steps shown for anything not connected), plus a small “AI connections” button on Scout; judging only on the strongest models; members without a key can search when someone lends one; each search logs its AI tokens. Migration 0032.
 - 2026-10-21 — Alvaro — Scout v2 (phase 1): web finds must appear in real search results (no invented places); one fast filter drops the wrong kind of places before research; 2 places researched per step; official website/Instagram/phone/Google Maps link filled in only from real results; unknowns count against a lead and an evidence level caps weak verdicts at Maybe; exact Google Maps links; Overture Maps via the Open Places API when OPEN_PLACES_API_KEY is set; Qwen as a third free model and lighter AI reasoning so the free Groq allowance lasts; leads can be saved to a project (project → Leads tab). Migration 0031.
 - 2026-10-21 — Alvaro — Fix: the New/Edit project form opens above the top bar (it was trapped under the search bar in Team Leader); Projects removed from the menu — My Projects lives in Base camp.
