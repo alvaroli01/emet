@@ -2295,10 +2295,6 @@
       "Welcher Kanal bringt die meisten Verkäufe?",
       "Was sollte ich heute zuerst tun?"
     ],
-    "demoOn": "Demo-Zahlen",
-    "demoOff": "Echte Zahlen anzeigen",
-    "demoBadge": "DEMO — Beispielzahlen für Präsentationen, keine echten Verkäufe",
-    "demoHint": "Füllt Heute mit Beispielzahlen für eine Präsentation. Es wird nichts gespeichert; nur Leader sehen diese Schaltfläche.",
     "scheduleOpen": "Öffnen",
     "calNow": "Jetzt",
     "calEmpty": "Diese Woche nichts geplant — füge Pläne im Basislager hinzu.",

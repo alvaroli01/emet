@@ -2295,10 +2295,6 @@
       "Quel canal rapporte le plus de ventes ?",
       "Que dois-je faire en premier aujourd'hui ?"
     ],
-    "demoOn": "Chiffres de démo",
-    "demoOff": "Afficher les vrais chiffres",
-    "demoBadge": "DEMO — chiffres d'exemple pour présenter, pas de vraies ventes",
-    "demoHint": "Remplit Aujourd'hui avec des chiffres d'exemple pour une présentation. Rien n'est enregistré ; seuls les responsables voient ce bouton.",
     "scheduleOpen": "Ouvrir",
     "calNow": "Maintenant",
     "calEmpty": "Rien de prévu cette semaine — ajoute des plans au Camp de base.",

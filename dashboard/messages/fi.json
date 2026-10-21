@@ -2295,10 +2295,6 @@
       "Mikä kanava tuo eniten myyntiä?",
       "Mitä minun pitäisi tehdä tänään ensin?"
     ],
-    "demoOn": "Demoluvut",
-    "demoOff": "Näytä oikeat luvut",
-    "demoBadge": "DEMO — esimerkkilukuja esittelyyn, ei oikeaa myyntiä",
-    "demoHint": "Täyttää Tänään-näkymän esimerkkiluvuilla esitystä varten. Mitään ei tallenneta; vain johtajat näkevät tämän painikkeen.",
     "scheduleOpen": "Avaa",
     "calNow": "Nyt",
     "calEmpty": "Tällä viikolla ei suunnitelmia — lisää niitä Perusleirissä.",

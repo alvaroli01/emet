@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Removed the Demo numbers button on Today (`/today?demo=1`) and the `dashboard/supabase/demo/` scripts; no more demo mode.
 - 2026-10-21 — Alvaro — Removed all `[DEMO]` class data from the live database (55 sales, 15 tasks, 14 DMs, posts, stock, prospects, decisions, blockers, complaints, expenses and their activity/notifications); 0 demo rows left.
 - 2026-10-21 — Alvaro — Added the 11 Replica skills (Jakeschincariol/replica-skill, MIT, free) to `.claude/skills/`: recon, architect, design, build, backend, test, diff, entrepreneur, brand, launch, deploy. Locked in `skills-lock.json`; README section 8 and 9 updated.
 - 2026-10-21 — Alvaro (via Claude) — Synced work from Alvaro's laptop that had never been pushed: dark theme only (light switch removed) and Today calendar fixes. Added `docs/design-references/` (7 reference pictures + a guide mapping each one to its screen) and the `obsidian/emet/` knowledge vault. README: leaders and groups filled in, Team Contract and leadership decisions logged, skills count fixed (13), login status updated.

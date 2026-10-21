@@ -2295,10 +2295,6 @@
       "Qual canal traz mais vendas?",
       "O que devo fazer primeiro hoje?"
     ],
-    "demoOn": "Números de demo",
-    "demoOff": "Mostrar números reais",
-    "demoBadge": "DEMO — números de exemplo para apresentar, não são vendas reais",
-    "demoHint": "Preenche Hoje com números de exemplo para uma apresentação. Nada é salvo; só os líderes veem este botão.",
     "scheduleOpen": "Abrir",
     "calNow": "Agora",
     "calEmpty": "Nada planejado nesta semana — adicione planos no Acampamento base.",
