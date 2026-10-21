@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Cpu, KeyRound, Loader2, HeartHandshake, Sparkles } from "lucide-react";
+import { Cpu, KeyRound, Loader2, HeartHandshake, Sparkles, Plug } from "lucide-react";
+import { GoogleConnect } from "./google-calendar";
 import { useToast } from "@/components/toast";
 
 type Status = { connected: boolean; last4: string | null; lend: boolean; usedToday: number; mistral: string | null; lenders: string[] };
@@ -52,12 +53,12 @@ export function AiConnections() {
 }
 
 /** One key: status + disconnect, or paste + connect (with short "how to get it" steps). */
-function KeyRow({ kind, last4, onChange }: { kind: "groq" | "mistral"; last4: string | null; onChange: () => void }) {
+function KeyRow({ kind, last4, onChange, steps = false }: { kind: "groq" | "mistral"; last4: string | null; onChange: () => void; steps?: boolean }) {
   const t = useTranslations("ai");
   const router = useRouter();
   const [key, setKey] = useState("");
   const [busy, setBusy] = useState(false);
-  const [how, setHow] = useState(false);
+  const [how, setHow] = useState(steps); // on the profile, the steps show straight away when not connected
   const [error, setError] = useState("");
   const url = kind === "groq" ? "/api/ai-key" : "/api/ai-key/mistral";
 
@@ -127,5 +128,30 @@ function Lend({ s, onChange }: { s: Status; onChange: () => void }) {
       {s.connected && <p className="mt-1 text-[11px] text-muted">{t("lend.used", { n: Math.round(s.usedToday / 1000) })}</p>}
       <p className="mt-1 text-[11px] text-muted">{s.lenders.length ? t("lend.lenders", { count: s.lenders.length, names: s.lenders.join(", ") }) : t("lend.none")}</p>
     </div>
+  );
+}
+
+/** Your profile → "My connections": every connection in one place; what isn't connected shows how to connect it. */
+export function MyConnections() {
+  const t = useTranslations("ai");
+  const [s, setS] = useState<Status | null>(null);
+  async function load() {
+    const res = await fetch("/api/ai-key").catch(() => null);
+    if (res?.ok) setS(await res.json());
+  }
+  useEffect(() => { load(); }, []);
+  return (
+    <section id="connections" className="panel scroll-mt-24 p-5">
+      <h2 className="flex items-center gap-2 text-lg font-semibold"><Plug size={18} className="text-brand" /> {t("sectionTitle")}</h2>
+      <p className="mt-1 text-sm text-muted">{t("sectionHelp")}</p>
+      {!s ? <Loader2 size={16} className="mt-4 animate-spin text-muted" /> : (
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          <KeyRow kind="groq" last4={s.last4} onChange={load} steps />
+          <KeyRow kind="mistral" last4={s.mistral} onChange={load} steps />
+          <Lend s={s} onChange={load} />
+          <div className="rounded-xl bg-surface-2/60 p-3 text-sm"><GoogleConnect /></div>
+        </div>
+      )}
+    </section>
   );
 }

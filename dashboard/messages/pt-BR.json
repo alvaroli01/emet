@@ -40,7 +40,8 @@
       "offline": "Offline"
     },
     "account": "Sua conta",
-    "myProfile": "Meu perfil"
+    "myProfile": "Meu perfil",
+    "connections": "Minhas conexões"
   },
   "prefs": {
     "language": "Idioma",
@@ -2847,6 +2848,8 @@
       "used": "Sua chave usou ~{n}K tokens hoje",
       "lenders": "{count, plural, one {# pessoa empresta} other {# pessoas emprestam}}: {names}",
       "none": "Ninguém empresta uma chave ainda"
-    }
+    },
+    "sectionTitle": "Minhas conexões",
+    "sectionHelp": "Tudo o que o emet conecta para você. Só você vê suas chaves e links."
   }
 }

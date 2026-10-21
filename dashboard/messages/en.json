@@ -40,7 +40,8 @@
       "offline": "Offline"
     },
     "account": "Your account",
-    "myProfile": "My profile"
+    "myProfile": "My profile",
+    "connections": "My connections"
   },
   "prefs": {
     "language": "Language",
@@ -2847,6 +2848,8 @@
       "used": "Your key used ~{n}K tokens today",
       "lenders": "{count, plural, one {# person lends} other {# people lend}}: {names}",
       "none": "Nobody lends a key yet"
-    }
+    },
+    "sectionTitle": "My connections",
+    "sectionHelp": "Everything emet connects to for you. Only you can see your keys and links."
   }
 }

@@ -7,7 +7,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { Pause, Play, Star, ChevronRight, Plus, Video, CalendarClock, Check, Trash2, TrendingUp, CalendarDays } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
-import { AiConnections } from "./ai-connections";
 
 export type PersonalData = {
   name: string; today: string; weekStart: string;
@@ -67,10 +66,7 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
 
   return (
     <div className="fade-in space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-        <h1 className="text-[clamp(1.7rem,3.5vw,2.4rem)] font-medium tracking-tight">{t("title", { name: d.name })}</h1>
-        <AiConnections />
-      </div>
+      <h1 className="pt-1 text-[clamp(1.7rem,3.5vw,2.4rem)] font-medium tracking-tight">{t("title", { name: d.name })}</h1>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="min-w-0 space-y-4">

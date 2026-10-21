@@ -40,7 +40,8 @@
       "offline": "Ei yhteyttä"
     },
     "account": "Tilisi",
-    "myProfile": "Oma profiili"
+    "myProfile": "Oma profiili",
+    "connections": "Omat yhteydet"
   },
   "prefs": {
     "language": "Kieli",
@@ -2847,6 +2848,8 @@
       "used": "Avaimesi käytti tänään ~{n}K tokenia",
       "lenders": "{count, plural, one {# henkilö lainaa} other {# henkilöä lainaa}}: {names}",
       "none": "Kukaan ei vielä lainaa avainta"
-    }
+    },
+    "sectionTitle": "Omat yhteydet",
+    "sectionHelp": "Kaikki, mihin emet on yhteydessä puolestasi. Vain sinä näet avaimesi ja linkkisi."
   }
 }

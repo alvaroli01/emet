@@ -8,6 +8,7 @@ import { eur } from "@/lib/format";
 import type { MemberData } from "@/lib/team-stats";
 import { DocumentsSection } from "@/components/documents/documents-section";
 import { MyProjects, type ProjectCard } from "@/components/projects/my-projects";
+import { MyConnections } from "@/components/camp/ai-connections";
 
 export type MemberInfo = { id: string; name: string; email: string; avatar: string | null; role: string | null; team: string | null; teamSlug: string | null };
 const COLORS = ["#ff6a1a", "#ffb07a", "#ffc23d", "#8b8b93"];
@@ -182,6 +183,7 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, p
       {/* Only on your own profile: company documents (read only) and your private folder */}
       {isMe && <MyProjects projects={projects} today={today} />}
       {isMe && <DocumentsSection meId={p.id} isLeader={isLeader} />}
+      {isMe && <MyConnections />}
     </div>
   );
 }

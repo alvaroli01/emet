@@ -40,7 +40,8 @@
       "offline": "Hors ligne"
     },
     "account": "Ton compte",
-    "myProfile": "Mon profil"
+    "myProfile": "Mon profil",
+    "connections": "Mes connexions"
   },
   "prefs": {
     "language": "Langue",
@@ -2847,6 +2848,8 @@
       "used": "Ta clé a utilisé ~{n}K tokens aujourd'hui",
       "lenders": "{count, plural, one {# personne prête} other {# personnes prêtent}} : {names}",
       "none": "Personne ne prête encore de clé"
-    }
+    },
+    "sectionTitle": "Mes connexions",
+    "sectionHelp": "Tout ce qu'emet connecte pour toi. Toi seul vois tes clés et liens."
   }
 }
