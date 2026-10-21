@@ -16,10 +16,11 @@ import { ProjectLinks, LinkIcon } from "./project-links";
 import { ProjectUpdates } from "./project-updates";
 import { ProjectFiles } from "./project-files";
 import { ProjectMoney } from "./project-money";
+import { ProjectIcon } from "./project-icon";
 import { AssignTasks, MyTeamTasks } from "@/components/tools/team-tasks";
 import type { TeamTask } from "@/lib/team-tasks";
 
-export type Project = { id: string; name: string; description: string | null; status: "planning" | "live" | "closed"; starts_on: string | null; ends_on: string | null; goal: number | null; color: string };
+export type Project = { id: string; name: string; description: string | null; status: "planning" | "live" | "closed"; starts_on: string | null; ends_on: string | null; goal: number | null; color: string; icon_path?: string | null; icon_url?: string | null };
 export type ProjectLink = { id: string; title: string; url: string; created_by: string | null; created_at: string };
 export type ProjectUpdate = { id: string; body: string; created_by: string | null; created_at: string };
 export type ProjectFile = { id: string; name: string; size: number; mime: string; path: string; uploaded_by: string | null; created_at: string };
@@ -69,7 +70,8 @@ export function ProjectPage({ project, memberIds, people, board, viewer, meId, i
         <span aria-hidden className="absolute inset-y-0 left-0 w-1.5" style={{ background: project.color }} />
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-3">
+              <ProjectIcon url={project.icon_url} color={project.color} name={project.name} size={44} />
               <h1 className="text-2xl font-semibold tracking-tight">{project.name}</h1>
               <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_STYLE[project.status]}`}>{t(`status.${project.status}`)}</span>
             </div>

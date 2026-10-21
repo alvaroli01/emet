@@ -2788,6 +2788,12 @@
       "byWeek": "Ingresos por semana",
       "empty": "Finanzas etiqueta ventas y gastos con este proyecto: aparecen aquí."
     },
-    "allTitle": "Todos los proyectos"
+    "allTitle": "Todos los proyectos",
+    "iconUpload": "Subir icono",
+    "iconChange": "Cambiar icono",
+    "iconRemove": "Quitar icono",
+    "iconType": "Elige una imagen (PNG, JPG…)",
+    "iconBig": "El icono debe pesar 2 MB o menos",
+    "iconError": "El proyecto se guardó, pero el icono no se pudo subir"
   }
 }

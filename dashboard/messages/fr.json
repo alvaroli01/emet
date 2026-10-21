@@ -2788,6 +2788,12 @@
       "byWeek": "Ventes par semaine",
       "empty": "Finances rattache ventes et dépenses à ce projet : elles apparaissent ici."
     },
-    "allTitle": "Tous les projets"
+    "allTitle": "Tous les projets",
+    "iconUpload": "Ajouter une icône",
+    "iconChange": "Changer l’icône",
+    "iconRemove": "Retirer l’icône",
+    "iconType": "Choisis une image (PNG, JPG…)",
+    "iconBig": "L’icône doit faire 2 Mo maximum",
+    "iconError": "Projet enregistré, mais l’icône n’a pas pu être envoyée"
   }
 }

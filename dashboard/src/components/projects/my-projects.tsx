@@ -8,6 +8,7 @@ import { eur } from "@/lib/format";
 import { daysLeft, progress } from "@/lib/projects";
 import type { Member } from "@/lib/boards";
 import { ProjectForm } from "./project-form";
+import { ProjectIcon } from "./project-icon";
 import { STATUS_STYLE, type Project } from "./project-page";
 
 export type ProjectCard = Project & { members: number; revenue: number };
@@ -31,7 +32,8 @@ export function MyProjects({ projects, canCreate = false, people = [], today, ti
               <Link key={p.id} href={`/projects/${p.id}`} className="group relative overflow-hidden rounded-2xl bg-surface-2/50 p-4 ring-1 ring-line transition hover:ring-brand/50">
                 <span aria-hidden className="absolute inset-y-0 left-0 w-1" style={{ background: p.color }} />
                 <div className="flex items-start justify-between gap-2">
-                  <p className="font-semibold group-hover:text-link">{p.name}</p>
+                  <span className="flex min-w-0 items-center gap-2.5"><ProjectIcon url={p.icon_url} color={p.color} name={p.name} size={34} />
+                  <p className="truncate font-semibold group-hover:text-link">{p.name}</p></span>
                   <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${STATUS_STYLE[p.status]}`}>{t(`status.${p.status}`)}</span>
                 </div>
                 {p.description && <p className="mt-1 line-clamp-2 text-xs text-muted">{p.description}</p>}

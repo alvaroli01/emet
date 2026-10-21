@@ -2788,6 +2788,12 @@
       "byWeek": "Revenue per week",
       "empty": "Finance tags sales and expenses to this project — they show up here."
     },
-    "allTitle": "All projects"
+    "allTitle": "All projects",
+    "iconUpload": "Upload icon",
+    "iconChange": "Change icon",
+    "iconRemove": "Remove icon",
+    "iconType": "Pick an image (PNG, JPG…)",
+    "iconBig": "The icon must be 2 MB or smaller",
+    "iconError": "The project was saved, but the icon couldn’t be uploaded"
   }
 }

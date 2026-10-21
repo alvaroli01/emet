@@ -2788,6 +2788,12 @@
       "byWeek": "Umsatz pro Woche",
       "empty": "Finanzen ordnet Verkäufe und Ausgaben diesem Projekt zu – sie erscheinen hier."
     },
-    "allTitle": "Alle Projekte"
+    "allTitle": "Alle Projekte",
+    "iconUpload": "Icon hochladen",
+    "iconChange": "Icon ändern",
+    "iconRemove": "Icon entfernen",
+    "iconType": "Wähle ein Bild (PNG, JPG …)",
+    "iconBig": "Das Icon darf höchstens 2 MB groß sein",
+    "iconError": "Projekt gespeichert, aber das Icon konnte nicht hochgeladen werden"
   }
 }

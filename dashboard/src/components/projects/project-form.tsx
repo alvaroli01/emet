@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Loader2, X } from "lucide-react";
+import { ImagePlus, Loader2, Trash2, X } from "lucide-react";
+import { ProjectIcon } from "./project-icon";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
@@ -23,6 +24,30 @@ export function ProjectForm({ project, people, onClose }: { project?: Project & 
     starts_on: project?.starts_on ?? "", ends_on: project?.ends_on ?? "", status: project?.status ?? "planning", color: project?.color ?? COLORS[0],
   });
   const [chosen, setChosen] = useState<Set<string>>(new Set(project?.memberIds ?? []));
+  // Icon: a photo (≤ 2 MB) shown on the project's cards and page
+  const [icon, setIcon] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(project?.icon_url ?? null);
+  const [dropIcon, setDropIcon] = useState(false);
+  function pickIcon(file: File | undefined) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) return toast("error", t("iconType"));
+    if (file.size > 2 * 1024 * 1024) return toast("error", t("iconBig"));
+    setIcon(file); setDropIcon(false); setPreview(URL.createObjectURL(file));
+  }
+  async function saveIcon(id: string) {
+    const old = project?.icon_path ?? null;
+    if (icon) {
+      const path = `${id}/icon/${crypto.randomUUID()}.${(icon.name.split(".").pop() || "png").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 5) || "png"}`;
+      const up = await supabase.storage.from("projects").upload(path, icon, { contentType: icon.type });
+      if (up.error) return false;
+      if ((await supabase.from("projects").update({ icon_path: path }).eq("id", id)).error) return false;
+      if (old) await supabase.storage.from("projects").remove([old]);
+    } else if (dropIcon && old) {
+      await supabase.from("projects").update({ icon_path: null }).eq("id", id);
+      await supabase.storage.from("projects").remove([old]);
+    }
+    return true;
+  }
   const [busy, setBusy] = useState(false);
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setF({ ...f, [k]: e.target.value });
 
@@ -50,6 +75,7 @@ export function ProjectForm({ project, people, onClose }: { project?: Project & 
       if ((await supabase.from("board_lists").insert([t("lists.todo"), t("lists.doing"), t("lists.done")].map((name, position) => ({ board_id: board.data.id, name, position })))).error) return fail();
       if (chosen.size && (await supabase.from("project_members").insert([...chosen].map((user_id) => ({ project_id: id, user_id })))).error) return fail();
     }
+    if (!(await saveIcon(id!))) toast("error", t("iconError"));
     setBusy(false);
     onClose();
     if (project) router.refresh(); else router.push(`/projects/${id}`);
@@ -64,6 +90,15 @@ export function ProjectForm({ project, people, onClose }: { project?: Project & 
         <div className="flex items-start justify-between">
           <h2 className="text-xl font-semibold">{project ? t("edit") : t("new")}</h2>
           <button type="button" onClick={onClose} aria-label={t("cancel")} className="rounded-lg p-1.5 text-muted hover:bg-surface-2"><X size={18} /></button>
+        </div>
+        <div className="flex items-center gap-3">
+          <ProjectIcon url={preview} color={f.color} name={f.name || "?"} size={56} />
+          <label className="flex cursor-pointer items-center gap-1.5 rounded-xl bg-surface-2 px-3 py-2 text-sm font-medium hover:bg-line">
+            <ImagePlus size={15} /> {preview ? t("iconChange") : t("iconUpload")}
+            <input type="file" accept="image/*" hidden onChange={(e) => { pickIcon(e.target.files?.[0]); e.target.value = ""; }} />
+          </label>
+          {preview && <button type="button" onClick={() => { setIcon(null); setPreview(null); setDropIcon(true); }} aria-label={t("iconRemove")} title={t("iconRemove")}
+                              className="grid size-9 place-items-center rounded-xl text-muted hover:bg-surface-2 hover:text-bad-text"><Trash2 size={15} /></button>}
         </div>
         <label className="block"><span className="mb-1 block text-sm font-medium">{t("form.name")}</span><input required maxLength={80} value={f.name} onChange={set("name")} className={field} /></label>
         <label className="block"><span className="mb-1 block text-sm font-medium">{t("form.description")}</span><textarea rows={2} value={f.description} onChange={set("description")} className={field} /></label>

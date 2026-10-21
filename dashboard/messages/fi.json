@@ -2788,6 +2788,12 @@
       "byWeek": "Myynti viikoittain",
       "empty": "Talous merkitsee myynnit ja kulut tälle projektille – ne näkyvät täällä."
     },
-    "allTitle": "Kaikki projektit"
+    "allTitle": "Kaikki projektit",
+    "iconUpload": "Lataa kuvake",
+    "iconChange": "Vaihda kuvake",
+    "iconRemove": "Poista kuvake",
+    "iconType": "Valitse kuva (PNG, JPG…)",
+    "iconBig": "Kuvakkeen on oltava enintään 2 Mt",
+    "iconError": "Projekti tallennettiin, mutta kuvaketta ei voitu ladata"
   }
 }

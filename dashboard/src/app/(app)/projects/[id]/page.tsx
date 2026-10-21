@@ -16,8 +16,9 @@ export default async function ProjectRoute({ params, searchParams }: { params: P
   const { data: isMember } = await supabase.rpc("is_project_member", { p: id });
   if (!isMember) notFound();
   const { data: project } = await supabase.from("projects")
-    .select("id, name, description, status, starts_on, ends_on, goal, color").eq("id", id).maybeSingle<Project>();
+    .select("id, name, description, status, starts_on, ends_on, goal, color, icon_path").eq("id", id).maybeSingle<Project>();
   if (!project) notFound();
+  if (project.icon_path) project.icon_url = (await supabase.storage.from("projects").createSignedUrl(project.icon_path, 3600)).data?.signedUrl ?? null;
 
   const [memberRows, money, weeks, links, updates, files, people, tickTasks] = await Promise.all([
     supabase.from("project_members").select("user_id").eq("project_id", id),
