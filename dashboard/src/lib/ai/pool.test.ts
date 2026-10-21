@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { KeyRing, canUse, waitSeconds, type PoolKey, type UsageRow } from "./pool.ts";
+import { KeyRing, canUse, waitSeconds, badTag, type PoolKey, type UsageRow } from "./pool.ts";
 
 const own: PoolKey = { owner: "me", key: "k0", own: true };
 const ana: PoolKey = { owner: "ana", key: "k1", own: false };
@@ -28,7 +28,12 @@ test("a key waiting on a model is skipped for that model only, until the wait is
 });
 
 test("a rejected key is skipped for every model", () => {
-  assert.equal(canUse(ana, "openai/gpt-oss-20b", [{ owner_id: "ana", model: "*", tokens: 0, limited_until: null, bad: true }], NOW), false);
+  assert.equal(canUse(ana, "openai/gpt-oss-20b", [{ owner_id: "ana", model: badTag("k1"), tokens: 0, limited_until: null, bad: true }], NOW), false);
+});
+
+test("a key the owner replaced is not blocked by the old key's rejection", () => {
+  const fresh: PoolKey = { owner: "ana", key: "new-key", own: false };
+  assert.equal(canUse(fresh, M, [{ owner_id: "ana", model: badTag("k1"), tokens: 0, limited_until: null, bad: true }], NOW), true);
 });
 
 test("wait = the soonest key/model to free up; a capped lent key frees up at UTC midnight", () => {
@@ -46,8 +51,9 @@ test("the ring remembers tokens, waits and rejected keys, and reports them for s
   assert.equal(ring.tokens, 700);
   assert.equal(ring.usedLent, true);
   assert.equal(canUse(own, M, ring.usage, NOW + 1000), false);
-  assert.equal(ring.allBad(), false);
-  assert.deepEqual(saved, [{ owner: "ana", model: M, tokens: 700 }, { owner: "me", model: M, until: new Date(NOW + 60_000).toISOString() }, { owner: "ana", model: "*", bad: true }]);
+  assert.equal(ring.isBad(own), false);
+  assert.equal(ring.isBad(ana), true);
+  assert.deepEqual(saved, [{ owner: "ana", model: M, tokens: 700 }, { owner: "me", model: M, until: new Date(NOW + 60_000).toISOString() }, { owner: "ana", model: badTag("k1"), bad: true }]);
 });
 
 test("a failing save never breaks the search", async () => {
@@ -58,4 +64,9 @@ test("a failing save never breaks the search", async () => {
 
 test("no wait when nothing is waiting or capped", () => {
   assert.equal(waitSeconds([own, ana], [M], [row("ana", 5)], NOW), null);
+});
+
+test("the rejection mark never contains the key itself", () => {
+  assert.match(badTag("gsk_secret123456"), /^bad:[0-9a-f]{12}$/);
+  assert.equal(badTag("gsk_secret123456").includes("secret"), false);
 });

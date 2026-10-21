@@ -110,7 +110,7 @@ Write in ${lang === "es" ? "Spanish" : "English"}. Use Markdown with exactly the
 Be strictly faithful to the transcript: never invent facts, names, numbers, dates or questions. If a word looks mis-transcribed, keep it as heard.`;
 }
 
-export async function makeNotes(key: string, transcript: string): Promise<{ markdown: string } | GroqError> {
+export async function makeNotes(key: string, transcript: string, onUsage?: (model: string, tokens?: number) => unknown): Promise<{ markdown: string } | GroqError> {
   const lang = mainLanguage(transcript);
   const ask = async (content: string): Promise<{ markdown: string } | GroqError> => {
     let last: GroqError = { kind: "failed", status: 404 };
@@ -125,7 +125,8 @@ export async function makeNotes(key: string, transcript: string): Promise<{ mark
         }),
       });
       if (res.ok) {
-        const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+        const data = (await res.json()) as { choices?: { message?: { content?: string } }[]; usage?: { total_tokens?: number } };
+        await onUsage?.(model, data.usage?.total_tokens);
         return { markdown: cleanNotes(data.choices?.[0]?.message?.content ?? "") };
       }
       // Retired or unavailable model → try the next one; anything else (limit, bad key) is final

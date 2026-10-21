@@ -81,3 +81,44 @@ test("a server error with no limit hit is 'failed', not a wait", async () => {
   rules.push(() => new Response("{}", { status: 500 }));
   assert.deepEqual(await call(new KeyRing([own, ana]), { messages: [] }, [BIG]), { error: "failed" });
 });
+
+test("Mistral keys from the ring take turns: when one is busy the next steps in", async () => {
+  rules.push((a) => (a.startsWith("k") ? busy() : a === "m1" ? busy(20) : undefined));
+  const ring = new KeyRing([own]);
+  ring.mistral = ["m1", "m2"];
+  const r = await call(ring, { messages: [] }, [BIG, "mistral/mistral-medium-latest"]);
+  assert.equal("ok" in r, true);
+  assert.deepEqual(calls, ["k0:openai/gpt-oss-120b", "m1:mistral-medium-latest", "m2:mistral-medium-latest"]);
+});
+
+test("own key rejected and nothing else works: tell me to reconnect, even with the Mistral backup set", async () => {
+  process.env.MISTRAL_API_KEY = "mk";
+  rules.push(() => new Response("{}", { status: 401 }));
+  assert.deepEqual(await call(new KeyRing([own]), { messages: [] }, [BIG, "mistral/mistral-medium-latest"]), { error: "bad-key" });
+});
+
+test("no own key and every lent key rejected: 'failed', not 'reconnect your key'", async () => {
+  rules.push(() => new Response("{}", { status: 401 }));
+  assert.deepEqual(await call(new KeyRing([ana]), { messages: [] }, [BIG]), { error: "failed" });
+});
+
+test("a server error on a model is not retried on every other key (keeps a step under 60 s)", async () => {
+  rules.push(() => new Response("{}", { status: 500 }));
+  await call(new KeyRing([own, ana, { owner: "ben", key: "k2", own: false }]), { messages: [] }, [BIG, "openai/gpt-oss-20b"]);
+  assert.deepEqual(calls, ["k0:openai/gpt-oss-120b", "k0:openai/gpt-oss-20b"]);
+});
+
+test("a short Groq pause is waited out instead of switching the judge to Mistral", async () => {
+  process.env.MISTRAL_API_KEY = "mk";
+  rules.push((a) => (a === "k0" ? busy(5) : undefined));
+  const r = await call(new KeyRing([own]), { messages: [] }, [BIG, "mistral/mistral-medium-latest"]);
+  assert.deepEqual(r, { error: "limit", retryAfter: 5 });
+  assert.equal(calls.some((c) => c.startsWith("mk:")), false);
+});
+
+test("my own calls (Ask, Idea Lab) are counted when the ring knows who I am", async () => {
+  const saved: unknown[] = [];
+  rules.push(() => ok(50));
+  await call(new KeyRing([own], [], (e) => saved.push(e)), { messages: [] }, [BIG]);
+  assert.deepEqual(saved, [{ owner: "me", model: BIG, tokens: 50 }]);
+});

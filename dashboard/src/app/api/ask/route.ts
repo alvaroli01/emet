@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { decryptKey } from "@/lib/ai/keys";
+import { recordUse } from "@/lib/ai/ring-server";
 import { totals, weekStart, onTimeRate, pace, type Sale, type Expense, type CardLite } from "@/lib/metrics";
 import { todayISO } from "@/lib/format";
 import { loadMyGoogleEvents } from "@/lib/gcal-server";
@@ -104,7 +105,9 @@ export async function POST(request: NextRequest) {
   for (const model of ["openai/gpt-oss-120b", "openai/gpt-oss-20b"]) {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: body(model) });
     if (res.ok) {
-      const data = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+      const data = (await res.json()) as { choices?: { message?: { content?: string } }[]; usage?: { total_tokens?: number } };
+      const { data: me } = await supabase.rpc("my_profile_id");
+      if (me) await recordUse(me as string, model, data.usage?.total_tokens);
       return NextResponse.json({ answer: data.choices?.[0]?.message?.content?.trim() ?? "" });
     }
     if (res.status === 401 || res.status === 403) return NextResponse.json({ error: "bad-key" }, { status: 400 });

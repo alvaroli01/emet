@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { decryptKey } from "@/lib/ai/keys";
+import { ownRing } from "@/lib/ai/ring-server";
 import { research, analyze, type Research } from "@/lib/lab/ai";
 
 export const maxDuration = 60;
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   if (!idea) return NextResponse.json({ error: "not-found" }, { status: 404 });
   if (idea.created_by !== me && !isAdmin) return NextResponse.json({ error: "forbidden" }, { status: 403 });
   if (!keyRow) return NextResponse.json({ error: "no-key" }, { status: 400 });
-  const key = decryptKey(keyRow);
+  const key = ownRing(me as string, keyRow); // counts my use, so lending my key to Scout leaves me my share
   const locale = await getLocale();
 
   if (step === "research") {

@@ -1,4 +1,5 @@
 import { CRITERIA, normalize, type Analysis } from "./score";
+import type { KeyRing } from "@/lib/ai/pool";
 import { call, type Fail } from "@/lib/ai/call";
 export { call, type Fail };
 
@@ -17,7 +18,7 @@ Goal: €30,000 revenue and €15,000 profit by 30 June 2027 (about 8 months fro
 Budget to start: €0 (they can reinvest profits). They can sell on campus, at events, online and via Instagram/TikTok. Nothing is decided yet.`;
 
 
-export async function research(key: string, idea: { title: string; pitch: string; kind: string }, locale: string): Promise<Research | Fail> {
+export async function research(key: string | KeyRing, idea: { title: string; pitch: string; kind: string }, locale: string): Promise<Research | Fail> {
   const r = await call(key, {
     reasoning_effort: "low",
     tools: [{ type: "browser_search" }],
@@ -44,7 +45,7 @@ Write compact research notes (bullet points with numbers) in ${LANG[locale] ?? "
   return { notes, sources };
 }
 
-export async function analyze(key: string, idea: { title: string; pitch: string; kind: string }, research: Research | null, locale: string): Promise<Analysis | Fail> {
+export async function analyze(key: string | KeyRing, idea: { title: string; pitch: string; kind: string }, research: Research | null, locale: string): Promise<Analysis | Fail> {
   const r = await call(key, {
     reasoning_effort: "medium",
     temperature: 0.3,

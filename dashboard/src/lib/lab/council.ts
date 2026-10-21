@@ -1,4 +1,5 @@
 import "server-only";
+import type { KeyRing } from "@/lib/ai/pool";
 import { call, CONTEXT, LANG, type Fail, type Research } from "./ai";
 import type { Analysis } from "./score";
 
@@ -42,7 +43,7 @@ ${a ? `Numbers estimated: price ${a.numbers.price || "?"}, unit cost ${a.numbers
 RULE FOR EVERYONE: judge the idea exactly as written — same customer, same product. Do not quietly swap it for a better idea; if you see a better version, name it as a pivot.`;
 }
 
-export async function advisor(key: string, idea: Idea, i: number, locale: string): Promise<AdvisorTake | Fail> {
+export async function advisor(key: string | KeyRing, idea: Idea, i: number, locale: string): Promise<AdvisorTake | Fail> {
   const a = ADVISORS[i];
   const r = await call(key, {
     reasoning_effort: "low", temperature: 0.6, response_format: { type: "json_object" },
@@ -58,7 +59,7 @@ export async function advisor(key: string, idea: Idea, i: number, locale: string
 }
 
 /** Anonymous peer review: advisors' answers are shuffled behind letters A–E so no lens gets favoured by name. */
-export async function review(key: string, idea: Idea, takes: AdvisorTake[], order: number[], locale: string): Promise<Reviews | Fail> {
+export async function review(key: string | KeyRing, idea: Idea, takes: AdvisorTake[], order: number[], locale: string): Promise<Reviews | Fail> {
   const letters = "ABCDE";
   const block = order.map((idx, n) => `RESPONSE ${letters[n]}:\n${takes[idx].headline}\n${takes[idx].analysis}`).join("\n\n");
   const r = await call(key, {
@@ -79,7 +80,7 @@ export async function review(key: string, idea: Idea, takes: AdvisorTake[], orde
   };
 }
 
-export async function chairman(key: string, idea: Idea, takes: AdvisorTake[], reviews: Reviews | null, locale: string): Promise<Chairman | Fail> {
+export async function chairman(key: string | KeyRing, idea: Idea, takes: AdvisorTake[], reviews: Reviews | null, locale: string): Promise<Chairman | Fail> {
   const r = await call(key, {
     reasoning_effort: "medium", temperature: 0.3, response_format: { type: "json_object" },
     messages: [

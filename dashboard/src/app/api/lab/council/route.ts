@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { decryptKey } from "@/lib/ai/keys";
+import { ownRing } from "@/lib/ai/ring-server";
 import { advisor, review, chairman, ADVISORS, type AdvisorTake, type Reviews } from "@/lib/lab/council";
 import type { Research } from "@/lib/lab/ai";
 import { finalVerdict, FATAL_CAP, type Analysis } from "@/lib/lab/score";
@@ -32,7 +32,8 @@ export async function POST(request: NextRequest) {
   if (!c) return NextResponse.json({ error: "not-found" }, { status: 404 });
   if (c.status !== "running") return NextResponse.json({ council_id, status: c.status });
 
-  const key = decryptKey(keyRow);
+  const { data: me } = await sb.rpc("my_profile_id");
+  const key = ownRing(me as string, keyRow); // counts my use, so lending my key to Scout leaves me my share
   const locale = await getLocale();
   const input = { title: idea.title, pitch: idea.pitch ?? "", kind: idea.kind, research: idea.research as Research | null, analysis: idea.analysis as Analysis | null };
   const takes = (c.advisors ?? []) as AdvisorTake[];

@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { decryptKey } from "@/lib/ai/keys";
 import { makeNotes } from "@/lib/ai/groq";
+import { recordUse } from "@/lib/ai/ring-server";
 
 export const maxDuration = 60;
 
@@ -14,7 +15,9 @@ export async function POST(request: NextRequest) {
   if (!transcript?.trim()) return NextResponse.json({ error: "empty" }, { status: 400 });
   if (transcript.length > 200_000) return NextResponse.json({ error: "too-long" }, { status: 413 });
 
-  const r = await makeNotes(decryptKey(row), transcript);
+  const { data: me } = await supabase.rpc("my_profile_id");
+  // My use is counted so lending my key to Scout always leaves me my share
+  const r = await makeNotes(decryptKey(row), transcript, (model, tokens) => (me ? recordUse(me as string, model, tokens) : undefined));
   if ("markdown" in r) return NextResponse.json(r);
   if (r.kind === "limit") return NextResponse.json({ error: "limit", retryAfter: r.retryAfter }, { status: 429 });
   return NextResponse.json({ error: r.kind }, { status: 502 });

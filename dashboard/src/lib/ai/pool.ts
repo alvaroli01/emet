@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 /**
  * Scout's key pool (pure, tested): which free Groq keys to try and when one is "out" for today.
  * Members lend their key to Scout; Scout uses a lent key for at most 60% of each model's daily allowance,
@@ -10,12 +12,14 @@ export type UsageRow = { owner_id: string; model: string; tokens: number; limite
 export type PoolEvent = { owner: string; model: string; tokens?: number; until?: string; bad?: boolean };
 
 const rowsOf = (usage: UsageRow[], owner: string) => usage.filter((r) => r.owner_id === owner);
+/** A rejected key is remembered by a one-way fingerprint, so a member who connects a new key isn't blocked by the old one. */
+export const badTag = (key: string) => `bad:${createHash("sha256").update(key).digest("hex").slice(0, 12)}`;
+const isBad = (k: PoolKey, usage: UsageRow[]) => usage.some((r) => r.owner_id === k.owner && r.bad && r.model === badTag(k.key));
 const capped = (k: PoolKey, r?: UsageRow) => !k.own && (r?.tokens ?? 0) >= DAILY_TOKENS * LEND_SHARE;
 
 export function canUse(k: PoolKey, model: string, usage: UsageRow[], now = Date.now()): boolean {
-  const rows = rowsOf(usage, k.owner);
-  if (rows.some((r) => r.bad)) return false;
-  const r = rows.find((x) => x.model === model);
+  if (isBad(k, usage)) return false;
+  const r = rowsOf(usage, k.owner).find((x) => x.model === model);
   if (r?.limited_until && Date.parse(r.limited_until) > now) return false;
   return !capped(k, r);
 }
@@ -26,8 +30,8 @@ export function waitSeconds(keys: PoolKey[], models: string[], usage: UsageRow[]
   const midnight = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1);
   let best = Infinity;
   for (const k of keys) {
+    if (isBad(k, usage)) continue;
     const rows = rowsOf(usage, k.owner);
-    if (rows.some((r) => r.bad)) continue;
     for (const m of models) {
       const r = rows.find((x) => x.model === m);
       const until = r?.limited_until ? Date.parse(r.limited_until) : 0;
@@ -41,6 +45,8 @@ export function waitSeconds(keys: PoolKey[], models: string[], usage: UsageRow[]
 export class KeyRing {
   keys: PoolKey[];
   usage: UsageRow[];
+  /** Mistral backup keys (own first, then lent), tried in turn after every Groq key. */
+  mistral: string[] = [];
   tokens = 0;
   usedLent = false;
   private persist: (e: PoolEvent) => unknown;
@@ -67,6 +73,6 @@ export class KeyRing {
     this.row(k.owner, model).limited_until = until;
     await this.save({ owner: k.owner, model, until });
   }
-  async bad(k: PoolKey) { this.row(k.owner, "*").bad = true; await this.save({ owner: k.owner, model: "*", bad: true }); }
-  allBad() { return this.keys.every((k) => rowsOf(this.usage, k.owner).some((r) => r.bad)); }
+  async bad(k: PoolKey) { const tag = badTag(k.key); this.row(k.owner, tag).bad = true; await this.save({ owner: k.owner, model: tag, bad: true }); }
+  isBad(k: PoolKey) { return isBad(k, this.usage); }
 }

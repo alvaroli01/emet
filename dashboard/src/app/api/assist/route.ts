@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { decryptKey } from "@/lib/ai/keys";
+import { ownRing } from "@/lib/ai/ring-server";
 import { call, CONTEXT, LANG } from "@/lib/lab/ai";
 import { groupHero } from "@/lib/hero-data";
 import { KINDS, kindsFor, cleanActions, type FieldSpec } from "@/lib/assist/kinds";
@@ -60,7 +60,7 @@ Reply with JSON only:
  "actions": [{"type":"create","kind":"<one of: ${kinds.join(", ")}>","values":{...}} or {"type":"open_tool","tab":"<tool id>"}]}
 Only include a create action when they clearly asked to add/log/plan something and you have the required fields; otherwise ask for what is missing. A create action is only a draft: say it is ready and that they can tap "Add it" — never say it was saved or logged. Dates: resolve "today", "tomorrow", "friday" to YYYY-MM-DD.`;
 
-  const r = await call(decryptKey(keyRow), {
+  const r = await call(ownRing(me as string, keyRow), {
     reasoning_effort: "low", temperature: 0.3, response_format: { type: "json_object" },
     messages: [{ role: "system", content: system }, ...messages],
   });
