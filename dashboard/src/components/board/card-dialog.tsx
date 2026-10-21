@@ -14,8 +14,8 @@ import { pushToTrello } from "./trello-push";
 type Item = { id: string; text: string; done: boolean; position: number; assignee_id: string | null; due_on: string | null };
 type Comment = { id: string; author_id: string; body: string; created_at: string };
 
-export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, trello, onClose, onChange }: {
-  card: BoardCard; lists: ListRow[]; members: Member[]; groupId: string | null; viewerId: string; canEdit: boolean; trello: boolean;
+export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, canDelete = canEdit, trello, onClose, onChange }: {
+  card: BoardCard; lists: ListRow[]; members: Member[]; groupId: string | null; viewerId: string; canEdit: boolean; canDelete?: boolean; trello: boolean;
   onClose: () => void; onChange: (card: BoardCard | null, id: string) => void;
 }) {
   const t = useTranslations("board");
@@ -335,7 +335,7 @@ export function CardDialog({ card, lists, members, groupId, viewerId, canEdit, t
                 ) : card.labels.length ? card.labels.map((l) => <LabelChip key={l} label={l} />) : <span className="text-sm text-muted">—</span>}
               </div>
             </section>
-            {canEdit && (
+            {canDelete && (
               <button onClick={remove} className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-line py-2 text-sm text-bad-text hover:bg-surface-2">
                 <Trash2 size={14} /> {t("deleteCard")}
               </button>

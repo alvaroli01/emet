@@ -516,8 +516,13 @@ select t.check('Leader adds a list to it', $$insert into board_lists (board_id, 
 select t.login(3);  -- Rocco, member of the project
 select t.assert('Member sees the project', t.num($$select count(*) from projects where name = 'Market stall'$$) = 1);
 select t.assert('Member was notified about being added', t.num($$select count(*) from notifications where kind = 'project_added'$$) = 1);
-select t.check('Member adds a task on the project board', $$insert into cards (board_id, list_id, title, created_by) select b.id, l.id, 'Book the stall', my_profile_id() from boards b join board_lists l on l.board_id = b.id where b.slug like 'project-%'$$, 'ok');
-select t.check('Member edits that task', $$update cards set title = 'Book the stall (paid)' where title = 'Book the stall'$$, 'ok');
+select t.check('Member cannot add a task to the project (leaders do, 2026-10-21)', $$insert into cards (board_id, list_id, title, created_by) select b.id, l.id, 'Sneaky', my_profile_id() from boards b join board_lists l on l.board_id = b.id where b.slug like 'project-%'$$, 'denied');
+select t.check('Member cannot add a column to the project board', $$insert into board_lists (board_id, name) select id, 'Mine' from boards where slug like 'project-%'$$, 'denied');
+select t.login(4);
+select t.check('Leader adds a task on the project board', $$insert into cards (board_id, list_id, title, created_by) select b.id, l.id, 'Book the stall', my_profile_id() from boards b join board_lists l on l.board_id = b.id where b.slug like 'project-%'$$, 'ok');
+select t.login(3);
+select t.check('Member works on that task (moves / renames it)', $$update cards set title = 'Book the stall (paid)' where title = 'Book the stall'$$, 'ok');
+select t.check('Member cannot delete the project task', $$delete from cards where title = 'Book the stall (paid)'$$, 'denied');
 select t.check('Member adds a link', $$insert into project_links (project_id, title, url) select id, 'Budget', 'https://docs.google.com/spreadsheets/d/x' from projects where name = 'Market stall'$$, 'ok');
 select t.check('Links must be https', $$insert into project_links (project_id, title, url) select id, 'Bad', 'javascript:alert(1)' from projects where name = 'Market stall'$$, 'denied');
 select t.check('Member posts an update', $$insert into project_updates (project_id, body) select id, 'Stall booked' from projects where name = 'Market stall'$$, 'ok');

@@ -26,7 +26,8 @@ export type Viewer = { meId: string; isAdmin: boolean; myGroupId: string | null 
 
 export function boardRights(board: BoardData["board"], v: Viewer) {
   // A project board is only reachable by its members (database rule), and every member works on it
-  if (board.project_id) return { general: false, canEditLists: true, canAdd: true, canEditCard: () => true };
+  // Project boards: leaders add/remove tasks and columns; the project's people work on them (move, tick, comment)
+  if (board.project_id) return { general: false, canEditLists: v.isAdmin, canAdd: v.isAdmin, canEditCard: () => true };
   const general = board.group_id === null;
   const groupEdit = v.isAdmin || (!!board.group_id && board.group_id === v.myGroupId);
   return {
@@ -222,7 +223,7 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
   return (
     <div>
       {!rights.canAdd ? (
-        <div className="mb-3"><ViewOnlyBadge /></div>
+        data.board.project_id ? null : <div className="mb-3"><ViewOnlyBadge /></div>
       ) : (
         <div className="mb-2 flex justify-end"><TemplateMenu onUse={applyTemplate} /></div>
       )}
@@ -246,7 +247,7 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
 
       {openCard && (
         <CardDialog card={openCard} lists={lists} members={data.members} groupId={data.board.group_id} viewerId={viewer.meId} trello={data.board.trello_sync_enabled}
-                    canEdit={rights.canEditCard(openCard)} onClose={() => setOpenId(null)} onChange={onCardChange} />
+                    canEdit={rights.canEditCard(openCard)} canDelete={data.board.project_id ? viewer.isAdmin : rights.canEditCard(openCard)} onClose={() => setOpenId(null)} onChange={onCardChange} />
       )}
     </div>
   );
