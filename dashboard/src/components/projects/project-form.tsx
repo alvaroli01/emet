@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { ImagePlus, Loader2, Trash2, X } from "lucide-react";
@@ -83,8 +84,9 @@ export function ProjectForm({ project, people, onClose }: { project?: Project & 
   function fail() { setBusy(false); toast("error", t("error")); }
 
   const field = "input w-full";
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={project ? t("edit") : t("new")}>
+  // Portal to <body>: inside a glass card (backdrop blur) a fixed overlay gets trapped under the top bar
+  return createPortal(
+    <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={project ? t("edit") : t("new")}>
       <button className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" aria-label={t("cancel")} onClick={onClose} />
       <form onSubmit={save} className="relative max-h-[92dvh] w-full max-w-xl space-y-4 overflow-y-auto rounded-t-3xl bg-solid p-5 shadow-2xl sm:rounded-3xl sm:p-7">
         <div className="flex items-start justify-between">
@@ -132,5 +134,5 @@ export function ProjectForm({ project, people, onClose }: { project?: Project & 
         </button>
       </form>
     </div>
-  );
+  , document.body);
 }

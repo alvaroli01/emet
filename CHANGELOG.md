@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Fix: the New/Edit project form opens above the top bar (it was trapped under the search bar in Team Leader); Projects removed from the menu — My Projects lives in Base camp.
 - 2026-10-21 — Alvaro — Projects get an icon: leaders upload a photo (≤ 2 MB) in New/Edit project; shown on project cards and the project page (migration 0030).
 - 2026-10-21 — Alvaro — Projects: “New project” and the list of all projects live only in Team Leader → All projects (leaders); Base camp, Projects and profiles show only the projects you're a member of.
 - 2026-10-21 — Alvaro — My Projects also in Base camp. Project task boards: only leaders add/delete tasks and columns; the project's people move, tick and comment (migration 0029).
