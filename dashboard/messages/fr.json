@@ -1066,7 +1066,15 @@
       "empty": "Pas encore de conseil pour cette idée.",
       "needKey": "Connecte ta clé Groq gratuite pour demander au conseil.",
       "failed": "Le dernier conseil s’est arrêté en route. Redemande.",
-      "error": "Le conseil n’a pas pu finir. Réessaie dans une minute."
+      "error": "Le conseil n’a pas pu finir. Réessaie dans une minute.",
+      "recommendation": "La recommandation :"
+    },
+    "asWritten": {
+      "title": "L’idée telle qu’elle est écrite",
+      "customer": "Qui paie :",
+      "offer": "Ce qu’ils obtiennent :",
+      "why": "Pourquoi ils achèteraient :",
+      "noSense": "N’a pas de sens telle qu’écrite —"
     }
   },
   "notifications": {

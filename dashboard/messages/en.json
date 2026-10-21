@@ -1066,7 +1066,15 @@
       "empty": "No council yet for this idea.",
       "needKey": "Connect your free Groq key to ask the council.",
       "failed": "The last council stopped halfway. Ask again.",
-      "error": "The council couldn't finish. Try again in a minute."
+      "error": "The council couldn't finish. Try again in a minute.",
+      "recommendation": "The recommendation:"
+    },
+    "asWritten": {
+      "title": "The idea exactly as written",
+      "customer": "Who pays:",
+      "offer": "What they get:",
+      "why": "Why they'd buy:",
+      "noSense": "Doesn't make sense as written —"
     }
   },
   "notifications": {

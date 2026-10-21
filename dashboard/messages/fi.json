@@ -1066,7 +1066,15 @@
       "empty": "Tälle idealle ei ole vielä neuvostoa.",
       "needKey": "Yhdistä ilmainen Groq-avaimesi kysyäksesi neuvostolta.",
       "failed": "Edellinen neuvosto pysähtyi kesken. Kysy uudelleen.",
-      "error": "Neuvosto ei pystynyt valmistumaan. Yritä uudelleen minuutin päästä."
+      "error": "Neuvosto ei pystynyt valmistumaan. Yritä uudelleen minuutin päästä.",
+      "recommendation": "Suositus:"
+    },
+    "asWritten": {
+      "title": "Idea täsmälleen kirjoitettuna",
+      "customer": "Kuka maksaa:",
+      "offer": "Mitä he saavat:",
+      "why": "Miksi he ostaisivat:",
+      "noSense": "Ei ole järkevä kirjoitetussa muodossa —"
     }
   },
   "notifications": {

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { decryptKey } from "@/lib/ai/keys";
 import { advisor, review, chairman, ADVISORS, type AdvisorTake, type Reviews } from "@/lib/lab/council";
 import type { Research } from "@/lib/lab/ai";
-import type { Analysis } from "@/lib/lab/score";
+import { finalVerdict, FATAL_CAP, type Analysis } from "@/lib/lab/score";
 
 export const maxDuration = 60;
 
@@ -53,6 +53,14 @@ export async function POST(request: NextRequest) {
     const r = await chairman(key, input, takes, c.reviews as Reviews, locale);
     if ("error" in r) { if (r.error !== "limit") await sb.from("lab_councils").update({ status: "failed" }).eq("id", council_id); return fail(r); }
     patch = { chairman: r, status: "done" };
+    // The chairman can only make the official verdict harsher (score capped to match), never kinder
+    const an = idea.analysis as Analysis | null;
+    if (an) {
+      const verdict = finalVerdict(an.verdict, r.verdict);
+      const score = verdict === "not_recommended" ? Math.min(an.score, FATAL_CAP) : verdict === "promising" ? Math.min(an.score, 74) : an.score;
+      if (verdict !== an.verdict || score !== an.score)
+        await sb.from("lab_ideas").update({ analysis: { ...an, verdict, score, council_verdict: r.verdict }, score }).eq("id", idea_id);
+    }
   }
   const { error } = await sb.from("lab_councils").update(patch).eq("id", council_id);
   if (error) return NextResponse.json({ error: "save" }, { status: 500 });

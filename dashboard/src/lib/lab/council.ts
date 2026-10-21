@@ -10,16 +10,16 @@ import type { Analysis } from "./score";
  */
 
 export const ADVISORS = [
-  { key: "contrarian", lens: "The Contrarian: hunt for the fatal flaw. Assume it fails and explain the most likely reason. Attack the weakest assumption." },
-  { key: "first_principles", lens: "The First-Principles Thinker: ignore how others do it. Rebuild the problem from basics: who exactly pays, why, and what is the simplest thing that delivers it?" },
-  { key: "expansionist", lens: "The Expansionist: look for the upside others miss: bigger markets, adjacent products, ways this could beat €30K, partnerships and leverage." },
-  { key: "outsider", lens: "The Outsider: you know nothing about this industry. React like a normal customer would: is it clear, would you pay, what confuses or worries you?" },
-  { key: "executor", lens: "The Executor: only care about doing it. What would the team do on Monday morning, in what order, with which people, and what will break first?" },
+  { key: "contrarian", lens: "The Contrarian: assume the idea has a fatal flaw and hunt for it. Ask the questions the team is avoiding. Not a pessimist — the friend who saves them from a bad deal." },
+  { key: "first_principles", lens: "The First-Principles Thinker: ignore the surface question and ask what they are actually trying to solve. Strip the assumptions and rebuild from the ground up: who exactly pays, and why? You may say they are asking the wrong question." },
+  { key: "expansionist", lens: "The Expansionist: hunt for the upside everyone else misses. What could be bigger? What adjacent opportunity is hiding? Ignore risk entirely." },
+  { key: "outsider", lens: "The Outsider: you have zero context about the team or the field. React only to what is on the page, like a normal customer or investor would. Catch the curse of knowledge: what is obvious to them but confusing or unconvincing to everyone else?" },
+  { key: "executor", lens: "The Executor: only care whether this can be done and the fastest path. 'OK, but what do you do Monday morning?' Call out an idea with no clear first step or no one who would pay." },
 ] as const;
 export type AdvisorKey = (typeof ADVISORS)[number]["key"];
 export type AdvisorTake = { key: AdvisorKey; headline: string; analysis: string; recommendation: "go" | "test" | "drop" };
 export type Reviews = { strongest: string; weakest: string; missed: string; notes: { letter: string; comment: string }[] };
-export type Chairman = { verdict: "go" | "test" | "drop"; summary: string; agree: string[]; clash: string[]; blind_spots: string[]; first_step: string };
+export type Chairman = { verdict: "go" | "test" | "drop"; summary: string; agree: string[]; clash: string[]; blind_spots: string[]; recommendation?: string; first_step: string };
 
 type Idea = { title: string; pitch: string; kind: string; research: Research | null; analysis: Analysis | null };
 const json = (m: Record<string, unknown>) => { try { return JSON.parse(String(m.content ?? "{}")); } catch { return null; } };
@@ -36,7 +36,10 @@ ${idea.pitch || "(no description)"}
 
 RESEARCH NOTES (from the web):
 ${idea.research?.notes?.slice(0, 4500) || "(none)"}
-${a ? `\nFIRST ANALYSIS: ${a.summary}\nNumbers: price ${a.numbers.price || "?"}, unit cost ${a.numbers.unit_cost || "?"}, margin ${a.numbers.margin || "?"}. To reach €30K: ${a.numbers.units_for_goal || "?"}` : ""}`;
+${a?.as_written ? `\nTHE IDEA AS WRITTEN: customer = ${a.as_written.customer || "?"}; offer = ${a.as_written.offer || "?"}; why they'd buy = ${a.as_written.why_they_buy || "?"}${a.as_written.makes_sense ? "" : ` — DOES NOT MAKE SENSE AS WRITTEN: ${a.as_written.problem}`}` : ""}
+${a ? `Numbers estimated: price ${a.numbers.price || "?"}, unit cost ${a.numbers.unit_cost || "?"}, margin ${a.numbers.margin || "?"}. To reach €30K: ${a.numbers.units_for_goal || "?"}` : ""}
+
+RULE FOR EVERYONE: judge the idea exactly as written — same customer, same product. Do not quietly swap it for a better idea; if you see a better version, name it as a pivot.`;
 }
 
 export async function advisor(key: string, idea: Idea, i: number, locale: string): Promise<AdvisorTake | Fail> {
@@ -44,8 +47,8 @@ export async function advisor(key: string, idea: Idea, i: number, locale: string
   const r = await call(key, {
     reasoning_effort: "low", temperature: 0.6, response_format: { type: "json_object" },
     messages: [
-      { role: "system", content: `You are one advisor on a council judging a business idea. ${a.lens} Stay in your lens; be concrete and blunt; don't hedge. Never invent statistics. Write in ${LANG[locale] ?? "English"}. Reply with JSON only.` },
-      { role: "user", content: `${brief(idea)}\n\nReturn JSON: {"headline":"your view in one sentence","analysis":"120-220 words from your lens","recommendation":"go | test | drop"}` },
+      { role: "system", content: `You are one advisor on an LLM Council judging a business idea. You cannot see the other advisors. ${a.lens} Lean fully into your angle: no hedging, no balance. Be concrete and blunt. Never invent statistics. Write in ${LANG[locale] ?? "English"}. Reply with JSON only.` },
+      { role: "user", content: `${brief(idea)}\n\nReturn JSON: {"headline":"your view in one sentence","analysis":"150-300 words from your lens","recommendation":"go | test | drop"}` },
     ],
   }, ["openai/gpt-oss-20b", "openai/gpt-oss-120b"]);
   if (!("ok" in r)) return r;
@@ -61,7 +64,7 @@ export async function review(key: string, idea: Idea, takes: AdvisorTake[], orde
   const r = await call(key, {
     reasoning_effort: "low", temperature: 0.3, response_format: { type: "json_object" },
     messages: [
-      { role: "system", content: `You review anonymous advice on a business idea. Judge the reasoning, not the style. Write in ${LANG[locale] ?? "English"}. Reply with JSON only.` },
+      { role: "system", content: `You run the anonymous peer review of an LLM Council. Judge each response on merit alone — reasoning and evidence, not style or confidence, and don't defer to any thinking style. Answer: which response is strongest and why, which has the biggest blind spot and what it is, and what ALL responses missed. Write in ${LANG[locale] ?? "English"}. Reply with JSON only.` },
       { role: "user", content: `${brief(idea)}\n\n${block}\n\nReturn JSON: {"strongest":"letter","weakest":"letter","missed":"what ALL responses missed (2-3 sentences)","notes":[{"letter":"A","comment":"one sentence"}, … for each letter]}` },
     ],
   }, ["openai/gpt-oss-20b", "openai/gpt-oss-120b"]);
@@ -80,7 +83,7 @@ export async function chairman(key: string, idea: Idea, takes: AdvisorTake[], re
   const r = await call(key, {
     reasoning_effort: "medium", temperature: 0.3, response_format: { type: "json_object" },
     messages: [
-      { role: "system", content: `You chair a council of five advisors for a student startup. Synthesize honestly: where they agree, where they clash and who is right, what everyone missed, and the single next action. Write in ${LANG[locale] ?? "English"}. Reply with JSON only.` },
+      { role: "system", content: `You are the Chairman of an LLM Council for a student startup. Synthesize everything. You may side with a lone dissenter if their reasoning is strongest. Be direct — never "it depends". If the idea as written has no real customer, no margin or no way to the goal, the verdict is "drop", however cheap or easy it is. Write in ${LANG[locale] ?? "English"}. Reply with JSON only.` },
       { role: "user", content: `${brief(idea)}
 
 ADVISORS:
@@ -88,11 +91,11 @@ ${takes.map((t) => `${t.key} (${t.recommendation}): ${t.headline}\n${t.analysis}
 
 PEER REVIEW: strongest = ${reviews?.strongest || "?"}, weakest = ${reviews?.weakest || "?"}. Missed by all: ${reviews?.missed || "?"}
 
-Return JSON: {"verdict":"go | test | drop","summary":"3-4 sentences","agree":["2-4 points"],"clash":["1-3 points: the disagreement and who is right"],"blind_spots":["1-3"],"first_step":"the one thing to do this week, concrete"}` },
+Return JSON: {"verdict":"go | test | drop","summary":"3-4 sentences","agree":["2-4 points multiple advisors reached independently"],"clash":["1-3 real disagreements: both sides and who is right"],"blind_spots":["1-3 insights that only surfaced in peer review"],"recommendation":"a clear, actionable answer with reasoning (2-4 sentences)","first_step":"the ONE concrete thing to do first — not a list"}` },
     ],
   });
   if (!("ok" in r)) return r;
   const j = json(r.message);
   if (!j || !s(j.summary)) return { error: "failed" };
-  return { verdict: rec(j.verdict), summary: s(j.summary, 1200), agree: list(j.agree), clash: list(j.clash, 3), blind_spots: list(j.blind_spots, 3), first_step: s(j.first_step, 400) };
+  return { verdict: rec(j.verdict), summary: s(j.summary, 1200), agree: list(j.agree), clash: list(j.clash, 3), blind_spots: list(j.blind_spots, 3), recommendation: s(j.recommendation, 1200), first_step: s(j.first_step, 400) };
 }

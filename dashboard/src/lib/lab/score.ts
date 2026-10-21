@@ -27,7 +27,13 @@ export type Analysis = {
   questions: string[];
   verdict: Verdict;
   score: number;
+  /** The idea exactly as written: who pays, what, why — judged literally, never swapped for a better idea */
+  as_written?: { customer: string; offer: string; why_they_buy: string; makes_sense: boolean; problem: string };
 };
+
+/** A fatal flaw can't be averaged away: no customers, no margin or no way to €30K caps the idea at "not recommended". */
+export const FATAL: CriterionKey[] = ["demand", "margin", "scale_to_goal"];
+export const FATAL_CAP = 44;
 
 const clamp = (n: number, a: number, b: number) => Math.min(b, Math.max(a, n));
 const strs = (v: unknown, max = 8) => (Array.isArray(v) ? v.filter((x) => typeof x === "string" && x.trim()).map((x) => x.trim()).slice(0, max) : []);
@@ -41,7 +47,16 @@ export function scoreOf(criteria: { key: string; score: number }[]): number {
     total += clamp(found.score, 1, 10) * c.weight;
     weights += c.weight;
   }
-  return weights ? Math.round((total / weights) * 10) : 0;
+  const score = weights ? Math.round((total / weights) * 10) : 0;
+  const fatal = criteria.some((c) => FATAL.includes(c.key as CriterionKey) && c.score <= 3);
+  return fatal ? Math.min(score, FATAL_CAP) : score;
+}
+
+const RANK: Verdict[] = ["not_recommended", "weak", "promising", "strong"];
+/** The council's chairman can only make the verdict harsher: drop → not recommended, test → at most promising. */
+export function finalVerdict(v: Verdict, chairman: "go" | "test" | "drop" | null | undefined): Verdict {
+  const cap: Verdict = chairman === "drop" ? "not_recommended" : chairman === "test" ? "promising" : "strong";
+  return RANK[Math.min(RANK.indexOf(v), RANK.indexOf(cap))];
 }
 
 export function verdictOf(score: number): Verdict {
@@ -58,7 +73,9 @@ export function normalize(raw: unknown): Analysis | null {
     .map((c) => ({ key: c.key as CriterionKey, score: clamp(Math.round(Number(c.score)), 1, 10), why: str(c.why) }));
   if (criteria.length < 5) return null; // not a usable verdict
   const n = (r.numbers ?? {}) as Record<string, unknown>;
-  const score = scoreOf(criteria);
+  const w = (r.idea_as_written ?? null) as Record<string, unknown> | null;
+  const as_written = w ? { customer: str(w.customer), offer: str(w.offer), why_they_buy: str(w.why_they_buy), makes_sense: w.makes_sense !== false, problem: str(w.problem) } : undefined;
+  const score = as_written && !as_written.makes_sense ? Math.min(scoreOf(criteria), FATAL_CAP) : scoreOf(criteria);
   return {
     summary: str(r.summary),
     criteria: CRITERIA.map((k) => criteria.find((c) => c.key === k.key)).filter(Boolean) as Analysis["criteria"],
@@ -70,5 +87,6 @@ export function normalize(raw: unknown): Analysis | null {
     questions: strs(r.questions, 6),
     score,
     verdict: verdictOf(score),
+    ...(as_written ? { as_written } : {}),
   };
 }

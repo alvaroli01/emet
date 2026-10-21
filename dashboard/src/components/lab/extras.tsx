@@ -39,7 +39,7 @@ export function IdeaExtras({ idea, hasKey }: { idea: { id: string; title: string
         </section>
       )}
 
-      <CouncilPanel ideaId={idea.id} hasKey={hasKey} />
+      <CouncilPanel ideaId={idea.id} hasKey={hasKey} ready={!!a} />
 
       {a && (a.verdict === "strong" || a.verdict === "promising") && (
         <Link href={`/scout?idea=${idea.id}`} className="panel panel-lift flex items-center gap-3 p-4">

@@ -305,6 +305,14 @@ function Detail({ idea, names, meId, isAdmin, hasKey, votes, comments, parent, v
                 {(() => { const V = VERDICT[a.verdict].Icon; return <V size={18} />; })()} {t(`verdicts.${a.verdict}`)}
               </p>
               <p className="mt-1 text-[15px] leading-relaxed">{a.summary}</p>
+              {a.as_written && (
+                <div className={`mt-3 rounded-xl p-3 text-sm ring-1 ${a.as_written.makes_sense ? "bg-surface-2/60 ring-line" : "bg-bad/10 ring-bad/40"}`}>
+                  <p className="text-xs font-semibold text-muted">{t("asWritten.title")}</p>
+                  <p className="mt-1"><span className="text-muted">{t("asWritten.customer")}</span> {a.as_written.customer} · <span className="text-muted">{t("asWritten.offer")}</span> {a.as_written.offer}</p>
+                  <p><span className="text-muted">{t("asWritten.why")}</span> {a.as_written.why_they_buy}</p>
+                  {!a.as_written.makes_sense && <p className="mt-1 font-medium text-bad-text">{t("asWritten.noSense")} {a.as_written.problem}</p>}
+                </div>
+              )}
               {!idea.research?.sources?.length && <p className="mt-2 text-xs text-muted">{t("noResearchNote")}</p>}
             </div>
           </section>

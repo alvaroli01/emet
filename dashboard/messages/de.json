@@ -1066,7 +1066,15 @@
       "empty": "Für diese Idee gibt es noch keinen Rat.",
       "needKey": "Verbinde deinen kostenlosen Groq-Key, um den Rat zu fragen.",
       "failed": "Der letzte Rat ist auf halbem Weg stehen geblieben. Frag nochmal.",
-      "error": "Der Rat konnte nicht fertig werden. Versuch es in einer Minute nochmal."
+      "error": "Der Rat konnte nicht fertig werden. Versuch es in einer Minute nochmal.",
+      "recommendation": "Die Empfehlung:"
+    },
+    "asWritten": {
+      "title": "Die Idee genau wie geschrieben",
+      "customer": "Wer zahlt:",
+      "offer": "Was sie bekommen:",
+      "why": "Warum sie kaufen würden:",
+      "noSense": "Ergibt so, wie geschrieben, keinen Sinn —"
     }
   },
   "notifications": {

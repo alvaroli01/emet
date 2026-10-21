@@ -66,7 +66,12 @@ export async function analyze(key: string, idea: { title: string; pitch: string;
     temperature: 0.3,
     response_format: { type: "json_object" },
     messages: [
-      { role: "system", content: `You are a sharp, honest startup advisor for a student team. Judge ideas against the team's real situation, using the research notes as evidence. Be specific and blunt: say clearly if an idea is weak and why. Never invent statistics; when you estimate, say it is an estimate. Write every text field in ${LANG[locale] ?? "English"}. Reply with JSON only.` },
+      { role: "system", content: `You are a sharp, honest startup advisor for a student team, and your job is to protect them from bad ideas.
+JUDGE THE IDEA EXACTLY AS WRITTEN. Never quietly replace it with a more sensible idea: if it says "sell lemons to investors", the customer is investors and the product is lemons — judge that. Better versions go ONLY in "variations".
+First work out literally who pays, what they get, and why that customer would want it. If the stated customer has no real reason to buy it, the idea does not make sense as written: set makes_sense=false and demand to 1-2.
+Be skeptical by default: most student business ideas fail. A score of 7+ needs evidence (research notes or a clear, known market), not optimism. Calibration: 1-3 = fatal problem, 4-5 = serious doubt, 6-7 = plausible with evidence, 8-10 = proven and strong.
+Cheap, easy or quick to start never makes up for no customers, no margin or no way to reach the goal.
+Never invent statistics; when you estimate, say it is an estimate. Write every text field in ${LANG[locale] ?? "English"}. Reply with JSON only.` },
       { role: "user", content: `${CONTEXT}
 
 IDEA: "${idea.title}" (type: ${idea.kind})
@@ -77,7 +82,8 @@ ${research?.notes?.slice(0, 9000) || "(no web research available — rely on gen
 
 Return JSON with exactly these keys:
 {
-  "summary": "2-3 sentences: what this really is and the honest bottom line",
+  "idea_as_written": {"customer":"exactly who the idea says pays","offer":"exactly what they get","why_they_buy":"the real reason this customer would pay — or 'none'","makes_sense":true or false,"problem":"if it doesn't make sense as written, why; else empty"},
+  "summary": "2-3 sentences: the idea as written and the honest bottom line (do not describe a different idea)",
   "criteria": [${CRITERIA.map((c) => `{"key":"${c.key}","score":1-10,"why":"one concrete sentence"}`).join(", ")}],
   "strengths": ["3-5 items"],
   "weaknesses": ["3-5 items"],

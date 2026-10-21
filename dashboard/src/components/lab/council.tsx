@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Users, Loader2, Crown, ChevronDown } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -8,12 +9,13 @@ import { useToast } from "@/components/toast";
 
 type Take = { key: string; headline: string; analysis: string; recommendation: "go" | "test" | "drop" };
 type Council = { id: string; status: string; advisors: Take[]; reviews: { strongest: string; weakest: string; missed: string; notes: { letter: string; comment: string }[] } | null;
-  chairman: { verdict: "go" | "test" | "drop"; summary: string; agree: string[]; clash: string[]; blind_spots: string[]; first_step: string } | null; created_at: string };
+  chairman: { verdict: "go" | "test" | "drop"; summary: string; agree: string[]; clash: string[]; blind_spots: string[]; recommendation?: string; first_step: string } | null; created_at: string };
 const ORDER = ["contrarian", "first_principles", "expansionist", "outsider", "executor"];
 const recTone = { go: "text-ok-text", test: "text-warn-text", drop: "text-bad-text" } as const;
 
-export function CouncilPanel({ ideaId, hasKey }: { ideaId: string; hasKey: boolean }) {
+export function CouncilPanel({ ideaId, hasKey, ready = false }: { ideaId: string; hasKey: boolean; ready?: boolean }) {
   const t = useTranslations("lab.council");
+  const router = useRouter();
   const toast = useToast();
   const supabase = useMemo(() => createClient(), []);
   const [c, setC] = useState<Council | null>(null);
@@ -31,6 +33,12 @@ export function CouncilPanel({ ideaId, hasKey }: { ideaId: string; hasKey: boole
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { load(); }, [ideaId]);
+  // Every analysed idea gets the council automatically (once): the chairman can make the verdict harsher
+  const started = useRef(false);
+  useEffect(() => {
+    if (hasKey && ready && loaded && !c && !started.current) { started.current = true; run(); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasKey, ready, loaded, c]);
 
   async function run(resume?: string) {
     let id = resume;
@@ -42,7 +50,7 @@ export function CouncilPanel({ ideaId, hasKey }: { ideaId: string; hasKey: boole
       if (!res?.ok) { toast("error", t(j?.error === "no-key" ? "needKey" : "error")); break; }
       id = j.council_id; setStep(j.step ?? 0);
       await load();
-      if (j.status !== "running") break;
+      if (j.status !== "running") { router.refresh(); break; }
     }
     setStep(null);
   }
@@ -83,6 +91,7 @@ export function CouncilPanel({ ideaId, hasKey }: { ideaId: string; hasKey: boole
               <div key={k}><p className="text-xs font-medium text-muted">{t(k)}</p><ul className="mt-1 list-disc space-y-0.5 pl-4">{items.map((x) => <li key={x}>{x}</li>)}</ul></div>
             ))}
           </div>
+          {ch.recommendation && <p className="mt-3 text-sm"><span className="font-medium">{t("recommendation")}</span> {ch.recommendation}</p>}
           {ch.first_step && <p className="mt-3 text-sm"><span className="font-medium">{t("firstStep")}</span> {ch.first_step}</p>}
         </div>
       )}

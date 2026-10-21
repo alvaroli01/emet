@@ -1066,7 +1066,15 @@
       "empty": "Ainda não há conselho para esta ideia.",
       "needKey": "Conecte sua chave gratuita do Groq para perguntar ao conselho.",
       "failed": "O último conselho parou no meio. Pergunte de novo.",
-      "error": "O conselho não conseguiu terminar. Tente de novo em um minuto."
+      "error": "O conselho não conseguiu terminar. Tente de novo em um minuto.",
+      "recommendation": "A recomendação:"
+    },
+    "asWritten": {
+      "title": "A ideia exatamente como foi escrita",
+      "customer": "Quem paga:",
+      "offer": "O que recebe:",
+      "why": "Por que compraria:",
+      "noSense": "Não faz sentido como está escrita —"
     }
   },
   "notifications": {
