@@ -9,13 +9,14 @@ import { useToast } from "@/components/toast";
 import { Modal } from "@/components/data-table";
 import { shortDate } from "@/lib/format";
 import type { ScoutLead, ScoutProject } from "./scout";
+import { mapsLink } from "@/lib/scout/core";
 
 type Person = { id: string; full_name: string };
 const STATUSES = ["new", "contacted", "meeting", "won", "lost", "ignored"] as const;
 const FITS = ["strong", "good", "maybe", "skip"] as const;
 const fitTone: Record<string, string> = { strong: "bg-climbed text-brand-contrast", good: "bg-[color-mix(in_srgb,var(--climbed)_18%,transparent)] text-ink", maybe: "bg-surface-2 text-muted", skip: "bg-surface-2 text-muted line-through decoration-1" };
 
-export function Leads({ leads, members, canScout, meId, project, onChecked, hasKey }: { leads: ScoutLead[]; members: Person[]; canScout: boolean; meId: string; project: ScoutProject; onChecked: () => void; hasKey: boolean }) {
+export function Leads({ leads, members, canScout, meId, project, onChecked, hasKey, ourProjects = [] }: { leads: ScoutLead[]; members: Person[]; canScout: boolean; meId: string; project: ScoutProject; onChecked: () => void; hasKey: boolean; ourProjects?: { id: string; name: string }[] }) {
   const t = useTranslations("scout.leads");
   const tf = useTranslations("scout.fit");
   const ts = useTranslations("scout.status");
@@ -63,6 +64,7 @@ export function Leads({ leads, members, canScout, meId, project, onChecked, hasK
                     <p className="truncate text-xs text-muted">{[l.place.category?.split("=")[1]?.replace(/_/g, " "), l.place.address].filter(Boolean).join(" · ") || l.place.city}</p>
                     <p className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px]">
                       <span className={`rounded-full px-2 py-0.5 font-medium ${fitTone[l.fit ?? "maybe"]}`}>{tf(l.fit ?? "maybe")}</span>
+                      {l.evidence && l.evidence !== "none" && <span className={`rounded-full px-2 py-0.5 ${l.evidence === "strong" ? "bg-ok/15 text-ok-text" : l.evidence === "some" ? "bg-surface-2" : "bg-warn/15 text-warn-text"}`}>{t(`evidence.${l.evidence}`)}</span>}
                       {l.status !== "new" && <span className="rounded-full bg-surface-2 px-2 py-0.5">{ts(l.status)}</span>}
                       {l.owner_id && <span className="text-muted">{members.find((m) => m.id === l.owner_id)?.full_name}</span>}
                     </p>
@@ -75,7 +77,7 @@ export function Leads({ leads, members, canScout, meId, project, onChecked, hasK
         </ul>
       ) : <p className="panel p-8 text-center text-sm text-muted">{leads.length ? t("noneFiltered") : t("none")}</p>}
 
-      {lead && <LeadDetail lead={lead} members={members} canEdit={canScout || lead.owner_id === meId} canScout={canScout} meId={meId} onClose={() => setOpen(null)} />}
+      {lead && <LeadDetail lead={lead} ourProjects={ourProjects} members={members} canEdit={canScout || lead.owner_id === meId} canScout={canScout} meId={meId} onClose={() => setOpen(null)} />}
     </section>
   );
 }
@@ -124,7 +126,7 @@ function CheckPlace({ project, onDone, hasKey }: { project: ScoutProject; onDone
   );
 }
 
-function LeadDetail({ lead, members, canEdit, canScout, meId, onClose }: { lead: ScoutLead; members: Person[]; canEdit: boolean; canScout: boolean; meId: string; onClose: () => void }) {
+function LeadDetail({ lead, members, canEdit, canScout, meId, onClose, ourProjects }: { lead: ScoutLead; members: Person[]; canEdit: boolean; canScout: boolean; meId: string; onClose: () => void; ourProjects: { id: string; name: string }[] }) {
   const t = useTranslations("scout.leads");
   const tc = useTranslations("scout.criteria");
   const tf = useTranslations("scout.fit");
@@ -134,7 +136,8 @@ function LeadDetail({ lead, members, canEdit, canScout, meId, onClose }: { lead:
   const toast = useToast();
   const supabase = useMemo(() => createClient(), []);
   const p = lead.place;
-  const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([p.name, p.address ?? p.city].filter(Boolean).join(" "))}`;
+  // The exact place in Google Maps (saved Google link, else its exact spot), not a name search
+  const maps = mapsLink({ name: p.name, maps_url: p.maps_url ?? null, lat: p.lat, lng: p.lng, address: p.address, city: p.city });
 
   async function patch(row: Record<string, unknown>) {
     const { error } = await supabase.from("scout_leads").update(row).eq("id", lead.id);
@@ -223,13 +226,19 @@ function LeadDetail({ lead, members, canEdit, canScout, meId, onClose }: { lead:
           </section>
         )}
 
-        <section className="grid gap-2 border-t border-line pt-4 sm:grid-cols-3">
+        {lead.evidence && lead.evidence !== "none" && (
+          <p className={`rounded-lg px-3 py-2 text-xs ${lead.evidence === "little" ? "bg-warn/10 text-warn-text" : "bg-surface-2/60 text-muted"}`}>{t(`evidence.${lead.evidence}`)} — {t(`evidenceWhy.${lead.evidence}`)}</p>
+        )}
+        <section className="grid gap-2 border-t border-line pt-4 sm:grid-cols-4">
           <label className="block"><span className="mb-0.5 block text-xs text-muted">{t("statusLabel")}</span>
             <select value={lead.status} onChange={(e) => setStatus(e.target.value)} disabled={!canEdit} className="input">{STATUSES.map((s) => <option key={s} value={s}>{ts(s)}</option>)}</select></label>
           <label className="block"><span className="mb-0.5 block text-xs text-muted">{t("owner")}</span>
             <select value={lead.owner_id ?? ""} onChange={(e) => patch({ owner_id: e.target.value || null })} disabled={!canScout} className="input"><option value="">—</option>{members.map((m) => <option key={m.id} value={m.id}>{m.full_name}</option>)}</select></label>
           <label className="block"><span className="mb-0.5 block text-xs text-muted">{t("nextStep")}</span>
             <input type="date" value={lead.next_step_at ?? ""} onChange={(e) => patch({ next_step_at: e.target.value || null })} disabled={!canEdit} className="input" /></label>
+          <label className="block"><span className="mb-0.5 block text-xs text-muted">{t("saveTo")}</span>
+            <select value={lead.saved_project_id ?? ""} onChange={(e) => patch({ saved_project_id: e.target.value || null })} disabled={!canEdit} className="input">
+              <option value="">{t("generalLeads")}</option>{ourProjects.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select></label>
         </section>
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
           <span>{t("found", { date: shortDate(lead.created_at, locale), source: t(`sources.${p.source}`) })}</span>

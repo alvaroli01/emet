@@ -1924,7 +1924,10 @@
       "failedPlace": "{name} konnte nicht bewertet werden, weiter geht's",
       "read": "{n} Seiten der Website von {name} gelesen",
       "scored": "{name}: {fit} ({score})",
-      "done": "Fertig: {strong} stark, {good} gut, {skip} nicht lohnend"
+      "done": "Fertig: {strong} stark, {good} gut, {skip} nicht lohnend",
+      "overture": "Overture Maps: {n} weitere Orte",
+      "filtered": "{keep} passende Orte behalten · {drop} passten nicht",
+      "fewPlaces": "Nur {n} Orte gefunden – versuch einen größeren Radius"
     },
     "fit": {
       "strong": "Starker Treffer",
@@ -2013,7 +2016,11 @@
       "copied": "Kopiert",
       "emailWarning": "In Spanien brauchen unaufgeforderte Werbe-E-Mails vorherige Einwilligung, auch an Unternehmen. Besser: Besuch, Anruf oder DM.",
       "whyScore": "Warum diese Bewertung",
-      "evidence": "Was Scout gefunden hat",
+      "evidence": {
+        "strong": "Starke Belege",
+        "some": "Einige Belege",
+        "little": "Wenig Belege"
+      },
       "statusLabel": "Status",
       "owner": "Zuständig",
       "nextStep": "Nächster Schritt am",
@@ -2022,9 +2029,17 @@
         "osm": "OpenStreetMap",
         "web": "Websuche",
         "manual": "einen eingefügten Link",
-        "google": "Google Places"
+        "google": "Google Places",
+        "overture": "Overture Maps"
       },
-      "forget": "Diesen Ort vergessen"
+      "forget": "Diesen Ort vergessen",
+      "evidenceWhy": {
+        "strong": "Website und mehrere Quellen geprüft",
+        "some": "einige Fakten online geprüft",
+        "little": "wir konnten wenig prüfen, daher höchstens ein Vielleicht"
+      },
+      "saveTo": "In Projekt speichern",
+      "generalLeads": "Allgemeine Leads (kein Projekt)"
     },
     "check": {
       "label": "Einen Ort prüfen",
@@ -2747,7 +2762,8 @@
       "tasks": "Aufgaben",
       "links": "Links",
       "files": "Dateien",
-      "updates": "Updates"
+      "updates": "Updates",
+      "leads": "Leads"
     },
     "lists": {
       "todo": "Zu tun",
@@ -2794,6 +2810,11 @@
     "iconRemove": "Icon entfernen",
     "iconType": "Wähle ein Bild (PNG, JPG …)",
     "iconBig": "Das Icon darf höchstens 2 MB groß sein",
-    "iconError": "Projekt gespeichert, aber das Icon konnte nicht hochgeladen werden"
+    "iconError": "Projekt gespeichert, aber das Icon konnte nicht hochgeladen werden",
+    "leads": {
+      "hint": "Mit Scout gefundene und in diesem Projekt gespeicherte Orte.",
+      "openScout": "Scout öffnen",
+      "empty": "Noch keine Leads. Öffne in Scout einen Lead und wähle dieses Projekt unter „In Projekt speichern“."
+    }
   }
 }

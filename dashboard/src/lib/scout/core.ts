@@ -218,7 +218,7 @@ export function keepRealLinks(c: { official_website?: unknown; instagram?: unkno
 }
 
 /** Open Places API (Overture Maps) results → places. Closed places are skipped. */
-export type OpenPlace = { place_id: string; name: string; lat: number; lon: number; categories?: string[]; category?: string;
+export type OpenPlace = { place_id: string; name: string; lat: number; lon: number; distance_mi?: number; categories?: string[]; category?: string;
   address?: { formatted?: string; street?: string; locality?: string }; phone?: string; website?: string; confidence?: number; operating_status?: string };
 export function placesFromOpenPlaces(results: OpenPlace[]): FoundPlace[] {
   return results.filter((r) => r?.name && !/closed/i.test(r.operating_status ?? "")).map((r) => ({

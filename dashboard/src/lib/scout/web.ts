@@ -1,5 +1,5 @@
 import "server-only";
-import { overpassQuery, placesFromOsm, type FoundPlace } from "./core";
+import { overpassQuery, placesFromOsm, placesFromOpenPlaces, type FoundPlace, type OpenPlace } from "./core";
 
 // Free, legal data sources only: OpenStreetMap (Nominatim + Overpass) and the business's own public website.
 // No Google scraping (against Google's terms and blocked from servers). See docs/lead-finder-build-prompt.md §1.
@@ -12,6 +12,23 @@ async function timed(url: string, init: RequestInit = {}, ms = 8000) {
   const id = setTimeout(() => ctrl.abort(), ms);
   try { return await fetch(url, { ...init, signal: ctrl.signal, headers: { "User-Agent": UA, ...(init.headers ?? {}) } }); }
   finally { clearTimeout(id); }
+}
+
+/** Overture Maps places via the Open Places API (free 10,000 searches/month; stops at the cap, never bills).
+ *  Only used when OPEN_PLACES_API_KEY is set. One request per query, in parallel; null when the service is down. */
+export async function openPlaces(queries: string[], lat: number, lng: number, radiusKm: number): Promise<FoundPlace[] | null> {
+  const key = process.env.OPEN_PLACES_API_KEY;
+  if (!key || !queries.length) return [];
+  const radius = Math.min(50, Math.max(0.5, radiusKm * 0.621)).toFixed(1);
+  const res = await Promise.all(queries.slice(0, 4).map(async (q) => {
+    const p = new URLSearchParams({ q, lat: String(lat), lon: String(lng), radius_mi: radius, limit: "20", min_confidence: "0.6" });
+    const r = await timed(`https://api.openplacesapi.com/v1/places?${p}`, { headers: { Authorization: `Bearer ${key}` } }, 7000).catch(() => null);
+    if (!r?.ok) return null;
+    const j = (await r.json().catch(() => null)) as { results?: OpenPlace[] } | null;
+    return placesFromOpenPlaces(j?.results ?? []);
+  }));
+  if (res.every((x) => x === null)) return null;
+  return res.flatMap((x) => x ?? []);
 }
 
 export type City = { name: string; country_code: string; lat: number; lng: number; bbox: number[] };

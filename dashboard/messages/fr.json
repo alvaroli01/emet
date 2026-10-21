@@ -1924,7 +1924,10 @@
       "failedPlace": "Impossible de juger {name}, on passe au suivant",
       "read": "{n} pages du site de {name} lues",
       "scored": "{name} : {fit} ({score})",
-      "done": "Terminé : {strong} forts, {good} bons, {skip} sans intérêt"
+      "done": "Terminé : {strong} forts, {good} bons, {skip} sans intérêt",
+      "overture": "Overture Maps : {n} lieux de plus",
+      "filtered": "{keep} lieux du bon type gardés · {drop} ne correspondaient pas",
+      "fewPlaces": "Seulement {n} lieux — essaie un rayon plus grand"
     },
     "fit": {
       "strong": "Très bon profil",
@@ -2013,7 +2016,11 @@
       "copied": "Copié",
       "emailWarning": "En Espagne, les e-mails commerciaux non sollicités exigent un consentement préalable, même envers des entreprises. Privilégie une visite, un appel ou un DM.",
       "whyScore": "Pourquoi ce score",
-      "evidence": "Ce que Scout a trouvé",
+      "evidence": {
+        "strong": "Preuves solides",
+        "some": "Quelques preuves",
+        "little": "Peu de preuves"
+      },
       "statusLabel": "Statut",
       "owner": "Responsable",
       "nextStep": "Prochaine étape le",
@@ -2022,9 +2029,17 @@
         "osm": "OpenStreetMap",
         "web": "recherche web",
         "manual": "un lien collé",
-        "google": "Google Places"
+        "google": "Google Places",
+        "overture": "Overture Maps"
       },
-      "forget": "Oublier ce lieu"
+      "forget": "Oublier ce lieu",
+      "evidenceWhy": {
+        "strong": "leur site et plusieurs sources vérifiés",
+        "some": "quelques faits vérifiés en ligne",
+        "little": "peu de choses vérifiables, donc au mieux un peut-être"
+      },
+      "saveTo": "Enregistrer dans le projet",
+      "generalLeads": "Leads généraux (sans projet)"
     },
     "check": {
       "label": "Vérifier un lieu",
@@ -2747,7 +2762,8 @@
       "tasks": "Tâches",
       "links": "Liens",
       "files": "Fichiers",
-      "updates": "Actus"
+      "updates": "Actus",
+      "leads": "Leads"
     },
     "lists": {
       "todo": "À faire",
@@ -2794,6 +2810,11 @@
     "iconRemove": "Retirer l’icône",
     "iconType": "Choisis une image (PNG, JPG…)",
     "iconBig": "L’icône doit faire 2 Mo maximum",
-    "iconError": "Projet enregistré, mais l’icône n’a pas pu être envoyée"
+    "iconError": "Projet enregistré, mais l’icône n’a pas pu être envoyée",
+    "leads": {
+      "hint": "Lieux trouvés avec Scout et enregistrés dans ce projet.",
+      "openScout": "Ouvrir Scout",
+      "empty": "Aucun lead pour l’instant. Dans Scout, ouvre un lead et choisis ce projet dans « Enregistrer dans le projet »."
+    }
   }
 }

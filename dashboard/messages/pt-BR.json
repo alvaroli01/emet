@@ -1924,7 +1924,10 @@
       "failedPlace": "Não consegui avaliar {name}, seguindo em frente",
       "read": "Li {n} páginas do site de {name}",
       "scored": "{name}: {fit} ({score})",
-      "done": "Pronto: {strong} fortes, {good} bons, {skip} sem valor"
+      "done": "Pronto: {strong} fortes, {good} bons, {skip} sem valor",
+      "overture": "Overture Maps: mais {n} lugares",
+      "filtered": "Ficaram {keep} lugares do tipo certo · {drop} não combinavam",
+      "fewPlaces": "Só {n} lugares — tente um raio maior"
     },
     "fit": {
       "strong": "Encaixe forte",
@@ -2013,7 +2016,11 @@
       "copied": "Copiado",
       "emailWarning": "Na Espanha, e-mails comerciais não solicitados exigem consentimento prévio, até para empresas. Prefira uma visita, ligação ou DM.",
       "whyScore": "Por que essa nota",
-      "evidence": "O que o Scout encontrou",
+      "evidence": {
+        "strong": "Evidência forte",
+        "some": "Alguma evidência",
+        "little": "Pouca evidência"
+      },
       "statusLabel": "Status",
       "owner": "Responsável",
       "nextStep": "Próximo passo em",
@@ -2022,9 +2029,17 @@
         "osm": "OpenStreetMap",
         "web": "busca na web",
         "manual": "um link colado",
-        "google": "Google Places"
+        "google": "Google Places",
+        "overture": "Overture Maps"
       },
-      "forget": "Esquecer este lugar"
+      "forget": "Esquecer este lugar",
+      "evidenceWhy": {
+        "strong": "site e várias fontes verificados",
+        "some": "alguns fatos verificados online",
+        "little": "não deu para verificar muito, então no máximo um talvez"
+      },
+      "saveTo": "Salvar no projeto",
+      "generalLeads": "Leads gerais (sem projeto)"
     },
     "check": {
       "label": "Checar um lugar",
@@ -2747,7 +2762,8 @@
       "tasks": "Tarefas",
       "links": "Links",
       "files": "Arquivos",
-      "updates": "Novidades"
+      "updates": "Novidades",
+      "leads": "Leads"
     },
     "lists": {
       "todo": "A fazer",
@@ -2794,6 +2810,11 @@
     "iconRemove": "Remover ícone",
     "iconType": "Escolha uma imagem (PNG, JPG…)",
     "iconBig": "O ícone deve ter no máximo 2 MB",
-    "iconError": "O projeto foi salvo, mas o ícone não pôde ser enviado"
+    "iconError": "O projeto foi salvo, mas o ícone não pôde ser enviado",
+    "leads": {
+      "hint": "Lugares encontrados com o Scout e salvos neste projeto.",
+      "openScout": "Abrir Scout",
+      "empty": "Ainda não há leads. No Scout, abra um lead e escolha este projeto em “Salvar no projeto”."
+    }
   }
 }

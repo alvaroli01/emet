@@ -1924,7 +1924,10 @@
       "failedPlace": "Paikkaa {name} ei voitu arvioida, jatketaan eteenpäin",
       "read": "Luettu {n} sivua paikan {name} verkkosivulta",
       "scored": "{name}: {fit} ({score})",
-      "done": "Valmis: {strong} vahvaa, {good} hyvää, {skip} ei kannata"
+      "done": "Valmis: {strong} vahvaa, {good} hyvää, {skip} ei kannata",
+      "overture": "Overture Maps: {n} paikkaa lisää",
+      "filtered": "{keep} sopivaa paikkaa jäi · {drop} ei sopinut",
+      "fewPlaces": "Vain {n} paikkaa – kokeile isompaa sädettä"
     },
     "fit": {
       "strong": "Vahva osuma",
@@ -2013,7 +2016,11 @@
       "copied": "Kopioitu",
       "emailWarning": "Espanjassa ei-toivotut myyntisähköpostit vaativat etukäteen annetun suostumuksen, myös yrityksille. Mieluummin käynti, puhelu tai DM.",
       "whyScore": "Miksi tämä pistemäärä",
-      "evidence": "Mitä Scout löysi",
+      "evidence": {
+        "strong": "Vahva näyttö",
+        "some": "Jonkin verran näyttöä",
+        "little": "Vähän näyttöä"
+      },
       "statusLabel": "Tila",
       "owner": "Vastuuhenkilö",
       "nextStep": "Seuraava askel:",
@@ -2022,9 +2029,17 @@
         "osm": "OpenStreetMap",
         "web": "verkkohaku",
         "manual": "liitetty linkki",
-        "google": "Google Places"
+        "google": "Google Places",
+        "overture": "Overture Maps"
       },
-      "forget": "Unohda tämä paikka"
+      "forget": "Unohda tämä paikka",
+      "evidenceWhy": {
+        "strong": "verkkosivu ja useita lähteitä tarkistettu",
+        "some": "joitain tietoja tarkistettu verkosta",
+        "little": "emme voineet tarkistaa paljoa, joten korkeintaan ehkä"
+      },
+      "saveTo": "Tallenna projektiin",
+      "generalLeads": "Yleiset liidit (ei projektia)"
     },
     "check": {
       "label": "Tarkista paikka",
@@ -2747,7 +2762,8 @@
       "tasks": "Tehtävät",
       "links": "Linkit",
       "files": "Tiedostot",
-      "updates": "Päivitykset"
+      "updates": "Päivitykset",
+      "leads": "Liidit"
     },
     "lists": {
       "todo": "Tehtävänä",
@@ -2794,6 +2810,11 @@
     "iconRemove": "Poista kuvake",
     "iconType": "Valitse kuva (PNG, JPG…)",
     "iconBig": "Kuvakkeen on oltava enintään 2 Mt",
-    "iconError": "Projekti tallennettiin, mutta kuvaketta ei voitu ladata"
+    "iconError": "Projekti tallennettiin, mutta kuvaketta ei voitu ladata",
+    "leads": {
+      "hint": "Scoutilla löydetyt ja tähän projektiin tallennetut paikat.",
+      "openScout": "Avaa Scout",
+      "empty": "Ei vielä liidejä. Avaa Scoutissa liidi ja valitse tämä projekti kohdassa ”Tallenna projektiin”."
+    }
   }
 }

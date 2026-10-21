@@ -1924,7 +1924,10 @@
       "failedPlace": "No he podido valorar {name}, sigo con el siguiente",
       "read": "Leídas {n} páginas de la web de {name}",
       "scored": "{name}: {fit} ({score})",
-      "done": "Listo: {strong} muy buenos, {good} buenos, {skip} sin interés"
+      "done": "Listo: {strong} muy buenos, {good} buenos, {skip} sin interés",
+      "overture": "Overture Maps: {n} sitios más",
+      "filtered": "Se quedan {keep} sitios del tipo correcto · {drop} no encajaban",
+      "fewPlaces": "Solo {n} sitios: prueba un radio mayor"
     },
     "fit": {
       "strong": "Encaje fuerte",
@@ -2013,7 +2016,11 @@
       "copied": "Copiado",
       "emailWarning": "En España, los emails comerciales no solicitados necesitan consentimiento previo, incluso a empresas. Mejor una visita, una llamada o un DM.",
       "whyScore": "Por qué esta puntuación",
-      "evidence": "Lo que ha encontrado Scout",
+      "evidence": {
+        "strong": "Pruebas sólidas",
+        "some": "Algunas pruebas",
+        "little": "Pocas pruebas"
+      },
       "statusLabel": "Estado",
       "owner": "Responsable",
       "nextStep": "Próximo paso el",
@@ -2022,9 +2029,17 @@
         "osm": "OpenStreetMap",
         "web": "búsqueda web",
         "manual": "un enlace pegado",
-        "google": "Google Places"
+        "google": "Google Places",
+        "overture": "Overture Maps"
       },
-      "forget": "Olvidar este local"
+      "forget": "Olvidar este local",
+      "evidenceWhy": {
+        "strong": "se revisó su web y varias fuentes",
+        "some": "se comprobaron algunos datos en internet",
+        "little": "no pudimos comprobar mucho, así que como mucho es un quizás"
+      },
+      "saveTo": "Guardar en proyecto",
+      "generalLeads": "Leads generales (sin proyecto)"
     },
     "check": {
       "label": "Revisar un local",
@@ -2747,7 +2762,8 @@
       "tasks": "Tareas",
       "links": "Enlaces",
       "files": "Archivos",
-      "updates": "Novedades"
+      "updates": "Novedades",
+      "leads": "Leads"
     },
     "lists": {
       "todo": "Por hacer",
@@ -2794,6 +2810,11 @@
     "iconRemove": "Quitar icono",
     "iconType": "Elige una imagen (PNG, JPG…)",
     "iconBig": "El icono debe pesar 2 MB o menos",
-    "iconError": "El proyecto se guardó, pero el icono no se pudo subir"
+    "iconError": "El proyecto se guardó, pero el icono no se pudo subir",
+    "leads": {
+      "hint": "Sitios encontrados con Scout y guardados en este proyecto.",
+      "openScout": "Abrir Scout",
+      "empty": "Aún no hay leads. En Scout, abre un lead y elige este proyecto en «Guardar en proyecto»."
+    }
   }
 }

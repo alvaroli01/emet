@@ -17,6 +17,7 @@ import { ProjectUpdates } from "./project-updates";
 import { ProjectFiles } from "./project-files";
 import { ProjectMoney } from "./project-money";
 import { ProjectIcon } from "./project-icon";
+import { ProjectLeads, type ProjectLead } from "./project-leads";
 import { AssignTasks, MyTeamTasks } from "@/components/tools/team-tasks";
 import type { TeamTask } from "@/lib/team-tasks";
 
@@ -26,15 +27,15 @@ export type ProjectUpdate = { id: string; body: string; created_by: string | nul
 export type ProjectFile = { id: string; name: string; size: number; mime: string; path: string; uploaded_by: string | null; created_at: string };
 export type Money = { revenue: number; costs: number; profit: number };
 
-const TABS = ["overview", "money", "tasks", "links", "files", "updates"] as const;
+const TABS = ["overview", "money", "tasks", "leads", "links", "files", "updates"] as const;
 type Tab = (typeof TABS)[number];
 export const STATUS_STYLE = { planning: "bg-surface-2 text-muted", live: "bg-ok/20 text-ok-text", closed: "bg-line text-muted" } as const;
 
 /** A project's page: header with goal and people, then Overview · Money · Tasks · Links · Files · Updates. */
-export function ProjectPage({ project, memberIds, people, board, viewer, meId, isLeader, money, weeks, links, updates, files, tickTasks, tab, today }: {
+export function ProjectPage({ project, memberIds, people, board, viewer, meId, isLeader, money, weeks, links, updates, files, tickTasks, leads, tab, today }: {
   project: Project; memberIds: string[]; people: Member[]; board: BoardData | null; viewer: Viewer; meId: string; isLeader: boolean;
   money: Money; weeks: { week: string; revenue: number }[]; links: ProjectLink[]; updates: ProjectUpdate[]; files: ProjectFile[];
-  tickTasks: TeamTask[]; tab?: string; today: string;
+  tickTasks: TeamTask[]; leads: ProjectLead[]; tab?: string; today: string;
 }) {
   const t = useTranslations("projects");
   const locale = useLocale();
@@ -162,6 +163,7 @@ export function ProjectPage({ project, memberIds, people, board, viewer, meId, i
           {board ? <div className="panel p-3 sm:p-4"><Board data={board} viewer={viewer} /></div> : <p className="panel p-5 text-sm text-muted">{t("noBoard")}</p>}
         </div>
       )}
+      {active === "leads" && <ProjectLeads leads={leads} />}
       {active === "links" && <ProjectLinks projectId={project.id} links={links} people={name} meId={meId} isLeader={isLeader} />}
       {active === "files" && <ProjectFiles projectId={project.id} files={files} people={name} meId={meId} isLeader={isLeader} />}
       {active === "updates" && <ProjectUpdates projectId={project.id} updates={updates} people={name} meId={meId} isLeader={isLeader} />}

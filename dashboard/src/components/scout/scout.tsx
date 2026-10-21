@@ -16,13 +16,14 @@ export type ScoutProject = { id: string; title: string; idea_id: string | null; 
   plan: { osm_tags: string[]; web_queries: string[]; signals: string[]; deal_breakers: string[]; playbook: string; summary: string } | null; created_at: string };
 export type LogLine = { at: string; k: string; p?: Record<string, string | number>; url?: string; place_id?: string };
 export type ScoutSearch = { id: string; project_id: string; city: string; country_code: string; lat: number | null; lng: number | null; radius_km: number; status: string; found: number; known: number; researched: number; max_places: number; log: LogLine[]; queue: string[]; created_by: string | null; created_at: string };
-export type ScoutPlace = { id: string; name: string; category: string | null; address: string | null; city: string | null; country_code: string | null; lat: number | null; lng: number | null; website: string | null; phone: string | null; instagram: string | null; email_public: string | null; opening_hours: string | null; source: string; forgotten: boolean };
+export type ScoutPlace = { id: string; name: string; category: string | null; address: string | null; city: string | null; country_code: string | null; lat: number | null; lng: number | null; website: string | null; phone: string | null; instagram: string | null; email_public: string | null; opening_hours: string | null; source: string; forgotten: boolean; maps_url?: string | null };
 export type ScoutLead = { id: string; project_id: string; place_id: string; search_id: string | null; score: number | null; fit: string | null; worth_it: boolean | null; why: string | null; attack_with: string | null;
   approach: { channel: string; opener: string; best_time: string; who_to_ask_for: string; objections: { objection: string; answer: string }[] } | null;
-  criteria: { key: string; score: number; why: string; source?: string }[] | null; signals: { text: string; url?: string }[]; status: string; owner_id: string | null; next_step_at: string | null; prospect_id: string | null; created_at: string; place: ScoutPlace };
+  criteria: { key: string; score: number; why: string; source?: string }[] | null; signals: { text: string; url?: string }[]; status: string; owner_id: string | null; next_step_at: string | null; prospect_id: string | null; created_at: string; place: ScoutPlace;
+  evidence?: "strong" | "some" | "little" | "none" | null; saved_project_id?: string | null };
 type Person = { id: string; full_name: string };
 
-const ACTIVE = ["queued", "finding", "researching"];
+const ACTIVE = ["queued", "finding", "filtering", "researching"];
 // Example searches the idle globe shows to explain what Scout does
 const EXAMPLES = [
   { lat: 43.263, lng: -2.935, k: "bilbao" }, { lat: 60.17, lng: 24.94, k: "helsinki" }, { lat: -23.55, lng: -46.63, k: "saopaulo" },
@@ -31,7 +32,7 @@ const EXAMPLES = [
 const COUNTRIES = "ES PT FR DE IT GB IE NL BE LU CH AT DK SE NO FI IS PL CZ SK HU SI HR RO BG GR CY MT EE LV LT RS BA ME MK AL UA MD RU TR US CA MX BR AR CL CO PE UY EC VE BO PY CR PA DO GT CU PR MA DZ TN EG ZA NG KE GH AE SA QA IL JO IN PK BD LK CN JP KR TW HK SG MY TH VN PH ID AU NZ".split(" ");
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export function Scout({ projects, searches, leads, members, meId, meName, canScout, hasKey: initialKey, ideas, initialProject, fromIdea }: {
+export function Scout({ projects, searches, leads, members, meId, meName, canScout, hasKey: initialKey, ideas, initialProject, fromIdea, ourProjects = [] }: { ourProjects?: { id: string; name: string }[];
   projects: ScoutProject[]; searches: ScoutSearch[]; leads: ScoutLead[]; members: Person[]; meId: string; meName: string; canScout: boolean; hasKey: boolean;
   ideas: { id: string; title: string; pitch: string }[]; initialProject: string | null; fromIdea: { id: string; title: string; pitch: string } | null;
 }) {
@@ -89,7 +90,7 @@ export function Scout({ projects, searches, leads, members, meId, meName, canSco
       ) : (
         <>
           <Finder key={project.id} project={project} latest={latest} canScout={canScout && hasKey} meId={meId} />
-          <Leads leads={projectLeads} members={members} canScout={canScout} meId={meId} project={project} onChecked={() => router.refresh()} hasKey={hasKey} />
+          <Leads leads={projectLeads} members={members} canScout={canScout} meId={meId} project={project} onChecked={() => router.refresh()} hasKey={hasKey} ourProjects={ourProjects} />
         </>
       )}
 

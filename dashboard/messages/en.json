@@ -1924,7 +1924,10 @@
       "failedPlace": "Couldn't judge {name}, moving on",
       "read": "Read {n} pages of {name}'s website",
       "scored": "{name}: {fit} ({score})",
-      "done": "Done: {strong} strong, {good} good, {skip} not worth it"
+      "done": "Done: {strong} strong, {good} good, {skip} not worth it",
+      "overture": "Overture Maps: {n} more places",
+      "filtered": "Kept {keep} places of the right kind · {drop} weren't a match",
+      "fewPlaces": "Only {n} places found — try a bigger radius"
     },
     "fit": {
       "strong": "Strong fit",
@@ -2013,7 +2016,11 @@
       "copied": "Copied",
       "emailWarning": "In Spain, unsolicited sales emails need prior consent, even to companies. Prefer a visit, call or DM.",
       "whyScore": "Why this score",
-      "evidence": "What Scout found",
+      "evidence": {
+        "strong": "Strong evidence",
+        "some": "Some evidence",
+        "little": "Little evidence"
+      },
       "statusLabel": "Status",
       "owner": "Owner",
       "nextStep": "Next step on",
@@ -2022,9 +2029,17 @@
         "osm": "OpenStreetMap",
         "web": "web search",
         "manual": "a pasted link",
-        "google": "Google Places"
+        "google": "Google Places",
+        "overture": "Overture Maps"
       },
-      "forget": "Forget this place"
+      "forget": "Forget this place",
+      "evidenceWhy": {
+        "strong": "their website and several web sources were checked",
+        "some": "some facts were checked online",
+        "little": "we couldn't check much online, so this is at most a maybe"
+      },
+      "saveTo": "Save to project",
+      "generalLeads": "General leads (no project)"
     },
     "check": {
       "label": "Check a place",
@@ -2747,7 +2762,8 @@
       "tasks": "Tasks",
       "links": "Links",
       "files": "Files",
-      "updates": "Updates"
+      "updates": "Updates",
+      "leads": "Leads"
     },
     "lists": {
       "todo": "To do",
@@ -2794,6 +2810,11 @@
     "iconRemove": "Remove icon",
     "iconType": "Pick an image (PNG, JPG…)",
     "iconBig": "The icon must be 2 MB or smaller",
-    "iconError": "The project was saved, but the icon couldn’t be uploaded"
+    "iconError": "The project was saved, but the icon couldn’t be uploaded",
+    "leads": {
+      "hint": "Places found with Scout and saved to this project.",
+      "openScout": "Open Scout",
+      "empty": "No leads saved yet. In Scout, open a lead and choose this project under “Save to project”."
+    }
   }
 }

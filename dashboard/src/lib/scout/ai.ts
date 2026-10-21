@@ -1,6 +1,6 @@
 import "server-only";
 import { call, CONTEXT, LANG, type Fail } from "@/lib/lab/ai";
-import { CRITERIA, normalizeJudgement, type Judgement } from "./core";
+import { CRITERIA, normalizeJudgement, parseRelevance, keepRealLinks, type Judgement } from "./core";
 import { PLAYBOOKS, PLAYBOOK_KEYS, type PlaybookKey } from "./playbooks";
 
 /** Scout's AI steps, run with the member's own free Groq key (same helper and fallbacks as the Idea lab). */
@@ -69,20 +69,44 @@ List up to 15 real, currently open businesses you actually found (no chains' hea
   } catch { return []; }
 }
 
+/** Before any research: one fast call says which candidates are the right KIND of place for this project. */
+export async function relevance(key: string, p: Project, plan: Plan | null, places: { name: string; category: string | null }[]): Promise<{ keep: Set<number>; reasons: Map<number, string> } | Fail> {
+  if (!places.length) return { keep: new Set(), reasons: new Map() };
+  const r = await call(key, {
+    reasoning_effort: "low", temperature: 0, response_format: { type: "json_object" },
+    messages: [
+      { role: "system", content: "You sort local businesses for a sales team. Judge only by name and category whether each one is the kind of business described. When unsure, keep it. Reply with JSON only." },
+      { role: "user", content: `We look for: ${p.niche}. Ideal client: ${p.ideal_client || "(any)"}. Deal-breakers: ${[...(plan?.deal_breakers ?? []), ...p.deal_breakers].join("; ") || "(none)"}.
+Candidates:
+${places.map((x, i) => `${i}. ${x.name}${x.category ? ` [${x.category}]` : ""}`).join("\n")}
+Return {"match":[numbers that ARE this kind of business],"not_match":[{"n":number,"why":"short reason"}]}` },
+    ],
+  }, ["openai/gpt-oss-20b", "openai/gpt-oss-120b"]);
+  if (!("ok" in r)) return r;
+  return parseRelevance(json(r), places.length);
+}
+
 export type Evidence = { place: { name: string; category: string | null; address: string | null; website: string | null; instagram: string | null; phone: string | null; opening_hours: string | null };
   pages: { url: string; text: string }[]; webNotes: string; webSources: { title: string; url: string }[] };
 
-/** Short web check of one place (reviews, Instagram activity, news) — real search results only. */
-export async function webCheck(key: string, name: string, city: string): Promise<{ notes: string; sources: { title: string; url: string }[] } | Fail> {
+/** Short web check of one place (reviews, Instagram activity, news) plus its official links — real search results only. */
+export type WebCheck = { notes: string; sources: { title: string; url: string }[]; links: { website: string | null; instagram: string | null; maps_url: string | null; phone: string | null } };
+export async function webCheck(key: string, name: string, city: string): Promise<WebCheck | Fail> {
   const r = await call(key, {
     reasoning_effort: "low", tools: [{ type: "browser_search" }],
-    messages: [{ role: "user", content: `Look up the business "${name}" in ${city}. In 5-8 short bullet points with facts only: what they sell, price level, reviews (rating, count, recurring complaints/praise), Instagram/online activity, size (staff, branches, chain or independent), anything new (opening, renovation, hiring). Say "unknown" when not found. No advice.` }],
+    messages: [{ role: "user", content: `Look up the business "${name}" in ${city}. In 5-8 short bullet points with facts only: what they sell, price level, reviews (rating, count, recurring complaints/praise), Instagram/online activity, size (staff, branches, chain or independent), anything new (opening, renovation, hiring), and their phone number if listed. Say "unknown" when not found. No advice.
+Then, on the last line, write exactly one JSON object with links you actually saw in the search results (null if not seen): {"official_website":null,"instagram":null,"google_maps_url":null,"phone":null}` }],
   }, ["openai/gpt-oss-20b", "openai/gpt-oss-120b"]);
   if (!("ok" in r)) return r;
   const m = r.message as { content?: string; executed_tools?: { search_results?: { results?: { title?: string; url?: string }[] } }[] };
-  const sources: { title: string; url: string }[] = [];
-  for (const t of m.executed_tools ?? []) for (const s of t.search_results?.results ?? []) if (s.url && /^https?:\/\//.test(s.url) && sources.length < 6 && !sources.some((x) => x.url === s.url)) sources.push({ title: (s.title ?? s.url).slice(0, 120), url: s.url });
-  return { notes: String(m.content ?? "").replace(/【[^】]*】/g, "").slice(0, 2500), sources };
+  const all: { title: string; url: string }[] = [];
+  for (const t of m.executed_tools ?? []) for (const x of t.search_results?.results ?? []) if (x.url && /^https?:\/\//.test(x.url) && !all.some((y) => y.url === x.url)) all.push({ title: (x.title ?? x.url).slice(0, 120), url: x.url });
+  const text = String(m.content ?? "").replace(/【[^】]*】/g, "");
+  const last = text.match(/\{[^{}]*"official_website"[^{}]*\}/);
+  let claimed: Record<string, unknown> = {};
+  try { claimed = last ? JSON.parse(last[0]) : {}; } catch { /* no links */ }
+  const notes = (last ? text.replace(last[0], "") : text).trim().slice(0, 2500);
+  return { notes, sources: all.slice(0, 6), links: keepRealLinks(claimed, all.map((x) => x.url), notes) };
 }
 
 /** Steps C+D in one call: judge the place for this project and, if it's a fit, plan how to approach it. */
@@ -94,11 +118,11 @@ export async function judge(key: string, p: Project, plan: Plan | null, ev: Evid
     ...ev.pages.map((pg) => `--- ${pg.url}\n${pg.text.slice(0, 2500)}`),
     ev.webNotes ? `--- WEB SEARCH NOTES\n${ev.webNotes}` : "",
     ev.webSources.length ? `Sources: ${ev.webSources.map((s) => s.url).join(" ")}` : "",
-  ].filter(Boolean).join("\n").slice(0, 9000);
+  ].filter(Boolean).join("\n").slice(0, 6000);
   const r = await call(key, {
     reasoning_effort: "medium", temperature: 0.2, response_format: { type: "json_object" },
     messages: [
-      { role: "system", content: `You qualify sales leads for a student startup. Judge ONLY from the evidence given; if something is not in the evidence, say "unknown" and score it 5. Never invent facts, reviews or numbers. Be blunt: most places are NOT worth it. Every "source" must be one of the URLs in the evidence. Write all text in ${lang}; write "opener" in the local language of the business. Reply with JSON only.` },
+      { role: "system", content: `You qualify sales leads for a student startup. Judge ONLY from the evidence given; if something is not in the evidence, say "unknown" and score it 3 (what we cannot show counts against the lead). Never invent facts, reviews or numbers. Be blunt: most places are NOT worth it. Every "source" must be one of the URLs in the evidence. Write all text in ${lang}; write "opener" in the local language of the business. Reply with JSON only.` },
       { role: "user", content: `${CONTEXT}
 
 ${project(p)}
