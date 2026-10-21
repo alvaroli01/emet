@@ -565,3 +565,23 @@ select t.assert('Its board, links and updates went with it', t.num($$select coun
 select t.login(2);
 select t.assert('The sale stays, untagged', t.num($$select count(*) from sales where description = 'Market stall sale' and project_id is null$$) = 1);
 reset role;
+-- ── Scout key pool: lend your Groq key to Scout ─────────────
+set role authenticated;
+select t.login(3);
+select t.check('Member saves a key', $$insert into ai_keys (key_iv, key_data, last4) values ('iv', 'enc', 'abcd')$$, 'ok');
+select t.check('...and lends it to Scout', $$update ai_keys set lend_scout = true$$, 'ok');
+select t.login(6);
+select t.assert('Lending does not show the key to anyone', t.num('select count(*) from ai_keys') = 0);
+select t.check('Browser cannot write key usage', $$select ai_usage_event(my_profile_id(), 'x', 5, null, false)$$, 'denied');
+select t.assert('Members see who lends a key (names only)', (select count(*) from scout_lenders()) = 1);
+select t.login(1);
+select t.assert('Admins cannot see a lent key either', t.num($$select count(*) from ai_keys where last4 = 'abcd'$$) = 0);
+reset role;
+select ai_usage_event((select id from profiles where full_name = 'Rocco'), 'openai/gpt-oss-120b', 1000, null, false);
+select ai_usage_event((select id from profiles where full_name = 'Rocco'), 'openai/gpt-oss-120b', 500, now() + interval '1 minute', false);
+set role authenticated;
+select t.login(3);
+select t.assert('Owner sees Scout usage of their key, added up', t.num($$select tokens from ai_key_usage where model = 'openai/gpt-oss-120b'$$) = 1500);
+select t.login(6);
+select t.assert('Nobody else sees it', t.num('select count(*) from ai_key_usage') = 0);
+reset role;
