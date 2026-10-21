@@ -1927,7 +1927,9 @@
       "done": "Fertig: {strong} stark, {good} gut, {skip} nicht lohnend",
       "overture": "Overture Maps: {n} weitere Orte",
       "filtered": "{keep} passende Orte behalten · {drop} passten nicht",
-      "fewPlaces": "Nur {n} Orte gefunden – versuch einen größeren Radius"
+      "fewPlaces": "Nur {n} Orte gefunden – versuch einen größeren Radius",
+      "pool": "Nutze die geteilten Schlüssel des Teams ({n} verfügbar)",
+      "tokens": "~{tokens}K KI-Tokens verbraucht"
     },
     "fit": {
       "strong": "Starker Treffer",
@@ -2052,7 +2054,13 @@
       "forgotten": "Dieser Ort wurde absichtlich vergessen und wird nicht mehr geprüft.",
       "needKey": "Verbinde zuerst deinen kostenlosen Groq-Key.",
       "error": "Dieser Ort konnte nicht geprüft werden. Versuch es in einer Minute nochmal."
-    }
+    },
+    "lendTitle": "Meinen KI-Schlüssel an Scout verleihen",
+    "lendHelp": "Nur Scout nutzt ihn – nie Ask, Idea Lab oder Notizen. Niemand kann deinen Schlüssel sehen. Scout stoppt bei 60 % deines Tageskontingents, der Rest bleibt immer dir.",
+    "lendNeedKey": "Verbinde zuerst deinen kostenlosen Groq-Schlüssel, dann kannst du ihn an Scout verleihen.",
+    "lendUsed": "Scout hat heute ~{n}K Tokens deines Schlüssels genutzt",
+    "lenders": "{count, plural, one {# Person verleiht} other {# Personen verleihen}} ihren Schlüssel an Scout: {names}",
+    "lendersNone": "Noch niemand verleiht einen Schlüssel an Scout"
   },
   "hero": {
     "allClear": "Hier wartet nichts auf dich. Guter Moment, um vorzuarbeiten.",

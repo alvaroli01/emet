@@ -1927,7 +1927,9 @@
       "done": "Valmis: {strong} vahvaa, {good} hyvää, {skip} ei kannata",
       "overture": "Overture Maps: {n} paikkaa lisää",
       "filtered": "{keep} sopivaa paikkaa jäi · {drop} ei sopinut",
-      "fewPlaces": "Vain {n} paikkaa – kokeile isompaa sädettä"
+      "fewPlaces": "Vain {n} paikkaa – kokeile isompaa sädettä",
+      "pool": "Käytetään tiimin jaettuja avaimia ({n} käytettävissä)",
+      "tokens": "Käytetty ~{tokens}K tekoälytokenia"
     },
     "fit": {
       "strong": "Vahva osuma",
@@ -2052,7 +2054,13 @@
       "forgotten": "Tämä paikka unohdettiin tarkoituksella, eikä sitä tarkisteta enää.",
       "needKey": "Yhdistä ensin ilmainen Groq-avaimesi.",
       "error": "Paikkaa ei voitu tarkistaa. Yritä uudelleen minuutin päästä."
-    }
+    },
+    "lendTitle": "Lainaa tekoälyavaimeni Scoutille",
+    "lendHelp": "Vain Scout käyttää sitä – ei koskaan Ask, Idea Lab tai muistiinpanot. Kukaan ei näe avaintasi. Scout lopettaa 60 %:iin päiväkiintiöstäsi, joten loput jäävät aina sinulle.",
+    "lendNeedKey": "Yhdistä ensin ilmainen Groq-avaimesi, sitten voit lainata sen Scoutille.",
+    "lendUsed": "Scout käytti tänään ~{n}K tokenia avaimestasi",
+    "lenders": "{count, plural, one {# henkilö lainaa} other {# henkilöä lainaa}} avaintaan Scoutille: {names}",
+    "lendersNone": "Kukaan ei vielä lainaa avainta Scoutille"
   },
   "hero": {
     "allClear": "Täällä ei ole mitään odottamassa sinua. Hyvä hetki ottaa ennakkoa.",

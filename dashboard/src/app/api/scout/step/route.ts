@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
     const fresh = researchOrder(unique.filter((r) => !known.has(r.id)), s.lat, s.lng).slice(0, 60);
     log.push(line("known", { known: known.size, todo: fresh.length }));
     if (unique.length < 10) log.push(line("fewPlaces", { n: unique.length }));
-    if (!fresh.length) { log.push(line("done", { strong: 0, good: 0, skip: 0, tokens: tokens() })); await save({ status: "done", found: unique.length, known: known.size }); return NextResponse.json({ status: "done" }); }
+    if (!fresh.length) { log.push(line("done", { strong: 0, good: 0, skip: 0 }), line("tokens", { tokens: tokens() })); await save({ status: "done", found: unique.length, known: known.size }); return NextResponse.json({ status: "done" }); }
     await save({ status: "filtering", found: unique.length, known: known.size, queue: fresh.map((r) => r.id) });
     return NextResponse.json({ status: "filtering", places: fresh.map((r) => ({ id: r.id, lat: r.lat, lng: r.lng })) });
   }
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
   async function finish() {
     const { data: leads } = await sb.from("scout_leads").select("fit").eq("search_id", id);
     const n = (f: string) => (leads ?? []).filter((l) => l.fit === f).length;
-    log.push(line("done", { strong: n("strong"), good: n("good"), skip: n("skip") + n("maybe"), tokens: tokens() }));
+    log.push(line("done", { strong: n("strong"), good: n("good"), skip: n("skip") + n("maybe") }), line("tokens", { tokens: tokens() }));
     await save({ status: "done", queue: [] });
     return NextResponse.json({ status: "done" });
   }

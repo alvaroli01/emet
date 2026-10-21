@@ -1927,7 +1927,9 @@
       "done": "Done: {strong} strong, {good} good, {skip} not worth it",
       "overture": "Overture Maps: {n} more places",
       "filtered": "Kept {keep} places of the right kind · {drop} weren't a match",
-      "fewPlaces": "Only {n} places found — try a bigger radius"
+      "fewPlaces": "Only {n} places found — try a bigger radius",
+      "pool": "Using the team's shared keys ({n} available)",
+      "tokens": "Used ~{tokens}K AI tokens"
     },
     "fit": {
       "strong": "Strong fit",
@@ -2052,7 +2054,13 @@
       "forgotten": "This place was forgotten on purpose and won't be checked again.",
       "needKey": "Connect your free Groq key first.",
       "error": "Couldn't check that place. Try again in a minute."
-    }
+    },
+    "lendTitle": "Lend my AI key to Scout",
+    "lendHelp": "Only Scout uses it — never Ask, Idea Lab or notes. Nobody can see your key. Scout stops at 60% of your daily allowance, so you always keep the rest.",
+    "lendNeedKey": "Connect your free Groq key first, then you can lend it to Scout.",
+    "lendUsed": "Scout used ~{n}K tokens of your key today",
+    "lenders": "{count, plural, one {# person lends} other {# people lend}} their key to Scout: {names}",
+    "lendersNone": "Nobody lends a key to Scout yet"
   },
   "hero": {
     "allClear": "Nothing is waiting on you here. Good moment to get ahead.",

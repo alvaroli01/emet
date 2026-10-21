@@ -1927,7 +1927,9 @@
       "done": "Listo: {strong} muy buenos, {good} buenos, {skip} sin interés",
       "overture": "Overture Maps: {n} sitios más",
       "filtered": "Se quedan {keep} sitios del tipo correcto · {drop} no encajaban",
-      "fewPlaces": "Solo {n} sitios: prueba un radio mayor"
+      "fewPlaces": "Solo {n} sitios: prueba un radio mayor",
+      "pool": "Usando las claves compartidas del equipo ({n} disponibles)",
+      "tokens": "Usados ~{tokens}K tokens de IA"
     },
     "fit": {
       "strong": "Encaje fuerte",
@@ -2052,7 +2054,13 @@
       "forgotten": "Este local se olvidó a propósito y no se volverá a revisar.",
       "needKey": "Conecta primero tu clave gratuita de Groq.",
       "error": "No se ha podido revisar ese local. Inténtalo de nuevo en un minuto."
-    }
+    },
+    "lendTitle": "Prestar mi clave de IA a Scout",
+    "lendHelp": "Solo la usa Scout, nunca Ask, Idea Lab ni las notas. Nadie puede ver tu clave. Scout se detiene al 60% de tu cupo diario, así siempre te queda el resto.",
+    "lendNeedKey": "Primero conecta tu clave gratuita de Groq y luego podrás prestarla a Scout.",
+    "lendUsed": "Scout ha usado ~{n}K tokens de tu clave hoy",
+    "lenders": "{count, plural, one {# persona presta} other {# personas prestan}} su clave a Scout: {names}",
+    "lendersNone": "Nadie presta todavía una clave a Scout"
   },
   "hero": {
     "allClear": "Aquí no tienes nada pendiente. Buen momento para adelantarte.",

@@ -1927,7 +1927,9 @@
       "done": "Terminé : {strong} forts, {good} bons, {skip} sans intérêt",
       "overture": "Overture Maps : {n} lieux de plus",
       "filtered": "{keep} lieux du bon type gardés · {drop} ne correspondaient pas",
-      "fewPlaces": "Seulement {n} lieux — essaie un rayon plus grand"
+      "fewPlaces": "Seulement {n} lieux — essaie un rayon plus grand",
+      "pool": "Utilisation des clés partagées de l'équipe ({n} disponibles)",
+      "tokens": "~{tokens}K tokens IA utilisés"
     },
     "fit": {
       "strong": "Très bon profil",
@@ -2052,7 +2054,13 @@
       "forgotten": "Ce lieu a été oublié volontairement et ne sera plus vérifié.",
       "needKey": "Connecte d’abord ta clé Groq gratuite.",
       "error": "Impossible de vérifier ce lieu. Réessaie dans une minute."
-    }
+    },
+    "lendTitle": "Prêter ma clé IA à Scout",
+    "lendHelp": "Seul Scout l'utilise — jamais Ask, Idea Lab ni les notes. Personne ne peut voir ta clé. Scout s'arrête à 60 % de ton quota quotidien, tu gardes toujours le reste.",
+    "lendNeedKey": "Connecte d'abord ta clé Groq gratuite, puis tu pourras la prêter à Scout.",
+    "lendUsed": "Scout a utilisé ~{n}K tokens de ta clé aujourd'hui",
+    "lenders": "{count, plural, one {# personne prête} other {# personnes prêtent}} leur clé à Scout : {names}",
+    "lendersNone": "Personne ne prête encore de clé à Scout"
   },
   "hero": {
     "allClear": "Rien ne t’attend ici. Bon moment pour prendre de l’avance.",

@@ -3,7 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { encryptKey } from "@/lib/ai/keys";
 import { checkKey } from "@/lib/ai/groq";
 
-/** A member connects / disconnects their own Groq account. The key is checked, encrypted, and only ever used for them. */
+/** A member connects / disconnects their own Groq account. The key is checked, encrypted, and only used for them —
+ *  and, only if they switch on "Lend my AI key to Scout", by Scout on the server (see lib/ai/ring-server.ts). */
 export async function GET() {
   const supabase = await createClient();
   const { data } = await supabase.from("ai_keys").select("last4, created_at").maybeSingle();
@@ -21,6 +22,16 @@ export async function POST(request: NextRequest) {
   const { error } = await supabase.from("ai_keys").upsert({ owner_id: me, provider: "groq", ...encryptKey(clean) });
   if (error) return NextResponse.json({ error: "save" }, { status: 500 });
   return NextResponse.json({ connected: true, last4: clean.slice(-4) });
+}
+
+/** Lend my key to Scout (on/off). RLS: only my own row can change. */
+export async function PATCH(request: NextRequest) {
+  const supabase = await createClient();
+  const { lend } = (await request.json().catch(() => ({}))) as { lend?: unknown };
+  if (typeof lend !== "boolean") return NextResponse.json({ error: "bad-request" }, { status: 400 });
+  const { data, error } = await supabase.from("ai_keys").update({ lend_scout: lend }).select("lend_scout").maybeSingle();
+  if (error || !data) return NextResponse.json({ error: "no-key" }, { status: 400 });
+  return NextResponse.json({ lend: data.lend_scout });
 }
 
 export async function DELETE() {
