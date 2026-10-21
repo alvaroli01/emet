@@ -850,14 +850,12 @@
     },
     "gcal": {
       "title": "Näytä Google-kalenterini emetissä",
-      "hint": "Google-tapahtumasi näkyvät kohdassa Tänään → Viikkosi, ja Ask emet osaa vastata aikatauluasi koskeviin kysymyksiin. Vain sinä näet ne.",
-      "step1": "Avaa Google-kalenteri tietokoneella → ⚙ Asetukset.",
+      "step1": "Avaa Google-kalenteri tietokoneella → ⚙ Asetukset:",
       "step2": "Valitse vasemmalta kalenterisi → vieritä kohtaan ”Salainen osoite iCal-muodossa” → kopioi se.",
       "step3": "Liitä se tähän ja paina Yhdistä.",
       "placeholder": "https://calendar.google.com/calendar/ical/…/basic.ics",
       "connect": "Yhdistä",
       "connected": "Yhdistetty ✓ — Google-tapahtumasi näkyvät Viikkosi-näkymässä",
-      "change": "Vaihda linkki",
       "disconnect": "Katkaise yhteys",
       "delay": "Uusien Google-tapahtumien näkyminen voi kestää muutaman minuutin.",
       "error": {
@@ -866,7 +864,9 @@
         "not_calendar": "Linkki ei palauttanut kalenteria. Kopioi ”Salainen osoite iCal-muodossa”.",
         "save": "Tallennus epäonnistui. Yritä uudelleen."
       },
-      "disconnected": "Google-kalenterin yhteys katkaistu"
+      "short": "Google-kalenteri",
+      "howTo": "Miten yhdistän?",
+      "privacy": "Vain sinä näet tapahtumasi. emet vain lukee ne – se ei koskaan muuta Google-kalenteriasi."
     }
   },
   "meetings": {
@@ -2324,8 +2324,7 @@
       "open": "Suunniteltu",
       "google": "Google"
     },
-    "gcalFailed": "Google-kalenteria ei voitu ladata juuri nyt.",
-    "gcalAdd": "Lisää Google-kalenterisi"
+    "gcalFailed": "Google-kalenteria ei voitu ladata juuri nyt."
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",

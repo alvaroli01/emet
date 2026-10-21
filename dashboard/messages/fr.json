@@ -850,14 +850,12 @@
     },
     "gcal": {
       "title": "Afficher mon Google Agenda dans emet",
-      "hint": "Tes événements Google apparaissent dans Aujourd’hui → Ta semaine et Ask emet peut répondre aux questions sur ton emploi du temps. Toi seul les vois.",
-      "step1": "Ouvre Google Agenda sur un ordinateur → ⚙ Paramètres.",
+      "step1": "Ouvre Google Agenda sur un ordinateur → ⚙ Paramètres :",
       "step2": "À gauche, clique sur ton agenda → descends jusqu’à « Adresse secrète au format iCal » → copie-la.",
       "step3": "Colle-la ici et appuie sur Connecter.",
       "placeholder": "https://calendar.google.com/calendar/ical/…/basic.ics",
       "connect": "Connecter",
       "connected": "Connecté ✓ — tes événements Google s’affichent dans Ta semaine",
-      "change": "Changer le lien",
       "disconnect": "Déconnecter",
       "delay": "Les nouveaux événements Google peuvent mettre quelques minutes à apparaître.",
       "error": {
@@ -866,7 +864,9 @@
         "not_calendar": "Ce lien n’a pas renvoyé d’agenda. Copie l’« Adresse secrète au format iCal ».",
         "save": "Impossible d’enregistrer. Réessaie."
       },
-      "disconnected": "Google Agenda déconnecté"
+      "short": "Google Agenda",
+      "howTo": "Comment connecter ?",
+      "privacy": "Toi seul vois tes événements. emet les lit seulement : il ne modifie jamais ton Google Agenda."
     }
   },
   "meetings": {
@@ -2324,8 +2324,7 @@
       "open": "Prévu",
       "google": "Google"
     },
-    "gcalFailed": "Impossible de charger Google Agenda pour le moment.",
-    "gcalAdd": "Ajouter ton Google Agenda"
+    "gcalFailed": "Impossible de charger Google Agenda pour le moment."
   },
   "financeDash": {
     "totalRevenue": "Chiffre d’affaires total",

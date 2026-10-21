@@ -850,14 +850,12 @@
     },
     "gcal": {
       "title": "Ver mi Google Calendar en emet",
-      "hint": "Tus eventos de Google aparecen en Hoy → Tu semana y Ask emet puede responder preguntas sobre tu agenda. Solo tú los ves.",
-      "step1": "Abre Google Calendar en un ordenador → ⚙ Configuración.",
+      "step1": "Abre Google Calendar en un ordenador → ⚙ Configuración:",
       "step2": "A la izquierda, haz clic en tu calendario → baja hasta “Dirección secreta en formato iCal” → cópiala.",
       "step3": "Pégala aquí y pulsa Conectar.",
       "placeholder": "https://calendar.google.com/calendar/ical/…/basic.ics",
       "connect": "Conectar",
       "connected": "Conectado ✓ — tus eventos de Google salen en Tu semana",
-      "change": "Cambiar enlace",
       "disconnect": "Desconectar",
       "delay": "Los eventos nuevos de Google pueden tardar unos minutos en aparecer.",
       "error": {
@@ -866,7 +864,9 @@
         "not_calendar": "Ese enlace no devolvió un calendario. Copia la “Dirección secreta en formato iCal”.",
         "save": "No se pudo guardar. Inténtalo de nuevo."
       },
-      "disconnected": "Google Calendar desconectado"
+      "short": "Google Calendar",
+      "howTo": "¿Cómo conectar?",
+      "privacy": "Solo tú ves tus eventos. emet solo los lee: nunca cambia tu Google Calendar."
     }
   },
   "meetings": {
@@ -2324,8 +2324,7 @@
       "open": "Planeado",
       "google": "Google"
     },
-    "gcalFailed": "No se pudo cargar Google Calendar ahora mismo.",
-    "gcalAdd": "Añade tu Google Calendar"
+    "gcalFailed": "No se pudo cargar Google Calendar ahora mismo."
   },
   "financeDash": {
     "totalRevenue": "Ingresos totales",

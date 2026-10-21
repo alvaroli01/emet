@@ -850,14 +850,12 @@
     },
     "gcal": {
       "title": "Meinen Google Kalender in emet anzeigen",
-      "hint": "Deine Google-Termine erscheinen unter Heute → Deine Woche, und Ask emet kann Fragen zu deinem Zeitplan beantworten. Nur du siehst sie.",
-      "step1": "Öffne Google Kalender am Computer → ⚙ Einstellungen.",
+      "step1": "Öffne Google Kalender am Computer → ⚙ Einstellungen:",
       "step2": "Links auf deinen Kalender klicken → zu „Privatadresse im iCal-Format“ scrollen → kopieren.",
       "step3": "Hier einfügen und Verbinden drücken.",
       "placeholder": "https://calendar.google.com/calendar/ical/…/basic.ics",
       "connect": "Verbinden",
       "connected": "Verbunden ✓ — deine Google-Termine erscheinen in Deine Woche",
-      "change": "Link ändern",
       "disconnect": "Trennen",
       "delay": "Neue Google-Termine können ein paar Minuten brauchen, bis sie erscheinen.",
       "error": {
@@ -866,7 +864,9 @@
         "not_calendar": "Dieser Link hat keinen Kalender geliefert. Kopiere die „Privatadresse im iCal-Format“.",
         "save": "Speichern fehlgeschlagen. Versuche es erneut."
       },
-      "disconnected": "Google Kalender getrennt"
+      "short": "Google Kalender",
+      "howTo": "Wie verbinden?",
+      "privacy": "Nur du siehst deine Termine. emet liest sie nur – dein Google Kalender wird nie geändert."
     }
   },
   "meetings": {
@@ -2324,8 +2324,7 @@
       "open": "Geplant",
       "google": "Google"
     },
-    "gcalFailed": "Google Kalender konnte gerade nicht geladen werden.",
-    "gcalAdd": "Google Kalender hinzufügen"
+    "gcalFailed": "Google Kalender konnte gerade nicht geladen werden."
   },
   "financeDash": {
     "totalRevenue": "Gesamtumsatz",
