@@ -55,3 +55,7 @@ test("a failing save never breaks the search", async () => {
   await ring.used(own, M, 10);
   assert.equal(ring.tokens, 10);
 });
+
+test("no wait when nothing is waiting or capped", () => {
+  assert.equal(waitSeconds([own, ana], [M], [row("ana", 5)], NOW), null);
+});

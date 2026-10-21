@@ -20,8 +20,8 @@ export function canUse(k: PoolKey, model: string, usage: UsageRow[], now = Date.
   return !capped(k, r);
 }
 
-/** Seconds until the first key/model can be tried again (a capped lent key: at the next UTC midnight). */
-export function waitSeconds(keys: PoolKey[], models: string[], usage: UsageRow[], now = Date.now()): number {
+/** Seconds until the first waiting/capped key+model can be tried again (capped lent key: next UTC midnight); null if none is waiting. */
+export function waitSeconds(keys: PoolKey[], models: string[], usage: UsageRow[], now = Date.now()): number | null {
   const d = new Date(now);
   const midnight = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1);
   let best = Infinity;
@@ -31,10 +31,11 @@ export function waitSeconds(keys: PoolKey[], models: string[], usage: UsageRow[]
     for (const m of models) {
       const r = rows.find((x) => x.model === m);
       const until = r?.limited_until ? Date.parse(r.limited_until) : 0;
-      best = Math.min(best, capped(k, r) ? midnight - now : Math.max(until - now, 0));
+      if (capped(k, r)) best = Math.min(best, midnight - now);
+      else if (until > now) best = Math.min(best, until - now);
     }
   }
-  return best === Infinity ? 60 : Math.max(1, Math.ceil(best / 1000));
+  return best === Infinity ? null : Math.max(1, Math.ceil(best / 1000));
 }
 
 export class KeyRing {
