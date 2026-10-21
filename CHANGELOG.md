@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Documents: leaders manage company documents in Team Leader → Company documents; everyone opens them in My profile → Documents and gets notified of new files; everyone has a private My folder (migration 0026, all 7 languages).
 - 2026-10-21 — Alvaro — Google Calendar in emet: connect it in Base camp → Agenda, your Google events show in Today → Your week, and Ask emet answers questions about your schedule (migration 0025, all 7 languages).
 - 2026-10-21 — Alvaro — Removed the Demo numbers button on Today (`/today?demo=1`) and the `dashboard/supabase/demo/` scripts; no more demo mode.
 - 2026-10-21 — Alvaro — Removed all `[DEMO]` class data from the live database (55 sales, 15 tasks, 14 DMs, posts, stock, prospects, decisions, blockers, complaints, expenses and their activity/notifications); 0 demo rows left.
