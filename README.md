@@ -172,7 +172,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-15 | Dark theme only — the light theme option was removed at Alvaro's request; everyone sees the dark glass look. | Alvaro |
 | 2026-10-18 | Team Contract signed by all 15 members (by Stefan): group membership, €3 late fines, Mon–Fri attendance, 24h replies | Team |
 | 2026-10-21 | Leadership team: Alvaro Team Leader, Rocco Finance Leader, Stefan Communications Leader, Mario Customer Leader, Nahuel Marketing Leader | Team |
-| 2026-10-21 | Dashboard: all 15 members put in their Team Contract groups; group leaders carry the title and their own group's rights only — company-wide leader powers (company documents, assigning tasks to everyone, leaders' meetings, managing people) stay with the Liderazgo group | Alvaro |
+| 2026-10-21 | Dashboard: all 15 members put in their Team Contract groups; group leaders carry the title and their own group's rights only — company-wide leader powers (company documents, assigning tasks to everyone, leaders' meetings, managing people) stay with the Liderazgo group and with Stefan, who is an admin with the same access as Alvaro | Alvaro |
 | 2026-10-21 | Design reference pictures and the Obsidian vault are now kept in the repo so every teammate's Claude builds from the same look | Alvaro |
 | 2026-10-21 | Added the 11 Replica skills to `.claude/skills/` so everyone's Claude can clone an existing app's features (never its code, brand or content) and fix what its users complain about | Alvaro |
 
