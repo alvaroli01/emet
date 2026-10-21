@@ -1930,7 +1930,8 @@
       "filtered": "{keep} passende Orte behalten · {drop} passten nicht",
       "fewPlaces": "Nur {n} Orte gefunden – versuch einen größeren Radius",
       "pool": "Nutze die geteilten Schlüssel des Teams ({n} verfügbar)",
-      "tokens": "~{tokens}K KI-Tokens verbraucht"
+      "tokens": "~{tokens}K KI-Tokens verbraucht",
+      "webChecked": "Websuche: {results} Ergebnisse gelesen, die KI nannte {listed} Orte, {n} durch echte Ergebnisse bestätigt"
     },
     "fit": {
       "strong": "Starker Treffer",

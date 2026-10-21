@@ -68,15 +68,16 @@ export async function POST(request: NextRequest) {
     const [osm, ovt, w] = await Promise.all([
       s.osm_tags.length ? osmPlaces(s.osm_tags, s.lat, s.lng, Number(s.radius_km)) : Promise.resolve([]),
       openPlaces(queries, s.lat, s.lng, Number(s.radius_km)),
-      s.web_queries.length ? webFind(key, s.web_queries, s.city, s.country_code) : Promise.resolve([]),
+      s.web_queries.length ? webFind(key, s.web_queries, s.city, s.country_code) : Promise.resolve({ places: [], listed: 0, results: 0 }),
     ]);
     log.push(line(osm === null ? "osmDown" : "osm", { n: osm?.length ?? 0, km: Number(s.radius_km), city: s.city }));
     if (ovt?.length) log.push(line("overture", { n: ovt.length }));
     let web: FoundPlace[] = [];
     {
       if (!("error" in w)) {
-        web = w.map((x) => ({ name: x.name, category: null, address: x.address, lat: null, lng: null, website: x.website, phone: null, instagram: x.instagram, email_public: null, opening_hours: null, osm_id: null }));
-        log.push(line("web", { n: web.length }));
+        web = w.places.map((x) => ({ name: x.name, category: null, address: x.address, lat: null, lng: null, website: x.website, phone: null, instagram: x.instagram, email_public: null, opening_hours: null, osm_id: null }));
+        // Why a web search finds nothing: the AI named none, or none appeared in the real search results
+        log.push(line("webChecked", { n: web.length, listed: w.listed, results: w.results }));
       }
     }
     const rows = [...(await upsertPlaces(sb, osm ?? [], s.city, s.country_code, "osm")), ...(await upsertPlaces(sb, ovt ?? [], s.city, s.country_code, "overture")), ...(await upsertPlaces(sb, web, s.city, s.country_code, "web"))];

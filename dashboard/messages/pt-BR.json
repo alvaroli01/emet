@@ -1930,7 +1930,8 @@
       "filtered": "Ficaram {keep} lugares do tipo certo · {drop} não combinavam",
       "fewPlaces": "Só {n} lugares — tente um raio maior",
       "pool": "Usando as chaves compartilhadas da equipe ({n} disponíveis)",
-      "tokens": "Usados ~{tokens}K tokens de IA"
+      "tokens": "Usados ~{tokens}K tokens de IA",
+      "webChecked": "Busca na web: {results} resultados lidos, a IA citou {listed} lugares, {n} confirmados pelos resultados reais"
     },
     "fit": {
       "strong": "Encaixe forte",

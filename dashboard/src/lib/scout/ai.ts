@@ -54,7 +54,8 @@ Return JSON:
 }
 
 /** Web search for businesses OpenStreetMap is missing. Returns name + website/Instagram found in real search results. */
-export async function webFind(key: string | KeyRing, queries: string[], city: string, country: string): Promise<{ name: string; website: string | null; instagram: string | null; address: string | null }[] | Fail> {
+/** Places from a web search; `listed` = how many the AI named, `results` = search results it really got (shown in the log). */
+export async function webFind(key: string | KeyRing, queries: string[], city: string, country: string): Promise<{ places: { name: string; website: string | null; instagram: string | null; address: string | null }[]; listed: number; results: number } | Fail> {
   const r = await call(key, {
     reasoning_effort: "low", tools: [{ type: "browser_search" }],
     messages: [{ role: "user", content: `Search the web for local businesses in ${city} (${country}) using these searches: ${queries.map((q) => `"${q.replace("{city}", city)}"`).join(", ")}.
@@ -71,8 +72,8 @@ List up to 15 real, currently open businesses you actually found (no chains' hea
     const j = JSON.parse(m?.[0] ?? "{}") as { places?: { name?: string; website?: string | null; instagram?: string | null; address?: string | null }[] };
     const ok = (u?: string | null) => (u && /^https?:\/\//.test(u) ? u.slice(0, 300) : null);
     const found = (j.places ?? []).filter((p) => p.name).slice(0, 15).map((p) => ({ name: String(p.name).slice(0, 160), website: ok(p.website), instagram: ok(p.instagram), address: p.address ? String(p.address).slice(0, 200) : null }));
-    return verifyWebPlaces(found, results);
-  } catch { return []; }
+    return { places: verifyWebPlaces(found, results), listed: found.length, results: results.length };
+  } catch { return { places: [], listed: 0, results: results.length }; }
 }
 
 /** Before any research: one fast call says which candidates are the right KIND of place for this project. */

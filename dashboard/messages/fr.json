@@ -1930,7 +1930,8 @@
       "filtered": "{keep} lieux du bon type gardés · {drop} ne correspondaient pas",
       "fewPlaces": "Seulement {n} lieux — essaie un rayon plus grand",
       "pool": "Utilisation des clés partagées de l'équipe ({n} disponibles)",
-      "tokens": "~{tokens}K tokens IA utilisés"
+      "tokens": "~{tokens}K tokens IA utilisés",
+      "webChecked": "Recherche web : {results} résultats lus, l'IA a cité {listed} lieux, {n} confirmés par les vrais résultats"
     },
     "fit": {
       "strong": "Très bon profil",

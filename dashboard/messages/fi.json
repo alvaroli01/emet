@@ -1930,7 +1930,8 @@
       "filtered": "{keep} sopivaa paikkaa jäi · {drop} ei sopinut",
       "fewPlaces": "Vain {n} paikkaa – kokeile isompaa sädettä",
       "pool": "Käytetään tiimin jaettuja avaimia ({n} käytettävissä)",
-      "tokens": "Käytetty ~{tokens}K tekoälytokenia"
+      "tokens": "Käytetty ~{tokens}K tekoälytokenia",
+      "webChecked": "Verkkohaku: {results} tulosta luettu, tekoäly nimesi {listed} paikkaa, {n} vahvistettu oikeista tuloksista"
     },
     "fit": {
       "strong": "Vahva osuma",

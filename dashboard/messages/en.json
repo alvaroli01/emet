@@ -1930,7 +1930,8 @@
       "filtered": "Kept {keep} places of the right kind · {drop} weren't a match",
       "fewPlaces": "Only {n} places found — try a bigger radius",
       "pool": "Using the team's shared keys ({n} available)",
-      "tokens": "Used ~{tokens}K AI tokens"
+      "tokens": "Used ~{tokens}K AI tokens",
+      "webChecked": "Web search: {results} results read, the AI named {listed} places, {n} confirmed by the real results"
     },
     "fit": {
       "strong": "Strong fit",

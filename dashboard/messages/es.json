@@ -1930,7 +1930,8 @@
       "filtered": "Se quedan {keep} sitios del tipo correcto · {drop} no encajaban",
       "fewPlaces": "Solo {n} sitios: prueba un radio mayor",
       "pool": "Usando las claves compartidas del equipo ({n} disponibles)",
-      "tokens": "Usados ~{tokens}K tokens de IA"
+      "tokens": "Usados ~{tokens}K tokens de IA",
+      "webChecked": "Búsqueda web: {results} resultados leídos, la IA nombró {listed} sitios, {n} confirmados por los resultados reales"
     },
     "fit": {
       "strong": "Encaje fuerte",
