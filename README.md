@@ -30,7 +30,7 @@ We go at our own pace — there is no fixed weekly revenue target.
 
 ## 4. Team structure (15 people, 5 groups)
 
-**Leaders chosen (Oct 2026):** Alvaro (Team Leader), Rocco (Finance), Stefan (Communications), Mario (Customer). Group membership comes from the Team Contract signed on 18 Oct 2026. Individual roles inside each group are still flexible. Names are in section 5.
+**Leaders chosen (Oct 2026):** Alvaro (Team Leader), Rocco (Finance), Stefan (Communications), Mario (Customer), Nahuel (Marketing). Group membership comes from the Team Contract signed on 18 Oct 2026. Individual roles inside each group are still flexible. Names are in section 5.
 
 ### 👑 Team Leader group (2)
 | Role | Responsibility / KPI |
@@ -76,7 +76,7 @@ We go at our own pace — there is no fixed weekly revenue target.
 | Fran | 💰 Finance | _TBD_ | — |
 | Zayd | 📣 Marketing | _TBD_ | — |
 | Nico | 🤝 Customer | _TBD_ | — |
-| Nahuel | 📣 Marketing | Marketing leader (Team Contract) | — |
+| Nahuel | 📣 Marketing | Marketing leader | — |
 | Emily | 📣 Marketing | _TBD_ | — |
 | Elizabeth | 📣 Marketing | _TBD_ | — |
 | Lassi | 🗂️ Communications | _TBD_ | — |
@@ -171,7 +171,8 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-21 | Google Calendar is connected with each person's secret iCal link, not Google sign-in (sign-in needs Google's review of calendar access or hand-added test users). Read only, private to each person | Alvaro |
 | 2026-10-15 | Dark theme only — the light theme option was removed at Alvaro's request; everyone sees the dark glass look. | Alvaro |
 | 2026-10-18 | Team Contract signed by all 15 members (by Stefan): group membership, €3 late fines, Mon–Fri attendance, 24h replies | Team |
-| 2026-10-21 | Leadership team: Alvaro Team Leader, Rocco Finance Leader, Stefan Communications Leader, Mario Customer Leader | Team |
+| 2026-10-21 | Leadership team: Alvaro Team Leader, Rocco Finance Leader, Stefan Communications Leader, Mario Customer Leader, Nahuel Marketing Leader | Team |
+| 2026-10-21 | Dashboard: all 15 members put in their Team Contract groups; group leaders carry the title and their own group's rights only — company-wide leader powers (company documents, assigning tasks to everyone, leaders' meetings, managing people) stay with the Liderazgo group | Alvaro |
 | 2026-10-21 | Design reference pictures and the Obsidian vault are now kept in the repo so every teammate's Claude builds from the same look | Alvaro |
 | 2026-10-21 | Added the 11 Replica skills to `.claude/skills/` so everyone's Claude can clone an existing app's features (never its code, brand or content) and fix what its users complain about | Alvaro |
 
