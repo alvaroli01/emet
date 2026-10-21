@@ -71,14 +71,17 @@ export function CouncilPanel({ ideaId, hasKey, ready = false }: { ideaId: string
       <p className="mt-1 text-xs text-muted">{t("explain")}</p>
 
       {running && (
-        <ol className="mt-3 grid grid-cols-7 gap-1" aria-label={t("progress")}>
-          {[...ORDER, "review", "chair"].map((k, i) => (
-            <li key={k} className="text-center text-[10px] text-muted">
-              <span className={`mb-1 block h-1 rounded-full ${i < (step ?? 0) ? "bg-climbed" : i === step ? "animate-pulse bg-[var(--trail)]" : "bg-surface-2"}`} />
-              <span className="hidden sm:inline">{t(`who.${k}`)}</span>
-            </li>
-          ))}
-        </ol>
+        <>
+          <ol className="mt-3 grid grid-cols-7 gap-1" aria-label={t("progress")}>
+            {[...ORDER, "review", "chair"].map((k, i) => (
+              <li key={k} title={t(`who.${k}`)} className="min-w-0">
+                <span className={`block h-1 rounded-full ${i < (step ?? 0) ? "bg-climbed" : i === step ? "animate-pulse bg-[var(--trail)]" : "bg-surface-2"}`} />
+              </li>
+            ))}
+          </ol>
+          {/* One label for the step running now (seven labels never fit in a narrow panel) */}
+          <p className="mt-1.5 text-xs text-muted">{t(`who.${[...ORDER, "review", "chair"][Math.min(step ?? 0, 6)]}`)} · {Math.min((step ?? 0) + 1, 7)}/7</p>
+        </>
       )}
       {wait > 0 && <p className="mt-2 flex items-center gap-1.5 text-xs text-warn-text"><Loader2 size={12} className="animate-spin" /> {t("waiting", { s: wait })}</p>}
 
