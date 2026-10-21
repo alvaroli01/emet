@@ -17,8 +17,10 @@ import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { AssistantBubble } from "@/components/shell/assistant-bubble";
-import { LayoutDashboard, KanbanSquare, ListChecks } from "lucide-react";
+import { LayoutDashboard, KanbanSquare, ListChecks, FolderOpen } from "lucide-react";
 import { AssignTasks } from "@/components/tools/team-tasks";
+import { Drive } from "@/components/documents/drive";
+import { StorageBar } from "@/components/documents/storage-bar";
 import { loadTeamTasks } from "@/lib/team-tasks";
 import { SectionAssistant } from "@/components/shell/section-assistant";
 import { createClient } from "@/lib/supabase/server";
@@ -87,8 +89,15 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     node: <AssignTasks tasks={await loadTeamTasks()} people={board.members} meId={session.me.id}
                        teams={session.groups.map((g) => ({ id: g.id, name: t(`names.${g.slug}`) }))} />,
   }] : [];
+  // Team leader only: company documents everyone can open on their own profile
+  const td = await getTranslations("documents");
+  const docsTool = slug === "team-leader" && session.isAdmin ? [{
+    id: "documents", group: "work" as const, label: td("tool"), icon: <FolderOpen size={16} />,
+    node: <div className="space-y-3"><StorageBar /><Drive scope="company" canEdit meId={session.me.id} /></div>,
+  }] : [];
   const allTools = [
     ...assignTool,
+    ...docsTool,
     { id: "board", group: "work", label: t("board"), icon: <KanbanSquare size={16} />, node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
     ...toolTabs,
     ...(slug !== "team-leader" ? [{ id: "blockers", group: "work" as const, label: tt("blockers.title"), node: await BlockersTool({ ...props, onlyThisGroup: true }) }] : []),

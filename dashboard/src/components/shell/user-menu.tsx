@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { LogOut, ChevronDown } from "lucide-react";
+import Link from "next/link";
+import { LogOut, ChevronDown, UserRound } from "lucide-react";
 import { Avatar } from "@/components/ui";
 import { LanguageSwitcher } from "@/components/preferences";
 
@@ -34,6 +35,10 @@ export function UserMenu({ name, avatar, subtitle, profileId }: { name: string; 
             <p className="truncate text-sm font-medium">{name}</p>
             <p className="truncate text-xs text-muted">{subtitle}</p>
           </div>
+          <Link href={`/team/${profileId}`} role="menuitem" onClick={() => setOpen(false)}
+                className="flex min-h-11 items-center gap-2.5 rounded-xl px-3 text-sm hover:bg-surface-2">
+            <UserRound size={16} /> {t("myProfile")}
+          </Link>
           <div className="flex items-center justify-between gap-2 rounded-xl px-1.5 py-1">
             <LanguageSwitcher profileId={profileId} />
           </div>
