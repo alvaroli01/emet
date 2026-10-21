@@ -3,6 +3,9 @@ import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { decryptKey } from "@/lib/ai/keys";
 import { totals, weekStart, onTimeRate, pace, type Sale, type Expense, type CardLite } from "@/lib/metrics";
+import { todayISO } from "@/lib/format";
+import { loadMyGoogleEvents } from "@/lib/gcal-server";
+import { scheduleRange, buildMySchedule, scheduleLines } from "@/lib/my-schedule";
 
 export const maxDuration = 60;
 const LANG: Record<string, string> = { en: "English", es: "Spanish", de: "German", fr: "French", fi: "Finnish", "pt-BR": "Brazilian Portuguese", ru: "Russian" };
@@ -36,6 +39,28 @@ export async function POST(request: NextRequest) {
     supabase.from("decisions").select("date, decision").order("date", { ascending: false }).limit(10),
     supabase.from("kpi_targets").select("metric, role_title, target, period, group_id"),
   ]);
+  // The asker's own schedule (last 14 → next 60 days): only their rows, read as them
+  const today = todayISO();
+  const { from, to } = scheduleRange(today);
+  const [myCards, mySubtasks, myTeamTasks, myPlans, google] = await Promise.all([
+    supabase.from("cards").select("title, due_at, completed_at, boards(slug), card_assignees!inner(user_id)").eq("card_assignees.user_id", me.data)
+      .gte("due_at", `${from}T00:00:00Z`).lte("due_at", `${to}T23:59:59Z`).limit(300),
+    supabase.from("card_checklist_items").select("text, due_on, cards(title)").eq("assignee_id", me.data).eq("done", false).gte("due_on", from).lte("due_on", to).limit(300),
+    supabase.from("team_task_people").select("done_at, team_tasks(title, due_on)").eq("user_id", me.data).limit(300),
+    supabase.from("agenda_items").select("title, day, start_time, end_time, done").eq("owner_id", me.data).gte("day", from).lte("day", to).limit(300),
+    loadMyGoogleEvents(supabase, from, to),
+  ]);
+  const mySchedule = buildMySchedule({
+    today, from, to, google,
+    cards: ((myCards.data ?? []) as unknown as { title: string; due_at: string; completed_at: string | null; boards: { slug: string } | null }[])
+      .map((c) => ({ title: c.title, board: c.boards?.slug, due_at: c.due_at, completed_at: c.completed_at })),
+    subtasks: ((mySubtasks.data ?? []) as unknown as { text: string; due_on: string; cards: { title: string } | null }[])
+      .map((x) => ({ text: x.text, card: x.cards?.title, due_on: x.due_on })),
+    teamTasks: ((myTeamTasks.data ?? []) as unknown as { done_at: string | null; team_tasks: { title: string; due_on: string | null } | null }[])
+      .flatMap((x) => (x.team_tasks ? [{ title: x.team_tasks.title, due_on: x.team_tasks.due_on, done_at: x.done_at }] : [])),
+    plans: myPlans.data ?? [],
+  });
+
   const name = new Map((people.data ?? []).map((p) => [p.id, p.full_name]));
   const gname = new Map((groups.data ?? []).map((g) => [g.id, g.slug]));
   const s = sales.data ?? [], e = expenses.data ?? [];
@@ -49,6 +74,7 @@ export async function POST(request: NextRequest) {
   const snapshot = {
     today: new Date(now).toISOString().slice(0, 10),
     asked_by: name.get(me.data as string) ?? null,
+    my_schedule: { covers: mySchedule.range, google_calendar: mySchedule.google_calendar, entries: scheduleLines(mySchedule.items) },
     goal: "€30,000 revenue and €15,000 profit by 2027-06-30, min 50% margin",
     money: { ...all, ...pace(all.revenue, all.profit, now), sales_count: s.length,
       by_week: [...byWeek.entries()].sort().slice(-10).map(([week, v]) => ({ week, ...v })),
@@ -69,7 +95,7 @@ export async function POST(request: NextRequest) {
   const body = (model: string) => JSON.stringify({
     model, temperature: 0.2, ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
     messages: [
-      { role: "system", content: `You are "emet", the assistant inside the emet HQ team dashboard. This is a conversation: use the earlier messages to understand follow-up questions. Answer ONLY from the JSON data below; if the data doesn't contain the answer, say so plainly and suggest where in the dashboard to find or add it. Be short and concrete (numbers, names, dates). Talk like a teammate: never mention the JSON, field names (like by_week) or "the data". Write money like €1,495.50. Use simple Markdown (bold, short lists). Answer in ${LANG[locale] ?? "English"}. Money in euros.\n\nDATA:\n${JSON.stringify(snapshot).slice(0, 24000)}` },
+      { role: "system", content: `You are "emet", the assistant inside the emet HQ team dashboard. This is a conversation: use the earlier messages to understand follow-up questions. Answer ONLY from the JSON data below; if the data doesn't contain the answer, say so plainly and suggest where in the dashboard to find or add it. Be short and concrete (numbers, names, dates). Talk like a teammate: never mention the JSON, field names (like by_week) or "the data". Write money like €1,495.50. Use simple Markdown (bold, short lists). Answer in ${LANG[locale] ?? "English"}. Money in euros. For questions about the asker's own schedule, tasks, plans, exams, free time or what they had on a past day, answer from my_schedule (it covers ${from} to ${to}): go day by day with weekday, date and times, and say which items are Google Calendar events and which are emet plans or tasks. If my_schedule.google_calendar is "not connected" or "couldn't be loaded", say their Google events aren't included and why. If something is outside that range or not there, say so plainly.\n\nDATA:\n${JSON.stringify(snapshot).slice(0, 24000)}` },
       ...past,
       { role: "user", content: question.trim() },
     ],
