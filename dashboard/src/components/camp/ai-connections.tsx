@@ -140,6 +140,13 @@ export function MyConnections() {
     if (res?.ok) setS(await res.json());
   }
   useEffect(() => { load(); }, []);
+  // Avatar menu → "My connections" links to #connections: scroll here (also when already on the profile)
+  useEffect(() => {
+    const go = () => { if (location.hash === "#connections") document.getElementById("connections")?.scrollIntoView({ behavior: "smooth", block: "start" }); };
+    go();
+    window.addEventListener("hashchange", go);
+    return () => window.removeEventListener("hashchange", go);
+  }, [s]);
   return (
     <section id="connections" className="panel scroll-mt-24 p-5">
       <h2 className="flex items-center gap-2 text-lg font-semibold"><Plug size={18} className="text-brand" /> {t("sectionTitle")}</h2>
