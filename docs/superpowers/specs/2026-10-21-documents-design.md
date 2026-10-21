@@ -60,8 +60,8 @@ company → read for members, write/delete for `is_admin()`; personal → only w
 Files are opened through **signed URLs valid 5 minutes** (never public).
 
 **Notification:** trigger `after insert on doc_files when scope = 'company'` →
-`public.notify(<all active members>, 'company_doc', {name}, '/team/<recipient's own id>#documents', uploaded_by)`.
-Link: since `notify` uses one link for all, link to `/me/documents`, a tiny route that redirects to `/team/<my id>#documents`.
+`public.notify(<all active members>, 'company_doc', {name}, '/me/documents', uploaded_by)`.
+`notify` gives everyone the same link, so `/me/documents` is a tiny page that redirects to `/team/<my id>#documents`.
 
 ## 2. Code
 
@@ -78,7 +78,7 @@ Link: since `notify` uses one link for all, link to `/me/documents`, a tiny rout
   `documents_storage_used()` that returns only the total).
 - `src/components/team/member-dashboard.tsx` gets the section only when `p.id === me.id`.
 - `src/components/shell/user-menu.tsx`: "My profile" item above Language.
-- `src/app/(app)/me/documents/route.ts` (or page) → redirect to `/team/<my id>#documents`.
+- `src/app/(app)/me/documents/page.tsx` → server `redirect("/team/<my id>#documents")`.
 - All strings in the 7 `messages/*.json`; notification text `notifications.company_doc`.
 
 ## 3. Errors
