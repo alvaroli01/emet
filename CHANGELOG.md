@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Added the 11 Replica skills (Jakeschincariol/replica-skill, MIT, free) to `.claude/skills/`: recon, architect, design, build, backend, test, diff, entrepreneur, brand, launch, deploy. Locked in `skills-lock.json`; README section 8 and 9 updated.
 - 2026-10-21 — Alvaro (via Claude) — Synced work from Alvaro's laptop that had never been pushed: dark theme only (light switch removed) and Today calendar fixes. Added `docs/design-references/` (7 reference pictures + a guide mapping each one to its screen) and the `obsidian/emet/` knowledge vault. README: leaders and groups filled in, Team Contract and leadership decisions logged, skills count fixed (13), login status updated.
 - 2026-10-15 — Alvaro — Dark theme only: light theme switch removed from the avatar menu. Fixed the Today calendar drawing cards as empty boxes with stray lines (fade-in animation broke Chrome's painting) and its columns not lining up with the day headers.
 - 2026-10-15 — Alvaro — Today calendar fixes: "Open" button visible in the light theme, calendar opens on the full hour so cards aren't cut, short plans fit on one line, late cards readable in both themes.
