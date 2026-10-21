@@ -38,7 +38,8 @@
       "synced": "Synkronoitu",
       "offline": "Ei yhteyttä"
     },
-    "account": "Tilisi"
+    "account": "Tilisi",
+    "myProfile": "Oma profiili"
   },
   "prefs": {
     "language": "Kieli",
@@ -1075,7 +1076,8 @@
       "design_request": "Uusi suunnittelupyyntö: ”{title}”",
       "due_soon": "Erääntyy huomenna: ”{title}”",
       "report": "Tämän viikon raportti on valmis",
-      "team_task": "Uusi tehtävä tiimin vetäjältä: “{title}”"
+      "team_task": "Uusi tehtävä tiimin vetäjältä: “{title}”",
+      "company_doc": "Uusi yrityksen dokumentti: ”{name}”"
     }
   },
   "palette": {
@@ -2645,5 +2647,41 @@
     "tick": "Merkitse “{title}” tehdyksi",
     "untick": "Merkitse “{title}” tekemättömäksi",
     "assignButton": "Anna tehtävä"
+  },
+  "documents": {
+    "title": "Dokumentit",
+    "tabs": {
+      "company": "Yrityksen dokumentit",
+      "personal": "Oma kansio"
+    },
+    "tool": "Yrityksen dokumentit",
+    "newFolder": "Uusi kansio",
+    "folderName": "Kansion nimi",
+    "upload": "Lataa",
+    "drop": "Pudota tiedostot tähän ladataksesi ne",
+    "uploading": "Ladataan {n}/{total}…",
+    "rename": "Nimeä uudelleen",
+    "delete": "Poista",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "confirmFolder": "Poistetaanko kansio ja sen {n} kohdetta?",
+    "confirmFile": "Poistetaanko ”{name}”?",
+    "new": "Uusi",
+    "by": "{name}",
+    "open": "Avaa",
+    "download": "Lataa koneelle",
+    "tooBig": "”{name}” on yli 25 Mt",
+    "uploadError": "Lataus epäonnistui. Yritä uudelleen.",
+    "full": "Tallennustila on täynnä – poista ensin vanhoja tiedostoja",
+    "error": "Jokin meni pieleen. Yritä uudelleen.",
+    "empty": {
+      "company": "Ei vielä yrityksen dokumentteja. Luo kansio tai lataa tiedosto.",
+      "companyRead": "Ei vielä yrityksen dokumentteja – tiiminvetäjät lisäävät ne tänne.",
+      "mine": "Yksityinen kansiosi on tyhjä. Lataa tänne mitä haluat säilyttää – vain sinä näet sen."
+    },
+    "private": "Vain sinä näet Oman kansion – eivät edes ylläpitäjät.",
+    "readOnly": "Tiiminvetäjät lisäävät nämä Johto-osiossa.",
+    "manage": "Hallinnoi Johto-osiossa",
+    "storage": "Dokumentit vievät {used} / {total}"
   }
 }

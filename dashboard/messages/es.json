@@ -38,7 +38,8 @@
       "synced": "Sincronizado",
       "offline": "Sin conexión"
     },
-    "account": "Tu cuenta"
+    "account": "Tu cuenta",
+    "myProfile": "Mi perfil"
   },
   "prefs": {
     "language": "Idioma",
@@ -1075,7 +1076,8 @@
       "design_request": "Nueva solicitud de diseño: «{title}»",
       "due_soon": "Vence mañana: «{title}»",
       "report": "El informe de esta semana está listo",
-      "team_task": "Nueva tarea del líder del equipo: “{title}”"
+      "team_task": "Nueva tarea del líder del equipo: “{title}”",
+      "company_doc": "Nuevo documento de la empresa: «{name}»"
     }
   },
   "palette": {
@@ -2645,5 +2647,41 @@
     "tick": "Marcar “{title}” como hecha",
     "untick": "Marcar “{title}” como no hecha",
     "assignButton": "Asignar una tarea"
+  },
+  "documents": {
+    "title": "Documentos",
+    "tabs": {
+      "company": "Documentos de la empresa",
+      "personal": "Mi carpeta"
+    },
+    "tool": "Documentos de la empresa",
+    "newFolder": "Nueva carpeta",
+    "folderName": "Nombre de la carpeta",
+    "upload": "Subir",
+    "drop": "Suelta aquí los archivos para subirlos",
+    "uploading": "Subiendo {n} de {total}…",
+    "rename": "Renombrar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirmFolder": "¿Eliminar esta carpeta y los {n} elementos que contiene?",
+    "confirmFile": "¿Eliminar «{name}»?",
+    "new": "Nuevo",
+    "by": "por {name}",
+    "open": "Abrir",
+    "download": "Descargar",
+    "tooBig": "«{name}» pesa más de 25 MB",
+    "uploadError": "No se pudo subir. Inténtalo de nuevo.",
+    "full": "El almacenamiento está lleno: borra archivos antiguos primero",
+    "error": "Algo salió mal. Inténtalo de nuevo.",
+    "empty": {
+      "company": "Aún no hay documentos de la empresa. Crea una carpeta o sube un archivo.",
+      "companyRead": "Aún no hay documentos de la empresa: los líderes los añaden aquí.",
+      "mine": "Tu carpeta privada está vacía. Sube lo que quieras guardar: solo tú puedes verlo."
+    },
+    "private": "Solo tú ves Mi carpeta, ni siquiera los administradores.",
+    "readOnly": "Los líderes los añaden en Liderazgo.",
+    "manage": "Gestionar en Liderazgo",
+    "storage": "Los documentos ocupan {used} de {total}"
   }
 }

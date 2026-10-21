@@ -38,7 +38,8 @@
       "synced": "Synced",
       "offline": "Offline"
     },
-    "account": "Your account"
+    "account": "Your account",
+    "myProfile": "My profile"
   },
   "prefs": {
     "language": "Language",
@@ -1075,7 +1076,8 @@
       "design_request": "New design request: “{title}”",
       "due_soon": "Due tomorrow: “{title}”",
       "report": "This week’s report is ready",
-      "team_task": "New task from the team leader: “{title}”"
+      "team_task": "New task from the team leader: “{title}”",
+      "company_doc": "New company document: “{name}”"
     }
   },
   "palette": {
@@ -2645,5 +2647,41 @@
     "tick": "Mark “{title}” as done",
     "untick": "Mark “{title}” as not done",
     "assignButton": "Assign a task"
+  },
+  "documents": {
+    "title": "Documents",
+    "tabs": {
+      "company": "Company documents",
+      "personal": "My folder"
+    },
+    "tool": "Company documents",
+    "newFolder": "New folder",
+    "folderName": "Folder name",
+    "upload": "Upload",
+    "drop": "Drop files here to upload them",
+    "uploading": "Uploading {n} of {total}…",
+    "rename": "Rename",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirmFolder": "Delete this folder and the {n} items inside it?",
+    "confirmFile": "Delete “{name}”?",
+    "new": "New",
+    "by": "by {name}",
+    "open": "Open",
+    "download": "Download",
+    "tooBig": "“{name}” is bigger than 25 MB",
+    "uploadError": "Couldn’t upload. Try again.",
+    "full": "Storage is full — delete old files first",
+    "error": "Something went wrong. Try again.",
+    "empty": {
+      "company": "No company documents yet. Create a folder or upload a file.",
+      "companyRead": "No company documents yet — team leaders add them here.",
+      "mine": "Your private folder is empty. Upload anything you want to keep here — only you can see it."
+    },
+    "private": "Only you can see My folder — not even admins.",
+    "readOnly": "Team leaders add these in Team Leader.",
+    "manage": "Manage in Team Leader",
+    "storage": "Documents use {used} of {total}"
   }
 }

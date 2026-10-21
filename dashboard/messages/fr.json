@@ -38,7 +38,8 @@
       "synced": "Synchronisé",
       "offline": "Hors ligne"
     },
-    "account": "Ton compte"
+    "account": "Ton compte",
+    "myProfile": "Mon profil"
   },
   "prefs": {
     "language": "Langue",
@@ -1075,7 +1076,8 @@
       "design_request": "Nouvelle demande de design : « {title} »",
       "due_soon": "À rendre demain : « {title} »",
       "report": "Le rapport de cette semaine est prêt",
-      "team_task": "Nouvelle tâche du chef d’équipe : « {title} »"
+      "team_task": "Nouvelle tâche du chef d’équipe : « {title} »",
+      "company_doc": "Nouveau document d’entreprise : « {name} »"
     }
   },
   "palette": {
@@ -2645,5 +2647,41 @@
     "tick": "Marquer « {title} » comme fait",
     "untick": "Marquer « {title} » comme non fait",
     "assignButton": "Attribuer une tâche"
+  },
+  "documents": {
+    "title": "Documents",
+    "tabs": {
+      "company": "Documents de l’entreprise",
+      "personal": "Mon dossier"
+    },
+    "tool": "Documents de l’entreprise",
+    "newFolder": "Nouveau dossier",
+    "folderName": "Nom du dossier",
+    "upload": "Téléverser",
+    "drop": "Dépose des fichiers ici pour les téléverser",
+    "uploading": "Téléversement {n} sur {total}…",
+    "rename": "Renommer",
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirmFolder": "Supprimer ce dossier et les {n} éléments qu’il contient ?",
+    "confirmFile": "Supprimer « {name} » ?",
+    "new": "Nouveau",
+    "by": "par {name}",
+    "open": "Ouvrir",
+    "download": "Télécharger",
+    "tooBig": "« {name} » dépasse 25 Mo",
+    "uploadError": "Échec du téléversement. Réessaie.",
+    "full": "Le stockage est plein : supprime d’abord d’anciens fichiers",
+    "error": "Une erreur s’est produite. Réessaie.",
+    "empty": {
+      "company": "Pas encore de documents d’entreprise. Crée un dossier ou téléverse un fichier.",
+      "companyRead": "Pas encore de documents d’entreprise : les responsables les ajoutent ici.",
+      "mine": "Ton dossier privé est vide. Téléverse ce que tu veux garder : toi seul peux le voir."
+    },
+    "private": "Toi seul vois Mon dossier, même pas les admins.",
+    "readOnly": "Les responsables les ajoutent dans Direction.",
+    "manage": "Gérer dans Direction",
+    "storage": "Les documents utilisent {used} sur {total}"
   }
 }

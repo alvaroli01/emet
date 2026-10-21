@@ -38,7 +38,8 @@
       "synced": "Synchronisiert",
       "offline": "Offline"
     },
-    "account": "Dein Konto"
+    "account": "Dein Konto",
+    "myProfile": "Mein Profil"
   },
   "prefs": {
     "language": "Sprache",
@@ -1075,7 +1076,8 @@
       "design_request": "Neue Designanfrage: „{title}“",
       "due_soon": "Morgen fällig: „{title}“",
       "report": "Der Bericht dieser Woche ist fertig",
-      "team_task": "Neue Aufgabe vom Teamleiter: „{title}“"
+      "team_task": "Neue Aufgabe vom Teamleiter: „{title}“",
+      "company_doc": "Neues Firmendokument: „{name}“"
     }
   },
   "palette": {
@@ -2645,5 +2647,41 @@
     "tick": "„{title}“ als erledigt markieren",
     "untick": "„{title}“ als nicht erledigt markieren",
     "assignButton": "Aufgabe vergeben"
+  },
+  "documents": {
+    "title": "Dokumente",
+    "tabs": {
+      "company": "Firmendokumente",
+      "personal": "Mein Ordner"
+    },
+    "tool": "Firmendokumente",
+    "newFolder": "Neuer Ordner",
+    "folderName": "Ordnername",
+    "upload": "Hochladen",
+    "drop": "Dateien hier ablegen, um sie hochzuladen",
+    "uploading": "Lade {n} von {total} hoch…",
+    "rename": "Umbenennen",
+    "delete": "Löschen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "confirmFolder": "Diesen Ordner und die {n} Elemente darin löschen?",
+    "confirmFile": "„{name}“ löschen?",
+    "new": "Neu",
+    "by": "von {name}",
+    "open": "Öffnen",
+    "download": "Herunterladen",
+    "tooBig": "„{name}“ ist größer als 25 MB",
+    "uploadError": "Hochladen fehlgeschlagen. Versuche es erneut.",
+    "full": "Speicher ist voll – lösche zuerst alte Dateien",
+    "error": "Etwas ist schiefgelaufen. Versuche es erneut.",
+    "empty": {
+      "company": "Noch keine Firmendokumente. Erstelle einen Ordner oder lade eine Datei hoch.",
+      "companyRead": "Noch keine Firmendokumente – Teamleiter fügen sie hier hinzu.",
+      "mine": "Dein privater Ordner ist leer. Lade hoch, was du hier aufbewahren willst – nur du siehst es."
+    },
+    "private": "Nur du siehst Mein Ordner – nicht einmal Admins.",
+    "readOnly": "Teamleiter fügen sie unter Teamleitung hinzu.",
+    "manage": "In Teamleitung verwalten",
+    "storage": "Dokumente belegen {used} von {total}"
   }
 }

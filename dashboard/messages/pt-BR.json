@@ -38,7 +38,8 @@
       "synced": "Sincronizado",
       "offline": "Offline"
     },
-    "account": "Sua conta"
+    "account": "Sua conta",
+    "myProfile": "Meu perfil"
   },
   "prefs": {
     "language": "Idioma",
@@ -1075,7 +1076,8 @@
       "design_request": "Novo pedido de design: “{title}”",
       "due_soon": "Vence amanhã: “{title}”",
       "report": "O relatório desta semana está pronto",
-      "team_task": "Nova tarefa do líder da equipe: “{title}”"
+      "team_task": "Nova tarefa do líder da equipe: “{title}”",
+      "company_doc": "Novo documento da empresa: “{name}”"
     }
   },
   "palette": {
@@ -2645,5 +2647,41 @@
     "tick": "Marcar “{title}” como feita",
     "untick": "Marcar “{title}” como não feita",
     "assignButton": "Atribuir uma tarefa"
+  },
+  "documents": {
+    "title": "Documentos",
+    "tabs": {
+      "company": "Documentos da empresa",
+      "personal": "Minha pasta"
+    },
+    "tool": "Documentos da empresa",
+    "newFolder": "Nova pasta",
+    "folderName": "Nome da pasta",
+    "upload": "Enviar",
+    "drop": "Solte os arquivos aqui para enviá-los",
+    "uploading": "Enviando {n} de {total}…",
+    "rename": "Renomear",
+    "delete": "Excluir",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "confirmFolder": "Excluir esta pasta e os {n} itens dentro dela?",
+    "confirmFile": "Excluir “{name}”?",
+    "new": "Novo",
+    "by": "por {name}",
+    "open": "Abrir",
+    "download": "Baixar",
+    "tooBig": "“{name}” tem mais de 25 MB",
+    "uploadError": "Não foi possível enviar. Tente de novo.",
+    "full": "O armazenamento está cheio — exclua arquivos antigos primeiro",
+    "error": "Algo deu errado. Tente de novo.",
+    "empty": {
+      "company": "Ainda não há documentos da empresa. Crie uma pasta ou envie um arquivo.",
+      "companyRead": "Ainda não há documentos da empresa — os líderes os adicionam aqui.",
+      "mine": "Sua pasta privada está vazia. Envie o que quiser guardar aqui — só você vê."
+    },
+    "private": "Só você vê Minha pasta — nem os admins.",
+    "readOnly": "Os líderes adicionam estes em Liderança.",
+    "manage": "Gerenciar em Liderança",
+    "storage": "Os documentos usam {used} de {total}"
   }
 }
