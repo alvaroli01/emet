@@ -28,7 +28,8 @@
     "collapse": "Replier le menu",
     "mobileNav": "Principal",
     "askCard": "Demande à emet",
-    "askCardText": "Des questions sur l’équipe, l’argent ou les tâches ? Réponse à partir de nos données."
+    "askCardText": "Des questions sur l’équipe, l’argent ou les tâches ? Réponse à partir de nos données.",
+    "projects": "Projets"
   },
   "shell": {
     "noGroupYet": "Pas encore de groupe",
@@ -2668,7 +2669,10 @@
     "fromLeader": "Du chef d’équipe",
     "tick": "Marquer « {title} » comme fait",
     "untick": "Marquer « {title} » comme non fait",
-    "assignButton": "Attribuer une tâche"
+    "assignButton": "Attribuer une tâche",
+    "forWhat": "Pour",
+    "wholeTeam": "Toute l’équipe",
+    "projectOption": "Projet : {name} ({n} personnes)"
   },
   "documents": {
     "title": "Documents",

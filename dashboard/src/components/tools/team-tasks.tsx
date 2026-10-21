@@ -41,7 +41,7 @@ export function TaskPeople({ task }: { task: TeamTask }) {
 }
 
 /** Team leader only: give a task to everyone, a whole team, several people or yourself — and follow who finished. */
-export function AssignTasks({ tasks, people, teams, meId, projectId }: { tasks: TeamTask[]; people: Person[]; teams: Team[]; meId: string; projectId?: string }) {
+export function AssignTasks({ tasks, people: allPeople, teams: allTeams, meId, projectId, projects }: { tasks: TeamTask[]; people: Person[]; teams: Team[]; meId: string; projectId?: string; projects?: { id: string; name: string; memberIds: string[] }[] }) {
   const t = useTranslations("teamTasks");
   const locale = useLocale();
   const router = useRouter();
@@ -52,6 +52,12 @@ export function AssignTasks({ tasks, people, teams, meId, projectId }: { tasks: 
   const [due, setDue] = useState("");
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
+  // Leaders can give the task to one project's people instead of the whole team
+  const [forProject, setForProject] = useState<string>("");
+  const project = projects?.find((p) => p.id === forProject);
+  const people = project ? allPeople.filter((p) => project.memberIds.includes(p.id)) : allPeople;
+  const teams = project ? [] : allTeams;
+  const targetProject = projectId ?? (forProject || null);
   const everyone = people.length > 0 && picked.size === people.length;
   const toggle = (id: string) => setPicked((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const addTeam = (gid: string) => setPicked((s) => new Set([...s, ...people.filter((p) => p.group_id === gid).map((p) => p.id)]));
@@ -60,7 +66,7 @@ export function AssignTasks({ tasks, people, teams, meId, projectId }: { tasks: 
     e.preventDefault();
     if (!title.trim() || !picked.size || saving) return;
     setSaving(true);
-    const { data, error } = await supabase.from("team_tasks").insert({ title: title.trim(), details: details.trim(), due_on: due || null, project_id: projectId ?? null }).select("id").single();
+    const { data, error } = await supabase.from("team_tasks").insert({ title: title.trim(), details: details.trim(), due_on: due || null, project_id: targetProject }).select("id").single();
     const res = data && !error ? await supabase.from("team_task_people").insert([...picked].map((user_id) => ({ task_id: data.id, user_id }))) : null;
     setSaving(false);
     if (error || res?.error) return toast("error", t("saveError"));
@@ -82,6 +88,14 @@ export function AssignTasks({ tasks, people, teams, meId, projectId }: { tasks: 
           <h3 className="font-semibold">{t("newTask")}</h3>
           <p className="text-sm text-muted">{t("onlyLeaders")}</p>
         </div>
+        {projects && projects.length > 0 && (
+          <label className="block w-fit text-sm font-medium">{t("forWhat")}
+            <select value={forProject} onChange={(e) => { setForProject(e.target.value); setPicked(new Set()); }} className="input mt-1.5">
+              <option value="">{t("wholeTeam")}</option>
+              {projects.map((p) => <option key={p.id} value={p.id}>{t("projectOption", { name: p.name, n: p.memberIds.length })}</option>)}
+            </select>
+          </label>
+        )}
         <label className="block text-sm font-medium">{t("what")}
           <input required maxLength={200} value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t("whatPlaceholder")} className="input mt-1.5" />
         </label>
@@ -134,6 +148,7 @@ export function AssignTasks({ tasks, people, teams, meId, projectId }: { tasks: 
               <div className="flex items-start gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold">{x.title}</p>
+                  {x.project && <a href={`/projects/${x.project.id}?tab=tasks`} className="mt-0.5 inline-block rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-muted hover:text-link">{x.project.name}</a>}
                   {x.details && <p className="mt-0.5 text-sm text-muted">{x.details}</p>}
                   {x.due_on && <p className="mt-1 flex items-center gap-1 text-xs text-muted"><Calendar size={12} /> {dayLabel(x.due_on, locale)}</p>}
                 </div>

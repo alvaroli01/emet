@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent, AudioLines, Lightbulb, Sun, Radar, ChevronDown, ChevronsLeft, ChevronsRight, Sparkles } from "lucide-react";
+import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent, AudioLines, Lightbulb, Sun, Radar, ChevronDown, ChevronsLeft, ChevronsRight, Sparkles, FolderKanban } from "lucide-react";
 import type { Group } from "@/lib/session";
 import { LogoMark } from "@/components/summit/logo";
 import { GroupIcon } from "@/components/group-icon";
@@ -22,6 +22,7 @@ function useSections({ groups, myGroupId }: Props) {
       { href: "/", label: t("overview"), icon: <LayoutDashboard size={17} /> },
       { href: "/camp", label: t("camp"), icon: <Tent size={17} /> },
       { href: "/my-tasks", label: t("myTasks"), icon: <CheckSquare size={17} /> },
+      { href: "/projects", label: t("projects"), icon: <FolderKanban size={17} /> },
     ] },
     { key: "teams", label: t("groups"), items: groups.map((g) => ({
       href: `/g/${g.slug}`, label: tg(g.slug), color: g.color, mine: g.id === myGroupId, icon: <GroupIcon slug={g.slug} size={17} />,

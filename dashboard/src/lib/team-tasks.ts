@@ -9,13 +9,13 @@ export type TeamTask = {
 };
 
 /** onlyFor = a person's tasks (company + their projects); projectId = one project's tasks; neither = company-wide tasks only. */
-export async function loadTeamTasks(onlyFor?: string, projectId?: string): Promise<TeamTask[]> {
+export async function loadTeamTasks(onlyFor?: string, projectId?: string, all = false): Promise<TeamTask[]> {
   const sb = await createClient();
   let q = sb.from("team_tasks")
     .select("id, title, details, due_on, created_at, created_by, project_id, projects(name), team_task_people(done_at, profiles(id, full_name, avatar_url))")
     .order("created_at", { ascending: false }).limit(100);
   if (projectId) q = q.eq("project_id", projectId);
-  else if (!onlyFor) q = q.is("project_id", null);
+  else if (!onlyFor && !all) q = q.is("project_id", null);
   if (onlyFor) q = q.in("id", (await sb.from("team_task_people").select("task_id").eq("user_id", onlyFor)).data?.map((x) => x.task_id) ?? []);
   const { data } = await q.returns<{
     id: string; title: string; details: string; due_on: string | null; created_at: string; created_by: string | null;

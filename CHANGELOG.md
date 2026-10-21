@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Projects in the left menu (Menu → Projects, with New project for leaders); Team Leader → Assign tasks has a “For” picker to give a task to one project's people.
 - 2026-10-21 — Alvaro — Fix: the global “buttons don't wrap” rule now sits in Tailwind's base layer, so wrapping classes on buttons work (council headlines no longer run over “Drop it”; also fixes the same silent issue in tables, card dialog and Scout).
 - 2026-10-21 — Alvaro — Fixes: Google events now also show in Base camp (My week board + today's plans); Today's week calendar puts overlapping events side by side, shows Mon–Fri unless the weekend has something, and has an Expand button for a big full-screen week; Idea lab council headlines no longer run out of their box.
 - 2026-10-21 — Alvaro — Idea lab made strict: judges the idea as written, fatal flaws can't be averaged away, the council runs on every idea and the chairman can only make it harsher ("selling lemons to investors" now 10/100, Not recommended). Projects: tick-off tasks for the project's people (migration 0028).

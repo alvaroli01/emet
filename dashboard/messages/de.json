@@ -28,7 +28,8 @@
     "collapse": "Menü einklappen",
     "mobileNav": "Hauptmenü",
     "askCard": "Frag emet",
-    "askCardText": "Fragen zum Team, zu Geld oder Aufgaben – beantwortet mit unseren Daten."
+    "askCardText": "Fragen zum Team, zu Geld oder Aufgaben – beantwortet mit unseren Daten.",
+    "projects": "Projekte"
   },
   "shell": {
     "noGroupYet": "Noch keine Gruppe",
@@ -2668,7 +2669,10 @@
     "fromLeader": "Vom Teamleiter",
     "tick": "„{title}“ als erledigt markieren",
     "untick": "„{title}“ als nicht erledigt markieren",
-    "assignButton": "Aufgabe vergeben"
+    "assignButton": "Aufgabe vergeben",
+    "forWhat": "Für",
+    "wholeTeam": "Ganzes Team",
+    "projectOption": "Projekt: {name} ({n} Personen)"
   },
   "documents": {
     "title": "Dokumente",

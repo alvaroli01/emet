@@ -19,6 +19,7 @@ import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { AssistantBubble } from "@/components/shell/assistant-bubble";
 import { LayoutDashboard, KanbanSquare, ListChecks, FolderOpen } from "lucide-react";
 import { AssignTasks } from "@/components/tools/team-tasks";
+import { loadProjectPeople } from "@/lib/projects-server";
 import { Drive } from "@/components/documents/drive";
 import { StorageBar } from "@/components/documents/storage-bar";
 import { loadTeamTasks } from "@/lib/team-tasks";
@@ -86,7 +87,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   const tk = await getTranslations("teamTasks");
   const assignTool = slug === "team-leader" && session.isAdmin ? [{
     id: "assign", group: "work" as const, label: tk("tool"), icon: <ListChecks size={16} />,
-    node: <AssignTasks tasks={await loadTeamTasks()} people={board.members} meId={session.me.id}
+    node: <AssignTasks tasks={await loadTeamTasks(undefined, undefined, true)} people={board.members} meId={session.me.id} projects={await loadProjectPeople(await createClient())}
                        teams={session.groups.map((g) => ({ id: g.id, name: t(`names.${g.slug}`) }))} />,
   }] : [];
   // Team leader only: company documents everyone can open on their own profile

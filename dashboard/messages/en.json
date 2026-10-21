@@ -28,7 +28,8 @@
     "collapse": "Collapse menu",
     "mobileNav": "Main",
     "askCard": "Ask emet",
-    "askCardText": "Questions about the team, money or tasks — answered from our data."
+    "askCardText": "Questions about the team, money or tasks — answered from our data.",
+    "projects": "Projects"
   },
   "shell": {
     "noGroupYet": "No group yet",
@@ -2668,7 +2669,10 @@
     "fromLeader": "From the team leader",
     "tick": "Mark “{title}” as done",
     "untick": "Mark “{title}” as not done",
-    "assignButton": "Assign a task"
+    "assignButton": "Assign a task",
+    "forWhat": "For",
+    "wholeTeam": "Whole team",
+    "projectOption": "Project: {name} ({n} people)"
   },
   "documents": {
     "title": "Documents",

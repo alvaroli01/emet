@@ -28,7 +28,8 @@
     "collapse": "Tiivistä valikko",
     "mobileNav": "Päävalikko",
     "askCard": "Kysy emetiltä",
-    "askCardText": "Kysymyksiä tiimistä, rahasta tai tehtävistä – vastaus tulee meidän datastamme."
+    "askCardText": "Kysymyksiä tiimistä, rahasta tai tehtävistä – vastaus tulee meidän datastamme.",
+    "projects": "Projektit"
   },
   "shell": {
     "noGroupYet": "Ei vielä ryhmää",
@@ -2668,7 +2669,10 @@
     "fromLeader": "Tiimin vetäjältä",
     "tick": "Merkitse “{title}” tehdyksi",
     "untick": "Merkitse “{title}” tekemättömäksi",
-    "assignButton": "Anna tehtävä"
+    "assignButton": "Anna tehtävä",
+    "forWhat": "Kenelle",
+    "wholeTeam": "Koko tiimi",
+    "projectOption": "Projekti: {name} ({n} henkilöä)"
   },
   "documents": {
     "title": "Dokumentit",

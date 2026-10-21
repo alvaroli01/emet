@@ -28,7 +28,8 @@
     "collapse": "Recolher menu",
     "mobileNav": "Principal",
     "askCard": "Pergunte à emet",
-    "askCardText": "Dúvidas sobre o time, o dinheiro ou as tarefas? Respondemos com os nossos dados."
+    "askCardText": "Dúvidas sobre o time, o dinheiro ou as tarefas? Respondemos com os nossos dados.",
+    "projects": "Projetos"
   },
   "shell": {
     "noGroupYet": "Ainda sem grupo",
@@ -2668,7 +2669,10 @@
     "fromLeader": "Do líder da equipe",
     "tick": "Marcar “{title}” como feita",
     "untick": "Marcar “{title}” como não feita",
-    "assignButton": "Atribuir uma tarefa"
+    "assignButton": "Atribuir uma tarefa",
+    "forWhat": "Para",
+    "wholeTeam": "Equipe toda",
+    "projectOption": "Projeto: {name} ({n} pessoas)"
   },
   "documents": {
     "title": "Documentos",
