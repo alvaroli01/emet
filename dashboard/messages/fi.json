@@ -847,6 +847,26 @@
       "confirmReset": "Luodaanko uusi linkki? Vanha lakkaa toimimasta ja uusi täytyy lisätä kalenteriisi.",
       "resetDone": "Uusi linkki valmis – lisää se kalenteriisi uudelleen",
       "error": "Linkin luominen ei onnistunut. Yritä uudelleen."
+    },
+    "gcal": {
+      "title": "Näytä Google-kalenterini emetissä",
+      "hint": "Google-tapahtumasi näkyvät kohdassa Tänään → Viikkosi, ja Ask emet osaa vastata aikatauluasi koskeviin kysymyksiin. Vain sinä näet ne.",
+      "step1": "Avaa Google-kalenteri tietokoneella → ⚙ Asetukset.",
+      "step2": "Valitse vasemmalta kalenterisi → vieritä kohtaan ”Salainen osoite iCal-muodossa” → kopioi se.",
+      "step3": "Liitä se tähän ja paina Yhdistä.",
+      "placeholder": "https://calendar.google.com/calendar/ical/…/basic.ics",
+      "connect": "Yhdistä",
+      "connected": "Yhdistetty ✓ — Google-tapahtumasi näkyvät Viikkosi-näkymässä",
+      "change": "Vaihda linkki",
+      "disconnect": "Katkaise yhteys",
+      "delay": "Uusien Google-tapahtumien näkyminen voi kestää muutaman minuutin.",
+      "error": {
+        "format": "Tämä ei ole Google-kalenterin salainen linkki. Kopioi ”Salainen osoite iCal-muodossa”.",
+        "unreachable": "Google ei vastannut. Tarkista linkki ja yritä uudelleen.",
+        "not_calendar": "Linkki ei palauttanut kalenteria. Kopioi ”Salainen osoite iCal-muodossa”.",
+        "save": "Tallennus epäonnistui. Yritä uudelleen."
+      },
+      "disconnected": "Google-kalenterin yhteys katkaistu"
     }
   },
   "meetings": {
@@ -2301,8 +2321,11 @@
     "cal": {
       "done": "Valmis",
       "late": "Myöhässä",
-      "open": "Suunniteltu"
-    }
+      "open": "Suunniteltu",
+      "google": "Google"
+    },
+    "gcalFailed": "Google-kalenteria ei voitu ladata juuri nyt.",
+    "gcalAdd": "+ Lisää Google-kalenterisi"
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",

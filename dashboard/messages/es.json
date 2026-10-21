@@ -847,6 +847,26 @@
       "confirmReset": "¿Crear un enlace nuevo? El anterior dejará de funcionar y tendrás que añadir el nuevo a tu calendario.",
       "resetDone": "Enlace nuevo listo: añádelo de nuevo a tu calendario",
       "error": "No se pudo crear el enlace. Inténtalo de nuevo."
+    },
+    "gcal": {
+      "title": "Ver mi Google Calendar en emet",
+      "hint": "Tus eventos de Google aparecen en Hoy → Tu semana y Ask emet puede responder preguntas sobre tu agenda. Solo tú los ves.",
+      "step1": "Abre Google Calendar en un ordenador → ⚙ Configuración.",
+      "step2": "A la izquierda, haz clic en tu calendario → baja hasta “Dirección secreta en formato iCal” → cópiala.",
+      "step3": "Pégala aquí y pulsa Conectar.",
+      "placeholder": "https://calendar.google.com/calendar/ical/…/basic.ics",
+      "connect": "Conectar",
+      "connected": "Conectado ✓ — tus eventos de Google salen en Tu semana",
+      "change": "Cambiar enlace",
+      "disconnect": "Desconectar",
+      "delay": "Los eventos nuevos de Google pueden tardar unos minutos en aparecer.",
+      "error": {
+        "format": "Eso no es un enlace secreto de Google Calendar. Copia la “Dirección secreta en formato iCal”.",
+        "unreachable": "Google no respondió. Revisa el enlace e inténtalo de nuevo.",
+        "not_calendar": "Ese enlace no devolvió un calendario. Copia la “Dirección secreta en formato iCal”.",
+        "save": "No se pudo guardar. Inténtalo de nuevo."
+      },
+      "disconnected": "Google Calendar desconectado"
     }
   },
   "meetings": {
@@ -2301,8 +2321,11 @@
     "cal": {
       "done": "Hecho",
       "late": "Atrasado",
-      "open": "Planeado"
-    }
+      "open": "Planeado",
+      "google": "Google"
+    },
+    "gcalFailed": "No se pudo cargar Google Calendar ahora mismo.",
+    "gcalAdd": "+ Añade tu Google Calendar"
   },
   "financeDash": {
     "totalRevenue": "Ingresos totales",

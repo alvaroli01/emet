@@ -847,6 +847,26 @@
       "confirmReset": "Neuen Link erstellen? Der alte funktioniert dann nicht mehr und du musst den neuen zu deinem Kalender hinzufügen.",
       "resetDone": "Neuer Link bereit – füge ihn erneut zu deinem Kalender hinzu",
       "error": "Der Link konnte nicht erstellt werden. Versuch es noch einmal."
+    },
+    "gcal": {
+      "title": "Meinen Google Kalender in emet anzeigen",
+      "hint": "Deine Google-Termine erscheinen unter Heute → Deine Woche, und Ask emet kann Fragen zu deinem Zeitplan beantworten. Nur du siehst sie.",
+      "step1": "Öffne Google Kalender am Computer → ⚙ Einstellungen.",
+      "step2": "Links auf deinen Kalender klicken → zu „Privatadresse im iCal-Format“ scrollen → kopieren.",
+      "step3": "Hier einfügen und Verbinden drücken.",
+      "placeholder": "https://calendar.google.com/calendar/ical/…/basic.ics",
+      "connect": "Verbinden",
+      "connected": "Verbunden ✓ — deine Google-Termine erscheinen in Deine Woche",
+      "change": "Link ändern",
+      "disconnect": "Trennen",
+      "delay": "Neue Google-Termine können ein paar Minuten brauchen, bis sie erscheinen.",
+      "error": {
+        "format": "Das ist kein geheimer Google-Kalender-Link. Kopiere die „Privatadresse im iCal-Format“.",
+        "unreachable": "Google hat nicht geantwortet. Prüfe den Link und versuche es erneut.",
+        "not_calendar": "Dieser Link hat keinen Kalender geliefert. Kopiere die „Privatadresse im iCal-Format“.",
+        "save": "Speichern fehlgeschlagen. Versuche es erneut."
+      },
+      "disconnected": "Google Kalender getrennt"
     }
   },
   "meetings": {
@@ -2301,8 +2321,11 @@
     "cal": {
       "done": "Erledigt",
       "late": "Überfällig",
-      "open": "Geplant"
-    }
+      "open": "Geplant",
+      "google": "Google"
+    },
+    "gcalFailed": "Google Kalender konnte gerade nicht geladen werden.",
+    "gcalAdd": "+ Google Kalender hinzufügen"
   },
   "financeDash": {
     "totalRevenue": "Gesamtumsatz",

@@ -847,6 +847,26 @@
       "confirmReset": "Make a new link? The old one stops working and you’ll need to add the new one to your calendar.",
       "resetDone": "New link ready — add it to your calendar again",
       "error": "Couldn’t create the link. Try again."
+    },
+    "gcal": {
+      "title": "Show my Google Calendar in emet",
+      "hint": "Your Google events appear in Today → Your week and Ask emet can answer questions about your schedule. Only you see them.",
+      "step1": "Open Google Calendar on a computer → ⚙ Settings.",
+      "step2": "On the left, click your calendar → scroll to “Secret address in iCal format” → copy it.",
+      "step3": "Paste it here and press Connect.",
+      "placeholder": "https://calendar.google.com/calendar/ical/…/basic.ics",
+      "connect": "Connect",
+      "connected": "Connected ✓ — your Google events show in Your week",
+      "change": "Change link",
+      "disconnect": "Disconnect",
+      "delay": "New Google events can take a few minutes to appear.",
+      "error": {
+        "format": "That isn’t a Google Calendar secret link. Copy the “Secret address in iCal format”.",
+        "unreachable": "Google didn’t answer. Check the link and try again.",
+        "not_calendar": "That link didn’t return a calendar. Copy the “Secret address in iCal format”.",
+        "save": "Couldn’t save. Try again."
+      },
+      "disconnected": "Google Calendar disconnected"
     }
   },
   "meetings": {
@@ -2301,8 +2321,11 @@
     "cal": {
       "done": "Done",
       "late": "Late",
-      "open": "Planned"
-    }
+      "open": "Planned",
+      "google": "Google"
+    },
+    "gcalFailed": "Google Calendar couldn’t be loaded right now.",
+    "gcalAdd": "+ Add your Google Calendar"
   },
   "financeDash": {
     "totalRevenue": "Total revenue",
