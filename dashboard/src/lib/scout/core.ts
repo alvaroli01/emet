@@ -21,12 +21,13 @@ export type Judgement = {
 
 const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
 
-/** Weighted 0–100 from 0–10 sub-scores. Missing criteria count as 5 (unknown = middle, not zero). */
+/** Weighted 0–100 from 0–10 sub-scores. Missing criteria count as 3: what we can't show counts against the lead. */
+export const UNKNOWN = 3;
 export function scoreOf(criteria: { key: string; score: number }[]): number {
   let total = 0;
   for (const c of CRITERIA) {
     const s = criteria.find((x) => x.key === c.key)?.score;
-    total += c.weight * (typeof s === "number" && Number.isFinite(s) ? clamp(s, 0, 10) : 5);
+    total += c.weight * (typeof s === "number" && Number.isFinite(s) ? clamp(s, 0, 10) : UNKNOWN);
   }
   return Math.round(total * 10);
 }
@@ -47,7 +48,7 @@ export function normalizeJudgement(raw: unknown): Judgement | null {
   const criteria: Criterion[] = CRITERIA.map(({ key }) => {
     const c = crit.find((x) => x && typeof x === "object" && (x as { key?: unknown }).key === key) as Record<string, unknown> | undefined;
     const n = Number(c?.score);
-    return { key, score: Number.isFinite(n) ? clamp(Math.round(n), 0, 10) : 5, why: str(c?.why, 300) || "—", source: url(c?.source) };
+    return { key, score: Number.isFinite(n) ? clamp(Math.round(n), 0, 10) : UNKNOWN, why: str(c?.why, 300) || "—", source: url(c?.source) };
   });
   if (!crit.length) return null;
   const db = str(r.deal_breaker, 200);
@@ -164,4 +165,67 @@ export function unitEconomics(priceText: string, costText: string, feeRate = 0.0
   const fees = Math.round(price * feeRate * 100) / 100;
   const profit = price - cost - fees;
   return { price, cost, fees, profit: Math.round(profit * 100) / 100, margin: profit / price, breakEvenRoas: profit > 0 ? Math.round((price / profit) * 100) / 100 : null, breakEvenCpa: Math.round(profit * 100) / 100 };
+}
+
+// ── Scout v2 phase 1 ──────────────────────────────────────────────────────────
+
+export type Evidence = "strong" | "some" | "little" | "none";
+/** How much real evidence a verdict rests on: pages read from their website + sources from the web search. */
+export function evidenceLevel(pages: number, sources: number): Evidence {
+  if (pages >= 1 && sources >= 3) return "strong";
+  if (pages >= 1 || sources >= 2) return "some";
+  return "little";
+}
+/** Little evidence: at most "maybe", never "worth it" — we don't recommend what we couldn't check. */
+export function applyEvidence(j: { fit: Fit; worth_it: boolean }, level: Evidence): { fit: Fit; worth_it: boolean } {
+  if (level !== "little" && level !== "none") return j;
+  return { fit: j.fit === "strong" || j.fit === "good" ? "maybe" : j.fit, worth_it: false };
+}
+
+/** The place in Google Maps: a saved Google link, else the exact spot (Google shows the business there), else a search. */
+export function mapsLink(p: { name: string; maps_url: string | null; lat: number | null; lng: number | null; address: string | null; city: string | null }): string {
+  if (p.maps_url) return p.maps_url;
+  const name = encodeURIComponent(p.name);
+  if (p.lat != null && p.lng != null) return `https://www.google.com/maps/place/${name}/@${p.lat},${p.lng},19z`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([p.name, p.address ?? p.city].filter(Boolean).join(", "))}`;
+}
+
+/** The relevance filter's reply → which candidates (0..n-1) are the right kind of place. If the reply is unusable, keep all. */
+export function parseRelevance(raw: unknown, n: number): { keep: Set<number>; reasons: Map<number, string> } {
+  const r = (raw && typeof raw === "object" ? raw : {}) as { match?: unknown; not_match?: unknown };
+  const keep = new Set((Array.isArray(r.match) ? r.match : []).map(Number).filter((i) => Number.isInteger(i) && i >= 0 && i < n));
+  const reasons = new Map<number, string>();
+  for (const x of Array.isArray(r.not_match) ? r.not_match : []) {
+    const i = Number((x as { n?: unknown })?.n);
+    if (Number.isInteger(i) && i >= 0 && i < n && !keep.has(i)) reasons.set(i, str((x as { why?: unknown })?.why, 160) || "not the right kind of place");
+  }
+  if (!keep.size && !reasons.size) return { keep: new Set(Array.from({ length: n }, (_, i) => i)), reasons };
+  return { keep, reasons };
+}
+
+const norm = (u: string) => u.toLowerCase().replace(/^https?:\/\/(www\.)?/, "").replace(/\/+$/, "");
+/** Enrichment: keep a link only if the web search really returned it (as that exact page), and a phone only if it's in the notes. */
+export function keepRealLinks(c: { official_website?: unknown; instagram?: unknown; google_maps_url?: unknown; phone?: unknown }, resultUrls: string[], notes: string) {
+  const found = (v: unknown) => { const s = str(v, 400); if (!/^https?:\/\//.test(s)) return null; return resultUrls.find((u) => norm(u) === norm(s)) ?? null; };
+  const phone = str(c.phone, 40);
+  const digits = phone.replace(/[^\d+]/g, "");
+  return {
+    website: found(c.official_website),
+    instagram: (() => { const u = found(c.instagram); return u && /instagram\.com\//i.test(u) ? u : null; })(),
+    maps_url: (() => { const u = found(c.google_maps_url); return u && /google\.[a-z.]+\/maps|maps\.app\.goo\.gl/i.test(u) ? u : null; })(),
+    phone: digits.replace(/\D/g, "").length >= 9 && notes.includes(phone) ? phone : null,
+  };
+}
+
+/** Open Places API (Overture Maps) results → places. Closed places are skipped. */
+export type OpenPlace = { place_id: string; name: string; lat: number; lon: number; categories?: string[]; category?: string;
+  address?: { formatted?: string; street?: string; locality?: string }; phone?: string; website?: string; confidence?: number; operating_status?: string };
+export function placesFromOpenPlaces(results: OpenPlace[]): FoundPlace[] {
+  return results.filter((r) => r?.name && !/closed/i.test(r.operating_status ?? "")).map((r) => ({
+    name: r.name.slice(0, 160), category: r.category ?? r.categories?.[0] ?? null,
+    address: r.address?.formatted ?? ([r.address?.street, r.address?.locality].filter(Boolean).join(", ") || null),
+    lat: Number.isFinite(r.lat) ? r.lat : null, lng: Number.isFinite(r.lon) ? r.lon : null,
+    website: r.website && /^https?:\/\//.test(r.website) ? r.website.slice(0, 300) : null, phone: r.phone?.slice(0, 40) ?? null,
+    instagram: null, email_public: null, opening_hours: null, osm_id: `ovt:${r.place_id}`,
+  }));
 }

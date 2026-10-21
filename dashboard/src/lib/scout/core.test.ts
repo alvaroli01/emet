@@ -2,10 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { scoreOf, fitOf, normalizeJudgement, fingerprint, domainOf, parseMapsLink, overpassQuery, placesFromOsm, researchOrder, unitEconomics } from "./core.ts";
 
-test("score is weighted, unknown criteria count as the middle", () => {
-  assert.equal(scoreOf([]), 50);
+test("score is weighted, unknown criteria count against the lead (2026-10-21: 3, was the middle 5)", () => {
+  assert.equal(scoreOf([]), 30);
   assert.equal(scoreOf(["need", "fit", "ability_to_pay", "reachability", "timing", "value_vs_effort", "low_risk"].map((key) => ({ key, score: 10 }))), 100);
-  assert.equal(scoreOf([{ key: "need", score: 10 }]), 63); // 0.25*10 + 0.75*5 = 6.25
+  assert.equal(scoreOf([{ key: "need", score: 10 }]), 48); // 0.25*10 + 0.75*3 = 4.75
 });
 
 test("fit bands and deal-breakers", () => {
@@ -74,4 +74,67 @@ test("unit economics: break-even ROAS and CPA", () => {
   assert.equal(u.breakEvenRoas, 1.59);
   assert.equal(unitEconomics("free", "€1"), null);
   assert.equal(unitEconomics("€1.200", "€300")!.price, 1200);
+});
+
+// ── Scout v2 phase 1 (2026-10-21): accuracy, exact links, relevance filter, enrichment, Open Places ──
+import { evidenceLevel, applyEvidence, mapsLink, parseRelevance, keepRealLinks, placesFromOpenPlaces } from "./core.ts";
+
+test("unknown criteria count against the lead (3, not 5)", () => {
+  assert.equal(scoreOf([]), 30);
+  const j = normalizeJudgement({ criteria: [{ key: "need", score: 9, why: "x" }] })!;
+  assert.equal(j.criteria.find((c) => c.key === "fit")!.score, 3);
+});
+
+test("evidence level: strong / some / little", () => {
+  assert.equal(evidenceLevel(2, 3), "strong");
+  assert.equal(evidenceLevel(1, 0), "some");
+  assert.equal(evidenceLevel(0, 2), "some");
+  assert.equal(evidenceLevel(0, 1), "little");
+});
+
+test("little evidence caps the lead at 'maybe' and not worth it", () => {
+  assert.deepEqual(applyEvidence({ fit: "strong", worth_it: true }, "little"), { fit: "maybe", worth_it: false });
+  assert.deepEqual(applyEvidence({ fit: "skip", worth_it: false }, "little"), { fit: "skip", worth_it: false });
+  assert.deepEqual(applyEvidence({ fit: "strong", worth_it: true }, "some"), { fit: "strong", worth_it: true });
+});
+
+test("maps link: saved Google link, else the exact spot, else a search", () => {
+  assert.equal(mapsLink({ name: "Bar Pepe", maps_url: "https://maps.app.goo.gl/abc", lat: 1, lng: 2, address: null, city: null }), "https://maps.app.goo.gl/abc");
+  assert.equal(mapsLink({ name: "Bar Pepe", maps_url: null, lat: 43.26312, lng: -2.93451, address: null, city: "Bilbao" }),
+    "https://www.google.com/maps/place/Bar%20Pepe/@43.26312,-2.93451,19z");
+  assert.equal(mapsLink({ name: "Bar Pepe", maps_url: null, lat: null, lng: null, address: "Calle Mayor 1", city: "Bilbao" }),
+    "https://www.google.com/maps/search/?api=1&query=Bar%20Pepe%2C%20Calle%20Mayor%201");
+});
+
+test("relevance reply: keeps listed matches, reasons for the rest, ignores junk", () => {
+  const r = parseRelevance({ match: [0, 2, 9, "x"], not_match: [{ n: 1, why: "pharmacy, not a café" }] }, 3);
+  assert.deepEqual([...r.keep].sort(), [0, 2]);
+  assert.equal(r.reasons.get(1), "pharmacy, not a café");
+  // nothing understandable → keep everyone (never drop places because the AI failed)
+  assert.equal(parseRelevance(null, 3).keep.size, 3);
+});
+
+test("enrichment keeps only links that really appeared in the search, and real phone numbers", () => {
+  const results = ["https://www.barpepe.es/", "https://www.instagram.com/barpepe/", "https://www.google.com/maps/place/Bar+Pepe/@43.2,-2.9,17z"];
+  const got = keepRealLinks({ official_website: "https://barpepe.es", instagram: "https://instagram.com/barpepe", google_maps_url: "https://www.google.com/maps/place/Bar+Pepe/@43.2,-2.9,17z", phone: "+34 944 12 34 56" },
+    results, "Phone: +34 944 12 34 56. Open daily.");
+  assert.equal(got.website, "https://www.barpepe.es/");
+  assert.equal(got.instagram, "https://www.instagram.com/barpepe/");
+  assert.ok(got.maps_url?.startsWith("https://www.google.com/maps/place/"));
+  assert.equal(got.phone, "+34 944 12 34 56");
+  const fake = keepRealLinks({ official_website: "https://invented.example", phone: "123" }, results, "no phone here");
+  assert.equal(fake.website, null);
+  assert.equal(fake.phone, null);
+});
+
+test("Open Places results become places; closed ones are skipped", () => {
+  const got = placesFromOpenPlaces([
+    { place_id: "abc", name: "Café Iruña", lat: 43.26, lon: -2.93, distance_mi: 0.2, categories: ["cafe", "bar"], address: { street: "Colón de Larreátegui 13", locality: "Bilbao" }, phone: "+34944237021", website: "https://cafeirunabilbao.net", confidence: 0.92 },
+    { place_id: "def", name: "Old Shop", lat: 43.2, lon: -2.9, distance_mi: 1, categories: ["shop"], address: { formatted: "X 1" }, confidence: 0.8, operating_status: "permanently_closed" },
+  ]);
+  assert.equal(got.length, 1);
+  assert.equal(got[0].name, "Café Iruña");
+  assert.equal(got[0].category, "cafe");
+  assert.equal(got[0].address, "Colón de Larreátegui 13, Bilbao");
+  assert.equal(got[0].osm_id, "ovt:abc");
 });
