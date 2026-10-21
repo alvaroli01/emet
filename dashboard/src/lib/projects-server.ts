@@ -2,9 +2,9 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ProjectCard } from "@/components/projects/my-projects";
 
-/** The projects someone should see in My Projects: leaders see every project, everyone else the ones they're in. */
-export async function loadMyProjects(supabase: SupabaseClient, meId: string, isLeader: boolean): Promise<ProjectCard[]> {
-  const mine = isLeader ? null : ((await supabase.from("project_members").select("project_id").eq("user_id", meId)).data ?? []).map((r) => r.project_id as string);
+/** My Projects: only the projects I'm a member of. all = every project (leaders' tool in Team Leader). */
+export async function loadMyProjects(supabase: SupabaseClient, meId: string, all = false): Promise<ProjectCard[]> {
+  const mine = all ? null : ((await supabase.from("project_members").select("project_id").eq("user_id", meId)).data ?? []).map((r) => r.project_id as string);
   let q = supabase.from("projects").select("id, name, description, status, starts_on, ends_on, goal, color, project_members(count)").order("created_at", { ascending: false });
   if (mine) q = q.in("id", mine.length ? mine : ["00000000-0000-0000-0000-000000000000"]);
   const { data: rows } = await q;

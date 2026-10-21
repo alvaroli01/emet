@@ -13,15 +13,15 @@ import { STATUS_STYLE, type Project } from "./project-page";
 export type ProjectCard = Project & { members: number; revenue: number };
 
 /** Own profile: the projects I'm in (leaders see all of them and can start a new one). */
-export function MyProjects({ projects, isLeader, people, today }: { projects: ProjectCard[]; isLeader: boolean; people: Member[]; today: string }) {
+export function MyProjects({ projects, canCreate = false, people = [], today, title }: { projects: ProjectCard[]; canCreate?: boolean; people?: Member[]; today: string; title?: string }) {
   const t = useTranslations("projects");
   const locale = useLocale();
   const [creating, setCreating] = useState(false);
   return (
     <section id="projects" className="panel scroll-mt-24 p-5">
       <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-lg font-semibold"><FolderKanban size={18} /> {t("mine")}</h2>
-        {isLeader && <button onClick={() => setCreating(true)} className="flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>}
+        <h2 className="flex items-center gap-2 text-lg font-semibold"><FolderKanban size={18} /> {title ?? t("mine")}</h2>
+        {canCreate && <button onClick={() => setCreating(true)} className="flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>}
       </div>
       {projects.length ? (
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -49,7 +49,7 @@ export function MyProjects({ projects, isLeader, people, today }: { projects: Pr
             );
           })}
         </div>
-      ) : <p className="rounded-2xl bg-surface-2/40 p-6 text-center text-sm text-muted">{isLeader ? t("emptyLeader") : t("empty")}</p>}
+      ) : <p className="rounded-2xl bg-surface-2/40 p-6 text-center text-sm text-muted">{canCreate ? t("emptyLeader") : t("empty")}</p>}
       {creating && <ProjectForm people={people} onClose={() => setCreating(false)} />}
     </section>
   );

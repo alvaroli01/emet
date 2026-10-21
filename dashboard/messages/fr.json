@@ -2787,6 +2787,7 @@
       "profit": "Bénéfice",
       "byWeek": "Ventes par semaine",
       "empty": "Finances rattache ventes et dépenses à ce projet : elles apparaissent ici."
-    }
+    },
+    "allTitle": "Tous les projets"
   }
 }

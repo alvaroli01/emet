@@ -2787,6 +2787,7 @@
       "profit": "Lucro",
       "byWeek": "Receita por semana",
       "empty": "Finanças marca vendas e despesas neste projeto — elas aparecem aqui."
-    }
+    },
+    "allTitle": "Todos os projetos"
   }
 }

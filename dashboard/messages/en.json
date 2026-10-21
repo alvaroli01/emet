@@ -2787,6 +2787,7 @@
       "profit": "Profit",
       "byWeek": "Revenue per week",
       "empty": "Finance tags sales and expenses to this project — they show up here."
-    }
+    },
+    "allTitle": "All projects"
   }
 }

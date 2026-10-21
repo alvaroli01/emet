@@ -2787,6 +2787,7 @@
       "profit": "Beneficio",
       "byWeek": "Ingresos por semana",
       "empty": "Finanzas etiqueta ventas y gastos con este proyecto: aparecen aquí."
-    }
+    },
+    "allTitle": "Todos los proyectos"
   }
 }

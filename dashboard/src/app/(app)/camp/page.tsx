@@ -25,7 +25,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   const t = await getTranslations("camp");
   const tp = await getTranslations("personal");
   const locale = await getLocale();
-  const { me, groups, isAdmin } = await getSession();
+  const { me, groups } = await getSession();
   const supabase = await createClient();
   const week = weekStart(Date.now());
   const today = todayISO();
@@ -92,7 +92,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   for (const c of boardMeta.data ?? []) { const k = teamName(c.boards) ?? c.boards?.name ?? tp("company"); byTeam.set(k, (byTeam.get(k) ?? 0) + 1); }
   const workedTotal = [...byTeam.values()].reduce((a, b) => a + b, 0);
   const gEvents = (await google).events;
-  const myProjects = await loadMyProjects(supabase, me.id, isAdmin);
+  const myProjects = await loadMyProjects(supabase, me.id);
   const gHref = (day: string) => `https://calendar.google.com/calendar/r/day/${day.replaceAll("-", "/")}`;
   const personal: PersonalData = {
     name: firstName, today, weekStart: week, focusTitle: prios.find((x: string) => !x.startsWith("✓ ")) ?? null,
@@ -119,7 +119,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   return (
     <div className="space-y-6">
       <PersonalDashboard d={personal} />
-      <MyProjects projects={myProjects} isLeader={isAdmin} people={members} today={today} />
+      <MyProjects projects={myProjects} today={today} />
       <div id="camp-tabs" className="scroll-mt-20" />
 
       <SectionTabs label={t("sections")} initial={tab} tabs={[

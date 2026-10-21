@@ -2787,6 +2787,7 @@
       "profit": "Gewinn",
       "byWeek": "Umsatz pro Woche",
       "empty": "Finanzen ordnet Verkäufe und Ausgaben diesem Projekt zu – sie erscheinen hier."
-    }
+    },
+    "allTitle": "Alle Projekte"
   }
 }

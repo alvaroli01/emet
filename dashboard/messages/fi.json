@@ -2787,6 +2787,7 @@
       "profit": "Voitto",
       "byWeek": "Myynti viikoittain",
       "empty": "Talous merkitsee myynnit ja kulut tälle projektille – ne näkyvät täällä."
-    }
+    },
+    "allTitle": "Kaikki projektit"
   }
 }

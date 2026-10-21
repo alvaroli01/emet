@@ -17,9 +17,10 @@ import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { AssistantBubble } from "@/components/shell/assistant-bubble";
-import { LayoutDashboard, KanbanSquare, ListChecks, FolderOpen } from "lucide-react";
+import { LayoutDashboard, KanbanSquare, ListChecks, FolderOpen, FolderKanban } from "lucide-react";
 import { AssignTasks } from "@/components/tools/team-tasks";
-import { loadProjectPeople } from "@/lib/projects-server";
+import { loadProjectPeople, loadMyProjects } from "@/lib/projects-server";
+import { MyProjects } from "@/components/projects/my-projects";
 import { Drive } from "@/components/documents/drive";
 import { StorageBar } from "@/components/documents/storage-bar";
 import { loadTeamTasks } from "@/lib/team-tasks";
@@ -96,8 +97,15 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     id: "documents", group: "work" as const, label: td("tool"), icon: <FolderOpen size={16} />,
     node: <div className="space-y-3"><StorageBar /><Drive scope="company" canEdit meId={session.me.id} /></div>,
   }] : [];
+  // Team leader only: every project, and where new projects are created
+  const tp = await getTranslations("projects");
+  const projectsTool = slug === "team-leader" && session.isAdmin ? [{
+    id: "projects", group: "work" as const, label: tp("allTitle"), icon: <FolderKanban size={16} />,
+    node: <MyProjects projects={await loadMyProjects(await createClient(), session.me.id, true)} canCreate people={board.members} today={todayISO()} title={tp("allTitle")} />,
+  }] : [];
   const allTools = [
     ...assignTool,
+    ...projectsTool,
     ...docsTool,
     { id: "board", group: "work", label: t("board"), icon: <KanbanSquare size={16} />, node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
     ...toolTabs,
