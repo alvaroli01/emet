@@ -1037,7 +1037,7 @@
       "run": "Den Rat fragen",
       "again": "Nochmal fragen",
       "resume": "Weiter",
-      "explain": "Fünf Berater beurteilen die Idee aus verschiedenen Blickwinkeln, prüfen gegenseitig ihre Antworten, ohne zu wissen, wer sie geschrieben hat, und ein Vorsitzender fällt das Urteil. Der Score oben bleibt die offizielle Zahl.",
+      "explain": "Fünf Berater beurteilen die Idee aus verschiedenen Blickwinkeln, prüfen die Antworten der anderen anonym, und ein Vorsitzender fällt das Urteil. Er kann das offizielle Urteil nur verschärfen, nie abmildern.",
       "progress": "Fortschritt des Rats",
       "who": {
         "contrarian": "Querdenker",

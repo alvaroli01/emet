@@ -1037,7 +1037,7 @@
       "run": "Preguntar al consejo",
       "again": "Preguntar otra vez",
       "resume": "Continuar",
-      "explain": "Cinco asesores juzgan la idea desde ángulos distintos, revisan las respuestas de los demás sin saber quién las escribió, y un presidente da el veredicto. La puntuación de arriba sigue siendo la oficial.",
+      "explain": "Cinco asesores juzgan la idea desde ángulos distintos, revisan las respuestas de los demás sin saber quién las escribió y un presidente da el veredicto. El presidente solo puede endurecer el veredicto oficial, nunca suavizarlo.",
       "progress": "Progreso del consejo",
       "who": {
         "contrarian": "Contrario",

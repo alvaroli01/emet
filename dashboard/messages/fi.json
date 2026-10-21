@@ -1037,7 +1037,7 @@
       "run": "Kysy neuvostolta",
       "again": "Kysy uudelleen",
       "resume": "Jatka",
-      "explain": "Viisi neuvonantajaa arvioi ideaa eri kulmista, tarkistaa toistensa vastaukset tietämättä kuka ne kirjoitti, ja puheenjohtaja antaa tuomion. Ylläoleva pistemäärä pysyy virallisena lukuna.",
+      "explain": "Viisi neuvonantajaa arvioi idean eri näkökulmista, arvioi toistensa vastaukset tietämättä kirjoittajaa, ja puheenjohtaja antaa tuomion. Puheenjohtaja voi vain koventaa virallista tuomiota, ei koskaan lieventää.",
       "progress": "Neuvoston eteneminen",
       "who": {
         "contrarian": "Vastarannan kiiski",

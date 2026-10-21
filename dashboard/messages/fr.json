@@ -1037,7 +1037,7 @@
       "run": "Demander au conseil",
       "again": "Redemander",
       "resume": "Continuer",
-      "explain": "Cinq conseillers jugent l’idée sous des angles différents, relisent les réponses des autres sans savoir qui les a écrites, puis un président rend le verdict. Le score ci-dessus reste le chiffre officiel.",
+      "explain": "Cinq conseillers jugent l’idée sous des angles différents, relisent les réponses des autres sans savoir qui les a écrites, puis un président rend le verdict. Le président peut seulement durcir le verdict officiel, jamais l’adoucir.",
       "progress": "Avancement du conseil",
       "who": {
         "contrarian": "Contrariant",

@@ -1037,7 +1037,7 @@
       "run": "Perguntar ao conselho",
       "again": "Perguntar de novo",
       "resume": "Continuar",
-      "explain": "Cinco conselheiros julgam a ideia por ângulos diferentes, revisam as respostas uns dos outros sem saber quem as escreveu, e um presidente dá o veredito. A nota acima continua sendo o número oficial.",
+      "explain": "Cinco conselheiros julgam a ideia de ângulos diferentes, revisam as respostas uns dos outros sem saber quem escreveu e um presidente dá o veredito. O presidente só pode endurecer o veredito oficial, nunca suavizar.",
       "progress": "Progresso do conselho",
       "who": {
         "contrarian": "Contrário",

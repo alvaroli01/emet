@@ -1037,7 +1037,7 @@
       "run": "Ask the council",
       "again": "Ask again",
       "resume": "Continue",
-      "explain": "Five advisors judge the idea from different angles, review each other's answers without knowing who wrote them, and a chairman gives the verdict. The score above stays the official number.",
+      "explain": "Five advisors judge the idea from different angles, review each other's answers without knowing who wrote them, and a chairman gives the verdict. The chairman can only make the official verdict harsher, never kinder.",
       "progress": "Council progress",
       "who": {
         "contrarian": "Contrarian",

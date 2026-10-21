@@ -24,7 +24,7 @@ export function CouncilPanel({ ideaId, hasKey, ready = false }: { ideaId: string
   const [wait, setWait] = useState(0);
   const [open, setOpen] = useState<string | null>(null);
   const alive = useRef(true);
-  useEffect(() => () => { alive.current = false; }, []);
+  useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []); // React may mount twice in development
 
   async function load() {
     const { data } = await supabase.from("lab_councils").select("*").eq("idea_id", ideaId).order("created_at", { ascending: false }).limit(1).maybeSingle();
