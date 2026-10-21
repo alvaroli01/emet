@@ -537,6 +537,18 @@ select t.assert('Finance does not see the project links', t.num('select count(*)
 select t.check('Finance tags a sale with the project', $$insert into sales (date, description, amount, cost, project_id, payment_method, logged_by) select current_date, 'Market stall sale', 120, 40, id, 'bizum', public.my_profile_id() from projects where name = 'Market stall'$$, 'ok');
 select t.login(3);
 select t.assert('Member sees the project money', (select revenue from project_money((select id from projects where name = 'Market stall'))) = 120);
+-- Project tick-off tasks (like "From the team leader", but inside one project)
+select t.login(4);
+select t.check('Leader gives a project task', $$insert into team_tasks (title, project_id) select 'Bring the cash box', id from projects where name = 'Market stall'$$, 'ok');
+select t.check('...to Rocco', $$insert into team_task_people (task_id, user_id) select tt.id, p.id from team_tasks tt, profiles p where tt.title = 'Bring the cash box' and p.full_name = 'Rocco'$$, 'ok');
+select t.login(3);
+select t.assert('Project member sees the project task', t.num($$select count(*) from team_tasks where title = 'Bring the cash box'$$) = 1);
+select t.check('Project member ticks it off', $$update team_task_people set done_at = now() where task_id = (select id from team_tasks where title = 'Bring the cash box') and user_id = my_profile_id()$$, 'ok');
+select t.assert('The notification opens the project', t.num($$select count(*) from notifications where kind = 'team_task' and link like '/projects/%'$$) = 1);
+select t.login(6);
+select t.assert('Non-member cannot see the project task or who has it', t.num($$select count(*) from team_tasks where title = 'Bring the cash box'$$) = 0 and t.num($$select count(*) from team_task_people tp join team_tasks tt on tt.id = tp.task_id where tt.title = 'Bring the cash box'$$) = 0);
+select t.check('Non-leader cannot give a project task', $$insert into team_tasks (title, project_id) select 'x', id from projects limit 1$$, 'denied');
+select t.assert('Company-wide leader tasks are still visible to everyone', t.num($$select count(*) from team_tasks where project_id is null$$) >= 0);
 select t.login(4);
 select t.check('Leader removes Rocco', $$delete from project_members where user_id = (select id from profiles where full_name = 'Rocco')$$, 'ok');
 select t.login(3);

@@ -41,7 +41,7 @@ export function TaskPeople({ task }: { task: TeamTask }) {
 }
 
 /** Team leader only: give a task to everyone, a whole team, several people or yourself — and follow who finished. */
-export function AssignTasks({ tasks, people, teams, meId }: { tasks: TeamTask[]; people: Person[]; teams: Team[]; meId: string }) {
+export function AssignTasks({ tasks, people, teams, meId, projectId }: { tasks: TeamTask[]; people: Person[]; teams: Team[]; meId: string; projectId?: string }) {
   const t = useTranslations("teamTasks");
   const locale = useLocale();
   const router = useRouter();
@@ -60,7 +60,7 @@ export function AssignTasks({ tasks, people, teams, meId }: { tasks: TeamTask[];
     e.preventDefault();
     if (!title.trim() || !picked.size || saving) return;
     setSaving(true);
-    const { data, error } = await supabase.from("team_tasks").insert({ title: title.trim(), details: details.trim(), due_on: due || null }).select("id").single();
+    const { data, error } = await supabase.from("team_tasks").insert({ title: title.trim(), details: details.trim(), due_on: due || null, project_id: projectId ?? null }).select("id").single();
     const res = data && !error ? await supabase.from("team_task_people").insert([...picked].map((user_id) => ({ task_id: data.id, user_id }))) : null;
     setSaving(false);
     if (error || res?.error) return toast("error", t("saveError"));
@@ -181,6 +181,7 @@ export function MyTeamTasks({ tasks, meId }: { tasks: TeamTask[]; meId: string }
               </button>
               <div className="min-w-0 flex-1">
                 <p className={`font-semibold ${done ? "text-muted line-through" : ""}`}>{x.title}</p>
+                {x.project && <a href={`/projects/${x.project.id}?tab=tasks`} className="mt-0.5 inline-block rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-muted hover:text-link">{x.project.name}</a>}
                 {x.details && <p className="mt-0.5 text-sm text-muted">{x.details}</p>}
                 {x.due_on && <p className="mt-1 flex items-center gap-1 text-xs text-muted"><Calendar size={12} /> {dayLabel(x.due_on, locale)}</p>}
                 <div className="mt-2.5"><TaskPeople task={x} /></div>
