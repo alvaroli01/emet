@@ -8,7 +8,7 @@ import { MountainLazy } from "@/components/summit/mountain-lazy";
 import { GroupIcon } from "@/components/group-icon";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { eur } from "@/lib/format";
-import { WeekCalendar, type CalendarItem } from "@/components/home/week-calendar";
+import { WeekCalendar, type CalendarItem, type GoogleStatus } from "@/components/home/week-calendar";
 
 export type HomeData = {
   name: string;
@@ -20,7 +20,7 @@ export type HomeData = {
   goal: { revenue: number; goal: number; pct: number; daysLeft: number; nextCampAt: number | null; teams: { slug: string; color: string; label: string; mine: boolean }[] };
   health: { score: number | null; onTime: number | null; blockers: number; mood: number | null };
   focus: { score: number | null; dueToday: number; late: number; doneWeek: number };
-  calendar: { today: string; days: string[]; items: CalendarItem[] };
+  calendar: { today: string; days: string[]; items: CalendarItem[]; google: GoogleStatus };
 };
 
 /** One glass card with the round icon chip and a "Last 7 days" style note — the building block of Home. */
@@ -271,7 +271,7 @@ export function HomeDashboard({ d }: { d: HomeData }) {
                 <Link href="/camp?tab=agenda#camp-tabs" className="rounded-full bg-surface-2 px-2.5 py-1 font-medium hover:text-link">{t("scheduleOpen")}</Link>
               </div>
             </div>
-            <WeekCalendar days={d.calendar.days} today={d.calendar.today} items={d.calendar.items} />
+            <WeekCalendar days={d.calendar.days} today={d.calendar.today} items={d.calendar.items} google={d.calendar.google} />
           </section>
         </div>
 
