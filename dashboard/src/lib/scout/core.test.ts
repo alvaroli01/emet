@@ -77,7 +77,7 @@ test("unit economics: break-even ROAS and CPA", () => {
 });
 
 // ── Scout v2 phase 1 (2026-10-21): accuracy, exact links, relevance filter, enrichment, Open Places ──
-import { evidenceLevel, applyEvidence, mapsLink, parseRelevance, keepRealLinks, placesFromOpenPlaces } from "./core.ts";
+import { evidenceLevel, applyEvidence, mapsLink, parseRelevance, keepRealLinks, placesFromOpenPlaces, verifyWebPlaces } from "./core.ts";
 
 test("unknown criteria count against the lead (3, not 5)", () => {
   assert.equal(scoreOf([]), 30);
@@ -137,4 +137,19 @@ test("Open Places results become places; closed ones are skipped", () => {
   assert.equal(got[0].category, "cafe");
   assert.equal(got[0].address, "Colón de Larreátegui 13, Bilbao");
   assert.equal(got[0].osm_id, "ovt:abc");
+});
+
+test("web-found places are kept only if the search really returned them (no invented bars)", () => {
+  const results = [
+    { title: "Café Iruña Bilbao – Restaurante histórico", url: "https://www.cafeirunabilbao.net/" },
+    { title: "Bar Bertoldo (@barbertoldo) • Instagram", url: "https://www.instagram.com/barbertoldo/" },
+  ];
+  const got = verifyWebPlaces([
+    { name: "Café Iruña", website: "https://cafeirunabilbao.net", instagram: null, address: "Jardines de Albia" },
+    { name: "Bar Bertoldo", website: null, instagram: "https://instagram.com/barbertoldo", address: null },
+    { name: "Bar Javi", website: null, instagram: null, address: "Calle Javi, 7" },          // invented: nothing in results
+    { name: "Bar Xaman", website: "https://barxaman.es", instagram: null, address: null },    // invented link
+  ], results);
+  assert.deepEqual(got.map((p) => p.name), ["Café Iruña", "Bar Bertoldo"]);
+  assert.equal(got[0].website, "https://www.cafeirunabilbao.net/");
 });

@@ -229,3 +229,18 @@ export function placesFromOpenPlaces(results: OpenPlace[]): FoundPlace[] {
     instagram: null, email_public: null, opening_hours: null, osm_id: `ovt:${r.place_id}`,
   }));
 }
+
+/** Web-search finds: keep a place only if the search really returned it — its website/Instagram is one of the result
+ *  URLs, or its name appears in a result title. Anything else may be invented by the AI and is dropped. */
+export function verifyWebPlaces<T extends { name: string; website: string | null; instagram: string | null }>(places: T[], results: { title: string; url: string }[]): T[] {
+  const byUrl = (u: string | null) => (u ? results.find((r) => norm(r.url) === norm(u))?.url ?? null : null);
+  const plain = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const titles = results.map((r) => ` ${plain(r.title)} `);
+  const out: T[] = [];
+  for (const p of places) {
+    const website = byUrl(p.website), instagram = byUrl(p.instagram);
+    const named = plain(p.name).length >= 4 && titles.some((t) => t.includes(` ${plain(p.name)} `));
+    if (website || instagram || named) out.push({ ...p, website, instagram });
+  }
+  return out;
+}

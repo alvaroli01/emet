@@ -1,6 +1,6 @@
 import "server-only";
 import { call, CONTEXT, LANG, type Fail } from "@/lib/lab/ai";
-import { CRITERIA, normalizeJudgement, parseRelevance, keepRealLinks, type Judgement } from "./core";
+import { CRITERIA, normalizeJudgement, parseRelevance, keepRealLinks, verifyWebPlaces, type Judgement } from "./core";
 import { PLAYBOOKS, PLAYBOOK_KEYS, type PlaybookKey } from "./playbooks";
 
 /** Scout's AI steps, run with the member's own free Groq key (same helper and fallbacks as the Idea lab). */
@@ -62,10 +62,14 @@ List up to 15 real, currently open businesses you actually found (no chains' hea
   if (!("ok" in r)) return r;
   const text = String(r.message.content ?? "");
   const m = text.match(/\{[\s\S]*\}/);
+  // What the search really returned: places not backed by these results are dropped (the AI can invent bars)
+  const msg = r.message as { executed_tools?: { search_results?: { results?: { title?: string; url?: string }[] } }[] };
+  const results = (msg.executed_tools ?? []).flatMap((t) => t.search_results?.results ?? []).filter((x) => x.url).map((x) => ({ title: String(x.title ?? ""), url: String(x.url) }));
   try {
     const j = JSON.parse(m?.[0] ?? "{}") as { places?: { name?: string; website?: string | null; instagram?: string | null; address?: string | null }[] };
     const ok = (u?: string | null) => (u && /^https?:\/\//.test(u) ? u.slice(0, 300) : null);
-    return (j.places ?? []).filter((p) => p.name).slice(0, 15).map((p) => ({ name: String(p.name).slice(0, 160), website: ok(p.website), instagram: ok(p.instagram), address: p.address ? String(p.address).slice(0, 200) : null }));
+    const found = (j.places ?? []).filter((p) => p.name).slice(0, 15).map((p) => ({ name: String(p.name).slice(0, 160), website: ok(p.website), instagram: ok(p.instagram), address: p.address ? String(p.address).slice(0, 200) : null }));
+    return verifyWebPlaces(found, results);
   } catch { return []; }
 }
 
@@ -81,7 +85,7 @@ Candidates:
 ${places.map((x, i) => `${i}. ${x.name}${x.category ? ` [${x.category}]` : ""}`).join("\n")}
 Return {"match":[numbers that ARE this kind of business],"not_match":[{"n":number,"why":"short reason"}]}` },
     ],
-  }, ["openai/gpt-oss-20b", "openai/gpt-oss-120b"]);
+  }, ["openai/gpt-oss-20b", "qwen/qwen3.8-27b", "openai/gpt-oss-120b"]);
   if (!("ok" in r)) return r;
   return parseRelevance(json(r), places.length);
 }
@@ -120,7 +124,7 @@ export async function judge(key: string, p: Project, plan: Plan | null, ev: Evid
     ev.webSources.length ? `Sources: ${ev.webSources.map((s) => s.url).join(" ")}` : "",
   ].filter(Boolean).join("\n").slice(0, 6000);
   const r = await call(key, {
-    reasoning_effort: "medium", temperature: 0.2, response_format: { type: "json_object" },
+    reasoning_effort: "low", temperature: 0.2, response_format: { type: "json_object" },
     messages: [
       { role: "system", content: `You qualify sales leads for a student startup. Judge ONLY from the evidence given; if something is not in the evidence, say "unknown" and score it 3 (what we cannot show counts against the lead). Never invent facts, reviews or numbers. Be blunt: most places are NOT worth it. Every "source" must be one of the URLs in the evidence. Write all text in ${lang}; write "opener" in the local language of the business. Reply with JSON only.` },
       { role: "user", content: `${CONTEXT}
@@ -145,7 +149,7 @@ Return JSON:
 Criteria: need = visibly has the problem we solve; fit = matches ideal client; ability_to_pay; reachability = we can reach a decision-maker; timing = a reason to act now; value_vs_effort = deal value vs effort for students; low_risk = 10 is safe (independent, open, friendly).
 Spain rule: unsolicited commercial email is not allowed even to companies, so prefer visit/phone/Instagram DM/contact form.` },
     ],
-  });
+  }, ["openai/gpt-oss-120b", "qwen/qwen3.8-27b", "openai/gpt-oss-20b"]);
   if (!("ok" in r)) return r;
   const j = normalizeJudgement(json(r));
   return j ?? { error: "failed" };

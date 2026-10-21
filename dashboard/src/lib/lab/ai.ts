@@ -18,16 +18,26 @@ Goal: €30,000 revenue and €15,000 profit by 30 June 2027 (about 8 months fro
 Budget to start: €0 (they can reinvest profits). They can sell on campus, at events, online and via Instagram/TikTok. Nothing is decided yet.`;
 
 export async function call(key: string, body: Record<string, unknown>, models = MODELS): Promise<{ ok: true; message: Record<string, unknown> } | Fail> {
-  let limited: Fail | null = null;
+  let limited = null as Fail | null;
   for (const model of models) {
-    const res = await fetch(API, { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: JSON.stringify({ model, ...body }) });
+    // Qwen has its own free daily allowance but no web search and other reasoning settings
+    const isQwen = model.startsWith("qwen/");
+    if (isQwen && body.tools) continue;
+    const { reasoning_effort, ...rest } = body;
+    const payload = isQwen ? { model, ...rest, reasoning_format: "hidden" } : { model, ...rest, ...(reasoning_effort ? { reasoning_effort } : {}) };
+    const res = await fetch(API, { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     if (res.ok) {
       const data = (await res.json()) as { choices?: { message?: Record<string, unknown> }[] };
       return { ok: true, message: data.choices?.[0]?.message ?? {} };
     }
     if (res.status === 401 || res.status === 403) return { error: "bad-key" };
     // Each model has its own free per-minute allowance: if one is busy, try the next before waiting
-    if (res.status === 429 || res.status === 413) { limited = { error: "limit", retryAfter: Math.ceil(Number(res.headers.get("retry-after")) || 60) }; continue; }
+    if (res.status === 429 || res.status === 413) {
+      // Wait for whichever model frees up first
+      const wait = Math.ceil(Number(res.headers.get("retry-after")) || 60);
+      limited = { error: "limit", retryAfter: Math.min(wait, limited?.retryAfter ?? wait) };
+      continue;
+    }
     if (res.status !== 404 && res.status !== 400) return { error: "failed" };
   }
   return limited ?? { error: "failed" };
