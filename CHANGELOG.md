@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — My Projects: leaders create projects and choose people; each project has overview, money (from Finance), a private task board, links, files and updates; listed under My Projects on your profile (migration 0027, all 7 languages). Finance can no longer create projects (leaders do).
 - 2026-10-21 — Alvaro — Record window: “Upload an audio file” turns an existing recording (up to 90 min) into notes + transcript, in Base camp Docs and Meeting log. All 7 languages.
 - 2026-10-21 — Alvaro — Live dashboard: all 15 members put in their groups (Team Contract) and leader titles set — Rocco Financial, Mario Customer, Nahuel Marketing, Stefan Communications, Alvaro Team leader. Group leaders get their own group's rights only.
 - 2026-10-21 — Alvaro — Documents: leaders manage company documents in Team Leader → Company documents; everyone opens them in My profile → Documents and gets notified of new files; everyone has a private My folder (migration 0026, all 7 languages).
