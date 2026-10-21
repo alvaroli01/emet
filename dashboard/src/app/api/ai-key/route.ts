@@ -5,10 +5,21 @@ import { checkKey } from "@/lib/ai/groq";
 
 /** A member connects / disconnects their own Groq account. The key is checked, encrypted, and only used for them —
  *  and, only if they switch on "Lend my AI key to Scout", by Scout on the server (see lib/ai/ring-server.ts). */
+/** My AI connections at a glance (the "AI connections" button): Groq, lending to Scout, Mistral backup. */
 export async function GET() {
   const supabase = await createClient();
-  const { data } = await supabase.from("ai_keys").select("last4, created_at").maybeSingle();
-  return NextResponse.json({ connected: !!data, last4: data?.last4 ?? null });
+  const day = new Date().toISOString().slice(0, 10);
+  const [{ data }, { data: mistral }, { data: usage }, { data: lenders }] = await Promise.all([
+    supabase.from("ai_keys").select("last4, lend_scout").maybeSingle(),
+    supabase.from("backup_keys").select("last4").maybeSingle(),
+    supabase.from("ai_key_usage").select("tokens").eq("day", day),
+    supabase.rpc("scout_lenders"),
+  ]);
+  return NextResponse.json({
+    connected: !!data, last4: data?.last4 ?? null, lend: !!data?.lend_scout,
+    usedToday: (usage ?? []).reduce((n, r) => n + (r.tokens as number), 0),
+    mistral: mistral?.last4 ?? null, lenders: ((lenders ?? []) as { full_name: string }[]).map((l) => l.full_name),
+  });
 }
 
 export async function POST(request: NextRequest) {

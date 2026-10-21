@@ -2055,25 +2055,6 @@
       "needKey": "Yhdistä ensin ilmainen Groq-avaimesi.",
       "error": "Paikkaa ei voitu tarkistaa. Yritä uudelleen minuutin päästä."
     },
-    "lendTitle": "Lainaa tekoälyavaimeni Scoutille",
-    "lendHelp": "Vain Scout käyttää sitä – ei koskaan Ask, Idea Lab tai muistiinpanot. Kukaan ei näe avaintasi. Scout lopettaa 60 %:iin päiväkiintiöstäsi, joten loput jäävät aina sinulle.",
-    "lendNeedKey": "Yhdistä ensin ilmainen Groq-avaimesi, sitten voit lainata sen Scoutille.",
-    "lendUsed": "Scout käytti tänään ~{n}K tokenia avaimestasi",
-    "lenders": "{count, plural, one {# henkilö lainaa} other {# henkilöä lainaa}} avaintaan Scoutille: {names}",
-    "lendersNone": "Kukaan ei vielä lainaa avainta Scoutille",
-    "mistralTitle": "Vara-tekoäly (Mistral)",
-    "mistralHelp": "Ilmainen, ei korttia. Scout käyttää sitä vain, kun kaikki Groq-avaimet on käytetty – haut jatkuvat. Kukaan ei näe avaintasi.",
-    "mistralHow": "Miten saan sen?",
-    "mistralStep1": "Avaa",
-    "mistralStep2": "Rekisteröidy ja valitse ilmainen ”Experiment”-paketti (ei korttia; puhelinnumero vahvistetaan).",
-    "mistralStep3": "Mene kohtaan API keys → Create new key, anna mikä tahansa nimi ja kopioi avain.",
-    "mistralStep4": "Liitä se tähän ja paina Yhdistä.",
-    "mistralPlaceholder": "Mistral API -avain",
-    "mistralConnect": "Yhdistä",
-    "mistralDisconnect": "Katkaise",
-    "mistralConnected": "Yhdistetty ••••{last4}",
-    "mistralDone": "Mistral yhdistetty",
-    "mistralError": "Mistral ei hyväksynyt avainta. Kopioi se uudelleen ja liitä koko avain.",
     "allOut": "Kaikki ilmaiset tekoälyavaimet on käytetty toistaiseksi. Scout jatkaa myöhemmin – tai aiemmin, jos joku lainaa avaimen tai yhdistää Mistralin."
   },
   "hero": {
@@ -2837,6 +2818,35 @@
       "hint": "Scoutilla löydetyt ja tähän projektiin tallennetut paikat.",
       "openScout": "Avaa Scout",
       "empty": "Ei vielä liidejä. Avaa Scoutissa liidi ja valitse tämä projekti kohdassa ”Tallenna projektiin”."
+    }
+  },
+  "ai": {
+    "button": "Tekoälyyhteydet",
+    "how": "Miten?",
+    "open": "Avaa",
+    "connect": "Yhdistä",
+    "disconnect": "Katkaise",
+    "error": "Avain ei toiminut. Kopioi se uudelleen ja liitä koko avain.",
+    "groq": {
+      "title": "Groq (pää-tekoäly)",
+      "help": "Ilmainen. Ask emet, Idea Lab, muistiinpanot ja Scout toimivat sillä.",
+      "step2": "Kirjaudu Googlella ja valitse Create API Key.",
+      "step3": "Kopioi, liitä tähän ja paina Yhdistä."
+    },
+    "mistral": {
+      "title": "Mistral (vara-tekoäly)",
+      "help": "Ilmainen, ei korttia. Scout käyttää sitä vain, kun kaikki Groq-avaimet on käytetty.",
+      "step2": "Rekisteröidy ja valitse ilmainen ”Experiment”-paketti (puhelin vahvistetaan).",
+      "step3": "API keys → Create new key → kopioi, liitä tähän ja paina Yhdistä.",
+      "placeholder": "Mistral-avain"
+    },
+    "lend": {
+      "title": "Lainaa avaimeni Scoutille",
+      "help": "Vain Scout käyttää sitä, ei koskaan omaa Askiasi, Idea Labia tai muistiinpanojasi. Kukaan ei näe avaintasi. Scout lopettaa 60 %:iin päiväkiintiöstäsi.",
+      "needKey": "Yhdistä ensin Groq.",
+      "used": "Avaimesi käytti tänään ~{n}K tokenia",
+      "lenders": "{count, plural, one {# henkilö lainaa} other {# henkilöä lainaa}}: {names}",
+      "none": "Kukaan ei vielä lainaa avainta"
     }
   }
 }

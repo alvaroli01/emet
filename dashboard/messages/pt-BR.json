@@ -2055,25 +2055,6 @@
       "needKey": "Conecte primeiro sua chave gratuita do Groq.",
       "error": "Não foi possível checar esse lugar. Tente de novo em um minuto."
     },
-    "lendTitle": "Emprestar minha chave de IA ao Scout",
-    "lendHelp": "Só o Scout usa — nunca o Ask, o Idea Lab ou as notas. Ninguém vê sua chave. O Scout para em 60% da sua cota diária, então o resto sempre fica com você.",
-    "lendNeedKey": "Conecte primeiro sua chave gratuita do Groq; depois você pode emprestá-la ao Scout.",
-    "lendUsed": "O Scout usou ~{n}K tokens da sua chave hoje",
-    "lenders": "{count, plural, one {# pessoa empresta} other {# pessoas emprestam}} a chave ao Scout: {names}",
-    "lendersNone": "Ninguém empresta uma chave ao Scout ainda",
-    "mistralTitle": "IA reserva (Mistral)",
-    "mistralHelp": "Grátis, sem cartão. O Scout só usa quando todas as chaves do Groq acabam — assim as buscas continuam. Ninguém vê sua chave.",
-    "mistralHow": "Como conseguir?",
-    "mistralStep1": "Abra",
-    "mistralStep2": "Cadastre-se e escolha o plano grátis “Experiment” (sem cartão; pede para verificar seu telefone).",
-    "mistralStep3": "Vá em API keys → Create new key, dê qualquer nome e copie.",
-    "mistralStep4": "Cole aqui e clique em Conectar.",
-    "mistralPlaceholder": "Chave de API da Mistral",
-    "mistralConnect": "Conectar",
-    "mistralDisconnect": "Desconectar",
-    "mistralConnected": "Conectada ••••{last4}",
-    "mistralDone": "Mistral conectada",
-    "mistralError": "A Mistral não aceitou essa chave. Copie de novo e cole a chave inteira.",
     "allOut": "Todas as chaves de IA grátis acabaram por enquanto. O Scout continua mais tarde, ou antes se alguém emprestar uma chave ou conectar a Mistral."
   },
   "hero": {
@@ -2837,6 +2818,35 @@
       "hint": "Lugares encontrados com o Scout e salvos neste projeto.",
       "openScout": "Abrir Scout",
       "empty": "Ainda não há leads. No Scout, abra um lead e escolha este projeto em “Salvar no projeto”."
+    }
+  },
+  "ai": {
+    "button": "Conexões de IA",
+    "how": "Como?",
+    "open": "Abra",
+    "connect": "Conectar",
+    "disconnect": "Desconectar",
+    "error": "Essa chave não funcionou. Copie de novo e cole a chave inteira.",
+    "groq": {
+      "title": "Groq (IA principal)",
+      "help": "Grátis. Faz funcionar o Ask emet, o Idea Lab, as notas e o Scout.",
+      "step2": "Entre com o Google e clique em Create API Key.",
+      "step3": "Copie, cole aqui e clique em Conectar."
+    },
+    "mistral": {
+      "title": "Mistral (IA reserva)",
+      "help": "Grátis, sem cartão. O Scout só usa quando todas as chaves do Groq acabam.",
+      "step2": "Cadastre-se e escolha o plano grátis “Experiment” (pede para verificar o telefone).",
+      "step3": "API keys → Create new key → copie, cole aqui e clique em Conectar.",
+      "placeholder": "Chave da Mistral"
+    },
+    "lend": {
+      "title": "Emprestar minha chave ao Scout",
+      "help": "Só o Scout usa, nunca seu Ask, Idea Lab ou notas. Ninguém vê sua chave. O Scout para em 60% da sua cota diária.",
+      "needKey": "Conecte o Groq primeiro.",
+      "used": "Sua chave usou ~{n}K tokens hoje",
+      "lenders": "{count, plural, one {# pessoa empresta} other {# pessoas emprestam}}: {names}",
+      "none": "Ninguém empresta uma chave ainda"
     }
   }
 }

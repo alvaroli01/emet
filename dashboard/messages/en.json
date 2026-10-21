@@ -2055,25 +2055,6 @@
       "needKey": "Connect your free Groq key first.",
       "error": "Couldn't check that place. Try again in a minute."
     },
-    "lendTitle": "Lend my AI key to Scout",
-    "lendHelp": "Only Scout uses it — never Ask, Idea Lab or notes. Nobody can see your key. Scout stops at 60% of your daily allowance, so you always keep the rest.",
-    "lendNeedKey": "Connect your free Groq key first, then you can lend it to Scout.",
-    "lendUsed": "Scout used ~{n}K tokens of your key today",
-    "lenders": "{count, plural, one {# person lends} other {# people lend}} their key to Scout: {names}",
-    "lendersNone": "Nobody lends a key to Scout yet",
-    "mistralTitle": "Backup AI (Mistral)",
-    "mistralHelp": "Free, no card. Scout uses it only when every Groq key is used up — so searches keep going. Nobody can see your key.",
-    "mistralHow": "How to get it?",
-    "mistralStep1": "Open",
-    "mistralStep2": "Sign up and choose the free “Experiment” plan (no card needed; it asks to verify your phone).",
-    "mistralStep3": "Go to API keys → Create new key, give it any name, and copy it.",
-    "mistralStep4": "Paste it here and press Connect.",
-    "mistralPlaceholder": "Mistral API key",
-    "mistralConnect": "Connect",
-    "mistralDisconnect": "Disconnect",
-    "mistralConnected": "Connected ••••{last4}",
-    "mistralDone": "Mistral connected",
-    "mistralError": "Mistral didn't accept that key. Copy it again and paste the whole key.",
     "allOut": "All free AI keys are used up for now. Scout continues later, or sooner when someone lends a key or connects Mistral."
   },
   "hero": {
@@ -2837,6 +2818,35 @@
       "hint": "Places found with Scout and saved to this project.",
       "openScout": "Open Scout",
       "empty": "No leads saved yet. In Scout, open a lead and choose this project under “Save to project”."
+    }
+  },
+  "ai": {
+    "button": "AI connections",
+    "how": "How?",
+    "open": "Open",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "error": "That key didn't work. Copy it again and paste the whole key.",
+    "groq": {
+      "title": "Groq (main AI)",
+      "help": "Free. Powers Ask emet, Idea Lab, notes and Scout.",
+      "step2": "Sign in with Google, then Create API Key.",
+      "step3": "Copy it, paste it here and press Connect."
+    },
+    "mistral": {
+      "title": "Mistral (backup AI)",
+      "help": "Free, no card. Scout uses it only when every Groq key is used up.",
+      "step2": "Sign up and choose the free “Experiment” plan (it asks to verify your phone).",
+      "step3": "API keys → Create new key → copy it, paste it here and press Connect.",
+      "placeholder": "Mistral key"
+    },
+    "lend": {
+      "title": "Lend my key to Scout",
+      "help": "Only Scout uses it, never your Ask, Idea Lab or notes. Nobody sees your key. Scout stops at 60% of your daily allowance.",
+      "needKey": "Connect Groq first.",
+      "used": "Your key used ~{n}K tokens today",
+      "lenders": "{count, plural, one {# person lends} other {# people lend}}: {names}",
+      "none": "Nobody lends a key yet"
     }
   }
 }

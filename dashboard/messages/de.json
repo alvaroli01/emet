@@ -2055,25 +2055,6 @@
       "needKey": "Verbinde zuerst deinen kostenlosen Groq-Key.",
       "error": "Dieser Ort konnte nicht geprüft werden. Versuch es in einer Minute nochmal."
     },
-    "lendTitle": "Meinen KI-Schlüssel an Scout verleihen",
-    "lendHelp": "Nur Scout nutzt ihn – nie Ask, Idea Lab oder Notizen. Niemand kann deinen Schlüssel sehen. Scout stoppt bei 60 % deines Tageskontingents, der Rest bleibt immer dir.",
-    "lendNeedKey": "Verbinde zuerst deinen kostenlosen Groq-Schlüssel, dann kannst du ihn an Scout verleihen.",
-    "lendUsed": "Scout hat heute ~{n}K Tokens deines Schlüssels genutzt",
-    "lenders": "{count, plural, one {# Person verleiht} other {# Personen verleihen}} ihren Schlüssel an Scout: {names}",
-    "lendersNone": "Noch niemand verleiht einen Schlüssel an Scout",
-    "mistralTitle": "Backup-KI (Mistral)",
-    "mistralHelp": "Kostenlos, ohne Karte. Scout nutzt sie nur, wenn alle Groq-Schlüssel aufgebraucht sind – so laufen Suchen weiter. Niemand kann deinen Schlüssel sehen.",
-    "mistralHow": "Wie bekomme ich ihn?",
-    "mistralStep1": "Öffne",
-    "mistralStep2": "Registriere dich und wähle den kostenlosen „Experiment“-Plan (keine Karte; Telefonnummer wird bestätigt).",
-    "mistralStep3": "Gehe zu API keys → Create new key, gib einen beliebigen Namen ein und kopiere ihn.",
-    "mistralStep4": "Füge ihn hier ein und klicke auf Verbinden.",
-    "mistralPlaceholder": "Mistral-API-Schlüssel",
-    "mistralConnect": "Verbinden",
-    "mistralDisconnect": "Trennen",
-    "mistralConnected": "Verbunden ••••{last4}",
-    "mistralDone": "Mistral verbunden",
-    "mistralError": "Mistral hat den Schlüssel nicht akzeptiert. Kopiere ihn erneut und füge ihn vollständig ein.",
     "allOut": "Alle kostenlosen KI-Schlüssel sind vorerst aufgebraucht. Scout macht später weiter – oder früher, wenn jemand einen Schlüssel verleiht oder Mistral verbindet."
   },
   "hero": {
@@ -2837,6 +2818,35 @@
       "hint": "Mit Scout gefundene und in diesem Projekt gespeicherte Orte.",
       "openScout": "Scout öffnen",
       "empty": "Noch keine Leads. Öffne in Scout einen Lead und wähle dieses Projekt unter „In Projekt speichern“."
+    }
+  },
+  "ai": {
+    "button": "KI-Verbindungen",
+    "how": "Wie?",
+    "open": "Öffne",
+    "connect": "Verbinden",
+    "disconnect": "Trennen",
+    "error": "Der Schlüssel hat nicht funktioniert. Kopiere ihn erneut und füge ihn vollständig ein.",
+    "groq": {
+      "title": "Groq (Haupt-KI)",
+      "help": "Kostenlos. Für Ask emet, Idea Lab, Notizen und Scout.",
+      "step2": "Mit Google anmelden, dann Create API Key.",
+      "step3": "Kopieren, hier einfügen und Verbinden drücken."
+    },
+    "mistral": {
+      "title": "Mistral (Backup-KI)",
+      "help": "Kostenlos, ohne Karte. Scout nutzt sie nur, wenn alle Groq-Schlüssel aufgebraucht sind.",
+      "step2": "Registrieren und den kostenlosen „Experiment“-Plan wählen (Telefon wird bestätigt).",
+      "step3": "API keys → Create new key → kopieren, hier einfügen und Verbinden drücken.",
+      "placeholder": "Mistral-Schlüssel"
+    },
+    "lend": {
+      "title": "Meinen Schlüssel an Scout verleihen",
+      "help": "Nur Scout nutzt ihn, nie dein Ask, Idea Lab oder deine Notizen. Niemand sieht deinen Schlüssel. Scout stoppt bei 60 % deines Tageskontingents.",
+      "needKey": "Verbinde zuerst Groq.",
+      "used": "Dein Schlüssel hat heute ~{n}K Tokens genutzt",
+      "lenders": "{count, plural, one {# Person verleiht} other {# Personen verleihen}}: {names}",
+      "none": "Noch niemand verleiht einen Schlüssel"
     }
   }
 }
