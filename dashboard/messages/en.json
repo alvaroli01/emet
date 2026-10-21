@@ -2344,7 +2344,10 @@
       "open": "Planned",
       "google": "Google"
     },
-    "gcalFailed": "Google Calendar couldn’t be loaded right now."
+    "gcalFailed": "Google Calendar couldn’t be loaded right now.",
+    "calExpand": "Expand",
+    "calClose": "Close",
+    "calendar": "Your week"
   },
   "financeDash": {
     "totalRevenue": "Total revenue",
@@ -2524,7 +2527,8 @@
     "undo": "Undo",
     "delete": "Delete reminder",
     "noReminders": "No reminders. Add one for today.",
-    "saveError": "Couldn't save. Try again."
+    "saveError": "Couldn't save. Try again.",
+    "allDay": "All day"
   },
   "teamTable": {
     "search": "Search people",

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Pause, Play, Star, ChevronRight, Plus, Video, CalendarClock, Check, Trash2, TrendingUp } from "lucide-react";
+import { Pause, Play, Star, ChevronRight, Plus, Video, CalendarClock, Check, Trash2, TrendingUp, CalendarDays } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 
@@ -12,14 +12,14 @@ export type PersonalData = {
   name: string; today: string; weekStart: string;
   focusTitle: string | null;
   tasks: { id: string; title: string; href: string; team: string | null }[];
-  meetings: { id: string; title: string; time: string | null; href: string; kind: "agenda" | "meeting" }[];
-  week: { id: string; title: string; day: string; status: "done" | "late" | "today" | "planned"; team: string | null; href: string }[];
+  meetings: { id: string; title: string; time: string | null; href: string; kind: "agenda" | "meeting" | "google" }[];
+  week: { id: string; title: string; day: string; status: "done" | "late" | "today" | "planned" | "google"; team: string | null; href: string; time?: string | null }[];
   activity: { label: string; pct: number }[]; activityPct: number;
   worked: { name: string; color: string; share: number }[];
   reminders: { id: string; title: string; remind_at: string; priority: "low" | "medium" | "high"; done: boolean }[];
 };
 
-const STATUS = { done: "bg-ok/15 text-ok-text", late: "bg-bad/15 text-bad-text", today: "bg-warn/15 text-warn-text", planned: "bg-surface-2 text-muted" } as const;
+const STATUS = { done: "bg-ok/15 text-ok-text", late: "bg-bad/15 text-bad-text", today: "bg-warn/15 text-warn-text", planned: "bg-surface-2 text-muted", google: "bg-[#3b82f6]/20 text-[#93c5fd]" } as const;
 const pad = (n: number) => String(n).padStart(2, "0");
 const hms = (s: number) => `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(Math.floor(s % 60))}`;
 
@@ -109,8 +109,8 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
                 <Link href="/camp?tab=agenda#camp-tabs" className="flex items-center text-xs text-link">{t("viewAll")} <ChevronRight size={13} /></Link></div>
               <div className="mt-3 grid grid-cols-2 gap-2">
                 {d.meetings.slice(0, 3).map((m, i) => (
-                  <Link key={m.id} href={m.href} className={`relative rounded-2xl p-3 ${i === 0 ? "bg-[linear-gradient(160deg,rgb(255_106_26/0.35),rgb(255_106_26/0.08))] ring-1 ring-brand/40" : "bg-surface-2"}`}>
-                    <span className="flex items-start justify-between"><span className="readout text-lg">{m.time ?? "—"}</span>{m.kind === "meeting" ? <Video size={14} className="text-muted" /> : <CalendarClock size={14} className="text-muted" />}</span>
+                  <Link key={m.id} href={m.href} {...(m.kind === "google" ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={`relative rounded-2xl p-3 ${i === 0 ? "bg-[linear-gradient(160deg,rgb(255_106_26/0.35),rgb(255_106_26/0.08))] ring-1 ring-brand/40" : "bg-surface-2"}`}>
+                    <span className="flex items-start justify-between"><span className="readout text-lg">{m.time ?? "—"}</span>{m.kind === "meeting" ? <Video size={14} className="text-muted" /> : m.kind === "google" ? <CalendarDays size={14} className="text-[#93c5fd]" /> : <CalendarClock size={14} className="text-muted" />}</span>
                     <span className="mt-1 line-clamp-2 block text-xs text-muted">{m.title}</span>
                   </Link>
                 ))}
@@ -133,7 +133,7 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
               <div className="grid min-w-[680px] gap-2" style={{ gridTemplateColumns: `repeat(${cols.length}, minmax(0,1fr))` }}>
                 {cols.map((day) => {
                   const isToday = day === d.today;
-                  const items = d.week.filter((x) => x.day === day);
+                  const items = d.week.filter((x) => x.day === day).sort((a, b) => Number(a.status === "google") - Number(b.status === "google") || (a.time ?? "").localeCompare(b.time ?? ""));
                   return (
                     <div key={day} className={`relative min-h-64 rounded-2xl p-2 ${isToday ? "bg-[linear-gradient(180deg,rgb(239_68_68/0.22),rgb(239_68_68/0.04))] ring-1 ring-bad/30" : "bg-surface-2/60"}`}>
                       <p className={`px-1 pb-2 text-xs font-medium uppercase ${isToday ? "text-bad-text" : "text-muted"}`}>{new Date(day + "T12:00:00Z").toLocaleDateString(locale, { weekday: "short", day: "numeric", timeZone: "UTC" })}</p>
@@ -141,8 +141,9 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
                       <ul className="space-y-2">
                         {items.map((x) => (
                           <li key={x.id}>
-                            <Link href={x.href} className="block rounded-xl bg-solid/80 p-2.5 ring-1 ring-line transition hover:ring-brand/50">
-                              <span className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${STATUS[x.status]}`}><span className="size-1.5 rounded-full bg-current" />{t(`card.${x.status}`)}</span>
+                            <Link href={x.href} {...(x.status === "google" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                  className={`block rounded-xl p-2.5 ring-1 transition hover:ring-brand/50 ${x.status === "google" ? "bg-[#3b82f6]/12 ring-[#60a5fa]/35" : "bg-solid/80 ring-line"}`}>
+                              <span className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${STATUS[x.status]}`}><span className="size-1.5 rounded-full bg-current" />{x.status === "google" ? (x.time ?? t("allDay")) : t(`card.${x.status}`)}</span>
                               <span className={`mt-1.5 block text-sm leading-snug ${x.status === "done" ? "text-muted line-through" : ""}`}>{x.title}</span>
                               {x.team && <span className="mt-1 block text-[11px] text-muted">{x.team}</span>}
                             </Link>

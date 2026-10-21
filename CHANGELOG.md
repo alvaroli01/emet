@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Fixes: Google events now also show in Base camp (My week board + today's plans); Today's week calendar puts overlapping events side by side, shows Mon–Fri unless the weekend has something, and has an Expand button for a big full-screen week; Idea lab council headlines no longer run out of their box.
 - 2026-10-21 — Alvaro — Idea lab made strict: judges the idea as written, fatal flaws can't be averaged away, the council runs on every idea and the chairman can only make it harsher ("selling lemons to investors" now 10/100, Not recommended). Projects: tick-off tasks for the project's people (migration 0028).
 - 2026-10-21 — Alvaro — My Projects: leaders create projects and choose people; each project has overview, money (from Finance), a private task board, links, files and updates; listed under My Projects on your profile (migration 0027, all 7 languages). Finance can no longer create projects (leaders do).
 - 2026-10-21 — Alvaro — Record window: “Upload an audio file” turns an existing recording (up to 90 min) into notes + transcript, in Base camp Docs and Meeting log. All 7 languages.

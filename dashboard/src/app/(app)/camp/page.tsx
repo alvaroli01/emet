@@ -12,6 +12,7 @@ import { DocsTab, type Doc } from "@/components/camp/docs";
 import { IdeasTab, type Idea } from "@/components/camp/ideas";
 import { VaultTab } from "@/components/camp/vault";
 import { cardHref } from "@/lib/projects";
+import { loadMyGoogleEvents } from "@/lib/gcal-server";
 
 type CardDue = { id: string; title: string; due_at: string; completed_at: string | null; boards: { slug: string; group_id: string | null } | null };
 type SubDue = { id: string; text: string; due_on: string | null; done: boolean; cards: { id: string; title: string; boards: { slug: string; group_id: string | null } | null } | null };
@@ -42,6 +43,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
     supabase.from("ai_keys").select("last4").maybeSingle(),
   ]);
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 7 * 864e5).toISOString();
+  const google = loadMyGoogleEvents(supabase, week, new Date(Date.parse(week + "T00:00:00Z") + 6 * 864e5).toISOString().slice(0, 10)); // in parallel
   const [openCards, weekCards, myLog, meetingsToday, reminders, boardMeta] = await Promise.all([
     supabase.from("cards").select("id, title, due_at, board_id, boards(slug, group_id, project_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).is("completed_at", null).order("due_at", { ascending: true, nullsFirst: false }).limit(12)
@@ -87,18 +89,24 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   const byTeam = new Map<string, number>();
   for (const c of boardMeta.data ?? []) { const k = teamName(c.boards) ?? c.boards?.name ?? tp("company"); byTeam.set(k, (byTeam.get(k) ?? 0) + 1); }
   const workedTotal = [...byTeam.values()].reduce((a, b) => a + b, 0);
+  const gEvents = (await google).events;
+  const gHref = (day: string) => `https://calendar.google.com/calendar/r/day/${day.replaceAll("-", "/")}`;
   const personal: PersonalData = {
     name: firstName, today, weekStart: week, focusTitle: prios.find((x: string) => !x.startsWith("✓ ")) ?? null,
     tasks: (openCards.data ?? []).map((c) => ({ id: c.id, title: c.title, href: link(c.boards, c.id), team: teamName(c.boards) })),
     meetings: [
       ...items.filter((x) => x.day === today).map((x) => ({ id: x.id, title: x.title, time: x.start_time?.slice(0, 5) ?? null, href: "/camp?tab=agenda#camp-tabs", kind: "agenda" as const })),
       ...(meetingsToday.data ?? []).map((m) => ({ id: m.id, title: m.title, time: tm(m.created_at), href: "/meetings", kind: "meeting" as const })),
+      ...gEvents.filter((g) => g.day === today).map((g) => ({ id: `g:${g.id}`, title: g.title, time: g.start, href: gHref(g.day), kind: "google" as const })),
     ].sort((a, b) => (a.time ?? "99").localeCompare(b.time ?? "99")),
-    week: (weekCards.data ?? []).map((c) => {
+    week: [...(weekCards.data ?? []).map((c) => {
       const day = c.due_at.slice(0, 10);
       return { id: c.id, title: c.title, day, href: link(c.boards, c.id), team: teamName(c.boards),
         status: c.completed_at ? "done" as const : day < today ? "late" as const : day === today ? "today" as const : "planned" as const };
     }),
+      // Google Calendar events (if connected), in time order after the day's tasks
+      ...gEvents.map((g) => ({ id: `g:${g.id}`, title: g.title, day: g.day, href: gHref(g.day), team: null, status: "google" as const,
+        time: g.allDay ? null : `${g.start}${g.end ? `–${g.end}` : ""}` }))],
     activity: perDay.map((n, i) => ({ label: new Date(Date.parse(week + "T12:00:00Z") + i * 864e5).toLocaleDateString(locale, { weekday: "short", timeZone: "UTC" }), pct: n / peak })),
     activityPct: perDay.slice(0, workedDays).filter((n) => n > 0).length / workedDays,
     worked: [...byTeam].sort((a, b) => b[1] - a[1]).slice(0, 6).map(([name, n], i) => ({ name, color: COLORS[i], share: n / workedTotal })),

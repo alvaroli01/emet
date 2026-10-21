@@ -100,11 +100,11 @@ export function CouncilPanel({ ideaId, hasKey, ready = false }: { ideaId: string
         <ul className="mt-3 divide-y divide-line">
           {takes.map((x) => (
             <li key={x.key}>
-              <button onClick={() => setOpen(open === x.key ? null : x.key)} aria-expanded={open === x.key} className="flex w-full items-start gap-2 py-2.5 text-left text-sm">
-                <span className="w-32 shrink-0 font-medium">{t(`who.${x.key}`)}
+              <button onClick={() => setOpen(open === x.key ? null : x.key)} aria-expanded={open === x.key} className="flex w-full items-start gap-2 py-2.5 text-left text-sm whitespace-normal">
+                <span className="w-24 shrink-0 font-medium sm:w-32">{t(`who.${x.key}`)}
                   {c?.reviews?.strongest === x.key && <span className="block text-[10px] font-normal text-ok-text">{t("strongest")}</span>}
                   {c?.reviews?.weakest === x.key && <span className="block text-[10px] font-normal text-muted">{t("weakest")}</span>}</span>
-                <span className="min-w-0 flex-1">{x.headline}</span>
+                <span className="min-w-0 flex-1 break-words">{x.headline}</span>
                 <span className={`shrink-0 text-xs font-medium ${recTone[x.recommendation]}`}>{t(`rec.${x.recommendation}`)}</span>
                 <ChevronDown size={14} className={`mt-0.5 shrink-0 text-muted transition-transform ${open === x.key ? "rotate-180" : ""}`} />
               </button>

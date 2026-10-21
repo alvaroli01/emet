@@ -2344,7 +2344,10 @@
       "open": "Suunniteltu",
       "google": "Google"
     },
-    "gcalFailed": "Google-kalenteria ei voitu ladata juuri nyt."
+    "gcalFailed": "Google-kalenteria ei voitu ladata juuri nyt.",
+    "calExpand": "Suurenna",
+    "calClose": "Sulje",
+    "calendar": "Viikkosi"
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",
@@ -2524,7 +2527,8 @@
     "undo": "Kumoa",
     "delete": "Poista muistutus",
     "noReminders": "Ei muistutuksia. Lisää yksi tälle päivälle.",
-    "saveError": "Tallennus epäonnistui. Yritä uudelleen."
+    "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
+    "allDay": "Koko päivän"
   },
   "teamTable": {
     "search": "Hae ihmisiä",

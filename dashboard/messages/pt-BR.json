@@ -2344,7 +2344,10 @@
       "open": "Planejado",
       "google": "Google"
     },
-    "gcalFailed": "Não foi possível carregar o Google Agenda agora."
+    "gcalFailed": "Não foi possível carregar o Google Agenda agora.",
+    "calExpand": "Ampliar",
+    "calClose": "Fechar",
+    "calendar": "Sua semana"
   },
   "financeDash": {
     "totalRevenue": "Receita total",
@@ -2524,7 +2527,8 @@
     "undo": "Desfazer",
     "delete": "Excluir lembrete",
     "noReminders": "Sem lembretes. Adicione um para hoje.",
-    "saveError": "Não foi possível salvar. Tente de novo."
+    "saveError": "Não foi possível salvar. Tente de novo.",
+    "allDay": "Dia todo"
   },
   "teamTable": {
     "search": "Buscar pessoas",

@@ -2344,7 +2344,10 @@
       "open": "Prévu",
       "google": "Google"
     },
-    "gcalFailed": "Impossible de charger Google Agenda pour le moment."
+    "gcalFailed": "Impossible de charger Google Agenda pour le moment.",
+    "calExpand": "Agrandir",
+    "calClose": "Fermer",
+    "calendar": "Ta semaine"
   },
   "financeDash": {
     "totalRevenue": "Chiffre d’affaires total",
@@ -2524,7 +2527,8 @@
     "undo": "Annuler",
     "delete": "Supprimer le rappel",
     "noReminders": "Aucun rappel. Ajoutes-en un pour aujourd'hui.",
-    "saveError": "Enregistrement impossible. Réessaie."
+    "saveError": "Enregistrement impossible. Réessaie.",
+    "allDay": "Toute la journée"
   },
   "teamTable": {
     "search": "Rechercher des personnes",
