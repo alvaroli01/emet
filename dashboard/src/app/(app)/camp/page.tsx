@@ -11,6 +11,7 @@ import { AgendaTab, type AgendaItem } from "@/components/camp/agenda";
 import { DocsTab, type Doc } from "@/components/camp/docs";
 import { IdeasTab, type Idea } from "@/components/camp/ideas";
 import { VaultTab } from "@/components/camp/vault";
+import { cardHref } from "@/lib/projects";
 
 type CardDue = { id: string; title: string; due_at: string; completed_at: string | null; boards: { slug: string; group_id: string | null } | null };
 type SubDue = { id: string; text: string; due_on: string | null; done: boolean; cards: { id: string; title: string; boards: { slug: string; group_id: string | null } | null } | null };
@@ -29,9 +30,9 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   const [plans, agenda, cards, subtasks, docs, ideas, vaultKey, vaultItems, members, aiKey] = await Promise.all([
     supabase.from("week_plans").select("*").eq("owner_id", me.id).order("week_start", { ascending: false }).limit(8).returns<WeekPlan[]>(),
     supabase.from("agenda_items").select("*").eq("owner_id", me.id).gte("day", today).order("day").order("start_time").returns<AgendaItem[]>(),
-    supabase.from("cards").select("id, title, due_at, completed_at, boards(slug, group_id), card_assignees!inner(user_id)")
+    supabase.from("cards").select("id, title, due_at, completed_at, boards(slug, group_id, project_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).is("completed_at", null).not("due_at", "is", null).returns<CardDue[]>(),
-    supabase.from("card_checklist_items").select("id, text, due_on, done, cards(id, title, boards(slug, group_id))")
+    supabase.from("card_checklist_items").select("id, text, due_on, done, cards(id, title, boards(slug, group_id, project_id))")
       .eq("assignee_id", me.id).eq("done", false).returns<SubDue[]>(),
     supabase.from("docs").select("*").order("pinned", { ascending: false }).order("updated_at", { ascending: false }).returns<Doc[]>(),
     supabase.from("ideas").select("*").eq("owner_id", me.id).order("created_at").returns<Idea[]>(),
@@ -42,12 +43,12 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   ]);
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 7 * 864e5).toISOString();
   const [openCards, weekCards, myLog, meetingsToday, reminders, boardMeta] = await Promise.all([
-    supabase.from("cards").select("id, title, due_at, board_id, boards(slug, group_id), card_assignees!inner(user_id)")
+    supabase.from("cards").select("id, title, due_at, board_id, boards(slug, group_id, project_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).is("completed_at", null).order("due_at", { ascending: true, nullsFirst: false }).limit(12)
-      .returns<{ id: string; title: string; due_at: string | null; board_id: string; boards: { slug: string; group_id: string | null } | null }[]>(),
-    supabase.from("cards").select("id, title, due_at, completed_at, boards(slug, group_id), card_assignees!inner(user_id)")
+      .returns<{ id: string; title: string; due_at: string | null; board_id: string; boards: { slug: string; group_id: string | null; project_id: string | null } | null }[]>(),
+    supabase.from("cards").select("id, title, due_at, completed_at, boards(slug, group_id, project_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).gte("due_at", week).lt("due_at", weekEnd)
-      .returns<{ id: string; title: string; due_at: string; completed_at: string | null; boards: { slug: string; group_id: string | null } | null }[]>(),
+      .returns<{ id: string; title: string; due_at: string; completed_at: string | null; boards: { slug: string; group_id: string | null; project_id: string | null } | null }[]>(),
     supabase.from("activity_log").select("created_at").eq("user_id", me.id).gte("created_at", week),
     supabase.from("meetings").select("id, title, kind, created_at").eq("meeting_date", today),
     supabase.from("reminders").select("id, title, remind_at, priority, done").eq("owner_id", me.id)
@@ -56,10 +57,8 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
       .returns<{ board_id: string; boards: { name: string; group_id: string | null } | null }[]>(),
   ]);
 
-  const slugOf = (b: { slug: string; group_id: string | null } | null | undefined) =>
-    b?.group_id ? groups.find((g) => g.id === b.group_id)?.slug ?? null : null;
-  const link = (b: { slug: string; group_id: string | null } | null | undefined, cardId: string) =>
-    slugOf(b) ? `/g/${slugOf(b)}?card=${cardId}` : `/board?card=${cardId}`;
+  const link = (b: { slug: string; group_id: string | null; project_id?: string | null } | null | undefined, cardId: string) =>
+    cardHref({ id: cardId, boards: b }, (gid) => groups.find((g) => g.id === gid)?.slug);
 
   // Everything with a date that is mine: cards I'm on, and small tasks given to me
   const due: DueTask[] = [

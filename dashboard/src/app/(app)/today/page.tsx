@@ -10,6 +10,7 @@ import { LiveRefresh } from "@/components/live-refresh";
 import { loadMyGoogleEvents } from "@/lib/gcal-server";
 import { ReportCard } from "@/components/workspace/report-card";
 import type { WeeklyReport } from "@/lib/weekly-report";
+import { cardHref } from "@/lib/projects";
 
 type Due = { id: string; title: string; day: string; href: string; parent?: string };
 
@@ -28,9 +29,9 @@ export default async function TodayPage() {
 
   const [plan, cards, subtasks, agenda, sales, expenses, report, leads] = await Promise.all([
     supabase.from("week_plans").select("priorities").eq("owner_id", me.id).eq("week_start", week).maybeSingle(),
-    supabase.from("cards").select("id, title, due_at, boards(group_id), card_assignees!inner(user_id)")
+    supabase.from("cards").select("id, title, due_at, boards(group_id, project_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).is("completed_at", null).not("due_at", "is", null).lte("due_at", `${today}T23:59:59Z`),
-    supabase.from("card_checklist_items").select("id, text, due_on, cards(id, title, boards(group_id))")
+    supabase.from("card_checklist_items").select("id, text, due_on, cards(id, title, boards(group_id, project_id))")
       .eq("assignee_id", me.id).eq("done", false).not("due_on", "is", null).lte("due_on", today),
     supabase.from("agenda_items").select("id, title, start_time, done").eq("owner_id", me.id).eq("day", today).order("start_time"),
     supabase.from("sales").select("date, amount, cost").returns<Sale[]>(),
@@ -51,19 +52,19 @@ export default async function TodayPage() {
     supabase.from("cards").select("completed_at, card_assignees!inner(user_id)").eq("card_assignees.user_id", me.id).not("completed_at", "is", null).gte("completed_at", since30),
     // My week calendar: my own agenda plus tasks assigned to me that are due this week
     supabase.from("agenda_items").select("id, title, day, start_time, end_time, done").eq("owner_id", me.id).gte("day", week).lte("day", weekEnd).order("start_time"),
-    supabase.from("cards").select("id, title, due_at, completed_at, boards(group_id), card_assignees!inner(user_id)")
+    supabase.from("cards").select("id, title, due_at, completed_at, boards(group_id, project_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).gte("due_at", `${week}T00:00:00Z`).lte("due_at", `${weekEnd}T23:59:59Z`),
   ]);
 
   const google = await googleP;
 
   const slug = (gid: string | null | undefined) => (gid ? groups.find((g) => g.id === gid)?.slug : undefined);
-  const href = (gid: string | null | undefined, id: string) => (slug(gid) ? `/g/${slug(gid)}?card=${id}` : `/board?card=${id}`);
+  const href = (b: { group_id: string | null; project_id?: string | null } | null | undefined, id: string) => cardHref({ id, boards: b }, (gid) => slug(gid));
   const due: Due[] = [
     ...((cards.data ?? []) as unknown as { id: string; title: string; due_at: string; boards: { group_id: string | null } | null }[])
-      .map((c) => ({ id: c.id, title: c.title, day: c.due_at.slice(0, 10), href: href(c.boards?.group_id, c.id) })),
+      .map((c) => ({ id: c.id, title: c.title, day: c.due_at.slice(0, 10), href: href(c.boards, c.id) })),
     ...((subtasks.data ?? []) as unknown as { id: string; text: string; due_on: string; cards: { id: string; title: string; boards: { group_id: string | null } | null } | null }[])
-      .filter((s) => s.cards).map((s) => ({ id: s.id, title: s.text, day: s.due_on, href: href(s.cards!.boards?.group_id, s.cards!.id), parent: s.cards!.title })),
+      .filter((s) => s.cards).map((s) => ({ id: s.id, title: s.text, day: s.due_on, href: href(s.cards!.boards, s.cards!.id), parent: s.cards!.title })),
     // Scout leads whose next step is due: who to visit or call today
     ...((leads.data ?? []) as unknown as { id: string; project_id: string; next_step_at: string; place: { name: string } | null }[])
       .map((l) => ({ id: l.id, title: l.place?.name ?? "—", day: l.next_step_at, href: `/scout?p=${l.project_id}`, parent: "Scout" })),
@@ -112,7 +113,7 @@ export default async function TodayPage() {
           status: a.done ? "done" as const : a.day < today ? "late" as const : "open" as const, href: "/camp?tab=agenda#camp-tabs" })),
         ...((weekTasks.data ?? []) as unknown as { id: string; title: string; due_at: string; completed_at: string | null; boards: { group_id: string | null } | null }[])
           .map((c) => ({ id: c.id, title: c.title, day: c.due_at.slice(0, 10), start: null, end: null, team: slug(c.boards?.group_id) ? tg(slug(c.boards?.group_id)!) : undefined,
-            status: c.completed_at ? "done" as const : c.due_at.slice(0, 10) < today ? "late" as const : "open" as const, href: href(c.boards?.group_id, c.id) })),
+            status: c.completed_at ? "done" as const : c.due_at.slice(0, 10) < today ? "late" as const : "open" as const, href: href(c.boards, c.id) })),
         ...google.events.map((g) => ({ id: `g:${g.id}`, title: g.title, day: g.day, start: g.start, end: g.end, kind: "google" as const,
           status: g.day < today ? "done" as const : "open" as const, href: `https://calendar.google.com/calendar/r/day/${g.day.replaceAll("-", "/")}` })),
       ],

@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { cardHref } from "@/lib/projects";
 
 export type SearchHit = { type: "card" | "doc" | "meeting" | "decision" | "idea" | "person"; id: string; title: string; snippet?: string; href: string };
 
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
   const like = `%${q}%`;
   const supabase = await createClient();
   const [cards, docs, meetings, decisions, ideas, people, groups] = await Promise.all([
-    supabase.from("cards").select("id, title, description, boards(group_id)").or(`title.ilike.${like},description.ilike.${like}`).limit(6),
+    supabase.from("cards").select("id, title, description, boards(group_id, project_id)").or(`title.ilike.${like},description.ilike.${like}`).limit(6),
     supabase.from("docs").select("id, title, body").or(`title.ilike.${like},body.ilike.${like}`).limit(5),
     supabase.from("meetings").select("id, title, notes, transcript").or(`title.ilike.${like},notes.ilike.${like},transcript.ilike.${like}`).limit(5),
     supabase.from("decisions").select("id, decision, date").ilike("decision", like).limit(4),
@@ -32,8 +33,8 @@ export async function GET(request: NextRequest) {
   };
   const hits: SearchHit[] = [
     ...(cards.data ?? []).map((c) => {
-      const gid = (c.boards as unknown as { group_id: string | null } | null)?.group_id;
-      return { type: "card" as const, id: c.id, title: c.title, snippet: snip(c.description), href: gid && slug.get(gid) ? `/g/${slug.get(gid)}?card=${c.id}` : `/board?card=${c.id}` };
+      const b = c.boards as unknown as { group_id: string | null; project_id: string | null } | null;
+      return { type: "card" as const, id: c.id, title: c.title, snippet: snip(c.description), href: cardHref({ id: c.id, boards: b }, (gid) => slug.get(gid)) };
     }),
     ...(docs.data ?? []).map((d) => ({ type: "doc" as const, id: d.id, title: d.title, snippet: snip(d.body), href: `/camp?tab=docs&doc=${d.id}` })),
     ...(meetings.data ?? []).map((m) => ({ type: "meeting" as const, id: m.id, title: m.title, snippet: snip(m.notes) ?? snip(m.transcript), href: `/meetings?m=${m.id}` })),

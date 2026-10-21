@@ -13,6 +13,7 @@ import { ActivityFeed, type ActivityEntry } from "@/components/activity-feed";
 import { LiveRefresh } from "@/components/live-refresh";
 import { StatusPill } from "@/components/status";
 import { GroupBadge } from "@/components/group-icon";
+import { cardHref } from "@/lib/projects";
 
 const DAY = 864e5;
 type CardRow = { id: string; title: string; board_id: string; due_at: string | null; completed_at: string | null };
@@ -36,7 +37,7 @@ export default async function OverviewPage() {
     supabase.from("sales").select("date, amount, cost, channel, description, reverses_id, item_id").returns<SaleRow[]>(),
     supabase.from("expenses").select("date, amount").returns<Expense[]>(),
     supabase.from("cards").select("id, title, board_id, due_at, completed_at").returns<CardRow[]>(),
-    supabase.from("boards").select("id, slug, group_id").returns<{ id: string; slug: string; group_id: string | null }[]>(),
+    supabase.from("boards").select("id, slug, group_id, project_id").returns<{ id: string; slug: string; group_id: string | null; project_id: string | null }[]>(),
     supabase.from("blockers").select("id, group_id, description, owner_id, created_at").eq("status", "open").order("created_at", { ascending: false })
       .returns<{ id: string; group_id: string; description: string; owner_id: string | null; created_at: string }[]>(),
     supabase.from("activity_log").select("*").order("created_at", { ascending: false }).limit(10).returns<ActivityEntry[]>(),
@@ -83,7 +84,7 @@ export default async function OverviewPage() {
   const allCards = cards.data ?? [];
   const boardOf = new Map((boards.data ?? []).map((b) => [b.id, b]));
   const groupOfCard = (c: CardRow) => boardOf.get(c.board_id)?.group_id ?? null;
-  const href = (c: CardRow) => { const g = groups.find((x) => x.id === groupOfCard(c)); return g ? `/g/${g.slug}?card=${c.id}` : `/board?card=${c.id}`; };
+  const href = (c: CardRow) => cardHref({ id: c.id, boards: boardOf.get(c.board_id) }, (gid) => groups.find((x) => x.id === gid)?.slug);
   const teamLabel = (gid: string | null) => { const g = groups.find((x) => x.id === gid); return g ? tg(g.slug) : t("company"); };
   const overdue = allCards.filter((c) => !c.completed_at && c.due_at && Date.parse(c.due_at) < now).sort((a, b) => a.due_at!.localeCompare(b.due_at!));
   const upcoming = allCards.filter((c) => !c.completed_at && c.due_at && Date.parse(c.due_at) >= now && Date.parse(c.due_at) < now + 7 * DAY).sort((a, b) => a.due_at!.localeCompare(b.due_at!));

@@ -10,10 +10,11 @@ import { LiveRefresh } from "@/components/live-refresh";
 import { shortDate } from "@/lib/format";
 import { MyTeamTasks } from "@/components/tools/team-tasks";
 import { loadTeamTasks } from "@/lib/team-tasks";
+import { cardHref } from "@/lib/projects";
 
 type Row = {
   id: string; title: string; due_at: string | null; completed_at: string | null; labels: string[];
-  boards: { slug: string; name: string; group_id: string | null } | null;
+  boards: { slug: string; name: string; group_id: string | null; project_id: string | null } | null;
   board_lists: { name: string } | null;
 };
 
@@ -30,7 +31,7 @@ export default async function MyTasksPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("cards")
-    .select("id, title, due_at, completed_at, labels, boards(slug, name, group_id), board_lists(name), card_assignees!inner(user_id)")
+    .select("id, title, due_at, completed_at, labels, boards(slug, name, group_id, project_id), board_lists(name), card_assignees!inner(user_id)")
     .eq("card_assignees.user_id", me.id)
     .returns<Row[]>();
 
@@ -85,7 +86,7 @@ export default async function MyTasksPage() {
             <ul className="divide-y divide-line">
               {[...items].sort(byDue).map((r) => {
                 const g = groups.find((x) => x.id === r.boards?.group_id);
-                const href = r.boards?.group_id && g ? `/g/${g.slug}?card=${r.id}` : `/board?card=${r.id}`;
+                const href = cardHref(r, (gid) => groups.find((x) => x.id === gid)?.slug);
                 return (
                   <li key={r.id}>
                     <Link href={href} className="flex items-center gap-3 px-5 py-3 hover:bg-surface-2/60">
@@ -93,7 +94,7 @@ export default async function MyTasksPage() {
                         <span className="size-4 shrink-0 rounded-full border-2 border-line" aria-hidden />}
                       <div className="min-w-0 flex-1">
                         <p className={`text-sm ${key === "done" ? "text-muted line-through" : ""}`}>{r.title}</p>
-                        <p className="text-xs text-muted">{g ? tg(g.slug) : t("general")} · {listName(r.board_lists?.name)}</p>
+                        <p className="text-xs text-muted">{g ? tg(g.slug) : r.boards?.project_id ? r.boards.name : t("general")} · {listName(r.board_lists?.name)}</p>
                       </div>
                       {r.due_at && (
                         <span className={`inline-flex shrink-0 items-center gap-1 text-xs ${key === "overdue" ? "font-medium text-bad-text" : "text-muted"}`}>

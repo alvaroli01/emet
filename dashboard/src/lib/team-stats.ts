@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile, Group } from "@/lib/session";
+import { cardHref } from "@/lib/projects";
 
 const DAY = 864e5;
 export type Engagement = "active" | "somewhat" | "inactive";
@@ -12,7 +13,7 @@ export type TeamRow = {
 };
 
 type Act = { user_id: string; day: string; group_id: string | null; n: number };
-type CardRow = { id: string; title: string; due_at: string | null; completed_at: string | null; created_at: string; boards: { slug: string; name: string; group_id: string | null } | null; card_assignees: { user_id: string }[] };
+type CardRow = { id: string; title: string; due_at: string | null; completed_at: string | null; created_at: string; boards: { slug: string; name: string; group_id: string | null; project_id: string | null } | null; card_assignees: { user_id: string }[] };
 
 /** Active = did something on 3+ different days in 30; somewhat = 1–2 days; inactive = nothing (or never logged in). */
 export const engagement = (activeDays: number, joined: boolean): Engagement => (!joined || !activeDays ? "inactive" : activeDays >= 3 ? "active" : "somewhat");
@@ -22,7 +23,7 @@ async function load(since: number) {
   const sinceIso = new Date(since).toISOString();
   const [acts, cards, last] = await Promise.all([
     sb.rpc("team_activity", { since: sinceIso }),
-    sb.from("cards").select("id, title, due_at, completed_at, created_at, boards(slug, name, group_id), card_assignees!inner(user_id)")
+    sb.from("cards").select("id, title, due_at, completed_at, created_at, boards(slug, name, group_id, project_id), card_assignees!inner(user_id)")
       .or(`completed_at.is.null,completed_at.gte.${sinceIso}`).returns<CardRow[]>(),
     sb.from("activity_log").select("user_id, created_at").order("created_at", { ascending: false }).limit(1000),
   ]);
@@ -66,7 +67,7 @@ export async function loadMember(person: Profile, groups: Group[], weekStartIso:
     .gte("date", iso(prevMonthStart)).or(`rep_id.eq.${person.id},logged_by.eq.${person.id}`);
 
   const slugOf = (gid: string | null) => groups.find((g) => g.id === gid)?.slug;
-  const href = (c: CardRow) => (slugOf(c.boards?.group_id ?? null) ? `/g/${slugOf(c.boards!.group_id)}?card=${c.id}` : `/board?card=${c.id}`);
+  const href = (c: CardRow) => cardHref(c, (gid) => slugOf(gid));
   const mine = cards.filter((c) => c.card_assignees.some((a) => a.user_id === person.id));
   const open = mine.filter((c) => !c.completed_at).sort((a, b) => (a.due_at ?? "9").localeCompare(b.due_at ?? "9"));
   const doneBetween = (from: number, to: number) => mine.filter((c) => c.completed_at && Date.parse(c.completed_at) >= from && Date.parse(c.completed_at) < to).length;
