@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, ArrowUp } from "lucide-react";
+import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, ArrowUp, CalendarSync } from "lucide-react";
 import { MountainLazy } from "@/components/summit/mountain-lazy";
 import { GroupIcon } from "@/components/group-icon";
 import { NumberTicker } from "@/components/ui/number-ticker";
@@ -268,6 +268,11 @@ export function HomeDashboard({ d }: { d: HomeData }) {
                 {d.focus.score !== null && <span className="rounded-full bg-surface-2 px-2.5 py-1">{t("focusScore")} <b className="readout text-[#ff7a2e]">{d.focus.score}</b></span>}
                 <span className="rounded-full bg-surface-2 px-2.5 py-1">{t("dueToday")} <b className="readout">{d.focus.dueToday}</b></span>
                 {d.focus.late > 0 && <span className="rounded-full bg-bad/20 px-2.5 py-1 text-bad-text">{t("late")} <b className="readout">{d.focus.late}</b></span>}
+                {d.calendar.google === "not_connected" && (
+                  <Link href="/camp?tab=agenda#gcal" className="flex items-center gap-1 rounded-full bg-[#3b82f6]/25 px-2.5 py-1 font-medium text-[#bfdbfe] ring-1 ring-[#60a5fa]/50 hover:bg-[#3b82f6]/40">
+                    <CalendarSync size={12} /> {t("gcalAdd")}
+                  </Link>
+                )}
                 <Link href="/camp?tab=agenda#camp-tabs" className="rounded-full bg-surface-2 px-2.5 py-1 font-medium hover:text-link">{t("scheduleOpen")}</Link>
               </div>
             </div>

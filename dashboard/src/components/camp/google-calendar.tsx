@@ -16,6 +16,11 @@ export function GoogleCalendar() {
   const [url, setUrl] = useState("");
   const [busy, setBusy] = useState(false);
   useEffect(() => { fetch("/api/gcal").then((r) => r.json()).then((d) => setConnected(!!d.connected)).catch(() => setConnected(false)); }, []);
+  // Arriving from Today's "Add your Google Calendar": the sections above load after the browser's own jump, so jump again once loaded
+  useEffect(() => {
+    if (connected !== undefined && window.location.hash === "#gcal")
+      setTimeout(() => document.getElementById("gcal")?.scrollIntoView({ behavior: "smooth", block: "center" }), 300);
+  }, [connected]);
 
   async function connect(e: React.FormEvent) {
     e.preventDefault();

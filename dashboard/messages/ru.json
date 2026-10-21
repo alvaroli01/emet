@@ -2325,7 +2325,7 @@
       "google": "Google"
     },
     "gcalFailed": "Не удалось загрузить Google Календарь.",
-    "gcalAdd": "+ Добавить Google Календарь"
+    "gcalAdd": "Добавить Google Календарь"
   },
   "financeDash": {
     "totalRevenue": "Общая выручка",

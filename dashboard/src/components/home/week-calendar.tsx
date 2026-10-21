@@ -143,9 +143,6 @@ export function WeekCalendar({ days, today, items, google }: { days: string[]; t
           <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-muted"><CalendarDays size={13} /> {t("calEmpty")}</p>
         )}
         {google === "unreachable" && <p className="mt-2 text-xs text-bad-text">{t("gcalFailed")}</p>}
-        {google === "not_connected" && (
-          <Link href="/camp?tab=agenda#gcal" className="mt-2 inline-block text-xs text-muted hover:text-ink">{t("gcalAdd")}</Link>
-        )}
       </div>
     </div>
   );

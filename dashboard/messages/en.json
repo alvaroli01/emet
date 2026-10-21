@@ -2325,7 +2325,7 @@
       "google": "Google"
     },
     "gcalFailed": "Google Calendar couldn’t be loaded right now.",
-    "gcalAdd": "+ Add your Google Calendar"
+    "gcalAdd": "Add your Google Calendar"
   },
   "financeDash": {
     "totalRevenue": "Total revenue",

@@ -2325,7 +2325,7 @@
       "google": "Google"
     },
     "gcalFailed": "Google-kalenteria ei voitu ladata juuri nyt.",
-    "gcalAdd": "+ Lisää Google-kalenterisi"
+    "gcalAdd": "Lisää Google-kalenterisi"
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",

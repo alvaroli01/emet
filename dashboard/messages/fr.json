@@ -2325,7 +2325,7 @@
       "google": "Google"
     },
     "gcalFailed": "Impossible de charger Google Agenda pour le moment.",
-    "gcalAdd": "+ Ajouter ton Google Agenda"
+    "gcalAdd": "Ajouter ton Google Agenda"
   },
   "financeDash": {
     "totalRevenue": "Chiffre d’affaires total",
