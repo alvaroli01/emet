@@ -1,9 +1,11 @@
 import "server-only";
 import { call, CONTEXT, LANG, type Fail } from "@/lib/lab/ai";
 import { CRITERIA, normalizeJudgement, parseRelevance, keepRealLinks, verifyWebPlaces, type Judgement } from "./core";
+import type { KeyRing } from "@/lib/ai/pool";
+import { PLAN_MODELS, FIND_MODELS, WEB_MODELS, RELEVANCE_MODELS, JUDGE_MODELS } from "./models";
 import { PLAYBOOKS, PLAYBOOK_KEYS, type PlaybookKey } from "./playbooks";
 
-/** Scout's AI steps, run with the member's own free Groq key (same helper and fallbacks as the Idea lab). */
+/** Scout's AI steps, run on the team key pool (own key first, then lent keys, then the Mistral backup). */
 
 export type Project = { title: string; offer: string; niche: string; ideal_client: string | null; must_have: string[]; deal_breakers: string[]; avg_deal_value: number | null };
 export type Plan = { osm_tags: string[]; web_queries: string[]; signals: string[]; deal_breakers: string[]; playbook: PlaybookKey; summary: string };
@@ -19,7 +21,7 @@ Average deal value: ${p.avg_deal_value ? `€${p.avg_deal_value}` : "(unknown)"}
 const json = (r: { message: Record<string, unknown> }) => { try { return JSON.parse(String(r.message.content ?? "{}")); } catch { return null; } };
 
 /** Step A: understand the project once (cached on the project): what to search for and what makes a good client. */
-export async function planProject(key: string, p: Project, country: string, locale: string): Promise<Plan | Fail> {
+export async function planProject(key: string | KeyRing, p: Project, country: string, locale: string): Promise<Plan | Fail> {
   const r = await call(key, {
     reasoning_effort: "low", temperature: 0.2, response_format: { type: "json_object" },
     messages: [
@@ -39,7 +41,7 @@ Return JSON:
   "summary": "one sentence in ${LANG[locale] ?? "English"}: who we're looking for and why"
 }` },
     ],
-  });
+  }, PLAN_MODELS);
   if (!("ok" in r)) return r;
   const j = json(r);
   if (!j) return { error: "failed" };
@@ -52,13 +54,13 @@ Return JSON:
 }
 
 /** Web search for businesses OpenStreetMap is missing. Returns name + website/Instagram found in real search results. */
-export async function webFind(key: string, queries: string[], city: string, country: string): Promise<{ name: string; website: string | null; instagram: string | null; address: string | null }[] | Fail> {
+export async function webFind(key: string | KeyRing, queries: string[], city: string, country: string): Promise<{ name: string; website: string | null; instagram: string | null; address: string | null }[] | Fail> {
   const r = await call(key, {
     reasoning_effort: "low", tools: [{ type: "browser_search" }],
     messages: [{ role: "user", content: `Search the web for local businesses in ${city} (${country}) using these searches: ${queries.map((q) => `"${q.replace("{city}", city)}"`).join(", ")}.
 List up to 15 real, currently open businesses you actually found (no chains' head offices, no directories). Reply ONLY with JSON:
 {"places":[{"name":"","website":"https://… or null","instagram":"https://instagram.com/… or null","address":"street, city or null"}]}` }],
-  }, ["openai/gpt-oss-120b", "openai/gpt-oss-20b"]);
+  }, FIND_MODELS);
   if (!("ok" in r)) return r;
   const text = String(r.message.content ?? "");
   const m = text.match(/\{[\s\S]*\}/);
@@ -74,7 +76,7 @@ List up to 15 real, currently open businesses you actually found (no chains' hea
 }
 
 /** Before any research: one fast call says which candidates are the right KIND of place for this project. */
-export async function relevance(key: string, p: Project, plan: Plan | null, places: { name: string; category: string | null }[]): Promise<{ keep: Set<number>; reasons: Map<number, string> } | Fail> {
+export async function relevance(key: string | KeyRing, p: Project, plan: Plan | null, places: { name: string; category: string | null }[]): Promise<{ keep: Set<number>; reasons: Map<number, string> } | Fail> {
   if (!places.length) return { keep: new Set(), reasons: new Map() };
   const r = await call(key, {
     reasoning_effort: "low", temperature: 0, response_format: { type: "json_object" },
@@ -85,7 +87,7 @@ Candidates:
 ${places.map((x, i) => `${i}. ${x.name}${x.category ? ` [${x.category}]` : ""}`).join("\n")}
 Return {"match":[numbers that ARE this kind of business],"not_match":[{"n":number,"why":"short reason"}]}` },
     ],
-  }, ["openai/gpt-oss-20b", "qwen/qwen3.8-27b", "openai/gpt-oss-120b"]);
+  }, RELEVANCE_MODELS);
   if (!("ok" in r)) return r;
   return parseRelevance(json(r), places.length);
 }
@@ -95,12 +97,12 @@ export type Evidence = { place: { name: string; category: string | null; address
 
 /** Short web check of one place (reviews, Instagram activity, news) plus its official links — real search results only. */
 export type WebCheck = { notes: string; sources: { title: string; url: string }[]; links: { website: string | null; instagram: string | null; maps_url: string | null; phone: string | null } };
-export async function webCheck(key: string, name: string, city: string): Promise<WebCheck | Fail> {
+export async function webCheck(key: string | KeyRing, name: string, city: string): Promise<WebCheck | Fail> {
   const r = await call(key, {
     reasoning_effort: "low", tools: [{ type: "browser_search" }],
     messages: [{ role: "user", content: `Look up the business "${name}" in ${city}. In 5-8 short bullet points with facts only: what they sell, price level, reviews (rating, count, recurring complaints/praise), Instagram/online activity, size (staff, branches, chain or independent), anything new (opening, renovation, hiring), and their phone number if listed. Say "unknown" when not found. No advice.
 Then, on the last line, write exactly one JSON object with links you actually saw in the search results (null if not seen): {"official_website":null,"instagram":null,"google_maps_url":null,"phone":null}` }],
-  }, ["openai/gpt-oss-20b", "openai/gpt-oss-120b"]);
+  }, WEB_MODELS);
   if (!("ok" in r)) return r;
   const m = r.message as { content?: string; executed_tools?: { search_results?: { results?: { title?: string; url?: string }[] } }[] };
   const all: { title: string; url: string }[] = [];
@@ -114,7 +116,7 @@ Then, on the last line, write exactly one JSON object with links you actually sa
 }
 
 /** Steps C+D in one call: judge the place for this project and, if it's a fit, plan how to approach it. */
-export async function judge(key: string, p: Project, plan: Plan | null, ev: Evidence, locale: string): Promise<Judgement | Fail> {
+export async function judge(key: string | KeyRing, p: Project, plan: Plan | null, ev: Evidence, locale: string): Promise<Judgement | Fail> {
   const lang = LANG[locale] ?? "English";
   const evidence = [
     `PLACE: ${ev.place.name} · ${ev.place.category ?? "?"} · ${ev.place.address ?? "address unknown"}`,
@@ -149,7 +151,7 @@ Return JSON:
 Criteria: need = visibly has the problem we solve; fit = matches ideal client; ability_to_pay; reachability = we can reach a decision-maker; timing = a reason to act now; value_vs_effort = deal value vs effort for students; low_risk = 10 is safe (independent, open, friendly).
 Spain rule: unsolicited commercial email is not allowed even to companies, so prefer visit/phone/Instagram DM/contact form.` },
     ],
-  }, ["openai/gpt-oss-120b", "qwen/qwen3.8-27b", "openai/gpt-oss-20b"]);
+  }, JUDGE_MODELS);
   if (!("ok" in r)) return r;
   const j = normalizeJudgement(json(r));
   return j ?? { error: "failed" };

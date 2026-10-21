@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { decryptKey } from "@/lib/ai/keys";
+import { scoutRing } from "@/lib/ai/ring-server";
 import { researchOrder, type FoundPlace } from "@/lib/scout/core";
 import { findCities, osmPlaces, openPlaces } from "@/lib/scout/web";
 import { planProject, webFind, relevance, type Plan, type Project } from "@/lib/scout/ai";
@@ -12,7 +12,7 @@ export const maxDuration = 60;
 /**
  * Advances a Scout search by ONE step and saves it (Vercel Hobby time limits): queued → plan + locate,
  * finding → collect places, researching → judge the next place. The page calls this again until "done".
- * Runs with the caller's own Groq key and the caller's permissions (RLS).
+ * Runs on the team key pool (own key, then lent keys, then the Mistral backup) with the caller's permissions (RLS).
  */
 export async function POST(request: NextRequest) {
   const { id } = (await request.json().catch(() => ({}))) as { id?: string };
@@ -25,13 +25,19 @@ export async function POST(request: NextRequest) {
   ]);
   if (!s) return NextResponse.json({ error: "not-found" }, { status: 404 });
   if (!canScout) return NextResponse.json({ error: "forbidden" }, { status: 403 });
-  if (!keyRow) return NextResponse.json({ error: "no-key" }, { status: 400 });
   if (s.status === "done" || s.status === "failed") return NextResponse.json({ status: s.status });
-  const key = decryptKey(keyRow);
+  // Team key pool: my key first, then keys members lend to Scout (only after the can_scout check above)
+  const { data: meId } = await sb.rpc("my_profile_id");
+  const key = await scoutRing(meId as string, keyRow);
+  if (!key) return NextResponse.json({ error: "no-key" }, { status: 400 });
   const locale = await getLocale();
   const { data: project } = await sb.from("scout_projects").select("*").eq("id", s.project_id).single();
   const log: LogLine[] = Array.isArray(s.log) ? s.log : [];
-  const save = (patch: Record<string, unknown>) => sb.from("scout_searches").update({ ...patch, log: log.slice(-80) }).eq("id", id);
+  const tokens = () => Math.round(((s.tokens ?? 0) + key.tokens) / 1000);
+  const save = (patch: Record<string, unknown>) => {
+    if (key.usedLent && !log.some((l) => l.k === "pool")) log.push(line("pool", { n: key.keys.filter((k) => !k.own).length }));
+    return sb.from("scout_searches").update({ ...patch, tokens: (s.tokens ?? 0) + key.tokens, log: log.slice(-80) }).eq("id", id);
+  };
   const limit = (r: { error: string; retryAfter?: number }) => NextResponse.json(r, { status: r.error === "limit" ? 429 : 502 });
 
   // ── 1. Understand the project (cached on it) and find the city ──
@@ -81,7 +87,7 @@ export async function POST(request: NextRequest) {
     const fresh = researchOrder(unique.filter((r) => !known.has(r.id)), s.lat, s.lng).slice(0, 60);
     log.push(line("known", { known: known.size, todo: fresh.length }));
     if (unique.length < 10) log.push(line("fewPlaces", { n: unique.length }));
-    if (!fresh.length) { log.push(line("done", { strong: 0, good: 0, skip: 0 })); await save({ status: "done", found: unique.length, known: known.size }); return NextResponse.json({ status: "done" }); }
+    if (!fresh.length) { log.push(line("done", { strong: 0, good: 0, skip: 0, tokens: tokens() })); await save({ status: "done", found: unique.length, known: known.size }); return NextResponse.json({ status: "done" }); }
     await save({ status: "filtering", found: unique.length, known: known.size, queue: fresh.map((r) => r.id) });
     return NextResponse.json({ status: "filtering", places: fresh.map((r) => ({ id: r.id, lat: r.lat, lng: r.lng })) });
   }
@@ -125,7 +131,7 @@ export async function POST(request: NextRequest) {
   async function finish() {
     const { data: leads } = await sb.from("scout_leads").select("fit").eq("search_id", id);
     const n = (f: string) => (leads ?? []).filter((l) => l.fit === f).length;
-    log.push(line("done", { strong: n("strong"), good: n("good"), skip: n("skip") + n("maybe") }));
+    log.push(line("done", { strong: n("strong"), good: n("good"), skip: n("skip") + n("maybe"), tokens: tokens() }));
     await save({ status: "done", queue: [] });
     return NextResponse.json({ status: "done" });
   }

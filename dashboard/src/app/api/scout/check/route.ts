@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { decryptKey } from "@/lib/ai/keys";
+import { scoutRing } from "@/lib/ai/ring-server";
 import { parseMapsLink, type FoundPlace } from "@/lib/scout/core";
 import { osmLookup, resolveMapsLink } from "@/lib/scout/web";
 import { planProject, type Plan, type Project } from "@/lib/scout/ai";
@@ -22,8 +22,10 @@ export async function POST(request: NextRequest) {
   ]);
   if (!project) return NextResponse.json({ error: "not-found" }, { status: 404 });
   if (!canScout) return NextResponse.json({ error: "forbidden" }, { status: 403 });
-  if (!keyRow) return NextResponse.json({ error: "no-key" }, { status: 400 });
-  const key = decryptKey(keyRow);
+  // Team key pool: my key first, then keys members lend to Scout (only after the can_scout check above)
+  const { data: meId } = await sb.rpc("my_profile_id");
+  const key = await scoutRing(meId as string, keyRow);
+  if (!key) return NextResponse.json({ error: "no-key" }, { status: 400 });
   const locale = await getLocale();
 
   const url = /^https?:\/\//i.test(raw) ? raw : /^[\w-]+(\.[\w-]+)+(\/|$)/.test(raw) ? `https://${raw}` : null;

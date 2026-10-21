@@ -4,6 +4,7 @@ import type { Fail } from "@/lib/lab/ai";
 import { fingerprint, evidenceLevel, applyEvidence, type FoundPlace } from "./core";
 import { readSite } from "./web";
 import { judge, webCheck, type Plan, type Project } from "./ai";
+import type { KeyRing } from "@/lib/ai/pool";
 
 /** One line of the plain-language step log next to the globe. The client translates `k` with `p` as values. */
 export type LogLine = { at: string; k: string; p?: Record<string, string | number>; url?: string; place_id?: string };
@@ -21,7 +22,7 @@ export async function upsertPlaces(sb: SupabaseClient, found: FoundPlace[], city
 }
 
 /** Research one place (reusing anything fetched in the last 30 days), judge it for the project and save the lead. */
-export async function researchAndJudge(sb: SupabaseClient, key: string, opts: { place: PlaceRow; project: Project & { id: string }; plan: Plan | null; searchId: string | null; locale: string }): Promise<{ ok: true; lead: { id: string; score: number; fit: string; worth_it: boolean }; pages: number } | Fail> {
+export async function researchAndJudge(sb: SupabaseClient, key: string | KeyRing, opts: { place: PlaceRow; project: Project & { id: string }; plan: Plan | null; searchId: string | null; locale: string }): Promise<{ ok: true; lead: { id: string; score: number; fit: string; worth_it: boolean }; pages: number } | Fail> {
   const { place, project, plan } = opts;
   const since = new Date(Date.now() - 30 * 864e5).toISOString();
   const { data: cached } = await sb.from("scout_research").select("url, text_excerpt, robots_ok").eq("place_id", place.id).gte("fetched_at", since);

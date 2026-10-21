@@ -153,3 +153,9 @@ test("web-found places are kept only if the search really returned them (no inve
   assert.deepEqual(got.map((p) => p.name), ["Café Iruña", "Bar Bertoldo"]);
   assert.equal(got[0].website, "https://www.cafeirunabilbao.net/");
 });
+
+import { JUDGE_MODELS, RELEVANCE_MODELS } from "./models.ts";
+test("the final score only ever comes from the strongest models", () => {
+  assert.deepEqual(JUDGE_MODELS, ["openai/gpt-oss-120b", "mistral/mistral-medium-latest"]);
+  assert.equal(RELEVANCE_MODELS.at(-1), "mistral/mistral-small-latest");
+});
