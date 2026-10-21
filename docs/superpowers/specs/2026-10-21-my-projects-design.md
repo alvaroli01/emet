@@ -34,7 +34,7 @@ the project made — so a project's work lives in one place. €0.
 **RLS:**
 - `projects` read: `is_admin() or is_finance() or is_project_member(id)`; insert/update/delete: `is_admin()` (replaces the
   Finance-only write policies; Finance keeps tagging sales because that's on `sales`/`expenses`).
-- `project_members`: read if `is_project_member(project_id) or is_finance()`... **read: `is_project_member(project_id)`**; write: `is_admin()`.
+- `project_members`: read `is_project_member(project_id)`; insert/delete `is_admin()`.
 - `project_links`, `project_updates`, `project_files`: read + insert for `is_project_member(project_id)`; update/delete for the
   creator or `is_admin()`.
 - Storage `projects` bucket: read/insert when `is_project_member((foldername)[1]::uuid)`; delete for admins or the uploader's row.
