@@ -44,13 +44,13 @@ export function PageHero({ section, title, subtitle, lines = [], stats = [], act
     <div className="fade-in space-y-4 sm:space-y-5">
       <header className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 pt-1">
         {/* Glass box behind the title block so it reads clearly over the section photo */}
-        <div className="panel min-w-0 max-w-3xl px-5 py-4 sm:px-6 sm:py-5">
+        <div className="panel min-w-0 max-w-3xl px-5 py-4 max-sm:w-full max-sm:px-4 max-sm:py-3.5 sm:px-6 sm:py-5">
           <p className="flex items-center gap-2 text-sm font-medium text-muted">
             <span aria-hidden className="grid size-7 place-items-center rounded-lg text-white" style={{ background: color }}>{section.icon}</span>
             {section.label}
           </p>
-          <h1 className="display mt-3 text-[clamp(1.65rem,3.2vw,2.4rem)]">{title}</h1>
-          {subtitle && <p className="mt-1.5 text-[15px] leading-relaxed text-muted sm:text-base">{subtitle}</p>}
+          <h1 className="display mt-3 text-[clamp(1.65rem,3.2vw,2.4rem)] max-sm:mt-2 max-sm:text-[1.45rem]">{title}</h1>
+          {subtitle && <p className="mt-1.5 text-[15px] leading-relaxed text-muted max-sm:text-sm sm:text-base">{subtitle}</p>}
           {aside && <div className="mt-3">{aside}</div>}
         </div>
         {(actions.length > 0 || corner) && (
@@ -99,7 +99,7 @@ export function PageHero({ section, title, subtitle, lines = [], stats = [], act
             </section>
           ))}
           {visual && (
-            <figure className={`panel relative h-64 overflow-hidden sm:h-72 ${lines.length ? "lg:col-span-2 lg:h-auto lg:min-h-[280px]" : "lg:h-80"}`}>
+            <figure className={`panel relative h-64 overflow-hidden max-sm:hidden sm:h-72 ${lines.length ? "lg:col-span-2 lg:h-auto lg:min-h-[280px]" : "lg:h-80"}`}>
               {visualTitle && <figcaption className="pointer-events-none absolute top-3.5 left-4 z-10 rounded-full bg-surface/85 px-2.5 py-1 text-xs font-medium text-muted backdrop-blur">{visualTitle}</figcaption>}
               {visual}
             </figure>
@@ -110,9 +110,9 @@ export function PageHero({ section, title, subtitle, lines = [], stats = [], act
       {stats.length > 0 && (
         <dl className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {stats.slice(0, 4).map((s, i) => (
-            <div key={s.label} className={`panel flex min-w-0 flex-col gap-2 p-4 sm:p-5 ${stats.length === 3 && i === 2 ? "col-span-2 lg:col-span-1" : ""}`}>
+            <div key={s.label} className={`panel flex min-w-0 flex-col gap-2 p-4 max-sm:gap-1.5 max-sm:p-3.5 sm:p-5 ${stats.length === 3 && i === 2 ? "col-span-2 lg:col-span-1" : ""}`}>
               <dt className="text-[13px] font-medium text-muted">{s.label}</dt>
-              <dd className="readout truncate text-[1.75rem] leading-none sm:text-3xl">
+              <dd className="readout truncate text-[1.75rem] leading-none max-sm:text-2xl sm:text-3xl">
                 {s.value === null ? "—" : (
                   <NumberTicker value={s.kind === "pct" ? Math.round(s.value * 100) : s.kind === "eur" ? Math.round(s.value) : s.value} locale={locale}
                                 decimalPlaces={s.kind === "num" && !Number.isInteger(s.value) ? 1 : 0}

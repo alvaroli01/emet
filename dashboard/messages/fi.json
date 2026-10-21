@@ -2368,7 +2368,9 @@
     "gcalFailed": "Google-kalenteria ei voitu ladata juuri nyt.",
     "calExpand": "Suurenna",
     "calClose": "Sulje",
-    "calendar": "Viikkosi"
+    "calendar": "Viikkosi",
+    "allDay": "Koko päivän",
+    "dayEmpty": "Ei mitään tänä päivänä"
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",
@@ -2549,7 +2551,8 @@
     "delete": "Poista muistutus",
     "noReminders": "Ei muistutuksia. Lisää yksi tälle päivälle.",
     "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
-    "allDay": "Koko päivän"
+    "allDay": "Koko päivän",
+    "dayEmpty": "Ei mitään tänä päivänä"
   },
   "teamTable": {
     "search": "Hae ihmisiä",

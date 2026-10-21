@@ -56,7 +56,7 @@ export function AgendaTab({ items: initial, due, today }: { items: AgendaItem[];
 
   return (
     <div className="space-y-4">
-      <div role="listbox" aria-label={t("days")} className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] lg:mx-0 lg:px-0">
+      <div role="listbox" aria-label={t("days")} className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] max-sm:-mx-3 max-sm:px-3 lg:mx-0 lg:px-0">
         {days.map((d) => {
           const active = d === day;
           const n = count(d);

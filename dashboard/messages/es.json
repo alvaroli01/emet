@@ -2368,7 +2368,9 @@
     "gcalFailed": "No se pudo cargar Google Calendar ahora mismo.",
     "calExpand": "Ampliar",
     "calClose": "Cerrar",
-    "calendar": "Tu semana"
+    "calendar": "Tu semana",
+    "allDay": "Todo el día",
+    "dayEmpty": "Nada este día"
   },
   "financeDash": {
     "totalRevenue": "Ingresos totales",
@@ -2549,7 +2551,8 @@
     "delete": "Eliminar recordatorio",
     "noReminders": "Sin recordatorios. Añade uno para hoy.",
     "saveError": "No se pudo guardar. Inténtalo de nuevo.",
-    "allDay": "Todo el día"
+    "allDay": "Todo el día",
+    "dayEmpty": "Nada este día"
   },
   "teamTable": {
     "search": "Buscar personas",

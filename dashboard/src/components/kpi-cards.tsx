@@ -46,7 +46,7 @@ export function KpiCards({ kpis, canEdit, inline = false }: { kpis: KpiWithValue
 
   if (!kpis.length) return null;
   return (
-    <div className={inline ? "grid grid-cols-2 gap-x-4 gap-y-5 lg:flex lg:gap-0 lg:divide-x lg:divide-line" : "grid gap-3 sm:grid-cols-2 lg:grid-cols-3"}>
+    <div className={inline ? "grid grid-cols-2 gap-x-4 gap-y-5 max-sm:grid-cols-1 max-sm:divide-y max-sm:divide-line max-sm:gap-y-0 max-sm:[&>*]:py-3 max-sm:[&>*:first-child]:pt-0 lg:flex lg:gap-0 lg:divide-x lg:divide-line" : "grid gap-3 sm:grid-cols-2 lg:grid-cols-3"}>
       {kpis.map((k) => {
         const status = kpiStatus(k.metric, k.current, k.target);
         return (

@@ -34,7 +34,7 @@ export function TopBarFrame({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const clear = path === "/today";
   return (
-    <header className={`sticky top-0 z-20 flex h-16 items-center gap-3 px-3 sm:px-4 lg:px-6 ${clear ? "force-dark" : "border-b border-line bg-bg/80 backdrop-blur-2xl"}`}>
+    <header className={`sticky top-0 z-20 flex h-16 items-center gap-3 px-3 sm:px-4 lg:px-6 ${clear ? "force-dark max-sm:bg-gradient-to-b max-sm:from-black/75 max-sm:to-black/35 max-sm:backdrop-blur-xl" : "border-b border-line bg-bg/80 backdrop-blur-2xl"}`}>
       {children}
     </header>
   );

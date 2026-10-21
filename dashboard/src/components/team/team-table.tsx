@@ -39,7 +39,7 @@ export function TeamTable({ rows }: { rows: TeamRow[] }) {
         <div className="grid w-full grid-cols-3 gap-2 sm:w-auto" role="group" aria-label={t("filter")}>
           {(["inactive", "somewhat", "active"] as const).map((e) => (
             <button key={e} onClick={() => toggle(e)} aria-pressed={show.has(e)}
-                    className={`min-h-11 rounded-2xl px-3 text-sm transition sm:px-5 ${show.has(e) ? "bg-surface-2 font-medium text-ink ring-1 ring-brand/60" : "text-muted ring-1 ring-line"}`}>
+                    className={`min-h-11 rounded-2xl px-3 text-sm transition max-sm:px-1.5 max-sm:text-xs max-sm:leading-tight max-sm:whitespace-normal sm:px-5 ${show.has(e) ? "bg-surface-2 font-medium text-ink ring-1 ring-brand/60" : "text-muted ring-1 ring-line"}`}>
               {t(`status.${e}`)} <span className="ml-1 text-xs text-muted tabular-nums">{rows.filter((r) => r.status === e).length}</span>
             </button>
           ))}
@@ -47,15 +47,15 @@ export function TeamTable({ rows }: { rows: TeamRow[] }) {
       </div>
 
       <div className="mt-5 overflow-x-auto">
-        <table className="w-full min-w-[760px] text-sm">
+        <table className="w-full min-w-[760px] text-sm max-sm:min-w-0 max-sm:table-fixed">
           <thead>
             <tr className="border-b border-line text-left align-bottom text-xs text-muted">
               <th className="pb-3 font-medium">{t("name")}</th>
-              <th className="pb-3 font-medium"><button onClick={() => setSortStatus((v) => !v)} className="font-medium text-ink">{t("statusCol")} {sortStatus ? "▾" : "▴"}</button></th>
-              <th className="pb-3 text-center font-medium whitespace-pre-line">{t("usedApp")}</th>
-              <th className="pb-3 text-center font-medium whitespace-pre-line">{t("didTask")}</th>
-              <th className="pb-3 text-right font-medium whitespace-pre-line">{t("tasksDone")}</th>
-              <th className="pb-3 pl-6 font-medium">{t("lastActive")}</th>
+              <th className="pb-3 font-medium max-sm:w-14"><button onClick={() => setSortStatus((v) => !v)} className="font-medium text-ink">{t("statusCol")} {sortStatus ? "▾" : "▴"}</button></th>
+              <th className="pb-3 text-center font-medium whitespace-pre-line max-sm:hidden">{t("usedApp")}</th>
+              <th className="pb-3 text-center font-medium whitespace-pre-line max-sm:hidden">{t("didTask")}</th>
+              <th className="pb-3 text-right font-medium whitespace-pre-line max-sm:hidden">{t("tasksDone")}</th>
+              <th className="pb-3 pl-6 font-medium max-sm:hidden">{t("lastActive")}</th>
               <th className="w-6" />
             </tr>
           </thead>
@@ -66,7 +66,7 @@ export function TeamTable({ rows }: { rows: TeamRow[] }) {
                 <tr key={r.id} className="group border-b border-line/60 last:border-0 hover:bg-surface-2/50">
                   <td className="py-3.5 pr-3">
                     <Link href={`/team/${r.id}`} className="flex items-center gap-3">
-                      <Avatar name={r.name} src={r.avatar} size={48} />
+                      <span className="max-sm:shrink-0"><Avatar name={r.name} src={r.avatar} size={48} /></span>
                       <span className="min-w-0">
                         <span className="block font-medium group-hover:text-link">{r.name}</span>
                         <span className="block truncate text-xs text-muted">{[r.role, r.team].filter(Boolean).join(" - ") || t("noRole")}</span>
@@ -74,11 +74,11 @@ export function TeamTable({ rows }: { rows: TeamRow[] }) {
                       </span>
                     </Link>
                   </td>
-                  <td><span className="flex items-center gap-2">{ICON[r.status]} {t(`status.${r.status}`)}</span></td>
-                  <td className="text-center">{yes(r.usedApp, r.usedApp ? t("yes") : t("no"))}</td>
-                  <td className="text-center">{yes(r.didTask, r.didTask ? t("yes") : t("no"))}</td>
-                  <td className="text-right text-muted tabular-nums">({r.done}/{r.total}) {r.total ? Math.round((r.done / r.total) * 100) : 0}%</td>
-                  <td className="pl-6"><span className="flex items-center gap-2">{!r.lastActive ? <CircleMinus size={20} className="text-warn-text" /> : recent ? <CircleCheck size={20} className="text-ok-text" /> : <CircleAlert size={20} className="text-bad-text" />} {ago(r.lastActive)}</span></td>
+                  <td><span className="flex items-center gap-2 max-sm:text-xs">{ICON[r.status]} <span className="max-sm:hidden">{t(`status.${r.status}`)}</span></span></td>
+                  <td className="text-center max-sm:hidden">{yes(r.usedApp, r.usedApp ? t("yes") : t("no"))}</td>
+                  <td className="text-center max-sm:hidden">{yes(r.didTask, r.didTask ? t("yes") : t("no"))}</td>
+                  <td className="text-right text-muted tabular-nums max-sm:hidden">({r.done}/{r.total}) {r.total ? Math.round((r.done / r.total) * 100) : 0}%</td>
+                  <td className="pl-6 max-sm:hidden"><span className="flex items-center gap-2">{!r.lastActive ? <CircleMinus size={20} className="text-warn-text" /> : recent ? <CircleCheck size={20} className="text-ok-text" /> : <CircleAlert size={20} className="text-bad-text" />} {ago(r.lastActive)}</span></td>
                   <td><Link href={`/team/${r.id}`} aria-label={t("open", { name: r.name })} className="text-muted"><ChevronRight size={16} /></Link></td>
                 </tr>
               );

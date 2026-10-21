@@ -16,11 +16,11 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 function Tile({ label, value, unit, delta, good, href }: { label: string; value: string; unit: string; delta: string; good: boolean | null; href?: string }) {
   return (
-    <section className="panel relative p-5">
-      <p className="text-sm text-muted">{label}</p>
-      {href && <Link href={href} aria-label={label} className="absolute top-4 right-4 grid size-9 place-items-center rounded-full ring-1 ring-line hover:bg-surface-2"><ArrowUpRight size={16} /></Link>}
-      <p className="readout mt-2 text-4xl">{value}</p>
-      <div className="mt-1 flex items-end justify-between gap-2 text-sm">
+    <section className="panel relative p-5 max-sm:p-3">
+      <p className="text-sm text-muted max-sm:truncate max-sm:text-[11px]">{label}</p>
+      {href && <Link href={href} aria-label={label} className="absolute top-4 right-4 grid size-9 place-items-center rounded-full ring-1 ring-line hover:bg-surface-2 max-sm:hidden"><ArrowUpRight size={16} /></Link>}
+      <p className="readout mt-2 text-4xl max-sm:mt-1 max-sm:truncate max-sm:text-xl">{value}</p>
+      <div className="mt-1 flex items-end justify-between gap-2 text-sm max-sm:hidden">
         <span>{unit}</span>
         <span className={good === null ? "text-muted" : good ? "text-ok-text" : "text-bad-text"}>{delta}</span>
       </div>
@@ -62,7 +62,7 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, p
     <div className="fade-in space-y-4">
       <Link href="/team" className="inline-flex items-center gap-1 text-sm text-muted hover:text-ink"><ChevronLeft size={15} /> {t("back")}</Link>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 max-sm:grid-cols-3 max-sm:gap-2 sm:grid-cols-3">
         <Tile label={t("inProgress")} value={String(d.inProgress)} unit={t("tasks", { n: d.inProgress })} delta={t("newThisWeek", { n: d.newThisWeek })} good={null} href={p.teamSlug ? `/g/${p.teamSlug}?tab=board` : "/board"} />
         <Tile label={t("completed")} value={String(d.completed7)} unit={t("tasks", { n: d.completed7 })} delta={t("vsLastWeek", { n: sign(doneDelta) })} good={doneDelta === 0 ? null : doneDelta > 0} />
         <Tile label={t("sales")} value={eur(d.salesMonth, locale)} unit={t("perMonth")} delta={salesDelta === null ? t("noPrev") : t("vsLastMonth", { n: `${salesDelta > 0 ? "+" : ""}${salesDelta}%` })} good={salesDelta === null || salesDelta === 0 ? null : salesDelta > 0} href="/g/finance" />
@@ -72,7 +72,7 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, p
         {/* Profile + working format */}
         <div className="space-y-4">
           <section className="panel relative overflow-hidden p-0">
-            <div className="relative aspect-[4/3.2] bg-[radial-gradient(120%_90%_at_50%_0%,rgb(255_106_26/0.45),transparent_70%),linear-gradient(180deg,var(--surface-2),var(--bg))]">
+            <div className="relative aspect-[4/3.2] max-sm:aspect-[16/9] bg-[radial-gradient(120%_90%_at_50%_0%,rgb(255_106_26/0.45),transparent_70%),linear-gradient(180deg,var(--surface-2),var(--bg))]">
               {p.avatar
                 ? <img src={p.avatar} alt="" className="absolute inset-0 size-full object-cover" /> // eslint-disable-line @next/next/no-img-element
                 : <span aria-hidden className="absolute inset-0 grid place-items-center text-7xl font-medium tracking-tight text-white/90">{initials}</span>}
@@ -88,7 +88,7 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, p
 
           <section className="panel p-5">
             <p className="font-medium">{t("format")}</p>
-            <div className="mt-4 grid h-44 grid-cols-2 items-end gap-3">
+            <div className="mt-4 grid h-44 grid-cols-2 items-end gap-3 max-sm:h-28">
               {[{ k: "elsewhere", v: d.format.elsewhere, on: false }, { k: "own", v: d.format.own, on: true }].map((x) => (
                 <div key={x.k} className={`flex flex-col justify-end rounded-2xl p-3 ${x.on ? "bg-[linear-gradient(180deg,#ff8a4a,#ff6a1a)] text-white" : "bg-[repeating-linear-gradient(135deg,rgb(255_255_255/0.06)_0_6px,transparent_6px_12px)] ring-1 ring-line"}`}
                      style={{ height: `${Math.max(35, Math.round(x.v * 100))}%` }}>
@@ -124,7 +124,7 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, p
 
           <section className="panel p-5">
             <p className="font-medium">{t("topProjects")}</p>
-            <div className="mt-4 grid h-44 grid-cols-5 items-end gap-2.5">
+            <div className="mt-4 grid h-44 grid-cols-5 items-end gap-2.5 max-sm:h-28">
               {d.projects.days.map((day) => {
                 const total = day.values.reduce((a, b) => a + b, 0);
                 return (

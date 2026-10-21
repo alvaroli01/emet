@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { CalendarDays, Clock, Maximize2, X } from "lucide-react";
 import { layoutLanes } from "@/lib/calendar-layout";
+import { PhoneWeek } from "./phone-week";
 
 export type CalendarItem = {
   id: string; title: string; day: string; start: string | null; end: string | null;
@@ -77,7 +78,7 @@ export function WeekCalendar({ days, today, items, google, big = false }: { days
   return (
     <div className={big ? "" : "relative mt-3"}>
       {!big && (
-        <button onClick={() => setExpanded(true)} className="absolute -top-1 right-0 z-10 flex items-center gap-1 rounded-full bg-surface-2 px-2.5 py-1 text-[11px] font-medium text-muted hover:text-ink" aria-label={t("calExpand")}>
+        <button onClick={() => setExpanded(true)} className="absolute -top-1 right-0 z-10 flex max-sm:hidden items-center gap-1 rounded-full bg-surface-2 px-2.5 py-1 text-[11px] font-medium text-muted hover:text-ink" aria-label={t("calExpand")}>
           <Maximize2 size={12} /> {t("calExpand")}
         </button>
       )}
@@ -91,7 +92,11 @@ export function WeekCalendar({ days, today, items, google, big = false }: { days
           </div>
         </div>, document.body,
       )}
-    <div className={`overflow-x-auto ${big ? "" : "pt-6"}`}>
+      {/* Phones: small day buttons + a short list; the time grid below is for the computer */}
+      {!big && <PhoneWeek days={days} today={today} allDay={t("allDay")} empty={t("dayEmpty")}
+        items={items.map((x) => ({ id: x.id, title: x.title, day: x.day, href: x.href, google: x.kind === "google", done: x.status === "done", late: x.status === "late",
+          time: x.start ? `${x.start}${x.end ? `–${x.end}` : ""}` : null, meta: x.team ?? null }))} />}
+    <div className={`overflow-x-auto ${big ? "" : "pt-6 max-sm:hidden"}`}>
       <div className={big ? "min-w-[980px]" : "min-w-[620px]"}>
         {/* Day headers + tasks due that day */}
         <div className="grid gap-1.5 pl-12" style={{ gridTemplateColumns: `repeat(${cols.length}, minmax(0,1fr))` }}>

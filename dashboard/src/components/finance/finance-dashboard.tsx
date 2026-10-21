@@ -24,7 +24,7 @@ function Change({ v }: { v: number | null }) {
 function Spark({ values, up }: { values: number[]; up: boolean }) {
   const max = Math.max(1, ...values), W = 90, H = 30;
   const d = values.map((v, i) => `${i ? "L" : "M"} ${(i / (values.length - 1)) * W} ${H - (v / max) * H}`).join(" ");
-  return <svg viewBox={`0 0 ${W} ${H}`} className="h-8 w-24" aria-hidden><path d={d} fill="none" stroke={up ? "var(--ok)" : "var(--bad)"} strokeWidth="1.8" strokeLinejoin="round" /></svg>;
+  return <svg viewBox={`0 0 ${W} ${H}`} className="h-8 w-24 max-sm:w-12 max-sm:shrink-0" aria-hidden><path d={d} fill="none" stroke={up ? "var(--ok)" : "var(--bad)"} strokeWidth="1.8" strokeLinejoin="round" /></svg>;
 }
 
 /** Finance at a glance — modelled on the "finance example": total, methods, money over time, flow, cashflow. */
@@ -69,11 +69,11 @@ export function FinanceDashboard({ d, canEdit }: { d: FinanceDash; canEdit: bool
       </section>
 
       {/* Payment methods */}
-      <section aria-label={t("methods")} className="-mx-3 flex gap-3 overflow-x-auto px-3 pb-1 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-3 sm:px-0 lg:grid-cols-5">
+      <section aria-label={t("methods")} className="-mx-3 flex gap-3 overflow-x-auto px-3 pb-1 [scrollbar-width:none] max-sm:mx-0 max-sm:grid max-sm:grid-cols-2 max-sm:px-0 sm:mx-0 sm:grid sm:grid-cols-3 sm:px-0 lg:grid-cols-5">
         {d.methods.map((m) => {
           const Icon = METHOD_ICON[m.key as keyof typeof METHOD_ICON];
           return (
-            <div key={m.key} className="panel min-w-[180px] p-4">
+            <div key={m.key} className="panel min-w-[180px] p-4 max-sm:min-w-0 max-sm:p-3.5">
               <p className="flex items-center gap-2 text-sm"><span className="grid size-7 place-items-center rounded-lg bg-surface-2"><Icon size={14} /></span>{tm(m.key)}</p>
               <div className="mt-3 flex items-end justify-between gap-2">
                 <div>
@@ -85,7 +85,7 @@ export function FinanceDashboard({ d, canEdit }: { d: FinanceDash; canEdit: bool
             </div>
           );
         })}
-        <Link href="/g/finance?tab=projects" className="grid min-w-[180px] place-items-center rounded-[22px] border border-dashed border-line p-4 text-center text-sm text-muted transition hover:border-muted hover:text-ink">
+        <Link href="/g/finance?tab=projects" className="grid min-w-[180px] place-items-center max-sm:min-w-0 rounded-[22px] border border-dashed border-line p-4 text-center text-sm text-muted transition hover:border-muted hover:text-ink">
           <span><span className="mx-auto mb-2 grid size-9 place-items-center rounded-full bg-surface-2"><FolderPlus size={16} /></span>{t("addProject")}</span>
         </Link>
       </section>
@@ -100,7 +100,7 @@ export function FinanceDashboard({ d, canEdit }: { d: FinanceDash; canEdit: bool
             </div>
             <p className="flex gap-3 text-xs text-muted"><span className="flex items-center gap-1.5"><span className="h-0.5 w-4 rounded bg-ink" /> {t("in")}</span><span className="flex items-center gap-1.5"><span className="h-0.5 w-4 rounded bg-brand" /> {t("out")}</span></p>
           </div>
-          <div className="mt-3 h-56">
+          <div className="mt-3 h-56 max-sm:h-40">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={days} margin={{ top: 10, right: 6, left: 6, bottom: 0 }} onMouseMove={(s) => setHover(typeof s?.activeTooltipIndex === "number" ? s.activeTooltipIndex : null)} onMouseLeave={() => setHover(null)}>
                 <defs>
@@ -125,7 +125,7 @@ export function FinanceDashboard({ d, canEdit }: { d: FinanceDash; canEdit: bool
             <div><p className="text-sm text-muted">{t("spentThisWeek")}</p><p className="readout mt-1 text-2xl">{eur(d.weekOutTotal, locale)}</p></div>
             <Link href="/g/finance?tab=ledgers" className="glass-pill h-8 px-3 text-xs">{t("seeAll")}</Link>
           </div>
-          <div className="mt-5 grid h-48 grid-cols-7 items-end gap-2">
+          <div className="mt-5 grid h-48 grid-cols-7 items-end gap-2 max-sm:h-32">
             {d.weekOut.map((v, i) => (
               <div key={i} className="flex h-full flex-col items-center gap-2">
                 <div className="relative w-full flex-1 overflow-hidden rounded-xl bg-surface-2">

@@ -2368,7 +2368,9 @@
     "gcalFailed": "Google Kalender konnte gerade nicht geladen werden.",
     "calExpand": "Vergrößern",
     "calClose": "Schließen",
-    "calendar": "Deine Woche"
+    "calendar": "Deine Woche",
+    "allDay": "Ganztägig",
+    "dayEmpty": "An diesem Tag nichts geplant"
   },
   "financeDash": {
     "totalRevenue": "Gesamtumsatz",
@@ -2549,7 +2551,8 @@
     "delete": "Erinnerung löschen",
     "noReminders": "Keine Erinnerungen. Füge eine für heute hinzu.",
     "saveError": "Speichern fehlgeschlagen. Versuch es nochmal.",
-    "allDay": "Ganztägig"
+    "allDay": "Ganztägig",
+    "dayEmpty": "An diesem Tag nichts geplant"
   },
   "teamTable": {
     "search": "Personen suchen",

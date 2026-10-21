@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Phone version (computer unchanged — every change only applies under 640px): nothing runs off the right edge any more (grids fit the screen, page never scrolls sideways); Your week / My week are small day buttons + a short list; big decorative pictures hidden on phones so the real content comes first; Finance payment cards in a 2×2 grid; Team list shows name + status; profile numbers in one compact row; notifications panel full-width and solid; top bar on Today gets a dark background. Fixes: Scout's “{city}” label error and a country-name mismatch warning.
 - 2026-10-21 — Alvaro — Fix: every pop-up form (shared Modal, task card window, recorder) now opens above the top bar — the search box no longer covers forms in any section. Scout log says why a web search finds nothing (results read, places named, confirmed).
 
 - 2026-10-21 — Alvaro — Scout team key pool: "Lend my AI key to Scout" switch; when one Groq key runs out the next one steps in automatically (lent keys capped at 60% of their daily allowance so owners keep the rest), then free Mistral backup keys; Groq, Mistral, lending to Scout and Google Calendar are all in avatar menu → My connections (steps shown for anything not connected), plus a small “AI connections” button on Scout; judging only on the strongest models; members without a key can search when someone lends one; each search logs its AI tokens. Migration 0032.

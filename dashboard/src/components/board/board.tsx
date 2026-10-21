@@ -230,7 +230,7 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
       <DndContext id={dndId} sensors={sensors} collisionDetection={closestCorners}
                   onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd}
                   onDragCancel={() => { dragging.current = false; setActiveId(null); router.refresh(); }}>
-        <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 lg:mx-0 lg:snap-none lg:px-0">
+        <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 max-sm:-mx-3 max-sm:px-3 lg:mx-0 lg:snap-none lg:px-0">
           {lists.map((list) => (
             <Column key={list.id} list={list} ids={order[list.id] ?? []} cards={cards} members={data.members}
                     rights={rights} onOpen={setOpenId} onAdd={addCard}

@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Pause, Play, Star, ChevronRight, Plus, Video, CalendarClock, Check, Trash2, TrendingUp, CalendarDays } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
+import { PhoneWeek } from "@/components/home/phone-week";
 
 export type PersonalData = {
   name: string; today: string; weekStart: string;
@@ -125,11 +126,15 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
           <section className="panel p-4 sm:p-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-lg font-medium">{t("myWeek")}</p>
-              <div className="glass-pill p-1 text-sm" role="tablist">
+              <div className="glass-pill p-1 text-sm max-sm:hidden" role="tablist">
                 {(["today", "week"] as const).map((v) => <button key={v} role="tab" aria-selected={view === v} onClick={() => setView(v)} className={`rounded-full px-3.5 py-1.5 ${view === v ? "bg-ink font-medium text-bg" : "text-muted"}`}>{t(v === "today" ? "viewToday" : "viewWeek")}</button>)}
               </div>
             </div>
-            <div className="mt-4 overflow-x-auto">
+            {/* Phones: small day buttons + a short list; the board below is for the computer */}
+            <PhoneWeek days={days} today={d.today} allDay={t("allDay")} empty={t("dayEmpty")}
+              items={d.week.map((x) => ({ id: x.id, title: x.title, day: x.day, href: x.href, time: x.time ?? null, meta: x.team,
+                google: x.status === "google", done: x.status === "done", late: x.status === "late" }))} />
+            <div className="mt-4 overflow-x-auto max-sm:hidden">
               <div className="grid min-w-[680px] gap-2" style={{ gridTemplateColumns: `repeat(${cols.length}, minmax(0,1fr))` }}>
                 {cols.map((day) => {
                   const isToday = day === d.today;

@@ -38,7 +38,7 @@ export function ContentPipeline({ items, metrics, glossary, members, canEdit, me
       </div>
 
       {view === "pipeline" ? (
-        <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0">
+        <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 max-sm:-mx-3 max-sm:px-3 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0">
           {STATUSES.map((s) => {
             const col = items.filter((c) => c.status === s).sort((a, b) => (a.planned_for ?? "9").localeCompare(b.planned_for ?? "9"));
             return (

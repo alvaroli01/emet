@@ -230,7 +230,8 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
           <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-2">
             <label className="block"><span className="mb-0.5 block text-xs text-muted">{t("country")}</span>
               <select value={country} onChange={(e) => { setCountry(e.target.value); setPicked(null); }} className="input" disabled={!canScout || running}>
-                {countries.map(({ c, name }) => <option key={c} value={c}>{name}</option>)}
+                {/* Country names come from the runtime: server and browser can word a few differently (e.g. Hong Kong) */}
+                {countries.map(({ c, name }) => <option key={c} value={c} suppressHydrationWarning>{name}</option>)}
               </select></label>
             <label className="relative block"><span className="mb-0.5 block text-xs text-muted">{t("city")}</span>
               <input value={city} onChange={(e) => { setCity(e.target.value); setPicked(null); setTyped(true); }} onBlur={() => setTimeout(() => setSuggest([]), 150)} placeholder={t("cityPlaceholder")} className="input" disabled={!canScout || running} autoComplete="off" required />
@@ -253,7 +254,7 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
             <details className="rounded-xl bg-surface-2/60 p-3 text-sm">
               <summary className="cursor-pointer text-muted">{t("lookingFor")} <span className="text-ink">{project.plan.summary}</span></summary>
               <Chips label={t("mapTags")} items={tags} onChange={setTags} disabled={!canScout || running} placeholder="amenity=cafe" />
-              <Chips label={t("webQueries")} items={queries} onChange={setQueries} disabled={!canScout || running} placeholder={t("queryPlaceholder")} />
+              <Chips label={t("webQueries", { city: "{city}" })} items={queries} onChange={setQueries} disabled={!canScout || running} placeholder={t("queryPlaceholder", { city: "{city}" })} />
             </details>
           ) : <p className="text-xs text-muted">{t("firstRunNote")}</p>}
           {canScout ? (

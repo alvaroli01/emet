@@ -75,7 +75,7 @@ export function NotificationsBell({ meId }: { meId: string }) {
         )}
       </button>
       {open && (
-        <div className="panel absolute top-[calc(100%+8px)] right-0 z-50 w-[min(380px,calc(100vw-24px))] overflow-hidden p-0 shadow-[var(--shadow-lift)]" role="dialog" aria-label={t("heading")}>
+        <div className="panel absolute top-[calc(100%+8px)] right-0 z-50 w-[min(380px,calc(100vw-24px))] overflow-hidden p-0 shadow-[var(--shadow-lift)] max-sm:fixed max-sm:inset-x-3 max-sm:top-[4.5rem] max-sm:w-auto max-sm:bg-solid" role="dialog" aria-label={t("heading")}>
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
             <p className="font-semibold">{t("heading")}</p>
             {unread > 0 && <button onClick={readAll} className="flex items-center gap-1 text-xs text-muted hover:text-ink"><CheckCheck size={14} /> {t("readAll")}</button>}
@@ -85,7 +85,7 @@ export function NotificationsBell({ meId }: { meId: string }) {
               const Icon = ICON[n.kind] ?? Bell;
               return (
                 <li key={n.id}>
-                  <button onClick={() => go(n)} className={`flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-surface-2/70 ${n.read_at ? "" : "bg-[color-mix(in_srgb,var(--climbed)_6%,transparent)]"}`}>
+                  <button onClick={() => go(n)} className={`flex w-full items-start gap-3 px-4 py-3 text-left transition max-sm:whitespace-normal hover:bg-surface-2/70 ${n.read_at ? "" : "bg-[color-mix(in_srgb,var(--climbed)_6%,transparent)]"}`}>
                     <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-surface-2 text-muted"><Icon size={15} /></span>
                     <span className="min-w-0 flex-1">
                       <span className={`block text-sm leading-snug ${n.read_at ? "text-muted" : ""}`}>{text(n)}</span>
