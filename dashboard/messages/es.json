@@ -2060,7 +2060,21 @@
     "lendNeedKey": "Primero conecta tu clave gratuita de Groq y luego podrás prestarla a Scout.",
     "lendUsed": "Scout ha usado ~{n}K tokens de tu clave hoy",
     "lenders": "{count, plural, one {# persona presta} other {# personas prestan}} su clave a Scout: {names}",
-    "lendersNone": "Nadie presta todavía una clave a Scout"
+    "lendersNone": "Nadie presta todavía una clave a Scout",
+    "mistralTitle": "IA de respaldo (Mistral)",
+    "mistralHelp": "Gratis, sin tarjeta. Scout solo la usa cuando todas las claves de Groq se han agotado, así las búsquedas siguen. Nadie puede ver tu clave.",
+    "mistralHow": "¿Cómo conseguirla?",
+    "mistralStep1": "Abre",
+    "mistralStep2": "Regístrate y elige el plan gratuito «Experiment» (sin tarjeta; te pide verificar tu teléfono).",
+    "mistralStep3": "Ve a API keys → Create new key, ponle cualquier nombre y cópiala.",
+    "mistralStep4": "Pégala aquí y pulsa Conectar.",
+    "mistralPlaceholder": "Clave API de Mistral",
+    "mistralConnect": "Conectar",
+    "mistralDisconnect": "Desconectar",
+    "mistralConnected": "Conectada ••••{last4}",
+    "mistralDone": "Mistral conectada",
+    "mistralError": "Mistral no aceptó esa clave. Cópiala de nuevo y pégala entera.",
+    "allOut": "Todas las claves de IA gratuitas están agotadas por ahora. Scout seguirá más tarde, o antes si alguien presta una clave o conecta Mistral."
   },
   "hero": {
     "allClear": "Aquí no tienes nada pendiente. Buen momento para adelantarte.",

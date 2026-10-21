@@ -43,3 +43,20 @@ grant execute on function public.scout_lenders() to authenticated;
 
 -- Tokens a search used (shown in its log)
 alter table public.scout_searches add column if not exists tokens integer not null default 0;
+
+-- Mistral backup key (free Experiment plan, no card): connected per member like the Groq key, encrypted, owner-only.
+-- Scout tries it only after every Groq key is out (own key for own searches; lent along with the Groq key).
+create table if not exists public.backup_keys (
+  owner_id   uuid primary key default public.my_profile_id() references public.profiles(id) on delete cascade,
+  provider   text not null default 'mistral' check (provider in ('mistral')),
+  key_iv     text not null,
+  key_data   text not null,
+  last4      text not null,
+  created_at timestamptz not null default now()
+);
+grant select, insert, update, delete on public.backup_keys to authenticated;
+grant select on public.backup_keys to service_role;
+alter table public.backup_keys enable row level security;
+create policy backup_keys_owner on public.backup_keys for all to authenticated
+  using (owner_id = (select public.my_profile_id()))
+  with check (owner_id = (select public.my_profile_id()));

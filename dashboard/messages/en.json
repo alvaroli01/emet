@@ -2060,7 +2060,21 @@
     "lendNeedKey": "Connect your free Groq key first, then you can lend it to Scout.",
     "lendUsed": "Scout used ~{n}K tokens of your key today",
     "lenders": "{count, plural, one {# person lends} other {# people lend}} their key to Scout: {names}",
-    "lendersNone": "Nobody lends a key to Scout yet"
+    "lendersNone": "Nobody lends a key to Scout yet",
+    "mistralTitle": "Backup AI (Mistral)",
+    "mistralHelp": "Free, no card. Scout uses it only when every Groq key is used up — so searches keep going. Nobody can see your key.",
+    "mistralHow": "How to get it?",
+    "mistralStep1": "Open",
+    "mistralStep2": "Sign up and choose the free “Experiment” plan (no card needed; it asks to verify your phone).",
+    "mistralStep3": "Go to API keys → Create new key, give it any name, and copy it.",
+    "mistralStep4": "Paste it here and press Connect.",
+    "mistralPlaceholder": "Mistral API key",
+    "mistralConnect": "Connect",
+    "mistralDisconnect": "Disconnect",
+    "mistralConnected": "Connected ••••{last4}",
+    "mistralDone": "Mistral connected",
+    "mistralError": "Mistral didn't accept that key. Copy it again and paste the whole key.",
+    "allOut": "All free AI keys are used up for now. Scout continues later, or sooner when someone lends a key or connects Mistral."
   },
   "hero": {
     "allClear": "Nothing is waiting on you here. Good moment to get ahead.",

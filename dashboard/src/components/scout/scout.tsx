@@ -11,7 +11,7 @@ import { KeyNotice } from "@/components/lab/idea-lab";
 import { GlobeLazy } from "./globe-lazy";
 import type { GlobePin } from "./globe";
 import { Leads } from "./leads";
-import { LendKey } from "./lend-key";
+import { LendKey, MistralKey } from "./lend-key";
 
 export type ScoutProject = { id: string; title: string; idea_id: string | null; offer: string; niche: string; ideal_client: string | null; must_have: string[]; deal_breakers: string[]; avg_deal_value: number | null;
   plan: { osm_tags: string[]; web_queries: string[]; signals: string[]; deal_breakers: string[]; playbook: string; summary: string } | null; created_at: string };
@@ -33,8 +33,8 @@ const EXAMPLES = [
 const COUNTRIES = "ES PT FR DE IT GB IE NL BE LU CH AT DK SE NO FI IS PL CZ SK HU SI HR RO BG GR CY MT EE LV LT RS BA ME MK AL UA MD RU TR US CA MX BR AR CL CO PE UY EC VE BO PY CR PA DO GT CU PR MA DZ TN EG ZA NG KE GH AE SA QA IL JO IN PK BD LK CN JP KR TW HK SG MY TH VN PH ID AU NZ".split(" ");
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export function Scout({ projects, searches, leads, members, meId, meName, canScout, hasKey: initialKey, ideas, initialProject, fromIdea, ourProjects = [], pool = { lend: false, usedToday: 0, lenders: [] } }: { ourProjects?: { id: string; name: string }[];
-  pool?: { lend: boolean; usedToday: number; lenders: string[] };
+export function Scout({ projects, searches, leads, members, meId, meName, canScout, hasKey: initialKey, ideas, initialProject, fromIdea, ourProjects = [], pool = { mistral: null, lend: false, usedToday: 0, lenders: [] } }: { ourProjects?: { id: string; name: string }[];
+  pool?: { mistral: string | null; lend: boolean; usedToday: number; lenders: string[] };
   projects: ScoutProject[]; searches: ScoutSearch[]; leads: ScoutLead[]; members: Person[]; meId: string; meName: string; canScout: boolean; hasKey: boolean;
   ideas: { id: string; title: string; pitch: string }[]; initialProject: string | null; fromIdea: { id: string; title: string; pitch: string } | null;
 }) {
@@ -80,7 +80,12 @@ export function Scout({ projects, searches, leads, members, meId, meName, canSco
       </header>
 
       {canScout && !canRun && <KeyNotice onConnected={() => setHasKey(true)} />}
-      {canScout && <LendKey hasKey={hasKey} lend={pool.lend} usedToday={pool.usedToday} lenders={pool.lenders} />}
+      {canScout && (
+        <div className="grid gap-3 lg:grid-cols-2">
+          <LendKey hasKey={hasKey} lend={pool.lend} usedToday={pool.usedToday} lenders={pool.lenders} />
+          <MistralKey last4={pool.mistral} />
+        </div>
+      )}
 
       {!project ? (
         <section className="panel grid gap-6 overflow-hidden p-6 md:grid-cols-[1fr_minmax(0,420px)] md:items-center">
@@ -173,6 +178,7 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
         if (!res) { await sleep(3000); continue; }
         const j = await res.json().catch(() => ({}));
         await refresh(id);
+        if (res.status === 429 && (j.retryAfter ?? 0) > 900) { toast("error", t("allOut")); break; } // every key is out for hours: say so instead of polling all day
         if (res.status === 429) {
           // Free Groq allowance used up for the minute: wait it out visibly, then continue where we left off
           for (let s = Math.min(90, j.retryAfter ?? 60); s > 0 && alive.current; s--) { setWaiting(s); await sleep(1000); }

@@ -33,18 +33,24 @@ export async function scoutRing(meId: string, ownRow: { key_iv: string; key_data
   const sb = service();
   if (!sb) return keys.length ? new KeyRing(keys) : null;
   const day = new Date().toISOString().slice(0, 10);
-  const [{ data: lent }, { data: active }, { data: usage }] = await Promise.all([
+  const [{ data: lent }, { data: active }, { data: usage }, { data: backups }] = await Promise.all([
     sb.from("ai_keys").select("owner_id, key_iv, key_data").eq("lend_scout", true).neq("owner_id", meId),
     sb.from("profiles").select("id").eq("active", true),
     sb.from("ai_key_usage").select("owner_id, model, tokens, limited_until, bad").eq("day", day),
+    sb.from("backup_keys").select("owner_id, key_iv, key_data"),
   ]);
   const ok = new Set((active ?? []).map((p) => p.id as string));
+  const lenders = new Set<string>();
   for (const r of lent ?? []) {
     if (!ok.has(r.owner_id)) continue; // deactivated members' keys are never used
-    try { keys.push({ owner: r.owner_id, key: decryptKey(r), own: false }); } catch { /* unreadable key: skip */ }
+    try { keys.push({ owner: r.owner_id, key: decryptKey(r), own: false }); lenders.add(r.owner_id); } catch { /* unreadable key: skip */ }
   }
   if (!keys.length) return null;
-  return new KeyRing(keys, (usage ?? []) as UsageRow[], async (e) => {
+  const ring = new KeyRing(keys, (usage ?? []) as UsageRow[], async (e) => {
     await sb.rpc("ai_usage_event", { p_owner: e.owner, p_model: e.model, p_tokens: e.tokens ?? 0, p_until: e.until ?? null, p_bad: e.bad ?? false });
   });
+  // Mistral backup keys: mine first, then those of people who lend their key to Scout
+  const mine = (backups ?? []).filter((b) => b.owner_id === meId), theirs = (backups ?? []).filter((b) => lenders.has(b.owner_id));
+  for (const b of [...mine, ...theirs]) { try { ring.mistral.push(decryptKey(b)); } catch { /* unreadable key: skip */ } }
+  return ring;
 }

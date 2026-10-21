@@ -585,3 +585,13 @@ select t.assert('Owner sees Scout usage of their key, added up', t.num($$select 
 select t.login(6);
 select t.assert('Nobody else sees it', t.num('select count(*) from ai_key_usage') = 0);
 reset role;
+-- ── Mistral backup key: only the owner ──────────────────────
+set role authenticated;
+select t.login(3);
+select t.check('Member saves their Mistral backup key', $$insert into backup_keys (key_iv, key_data, last4) values ('iv', 'enc', 'm123')$$, 'ok');
+select t.login(6);
+select t.assert('Nobody else sees it', t.num('select count(*) from backup_keys') = 0);
+select t.check('Nobody else can change it', $$update backup_keys set last4 = 'xxxx'$$, 'denied');
+select t.login(1);
+select t.assert('Admins cannot see it either', t.num('select count(*) from backup_keys') = 0);
+reset role;

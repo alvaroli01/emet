@@ -2060,7 +2060,21 @@
     "lendNeedKey": "Verbinde zuerst deinen kostenlosen Groq-Schlüssel, dann kannst du ihn an Scout verleihen.",
     "lendUsed": "Scout hat heute ~{n}K Tokens deines Schlüssels genutzt",
     "lenders": "{count, plural, one {# Person verleiht} other {# Personen verleihen}} ihren Schlüssel an Scout: {names}",
-    "lendersNone": "Noch niemand verleiht einen Schlüssel an Scout"
+    "lendersNone": "Noch niemand verleiht einen Schlüssel an Scout",
+    "mistralTitle": "Backup-KI (Mistral)",
+    "mistralHelp": "Kostenlos, ohne Karte. Scout nutzt sie nur, wenn alle Groq-Schlüssel aufgebraucht sind – so laufen Suchen weiter. Niemand kann deinen Schlüssel sehen.",
+    "mistralHow": "Wie bekomme ich ihn?",
+    "mistralStep1": "Öffne",
+    "mistralStep2": "Registriere dich und wähle den kostenlosen „Experiment“-Plan (keine Karte; Telefonnummer wird bestätigt).",
+    "mistralStep3": "Gehe zu API keys → Create new key, gib einen beliebigen Namen ein und kopiere ihn.",
+    "mistralStep4": "Füge ihn hier ein und klicke auf Verbinden.",
+    "mistralPlaceholder": "Mistral-API-Schlüssel",
+    "mistralConnect": "Verbinden",
+    "mistralDisconnect": "Trennen",
+    "mistralConnected": "Verbunden ••••{last4}",
+    "mistralDone": "Mistral verbunden",
+    "mistralError": "Mistral hat den Schlüssel nicht akzeptiert. Kopiere ihn erneut und füge ihn vollständig ein.",
+    "allOut": "Alle kostenlosen KI-Schlüssel sind vorerst aufgebraucht. Scout macht später weiter – oder früher, wenn jemand einen Schlüssel verleiht oder Mistral verbindet."
   },
   "hero": {
     "allClear": "Hier wartet nichts auf dich. Guter Moment, um vorzuarbeiten.",
