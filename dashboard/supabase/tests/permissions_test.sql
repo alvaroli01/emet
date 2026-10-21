@@ -394,7 +394,11 @@ set role authenticated;
 
 -- ── Finance upgrade: projects, no deletes, month close, reversals, claims, audit, product linking ──
 select t.login(2);  -- Stefan (Finance)
-select t.check('Finance creates a project', $$insert into projects (name, budget) values ('Campus stall', 100)$$, 'ok');
+select t.check('Finance cannot create a project (leaders do, 2026-10-21)', $$insert into projects (name, budget) values ('Campus stall', 100)$$, 'denied');
+select t.login(4);  -- Lassi (Team Leader)
+select t.check('Leader creates a project', $$insert into projects (name, budget) values ('Campus stall', 100)$$, 'ok');
+select t.login(2);
+select t.check('Finance can still update a project''s budget', $$update projects set budget = 150 where name = 'Campus stall'$$, 'ok');
 select t.check('Finance logs a sale in a project with a payment method',
   $$insert into sales (date, description, amount, cost, project_id, payment_method, logged_by) select current_date, 'Stall sale', 20, 8, id, 'bizum', public.my_profile_id() from projects where name = 'Campus stall'$$, 'ok');
 select t.check('Nobody can hard-delete a sale (fixes are reversals)', $$delete from sales where description = 'Stall sale'$$, 'denied');
@@ -498,4 +502,49 @@ reset role;
 set role anon;
 select t.check('Logged-out visitor cannot read anything',
   $$select * from profiles$$, 'denied');
+reset role;
+
+-- ── My Projects: leaders create, members work, others see nothing ──
+set role authenticated;
+select t.login(3);
+select t.check('Member cannot create a project', $$insert into projects (name) values ('Nope')$$, 'denied');
+select t.login(4);  -- Lassi, leader
+select t.check('Leader creates a project', $$insert into projects (name, goal) values ('Market stall', 2000)$$, 'ok');
+select t.check('Leader adds Rocco to it', $$insert into project_members (project_id, user_id) select p.id, r.id from projects p, profiles r where p.name = 'Market stall' and r.full_name = 'Rocco'$$, 'ok');
+select t.check('Leader creates the project board', $$insert into boards (slug, name, project_id) select 'project-' || id, name, id from projects where name = 'Market stall'$$, 'ok');
+select t.check('Leader adds a list to it', $$insert into board_lists (board_id, name) select id, 'To do' from boards where slug like 'project-%'$$, 'ok');
+select t.login(3);  -- Rocco, member of the project
+select t.assert('Member sees the project', t.num($$select count(*) from projects where name = 'Market stall'$$) = 1);
+select t.assert('Member was notified about being added', t.num($$select count(*) from notifications where kind = 'project_added'$$) = 1);
+select t.check('Member adds a task on the project board', $$insert into cards (board_id, list_id, title, created_by) select b.id, l.id, 'Book the stall', my_profile_id() from boards b join board_lists l on l.board_id = b.id where b.slug like 'project-%'$$, 'ok');
+select t.check('Member edits that task', $$update cards set title = 'Book the stall (paid)' where title = 'Book the stall'$$, 'ok');
+select t.check('Member adds a link', $$insert into project_links (project_id, title, url) select id, 'Budget', 'https://docs.google.com/spreadsheets/d/x' from projects where name = 'Market stall'$$, 'ok');
+select t.check('Links must be https', $$insert into project_links (project_id, title, url) select id, 'Bad', 'javascript:alert(1)' from projects where name = 'Market stall'$$, 'denied');
+select t.check('Member posts an update', $$insert into project_updates (project_id, body) select id, 'Stall booked' from projects where name = 'Market stall'$$, 'ok');
+select t.check('Member uploads a project file', $$insert into storage.objects (bucket_id, name) select 'projects', id || '/f/plan.pdf' from projects where name = 'Market stall'$$, 'ok');
+select t.check('Member cannot add people', $$insert into project_members (project_id, user_id) select p.id, r.id from projects p, profiles r where p.name = 'Market stall' and r.full_name = 'Emily'$$, 'denied');
+select t.check('Member cannot change the project', $$update projects set goal = 1 where name = 'Market stall'$$, 'denied');
+select t.login(6);  -- Emily, not a member
+select t.assert('Non-member does not see the project', t.num($$select count(*) from projects where name = 'Market stall'$$) = 0);
+select t.assert('Non-member does not see its board, lists or tasks', t.num($$select count(*) from boards where slug like 'project-%'$$) = 0 and t.num($$select count(*) from board_lists l join boards b on b.id = l.board_id where b.project_id is not null$$) = 0 and t.num($$select count(*) from cards where title like 'Book the stall%'$$) = 0);
+select t.assert('Non-member does not see links, updates or files', t.num('select count(*) from project_links') = 0 and t.num('select count(*) from project_updates') = 0 and t.num($$select count(*) from storage.objects where bucket_id = 'projects'$$) = 0);
+select t.assert('Non-member activity feed has no project task titles', t.num($$select count(*) from activity_log where summary->>'label' like 'Book the stall%'$$) = 0);
+select t.check('Non-member cannot add a task to the project board', $$insert into cards (board_id, list_id, title, created_by) select b.id, l.id, 'x', my_profile_id() from boards b join board_lists l on l.board_id = b.id where b.slug like 'project-%'$$, 'denied');
+select t.assert('Team boards are still visible to everyone', t.num($$select count(*) from boards where project_id is null$$) > 0);
+select t.login(2);  -- Stefan, Finance (not a member)
+select t.assert('Finance sees the project name to tag sales', t.num($$select count(*) from projects where name = 'Market stall'$$) = 1);
+select t.assert('Finance does not see the project links', t.num('select count(*) from project_links') = 0);
+select t.check('Finance tags a sale with the project', $$insert into sales (date, description, amount, cost, project_id, payment_method, logged_by) select current_date, 'Market stall sale', 120, 40, id, 'bizum', public.my_profile_id() from projects where name = 'Market stall'$$, 'ok');
+select t.login(3);
+select t.assert('Member sees the project money', (select revenue from project_money((select id from projects where name = 'Market stall'))) = 120);
+select t.login(4);
+select t.check('Leader removes Rocco', $$delete from project_members where user_id = (select id from profiles where full_name = 'Rocco')$$, 'ok');
+select t.login(3);
+select t.assert('Removed member loses the project at once', t.num($$select count(*) from projects where name = 'Market stall'$$) = 0 and t.num($$select count(*) from cards where title like 'Book the stall%'$$) = 0);
+select t.login(4);
+select t.assert('Project task links open the project', (select card_link(id) from cards where title like 'Book the stall%') like '/projects/%?tab=tasks&card=%');
+select t.check('Leader deletes the project', $$delete from projects where name = 'Market stall'$$, 'ok');
+select t.assert('Its board, links and updates went with it', t.num($$select count(*) from boards where slug like 'project-%'$$) = 0 and t.num('select count(*) from project_links') = 0 and t.num('select count(*) from project_updates') = 0);
+select t.login(2);
+select t.assert('The sale stays, untagged', t.num($$select count(*) from sales where description = 'Market stall sale' and project_id is null$$) = 1);
 reset role;
