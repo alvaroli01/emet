@@ -17,7 +17,7 @@ import { ProjectUpdates } from "./project-updates";
 import { ProjectFiles } from "./project-files";
 import { ProjectMoney } from "./project-money";
 
-export type Project = { id: string; name: string; description: string | null; status: "planning" | "live" | "closed"; starts_on: string | null; ends_on: string | null; goal: number | null; color: string; board_id: string | null };
+export type Project = { id: string; name: string; description: string | null; status: "planning" | "live" | "closed"; starts_on: string | null; ends_on: string | null; goal: number | null; color: string };
 export type ProjectLink = { id: string; title: string; url: string; created_by: string | null; created_at: string };
 export type ProjectUpdate = { id: string; body: string; created_by: string | null; created_at: string };
 export type ProjectFile = { id: string; name: string; size: number; mime: string; path: string; uploaded_by: string | null; created_at: string };

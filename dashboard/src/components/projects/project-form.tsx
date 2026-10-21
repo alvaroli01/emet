@@ -40,16 +40,14 @@ export function ProjectForm({ project, people, onClose }: { project?: Project & 
       const add = [...chosen].filter((x) => !before.has(x)), drop = [...before].filter((x) => !chosen.has(x));
       if (add.length && (await supabase.from("project_members").insert(add.map((user_id) => ({ project_id: id, user_id })))).error) return fail();
       if (drop.length && (await supabase.from("project_members").delete().eq("project_id", id).in("user_id", drop)).error) return fail();
-      if (project!.board_id && row.name !== project!.name) await supabase.from("boards").update({ name: row.name }).eq("id", project!.board_id);
+      if (row.name !== project!.name) await supabase.from("boards").update({ name: row.name }).eq("project_id", id);
     } else {
       const made = await supabase.from("projects").insert(row).select("id").single();
       if (made.error) return fail();
       id = made.data.id as string;
       const board = await supabase.from("boards").insert({ slug: `project-${id}`, name: row.name, project_id: id }).select("id").single();
-      if (!board.error) {
-        await supabase.from("board_lists").insert([t("lists.todo"), t("lists.doing"), t("lists.done")].map((name, position) => ({ board_id: board.data.id, name, position })));
-        await supabase.from("projects").update({ board_id: board.data.id }).eq("id", id);
-      }
+      if (board.error) return fail();
+      if ((await supabase.from("board_lists").insert([t("lists.todo"), t("lists.doing"), t("lists.done")].map((name, position) => ({ board_id: board.data.id, name, position })))).error) return fail();
       if (chosen.size && (await supabase.from("project_members").insert([...chosen].map((user_id) => ({ project_id: id, user_id })))).error) return fail();
     }
     setBusy(false);

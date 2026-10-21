@@ -511,7 +511,7 @@ select t.check('Member cannot create a project', $$insert into projects (name) v
 select t.login(4);  -- Lassi, leader
 select t.check('Leader creates a project', $$insert into projects (name, goal) values ('Market stall', 2000)$$, 'ok');
 select t.check('Leader adds Rocco to it', $$insert into project_members (project_id, user_id) select p.id, r.id from projects p, profiles r where p.name = 'Market stall' and r.full_name = 'Rocco'$$, 'ok');
-select t.check('Leader creates the project board', $$insert into boards (slug, name, project_id) select 'project-' || id, name, id from projects where name = 'Market stall'$$, 'ok');
+select t.check('Leader creates the project board (and reads it back, like the app does)', $$insert into boards (slug, name, project_id) select 'project-' || id, name, id from projects where name = 'Market stall' returning id$$, 'ok');
 select t.check('Leader adds a list to it', $$insert into board_lists (board_id, name) select id, 'To do' from boards where slug like 'project-%'$$, 'ok');
 select t.login(3);  -- Rocco, member of the project
 select t.assert('Member sees the project', t.num($$select count(*) from projects where name = 'Market stall'$$) = 1);

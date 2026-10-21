@@ -15,7 +15,7 @@ export default async function ProjectRoute({ params, searchParams }: { params: P
   const { data: isMember } = await supabase.rpc("is_project_member", { p: id });
   if (!isMember) notFound();
   const { data: project } = await supabase.from("projects")
-    .select("id, name, description, status, starts_on, ends_on, goal, color, board_id").eq("id", id).maybeSingle<Project>();
+    .select("id, name, description, status, starts_on, ends_on, goal, color").eq("id", id).maybeSingle<Project>();
   if (!project) notFound();
 
   const [memberRows, money, weeks, links, updates, files, people] = await Promise.all([
@@ -28,7 +28,9 @@ export default async function ProjectRoute({ params, searchParams }: { params: P
     loadMembers(),
   ]);
   const memberIds = (memberRows.data ?? []).map((m) => m.user_id as string);
-  const board = project.board_id ? await loadBoardById(project.board_id, memberIds) : null;
+  // The project's task board points at the project (boards.project_id)
+  const { data: b } = await supabase.from("boards").select("id").eq("project_id", id).maybeSingle();
+  const board = b ? await loadBoardById(b.id as string, memberIds) : null;
   const m = (money.data as { revenue: number; costs: number; profit: number }[] | null)?.[0];
 
   return (

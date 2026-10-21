@@ -24,7 +24,7 @@ export default async function MemberPage({ params }: { params: Promise<{ id: str
   let projects: ProjectCard[] = [], people: Awaited<ReturnType<typeof loadMembers>> = [];
   if (person.id === me.id) {
     const mine = isAdmin ? null : ((await supabase.from("project_members").select("project_id").eq("user_id", me.id)).data ?? []).map((r) => r.project_id as string);
-    let q = supabase.from("projects").select("id, name, description, status, starts_on, ends_on, goal, color, board_id, project_members(count)").order("created_at", { ascending: false });
+    let q = supabase.from("projects").select("id, name, description, status, starts_on, ends_on, goal, color, project_members(count)").order("created_at", { ascending: false });
     if (mine) q = q.in("id", mine.length ? mine : ["00000000-0000-0000-0000-000000000000"]);
     const [{ data: rows }, members] = await Promise.all([q, isAdmin ? loadMembers() : Promise.resolve([])]);
     people = members;

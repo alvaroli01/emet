@@ -19,7 +19,7 @@ the project made — so a project's work lives in one place. €0.
 
 ## 1. Data (migration `0027_my_projects.sql`)
 
-- `projects` gains: `goal numeric(12,2)` (target revenue, optional), `board_id uuid references boards(id) on delete set null`.
+- `projects` gains `goal numeric(12,2)` (target revenue, optional); the project's board is found through `boards.project_id` (unique).
   Existing columns reused: `name, description, status (planning|live|closed), starts_on, ends_on, budget, color, owner_id`.
 - `project_members(project_id → projects on delete cascade, user_id → profiles on delete cascade, added_by, added_at, primary key (project_id, user_id))`.
 - `project_links(id, project_id, title 1..120, url (https only), kind text, created_by default my_profile_id(), created_at)`.

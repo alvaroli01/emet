@@ -82,7 +82,9 @@ $$;
 
 -- Read rules: project boards and everything on them only for the project's members
 drop policy if exists boards_read on public.boards;
-create policy boards_read on public.boards for select to authenticated using (public.can_see_board(id));
+-- Uses the row's own project_id (a lookup by id can't see a board inserted in the same statement, e.g. insert … returning)
+create policy boards_read on public.boards for select to authenticated
+  using (case when project_id is null then public.is_member() else public.is_project_member(project_id) end);
 drop policy if exists boards_insert on public.boards;
 create policy boards_insert on public.boards for insert to authenticated with check (public.is_admin());
 drop policy if exists lists_read on public.board_lists;
