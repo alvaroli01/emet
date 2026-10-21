@@ -1085,7 +1085,9 @@
       "due_soon": "Due tomorrow: “{title}”",
       "report": "This week’s report is ready",
       "team_task": "New task from the team leader: “{title}”",
-      "company_doc": "New company document: “{name}”"
+      "company_doc": "New company document: “{name}”",
+      "project_added": "You were added to the project “{project}”",
+      "project_post": "New in “{project}”: {title}"
     }
   },
   "palette": {
@@ -2695,5 +2697,80 @@
     "readOnly": "Team leaders add these in Team Leader.",
     "manage": "Manage in Team Leader",
     "storage": "Documents use {used} of {total}"
+  },
+  "projects": {
+    "mine": "My Projects",
+    "new": "New project",
+    "edit": "Edit project",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Create project",
+    "error": "Something went wrong. Try again.",
+    "empty": "You’re not in any project yet — team leaders add you.",
+    "emptyLeader": "No projects yet. Create the first one and choose its people.",
+    "daysLeft": "{n, plural, one {# day left} other {# days left}}",
+    "overdue": "{n, plural, one {# day over} other {# days over}}",
+    "goal": "Goal",
+    "goalOf": "{done} of {goal}",
+    "confirmDelete": "Delete “{name}” with its tasks, links, files and updates? Sales stay in Finance.",
+    "people": "People",
+    "noPeople": "Nobody added yet.",
+    "noUpdates": "No updates yet.",
+    "noLinks": "No links yet. Paste a Google Doc, Sheet, Slides…",
+    "noFiles": "No files yet.",
+    "noBoard": "This project has no task board.",
+    "status": {
+      "planning": "Planning",
+      "live": "Live",
+      "closed": "Closed"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "money": "Money",
+      "tasks": "Tasks",
+      "links": "Links",
+      "files": "Files",
+      "updates": "Updates"
+    },
+    "lists": {
+      "todo": "To do",
+      "doing": "Doing",
+      "done": "Done"
+    },
+    "form": {
+      "name": "Name",
+      "description": "What is it about?",
+      "goal": "Goal (€ revenue)",
+      "start": "Start",
+      "end": "Deadline",
+      "status": "Status",
+      "color": "Colour",
+      "people": "People ({n})"
+    },
+    "badLink": "That doesn’t look like a web link.",
+    "linkTitle": "Title (e.g. Budget)",
+    "linkUrl": "Link",
+    "addLink": "Add link",
+    "kinds": {
+      "doc": "Google Doc",
+      "sheet": "Spreadsheet",
+      "slides": "Presentation",
+      "drive": "Drive folder",
+      "form": "Form",
+      "canva": "Canva",
+      "notion": "Notion",
+      "figma": "Figma",
+      "other": "Link"
+    },
+    "updatePlaceholder": "Share an update with the project…",
+    "post": "Post",
+    "money": {
+      "revenue": "Revenue",
+      "costs": "Costs",
+      "profit": "Profit",
+      "byWeek": "Revenue per week",
+      "empty": "Finance tags sales and expenses to this project — they show up here."
+    }
   }
 }

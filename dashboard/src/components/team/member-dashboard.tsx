@@ -7,6 +7,8 @@ import { ArrowUpRight, Mail, Play, ChevronLeft, ChevronRight } from "lucide-reac
 import { eur } from "@/lib/format";
 import type { MemberData } from "@/lib/team-stats";
 import { DocumentsSection } from "@/components/documents/documents-section";
+import { MyProjects, type ProjectCard } from "@/components/projects/my-projects";
+import type { Member } from "@/lib/boards";
 
 export type MemberInfo = { id: string; name: string; email: string; avatar: string | null; role: string | null; team: string | null; teamSlug: string | null };
 const COLORS = ["#ff6a1a", "#ffb07a", "#ffc23d", "#8b8b93"];
@@ -36,7 +38,7 @@ function Countdown({ to }: { to: string | null }) {
   return <span className="readout text-3xl">{d ? `${d}d ` : ""}{pad(Math.floor((s % 86400) / 3600))}:{pad(Math.floor((s % 3600) / 60))}:{pad(s % 60)}</span>;
 }
 
-export function MemberDashboard({ p, d, today, isMe = false, isLeader = false }: { p: MemberInfo; d: MemberData; today: string; isMe?: boolean; isLeader?: boolean }) {
+export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, projects = [], people = [] }: { p: MemberInfo; d: MemberData; today: string; isMe?: boolean; isLeader?: boolean; projects?: ProjectCard[]; people?: Member[] }) {
   const t = useTranslations("member");
   const locale = useLocale();
   const [month, setMonth] = useState(() => today.slice(0, 7));
@@ -179,6 +181,7 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false }:
       </div>
 
       {/* Only on your own profile: company documents (read only) and your private folder */}
+      {isMe && <MyProjects projects={projects} isLeader={isLeader} people={people} today={today} />}
       {isMe && <DocumentsSection meId={p.id} isLeader={isLeader} />}
     </div>
   );

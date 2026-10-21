@@ -1085,7 +1085,9 @@
       "due_soon": "Erääntyy huomenna: ”{title}”",
       "report": "Tämän viikon raportti on valmis",
       "team_task": "Uusi tehtävä tiimin vetäjältä: “{title}”",
-      "company_doc": "Uusi yrityksen dokumentti: ”{name}”"
+      "company_doc": "Uusi yrityksen dokumentti: ”{name}”",
+      "project_added": "Sinut lisättiin projektiin ”{project}”",
+      "project_post": "Uutta projektissa ”{project}”: {title}"
     }
   },
   "palette": {
@@ -2695,5 +2697,80 @@
     "readOnly": "Tiiminvetäjät lisäävät nämä Johto-osiossa.",
     "manage": "Hallinnoi Johto-osiossa",
     "storage": "Dokumentit vievät {used} / {total}"
+  },
+  "projects": {
+    "mine": "Omat projektit",
+    "new": "Uusi projekti",
+    "edit": "Muokkaa projektia",
+    "delete": "Poista",
+    "cancel": "Peruuta",
+    "save": "Tallenna",
+    "create": "Luo projekti",
+    "error": "Jokin meni pieleen. Yritä uudelleen.",
+    "empty": "Et ole vielä missään projektissa – tiiminvetäjät lisäävät sinut.",
+    "emptyLeader": "Ei vielä projekteja. Luo ensimmäinen ja valitse sen ihmiset.",
+    "daysLeft": "{n, plural, one {# päivä jäljellä} other {# päivää jäljellä}}",
+    "overdue": "{n, plural, one {# päivä myöhässä} other {# päivää myöhässä}}",
+    "goal": "Tavoite",
+    "goalOf": "{done} / {goal}",
+    "confirmDelete": "Poistetaanko ”{name}” tehtävineen, linkkeineen, tiedostoineen ja päivityksineen? Myynnit jäävät Talouteen.",
+    "people": "Ihmiset",
+    "noPeople": "Ketään ei ole vielä lisätty.",
+    "noUpdates": "Ei vielä päivityksiä.",
+    "noLinks": "Ei vielä linkkejä. Liitä Google Doc, Sheet, Slides…",
+    "noFiles": "Ei vielä tiedostoja.",
+    "noBoard": "Projektilla ei ole tehtävätaulua.",
+    "status": {
+      "planning": "Suunnittelussa",
+      "live": "Käynnissä",
+      "closed": "Suljettu"
+    },
+    "tabs": {
+      "overview": "Yleiskatsaus",
+      "money": "Raha",
+      "tasks": "Tehtävät",
+      "links": "Linkit",
+      "files": "Tiedostot",
+      "updates": "Päivitykset"
+    },
+    "lists": {
+      "todo": "Tehtävänä",
+      "doing": "Työn alla",
+      "done": "Valmis"
+    },
+    "form": {
+      "name": "Nimi",
+      "description": "Mistä on kyse?",
+      "goal": "Tavoite (€ myyntiä)",
+      "start": "Alku",
+      "end": "Määräaika",
+      "status": "Tila",
+      "color": "Väri",
+      "people": "Ihmiset ({n})"
+    },
+    "badLink": "Tämä ei näytä verkkolinkiltä.",
+    "linkTitle": "Otsikko (esim. Budjetti)",
+    "linkUrl": "Linkki",
+    "addLink": "Lisää linkki",
+    "kinds": {
+      "doc": "Google Doc",
+      "sheet": "Taulukko",
+      "slides": "Esitys",
+      "drive": "Drive-kansio",
+      "form": "Lomake",
+      "canva": "Canva",
+      "notion": "Notion",
+      "figma": "Figma",
+      "other": "Linkki"
+    },
+    "updatePlaceholder": "Jaa päivitys projektille…",
+    "post": "Julkaise",
+    "money": {
+      "revenue": "Myynti",
+      "costs": "Kulut",
+      "profit": "Voitto",
+      "byWeek": "Myynti viikoittain",
+      "empty": "Talous merkitsee myynnit ja kulut tälle projektille – ne näkyvät täällä."
+    }
   }
 }

@@ -25,6 +25,8 @@ import { pushToTrello } from "./trello-push";
 export type Viewer = { meId: string; isAdmin: boolean; myGroupId: string | null };
 
 export function boardRights(board: BoardData["board"], v: Viewer) {
+  // A project board is only reachable by its members (database rule), and every member works on it
+  if (board.project_id) return { general: false, canEditLists: true, canAdd: true, canEditCard: () => true };
   const general = board.group_id === null;
   const groupEdit = v.isAdmin || (!!board.group_id && board.group_id === v.myGroupId);
   return {
@@ -240,7 +242,7 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
         </DragOverlay>
       </DndContext>
 
-      {viewer.isAdmin && <TrelloPanel board={data.board} members={data.members} />}
+      {viewer.isAdmin && !data.board.project_id && <TrelloPanel board={data.board} members={data.members} />}
 
       {openCard && (
         <CardDialog card={openCard} lists={lists} members={data.members} groupId={data.board.group_id} viewerId={viewer.meId} trello={data.board.trello_sync_enabled}

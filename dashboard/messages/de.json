@@ -1085,7 +1085,9 @@
       "due_soon": "Morgen fällig: „{title}“",
       "report": "Der Bericht dieser Woche ist fertig",
       "team_task": "Neue Aufgabe vom Teamleiter: „{title}“",
-      "company_doc": "Neues Firmendokument: „{name}“"
+      "company_doc": "Neues Firmendokument: „{name}“",
+      "project_added": "Du wurdest zum Projekt „{project}“ hinzugefügt",
+      "project_post": "Neu in „{project}“: {title}"
     }
   },
   "palette": {
@@ -2695,5 +2697,80 @@
     "readOnly": "Teamleiter fügen sie unter Teamleitung hinzu.",
     "manage": "In Teamleitung verwalten",
     "storage": "Dokumente belegen {used} von {total}"
+  },
+  "projects": {
+    "mine": "Meine Projekte",
+    "new": "Neues Projekt",
+    "edit": "Projekt bearbeiten",
+    "delete": "Löschen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "create": "Projekt erstellen",
+    "error": "Etwas ist schiefgelaufen. Versuche es erneut.",
+    "empty": "Du bist noch in keinem Projekt – Teamleiter fügen dich hinzu.",
+    "emptyLeader": "Noch keine Projekte. Erstelle das erste und wähle die Leute.",
+    "daysLeft": "{n, plural, one {noch # Tag} other {noch # Tage}}",
+    "overdue": "{n, plural, one {# Tag überfällig} other {# Tage überfällig}}",
+    "goal": "Ziel",
+    "goalOf": "{done} von {goal}",
+    "confirmDelete": "„{name}“ mit Aufgaben, Links, Dateien und Updates löschen? Verkäufe bleiben in Finanzen.",
+    "people": "Leute",
+    "noPeople": "Noch niemand hinzugefügt.",
+    "noUpdates": "Noch keine Updates.",
+    "noLinks": "Noch keine Links. Füge ein Google Doc, Sheet, Slides … ein.",
+    "noFiles": "Noch keine Dateien.",
+    "noBoard": "Dieses Projekt hat kein Aufgabenboard.",
+    "status": {
+      "planning": "In Planung",
+      "live": "Läuft",
+      "closed": "Abgeschlossen"
+    },
+    "tabs": {
+      "overview": "Überblick",
+      "money": "Geld",
+      "tasks": "Aufgaben",
+      "links": "Links",
+      "files": "Dateien",
+      "updates": "Updates"
+    },
+    "lists": {
+      "todo": "Zu tun",
+      "doing": "In Arbeit",
+      "done": "Erledigt"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Worum geht es?",
+      "goal": "Ziel (€ Umsatz)",
+      "start": "Start",
+      "end": "Deadline",
+      "status": "Status",
+      "color": "Farbe",
+      "people": "Leute ({n})"
+    },
+    "badLink": "Das sieht nicht wie ein Weblink aus.",
+    "linkTitle": "Titel (z. B. Budget)",
+    "linkUrl": "Link",
+    "addLink": "Link hinzufügen",
+    "kinds": {
+      "doc": "Google Doc",
+      "sheet": "Tabelle",
+      "slides": "Präsentation",
+      "drive": "Drive-Ordner",
+      "form": "Formular",
+      "canva": "Canva",
+      "notion": "Notion",
+      "figma": "Figma",
+      "other": "Link"
+    },
+    "updatePlaceholder": "Teile ein Update mit dem Projekt…",
+    "post": "Posten",
+    "money": {
+      "revenue": "Umsatz",
+      "costs": "Kosten",
+      "profit": "Gewinn",
+      "byWeek": "Umsatz pro Woche",
+      "empty": "Finanzen ordnet Verkäufe und Ausgaben diesem Projekt zu – sie erscheinen hier."
+    }
   }
 }

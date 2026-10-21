@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 
-export type BoardRow = { id: string; slug: string; name: string; group_id: string | null; trello_sync_enabled: boolean; trello_board_id: string | null };
+export type BoardRow = { id: string; slug: string; name: string; group_id: string | null; project_id?: string | null; trello_sync_enabled: boolean; trello_board_id: string | null };
 export type ListRow = { id: string; board_id: string; name: string; position: number };
 export type CardRow = {
   id: string; board_id: string; list_id: string; title: string; description: string | null;
@@ -49,6 +49,20 @@ export async function loadBoard(slug: string): Promise<BoardData | null> {
     loadMembers(),
   ]);
   return { board, lists: lists.data ?? [], cards: (cards.data ?? []).map(shapeCard), members };
+}
+
+/** A project's task board; assignees limited to the project's people. */
+export async function loadBoardById(id: string, memberIds?: string[]): Promise<BoardData | null> {
+  const supabase = await createClient();
+  const { data: board } = await supabase.from("boards").select("*").eq("id", id).maybeSingle<BoardRow>();
+  if (!board) return null;
+  const [lists, cards, members] = await Promise.all([
+    supabase.from("board_lists").select("*").eq("board_id", board.id).order("position").returns<ListRow[]>(),
+    supabase.from("cards").select(CARD_SELECT).eq("board_id", board.id).order("position").returns<RawCard[]>(),
+    loadMembers(),
+  ]);
+  return { board, lists: lists.data ?? [], cards: (cards.data ?? []).map(shapeCard),
+           members: memberIds ? members.filter((m) => memberIds.includes(m.id)) : members };
 }
 
 export const BOARD_TABLES = ["cards", "board_lists", "card_assignees", "card_checklist_items", "card_comments", "boards"];

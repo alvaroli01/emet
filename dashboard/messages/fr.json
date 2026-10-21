@@ -1085,7 +1085,9 @@
       "due_soon": "À rendre demain : « {title} »",
       "report": "Le rapport de cette semaine est prêt",
       "team_task": "Nouvelle tâche du chef d’équipe : « {title} »",
-      "company_doc": "Nouveau document d’entreprise : « {name} »"
+      "company_doc": "Nouveau document d’entreprise : « {name} »",
+      "project_added": "Tu as été ajouté au projet « {project} »",
+      "project_post": "Nouveau dans « {project} » : {title}"
     }
   },
   "palette": {
@@ -2695,5 +2697,80 @@
     "readOnly": "Les responsables les ajoutent dans Direction.",
     "manage": "Gérer dans Direction",
     "storage": "Les documents utilisent {used} sur {total}"
+  },
+  "projects": {
+    "mine": "Mes projets",
+    "new": "Nouveau projet",
+    "edit": "Modifier le projet",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "create": "Créer le projet",
+    "error": "Une erreur s’est produite. Réessaie.",
+    "empty": "Tu n’es dans aucun projet pour l’instant : les responsables t’ajoutent.",
+    "emptyLeader": "Aucun projet pour l’instant. Crée le premier et choisis son équipe.",
+    "daysLeft": "{n, plural, one {# jour restant} other {# jours restants}}",
+    "overdue": "{n, plural, one {# jour de retard} other {# jours de retard}}",
+    "goal": "Objectif",
+    "goalOf": "{done} sur {goal}",
+    "confirmDelete": "Supprimer « {name} » avec ses tâches, liens, fichiers et actus ? Les ventes restent dans Finances.",
+    "people": "Personnes",
+    "noPeople": "Personne pour l’instant.",
+    "noUpdates": "Pas encore d’actus.",
+    "noLinks": "Pas encore de liens. Colle un Google Doc, Sheet, Slides…",
+    "noFiles": "Pas encore de fichiers.",
+    "noBoard": "Ce projet n’a pas de tableau de tâches.",
+    "status": {
+      "planning": "En préparation",
+      "live": "En cours",
+      "closed": "Terminé"
+    },
+    "tabs": {
+      "overview": "Aperçu",
+      "money": "Argent",
+      "tasks": "Tâches",
+      "links": "Liens",
+      "files": "Fichiers",
+      "updates": "Actus"
+    },
+    "lists": {
+      "todo": "À faire",
+      "doing": "En cours",
+      "done": "Fait"
+    },
+    "form": {
+      "name": "Nom",
+      "description": "De quoi s’agit-il ?",
+      "goal": "Objectif (€ de ventes)",
+      "start": "Début",
+      "end": "Échéance",
+      "status": "Statut",
+      "color": "Couleur",
+      "people": "Personnes ({n})"
+    },
+    "badLink": "Ça ne ressemble pas à un lien web.",
+    "linkTitle": "Titre (ex. Budget)",
+    "linkUrl": "Lien",
+    "addLink": "Ajouter le lien",
+    "kinds": {
+      "doc": "Google Doc",
+      "sheet": "Tableur",
+      "slides": "Présentation",
+      "drive": "Dossier Drive",
+      "form": "Formulaire",
+      "canva": "Canva",
+      "notion": "Notion",
+      "figma": "Figma",
+      "other": "Lien"
+    },
+    "updatePlaceholder": "Partage une actu avec le projet…",
+    "post": "Publier",
+    "money": {
+      "revenue": "Ventes",
+      "costs": "Coûts",
+      "profit": "Bénéfice",
+      "byWeek": "Ventes par semaine",
+      "empty": "Finances rattache ventes et dépenses à ce projet : elles apparaissent ici."
+    }
   }
 }
