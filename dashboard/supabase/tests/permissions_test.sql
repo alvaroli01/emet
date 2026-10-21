@@ -262,6 +262,18 @@ select t.check('Other member cannot overwrite it', $$update ai_keys set last4 = 
 select t.login(1);
 select t.assert('Admin cannot see members'' keys', t.num('select count(*) from ai_keys') = 0);
 
+-- ── Google Calendar links: only the owner ──────────────────
+select t.login(2);
+select t.check('Member saves their own (encrypted) Google Calendar link', $$insert into google_calendars (url_iv, url_data) values ('iv', 'enc')$$, 'ok');
+select t.login(3);
+select t.assert('Other member cannot see someone else''s Google link', t.num('select count(*) from google_calendars') = 0);
+select t.check('Other member cannot overwrite it', $$update google_calendars set url_data = 'x'$$, 'denied');
+select t.check('Other member cannot delete it', $$delete from google_calendars$$, 'denied');
+select t.login(1);
+select t.assert('Admin cannot see members'' Google links', t.num('select count(*) from google_calendars') = 0);
+select t.login(2);
+select t.assert('Owner still has their link, unchanged', t.num($q$select count(*) from google_calendars where url_data = 'enc'$q$) = 1);
+
 -- ── Meeting log: shared with the team; leaders' meetings only for leaders ──
 select t.login(3);  -- Rocco (Marketing, not a leader)
 select t.check('Member records a training session for the team', $$insert into meetings (title, kind) values ('Pricing training', 'training')$$, 'ok');
