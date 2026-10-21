@@ -274,6 +274,39 @@ select t.assert('Admin cannot see members'' Google links', t.num('select count(*
 select t.login(2);
 select t.assert('Owner still has their link, unchanged', t.num($q$select count(*) from google_calendars where url_data = 'enc'$q$) = 1);
 
+-- ── Documents: company (leaders write, everyone reads) + private My folder ──
+select t.login(4);  -- Lassi, Team Leader
+select t.check('Leader creates a company folder', $$insert into doc_folders (scope, name) values ('company', 'Contracts')$$, 'ok');
+select t.check('Leader adds a company file', $$insert into doc_files (scope, folder_id, name, size, path) select 'company', id, 'Team Contract.pdf', 1000, 'company/x/Team Contract.pdf' from doc_folders where name = 'Contracts'$$, 'ok');
+select t.check('Leader uploads it to storage', $$insert into storage.objects (bucket_id, name) values ('documents', 'company/x/Team Contract.pdf')$$, 'ok');
+select t.login(3);  -- Rocco, member
+select t.assert('Member sees the company folder and file', t.num($$select count(*) from doc_files where scope = 'company'$$) = 1 and t.num($$select count(*) from doc_folders where scope = 'company'$$) = 1);
+select t.assert('Member can open the company file in storage', t.num($$select count(*) from storage.objects where bucket_id = 'documents' and name like 'company/%'$$) = 1);
+select t.check('Member cannot create a company folder', $$insert into doc_folders (scope, name) values ('company', 'Mine')$$, 'denied');
+select t.check('Member cannot add a company file', $$insert into doc_files (scope, name, size, path) values ('company', 'x.pdf', 1, 'company/y/x.pdf')$$, 'denied');
+select t.check('Member cannot rename a company file', $$update doc_files set name = 'hacked' where scope = 'company'$$, 'denied');
+select t.check('Member cannot delete a company file', $$delete from doc_files where scope = 'company'$$, 'denied');
+select t.check('Member cannot upload into company storage', $$insert into storage.objects (bucket_id, name) values ('documents', 'company/z/evil.pdf')$$, 'denied');
+select t.check('Member cannot delete company storage', $$delete from storage.objects where bucket_id = 'documents' and name like 'company/%'$$, 'denied');
+select t.assert('Member was notified about the new company document', t.num($$select count(*) from notifications where kind = 'company_doc' and data->>'name' = 'Team Contract.pdf'$$) = 1);
+select t.check('Member keeps a private folder', $$insert into doc_folders (scope, owner_id, name) values ('personal', my_profile_id(), 'Uni')$$, 'ok');
+select t.check('Member adds a private file', $$insert into doc_files (scope, owner_id, folder_id, name, size, path) select 'personal', my_profile_id(), id, 'cv.pdf', 10, 'personal/' || my_profile_id() || '/f/cv.pdf' from doc_folders where name = 'Uni'$$, 'ok');
+select t.check('Member uploads the private file to storage', $$insert into storage.objects (bucket_id, name) values ('documents', 'personal/' || my_profile_id() || '/f/cv.pdf')$$, 'ok');
+select t.check('Private file cannot go into a company folder', $$insert into doc_files (scope, owner_id, folder_id, name, size, path) select 'personal', my_profile_id(), id, 'a', 1, 'personal/' || my_profile_id() || '/g/a' from doc_folders where name = 'Contracts'$$, 'denied');
+select t.check('Member cannot make a private folder for someone else', $$insert into doc_folders (scope, owner_id, name) select 'personal', id, 'x' from profiles where full_name = 'Stefan'$$, 'denied');
+select t.check('Files over 25 MB are refused', $$insert into doc_files (scope, owner_id, name, size, path) values ('personal', my_profile_id(), 'big', 26214401, 'personal/' || my_profile_id() || '/h/big')$$, 'denied');
+select t.login(2);  -- Stefan
+select t.assert('Other member cannot see Rocco''s private folder or files', t.num($$select count(*) from doc_folders where scope = 'personal'$$) = 0 and t.num($$select count(*) from doc_files where scope = 'personal'$$) = 0);
+select t.assert('Other member cannot open Rocco''s private file in storage', t.num($$select count(*) from storage.objects where bucket_id = 'documents' and name like 'personal/%'$$) = 0);
+select t.check('Other member cannot put a file into Rocco''s private storage', $$insert into storage.objects (bucket_id, name) select 'documents', 'personal/' || id || '/q/x' from profiles where full_name = 'Rocco'$$, 'denied');
+select t.login(1);  -- Alvaro, admin
+select t.assert('Admin cannot see members'' private files', t.num($$select count(*) from doc_files where scope = 'personal'$$) = 0);
+select t.assert('Admin cannot open members'' private storage', t.num($$select count(*) from storage.objects where bucket_id = 'documents' and name like 'personal/%'$$) = 0);
+select t.assert('Storage total counts every document', public.documents_storage_used() = 1010);
+select t.login(4);
+select t.check('Leader deletes the company folder (file goes with it)', $$delete from doc_folders where name = 'Contracts'$$, 'ok');
+select t.assert('Company file was removed with its folder', t.num($$select count(*) from doc_files where scope = 'company'$$) = 0);
+
 -- ── Meeting log: shared with the team; leaders' meetings only for leaders ──
 select t.login(3);  -- Rocco (Marketing, not a leader)
 select t.check('Member records a training session for the team', $$insert into meetings (title, kind) values ('Pricing training', 'training')$$, 'ok');
