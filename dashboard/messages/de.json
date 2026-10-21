@@ -2654,6 +2654,10 @@
       "company": "Firmendokumente",
       "personal": "Mein Ordner"
     },
+    "top": {
+      "company": "Firmendokumente",
+      "personal": "Mein Ordner"
+    },
     "tool": "Firmendokumente",
     "newFolder": "Neuer Ordner",
     "folderName": "Ordnername",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Building2, Lock } from "lucide-react";
@@ -10,6 +10,10 @@ import { Drive } from "./drive";
 export function DocumentsSection({ meId, isLeader }: { meId: string; isLeader: boolean }) {
   const t = useTranslations("documents");
   const [tab, setTab] = useState<"company" | "personal">("company");
+  // Arriving from a notification (/me/documents → #documents): the profile's cards load after the browser's jump
+  useEffect(() => {
+    if (window.location.hash === "#documents") setTimeout(() => document.getElementById("documents")?.scrollIntoView({ behavior: "smooth", block: "start" }), 400);
+  }, []);
   return (
     <section id="documents" className="panel scroll-mt-24 p-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">

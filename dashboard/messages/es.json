@@ -2654,6 +2654,10 @@
       "company": "Documentos de la empresa",
       "personal": "Mi carpeta"
     },
+    "top": {
+      "company": "Documentos de la empresa",
+      "personal": "Mi carpeta"
+    },
     "tool": "Documentos de la empresa",
     "newFolder": "Nueva carpeta",
     "folderName": "Nombre de la carpeta",

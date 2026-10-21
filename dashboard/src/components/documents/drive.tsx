@@ -45,6 +45,7 @@ export function Drive({ scope, canEdit, meId }: { scope: Scope; canEdit: boolean
     const [fo, fi] = await Promise.all([fq, dq]);
     if (fo.error || fi.error) { toast("error", t("error")); setFolders([]); return; }
     setFolders(fo.data as Folder[]); setFiles(fi.data as DocFile[]);
+    window.dispatchEvent(new Event("emet:documents-changed")); // the storage bar re-counts
     if (scope === "company") {
       const ids = [...new Set((fi.data as DocFile[]).map((f) => f.uploaded_by).filter(Boolean))] as string[];
       if (ids.length) {

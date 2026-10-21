@@ -2654,6 +2654,10 @@
       "company": "Documents de l’entreprise",
       "personal": "Mon dossier"
     },
+    "top": {
+      "company": "Documents de l’entreprise",
+      "personal": "Mon dossier"
+    },
     "tool": "Documents de l’entreprise",
     "newFolder": "Nouveau dossier",
     "folderName": "Nom du dossier",

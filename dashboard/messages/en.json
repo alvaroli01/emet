@@ -2654,6 +2654,10 @@
       "company": "Company documents",
       "personal": "My folder"
     },
+    "top": {
+      "company": "Company documents",
+      "personal": "My folder"
+    },
     "tool": "Company documents",
     "newFolder": "New folder",
     "folderName": "Folder name",

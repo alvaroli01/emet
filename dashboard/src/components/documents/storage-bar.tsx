@@ -13,7 +13,12 @@ export function StorageBar() {
   const locale = useLocale();
   const supabase = useMemo(() => createClient(), []);
   const [used, setUsed] = useState<number | null>(null);
-  useEffect(() => { supabase.rpc("documents_storage_used").then(({ data }) => setUsed(Number(data ?? 0))); }, [supabase]);
+  useEffect(() => {
+    const count = () => { supabase.rpc("documents_storage_used").then(({ data }) => setUsed(Number(data ?? 0))); };
+    count();
+    window.addEventListener("emet:documents-changed", count);
+    return () => window.removeEventListener("emet:documents-changed", count);
+  }, [supabase]);
   if (used === null) return null;
   const pct = Math.min(1, used / TOTAL);
   return (

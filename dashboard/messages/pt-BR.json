@@ -2654,6 +2654,10 @@
       "company": "Documentos da empresa",
       "personal": "Minha pasta"
     },
+    "top": {
+      "company": "Documentos da empresa",
+      "personal": "Minha pasta"
+    },
     "tool": "Documentos da empresa",
     "newFolder": "Nova pasta",
     "folderName": "Nome da pasta",
