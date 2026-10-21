@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-21 — Alvaro — Google Calendar in emet: connect it in Base camp → Agenda, your Google events show in Today → Your week, and Ask emet answers questions about your schedule (migration 0025, all 7 languages).
 - 2026-10-21 — Alvaro — Removed the Demo numbers button on Today (`/today?demo=1`) and the `dashboard/supabase/demo/` scripts; no more demo mode.
 - 2026-10-21 — Alvaro — Removed all `[DEMO]` class data from the live database (55 sales, 15 tasks, 14 DMs, posts, stock, prospects, decisions, blockers, complaints, expenses and their activity/notifications); 0 demo rows left.
 - 2026-10-21 — Alvaro — Added the 11 Replica skills (Jakeschincariol/replica-skill, MIT, free) to `.claude/skills/`: recon, architect, design, build, backend, test, diff, entrepreneur, brand, launch, deploy. Locked in `skills-lock.json`; README section 8 and 9 updated.
