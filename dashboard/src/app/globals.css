@@ -178,7 +178,8 @@ p, li { text-wrap: pretty; }
 
 /* Long German / Finnish / Russian words must wrap instead of breaking the layout */
 h1, h2, h3, p, label, li, td { overflow-wrap: break-word; hyphens: auto; }
-button { white-space: nowrap; }
+/* In the base layer, so a utility like whitespace-normal on a button can override it (unlayered CSS beats every Tailwind class) */
+@layer base { button { white-space: nowrap; } }
 
 @layer components {
   /* Liquid glass: translucent, blurred, with a bright top edge — every card and menu is made of it */
