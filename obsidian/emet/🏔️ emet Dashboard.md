@@ -18,7 +18,7 @@ Progress so far: **€0 real revenue** (demo numbers removed 21 Oct) → see [[G
 ## 🚦 Where we are (22 Oct 2026)
 - **What we sell:** ❓ not decided — 7 ideas on the whiteboard (events, raffle, cup cover, e-commerce, websites, Sunset Sessions, Chinese project); groups bring a path + one leader per project by Friday → [[Projects & ideas]]
 - **Leaders:** ✅ Alvaro (Team Leader), Rocco (Finance), Stefan (Communications), Mario (Customer), Nahuel (Marketing); roles inside groups still open → [[Team structure]]
-- **emet HQ:** ✅ live → [[emet HQ (dashboard)]] · 22 Oct work (Notion, Week/Month, task pop-ups, Coach) is local, not pushed yet
+- **emet HQ:** ✅ live → [[emet HQ (dashboard)]] · 22 Oct work (Notion, Week/Month, task pop-ups, Coach) is live and its database updates are applied; Notion still needs its app keys
 - **Coach:** Leire has a Coach role in emet HQ (22 Oct) → [[Who's who]]
 - **Uni:** Finance Block 1 validation Thu 29 Oct → [[LEINN calendar]]
 - **Demo data:** ✅ removed on 21 Oct

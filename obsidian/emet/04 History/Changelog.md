@@ -7,6 +7,7 @@ updated: 2026-10-22
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-22 — Alvaro — Live database: migrations 0033–0035 confirmed applied, Leire set as coach, coach rules tested (rolled back). Vault day note + home status updated.
 - 2026-10-22 — Alvaro — Today: Week / Month switch with ‹ › arrows for the Sales, Tasks and Money cards (back to any past week or month; Tasks also looks ahead and shows what's due). Live pop-up when you get a task (title + due date + Open), optional desktop alerts from the bell. New Coach role (Leire): views everything, adds tasks on any team board and assigns people, edits only her own tasks. Migrations 0034 (coach) and 0035 (due date in task notifications).
 - 2026-10-22 — Alvaro — Notion (step 1): connect your own Notion in My connections; Base camp → Notion tab (search, read pages, databases as tables); Notion deadlines in your week and My Tasks; Save to Notion on meetings, docs, Idea Lab and project updates; Ask emet reads your Notion. Public /privacy and /terms pages. Fix: Scout lead heading "What Scout found" was showing a broken label. Migration 0033.
 - 2026-10-22 — Alvaro — Obsidian vault brought up to date: new notes for My Projects, Documents, Google Calendar, My connections & AI keys, Phone version, Scout v2, the video walkthrough prompt and the 21–22 Oct days; `obsidian/sync-from-repo.py` copies CHANGELOG, decisions, README and specs into the vault; CLAUDE.md rule 10 keeps it current after every change.
