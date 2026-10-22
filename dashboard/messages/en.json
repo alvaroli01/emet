@@ -2892,6 +2892,10 @@
     "back": "Back",
     "openInNotion": "Open in Notion",
     "untitled": "Untitled",
-    "noRows": "No rows yet"
+    "noRows": "No rows yet",
+    "saveToNotion": "Save to Notion",
+    "pickSavePage": "Pick a Notion page to save to",
+    "saveFailedNotion": "Couldn't save to Notion. Try again.",
+    "savedNotion": "Saved to Notion"
   }
 }

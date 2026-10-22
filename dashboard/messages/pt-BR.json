@@ -2892,6 +2892,10 @@
     "back": "Voltar",
     "openInNotion": "Abrir no Notion",
     "untitled": "Sem título",
-    "noRows": "Ainda sem linhas"
+    "noRows": "Ainda sem linhas",
+    "saveToNotion": "Salvar no Notion",
+    "pickSavePage": "Escolha uma página do Notion para salvar",
+    "saveFailedNotion": "Não foi possível salvar no Notion. Tente de novo.",
+    "savedNotion": "Salvo no Notion"
   }
 }

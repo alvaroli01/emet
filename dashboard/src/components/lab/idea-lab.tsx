@@ -7,6 +7,7 @@ import {
   Lightbulb, Sparkles, ThumbsUp, MessageSquare, ArrowLeft, Trash2, RotateCcw, Loader2, Check, X, Globe, ListChecks,
   TrendingUp, TrendingDown, AlertTriangle, CircleHelp, GitBranch, Package, Wrench, PartyPopper, MonitorSmartphone, Shapes, KeyRound,
 } from "lucide-react";
+import { SaveToNotion } from "@/components/notion/save-to-notion";
 import { createClient } from "@/lib/supabase/client";
 import { IdeaExtras } from "./extras";
 import { useToast } from "@/components/toast";
@@ -279,6 +280,7 @@ function Detail({ idea, names, meId, isAdmin, hasKey, votes, comments, parent, v
           {canManage && hasKey && !progress && (
             <button onClick={onRun} className="grid size-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-ink" aria-label={t("rerun")} title={t("rerun")}><RotateCcw size={15} /></button>
           )}
+          {idea.analysis && <SaveToNotion kind="idea" id={idea.id} />}
           {canManage && <button onClick={remove} className="grid size-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-bad-text" aria-label={t("delete")} title={t("delete")}><Trash2 size={15} /></button>}
         </span>
       </div>

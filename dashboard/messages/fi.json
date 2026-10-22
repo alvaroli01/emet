@@ -2892,6 +2892,10 @@
     "back": "Takaisin",
     "openInNotion": "Avaa Notionissa",
     "untitled": "Nimetön",
-    "noRows": "Ei vielä rivejä"
+    "noRows": "Ei vielä rivejä",
+    "saveToNotion": "Tallenna Notioniin",
+    "pickSavePage": "Valitse Notion-sivu tallennusta varten",
+    "saveFailedNotion": "Tallennus Notioniin epäonnistui. Yritä uudelleen.",
+    "savedNotion": "Tallennettu Notioniin"
   }
 }

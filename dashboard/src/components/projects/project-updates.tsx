@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Trash2 } from "lucide-react";
+import { SaveToNotion } from "@/components/notion/save-to-notion";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
@@ -50,6 +51,7 @@ export function ProjectUpdates({ projectId, updates, people, meId, isLeader }: {
               <div className="min-w-0 flex-1">
                 <p className="text-xs text-muted"><span className="font-semibold text-ink">{who?.full_name ?? "—"}</span> · {timeAgo(u.created_at, locale)}</p>
                 <p className="mt-0.5 whitespace-pre-wrap text-sm">{u.body}</p>
+                <div className="mt-1.5"><SaveToNotion kind="project_update" id={u.id} meId={meId} /></div>
               </div>
               {(isLeader || u.created_by === meId) && (
                 <button onClick={() => remove(u.id)} aria-label={t("delete")} title={t("delete")} className="grid size-8 shrink-0 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-bad-text"><Trash2 size={14} /></button>

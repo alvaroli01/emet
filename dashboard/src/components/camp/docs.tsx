@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   Plus, Search, Mic, Pin, PinOff, Trash2, Download, Share2, Bold, Heading1, Heading2, List, ListChecks, Eye, PenLine, ArrowLeft, Users, Lock, FileText,
 } from "lucide-react";
+import { SaveToNotion } from "@/components/notion/save-to-notion";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
@@ -249,6 +250,7 @@ function Editor({ doc, canEdit, members, meId, ownerName, onBack, onChange, onDe
               )}
             </div>
           )}
+          <SaveToNotion kind="doc" id={doc.id} meId={meId} />
           {canEdit && <button onClick={onDelete} className={`${tool} hover:text-bad-text`} aria-label={t("delete")} title={t("delete")}><Trash2 size={16} /></button>}
         </span>
       </div>

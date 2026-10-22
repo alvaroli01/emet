@@ -2892,6 +2892,10 @@
     "back": "Retour",
     "openInNotion": "Ouvrir dans Notion",
     "untitled": "Sans titre",
-    "noRows": "Pas encore de lignes"
+    "noRows": "Pas encore de lignes",
+    "saveToNotion": "Enregistrer dans Notion",
+    "pickSavePage": "Choisis une page Notion où enregistrer",
+    "saveFailedNotion": "Impossible d'enregistrer dans Notion. Réessaie.",
+    "savedNotion": "Enregistré dans Notion"
   }
 }

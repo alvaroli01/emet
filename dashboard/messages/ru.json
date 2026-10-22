@@ -2892,6 +2892,10 @@
     "back": "Назад",
     "openInNotion": "Открыть в Notion",
     "untitled": "Без названия",
-    "noRows": "Строк пока нет"
+    "noRows": "Строк пока нет",
+    "saveToNotion": "Сохранить в Notion",
+    "pickSavePage": "Выбери страницу Notion для сохранения",
+    "saveFailedNotion": "Не удалось сохранить в Notion. Попробуй ещё раз.",
+    "savedNotion": "Сохранено в Notion"
   }
 }

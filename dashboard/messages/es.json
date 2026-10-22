@@ -2892,6 +2892,10 @@
     "back": "Atrás",
     "openInNotion": "Abrir en Notion",
     "untitled": "Sin título",
-    "noRows": "Aún no hay filas"
+    "noRows": "Aún no hay filas",
+    "saveToNotion": "Guardar en Notion",
+    "pickSavePage": "Elige una página de Notion donde guardar",
+    "saveFailedNotion": "No se pudo guardar en Notion. Inténtalo de nuevo.",
+    "savedNotion": "Guardado en Notion"
   }
 }

@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Mic, Search, GraduationCap, Phone, Video, Crown, ArrowLeft, Download, Trash2, Loader2, ChevronDown, Lock, AudioLines } from "lucide-react";
+import { SaveToNotion } from "@/components/notion/save-to-notion";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { mdToHtml } from "@/lib/markdown";
@@ -259,6 +260,7 @@ function Detail({ m, by, canManage, onBack, onDeleted }: { m: MeetingRow; by?: s
               </div>
             )}
           </div>
+          {m.status === "ready" && <SaveToNotion kind="meeting" id={m.id} />}
           {canManage && <button onClick={remove} className={`${tool} hover:text-bad-text`} aria-label={t("delete")} title={t("delete")}><Trash2 size={16} /></button>}
         </span>
       </div>
