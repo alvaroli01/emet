@@ -182,6 +182,8 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-21 | Design reference pictures and the Obsidian vault are now kept in the repo so every teammate's Claude builds from the same look | Alvaro |
 | 2026-10-21 | Added the 11 Replica skills to `.claude/skills/` so everyone's Claude can clone an existing app's features (never its code, brand or content) and fix what its users complain about | Alvaro |
 | 2026-10-22 | Notion is connected per member (their own uni or personal Notion, by OAuth), never shared; emet stores no Notion content, only encrypted tokens and which page/database each person picked | Alvaro |
+| 2026-10-22 | Leire (the team's coach / teacher) joins as **Coach**: no group, sees everything, can add tasks on any team board and assign people, and edit only her own tasks. Only admins can make someone a coach | Alvaro |
+| 2026-10-22 | Getting a task shows a live pop-up (title + due date) on whatever page you're on; Today's Sales / Tasks / Money cards can show any week or month | Alvaro |
 
 ## 10. Open questions
 

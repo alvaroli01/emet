@@ -16,4 +16,6 @@ First screen after login. Full-screen Bilbao-at-night photo, icon rail, **"Hey {
 - Due today / late, priorities, agenda, quick actions (log sale, add task, record), Friday report, goal
 - **Demo numbers** switch (`?demo=1`) for presentations
 
+- **Week / Month** switch with ‹ › on the Sales, Tasks and Money cards: any past week or month; Tasks also looks ahead (tasks due). (22 Oct 2026)
+
 Back to [[Systems map]]

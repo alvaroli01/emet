@@ -8,6 +8,8 @@ updated: 2026-10-22
 | Date | Decision | Decided by |
 |---|---|---|
 | [[2026-10-22]] | Notion is connected per member (their own uni or personal Notion, by OAuth), never shared; emet stores no Notion content, only encrypted tokens and which page/database each person picked | Alvaro |
+| [[2026-10-22]] | Leire (the team's coach / teacher) joins as **Coach**: no group, sees everything, can add tasks on any team board and assign people, and edit only her own tasks. Only admins can make someone a coach | Alvaro |
+| [[2026-10-22]] | Getting a task shows a live pop-up (title + due date) on whatever page you're on; Today's Sales / Tasks / Money cards can show any week or month | Alvaro |
 | [[2026-10-21]] | Idea lab judges ideas exactly as written (no swapping in a better idea), fatal flaws (demand, margin or path to €30K ≤ 3/10, or no sense as written) cap the score at 44 = Not recommended, and the LLM Council (5 advisors → anonymous review → chairman, from Alvaro's council method) runs on every idea and can only make the verdict harsher. Tested: "selling lemons to investors" 74 → 10/100 | Alvaro |
 | [[2026-10-21]] | Scout stays €0: OpenStreetMap + verified web search (+ Overture via the Open Places API free plan when a key is added; it stops at 10,000 searches/month, never bills). Every place and link must come from real data — nothing the AI can't back with a search result is kept | Alvaro |
 | [[2026-10-21]] | Scout's free AI limit: members can opt in to lend their Groq key to Scout (max 60% of its daily allowance), plus a free Mistral key as last resort; the final score never drops to a weaker model | Alvaro |
