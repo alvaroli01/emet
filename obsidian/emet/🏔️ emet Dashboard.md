@@ -1,6 +1,6 @@
 ---
 tags: [emet, dashboard]
-updated: 2026-10-21
+updated: 2026-10-22
 ---
 
 # 🏔️ emet — Dashboard
@@ -15,11 +15,13 @@ updated: 2026-10-21
 
 Progress so far: **€0 real revenue** (only `[DEMO]` numbers in the app) → see [[Goal & Money]]
 
-## 🚦 Where we are (21 Oct 2026)
+## 🚦 Where we are (22 Oct 2026)
 - **What we sell:** ❓ not decided — brainstorm this week (19 Oct) through the [[Idea lab]]
-- **Leaders & roles:** ❓ not assigned yet → [[Team structure]]
+- **Leaders:** ✅ Alvaro (Team Leader), Rocco (Finance), Stefan (Communications), Mario (Customer), Nahuel (Marketing); roles inside groups still open → [[Team structure]]
 - **emet HQ:** ✅ live with 15 systems → [[emet HQ (dashboard)]]
-- **Demo data:** ⚠️ `[DEMO]` rows still in the live database → [[Open questions]]
+- **Demo data:** ✅ removed on 21 Oct
+- **New (21 Oct):** [[My Projects]] · [[Documents]] · [[Google Calendar]] · [[My connections & AI keys]] · [[Phone version]] · Scout v2
+- **Repo info:** [[Repo README]] · [[Changelog]] · [[Decisions log]] · [[Specs and plans]] · [[Video walkthrough prompt]]
 
 ## 🧭 Navigate
 | Company | Team | Systems | History |

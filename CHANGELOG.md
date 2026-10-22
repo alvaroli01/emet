@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-22 — Alvaro — Obsidian vault brought up to date: new notes for My Projects, Documents, Google Calendar, My connections & AI keys, Phone version, Scout v2, the video walkthrough prompt and the 21–22 Oct days; `obsidian/sync-from-repo.py` copies CHANGELOG, decisions, README and specs into the vault; CLAUDE.md rule 10 keeps it current after every change.
 - 2026-10-21 — Alvaro — Phone version (computer unchanged — every change only applies under 640px): nothing runs off the right edge any more (grids fit the screen, page never scrolls sideways); Your week / My week are small day buttons + a short list; big decorative pictures hidden on phones so the real content comes first; Finance payment cards in a 2×2 grid; Team list shows name + status; profile numbers in one compact row; notifications panel full-width and solid; top bar on Today gets a dark background. Fixes: Scout's “{city}” label error and a country-name mismatch warning.
 - 2026-10-21 — Alvaro — Fix: every pop-up form (shared Modal, task card window, recorder) now opens above the top bar — the search box no longer covers forms in any section. Scout log says why a web search finds nothing (results read, places named, confirmed).
 

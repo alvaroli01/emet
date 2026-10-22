@@ -16,4 +16,12 @@ Find and judge first clients for a project. Migration 0018 (167 permission tests
 - Live 3D globe + plain-language step log
 - Runs searches: Customer, Marketing, admins. Outreach avoids cold email (Spanish LSSI)
 
+## v2 (21 Oct 2026)
+- Only real places: web finds must appear in real search results; a fast filter drops the wrong kind of place
+- Exact Google Maps links; official website / Instagram / phone filled only from real results
+- Evidence level per lead (little evidence → at most "Maybe"); unknowns count against a lead
+- Save a lead to a project → [[My Projects]] Leads tab
+- Shared AI keys + Mistral backup → [[My connections & AI keys]]; the log shows tokens used and why a web search found nothing
+- Optional second map source: Open Places API free key (`OPEN_PLACES_API_KEY`)
+
 Back to [[Systems map]]

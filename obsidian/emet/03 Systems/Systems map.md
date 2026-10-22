@@ -28,6 +28,11 @@ graph TD
 | System | Note |
 |---|---|
 | [[emet HQ (dashboard)]] | The app |
+| [[My Projects]] | Projects with tasks, money, links, files, leads |
+| [[Documents]] | Company documents + private My folder |
+| [[Google Calendar]] | Google events in Today and Base camp |
+| [[My connections & AI keys]] | Groq, Mistral, lend to Scout, Google Calendar |
+| [[Phone version]] | Dashboard on phones |
 | [[Today]] · [[Overview (company dashboard)]] | Home + company view |
 | [[Task boards]] · [[Team tasks]] | Work |
 | [[Base camp]] | Private |
