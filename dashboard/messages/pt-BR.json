@@ -616,7 +616,8 @@
       "agenda": "Agenda",
       "docs": "Docs",
       "ideas": "Mural de ideias",
-      "vault": "Cofre"
+      "vault": "Cofre",
+      "notion": "Notion"
     },
     "week": {
       "saveError": "Não foi possível salvar. Tente de novo.",
@@ -2878,6 +2879,18 @@
     "saveTo": "Salvar na página",
     "none": "Nenhuma",
     "dateColumn": "Coluna de data",
-    "doneColumn": "Coluna de concluído"
+    "doneColumn": "Coluna de concluído",
+    "tabEmptyTitle": "Conecte seu Notion",
+    "tabEmptyText": "Leia e busque suas páginas do Notion aqui — conecte uma vez em Minhas conexões.",
+    "search": "Buscar no seu Notion",
+    "results": "Resultados",
+    "recent": "Editado recentemente",
+    "nothing": "Nada encontrado",
+    "loadFailed": "Não foi possível abrir pelo Notion. Talvez não esteja compartilhado com o emet.",
+    "pick": "Escolha uma página ou banco de dados à esquerda.",
+    "back": "Voltar",
+    "openInNotion": "Abrir no Notion",
+    "untitled": "Sem título",
+    "noRows": "Ainda sem linhas"
   }
 }

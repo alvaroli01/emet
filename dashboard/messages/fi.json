@@ -616,7 +616,8 @@
       "agenda": "Kalenteri",
       "docs": "Dokumentit",
       "ideas": "Ideaseinä",
-      "vault": "Holvi"
+      "vault": "Holvi",
+      "notion": "Notion"
     },
     "week": {
       "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
@@ -2878,6 +2879,18 @@
     "saveTo": "Tallenna sivulle",
     "none": "Ei mitään",
     "dateColumn": "Päivämääräsarake",
-    "doneColumn": "Valmis-sarake"
+    "doneColumn": "Valmis-sarake",
+    "tabEmptyTitle": "Yhdistä Notionisi",
+    "tabEmptyText": "Lue ja hae Notion-sivujasi täällä – yhdistä kerran kohdassa Omat yhteydet.",
+    "search": "Hae Notionista",
+    "results": "Tulokset",
+    "recent": "Viimeksi muokatut",
+    "nothing": "Ei löytynyt mitään",
+    "loadFailed": "Tätä ei voitu avata Notionista. Sitä ei ehkä ole jaettu emetille.",
+    "pick": "Valitse sivu tai tietokanta vasemmalta.",
+    "back": "Takaisin",
+    "openInNotion": "Avaa Notionissa",
+    "untitled": "Nimetön",
+    "noRows": "Ei vielä rivejä"
   }
 }

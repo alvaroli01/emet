@@ -616,7 +616,8 @@
       "agenda": "Agenda",
       "docs": "Docs",
       "ideas": "Idea wall",
-      "vault": "Vault"
+      "vault": "Vault",
+      "notion": "Notion"
     },
     "week": {
       "saveError": "Couldn’t save. Try again.",
@@ -2878,6 +2879,18 @@
     "saveTo": "Save to page",
     "none": "None",
     "dateColumn": "Date column",
-    "doneColumn": "Done column"
+    "doneColumn": "Done column",
+    "tabEmptyTitle": "Connect your Notion",
+    "tabEmptyText": "Read and search your Notion pages here — connect it once in My connections.",
+    "search": "Search your Notion",
+    "results": "Results",
+    "recent": "Recently edited",
+    "nothing": "Nothing found",
+    "loadFailed": "Couldn't open this from Notion. It may not be shared with emet.",
+    "pick": "Pick a page or database on the left.",
+    "back": "Back",
+    "openInNotion": "Open in Notion",
+    "untitled": "Untitled",
+    "noRows": "No rows yet"
   }
 }

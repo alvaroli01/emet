@@ -616,7 +616,8 @@
       "agenda": "Agenda",
       "docs": "Docs",
       "ideas": "Muro de ideas",
-      "vault": "Caja fuerte"
+      "vault": "Caja fuerte",
+      "notion": "Notion"
     },
     "week": {
       "saveError": "No se pudo guardar. Inténtalo de nuevo.",
@@ -2878,6 +2879,18 @@
     "saveTo": "Guardar en la página",
     "none": "Ninguna",
     "dateColumn": "Columna de fecha",
-    "doneColumn": "Columna de hecho"
+    "doneColumn": "Columna de hecho",
+    "tabEmptyTitle": "Conecta tu Notion",
+    "tabEmptyText": "Lee y busca tus páginas de Notion aquí: conéctalo una vez en Mis conexiones.",
+    "search": "Busca en tu Notion",
+    "results": "Resultados",
+    "recent": "Editado recientemente",
+    "nothing": "No se encontró nada",
+    "loadFailed": "No se pudo abrir desde Notion. Puede que no esté compartido con emet.",
+    "pick": "Elige una página o base de datos a la izquierda.",
+    "back": "Atrás",
+    "openInNotion": "Abrir en Notion",
+    "untitled": "Sin título",
+    "noRows": "Aún no hay filas"
   }
 }

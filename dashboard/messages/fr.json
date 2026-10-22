@@ -616,7 +616,8 @@
       "agenda": "Agenda",
       "docs": "Docs",
       "ideas": "Mur d’idées",
-      "vault": "Coffre-fort"
+      "vault": "Coffre-fort",
+      "notion": "Notion"
     },
     "week": {
       "saveError": "Échec de l’enregistrement. Réessayez.",
@@ -2878,6 +2879,18 @@
     "saveTo": "Enregistrer dans la page",
     "none": "Aucune",
     "dateColumn": "Colonne de date",
-    "doneColumn": "Colonne « fait »"
+    "doneColumn": "Colonne « fait »",
+    "tabEmptyTitle": "Connecte ton Notion",
+    "tabEmptyText": "Lis et cherche tes pages Notion ici — connecte-le une fois dans Mes connexions.",
+    "search": "Chercher dans Notion",
+    "results": "Résultats",
+    "recent": "Modifié récemment",
+    "nothing": "Rien trouvé",
+    "loadFailed": "Impossible d'ouvrir ceci depuis Notion. Ce n'est peut-être pas partagé avec emet.",
+    "pick": "Choisis une page ou une base à gauche.",
+    "back": "Retour",
+    "openInNotion": "Ouvrir dans Notion",
+    "untitled": "Sans titre",
+    "noRows": "Pas encore de lignes"
   }
 }

@@ -13,6 +13,7 @@ import { IdeasTab, type Idea } from "@/components/camp/ideas";
 import { VaultTab } from "@/components/camp/vault";
 import { cardHref } from "@/lib/projects";
 import { loadMyGoogleEvents } from "@/lib/gcal-server";
+import { NotionTab } from "@/components/notion/notion-tab";
 import { loadMyProjects } from "@/lib/projects-server";
 import { MyProjects } from "@/components/projects/my-projects";
 
@@ -127,6 +128,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
         { id: "agenda", label: t("tabs.agenda"), node: <AgendaTab items={agenda.data ?? []} due={due} today={today} /> },
         { id: "docs", label: t("tabs.docs"), node: <DocsTab mine={myDocs} shared={sharedDocs} members={members} meId={me.id} ai={{ connected: !!aiKey.data, last4: aiKey.data?.last4 ?? null }} initialOpen={openDoc} /> },
         { id: "ideas", label: t("tabs.ideas"), node: <IdeasTab ideas={ideas.data ?? []} meId={me.id} /> },
+        { id: "notion", label: t("tabs.notion"), node: <NotionTab meId={me.id} /> },
         { id: "vault", label: t("tabs.vault"), node: <VaultTab keyRow={vaultKey.data} items={vaultItems.data ?? []} meId={me.id} /> },
       ]} />
     </div>

@@ -616,7 +616,8 @@
       "agenda": "Agenda",
       "docs": "Dokumente",
       "ideas": "Ideenwand",
-      "vault": "Tresor"
+      "vault": "Tresor",
+      "notion": "Notion"
     },
     "week": {
       "saveError": "Speichern fehlgeschlagen. Versuch es nochmal.",
@@ -2878,6 +2879,18 @@
     "saveTo": "Speichern in Seite",
     "none": "Keine",
     "dateColumn": "Datumsspalte",
-    "doneColumn": "Erledigt-Spalte"
+    "doneColumn": "Erledigt-Spalte",
+    "tabEmptyTitle": "Verbinde dein Notion",
+    "tabEmptyText": "Lies und durchsuche hier deine Notion-Seiten – einmal unter Meine Verbindungen verbinden.",
+    "search": "Notion durchsuchen",
+    "results": "Ergebnisse",
+    "recent": "Zuletzt bearbeitet",
+    "nothing": "Nichts gefunden",
+    "loadFailed": "Konnte das nicht aus Notion öffnen. Vielleicht ist es nicht mit emet geteilt.",
+    "pick": "Wähle links eine Seite oder Datenbank.",
+    "back": "Zurück",
+    "openInNotion": "In Notion öffnen",
+    "untitled": "Ohne Titel",
+    "noRows": "Noch keine Zeilen"
   }
 }
