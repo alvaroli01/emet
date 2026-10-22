@@ -33,6 +33,7 @@ graph TD
 | [[Google Calendar]] | Google events in Today and Base camp |
 | [[My connections & AI keys]] | Groq, Mistral, lend to Scout, Google Calendar |
 | [[Phone version]] | Dashboard on phones |
+| [[Notion]] | Each member's own Notion inside emet |
 | [[Today]] · [[Overview (company dashboard)]] | Home + company view |
 | [[Task boards]] · [[Team tasks]] | Work |
 | [[Base camp]] | Private |

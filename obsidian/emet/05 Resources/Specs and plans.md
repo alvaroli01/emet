@@ -18,6 +18,7 @@ Design specs and build plans for each feature, newest first.
 
 ## Plans
 
+- [2026-10-22-notion-step1](https://github.com/alvaroli01/emet/blob/main/docs/superpowers/plans/2026-10-22-notion-step1.md)
 - [2026-10-21-scout-key-pool](https://github.com/alvaroli01/emet/blob/main/docs/superpowers/plans/2026-10-21-scout-key-pool.md)
 - [2026-10-21-my-projects](https://github.com/alvaroli01/emet/blob/main/docs/superpowers/plans/2026-10-21-my-projects.md)
 - [2026-10-21-google-calendar](https://github.com/alvaroli01/emet/blob/main/docs/superpowers/plans/2026-10-21-google-calendar.md)

@@ -20,7 +20,7 @@ Progress so far: **€0 real revenue** (only `[DEMO]` numbers in the app) → se
 - **Leaders:** ✅ Alvaro (Team Leader), Rocco (Finance), Stefan (Communications), Mario (Customer), Nahuel (Marketing); roles inside groups still open → [[Team structure]]
 - **emet HQ:** ✅ live with 15 systems → [[emet HQ (dashboard)]]
 - **Demo data:** ✅ removed on 21 Oct
-- **New (21 Oct):** [[My Projects]] · [[Documents]] · [[Google Calendar]] · [[My connections & AI keys]] · [[Phone version]] · Scout v2
+- **New (21 Oct):** [[My Projects]] · [[Documents]] · [[Google Calendar]] · [[My connections & AI keys]] · [[Phone version]] · Scout v2 · [[Notion]] (22 Oct)
 - **Repo info:** [[Repo README]] · [[Changelog]] · [[Decisions log]] · [[Specs and plans]] · [[Video walkthrough prompt]]
 
 ## 🧭 Navigate
