@@ -257,7 +257,8 @@
       "upcoming": "Demnächst",
       "noDate": "Ohne Datum",
       "done": "Erledigt"
-    }
+    },
+    "fromNotion": "Aus Notion"
   },
   "group": {
     "names": {

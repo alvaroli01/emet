@@ -103,3 +103,31 @@ export async function loadMyNotionDeadlines(sb: SupabaseClient, from: string, to
   }).catch(() => { failed++; return [] as NotionDeadline[]; })));
   return { status: failed === conns.length ? "unreachable" : "connected", items: lists.flat() };
 }
+
+/** Ask emet: short excerpts from my Notion pages that match the question (top 5 pages, ~1,500 characters each, ≤ 8K total). */
+export async function notionContext(sb: SupabaseClient, question: string): Promise<{ page: string; url: string; text: string }[]> {
+  const conns = await myConnections(sb);
+  if (!conns.length) return [];
+  const words = question.replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter((w) => w.length > 3).slice(0, 6).join(" ");
+  const hits = (await Promise.all(conns.map(async (c) => {
+    try {
+      const r = await call<{ results: { id: string; url: string; object: string; properties?: unknown }[] }>(sb, c, "/search",
+        { method: "POST", body: { query: words, filter: { property: "object", value: "page" }, page_size: 5 } });
+      return r.results.map((p) => ({ c, p }));
+    } catch { return []; }
+  }))).flat().slice(0, 5);
+  const { titleOf } = await import("./props");
+  const out: { page: string; url: string; text: string }[] = [];
+  let total = 0;
+  for (const { c, p } of hits) {
+    try {
+      const kids = await call<{ results: { type: string; [k: string]: unknown }[] }>(sb, c, `/blocks/${p.id}/children?page_size=60`);
+      const text = kids.results.map((b) => ((b[b.type] as { rich_text?: { plain_text?: string }[] })?.rich_text ?? []).map((r) => r.plain_text ?? "").join("")).filter(Boolean).join("\n").slice(0, 1500);
+      if (!text) continue;
+      total += text.length;
+      out.push({ page: titleOf(p), url: p.url, text });
+      if (total > 8000) break;
+    } catch { /* skip this page */ }
+  }
+  return out;
+}

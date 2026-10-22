@@ -11,7 +11,7 @@ import { PhoneWeek } from "./phone-week";
 
 export type CalendarItem = {
   id: string; title: string; day: string; start: string | null; end: string | null;
-  status: "done" | "late" | "open"; href: string; team?: string; kind?: "google";
+  status: "done" | "late" | "open"; href: string; team?: string; kind?: "google" | "notion";
 };
 export type GoogleStatus = "connected" | "not_connected" | "unreachable";
 
@@ -19,11 +19,11 @@ const ROW = 52, BIG_ROW = 64; // px per hour (normal / expanded view)
 const mins = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
 const hhmm = (m: number) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
 const DOT = { done: "bg-muted", late: "bg-bad", open: "bg-[#ff7a2e]" } as const;
-const GDOT = "bg-[#60a5fa]";
+const GDOT = "bg-[#60a5fa]", NDOT = "bg-[#a78bfa]"; // Google blue, Notion purple
 
 /** emet items open inside the app; Google events open Google Calendar in a new tab. */
 function Item({ x, ...p }: { x: CalendarItem } & Omit<ComponentProps<"a">, "href">) {
-  return x.kind === "google" ? <a href={x.href} target="_blank" rel="noopener noreferrer" {...p} /> : <Link href={x.href} {...p} />;
+  return x.kind ? <a href={x.href} target="_blank" rel="noopener noreferrer" {...p} /> : <Link href={x.href} {...p} />;
 }
 
 /**
@@ -63,7 +63,7 @@ export function WeekCalendar({ days, today, items, google, big = false }: { days
   const hours = Array.from({ length: to - from }, (_, i) => from + i);
   const y = (m: number) => ((m - from * 60) / 60) * row;
   const nowY = now !== null && now >= from * 60 && now <= to * 60 ? y(now) : null;
-  const isLive = (x: CalendarItem) => x.kind !== "google" && x.day === today && x.status !== "done" && now !== null && x.start !== null
+  const isLive = (x: CalendarItem) => !x.kind && x.day === today && x.status !== "done" && now !== null && x.start !== null
     && mins(x.start) <= now && now < (x.end ? mins(x.end) : mins(x.start) + 30);
 
   // Open on the current hour (or the first plan) instead of 8 am
@@ -94,7 +94,7 @@ export function WeekCalendar({ days, today, items, google, big = false }: { days
       )}
       {/* Phones: small day buttons + a short list; the time grid below is for the computer */}
       {!big && <PhoneWeek days={days} today={today} allDay={t("allDay")} empty={t("dayEmpty")}
-        items={items.map((x) => ({ id: x.id, title: x.title, day: x.day, href: x.href, google: x.kind === "google", done: x.status === "done", late: x.status === "late",
+        items={items.map((x) => ({ id: x.id, title: x.title, day: x.day, href: x.href, google: x.kind === "google", notion: x.kind === "notion", done: x.status === "done", late: x.status === "late",
           time: x.start ? `${x.start}${x.end ? `–${x.end}` : ""}` : null, meta: x.team ?? null }))} />}
     <div className={`overflow-x-auto ${big ? "" : "pt-6 max-sm:hidden"}`}>
       <div className={big ? "min-w-[980px]" : "min-w-[620px]"}>
@@ -110,8 +110,8 @@ export function WeekCalendar({ days, today, items, google, big = false }: { days
                 </p>
                 {due.map((x, k) => (
                   <Item key={x.id} x={x} title={x.title} style={{ animationDelay: `${k * 60}ms` }}
-                        className={`cal-in mt-1 flex items-center gap-1.5 truncate rounded-lg bg-solid/70 px-1.5 py-1 text-[11px] ring-1 ring-line hover:ring-brand/50 ${x.kind === "google" ? `ring-[#60a5fa]/40 ${x.status === "done" ? "text-muted" : ""}` : x.status === "done" ? "text-muted line-through" : ""}`}>
-                    <span className={`size-1.5 shrink-0 rounded-full ${x.kind === "google" ? GDOT : DOT[x.status]}`} /><span className={big ? "line-clamp-2" : "truncate"}>{x.title}</span>
+                        className={`cal-in mt-1 flex items-center gap-1.5 truncate rounded-lg bg-solid/70 px-1.5 py-1 text-[11px] ring-1 ring-line hover:ring-brand/50 ${x.kind === "google" ? `ring-[#60a5fa]/40 ${x.status === "done" ? "text-muted" : ""}` : x.kind === "notion" ? `ring-[#a78bfa]/45 ${x.status === "done" ? "text-muted line-through" : ""}` : x.status === "done" ? "text-muted line-through" : ""}`}>
+                    <span className={`size-1.5 shrink-0 rounded-full ${x.kind === "google" ? GDOT : x.kind === "notion" ? NDOT : DOT[x.status]}`} /><span className={big ? "line-clamp-2" : "truncate"}>{x.title}</span>
                   </Item>
                 ))}
               </div>
@@ -144,16 +144,17 @@ export function WeekCalendar({ days, today, items, google, big = false }: { days
                             className={`cal-in absolute overflow-hidden rounded-xl text-left ${h < 44 ? "px-2 py-1.5" : "p-2"} ring-1 transition hover:ring-brand/60
                               ${live ? "cal-live bg-[linear-gradient(160deg,rgb(255_106_26/0.45),rgb(255_106_26/0.15))] ring-brand/60"
                                 : x.kind === "google" ? `bg-[#3b82f6]/20 ring-[#60a5fa]/45 ${x.status === "done" ? "opacity-70" : ""}`
+                                : x.kind === "notion" ? `bg-[#8b5cf6]/20 ring-[#a78bfa]/45 ${x.status === "done" ? "opacity-70" : ""}`
                                 : x.status === "late" ? "bg-bad/15 ring-bad/40" : "bg-solid/80 ring-line"}`}
                             style={{ top, height: h, left: `calc(${(lane / n) * 100}% + 2px)`, width: `calc(${100 / n}% - 4px)`, animationDelay: `${(ci * 3 + k) * 50}ms` }}>
                         {h < 44 ? (
                           <span className={`flex items-center gap-1.5 text-[11px] leading-tight font-medium ${strike}`}>
-                            <span className={`size-1.5 shrink-0 rounded-full ${live ? "animate-pulse bg-white" : g ? GDOT : DOT[x.status]}`} /><span className={big ? "line-clamp-2" : "truncate"}>{x.title}</span>
+                            <span className={`size-1.5 shrink-0 rounded-full ${live ? "animate-pulse bg-white" : g ? GDOT : x.kind === "notion" ? NDOT : DOT[x.status]}`} /><span className={big ? "line-clamp-2" : "truncate"}>{x.title}</span>
                           </span>
                         ) : (<>
-                          <span className={`flex items-center gap-1 text-[10px] font-medium ${g ? "text-[#93c5fd]" : x.status === "done" ? "text-muted" : x.status === "late" ? "text-bad-text" : "text-[#ffb27a]"}`}>
-                            {g ? <CalendarDays size={10} /> : <span className={`size-1.5 rounded-full ${live ? "animate-pulse bg-white" : DOT[x.status]}`} />}
-                            {g ? t("cal.google") : live ? t("calNow") : t(`cal.${x.status}`)}
+                          <span className={`flex items-center gap-1 text-[10px] font-medium ${g ? "text-[#93c5fd]" : x.kind === "notion" ? "text-[#c4b5fd]" : x.status === "done" ? "text-muted" : x.status === "late" ? "text-bad-text" : "text-[#ffb27a]"}`}>
+                            {g ? <CalendarDays size={10} /> : <span className={`size-1.5 rounded-full ${live ? "animate-pulse bg-white" : x.kind === "notion" ? NDOT : DOT[x.status]}`} />}
+                            {g ? t("cal.google") : x.kind === "notion" ? "Notion" : live ? t("calNow") : t(`cal.${x.status}`)}
                           </span>
                           <span className={`mt-0.5 block text-xs leading-tight font-medium ${strike}`}>{x.title}</span>
                           {h > 50 && <span className="mt-1 flex items-center gap-1 text-[10px] text-muted"><Clock size={10} /> {x.start}{x.end ? `–${x.end}` : ""}</span>}

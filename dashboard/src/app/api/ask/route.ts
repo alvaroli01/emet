@@ -7,6 +7,7 @@ import { totals, weekStart, onTimeRate, pace, type Sale, type Expense, type Card
 import { todayISO } from "@/lib/format";
 import { loadMyGoogleEvents } from "@/lib/gcal-server";
 import { scheduleRange, buildMySchedule, scheduleLines } from "@/lib/my-schedule";
+import { loadMyNotionDeadlines, notionContext } from "@/lib/notion/server";
 
 export const maxDuration = 60;
 const LANG: Record<string, string> = { en: "English", es: "Spanish", de: "German", fr: "French", fi: "Finnish", "pt-BR": "Brazilian Portuguese", ru: "Russian" };
@@ -43,16 +44,18 @@ export async function POST(request: NextRequest) {
   // The asker's own schedule (last 14 → next 60 days): only their rows, read as them
   const today = todayISO();
   const { from, to } = scheduleRange(today);
-  const [myCards, mySubtasks, myTeamTasks, myPlans, google] = await Promise.all([
+  const [myCards, mySubtasks, myTeamTasks, myPlans, google, notionDl, notionPages] = await Promise.all([
     supabase.from("cards").select("title, due_at, completed_at, boards(slug), card_assignees!inner(user_id)").eq("card_assignees.user_id", me.data)
       .gte("due_at", `${from}T00:00:00Z`).lte("due_at", `${to}T23:59:59Z`).limit(300),
     supabase.from("card_checklist_items").select("text, due_on, cards(title)").eq("assignee_id", me.data).eq("done", false).gte("due_on", from).lte("due_on", to).limit(300),
     supabase.from("team_task_people").select("done_at, team_tasks(title, due_on)").eq("user_id", me.data).limit(300),
     supabase.from("agenda_items").select("title, day, start_time, end_time, done").eq("owner_id", me.data).gte("day", from).lte("day", to).limit(300),
     loadMyGoogleEvents(supabase, from, to),
+    loadMyNotionDeadlines(supabase, from, to),
+    notionContext(supabase, question).catch(() => []),
   ]);
   const mySchedule = buildMySchedule({
-    today, from, to, google,
+    today, from, to, google, notion: notionDl,
     cards: ((myCards.data ?? []) as unknown as { title: string; due_at: string; completed_at: string | null; boards: { slug: string } | null }[])
       .map((c) => ({ title: c.title, board: c.boards?.slug, due_at: c.due_at, completed_at: c.completed_at })),
     subtasks: ((mySubtasks.data ?? []) as unknown as { text: string; due_on: string; cards: { title: string } | null }[])
@@ -75,7 +78,7 @@ export async function POST(request: NextRequest) {
   const snapshot = {
     today: new Date(now).toISOString().slice(0, 10),
     asked_by: name.get(me.data as string) ?? null,
-    my_schedule: { covers: mySchedule.range, google_calendar: mySchedule.google_calendar, entries: scheduleLines(mySchedule.items) },
+    my_schedule: { covers: mySchedule.range, google_calendar: mySchedule.google_calendar, notion: mySchedule.notion, entries: scheduleLines(mySchedule.items) },
     goal: "€30,000 revenue and €15,000 profit by 2027-06-30, min 50% margin",
     money: { ...all, ...pace(all.revenue, all.profit, now), sales_count: s.length,
       by_week: [...byWeek.entries()].sort().slice(-10).map(([week, v]) => ({ week, ...v })),
@@ -96,7 +99,7 @@ export async function POST(request: NextRequest) {
   const body = (model: string) => JSON.stringify({
     model, temperature: 0.2, ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
     messages: [
-      { role: "system", content: `You are "emet", the assistant inside the emet HQ team dashboard. This is a conversation: use the earlier messages to understand follow-up questions. Answer ONLY from the JSON data below; if the data doesn't contain the answer, say so plainly and suggest where in the dashboard to find or add it. Be short and concrete (numbers, names, dates). Talk like a teammate: never mention the JSON, field names (like by_week) or "the data". Write money like €1,495.50. Use simple Markdown (bold, short lists). Answer in ${LANG[locale] ?? "English"}. Money in euros. For questions about the asker's own schedule, tasks, plans, exams, free time or what they had on a past day, answer from my_schedule (it covers ${from} to ${to}): go day by day with weekday, date and times, and say which items are Google Calendar events and which are emet plans or tasks. If my_schedule.google_calendar is "not connected" or "couldn't be loaded", say their Google events aren't included and why. If something is outside that range or not there, say so plainly.\n\nDATA:\n${JSON.stringify(snapshot).slice(0, 24000)}` },
+      { role: "system", content: `You are "emet", the assistant inside the emet HQ team dashboard. This is a conversation: use the earlier messages to understand follow-up questions. Answer ONLY from the JSON data below; if the data doesn't contain the answer, say so plainly and suggest where in the dashboard to find or add it. Be short and concrete (numbers, names, dates). Talk like a teammate: never mention the JSON, field names (like by_week) or "the data". Write money like €1,495.50. Use simple Markdown (bold, short lists). Answer in ${LANG[locale] ?? "English"}. Money in euros. For questions about the asker's own schedule, tasks, plans, exams, free time or what they had on a past day, answer from my_schedule (it covers ${from} to ${to}): go day by day with weekday, date and times, and say which items are Google Calendar events and which are emet plans or tasks. If my_schedule.google_calendar is "not connected" or "couldn't be loaded", say their Google events aren't included and why. If something is outside that range or not there, say so plainly. my_schedule also lists the asker's Notion deadlines ("Notion deadline"), and my_notion_pages has excerpts from their own Notion pages that match the question: use them for questions about uni, classes, notes or anything in their Notion, and name the page.\n\nDATA:\n${JSON.stringify({ ...snapshot, my_notion_pages: notionPages }).slice(0, 24000)}` },
       ...past,
       { role: "user", content: question.trim() },
     ],

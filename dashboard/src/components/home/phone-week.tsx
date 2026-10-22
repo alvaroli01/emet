@@ -6,7 +6,7 @@ import { useLocale } from "next-intl";
 
 export type PhoneWeekItem = {
   id: string; title: string; day: string; time: string | null; href: string;
-  google?: boolean; done?: boolean; late?: boolean; meta?: string | null;
+  google?: boolean; notion?: boolean; done?: boolean; late?: boolean; meta?: string | null;
 };
 
 /**
@@ -37,8 +37,8 @@ export function PhoneWeek({ days, today, items, allDay, empty }: { days: string[
       <ul className="mt-3 space-y-1.5">
         {list.map((x) => (
           <li key={x.id}>
-            <Link href={x.href} {...(x.google ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className={`flex items-start gap-3 rounded-xl border-l-2 bg-surface-2/60 px-3 py-2 ${x.google ? "border-[#60a5fa]" : x.late ? "border-bad" : x.done ? "border-ok" : "border-brand"}`}>
+            <Link href={x.href} {...(x.google || x.notion ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className={`flex items-start gap-3 rounded-xl border-l-2 bg-surface-2/60 px-3 py-2 ${x.google ? "border-[#60a5fa]" : x.notion ? "border-[#a78bfa]" : x.late ? "border-bad" : x.done ? "border-ok" : "border-brand"}`}>
               <span className="w-[4.5rem] shrink-0 pt-0.5 text-[11px] text-muted tabular-nums">{x.time ?? allDay}</span>
               <span className="min-w-0 flex-1">
                 <span className={`line-clamp-2 text-sm leading-snug ${x.done ? "text-muted line-through" : ""}`}>{x.title}</span>

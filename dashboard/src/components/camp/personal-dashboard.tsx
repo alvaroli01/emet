@@ -14,13 +14,13 @@ export type PersonalData = {
   focusTitle: string | null;
   tasks: { id: string; title: string; href: string; team: string | null }[];
   meetings: { id: string; title: string; time: string | null; href: string; kind: "agenda" | "meeting" | "google" }[];
-  week: { id: string; title: string; day: string; status: "done" | "late" | "today" | "planned" | "google"; team: string | null; href: string; time?: string | null }[];
+  week: { id: string; title: string; day: string; status: "done" | "late" | "today" | "planned" | "google" | "notion"; team: string | null; href: string; time?: string | null }[];
   activity: { label: string; pct: number }[]; activityPct: number;
   worked: { name: string; color: string; share: number }[];
   reminders: { id: string; title: string; remind_at: string; priority: "low" | "medium" | "high"; done: boolean }[];
 };
 
-const STATUS = { done: "bg-ok/15 text-ok-text", late: "bg-bad/15 text-bad-text", today: "bg-warn/15 text-warn-text", planned: "bg-surface-2 text-muted", google: "bg-[#3b82f6]/20 text-[#93c5fd]" } as const;
+const STATUS = { done: "bg-ok/15 text-ok-text", late: "bg-bad/15 text-bad-text", today: "bg-warn/15 text-warn-text", planned: "bg-surface-2 text-muted", google: "bg-[#3b82f6]/20 text-[#93c5fd]", notion: "bg-[#8b5cf6]/20 text-[#c4b5fd]" } as const;
 const pad = (n: number) => String(n).padStart(2, "0");
 const hms = (s: number) => `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(Math.floor(s % 60))}`;
 
@@ -133,7 +133,7 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
             {/* Phones: small day buttons + a short list; the board below is for the computer */}
             <PhoneWeek days={days} today={d.today} allDay={t("allDay")} empty={t("dayEmpty")}
               items={d.week.map((x) => ({ id: x.id, title: x.title, day: x.day, href: x.href, time: x.time ?? null, meta: x.team,
-                google: x.status === "google", done: x.status === "done", late: x.status === "late" }))} />
+                google: x.status === "google", notion: x.status === "notion", done: x.status === "done", late: x.status === "late" }))} />
             <div className="mt-4 overflow-x-auto max-sm:hidden">
               <div className="grid min-w-[680px] gap-2" style={{ gridTemplateColumns: `repeat(${cols.length}, minmax(0,1fr))` }}>
                 {cols.map((day) => {
@@ -146,9 +146,9 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
                       <ul className="space-y-2">
                         {items.map((x) => (
                           <li key={x.id}>
-                            <Link href={x.href} {...(x.status === "google" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                                  className={`block rounded-xl p-2.5 ring-1 transition hover:ring-brand/50 ${x.status === "google" ? "bg-[#3b82f6]/12 ring-[#60a5fa]/35" : "bg-solid/80 ring-line"}`}>
-                              <span className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${STATUS[x.status]}`}><span className="size-1.5 rounded-full bg-current" />{x.status === "google" ? (x.time ?? t("allDay")) : t(`card.${x.status}`)}</span>
+                            <Link href={x.href} {...(x.status === "google" || x.status === "notion" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                  className={`block rounded-xl p-2.5 ring-1 transition hover:ring-brand/50 ${x.status === "google" ? "bg-[#3b82f6]/12 ring-[#60a5fa]/35" : x.status === "notion" ? "bg-[#8b5cf6]/12 ring-[#a78bfa]/35" : "bg-solid/80 ring-line"}`}>
+                              <span className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${STATUS[x.status]}`}><span className="size-1.5 rounded-full bg-current" />{x.status === "google" ? (x.time ?? t("allDay")) : x.status === "notion" ? (x.time ?? "Notion") : t(`card.${x.status}`)}</span>
                               <span className={`mt-1.5 block text-sm leading-snug ${x.status === "done" ? "text-muted line-through" : ""}`}>{x.title}</span>
                               {x.team && <span className="mt-1 block text-[11px] text-muted">{x.team}</span>}
                             </Link>

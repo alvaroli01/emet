@@ -1,8 +1,9 @@
 import type { GEvent } from "./gcal.ts";
+import type { NotionDeadline } from "./notion/deadlines.ts";
 
-/** What Ask emet knows about the asker's own schedule: tasks, team-leader tasks, Base camp plans and Google events. */
+/** What Ask emet knows about the asker's own schedule: tasks, team-leader tasks, Base camp plans, Google events and Notion deadlines. */
 export type ScheduleItem = {
-  type: "task" | "leader_task" | "plan" | "google"; title: string; day: string;
+  type: "task" | "leader_task" | "plan" | "google" | "notion"; title: string; day: string;
   start?: string; end?: string; board?: string; all_day?: boolean; done?: boolean; late?: boolean;
 };
 
@@ -23,6 +24,7 @@ export function buildMySchedule(x: {
   teamTasks: { title: string; due_on: string | null; done_at: string | null }[];
   plans: { title: string; day: string; start_time: string | null; end_time: string | null; done: boolean }[];
   google: { status: keyof typeof STATUS; events: GEvent[] };
+  notion?: { status: keyof typeof STATUS; items: NotionDeadline[] };
 }) {
   const { today, from, to } = x;
   const inRange = (d: string) => d >= from && d <= to;
@@ -34,16 +36,17 @@ export function buildMySchedule(x: {
       .map((t) => ({ type: "leader_task" as const, title: t.title, day: t.due_on!, done: !!t.done_at, late: !t.done_at && t.due_on! < today })),
     ...x.plans.map((p) => ({ type: "plan" as const, title: p.title, day: p.day, start: p.start_time?.slice(0, 5), end: p.end_time?.slice(0, 5), done: p.done })),
     ...x.google.events.map((g) => ({ type: "google" as const, title: g.title, day: g.day, start: g.start ?? undefined, end: g.end ?? undefined, all_day: g.allDay })),
+    ...(x.notion?.items ?? []).map((n) => ({ type: "notion" as const, title: n.title, day: n.day, start: n.start ?? undefined, end: n.end ?? undefined, done: n.done, late: !n.done && n.day < today })),
   ].filter((r) => inRange(r.day));
 
   const away = (d: string) => Math.abs(Date.parse(d) - Date.parse(today));
   const items = rows.sort((a, b) => away(a.day) - away(b.day)).slice(0, MAX)
     .sort((a, b) => a.day.localeCompare(b.day) || (a.start ?? "").localeCompare(b.start ?? ""));
-  return { range: { from, to }, google_calendar: STATUS[x.google.status], items };
+  return { range: { from, to }, google_calendar: STATUS[x.google.status], notion: STATUS[x.notion?.status ?? "not_connected"], items };
 }
 
 const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const LABEL = { task: "due task", leader_task: "due team-leader task", plan: "plan", google: "Google" } as const;
+const LABEL = { task: "due task", leader_task: "due team-leader task", plan: "plan", google: "Google", notion: "Notion deadline" } as const;
 
 /** One short line per entry, e.g. "Thu 2026-10-22 10:00-11:30 Google: Marketing class" — far smaller than JSON. */
 export function scheduleLines(items: ScheduleItem[]): string[] {

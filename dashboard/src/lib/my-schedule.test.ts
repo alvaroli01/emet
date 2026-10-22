@@ -63,3 +63,14 @@ test("compact one-line entries for the AI", () => {
     "Fri 2026-10-23 due team-leader task: Weekly report [done]",
   ]);
 });
+
+test("Notion deadlines are included (in range only) and say they come from Notion", () => {
+  const s = buildMySchedule({ ...base, cards: [], subtasks: [], teamTasks: [], plans: [],
+    notion: { status: "connected", items: [
+      { id: "n1", title: "Essay draft", day: "2026-10-24", start: null, end: null, done: false, url: "https://notion.so/n1" },
+      { id: "n2", title: "Way later", day: "2027-05-01", start: null, end: null, done: false, url: "" },
+    ] } });
+  assert.equal(s.notion, "connected");
+  assert.deepEqual(s.items.map((i) => [i.type, i.title]), [["notion", "Essay draft"]]);
+  assert.match(scheduleLines(s.items)[0], /Notion deadline: Essay draft/);
+});

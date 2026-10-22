@@ -257,7 +257,8 @@
       "upcoming": "Скоро",
       "noDate": "Без срока",
       "done": "Готово"
-    }
+    },
+    "fromNotion": "Из Notion"
   },
   "group": {
     "names": {

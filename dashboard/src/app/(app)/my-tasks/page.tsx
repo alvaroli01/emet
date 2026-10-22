@@ -7,9 +7,10 @@ import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui";
 import { LiveRefresh } from "@/components/live-refresh";
-import { shortDate } from "@/lib/format";
+import { shortDate, todayISO } from "@/lib/format";
 import { MyTeamTasks } from "@/components/tools/team-tasks";
 import { loadTeamTasks } from "@/lib/team-tasks";
+import { loadMyNotionDeadlines } from "@/lib/notion/server";
 import { cardHref } from "@/lib/projects";
 
 type Row = {
@@ -36,6 +37,10 @@ export default async function MyTasksPage() {
     .returns<Row[]>();
 
   const teamTasks = await loadTeamTasks(me.id);
+  // My Notion deadlines (if I picked a deadlines database): late + next 60 days, not done
+  const today = todayISO();
+  const notion = (await loadMyNotionDeadlines(supabase, new Date(Date.parse(today) - 14 * 864e5).toISOString().slice(0, 10), new Date(Date.parse(today) + 60 * 864e5).toISOString().slice(0, 10)))
+    .items.filter((n) => !n.done).sort((a, b) => a.day.localeCompare(b.day));
   const now = Date.now();
   const rows = data ?? [];
   const open = rows.filter((r) => !r.completed_at);
@@ -74,6 +79,26 @@ export default async function MyTasksPage() {
         visual={<ProgressRing value={sections[3].items.length} max={rows.length} label={th("tasks.ring")} />}
       />
       <MyTeamTasks tasks={teamTasks} meId={me.id} />
+      {notion.length > 0 && (
+        <section>
+          <h2 className="mb-2 text-sm font-semibold">{t("fromNotion")} <span className="text-muted tabular-nums">· {notion.length}</span></h2>
+          <Card className="p-0">
+            <ul className="divide-y divide-line">
+              {notion.map((n) => (
+                <li key={n.id}>
+                  <a href={n.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-4 py-3 hover:bg-surface-2/60">
+                    <span aria-hidden className="size-2 shrink-0 rounded-full bg-[#a78bfa]" />
+                    <span className="min-w-0 flex-1 truncate">{n.title}</span>
+                    <span className={`shrink-0 text-xs tabular-nums ${n.day < today ? "text-bad-text" : "text-muted"}`}>
+                      {new Date(n.day + "T12:00:00Z").toLocaleDateString(locale, { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" })}{n.start ? ` · ${n.start}` : ""}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </section>
+      )}
       {!rows.length && !teamTasks.length && (
         <Card className="text-center text-sm text-muted">{t("empty")}</Card>
       )}
