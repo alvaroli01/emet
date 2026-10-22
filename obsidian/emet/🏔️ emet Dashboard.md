@@ -51,7 +51,7 @@ Progress so far: **€0 real revenue** (demo numbers removed 21 Oct) → see [[G
 | [[Google Calendar]] | ✅ Live (21 Oct) |
 | [[My connections & AI keys]] | ✅ Live (21 Oct) |
 | [[Phone version]] | ✅ Live (21 Oct) |
-| [[Notion]] | 🟡 Step 1 built, local, not pushed yet (22 Oct) |
+| [[Notion]] | 🟡 Step 1 live (22 Oct) · needs the Notion app keys |
 | [[Meeting log]] | ✅ Live |
 | [[Workspace tools]] (notifications, ⌘K, Ask emet, Friday report) | ✅ Live |
 | [[Backups & reliability]] | ✅ Running |
@@ -64,7 +64,7 @@ tag:#open
 Full list → [[Open questions]]
 
 ## 🕒 Latest changes
-- **2026-10-22** — [[Notion]] step 1, Week/Month on [[Today]], live task pop-ups, Leire as Coach (local, not pushed yet); vault synced with the repo → [[2026-10-22]]
+- **2026-10-22** — [[Notion]] step 1, Week/Month on [[Today]], live task pop-ups, Leire as Coach (live); vault synced with the repo → [[2026-10-22]]
 - **2026-10-21** — Demo data removed, leaders set, [[My Projects]], [[Documents]], [[Google Calendar]], Scout v2 + key pool, [[Phone version]], project ideas whiteboard → [[2026-10-21]]
 - **2026-10-15** — Week calendar on Today, wellness waves, gold money mountain, Demo numbers switch, [[Team tasks]], `[DEMO]` class data → [[2026-10-15]]
 - **2026-10-14** — Online, many redesigns ending in "emet glass", Finance, Marketing, Idea lab, Scout, Meeting log, backups → [[2026-10-14]]
