@@ -1,13 +1,13 @@
 ---
 tags: [emet, plan]
-updated: 2026-10-21
+updated: 2026-10-22
 ---
 
 # Next steps (suggested order)
 
-1. [ ] Class presentation done → **remove `[DEMO]` data**
+1. [x] Class presentation done → **remove `[DEMO]` data** (21 Oct)
 2. [ ] **Brainstorm what to sell** → each idea into the [[Idea lab]] → council → pick 1–2 to test with the 7-day €0 test
-3. [ ] **Choose leaders and roles** → fill [[Who's who]] and set groups in emet HQ (Team page)
+3. [ ] **Choose leaders and roles** → ✅ leaders + groups set 21 Oct; roles inside groups and one leader per project still open ([[Projects & ideas]])
 4. [ ] Collect **remaining emails** → invite everyone
 5. [ ] Decide **Grok bot** admin rights
 6. [ ] **Connect Google** (Drive archive + emet Books sheet)
