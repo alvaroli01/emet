@@ -52,7 +52,7 @@ test("tables and columns", () => {
       block("column", {}, { children: [block("paragraph", { rich_text: [rt("left")] })] }),
       block("column", {}, { children: [block("paragraph", { rich_text: [rt("right")] })] }),
     ] }),
-  ]) as [{ rows: { text: string }[][][]; header: boolean }, { columns: { kind: string }[][] }];
+  ]) as unknown as [{ rows: { text: string }[][][]; header: boolean }, { columns: { kind: string }[][] }];
   assert.equal(table.header, true);
   assert.equal(table.rows[1][1][0].text, "2");
   assert.equal(cols.columns.length, 2);

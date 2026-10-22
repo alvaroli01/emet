@@ -11,10 +11,14 @@
             "id": "9b8e544b370aeb4c",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "05 Resources/Video walkthrough prompt.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Video walkthrough prompt"
             }
           }
         ]
@@ -95,6 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "05 Resources/Video walkthrough prompt.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,6 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "05 Resources/Video walkthrough prompt.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -155,6 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "05 Resources/Video walkthrough prompt.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -183,6 +190,15 @@
   },
   "active": "9b8e544b370aeb4c",
   "lastOpenFiles": [
+    "05 Resources/Tech stack.md",
+    "05 Resources/Video walkthrough prompt.md",
+    "05 Resources/Specs and plans.md",
+    "05 Resources/Repo README.md",
+    "05 Resources/Repo map.md",
+    "05 Resources/Links & accounts.md",
+    "02 Team/Who's who.md",
+    "02 Team/People/Alvaro.md",
+    "03 Systems/My Projects.md",
     "🗺️ emet Map.canvas",
     "🏔️ emet Dashboard.md"
   ]
