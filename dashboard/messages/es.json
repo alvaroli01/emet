@@ -2043,7 +2043,8 @@
         "little": "no pudimos comprobar mucho, así que como mucho es un quizás"
       },
       "saveTo": "Guardar en proyecto",
-      "generalLeads": "Leads generales (sin proyecto)"
+      "generalLeads": "Leads generales (sin proyecto)",
+      "foundTitle": "Lo que ha encontrado Scout"
     },
     "check": {
       "label": "Revisar un local",
@@ -2855,5 +2856,28 @@
     },
     "sectionTitle": "Mis conexiones",
     "sectionHelp": "Todo lo que emet conecta por ti. Solo tú puedes ver tus claves y enlaces."
+  },
+  "notion": {
+    "title": "Notion",
+    "help": "Usa tu propio Notion dentro de emet: lee y busca tus páginas, ve tus fechas de Notion en tu semana y guarda notas en Notion.",
+    "notSetUp": "Notion aún no está configurado para emet: un líder añade la app de emet una vez.",
+    "step1": "Pulsa Conectar Notion e inicia sesión en tu Notion (uni o personal).",
+    "step2": "En la pantalla de Notion, marca las páginas y bases de datos que emet puede usar.",
+    "step3": "De vuelta aquí, elige tu base de datos de entregas y una página donde guardar.",
+    "connect": "Conectar Notion",
+    "connectAnother": "Conectar otro espacio",
+    "connected": "Notion conectado",
+    "connectFailed": "No se pudo conectar Notion. Inténtalo de nuevo.",
+    "saveFailed": "No se pudo guardar. Inténtalo de nuevo.",
+    "noDateColumn": "Esa base de datos no tiene columna de fecha, así que no puede mostrar entregas.",
+    "workspace": "Espacio de Notion",
+    "disconnect": "Desconectar",
+    "reconnect": "Notion necesita que vuelvas a conectarlo.",
+    "unreachable": "No se pudo acceder a este espacio ahora.",
+    "deadlinesDb": "Base de datos de entregas (sale en tu semana)",
+    "saveTo": "Guardar en la página",
+    "none": "Ninguna",
+    "dateColumn": "Columna de fecha",
+    "doneColumn": "Columna de hecho"
   }
 }

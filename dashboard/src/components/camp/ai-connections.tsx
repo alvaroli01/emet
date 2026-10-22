@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Cpu, KeyRound, Loader2, HeartHandshake, Sparkles, Plug } from "lucide-react";
 import { GoogleConnect } from "./google-calendar";
+import { NotionCard } from "@/components/notion/notion-card";
 import { useToast } from "@/components/toast";
 
 type Status = { connected: boolean; last4: string | null; lend: boolean; usedToday: number; mistral: string | null; lenders: string[] };
@@ -157,6 +158,7 @@ export function MyConnections() {
           <KeyRow kind="mistral" last4={s.mistral} onChange={load} steps />
           <Lend s={s} onChange={load} />
           <div className="rounded-xl bg-surface-2/60 p-3 text-sm"><GoogleConnect /></div>
+          <NotionCard />
         </div>
       )}
     </section>

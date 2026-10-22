@@ -2043,7 +2043,8 @@
         "little": "we couldn't check much online, so this is at most a maybe"
       },
       "saveTo": "Save to project",
-      "generalLeads": "General leads (no project)"
+      "generalLeads": "General leads (no project)",
+      "foundTitle": "What Scout found"
     },
     "check": {
       "label": "Check a place",
@@ -2855,5 +2856,28 @@
     },
     "sectionTitle": "My connections",
     "sectionHelp": "Everything emet connects to for you. Only you can see your keys and links."
+  },
+  "notion": {
+    "title": "Notion",
+    "help": "Use your own Notion inside emet: read and search your pages, see your Notion deadlines in your week, save notes to Notion.",
+    "notSetUp": "Notion isn't set up for emet yet — a leader adds the emet app once.",
+    "step1": "Click Connect Notion and sign in to your Notion (uni or personal).",
+    "step2": "In Notion's screen, tick the pages and databases emet may use.",
+    "step3": "Back here, pick your deadlines database and a page to save to.",
+    "connect": "Connect Notion",
+    "connectAnother": "Connect another workspace",
+    "connected": "Notion connected",
+    "connectFailed": "Couldn't connect Notion. Try again.",
+    "saveFailed": "Couldn't save. Try again.",
+    "noDateColumn": "That database has no date column, so it can't show deadlines.",
+    "workspace": "Notion workspace",
+    "disconnect": "Disconnect",
+    "reconnect": "Notion needs you to connect again.",
+    "unreachable": "Couldn't reach this workspace right now.",
+    "deadlinesDb": "Deadlines database (shows in your week)",
+    "saveTo": "Save to page",
+    "none": "None",
+    "dateColumn": "Date column",
+    "doneColumn": "Done column"
   }
 }

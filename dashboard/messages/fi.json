@@ -2043,7 +2043,8 @@
         "little": "emme voineet tarkistaa paljoa, joten korkeintaan ehkä"
       },
       "saveTo": "Tallenna projektiin",
-      "generalLeads": "Yleiset liidit (ei projektia)"
+      "generalLeads": "Yleiset liidit (ei projektia)",
+      "foundTitle": "Mitä Scout löysi"
     },
     "check": {
       "label": "Tarkista paikka",
@@ -2855,5 +2856,28 @@
     },
     "sectionTitle": "Omat yhteydet",
     "sectionHelp": "Kaikki, mihin emet on yhteydessä puolestasi. Vain sinä näet avaimesi ja linkkisi."
+  },
+  "notion": {
+    "title": "Notion",
+    "help": "Käytä omaa Notioniasi emetissä: lue ja hae sivujasi, näe Notion-määräajat viikossasi ja tallenna muistiinpanoja Notioniin.",
+    "notSetUp": "Notionia ei ole vielä otettu käyttöön emetissä – vetäjä lisää emet-sovelluksen kerran.",
+    "step1": "Klikkaa Yhdistä Notion ja kirjaudu Notioniisi (yliopisto tai oma).",
+    "step2": "Valitse Notionin näkymässä sivut ja tietokannat, joita emet saa käyttää.",
+    "step3": "Täällä valitse määräaikatietokanta ja sivu, johon tallennetaan.",
+    "connect": "Yhdistä Notion",
+    "connectAnother": "Yhdistä toinen työtila",
+    "connected": "Notion yhdistetty",
+    "connectFailed": "Notionia ei voitu yhdistää. Yritä uudelleen.",
+    "saveFailed": "Tallennus epäonnistui. Yritä uudelleen.",
+    "noDateColumn": "Tietokannassa ei ole päivämääräsaraketta, joten se ei voi näyttää määräaikoja.",
+    "workspace": "Notion-työtila",
+    "disconnect": "Katkaise",
+    "reconnect": "Notion pyytää yhdistämään uudelleen.",
+    "unreachable": "Työtilaan ei juuri nyt saada yhteyttä.",
+    "deadlinesDb": "Määräaikatietokanta (näkyy viikossasi)",
+    "saveTo": "Tallenna sivulle",
+    "none": "Ei mitään",
+    "dateColumn": "Päivämääräsarake",
+    "doneColumn": "Valmis-sarake"
   }
 }

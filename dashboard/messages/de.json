@@ -2043,7 +2043,8 @@
         "little": "wir konnten wenig prüfen, daher höchstens ein Vielleicht"
       },
       "saveTo": "In Projekt speichern",
-      "generalLeads": "Allgemeine Leads (kein Projekt)"
+      "generalLeads": "Allgemeine Leads (kein Projekt)",
+      "foundTitle": "Was Scout gefunden hat"
     },
     "check": {
       "label": "Einen Ort prüfen",
@@ -2855,5 +2856,28 @@
     },
     "sectionTitle": "Meine Verbindungen",
     "sectionHelp": "Alles, womit emet für dich verbunden ist. Nur du siehst deine Schlüssel und Links."
+  },
+  "notion": {
+    "title": "Notion",
+    "help": "Nutze dein eigenes Notion in emet: Seiten lesen und durchsuchen, Notion-Fristen in deiner Woche sehen, Notizen in Notion speichern.",
+    "notSetUp": "Notion ist für emet noch nicht eingerichtet – eine Leitung fügt die emet-App einmal hinzu.",
+    "step1": "Klicke auf Notion verbinden und melde dich bei deinem Notion an (Uni oder privat).",
+    "step2": "Wähle in Notion die Seiten und Datenbanken aus, die emet nutzen darf.",
+    "step3": "Zurück hier: wähle deine Fristen-Datenbank und eine Seite zum Speichern.",
+    "connect": "Notion verbinden",
+    "connectAnother": "Weiteren Workspace verbinden",
+    "connected": "Notion verbunden",
+    "connectFailed": "Notion konnte nicht verbunden werden. Versuch es erneut.",
+    "saveFailed": "Konnte nicht speichern. Versuch es erneut.",
+    "noDateColumn": "Diese Datenbank hat keine Datumsspalte und kann keine Fristen zeigen.",
+    "workspace": "Notion-Workspace",
+    "disconnect": "Trennen",
+    "reconnect": "Notion muss neu verbunden werden.",
+    "unreachable": "Dieser Workspace ist gerade nicht erreichbar.",
+    "deadlinesDb": "Fristen-Datenbank (erscheint in deiner Woche)",
+    "saveTo": "Speichern in Seite",
+    "none": "Keine",
+    "dateColumn": "Datumsspalte",
+    "doneColumn": "Erledigt-Spalte"
   }
 }

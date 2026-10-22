@@ -221,7 +221,7 @@ function LeadDetail({ lead, members, canEdit, canScout, meId, onClose, ourProjec
 
         {lead.signals.length > 0 && (
           <section>
-            <h3 className="mb-1.5 text-sm font-semibold">{t("evidence")}</h3>
+            <h3 className="mb-1.5 text-sm font-semibold">{t("foundTitle")}</h3>
             <ul className="list-disc space-y-1 pl-5 text-sm">{lead.signals.map((s) => <li key={s.text}>{s.text}{s.url && <a href={s.url} target="_blank" rel="noopener noreferrer" className="ml-1 text-climbed"><ExternalLink size={11} className="inline" /></a>}</li>)}</ul>
           </section>
         )}

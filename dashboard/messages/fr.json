@@ -2043,7 +2043,8 @@
         "little": "peu de choses vérifiables, donc au mieux un peut-être"
       },
       "saveTo": "Enregistrer dans le projet",
-      "generalLeads": "Leads généraux (sans projet)"
+      "generalLeads": "Leads généraux (sans projet)",
+      "foundTitle": "Ce que Scout a trouvé"
     },
     "check": {
       "label": "Vérifier un lieu",
@@ -2855,5 +2856,28 @@
     },
     "sectionTitle": "Mes connexions",
     "sectionHelp": "Tout ce qu'emet connecte pour toi. Toi seul vois tes clés et liens."
+  },
+  "notion": {
+    "title": "Notion",
+    "help": "Utilise ton propre Notion dans emet : lis et cherche tes pages, vois tes échéances Notion dans ta semaine, enregistre des notes dans Notion.",
+    "notSetUp": "Notion n'est pas encore configuré pour emet — un responsable ajoute l'app emet une fois.",
+    "step1": "Clique sur Connecter Notion et connecte-toi à ton Notion (fac ou perso).",
+    "step2": "Dans l'écran de Notion, coche les pages et bases de données qu'emet peut utiliser.",
+    "step3": "De retour ici, choisis ta base d'échéances et une page où enregistrer.",
+    "connect": "Connecter Notion",
+    "connectAnother": "Connecter un autre espace",
+    "connected": "Notion connecté",
+    "connectFailed": "Impossible de connecter Notion. Réessaie.",
+    "saveFailed": "Impossible d'enregistrer. Réessaie.",
+    "noDateColumn": "Cette base n'a pas de colonne de date, elle ne peut pas afficher d'échéances.",
+    "workspace": "Espace Notion",
+    "disconnect": "Déconnecter",
+    "reconnect": "Notion demande de te reconnecter.",
+    "unreachable": "Impossible de joindre cet espace pour l'instant.",
+    "deadlinesDb": "Base d'échéances (s'affiche dans ta semaine)",
+    "saveTo": "Enregistrer dans la page",
+    "none": "Aucune",
+    "dateColumn": "Colonne de date",
+    "doneColumn": "Colonne « fait »"
   }
 }

@@ -2043,7 +2043,8 @@
         "little": "não deu para verificar muito, então no máximo um talvez"
       },
       "saveTo": "Salvar no projeto",
-      "generalLeads": "Leads gerais (sem projeto)"
+      "generalLeads": "Leads gerais (sem projeto)",
+      "foundTitle": "O que o Scout encontrou"
     },
     "check": {
       "label": "Checar um lugar",
@@ -2855,5 +2856,28 @@
     },
     "sectionTitle": "Minhas conexões",
     "sectionHelp": "Tudo o que o emet conecta para você. Só você vê suas chaves e links."
+  },
+  "notion": {
+    "title": "Notion",
+    "help": "Use seu próprio Notion dentro do emet: leia e busque suas páginas, veja seus prazos do Notion na sua semana e salve notas no Notion.",
+    "notSetUp": "O Notion ainda não está configurado no emet — um líder adiciona o app do emet uma vez.",
+    "step1": "Clique em Conectar Notion e entre no seu Notion (faculdade ou pessoal).",
+    "step2": "Na tela do Notion, marque as páginas e bancos de dados que o emet pode usar.",
+    "step3": "De volta aqui, escolha seu banco de prazos e uma página para salvar.",
+    "connect": "Conectar Notion",
+    "connectAnother": "Conectar outro espaço",
+    "connected": "Notion conectado",
+    "connectFailed": "Não foi possível conectar o Notion. Tente de novo.",
+    "saveFailed": "Não foi possível salvar. Tente de novo.",
+    "noDateColumn": "Esse banco não tem coluna de data, então não pode mostrar prazos.",
+    "workspace": "Espaço do Notion",
+    "disconnect": "Desconectar",
+    "reconnect": "O Notion precisa que você conecte de novo.",
+    "unreachable": "Não foi possível acessar este espaço agora.",
+    "deadlinesDb": "Banco de prazos (aparece na sua semana)",
+    "saveTo": "Salvar na página",
+    "none": "Nenhuma",
+    "dateColumn": "Coluna de data",
+    "doneColumn": "Coluna de concluído"
   }
 }
