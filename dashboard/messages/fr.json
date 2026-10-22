@@ -1100,7 +1100,13 @@
       "company_doc": "Nouveau document d’entreprise : « {name} »",
       "project_added": "Tu as été ajouté au projet « {project} »",
       "project_post": "Nouveau dans « {project} » : {title}"
-    }
+    },
+    "popupTitle": "Nouvelle tâche pour toi",
+    "popupDue": "Pour le {date}",
+    "popupNoDue": "Pas d'échéance",
+    "popupOpen": "Ouvrir",
+    "popupClose": "Fermer",
+    "desktopAlerts": "Activer les alertes bureau pour les nouvelles tâches"
   },
   "palette": {
     "label": "Rechercher et demander",

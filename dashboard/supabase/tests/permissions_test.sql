@@ -632,3 +632,16 @@ select t.login(7);
 select t.assert('Coach cannot change someone else''s task', t.num($$with u as (update cards set title = 'hacked' where title = 'Rocco task' returning 1) select count(*) from u$$) = 0);
 select t.check('Coach cannot make herself admin', $$update profiles set is_admin = true where full_name = 'Leire'$$, 'denied');
 reset role;
+-- ── Task pop-up: the "you got a task" notification carries the due date ──
+set role authenticated;
+select t.login(4);
+select t.check('Leader gives Rocco a dated task', $$insert into team_tasks (title, due_on) values ('Send the invoice', '2026-10-30')$$, 'ok');
+select t.check('...to Rocco', $$insert into team_task_people (task_id, user_id) select tt.id, p.id from team_tasks tt, profiles p where tt.title = 'Send the invoice' and p.full_name = 'Rocco'$$, 'ok');
+select t.login(3);
+select t.assert('Rocco''s notification says when it is due', t.num($$select count(*) from notifications where kind = 'team_task' and data->>'title' = 'Send the invoice' and data->>'due' = '2026-10-30'$$) = 1);
+select t.login(7);
+select t.check('Coach dates her task', $$update cards set due_at = '2026-10-31T10:00:00Z' where title = 'Coach: prepare the pitch deck'$$, 'ok');
+select t.check('...and assigns Emily', $$insert into card_assignees (card_id, user_id) select c.id, p.id from cards c, profiles p where c.title = 'Coach: prepare the pitch deck' and p.full_name = 'Emily'$$, 'ok');
+select t.login(6);
+select t.assert('Emily''s notification says when it is due', t.num($$select count(*) from notifications where kind = 'assigned' and data->>'due' like '2026-10-31%'$$) = 1);
+reset role;

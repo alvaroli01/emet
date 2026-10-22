@@ -1100,7 +1100,13 @@
       "company_doc": "Nuevo documento de la empresa: «{name}»",
       "project_added": "Te han añadido al proyecto «{project}»",
       "project_post": "Novedad en «{project}»: {title}"
-    }
+    },
+    "popupTitle": "Nueva tarea para ti",
+    "popupDue": "Para el {date}",
+    "popupNoDue": "Sin fecha límite",
+    "popupOpen": "Abrir",
+    "popupClose": "Cerrar",
+    "desktopAlerts": "Activar avisos en el escritorio para tareas nuevas"
   },
   "palette": {
     "label": "Buscar y preguntar",

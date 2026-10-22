@@ -1100,7 +1100,13 @@
       "company_doc": "Neues Firmendokument: „{name}“",
       "project_added": "Du wurdest zum Projekt „{project}“ hinzugefügt",
       "project_post": "Neu in „{project}“: {title}"
-    }
+    },
+    "popupTitle": "Neue Aufgabe für dich",
+    "popupDue": "Fällig {date}",
+    "popupNoDue": "Kein Fälligkeitsdatum",
+    "popupOpen": "Öffnen",
+    "popupClose": "Schließen",
+    "desktopAlerts": "Desktop-Hinweise für neue Aufgaben einschalten"
   },
   "palette": {
     "label": "Suchen und fragen",

@@ -1100,7 +1100,13 @@
       "company_doc": "Uusi yrityksen dokumentti: ”{name}”",
       "project_added": "Sinut lisättiin projektiin ”{project}”",
       "project_post": "Uutta projektissa ”{project}”: {title}"
-    }
+    },
+    "popupTitle": "Uusi tehtävä sinulle",
+    "popupDue": "Määräaika {date}",
+    "popupNoDue": "Ei määräaikaa",
+    "popupOpen": "Avaa",
+    "popupClose": "Sulje",
+    "desktopAlerts": "Ota työpöytäilmoitukset käyttöön uusille tehtäville"
   },
   "palette": {
     "label": "Hae ja kysy",

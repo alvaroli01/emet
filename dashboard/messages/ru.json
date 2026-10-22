@@ -1100,7 +1100,13 @@
       "company_doc": "Новый документ компании: «{name}»",
       "project_added": "Вас добавили в проект «{project}»",
       "project_post": "Новое в «{project}»: {title}"
-    }
+    },
+    "popupTitle": "Новая задача для тебя",
+    "popupDue": "Срок: {date}",
+    "popupNoDue": "Без срока",
+    "popupOpen": "Открыть",
+    "popupClose": "Закрыть",
+    "desktopAlerts": "Включить уведомления на рабочем столе о новых задачах"
   },
   "palette": {
     "label": "Поиск и вопросы",

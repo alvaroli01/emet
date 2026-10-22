@@ -1100,7 +1100,13 @@
       "company_doc": "New company document: “{name}”",
       "project_added": "You were added to the project “{project}”",
       "project_post": "New in “{project}”: {title}"
-    }
+    },
+    "popupTitle": "New task for you",
+    "popupDue": "Due {date}",
+    "popupNoDue": "No due date",
+    "popupOpen": "Open",
+    "popupClose": "Close",
+    "desktopAlerts": "Turn on desktop alerts for new tasks"
   },
   "palette": {
     "label": "Search and ask",

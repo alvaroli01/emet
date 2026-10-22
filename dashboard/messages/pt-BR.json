@@ -1100,7 +1100,13 @@
       "company_doc": "Novo documento da empresa: “{name}”",
       "project_added": "Você foi adicionado ao projeto “{project}”",
       "project_post": "Novo em “{project}”: {title}"
-    }
+    },
+    "popupTitle": "Nova tarefa para você",
+    "popupDue": "Prazo: {date}",
+    "popupNoDue": "Sem prazo",
+    "popupOpen": "Abrir",
+    "popupClose": "Fechar",
+    "desktopAlerts": "Ativar alertas na área de trabalho para novas tarefas"
   },
   "palette": {
     "label": "Buscar e perguntar",
