@@ -83,3 +83,24 @@ test("long text is split into Notion's 2000-character pieces", () => {
 test("blocks are sent 100 at a time", () => {
   assert.deepEqual(chunk(Array.from({ length: 250 }, (_, i) => i)).map((c) => c.length), [100, 100, 50]);
 });
+
+test("unknown code languages fall back to plain text (Notion refuses others)", () => {
+  const [c] = markdownToBlocks("```tsx\nconst a = 1\n```") as { code: { language: string } }[];
+  assert.equal(c.code.language, "plain text");
+  const [d] = markdownToBlocks("```python\nx\n```") as { code: { language: string } }[];
+  assert.equal(d.code.language, "python");
+});
+
+test("a block never carries more than 100 rich-text pieces", () => {
+  const blocks = markdownToBlocks("y".repeat(2000 * 150)) as { paragraph: { rich_text: unknown[] } }[];
+  assert.equal(blocks.length, 2);
+  assert.ok(blocks.every((b) => b.paragraph.rich_text.length <= 100));
+});
+
+test("tables over 100 rows are split, each keeping the header", () => {
+  const md = "| A |\n| --- |\n" + Array.from({ length: 150 }, (_, i) => `| r${i} |`).join("\n");
+  const tables = markdownToBlocks(md) as { table: { children: { table_row: { cells: { text: { content: string } }[][] } }[] } }[];
+  assert.equal(tables.length, 2);
+  assert.ok(tables.every((t) => t.table.children.length <= 100));
+  assert.equal(tables[1].table.children[0].table_row.cells[0][0].text.content, "A");
+});

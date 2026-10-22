@@ -8,7 +8,7 @@ import { weekStart, GOAL, pace, totals, onTimeRate, type Sale, type Expense, typ
 import { todayISO, shortDate } from "@/lib/format";
 import { LiveRefresh } from "@/components/live-refresh";
 import { loadMyGoogleEvents } from "@/lib/gcal-server";
-import { loadMyNotionDeadlines } from "@/lib/notion/server";
+import { loadMyNotionDeadlinesFast } from "@/lib/notion/server";
 import { ReportCard } from "@/components/workspace/report-card";
 import type { WeeklyReport } from "@/lib/weekly-report";
 import { cardHref } from "@/lib/projects";
@@ -44,7 +44,7 @@ export default async function TodayPage() {
   const since30 = new Date(Date.now() - 30 * DAY).toISOString().slice(0, 10);
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 6 * DAY).toISOString().slice(0, 10);
   const googleP = loadMyGoogleEvents(supabase, week, weekEnd); // in parallel with the queries below
-  const notionP = loadMyNotionDeadlines(supabase, week, weekEnd); // my Notion deadlines database, if I picked one
+  const notionP = loadMyNotionDeadlinesFast(supabase, week, weekEnd); // my Notion deadlines database, if I picked one
   const [weekSales, doneCards, dueCards, blockers, morale, myDone, weekAgenda, weekTasks] = await Promise.all([
     supabase.from("sales").select("date, amount, heard_about, channel").gte("date", lastMonday),
     supabase.from("cards").select("completed_at").not("completed_at", "is", null).gte("completed_at", lastMonday),
@@ -120,7 +120,7 @@ export default async function TodayPage() {
         ...google.events.map((g) => ({ id: `g:${g.id}`, title: g.title, day: g.day, start: g.start, end: g.end, kind: "google" as const,
           status: g.day < today ? "done" as const : "open" as const, href: `https://calendar.google.com/calendar/r/day/${g.day.replaceAll("-", "/")}` })),
         ...notionDl.items.map((n) => ({ id: `n:${n.id}`, title: n.title, day: n.day, start: n.start, end: n.end, kind: "notion" as const,
-          status: n.done ? "done" as const : n.day < today ? "late" as const : "open" as const, href: n.url })),
+          status: n.done ? "done" as const : n.day < today ? "late" as const : "open" as const, href: n.url || "/camp?tab=notion#camp-tabs" })),
       ],
       google: google.status,
     },

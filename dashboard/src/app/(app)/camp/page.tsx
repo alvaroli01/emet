@@ -13,7 +13,7 @@ import { IdeasTab, type Idea } from "@/components/camp/ideas";
 import { VaultTab } from "@/components/camp/vault";
 import { cardHref } from "@/lib/projects";
 import { loadMyGoogleEvents } from "@/lib/gcal-server";
-import { loadMyNotionDeadlines } from "@/lib/notion/server";
+import { loadMyNotionDeadlinesFast } from "@/lib/notion/server";
 import { NotionTab } from "@/components/notion/notion-tab";
 import { loadMyProjects } from "@/lib/projects-server";
 import { MyProjects } from "@/components/projects/my-projects";
@@ -47,7 +47,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
     supabase.from("ai_keys").select("last4").maybeSingle(),
   ]);
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 7 * 864e5).toISOString();
-  const notionWeek = loadMyNotionDeadlines(supabase, week, new Date(Date.parse(week + "T00:00:00Z") + 6 * 864e5).toISOString().slice(0, 10)); // my Notion deadlines
+  const notionWeek = loadMyNotionDeadlinesFast(supabase, week, new Date(Date.parse(week + "T00:00:00Z") + 6 * 864e5).toISOString().slice(0, 10)); // my Notion deadlines
   const google = loadMyGoogleEvents(supabase, week, new Date(Date.parse(week + "T00:00:00Z") + 6 * 864e5).toISOString().slice(0, 10)); // in parallel
   const [openCards, weekCards, myLog, meetingsToday, reminders, boardMeta] = await Promise.all([
     supabase.from("cards").select("id, title, due_at, board_id, boards(slug, group_id, project_id), card_assignees!inner(user_id)")
@@ -114,7 +114,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
       ...gEvents.map((g) => ({ id: `g:${g.id}`, title: g.title, day: g.day, href: gHref(g.day), team: null, status: "google" as const,
         time: g.allDay ? null : `${g.start}${g.end ? `–${g.end}` : ""}` })),
       // Notion deadlines (if I picked a deadlines database)
-      ...(await notionWeek).items.map((n) => ({ id: `n:${n.id}`, title: n.title, day: n.day, href: n.url, team: null, status: "notion" as const,
+      ...(await notionWeek).items.map((n) => ({ id: `n:${n.id}`, title: n.title, day: n.day, href: n.url || "/camp?tab=notion#camp-tabs", team: null, status: "notion" as const,
         time: n.start ? `${n.start}${n.end ? `–${n.end}` : ""}` : null }))],
     activity: perDay.map((n, i) => ({ label: new Date(Date.parse(week + "T12:00:00Z") + i * 864e5).toLocaleDateString(locale, { weekday: "short", timeZone: "UTC" }), pct: n / peak })),
     activityPct: perDay.slice(0, workedDays).filter((n) => n > 0).length / workedDays,

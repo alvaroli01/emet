@@ -24,3 +24,12 @@ test("a tampered or garbage state is refused", () => {
   assert.equal(verifyState("nonsense", "me", NOW), false);
   assert.equal(verifyState("", "me", NOW), false);
 });
+
+test("without a server secret nothing can be signed or accepted", () => {
+  const saved = process.env.AI_KEY_SECRET;
+  const s = signState("me", NOW);
+  delete process.env.AI_KEY_SECRET;
+  assert.throws(() => signState("me", NOW));
+  assert.equal(verifyState(s, "me", NOW), false);
+  process.env.AI_KEY_SECRET = saved;
+});

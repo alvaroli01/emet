@@ -10,7 +10,7 @@ import { LiveRefresh } from "@/components/live-refresh";
 import { shortDate, todayISO } from "@/lib/format";
 import { MyTeamTasks } from "@/components/tools/team-tasks";
 import { loadTeamTasks } from "@/lib/team-tasks";
-import { loadMyNotionDeadlines } from "@/lib/notion/server";
+import { loadMyNotionDeadlinesFast } from "@/lib/notion/server";
 import { cardHref } from "@/lib/projects";
 
 type Row = {
@@ -39,7 +39,7 @@ export default async function MyTasksPage() {
   const teamTasks = await loadTeamTasks(me.id);
   // My Notion deadlines (if I picked a deadlines database): late + next 60 days, not done
   const today = todayISO();
-  const notion = (await loadMyNotionDeadlines(supabase, new Date(Date.parse(today) - 14 * 864e5).toISOString().slice(0, 10), new Date(Date.parse(today) + 60 * 864e5).toISOString().slice(0, 10)))
+  const notion = (await loadMyNotionDeadlinesFast(supabase, new Date(Date.parse(today) - 14 * 864e5).toISOString().slice(0, 10), new Date(Date.parse(today) + 60 * 864e5).toISOString().slice(0, 10)))
     .items.filter((n) => !n.done).sort((a, b) => a.day.localeCompare(b.day));
   const now = Date.now();
   const rows = data ?? [];

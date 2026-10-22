@@ -35,7 +35,10 @@ export async function GET() {
 /** Save one connection's picks. A new deadlines database gets its columns detected unless the member chose them. */
 export async function POST(request: NextRequest) {
   const body = (await request.json().catch(() => ({}))) as { id?: string; deadlines_ds?: string | null; deadlines_map?: DeadlineMap | null; save_parent?: string | null };
-  if (!body.id) return NextResponse.json({ error: "bad-request" }, { status: 400 });
+  const ID = /^[0-9a-f-]{32,36}$/i;
+  const okId = (v: unknown) => v === undefined || v === null || v === "" || (typeof v === "string" && ID.test(v));
+  const okMap = (m: unknown) => m === undefined || m === null || (typeof m === "object" && typeof (m as DeadlineMap).title === "string" && typeof (m as DeadlineMap).date === "string");
+  if (!body.id || !okId(body.deadlines_ds) || !okId(body.save_parent) || !okMap(body.deadlines_map)) return NextResponse.json({ error: "bad-request" }, { status: 400 });
   const sb = await createClient();
   const c = (await myConnections(sb)).find((x) => x.id === body.id);
   if (!c) return NextResponse.json({ error: "not-found" }, { status: 404 });

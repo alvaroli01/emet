@@ -5,22 +5,26 @@ import { titleOf } from "@/lib/notion/props";
 import { toRender } from "@/lib/notion/blocks";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+export const maxDuration = 60;
+
 type B = { id: string; type: string; has_children?: boolean; children?: B[] };
 const NEST = new Set(["toggle", "bulleted_list_item", "numbered_list_item", "to_do", "table", "column_list", "column", "callout", "quote"]);
 
 /** One page's blocks, children attached (depth ≤ 3, ≤ 300 blocks), so the page reads like it does in Notion. */
-async function children(sb: SupabaseClient, c: Conn, id: string, depth: number, budget: { n: number }): Promise<B[]> {
+async function children(sb: SupabaseClient, c: Conn, id: string, depth: number, budget: { n: number; until: number }): Promise<B[]> {
   const out: B[] = [];
   let cursor: string | undefined;
   do {
-    const r = await call<{ results: B[]; has_more: boolean; next_cursor: string | null }>(sb, c, `/blocks/${id}/children?page_size=100${cursor ? `&start_cursor=${cursor}` : ""}`);
+    const r = await call<{ results: B[]; has_more: boolean; next_cursor: string | null }>(sb, c, `/blocks/${id}/children?page_size=100${cursor ? `&start_cursor=${encodeURIComponent(cursor)}` : ""}`);
     out.push(...r.results);
     budget.n -= r.results.length;
-    cursor = r.has_more && r.next_cursor && budget.n > 0 ? r.next_cursor : undefined;
+    cursor = r.has_more && r.next_cursor && budget.n > 0 && Date.now() < budget.until ? r.next_cursor : undefined;
   } while (cursor);
   if (depth < 3) {
-    for (const b of out) {
-      if (b.has_children && NEST.has(b.type) && budget.n > 0) b.children = await children(sb, c, b.id, depth + 1, budget);
+    // nested blocks 3 at a time, and stop (showing what loaded) after ~20 s so the request never times out
+    const nested = out.filter((b) => b.has_children && NEST.has(b.type));
+    for (let i = 0; i < nested.length && budget.n > 0 && Date.now() < budget.until; i += 3) {
+      await Promise.all(nested.slice(i, i + 3).map(async (b) => { b.children = await children(sb, c, b.id, depth + 1, budget).catch(() => []); }));
     }
   }
   return out;
@@ -36,7 +40,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     try {
       const data = await cached(`page:${c.id}:${id}`, 60_000, async () => {
         const page = await call<{ id: string; url: string; last_edited_time: string; icon?: { type?: string; emoji?: string } | null; properties: unknown }>(sb, c, `/pages/${id}`);
-        const blocks = await children(sb, c, id, 0, { n: 300 });
+        const blocks = await children(sb, c, id, 0, { n: 300, until: Date.now() + 20_000 });
         return { id: page.id, c: c.id, title: titleOf(page), url: page.url, edited: page.last_edited_time, icon: page.icon?.type === "emoji" ? page.icon.emoji : null, nodes: toRender(blocks) };
       });
       return NextResponse.json(data);

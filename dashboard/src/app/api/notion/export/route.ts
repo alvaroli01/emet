@@ -52,8 +52,13 @@ export async function POST(request: NextRequest) {
       properties: { title: { title: [{ type: "text", text: { content: md.title.slice(0, 2000) } }] } },
       children: first ?? [],
     } });
-    for (const part of rest) await call(sb, conn, `/blocks/${page.id}/children`, { method: "PATCH", body: { children: part } });
+    // Remember it at once, so a retry or a double click opens this page instead of making a second one
     await sb.from("notion_exports").insert({ kind, source_id: id, notion_page_id: page.id, url: page.url });
+    try {
+      for (const part of rest) await call(sb, conn, `/blocks/${page.id}/children`, { method: "PATCH", body: { children: part } });
+    } catch {
+      return NextResponse.json({ url: page.url, partial: true });
+    }
     return NextResponse.json({ url: page.url });
   } catch {
     return NextResponse.json({ error: "failed" }, { status: 502 });

@@ -13,7 +13,7 @@ export function exportMarkdown(kind: ExportKind, x: Any): { title: string; body:
       return { title: dated(x.title || "Meeting", x.meeting_date), body: [String(x.notes ?? "").trim(), transcript ? `## Transcript\n\n${transcript}` : ""].filter(Boolean).join("\n\n") };
     }
     case "doc":
-      return { title: dated(x.title || "Doc", x.doc_date), body: String(x.body ?? "") };
+      return { title: dated(x.title || "Doc", x.doc_date), body: String(x.body ?? "").slice(0, TRANSCRIPT_MAX) };
     case "project_update":
       return { title: dated(`${x.project ?? "Project"} update`, x.created_at), body: String(x.body ?? "") };
     case "idea": {

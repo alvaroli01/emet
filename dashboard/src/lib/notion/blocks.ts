@@ -86,6 +86,9 @@ export function toRender(blocks: unknown[]): RNode[] {
 // ── Markdown → Notion blocks ──────────────────────────────────────────────────
 const MAX = 2000;
 const LANGS: Record<string, string> = { js: "javascript", ts: "typescript", py: "python", sh: "shell", bash: "shell", md: "markdown", yml: "yaml", "": "plain text" };
+// Notion only accepts its own language names; anything else falls back to plain text
+const NOTION_LANGS = new Set(["javascript", "typescript", "python", "shell", "markdown", "yaml", "json", "html", "css", "sql", "java", "c", "c++", "c#", "go", "rust", "ruby", "php", "swift", "kotlin", "r", "plain text", "bash", "dart", "scala", "xml"]);
+const lang = (l: string) => { const x = LANGS[l] ?? l; return NOTION_LANGS.has(x) ? x : "plain text"; };
 
 type RichOut = { type: "text"; text: { content: string; link: { url: string } | null }; annotations?: Record<string, boolean> };
 
@@ -112,25 +115,31 @@ function inline(s: string): RichOut[] {
 }
 
 const text = (type: string, s: string, extra: Record<string, unknown> = {}) => ({ object: "block", type, [type]: { rich_text: inline(s), ...extra } });
+/** Notion allows ≤ 100 rich-text pieces per block: very long text becomes several blocks of the same type. */
+function texts(type: string, s: string, extra: Record<string, unknown> = {}): object[] {
+  const rich = inline(s);
+  if (rich.length <= 100) return [{ object: "block", type, [type]: { rich_text: rich, ...extra } }];
+  return chunk(rich, 100).map((part) => ({ object: "block", type, [type]: { rich_text: part, ...extra } }));
+}
 const cells = (line: string) => line.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
 
 export function markdownToBlocks(md: string): object[] {
   const lines = md.replace(/\r/g, "").split("\n");
   const out: object[] = [];
   let para: string[] = [];
-  const flush = () => { if (para.length) { out.push(text("paragraph", para.join(" "))); para = []; } };
+  const flush = () => { if (para.length) { out.push(...texts("paragraph", para.join(" "))); para = []; } };
   for (let i = 0; i < lines.length; i++) {
     const raw = lines[i], line = raw.trim();
     let m: RegExpMatchArray | null;
     if (!line) { flush(); continue; }
     if (line.startsWith("```")) {
       flush();
-      const lang = line.slice(3).trim().toLowerCase();
+      const code_lang = line.slice(3).trim().toLowerCase();
       const body: string[] = [];
       while (++i < lines.length && !lines[i].trim().startsWith("```")) body.push(lines[i]);
       const code = body.join("\n");
       const pieces = Array.from({ length: Math.ceil(code.length / MAX) }, (_, k) => ({ type: "text", text: { content: code.slice(k * MAX, (k + 1) * MAX), link: null } }));
-      out.push({ object: "block", type: "code", code: { rich_text: pieces, language: LANGS[lang] ?? lang } });
+      out.push({ object: "block", type: "code", code: { rich_text: pieces, language: lang(code_lang) } });
       continue;
     }
     if (line.startsWith("|") && i + 1 < lines.length && /^\|?\s*:?-{2,}/.test(lines[i + 1].trim())) {
@@ -140,8 +149,12 @@ export function markdownToBlocks(md: string): object[] {
       i += 1;
       while (i + 1 < lines.length && lines[i + 1].trim().startsWith("|")) rows.push(cells(lines[++i]));
       const width = header.length;
-      out.push({ object: "block", type: "table", table: { table_width: width, has_column_header: true, has_row_header: false,
-        children: rows.map((r) => ({ object: "block", type: "table_row", table_row: { cells: Array.from({ length: width }, (_, k) => inline(r[k] ?? "")) } })) } });
+      const row = (r: string[]) => ({ object: "block", type: "table_row", table_row: { cells: Array.from({ length: width }, (_, k) => inline(r[k] ?? "")) } });
+      // Notion allows ≤ 100 rows per table: longer tables are split, each part repeating the header
+      for (const part of chunk(rows.slice(1), 99)) {
+        out.push({ object: "block", type: "table", table: { table_width: width, has_column_header: true, has_row_header: false, children: [header, ...part].map(row) } });
+      }
+      if (rows.length === 1) out.push({ object: "block", type: "table", table: { table_width: width, has_column_header: true, has_row_header: false, children: [row(header)] } });
       continue;
     }
     if ((m = line.match(/^(#{1,3})\s+(.*)$/))) { flush(); out.push(text(`heading_${m[1].length}`, m[2])); continue; }

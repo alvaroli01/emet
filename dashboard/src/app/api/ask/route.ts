@@ -7,7 +7,7 @@ import { totals, weekStart, onTimeRate, pace, type Sale, type Expense, type Card
 import { todayISO } from "@/lib/format";
 import { loadMyGoogleEvents } from "@/lib/gcal-server";
 import { scheduleRange, buildMySchedule, scheduleLines } from "@/lib/my-schedule";
-import { loadMyNotionDeadlines, notionContext } from "@/lib/notion/server";
+import { loadMyNotionDeadlinesFast, notionContext } from "@/lib/notion/server";
 
 export const maxDuration = 60;
 const LANG: Record<string, string> = { en: "English", es: "Spanish", de: "German", fr: "French", fi: "Finnish", "pt-BR": "Brazilian Portuguese", ru: "Russian" };
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     supabase.from("team_task_people").select("done_at, team_tasks(title, due_on)").eq("user_id", me.data).limit(300),
     supabase.from("agenda_items").select("title, day, start_time, end_time, done").eq("owner_id", me.data).gte("day", from).lte("day", to).limit(300),
     loadMyGoogleEvents(supabase, from, to),
-    loadMyNotionDeadlines(supabase, from, to),
+    loadMyNotionDeadlinesFast(supabase, from, to),
     notionContext(supabase, question).catch(() => []),
   ]);
   const mySchedule = buildMySchedule({
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
   const body = (model: string) => JSON.stringify({
     model, temperature: 0.2, ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
     messages: [
-      { role: "system", content: `You are "emet", the assistant inside the emet HQ team dashboard. This is a conversation: use the earlier messages to understand follow-up questions. Answer ONLY from the JSON data below; if the data doesn't contain the answer, say so plainly and suggest where in the dashboard to find or add it. Be short and concrete (numbers, names, dates). Talk like a teammate: never mention the JSON, field names (like by_week) or "the data". Write money like €1,495.50. Use simple Markdown (bold, short lists). Answer in ${LANG[locale] ?? "English"}. Money in euros. For questions about the asker's own schedule, tasks, plans, exams, free time or what they had on a past day, answer from my_schedule (it covers ${from} to ${to}): go day by day with weekday, date and times, and say which items are Google Calendar events and which are emet plans or tasks. If my_schedule.google_calendar is "not connected" or "couldn't be loaded", say their Google events aren't included and why. If something is outside that range or not there, say so plainly. my_schedule also lists the asker's Notion deadlines ("Notion deadline"), and my_notion_pages has excerpts from their own Notion pages that match the question: use them for questions about uni, classes, notes or anything in their Notion, and name the page.\n\nDATA:\n${JSON.stringify({ ...snapshot, my_notion_pages: notionPages }).slice(0, 24000)}` },
+      { role: "system", content: `You are "emet", the assistant inside the emet HQ team dashboard. This is a conversation: use the earlier messages to understand follow-up questions. Answer ONLY from the JSON data below; if the data doesn't contain the answer, say so plainly and suggest where in the dashboard to find or add it. Be short and concrete (numbers, names, dates). Talk like a teammate: never mention the JSON, field names (like by_week) or "the data". Write money like €1,495.50. Use simple Markdown (bold, short lists). Answer in ${LANG[locale] ?? "English"}. Money in euros. For questions about the asker's own schedule, tasks, plans, exams, free time or what they had on a past day, answer from my_schedule (it covers ${from} to ${to}): go day by day with weekday, date and times, and say which items are Google Calendar events and which are emet plans or tasks. If my_schedule.google_calendar is "not connected" or "couldn't be loaded", say their Google events aren't included and why. If something is outside that range or not there, say so plainly. my_schedule also lists the asker's Notion deadlines ("Notion deadline"), and my_notion_pages has excerpts from their own Notion pages that match the question: use them for questions about uni, classes, notes or anything in their Notion, and name the page.\n\nDATA:\n${JSON.stringify(snapshot).slice(0, 24000)}${notionPages.length ? `\n\nMY NOTION PAGES (my_notion_pages):\n${JSON.stringify(notionPages).slice(0, 8000)}` : ""}}` },
       ...past,
       { role: "user", content: question.trim() },
     ],
