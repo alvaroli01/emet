@@ -595,3 +595,15 @@ select t.check('Nobody else can change it', $$update backup_keys set last4 = 'xx
 select t.login(1);
 select t.assert('Admins cannot see it either', t.num('select count(*) from backup_keys') = 0);
 reset role;
+-- ── Notion: each member's own connections and exports ───────
+set role authenticated;
+select t.login(3);
+select t.check('Member saves a Notion connection', $$insert into notion_connections (workspace_id, workspace_name, token_iv, token_data) values ('ws1', 'Uni', 'iv', 'enc')$$, 'ok');
+select t.check('...and remembers an export', $$insert into notion_exports (kind, source_id, notion_page_id, url) values ('meeting', gen_random_uuid(), 'p1', 'https://notion.so/p1')$$, 'ok');
+select t.login(6);
+select t.assert('Nobody else sees the Notion connection', t.num('select count(*) from notion_connections') = 0);
+select t.assert('...or the export', t.num('select count(*) from notion_exports') = 0);
+select t.check('...or can change it', $$update notion_connections set workspace_name = 'x'$$, 'denied');
+select t.login(1);
+select t.assert('Admins cannot see a Notion connection either', t.num('select count(*) from notion_connections') = 0);
+reset role;
