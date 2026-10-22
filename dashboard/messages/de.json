@@ -2379,7 +2379,17 @@
     "calClose": "Schließen",
     "calendar": "Deine Woche",
     "allDay": "Ganztägig",
-    "dayEmpty": "An diesem Tag nichts geplant"
+    "dayEmpty": "An diesem Tag nichts geplant",
+    "period": "Zeitraum",
+    "week": "Woche",
+    "month": "Monat",
+    "prevPeriod": "Zurück",
+    "nextPeriod": "Weiter",
+    "notYet": "Noch nicht passiert",
+    "dueLabel": "fällig",
+    "dueNote": "In diesem Zeitraum fällige Aufgaben",
+    "vsLastMonth": "vs Vormonat",
+    "salesCountPeriod": "{count, plural, one {# Verkauf} other {# Verkäufe}} in diesem Zeitraum"
   },
   "financeDash": {
     "totalRevenue": "Gesamtumsatz",

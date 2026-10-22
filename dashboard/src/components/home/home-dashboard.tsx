@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, ArrowUp } from "lucide-react";
+import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, ArrowUp, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import type { Period, Series, Unit } from "@/lib/today-periods";
 import { MountainLazy } from "@/components/summit/mountain-lazy";
 import { GroupIcon } from "@/components/group-icon";
 import { NumberTicker } from "@/components/ui/number-ticker";
@@ -47,31 +48,32 @@ function useWeekdays(style: "narrow" | "short" = "narrow") {
 }
 
 /** Sales by channel: orange pills on a day grid (like the activity strip). */
-function ChannelStrip({ rows }: { rows: { label: string; days: number[] }[] }) {
-  const days = useWeekdays();
+function ChannelStrip({ rows, labels }: { rows: { label: string; days: number[] }[]; labels: string[] }) {
+  const days = labels;
+  const cols = { gridTemplateColumns: `repeat(${labels.length}, minmax(0, 1fr))` };
   const max = Math.max(1, ...rows.flatMap((r) => r.days));
   return (
     <div className="mt-4 grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-2.5 text-[11px] text-muted">
       {rows.map((r) => (
         <div key={r.label} className="contents">
           <span className="text-right">{r.label}</span>
-          <div className="grid h-4 grid-cols-7 items-center gap-1">
+          <div className="grid h-4 items-center gap-1" style={cols}>
             {r.days.map((v, i) => <span key={i} title={`${days[i]}: ${v}`} className="mx-auto h-4 rounded-[4px] bg-[#ff7a2e]" style={{ width: v ? `${30 + (v / max) * 70}%` : 0, opacity: v ? 0.55 + (v / max) * 0.45 : 0 }} />)}
           </div>
         </div>
       ))}
       <span />
-      <div className="grid grid-cols-7 text-center">{days.map((d, i) => <span key={i}>{d}</span>)}</div>
+      <div className="grid text-center" style={cols}>{days.map((d, i) => <span key={i} className="truncate">{d}</span>)}</div>
     </div>
   );
 }
 
 /** Two step-lines: tasks finished this week (orange) vs last week (lime). */
-function StepLines({ a, b }: { a: number[]; b: number[] }) {
-  const days = useWeekdays();
+function StepLines({ a, b, labels }: { a: number[]; b: number[]; labels: string[] }) {
+  const days = labels;
   const max = Math.max(4, ...a, ...b);
   const W = 220, H = 92;
-  const path = (v: number[]) => v.map((y, i) => { const x = (i / 6) * W, yy = H - (y / max) * H; return i ? `H ${x} V ${yy}` : `M 0 ${yy}`; }).join(" ");
+  const path = (v: number[]) => v.map((y, i) => { const x = (i / Math.max(1, v.length - 1)) * W, yy = H - (y / max) * H; return i ? `H ${x} V ${yy}` : `M 0 ${yy}`; }).join(" ");
   return (
     <div className="mt-3 flex gap-2">
       <div className="flex flex-col justify-between py-0.5 text-[10px] text-muted">{[max, Math.round(max / 2), 0].map((v) => <span key={v}>{v}</span>)}</div>
@@ -81,18 +83,18 @@ function StepLines({ a, b }: { a: number[]; b: number[] }) {
           <path d={path(b)} fill="none" stroke="#c8e86b" strokeWidth="2" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
           <path d={path(a)} fill="none" stroke="#ffb02e" strokeWidth="2.5" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
         </svg>
-        <div className="mt-1 grid grid-cols-7 text-center text-[10px] text-muted">{days.map((d, i) => <span key={i}>{d}</span>)}</div>
+        <div className="mt-1 grid text-center text-[10px] text-muted" style={{ gridTemplateColumns: `repeat(${days.length}, minmax(0, 1fr))` }}>{days.map((d, i) => <span key={i} className="truncate">{d}</span>)}</div>
       </div>
     </div>
   );
 }
 
 /** Money per day as stacked yellow blocks (like the heart-rate columns). */
-function BlockColumns({ values }: { values: number[] }) {
-  const days = useWeekdays();
+function BlockColumns({ values, labels }: { values: number[]; labels: string[] }) {
+  const days = labels;
   const max = Math.max(1, ...values);
   return (
-    <div className="mt-3 grid grid-cols-7 gap-1.5">
+    <div className="mt-3 grid gap-1.5" style={{ gridTemplateColumns: `repeat(${values.length}, minmax(0, 1fr))` }}>
       {values.map((v, i) => {
         const filled = v ? Math.max(1, Math.round((v / max) * 6)) : 0;
         return (
@@ -200,6 +202,31 @@ export function HomeDashboard({ d }: { d: HomeData }) {
   const typed = useTypewriter(examples, q.length > 0);
   const ask = (e: React.FormEvent) => { e.preventDefault(); if (q.trim()) { window.dispatchEvent(new CustomEvent("emet:ask", { detail: q.trim() })); setQ(""); } };
 
+  // Sales / Tasks / Money cards: this week by default; Week | Month and ‹ › choose another period
+  const weekdays = useWeekdays();
+  const [unit, setUnit] = useState<Unit>("week");
+  const [offset, setOffset] = useState(0);
+  const [live, setLive] = useState<{ period: Period; series: Series } | null>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    if (unit === "week" && offset === 0) { setLive(null); return; }
+    let alive = true;
+    setBusy(true);
+    fetch(`/api/today/cards?unit=${unit}&offset=${offset}`).then((r) => (r.ok ? r.json() : null)).then((j) => { if (alive) { setLive(j); setBusy(false); } }).catch(() => { if (alive) setBusy(false); });
+    return () => { alive = false; };
+  }, [unit, offset]);
+  const fmt = (x: string, o: Intl.DateTimeFormatOptions) => new Date(x + "T12:00:00Z").toLocaleDateString(locale, { ...o, timeZone: "UTC" });
+  const view = live ? {
+    label: live.period.unit === "month" ? fmt(live.period.from, { month: "long", year: "numeric" }) : `${fmt(live.period.from, { day: "numeric", month: "short" })} – ${fmt(live.period.to, { day: "numeric", month: "short" })}`,
+    labels: live.period.unit === "month" ? live.period.buckets.map((b) => `${Number(b.start.slice(8))}–${Number(b.end.slice(8))}`) : weekdays,
+    note: live.period.unit === "month" ? fmt(live.period.from, { month: "short" }) : t("week"),
+    future: live.period.future,
+    sales: { week: live.series.moneyTotal, count: live.series.salesCount, rows: (["stall", "online", "other"] as const).map((k, i) => ({ label: d.sales.rows[i]?.label ?? k, days: live.series.channels[k] })) },
+    tasks: { thisWeek: live.series.tasks.this, lastWeek: live.series.tasks.prev, done: live.series.tasks.done, delta: (live.series.tasks.this.at(-1) ?? 0) - (live.series.tasks.prev.at(-1) ?? 0), due: live.series.tasks.mode === "due" },
+    money: { days: live.series.money, week: live.series.moneyTotal },
+  } : { label: d.weekLabel, labels: weekdays, note: t("last7"), future: false, sales: d.sales, tasks: { ...d.tasks, due: false }, money: d.money };
+  const switchUnit = (u: Unit) => { setUnit(u); setOffset(0); };
+
   return (
     <div className="fade-in flex min-h-[calc(100dvh-5rem)] flex-col">
       {/* Ask box — "Hey, need help? / Just ask me anything" */}
@@ -224,7 +251,15 @@ export function HomeDashboard({ d }: { d: HomeData }) {
       <div className="-mx-3 mb-3 flex gap-2 overflow-x-auto px-3 pb-1 [scrollbar-width:none] sm:mx-0 sm:justify-end sm:px-0">
         <button onClick={() => window.dispatchEvent(new Event("emet:palette"))} aria-label={t("search")} className="glass-pill size-11 shrink-0 justify-center text-white"><Search size={17} /></button>
         <Link href="/board" aria-label={t("newTask")} className="glass-pill size-11 shrink-0 justify-center text-white"><PenLine size={17} /></Link>
-        <span className="glass-pill h-11 shrink-0 px-4 text-sm text-white"><CalendarDays size={16} /> {d.weekLabel}</span>
+        <span className="glass-pill h-11 shrink-0 gap-1 px-1.5 text-sm text-white" role="group" aria-label={t("period")}>
+          <span className="flex rounded-full bg-white/10 p-0.5 text-xs">
+            {(["week", "month"] as const).map((u) => <button key={u} type="button" onClick={() => switchUnit(u)} aria-pressed={unit === u}
+              className={`rounded-full px-2.5 py-1 ${unit === u ? "bg-white font-medium text-black" : "text-white/80"}`}>{t(u === "week" ? "week" : "month")}</button>)}
+          </span>
+          <button type="button" onClick={() => setOffset((o) => o - 1)} aria-label={t("prevPeriod")} className="grid size-8 place-items-center rounded-full hover:bg-white/10"><ChevronLeft size={16} /></button>
+          <span className="flex min-w-[7.5rem] items-center justify-center gap-1.5 whitespace-nowrap">{busy ? <Loader2 size={14} className="animate-spin" /> : <CalendarDays size={15} />} {view.label}</span>
+          <button type="button" onClick={() => setOffset((o) => o + 1)} disabled={offset >= (unit === "week" ? 8 : 3)} aria-label={t("nextPeriod")} className="grid size-8 place-items-center rounded-full hover:bg-white/10 disabled:opacity-30"><ChevronRight size={16} /></button>
+        </span>
         {d.canLogSale && <Link href="/g/finance?tab=books" className="glass-pill h-11 shrink-0 px-4 text-sm text-white"><Plus size={16} /> {t("logSale")}</Link>}
         <Link href="/today#report" className="glass-pill h-11 shrink-0 px-4 text-sm text-white"><FileText size={16} /> {t("report")}</Link>
       </div>
@@ -232,19 +267,19 @@ export function HomeDashboard({ d }: { d: HomeData }) {
       {/* Glass cards */}
       <div className="grid gap-3 lg:grid-cols-[minmax(0,3fr)_minmax(260px,1fr)] lg:gap-4">
         <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
-          <Card icon={<Receipt size={19} />} title={t("sales")} note={t("last7")}>
-            <ChannelStrip rows={d.sales.rows} />
-            <p className="readout mt-3 text-3xl"><NumberTicker value={Math.round(d.sales.week)} locale={locale} options={{ style: "currency", currency: "EUR", maximumFractionDigits: 0 }} /></p>
-            <p className="text-xs text-muted">{t("salesCount", { count: d.sales.count })}</p>
+          <Card icon={<Receipt size={19} />} title={t("sales")} note={view.note}>
+            <ChannelStrip rows={view.sales.rows} labels={view.labels} />
+            <p className="readout mt-3 text-3xl"><NumberTicker value={Math.round(view.sales.week)} locale={locale} options={{ style: "currency", currency: "EUR", maximumFractionDigits: 0 }} /></p>
+            <p className="text-xs text-muted">{view.future ? t("notYet") : t(live ? "salesCountPeriod" : "salesCount", { count: view.sales.count })}</p>
           </Card>
-          <Card icon={<ListChecks size={19} />} title={t("tasks")} note={t("last7")}>
-            <StepLines a={d.tasks.thisWeek} b={d.tasks.lastWeek} />
-            <p className="readout mt-2 text-3xl">{d.tasks.done} <span className="text-base font-normal text-muted">{t("done")}</span></p>
-            <p className="text-xs text-muted">{d.tasks.delta >= 0 ? "+" : ""}{d.tasks.delta} {t("vsLastWeek")}</p>
+          <Card icon={<ListChecks size={19} />} title={t("tasks")} note={view.note}>
+            <StepLines a={view.tasks.thisWeek} b={view.tasks.lastWeek} labels={view.labels} />
+            <p className="readout mt-2 text-3xl">{view.tasks.done} <span className="text-base font-normal text-muted">{view.tasks.due ? t("dueLabel") : t("done")}</span></p>
+            <p className="text-xs text-muted">{view.tasks.due ? t("dueNote") : <>{view.tasks.delta >= 0 ? "+" : ""}{view.tasks.delta} {unit === "month" && live ? t("vsLastMonth") : t("vsLastWeek")}</>}</p>
           </Card>
-          <Card icon={<Coins size={19} />} title={t("money")} note={t("last7")} className="sm:col-span-2 lg:col-span-1">
-            <BlockColumns values={d.money.days} />
-            <p className="readout mt-2 text-3xl">{eur(d.money.week, locale)}</p>
+          <Card icon={<Coins size={19} />} title={t("money")} note={view.note} className="sm:col-span-2 lg:col-span-1">
+            <BlockColumns values={view.money.days} labels={view.labels} />
+            <p className="readout mt-2 text-3xl">{eur(view.money.week, locale)}</p>
             <p className="flex items-center gap-1 text-xs text-muted"><span className="text-[#ff7a2e]">●</span> {t("moneyNote")}</p>
           </Card>
 

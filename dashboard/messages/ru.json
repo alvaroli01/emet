@@ -2379,7 +2379,17 @@
     "calClose": "Закрыть",
     "calendar": "Ваша неделя",
     "allDay": "Весь день",
-    "dayEmpty": "В этот день ничего нет"
+    "dayEmpty": "В этот день ничего нет",
+    "period": "Период",
+    "week": "Неделя",
+    "month": "Месяц",
+    "prevPeriod": "Назад",
+    "nextPeriod": "Вперёд",
+    "notYet": "Ещё не наступило",
+    "dueLabel": "к сроку",
+    "dueNote": "Задачи со сроком в этом периоде",
+    "vsLastMonth": "vs прошлый месяц",
+    "salesCountPeriod": "{count, plural, one {# продажа} few {# продажи} many {# продаж} other {# продажи}} за этот период"
   },
   "financeDash": {
     "totalRevenue": "Общая выручка",

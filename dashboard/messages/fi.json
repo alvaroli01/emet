@@ -2379,7 +2379,17 @@
     "calClose": "Sulje",
     "calendar": "Viikkosi",
     "allDay": "Koko päivän",
-    "dayEmpty": "Ei mitään tänä päivänä"
+    "dayEmpty": "Ei mitään tänä päivänä",
+    "period": "Jakso",
+    "week": "Viikko",
+    "month": "Kuukausi",
+    "prevPeriod": "Edellinen",
+    "nextPeriod": "Seuraava",
+    "notYet": "Ei vielä tapahtunut",
+    "dueLabel": "erääntyy",
+    "dueNote": "Tämän jakson määräajat",
+    "vsLastMonth": "vs edellinen kuukausi",
+    "salesCountPeriod": "{count, plural, one {# myynti} other {# myyntiä}} tällä jaksolla"
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",

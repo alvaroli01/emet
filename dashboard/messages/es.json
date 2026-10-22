@@ -2379,7 +2379,17 @@
     "calClose": "Cerrar",
     "calendar": "Tu semana",
     "allDay": "Todo el día",
-    "dayEmpty": "Nada este día"
+    "dayEmpty": "Nada este día",
+    "period": "Periodo",
+    "week": "Semana",
+    "month": "Mes",
+    "prevPeriod": "Anterior",
+    "nextPeriod": "Siguiente",
+    "notYet": "Aún no ha pasado",
+    "dueLabel": "pendientes",
+    "dueNote": "Tareas con fecha en este periodo",
+    "vsLastMonth": "vs mes pasado",
+    "salesCountPeriod": "{count, plural, one {# venta} other {# ventas}} en este periodo"
   },
   "financeDash": {
     "totalRevenue": "Ingresos totales",
