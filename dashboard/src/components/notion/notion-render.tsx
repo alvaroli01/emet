@@ -67,7 +67,10 @@ function Node({ n, onOpen, labels }: { n: RNode; onOpen: Open; labels: { open: s
     case "code": return <pre className="my-2 overflow-x-auto rounded-xl bg-surface-2 p-3 font-mono text-xs"><code>{n.text}</code></pre>;
     case "divider": return <hr className="my-4 border-line" />;
     case "image": return n.url ? (
-      <figure className="my-3">{/* eslint-disable-next-line @next/next/no-img-element */}<img src={n.url} alt="" className="max-h-[480px] rounded-xl" loading="lazy" />
+      <figure className="my-3">
+        {/* Notion's own short-lived image links: a plain img (next/image would need every Notion host whitelisted) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={n.url} alt="" className="max-h-[480px] rounded-xl" loading="lazy" />
         {n.caption.length > 0 && <figcaption className="mt-1 text-xs text-muted"><Spans s={n.caption} /></figcaption>}</figure>
     ) : null;
     case "file": case "bookmark": return n.url ? (
