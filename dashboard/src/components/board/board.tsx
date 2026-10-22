@@ -22,7 +22,7 @@ import { TemplateMenu } from "./templates";
 import { pushToTrello } from "./trello-push";
 
 
-export type Viewer = { meId: string; isAdmin: boolean; myGroupId: string | null };
+export type Viewer = { meId: string; isAdmin: boolean; myGroupId: string | null; isCoach?: boolean };
 
 export function boardRights(board: BoardData["board"], v: Viewer) {
   // A project board is only reachable by its members (database rule), and every member works on it
@@ -33,9 +33,9 @@ export function boardRights(board: BoardData["board"], v: Viewer) {
   return {
     general,
     canEditLists: general ? v.isAdmin : groupEdit,
-    canAdd: general ? true : groupEdit,
+    canAdd: general ? true : groupEdit || !!v.isCoach, // a coach adds tasks on every team board
     canEditCard: (c: Pick<BoardCard, "created_by" | "assignees">) =>
-      general ? v.isAdmin || c.created_by === v.meId || c.assignees.includes(v.meId) : groupEdit,
+      general ? v.isAdmin || c.created_by === v.meId || c.assignees.includes(v.meId) : groupEdit || (!!v.isCoach && c.created_by === v.meId),
   };
 }
 

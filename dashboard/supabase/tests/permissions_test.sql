@@ -607,3 +607,28 @@ select t.check('...or can change it', $$update notion_connections set workspace_
 select t.login(1);
 select t.assert('Admins cannot see a Notion connection either', t.num('select count(*) from notion_connections') = 0);
 reset role;
+-- ── Coach (Leire): views everything, adds tasks on any team board, edits only her own tasks ──
+reset role;
+insert into profiles (full_name, email, role_title, is_coach) values ('Leire', 'leire@emet.invalid', 'Coach', true);
+insert into auth.users (id, email) values ('00000000-0000-0000-0000-000000000007', 'leire@emet.invalid');
+set role authenticated;
+select t.login(7);
+select t.check('Coach adds a task to the Marketing board',
+  $$insert into cards (board_id, list_id, title, created_by)
+    select b.id, l.id, 'Coach: prepare the pitch', my_profile_id()
+      from boards b join board_lists l on l.board_id = b.id and l.name = 'To do' where b.slug = 'marketing'$$, 'ok');
+select t.check('...and assigns Rocco to it',
+  $$insert into card_assignees (card_id, user_id) select c.id, p.id from cards c, profiles p where c.title = 'Coach: prepare the pitch' and p.full_name = 'Rocco'$$, 'ok');
+select t.check('...and can edit her own task',
+  $$update cards set title = 'Coach: prepare the pitch deck' where title = 'Coach: prepare the pitch'$$, 'ok');
+select t.assert('Coach sees the team''s work', t.num('select count(*) from cards') > 1);
+select t.check('Coach cannot log a sale', $$insert into sales (description, amount) values ('x', 1)$$, 'denied');
+select t.check('Coach cannot add a column to a team board',
+  $$insert into board_lists (board_id, name) select id, 'Coach col' from boards where slug = 'marketing'$$, 'denied');
+select t.login(3);
+select t.check('Rocco makes a Marketing task', $$insert into cards (board_id, list_id, title, created_by)
+    select b.id, l.id, 'Rocco task', my_profile_id() from boards b join board_lists l on l.board_id = b.id and l.name = 'To do' where b.slug = 'marketing'$$, 'ok');
+select t.login(7);
+select t.assert('Coach cannot change someone else''s task', t.num($$with u as (update cards set title = 'hacked' where title = 'Rocco task' returning 1) select count(*) from u$$) = 0);
+select t.check('Coach cannot make herself admin', $$update profiles set is_admin = true where full_name = 'Leire'$$, 'denied');
+reset role;

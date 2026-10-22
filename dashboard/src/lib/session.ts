@@ -13,6 +13,7 @@ export type Profile = {
   group_id: string | null;
   role_title: string | null;
   is_admin: boolean;
+  is_coach?: boolean;
   locale: string | null;
   active: boolean;
 };
@@ -26,7 +27,7 @@ export type Session = {
   /** UI hint only. The database (RLS) is what actually enforces this. */
   canEditGroup: (groupId: string | null | undefined) => boolean;
   /** Plain object (safe to pass to client components) */
-  viewer: { meId: string; isAdmin: boolean; myGroupId: string | null };
+  viewer: { meId: string; isAdmin: boolean; myGroupId: string | null; isCoach: boolean };
 };
 
 /** Loads the logged-in member once per request. Redirects to /login if not logged in or not on the team. */
@@ -53,6 +54,6 @@ export const getSession = cache(async (): Promise<Session> => {
     groups: allGroups,
     isAdmin,
     canEditGroup: (gid) => isAdmin || (!!gid && gid === me.group_id),
-    viewer: { meId: me.id, isAdmin, myGroupId: me.group_id },
+    viewer: { meId: me.id, isAdmin, myGroupId: me.group_id, isCoach: !!me.is_coach },
   };
 });
