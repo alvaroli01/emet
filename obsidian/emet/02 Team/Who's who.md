@@ -28,4 +28,6 @@ updated: 2026-10-22
 
 > ⚠️ Self/peer review summaries are in the repo (`docs/team-profiles.md`). They are **preliminary and disputed** — not final roles.
 
+> 🏫 Our LEINN class has 30 people in two teams of 15: **emet** (us) and **Olin**. Shared projects so far: [[Chinese event (25 Nov)]] (Olin: Andres, Eduardo, Gordon, Nico Yarnoz).
+
 Back to [[Team structure]]

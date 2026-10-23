@@ -22,6 +22,9 @@ updated: 2026-10-22
 | Digital 1 | 30 Oct–5 Nov | Tue 10 Nov |
 | Legal 2 | 6–17 Nov | Thu 19 Nov |
 | Digital 4 "Idea Validation" | 20–29 Nov | Tue 1 Dec |
+
+> 🏮 **Wed 25 Nov 2026 — [[Chinese event (25 Nov)]]** in Bilbao (falls inside Digital 4 "Idea Validation")
+
 | Legal 3 "Data Protection" | 2–15 Dec | Thu 17 Dec |
 | Finance 2 "Taxation" | 19 Dec–10 Jan | Tue 19 Jan 2027 |
 | Legal 4 "Legal Design" | 20 Jan–2 Feb | Thu 4 Feb |

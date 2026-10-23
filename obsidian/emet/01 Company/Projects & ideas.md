@@ -17,6 +17,9 @@ updated: 2026-10-22
 | Sunset Sessions | Nahuel, Sasha, Lassi |
 | Chinese project | Mario, Alvaro, Nico, Martin |
 
+### 🏮 Chinese event — Wed 25 Nov 2026, Bilbao (planning, 22 Oct)
+First concrete project: a Chinese culture event with visiting students from a Chinese university. Joint with **Olin** (the other LEINN team in our class). emet: Alvaro, Mario, Nico (Empresa) · Olin: Andres, Eduardo, Gordon, Nico Yarnoz. €10 entrance, €5 raffle × 1,000 tickets, handcraft markets, fortune cookies, products brought from China → [[Chinese event (25 Nov)]]
+
 ## Next
 - [ ] Each group meets and brings a clear path + goals for the week by Friday #open
 - [ ] One leader per project #open

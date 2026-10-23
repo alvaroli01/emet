@@ -2,6 +2,13 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-23 — Alvaro — Chinese event: venue (BBF, all day, 200–400 people) and the honest product/sponsor review added to the vault note and the Claude Project doc.
+- 2026-10-22 — Alvaro — Chinese event is a joint project with Olin (the other LEINN team in our class); group split into emet and Olin members.
+- 2026-10-22 — Alvaro — Chinese event: their product PPT added to the vault (PDF + one-page overview in `01 Company/Chinese event files/`) with a product table, notes and questions for the 23 Oct meeting.
+- 2026-10-22 — Alvaro — New project: Chinese event (Wed 25 Nov, Bilbao) — vault note with plan, money scenarios, shopping list for the 23 Oct meeting, sponsor and publicity ideas, checks (raffle permission) and an ideas log; linked from home, Projects & ideas, Open questions, LEINN calendar and today's note. README decision + open question.
+
+- 2026-10-22 — Alvaro — Vault: real revenue so far set to €388 (one sale, Oct) on the home note and Goal & Money.
+
 - 2026-10-22 — Alvaro — Vault home note: Notion and the 22 Oct work marked live (they were still listed as "local, not pushed yet").
 
 - 2026-10-22 — Alvaro — Live database: migrations 0033–0035 confirmed applied, Leire set as coach, coach rules tested (rolled back). Vault day note + home status updated.

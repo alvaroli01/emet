@@ -183,9 +183,12 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-21 | Added the 11 Replica skills to `.claude/skills/` so everyone's Claude can clone an existing app's features (never its code, brand or content) and fix what its users complain about | Alvaro |
 | 2026-10-22 | Notion is connected per member (their own uni or personal Notion, by OAuth), never shared; emet stores no Notion content, only encrypted tokens and which page/database each person picked | Alvaro |
 | 2026-10-22 | Leire (the team's coach / teacher) joins as **Coach**: no group, sees everything, can add tasks on any team board and assign people, and edit only her own tasks. Only admins can make someone a coach | Alvaro |
+| 2026-10-22 | New project: Chinese culture event in Bilbao on Wed 25 Nov 2026 with visiting students from a Chinese university (they bring products from China). Joint project with Olin (the other 15-person LEINN team in our class of 30) — emet: Alvaro, Mario, Nico; Olin: Andres, Eduardo, Gordon, Nico Yarnoz. Plan in the vault: `obsidian/emet/01 Company/Chinese event (25 Nov).md` | Alvaro |
 | 2026-10-22 | Getting a task shows a live pop-up (title + due date) on whatever page you're on; Today's Sales / Tasks / Money cards can show any week or month | Alvaro |
 
 ## 10. Open questions
+
+- **Chinese event (25 Nov):** venue, project leader, their 6 products from the PPT (flower pastry, bookmark, bamboo weaving, marbled fan, embroidered wallet, herbal sachet — €2–8) need quantities, cost price and our share; flower pastry may contain lard (can't enter the EU in luggage); revenue split with the Chinese students (meeting 23 Oct) and between emet and Olin, raffle permission from the Basque Government (€5 × 1,000 tickets), sponsors, €10 entrance. See the vault note `Chinese event (25 Nov)`. (Alvaro)
 
 - Remove the `[DEMO]` class data from the live database once the presentation is done (`dashboard/supabase/demo/remove-all-demo-data.sql`). (Alvaro)
 

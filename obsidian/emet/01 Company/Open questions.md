@@ -10,6 +10,13 @@ updated: 2026-10-22
 - [ ] **Who does what inside each group?** — leaders are set (21 Oct); roles inside groups still open ([[Team structure]]) #open
 - [ ] **One leader per project** — each group brings a clear path by Friday ([[Projects & ideas]]) #open
 
+### 🏮 Chinese event (25 Nov) → [[Chinese event (25 Nov)]]
+- [ ] Venue in Bilbao, project leader, Chinese university name #open
+- [ ] Their 6 products (PPT): quantities, cost vs. sale price, our share, can flower pastry come in (lard?), workshops? (meeting Fri 23 Oct) #open
+- [ ] Raffle permission from the Basque Government for 1,000 × €5 tickets #open
+- [ ] Sponsors: who to approach first; sponsor pack #open
+- [ ] How emet and Olin split the event's money and work #open
+
 ### Team & access
 - [ ] Emails of all 15 members (for dashboard logins; most added view-only so far) #open
 - [ ] Missing self-reviews (Nico, Nahuel), Fran's redo, missing peer reviews — `docs/team-profiles.md` #open
