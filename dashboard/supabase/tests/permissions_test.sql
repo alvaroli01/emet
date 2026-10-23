@@ -645,3 +645,73 @@ select t.check('...and assigns Emily', $$insert into card_assignees (card_id, us
 select t.login(6);
 select t.assert('Emily''s notification says when it is due', t.num($$select count(*) from notifications where kind = 'assigned' and data->>'due' like '2026-10-31%'$$) = 1);
 reset role;
+-- ── Subscriptions: repeating costs that book themselves as expenses ──
+set role authenticated;
+select t.login(2);  -- Stefan (Finance)
+select t.check('Finance adds a monthly subscription', $$insert into subscriptions (name, amount, every, unit, starts_on) values ('Canva', 12, 1, 'month', (now() at time zone 'Europe/Madrid')::date)$$, 'ok');
+select t.check('Finance adds a weekly one that started two weeks ago', $$insert into subscriptions (name, amount, every, unit, starts_on) values ('Ads', 5, 1, 'week', (now() at time zone 'Europe/Madrid')::date - 14)$$, 'ok');
+select t.check('Amount must be above zero', $$insert into subscriptions (name, amount) values ('Free', 0)$$, 'denied');
+select t.login(3);  -- Rocco (Marketing)
+select t.assert('Members see the subscriptions', t.num('select count(*) from subscriptions') = 2);
+select t.check('Members cannot add subscriptions', $$insert into subscriptions (name, amount) values ('x', 1)$$, 'denied');
+select t.check('Members cannot delete subscriptions', $$delete from subscriptions$$, 'denied');
+select t.check('Members cannot run the charges', $$select run_subscriptions()$$, 'denied');
+select t.assert('Members charging now does nothing', t.num('select charge_subscriptions_now()') = 0);
+select t.login(2);
+select t.assert('Finance charging now books 4 expenses (1 Canva + 3 weekly)', t.num('select charge_subscriptions_now()') = 4);
+select t.assert('...each one an expense linked to its subscription', t.num($$select count(*) from expenses where subscription_id is not null$$) = 4);
+select t.assert('...dated on its own charge day', t.num($$select count(distinct date) from expenses e join subscriptions s on s.id = e.subscription_id where s.name = 'Ads'$$) = 3);
+select t.assert('Running again books nothing twice', t.num('select charge_subscriptions_now()') = 0);
+select t.assert('Canva''s next charge is one month later', t.num($$select count(*) from subscriptions where name = 'Canva' and next_charge_on = ((now() at time zone 'Europe/Madrid')::date + interval '1 month')::date$$) = 1);
+reset role;
+select t.assert('The daily job can run the charges', (select run_subscriptions()) = 0);
+-- A charge whose day falls in a closed month is booked today instead
+insert into month_locks (month) values (date_trunc('month', (now() at time zone 'Europe/Madrid')::date - interval '1 month')::date) on conflict do nothing;
+set role authenticated;
+select t.login(2);
+select t.check('Finance adds one that was due last month', $$insert into subscriptions (name, amount, every, unit, starts_on) values ('Hosting', 3, 1, 'month', ((now() at time zone 'Europe/Madrid')::date - interval '1 month')::date)$$, 'ok');
+select t.assert('Closed-month charge still books (2 charges)', t.num('select charge_subscriptions_now()') = 2);
+select t.assert('...both dated today', t.num($$select count(*) from expenses e join subscriptions s on s.id = e.subscription_id where s.name = 'Hosting' and e.date = (now() at time zone 'Europe/Madrid')::date$$) = 2);
+select t.check('Finance deletes a subscription we stopped paying', $$delete from subscriptions where name = 'Canva'$$, 'ok');
+select t.assert('...and its past expenses stay in the books', t.num($$select count(*) from expenses where description = 'Canva'$$) = 1);
+reset role;
+
+-- ── Team tasks that need a file to finish ──
+set role authenticated;
+select t.login(4);  -- Lassi (Team Leader)
+select t.check('Leader gives a task that needs a file', $$insert into team_tasks (title, needs_file) values ('Upload your flyer', true)$$, 'ok');
+select t.check('...to Rocco', $$insert into team_task_people (task_id, user_id) select tt.id, p.id from team_tasks tt, profiles p where tt.title = 'Upload your flyer' and p.full_name = 'Rocco'$$, 'ok');
+select t.login(3);  -- Rocco
+select t.check('Rocco cannot finish it without a file', $$update team_task_people set done_at = now() where user_id = my_profile_id() and task_id = (select id from team_tasks where title = 'Upload your flyer')$$, 'denied');
+select t.check('Rocco cannot point at a file that was never uploaded', $$update team_task_people set file_path = my_profile_id() || '/t/ghost.pdf', done_at = now() where user_id = my_profile_id() and task_id = (select id from team_tasks where title = 'Upload your flyer')$$, 'denied');
+select t.check('Rocco uploads his file', $$insert into storage.objects (bucket_id, name) values ('task-files', my_profile_id() || '/t/flyer.pdf')$$, 'ok');
+select t.check('Rocco cannot upload into someone else''s folder', $$insert into storage.objects (bucket_id, name) select 'task-files', id || '/t/x.pdf' from profiles where full_name = 'Stefan'$$, 'denied');
+select t.check('Rocco hands it in with the file', $$update team_task_people set file_path = my_profile_id() || '/t/flyer.pdf', file_name = 'flyer.pdf', done_at = now() where user_id = my_profile_id() and task_id = (select id from team_tasks where title = 'Upload your flyer')$$, 'ok');
+select t.check('Rocco cannot turn off "needs a file"', $$update team_tasks set needs_file = false where title = 'Upload your flyer'$$, 'denied');
+select t.login(5);  -- Mario
+select t.assert('Other members cannot open Rocco''s file', t.num($$select count(*) from storage.objects where bucket_id = 'task-files'$$) = 0);
+select t.login(4);
+select t.assert('The leader can open it', t.num($$select count(*) from storage.objects where bucket_id = 'task-files'$$) = 1);
+select t.check('Normal tasks still tick without a file', $$insert into team_tasks (title) values ('Just tick it')$$, 'ok');
+reset role;
+-- ── Training leaders: one or more people lead training for a whole week (Mon–Sun) ──
+set role authenticated;
+select t.login(1);  -- Alvaro (admin)
+select t.check('Admin sets Lassi and Rocco as next week''s leaders', $$insert into training_leaders (week_start, user_id) select '2026-10-26', id from profiles where full_name in ('Lassi', 'Rocco')$$, 'ok');
+select t.check('A week must start on a Monday', $$insert into training_leaders (week_start, user_id) select '2026-10-27', id from profiles where full_name = 'Emily'$$, 'denied');
+select t.check('Nobody is added twice to the same week', $$insert into training_leaders (week_start, user_id) select '2026-10-26', id from profiles where full_name = 'Lassi'$$, 'denied');
+select t.login(3);  -- Rocco
+select t.assert('Everyone sees the training leaders', t.num('select count(*) from training_leaders') = 2);
+select t.check('Members cannot set leaders', $$insert into training_leaders (week_start, user_id) select '2026-11-02', my_profile_id()$$, 'denied');
+select t.check('Members cannot remove leaders', $$delete from training_leaders$$, 'denied');
+select t.check('Members cannot run the Monday reminder', $$select notify_training_leaders('2026-10-26')$$, 'denied');
+reset role;
+select t.assert('Monday: both leaders are told', (select notify_training_leaders('2026-10-26')) = 2);
+select t.assert('...only once', (select notify_training_leaders('2026-10-26')) = 0);
+select t.assert('Other days: nobody is told', (select notify_training_leaders('2026-10-27')) = 0);
+set role authenticated;
+select t.login(3);
+select t.assert('Rocco got "you lead training this week"', t.num($$select count(*) from notifications where kind = 'training_lead' and data->>'week' = '2026-10-26'$$) = 1);
+select t.login(1);
+select t.check('Admin removes a leader from a week', $$delete from training_leaders where week_start = '2026-10-26' and user_id = (select id from profiles where full_name = 'Rocco')$$, 'ok');
+reset role;

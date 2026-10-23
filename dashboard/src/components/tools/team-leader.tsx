@@ -3,8 +3,10 @@ import { createClient } from "@/lib/supabase/server";
 import { DataTable, type Field, type Row } from "@/components/data-table";
 import { StatusPill } from "@/components/status";
 import { onTimeRate, groupHealth, type CardLite } from "@/lib/metrics";
-import { pct } from "@/lib/format";
+import { pct, todayISO } from "@/lib/format";
+import { trainingWeeks, mondayOf } from "@/lib/daily-brief";
 import { BlockersTool } from "./blockers";
+import { TrainingLeaders } from "./training-leaders";
 import type { ToolProps, ToolTab } from "./types";
 
 export async function TeamLeaderTools(props: ToolProps): Promise<ToolTab[]> {
@@ -13,12 +15,14 @@ export async function TeamLeaderTools(props: ToolProps): Promise<ToolTab[]> {
   const tg = await getTranslations("group.names");
   const locale = await getLocale();
   const supabase = await createClient();
-  const [notes, outreach, cards, boards, blockers] = await Promise.all([
+  const today = todayISO();
+  const [notes, outreach, cards, boards, blockers, training] = await Promise.all([
     supabase.from("meeting_notes").select("*").order("meeting_date", { ascending: false }).returns<Row[]>(),
     supabase.from("outreach").select("*").order("updated_at", { ascending: false }).returns<Row[]>(),
     supabase.from("cards").select("board_id, due_at, completed_at").returns<CardLite[]>(),
     supabase.from("boards").select("id, group_id"),
     supabase.from("blockers").select("group_id").eq("status", "open"),
+    supabase.from("training_leaders").select("week_start, user_id").gte("week_start", mondayOf(today)).order("created_at"),
   ]);
 
   const boardGroup = new Map((boards.data ?? []).map((b) => [b.id as string, b.group_id as string | null]));
@@ -78,6 +82,10 @@ export async function TeamLeaderTools(props: ToolProps): Promise<ToolTab[]> {
           {await BlockersTool(props)}
         </div>
       ),
+    },
+    {
+      id: "training", group: "people", label: t("leader.training"),
+      node: <TrainingLeaders weeks={trainingWeeks(today)} leaders={training.data ?? []} members={allMembers} thisWeek={mondayOf(today)} canEdit={session.isAdmin} />,
     },
     {
       id: "meetings", group: "plan", label: t("leader.meetings"),

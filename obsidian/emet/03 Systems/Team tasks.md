@@ -13,5 +13,8 @@ Added 15 Oct (migration 0024, 9 new permission tests).
 - People see it in **My Tasks → "From the team leader"** with a tick box
 - Everyone sees who has finished (green tick) and who hasn't
 - Only leaders create/delete; each person ticks only their own; notification to everyone who has logged in
+- **Needs a file** (23 Oct, migration 0036): tick "Needs a file to finish" when giving a task; the person's tick becomes an upload (any file, max 10 MB) and the database won't accept the tick without it. Leaders open the files from "Tasks you gave"
+- **Daily pop-up** (23 Oct): first visit each day → your late tasks + next 30 days, and this/next week's training leaders
+- **Training leaders** (23 Oct, migration 0037): Team Leader → Training leaders, one or more people per week (Mon–Sun) up to 19 Dec; admins set them, Monday reminder. 26 Oct–1 Nov: Mario & Rocco; later weeks: Alvaro decides
 
 Back to [[Systems map]]

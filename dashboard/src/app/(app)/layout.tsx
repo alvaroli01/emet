@@ -8,6 +8,7 @@ import { Backdrop, Breadcrumb, MobileLogo, NotOnToday, TopBarFrame } from "@/com
 import { HeaderRecord } from "@/components/camp/header-record";
 import { NotificationsBell } from "@/components/workspace/notifications";
 import { CommandPalette, SearchButton } from "@/components/workspace/command-palette";
+import { DailyBrief } from "@/components/workspace/daily-brief";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("shell");
@@ -36,6 +37,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       </div>
       <BottomNav groups={groups} myGroupId={me.group_id} />
       <CommandPalette />
+      <DailyBrief />
     </div>
   );
 }

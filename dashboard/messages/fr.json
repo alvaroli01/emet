@@ -540,7 +540,8 @@
       "addMeeting": "Ajouter un compte rendu",
       "outreach": "Contacts école et promos supérieures",
       "outreachEmpty": "Aucun contact.",
-      "addOutreach": "Ajouter un contact"
+      "addOutreach": "Ajouter un contact",
+      "training": "Responsables d’entraînement"
     }
   },
   "team": {
@@ -1099,7 +1100,8 @@
       "team_task": "Nouvelle tâche du chef d’équipe : « {title} »",
       "company_doc": "Nouveau document d’entreprise : « {name} »",
       "project_added": "Tu as été ajouté au projet « {project} »",
-      "project_post": "Nouveau dans « {project} » : {title}"
+      "project_post": "Nouveau dans « {project} » : {title}",
+      "training_lead": "Tu animes l’entraînement cette semaine"
     },
     "popupTitle": "Nouvelle tâche pour toi",
     "popupDue": "Pour le {date}",
@@ -1266,7 +1268,8 @@
       "projects": "Projets",
       "ledgers": "Registres",
       "stock": "Stock",
-      "books": "Comptabilité"
+      "books": "Comptabilité",
+      "subscriptions": "Abonnements"
     },
     "range": {
       "label": "Période",
@@ -1527,7 +1530,38 @@
       "noAudit": "Aucune modification pour l’instant."
     },
     "showAll": "Afficher {count} chiffres de plus",
-    "showFewer": "Afficher moins"
+    "showFewer": "Afficher moins",
+    "subs": {
+      "perMonth": "Abonnements par mois",
+      "explain": "Chaque paiement est ajouté comme dépense le jour venu, automatiquement. Personne n’a besoin de se connecter.",
+      "count": "{count, plural, =0 {Aucun abonnement} one {# abonnement} other {# abonnements}}",
+      "new": "Ajouter un abonnement",
+      "name": "C’est quoi ?",
+      "namePlaceholder": "ex. Canva Pro",
+      "amount": "Montant (€)",
+      "every": "Tous les",
+      "unitLabel": "Période",
+      "units": {
+        "week": "{count, plural, one {semaine} other {semaines}}",
+        "month": "{count, plural, one {mois} other {mois}}",
+        "year": "{count, plural, one {an} other {ans}}"
+      },
+      "nextPayment": "Prochain paiement",
+      "category": "Catégorie",
+      "method": "Payé par",
+      "project": "Projet",
+      "add": "Ajouter l’abonnement",
+      "list": "Nos abonnements",
+      "everyText": "{n, plural, one {chaque {unit}} other {tous les # {unit}}}",
+      "nextOn": "Prochain prélèvement {date}",
+      "paidSoFar": "{total} payés jusqu’ici ({count, plural, one {# prélèvement} other {# prélèvements}})",
+      "delete": "Supprimer {name}",
+      "confirmDelete": "Supprimer {name} ? Les prochains prélèvements s’arrêtent. Les paiements déjà enregistrés restent dans les comptes.",
+      "deleted": "{name} supprimé. Plus de prélèvements.",
+      "added": "{name} ajouté",
+      "none": "Pas encore d’abonnements.",
+      "saveError": "Échec de l’enregistrement. Réessaie."
+    }
   },
   "marketing": {
     "tabs": {
@@ -2714,7 +2748,16 @@
     "assignButton": "Attribuer une tâche",
     "forWhat": "Pour",
     "wholeTeam": "Toute l’équipe",
-    "projectOption": "Projet : {name} ({n} personnes)"
+    "projectOption": "Projet : {name} ({n} personnes)",
+    "needsFile": "Un fichier est requis pour terminer",
+    "needsFileHint": "Ils doivent envoyer une photo, un PDF ou n’importe quel fichier avant de pouvoir la cocher.",
+    "fileNeeded": "Fichier requis",
+    "openFile": "Ouvrir le fichier",
+    "openFileOf": "Ouvrir le fichier de {name}",
+    "uploadToFinish": "Envoie un fichier pour terminer cette tâche",
+    "uploadFor": "Envoyer un fichier pour « {title} »",
+    "handedIn": "Fichier rendu. Tâche terminée !",
+    "uploadError": "Échec de l’envoi (10 Mo max). Réessaie."
   },
   "documents": {
     "title": "Documents",
@@ -2913,5 +2956,30 @@
     "pickSavePage": "Choisis une page Notion où enregistrer",
     "saveFailedNotion": "Impossible d'enregistrer dans Notion. Réessaie.",
     "savedNotion": "Enregistré dans Notion"
+  },
+  "brief": {
+    "title": "Ton programme",
+    "training": "Responsables d’entraînement",
+    "youLead": "Tu animes l’entraînement cette semaine !",
+    "thisWeek": "Cette semaine :",
+    "nextWeek": "Semaine prochaine : {names}",
+    "tasks": "Tes tâches",
+    "window": "en retard + 30 prochains jours",
+    "late": "En retard",
+    "noTasks": "Rien à rendre le mois prochain. Bien joué !",
+    "more": "{count, plural, one {+ # autre dans Mes tâches} other {+ # autres dans Mes tâches}}",
+    "openTasks": "Ouvrir Mes tâches",
+    "gotIt": "Compris"
+  },
+  "training": {
+    "title": "Responsables d’entraînement",
+    "hint": "Qui anime les séances d’entraînement chaque semaine (du lundi au dimanche).",
+    "hintAdmin": "Qui anime les séances d’entraînement chaque semaine (du lundi au dimanche). Ajoute une ou plusieurs personnes par semaine ; elles reçoivent un rappel le lundi.",
+    "now": "Cette semaine",
+    "nobody": "Pas encore décidé",
+    "add": "Ajouter un responsable",
+    "addFor": "Ajouter un responsable pour {week}",
+    "remove": "Retirer {name}",
+    "saveError": "Échec de l’enregistrement. Réessaie."
   }
 }

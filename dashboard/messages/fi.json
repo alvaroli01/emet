@@ -540,7 +540,8 @@
       "addMeeting": "Lisää muistio",
       "outreach": "Yhteydet kouluun ja ylempiin vuosikursseihin",
       "outreachEmpty": "Ei vielä yhteyksiä.",
-      "addOutreach": "Lisää yhteys"
+      "addOutreach": "Lisää yhteys",
+      "training": "Treenien vetäjät"
     }
   },
   "team": {
@@ -1099,7 +1100,8 @@
       "team_task": "Uusi tehtävä tiimin vetäjältä: “{title}”",
       "company_doc": "Uusi yrityksen dokumentti: ”{name}”",
       "project_added": "Sinut lisättiin projektiin ”{project}”",
-      "project_post": "Uutta projektissa ”{project}”: {title}"
+      "project_post": "Uutta projektissa ”{project}”: {title}",
+      "training_lead": "Vedät treenit tällä viikolla"
     },
     "popupTitle": "Uusi tehtävä sinulle",
     "popupDue": "Määräaika {date}",
@@ -1266,7 +1268,8 @@
       "projects": "Projektit",
       "ledgers": "Kirjat",
       "stock": "Varasto",
-      "books": "Kirjanpito"
+      "books": "Kirjanpito",
+      "subscriptions": "Tilaukset"
     },
     "range": {
       "label": "Jakso",
@@ -1527,7 +1530,38 @@
       "noAudit": "Ei vielä muutoksia."
     },
     "showAll": "Näytä {count} lukua lisää",
-    "showFewer": "Näytä vähemmän"
+    "showFewer": "Näytä vähemmän",
+    "subs": {
+      "perMonth": "Tilaukset kuukaudessa",
+      "explain": "Jokainen maksu kirjataan kuluksi omana päivänään automaattisesti. Kenenkään ei tarvitse kirjautua.",
+      "count": "{count, plural, =0 {Ei tilauksia} one {# tilaus} other {# tilausta}}",
+      "new": "Lisää tilaus",
+      "name": "Mikä se on?",
+      "namePlaceholder": "esim. Canva Pro",
+      "amount": "Summa (€)",
+      "every": "Joka",
+      "unitLabel": "Jakso",
+      "units": {
+        "week": "{count, plural, one {viikko} other {viikkoa}}",
+        "month": "{count, plural, one {kuukausi} other {kuukautta}}",
+        "year": "{count, plural, one {vuosi} other {vuotta}}"
+      },
+      "nextPayment": "Seuraava maksu",
+      "category": "Luokka",
+      "method": "Maksutapa",
+      "project": "Projekti",
+      "add": "Lisää tilaus",
+      "list": "Tilauksemme",
+      "everyText": "{n, plural, one {joka {unit}} other {# {unit} välein}}",
+      "nextOn": "Seuraava veloitus {date}",
+      "paidSoFar": "{total} maksettu tähän mennessä ({count, plural, one {# veloitus} other {# veloitusta}})",
+      "delete": "Poista {name}",
+      "confirmDelete": "Poistetaanko {name}? Tulevat veloitukset loppuvat. Jo kirjatut maksut jäävät kirjanpitoon.",
+      "deleted": "{name} poistettu. Ei enää veloituksia.",
+      "added": "{name} lisätty",
+      "none": "Ei vielä tilauksia.",
+      "saveError": "Tallennus epäonnistui. Yritä uudelleen."
+    }
   },
   "marketing": {
     "tabs": {
@@ -2714,7 +2748,16 @@
     "assignButton": "Anna tehtävä",
     "forWhat": "Kenelle",
     "wholeTeam": "Koko tiimi",
-    "projectOption": "Projekti: {name} ({n} henkilöä)"
+    "projectOption": "Projekti: {name} ({n} henkilöä)",
+    "needsFile": "Vaatii tiedoston valmistuakseen",
+    "needsFileHint": "Heidän pitää ladata kuva, PDF tai mikä tahansa tiedosto ennen kuin voivat kuitata tehtävän.",
+    "fileNeeded": "Tiedosto tarvitaan",
+    "openFile": "Avaa tiedosto",
+    "openFileOf": "Avaa käyttäjän {name} tiedosto",
+    "uploadToFinish": "Lataa tiedosto saadaksesi tehtävän valmiiksi",
+    "uploadFor": "Lataa tiedosto tehtävään ”{title}”",
+    "handedIn": "Tiedosto palautettu. Tehtävä valmis!",
+    "uploadError": "Tiedoston lataus epäonnistui (enintään 10 Mt). Yritä uudelleen."
   },
   "documents": {
     "title": "Dokumentit",
@@ -2913,5 +2956,30 @@
     "pickSavePage": "Valitse Notion-sivu tallennusta varten",
     "saveFailedNotion": "Tallennus Notioniin epäonnistui. Yritä uudelleen.",
     "savedNotion": "Tallennettu Notioniin"
+  },
+  "brief": {
+    "title": "Suunnitelmasi",
+    "training": "Treenien vetäjät",
+    "youLead": "Vedät treenit tällä viikolla!",
+    "thisWeek": "Tällä viikolla:",
+    "nextWeek": "Ensi viikolla: {names}",
+    "tasks": "Tehtäväsi",
+    "window": "myöhässä + seuraavat 30 päivää",
+    "late": "Myöhässä",
+    "noTasks": "Ei mitään seuraavan kuukauden aikana. Hienoa!",
+    "more": "{count, plural, one {+ # lisää kohdassa Omat tehtävät} other {+ # lisää kohdassa Omat tehtävät}}",
+    "openTasks": "Avaa Omat tehtävät",
+    "gotIt": "Selvä"
+  },
+  "training": {
+    "title": "Treenien vetäjät",
+    "hint": "Kuka vetää treenit kunakin viikkona (maanantaista sunnuntaihin).",
+    "hintAdmin": "Kuka vetää treenit kunakin viikkona (maanantaista sunnuntaihin). Lisää viikolle yksi tai useampi henkilö; he saavat muistutuksen maanantaina.",
+    "now": "Tällä viikolla",
+    "nobody": "Ei vielä päätetty",
+    "add": "Lisää vetäjä",
+    "addFor": "Lisää vetäjä viikolle {week}",
+    "remove": "Poista {name}",
+    "saveError": "Tallennus epäonnistui. Yritä uudelleen."
   }
 }

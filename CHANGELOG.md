@@ -2,6 +2,8 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-23 — Alvaro — Daily pop-up (first visit each day) with your late tasks + the next 30 days and this/next week's training leaders. Team Leader → Training leaders: one or more leaders per week up to 19 Dec, Monday reminder. Migration 0037; 26 Oct week = Mario & Rocco.
+- 2026-10-23 — Alvaro — Finance → Subscriptions: repeating costs that are booked as expenses automatically every day by the daily job; delete to stop. Team tasks can now need a file (photo, PDF, anything) before a person can tick them off. Migration 0036, 30 new permission tests.
 - 2026-10-23 — Alvaro — Chinese event: venue (BBF, all day, 200–400 people) and the honest product/sponsor review added to the vault note and the Claude Project doc.
 - 2026-10-22 — Alvaro — Chinese event is a joint project with Olin (the other LEINN team in our class); group split into emet and Olin members.
 - 2026-10-22 — Alvaro — Chinese event: their product PPT added to the vault (PDF + one-page overview in `01 Company/Chinese event files/`) with a product table, notes and questions for the 23 Oct meeting.

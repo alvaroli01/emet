@@ -10,6 +10,7 @@ import { Ledgers } from "@/components/finance/ledgers";
 import { Stock } from "@/components/finance/stock";
 import { Bookkeeper } from "@/components/finance/bookkeeper";
 import { ClaimButton } from "@/components/finance/claim";
+import { Subscriptions, type Subscription } from "@/components/finance/subscriptions";
 import { FridayReport } from "./friday-report";
 import { HEARD_ABOUT } from "./marketing";
 import type { ToolProps, ToolTab } from "./types";
@@ -22,7 +23,7 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
   const tmk = await getTranslations("marketing");
   const supabase = await createClient();
   const today = todayISO();
-  const [sales, expenses, inventory, projects, flags, locks, claims, counts, audit, won, people, codes] = await Promise.all([
+  const [sales, expenses, inventory, projects, flags, locks, claims, counts, audit, won, people, codes, subs] = await Promise.all([
     supabase.from("sales").select("*").order("date", { ascending: false }).order("created_at", { ascending: false }).returns<Row[]>(),
     supabase.from("expenses").select("*").order("date", { ascending: false }).order("created_at", { ascending: false }).returns<Row[]>(),
     supabase.from("inventory").select("*").order("product").returns<Row[]>(),
@@ -35,6 +36,7 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
     supabase.from("prospects").select("id", { count: "exact", head: true }).eq("stage", "won"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("active", true),
     supabase.from("discount_codes").select("code").eq("active", true).order("code"),
+    supabase.from("subscriptions").select("*").order("next_charge_on").returns<Subscription[]>(),
   ]);
   const me = session.me.id;
   const s = (sales.data ?? []) as unknown as SaleRow[];
@@ -103,6 +105,7 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
       node: <Ledgers sales={sales.data ?? []} expenses={expenses.data ?? []} salesFields={salesFields} expenseFields={expenseFields} members={allMembers}
                      projects={p} categories={categoryOptions} canEdit={editable} me={me} today={today} />,
     },
+    { id: "subscriptions", group: "plan", label: tf("tabs.subscriptions"), node: <Subscriptions subs={subs.data ?? []} expenses={e} projects={p} categories={categoryOptions} canEdit={editable} today={today} /> },
     { id: "stock", group: "work", label: tf("tabs.stock"), node: <Stock items={inventory.data ?? []} fields={inventoryFields} sales={s} members={allMembers} canEdit={editable} isAdmin={session.isAdmin} linking={linking} today={today} /> },
     ...(editable ? [{
       id: "books", group: "work" as const, label: tf("tabs.books"),

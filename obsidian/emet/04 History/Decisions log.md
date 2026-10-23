@@ -1,12 +1,14 @@
 ---
 tags: [emet, decisions]
-updated: 2026-10-22
+updated: 2026-10-23
 ---
 
-# Decisions log (synced from README §9, 2026-10-22)
+# Decisions log (synced from README §9, 2026-10-23)
 
 | Date | Decision | Decided by |
 |---|---|---|
+| [[2026-10-23]] | Finance subscriptions book themselves as expenses (daily job, no login needed); deleting one keeps past charges. Team tasks can require a file to finish (enforced in the database) | Alvaro |
+| [[2026-10-23]] | Daily pop-up with your tasks (late + next 30 days) on the first visit of the day; training leaders change every week (Mon–Sun) up to 19 Dec, first week 26 Oct = Mario & Rocco, the rest to be decided by Alvaro | Alvaro |
 | [[2026-10-22]] | Notion is connected per member (their own uni or personal Notion, by OAuth), never shared; emet stores no Notion content, only encrypted tokens and which page/database each person picked | Alvaro |
 | [[2026-10-22]] | Leire (the team's coach / teacher) joins as **Coach**: no group, sees everything, can add tasks on any team board and assign people, and edit only her own tasks. Only admins can make someone a coach | Alvaro |
 | [[2026-10-22]] | New project: Chinese culture event in Bilbao on Wed 25 Nov 2026 with visiting students from a Chinese university (they bring products from China). Joint project with Olin (the other 15-person LEINN team in our class of 30) — emet: Alvaro, Mario, Nico; Olin: Andres, Eduardo, Gordon, Nico Yarnoz. Plan in the vault: `obsidian/emet/01 Company/Chinese event (25 Nov).md` | Alvaro |

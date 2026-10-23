@@ -540,7 +540,8 @@
       "addMeeting": "Protokoll hinzufügen",
       "outreach": "Kontakt zur Hochschule & höheren Jahrgängen",
       "outreachEmpty": "Noch keine Kontakte.",
-      "addOutreach": "Kontakt hinzufügen"
+      "addOutreach": "Kontakt hinzufügen",
+      "training": "Trainingsleitung"
     }
   },
   "team": {
@@ -1099,7 +1100,8 @@
       "team_task": "Neue Aufgabe vom Teamleiter: „{title}“",
       "company_doc": "Neues Firmendokument: „{name}“",
       "project_added": "Du wurdest zum Projekt „{project}“ hinzugefügt",
-      "project_post": "Neu in „{project}“: {title}"
+      "project_post": "Neu in „{project}“: {title}",
+      "training_lead": "Du leitest diese Woche das Training"
     },
     "popupTitle": "Neue Aufgabe für dich",
     "popupDue": "Fällig {date}",
@@ -1266,7 +1268,8 @@
       "projects": "Projekte",
       "ledgers": "Journale",
       "stock": "Lager",
-      "books": "Buchhaltung"
+      "books": "Buchhaltung",
+      "subscriptions": "Abos"
     },
     "range": {
       "label": "Zeitraum",
@@ -1527,7 +1530,38 @@
       "noAudit": "Noch keine Änderungen."
     },
     "showAll": "{count} weitere Zahlen zeigen",
-    "showFewer": "Weniger zeigen"
+    "showFewer": "Weniger zeigen",
+    "subs": {
+      "perMonth": "Abos pro Monat",
+      "explain": "Jede Zahlung wird an ihrem Tag automatisch als Ausgabe gebucht. Niemand muss sich anmelden.",
+      "count": "{count, plural, =0 {Keine Abos} one {# Abo} other {# Abos}}",
+      "new": "Abo hinzufügen",
+      "name": "Was ist es?",
+      "namePlaceholder": "z. B. Canva Pro",
+      "amount": "Betrag (€)",
+      "every": "Alle",
+      "unitLabel": "Zeitraum",
+      "units": {
+        "week": "{count, plural, one {Woche} other {Wochen}}",
+        "month": "{count, plural, one {Monat} other {Monate}}",
+        "year": "{count, plural, one {Jahr} other {Jahre}}"
+      },
+      "nextPayment": "Nächste Zahlung",
+      "category": "Kategorie",
+      "method": "Bezahlt mit",
+      "project": "Projekt",
+      "add": "Abo hinzufügen",
+      "list": "Unsere Abos",
+      "everyText": "{n, plural, one {jede(n) {unit}} other {alle # {unit}}}",
+      "nextOn": "Nächste Abbuchung {date}",
+      "paidSoFar": "{total} bisher bezahlt ({count, plural, one {# Abbuchung} other {# Abbuchungen}})",
+      "delete": "{name} löschen",
+      "confirmDelete": "{name} löschen? Künftige Abbuchungen stoppen. Bereits gebuchte Zahlungen bleiben in den Büchern.",
+      "deleted": "{name} gelöscht. Keine weiteren Abbuchungen.",
+      "added": "{name} hinzugefügt",
+      "none": "Noch keine Abos.",
+      "saveError": "Speichern fehlgeschlagen. Bitte erneut versuchen."
+    }
   },
   "marketing": {
     "tabs": {
@@ -2714,7 +2748,16 @@
     "assignButton": "Aufgabe vergeben",
     "forWhat": "Für",
     "wholeTeam": "Ganzes Team",
-    "projectOption": "Projekt: {name} ({n} Personen)"
+    "projectOption": "Projekt: {name} ({n} Personen)",
+    "needsFile": "Braucht eine Datei zum Abschließen",
+    "needsFileHint": "Sie müssen ein Foto, PDF oder eine andere Datei hochladen, bevor sie abhaken können.",
+    "fileNeeded": "Datei nötig",
+    "openFile": "Datei öffnen",
+    "openFileOf": "Datei von {name} öffnen",
+    "uploadToFinish": "Lade eine Datei hoch, um die Aufgabe abzuschließen",
+    "uploadFor": "Datei für „{title}“ hochladen",
+    "handedIn": "Datei abgegeben. Aufgabe erledigt!",
+    "uploadError": "Hochladen fehlgeschlagen (max. 10 MB). Bitte erneut versuchen."
   },
   "documents": {
     "title": "Dokumente",
@@ -2913,5 +2956,30 @@
     "pickSavePage": "Wähle eine Notion-Seite zum Speichern",
     "saveFailedNotion": "Speichern in Notion fehlgeschlagen. Versuch es erneut.",
     "savedNotion": "In Notion gespeichert"
+  },
+  "brief": {
+    "title": "Dein Plan",
+    "training": "Trainingsleitung",
+    "youLead": "Du leitest diese Woche das Training!",
+    "thisWeek": "Diese Woche:",
+    "nextWeek": "Nächste Woche: {names}",
+    "tasks": "Deine Aufgaben",
+    "window": "überfällig + nächste 30 Tage",
+    "late": "Überfällig",
+    "noTasks": "Im nächsten Monat ist nichts fällig. Super!",
+    "more": "{count, plural, one {+ # weitere in Meine Aufgaben} other {+ # weitere in Meine Aufgaben}}",
+    "openTasks": "Meine Aufgaben öffnen",
+    "gotIt": "Alles klar"
+  },
+  "training": {
+    "title": "Trainingsleitung",
+    "hint": "Wer die Trainings jede Woche leitet (Montag bis Sonntag).",
+    "hintAdmin": "Wer die Trainings jede Woche leitet (Montag bis Sonntag). Füge eine oder mehrere Personen pro Woche hinzu; sie bekommen am Montag eine Erinnerung.",
+    "now": "Diese Woche",
+    "nobody": "Noch nicht entschieden",
+    "add": "Leitung hinzufügen",
+    "addFor": "Leitung für {week} hinzufügen",
+    "remove": "{name} entfernen",
+    "saveError": "Speichern fehlgeschlagen. Bitte erneut versuchen."
   }
 }

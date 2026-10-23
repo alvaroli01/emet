@@ -540,7 +540,8 @@
       "addMeeting": "Añadir acta",
       "outreach": "Contacto con la universidad y cursos superiores",
       "outreachEmpty": "Aún no hay contactos.",
-      "addOutreach": "Añadir contacto"
+      "addOutreach": "Añadir contacto",
+      "training": "Líderes de entrenamiento"
     }
   },
   "team": {
@@ -1099,7 +1100,8 @@
       "team_task": "Nueva tarea del líder del equipo: “{title}”",
       "company_doc": "Nuevo documento de la empresa: «{name}»",
       "project_added": "Te han añadido al proyecto «{project}»",
-      "project_post": "Novedad en «{project}»: {title}"
+      "project_post": "Novedad en «{project}»: {title}",
+      "training_lead": "Esta semana lideras el entrenamiento"
     },
     "popupTitle": "Nueva tarea para ti",
     "popupDue": "Para el {date}",
@@ -1266,7 +1268,8 @@
       "projects": "Proyectos",
       "ledgers": "Libros",
       "stock": "Inventario",
-      "books": "Contabilidad"
+      "books": "Contabilidad",
+      "subscriptions": "Suscripciones"
     },
     "range": {
       "label": "Periodo",
@@ -1527,7 +1530,38 @@
       "noAudit": "Aún no hay cambios."
     },
     "showAll": "Ver {count} cifras más",
-    "showFewer": "Ver menos"
+    "showFewer": "Ver menos",
+    "subs": {
+      "perMonth": "Suscripciones al mes",
+      "explain": "Cada pago se añade como gasto en su día, automáticamente. Nadie tiene que entrar.",
+      "count": "{count, plural, =0 {Sin suscripciones} one {# suscripción} other {# suscripciones}}",
+      "new": "Añadir una suscripción",
+      "name": "¿Qué es?",
+      "namePlaceholder": "p. ej. Canva Pro",
+      "amount": "Importe (€)",
+      "every": "Cada",
+      "unitLabel": "Periodo",
+      "units": {
+        "week": "{count, plural, one {semana} other {semanas}}",
+        "month": "{count, plural, one {mes} other {meses}}",
+        "year": "{count, plural, one {año} other {años}}"
+      },
+      "nextPayment": "Próximo pago",
+      "category": "Categoría",
+      "method": "Pagado con",
+      "project": "Proyecto",
+      "add": "Añadir suscripción",
+      "list": "Nuestras suscripciones",
+      "everyText": "{n, plural, one {cada {unit}} other {cada # {unit}}}",
+      "nextOn": "Próximo cargo {date}",
+      "paidSoFar": "{total} pagado hasta ahora ({count, plural, one {# cargo} other {# cargos}})",
+      "delete": "Eliminar {name}",
+      "confirmDelete": "¿Eliminar {name}? Se paran los próximos cargos. Los pagos ya registrados se quedan en las cuentas.",
+      "deleted": "{name} eliminada. No habrá más cargos.",
+      "added": "{name} añadida",
+      "none": "Aún no hay suscripciones.",
+      "saveError": "No se ha podido guardar. Inténtalo otra vez."
+    }
   },
   "marketing": {
     "tabs": {
@@ -2714,7 +2748,16 @@
     "assignButton": "Asignar una tarea",
     "forWhat": "Para",
     "wholeTeam": "Todo el equipo",
-    "projectOption": "Proyecto: {name} ({n} personas)"
+    "projectOption": "Proyecto: {name} ({n} personas)",
+    "needsFile": "Necesita un archivo para terminar",
+    "needsFileHint": "Tienen que subir una foto, un PDF o cualquier archivo antes de poder marcarla.",
+    "fileNeeded": "Archivo necesario",
+    "openFile": "Abrir archivo",
+    "openFileOf": "Abrir el archivo de {name}",
+    "uploadToFinish": "Sube un archivo para terminar esta tarea",
+    "uploadFor": "Subir un archivo para «{title}»",
+    "handedIn": "Archivo entregado. ¡Tarea hecha!",
+    "uploadError": "No se ha podido subir el archivo (máx. 10 MB). Inténtalo otra vez."
   },
   "documents": {
     "title": "Documentos",
@@ -2913,5 +2956,30 @@
     "pickSavePage": "Elige una página de Notion donde guardar",
     "saveFailedNotion": "No se pudo guardar en Notion. Inténtalo de nuevo.",
     "savedNotion": "Guardado en Notion"
+  },
+  "brief": {
+    "title": "Tu plan",
+    "training": "Líderes de entrenamiento",
+    "youLead": "¡Esta semana lideras el entrenamiento!",
+    "thisWeek": "Esta semana:",
+    "nextWeek": "La semana que viene: {names}",
+    "tasks": "Tus tareas",
+    "window": "atrasadas + próximos 30 días",
+    "late": "Atrasada",
+    "noTasks": "Nada para el próximo mes. ¡Bien!",
+    "more": "{count, plural, one {+ # más en Mis tareas} other {+ # más en Mis tareas}}",
+    "openTasks": "Abrir Mis tareas",
+    "gotIt": "Entendido"
+  },
+  "training": {
+    "title": "Líderes de entrenamiento",
+    "hint": "Quién lidera las sesiones de entrenamiento cada semana (de lunes a domingo).",
+    "hintAdmin": "Quién lidera las sesiones de entrenamiento cada semana (de lunes a domingo). Añade una o más personas por semana; reciben un aviso el lunes.",
+    "now": "Esta semana",
+    "nobody": "Aún sin decidir",
+    "add": "Añadir líder",
+    "addFor": "Añadir un líder para {week}",
+    "remove": "Quitar a {name}",
+    "saveError": "No se ha podido guardar. Inténtalo otra vez."
   }
 }

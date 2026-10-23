@@ -3,19 +3,26 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Check, Trash2, Users, Calendar, Send } from "lucide-react";
+import { Check, Trash2, Users, Calendar, Send, Paperclip, Upload, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
+import { compressImage } from "@/components/finance/claim";
 import type { TeamTask } from "@/lib/team-tasks";
 
 type Person = { id: string; full_name: string; avatar_url: string | null; group_id: string | null };
 type Team = { id: string; name: string };
 
+/** Opens a handed-in file (private bucket) in a new tab for 10 minutes. */
+async function openTaskFile(path: string) {
+  const { data } = await createClient().storage.from("task-files").createSignedUrl(path, 600);
+  if (data?.signedUrl) window.open(data.signedUrl, "_blank", "noopener");
+}
+
 const dayLabel = (d: string, locale: string) => new Date(d + "T12:00:00Z").toLocaleDateString(locale, { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
 
-/** Who has finished and who hasn't: a ticked avatar for done, a plain one for still to do. */
-export function TaskPeople({ task }: { task: TeamTask }) {
+/** Who has finished and who hasn't: a ticked avatar for done, a plain one for still to do. openFiles = leaders can open handed-in files. */
+export function TaskPeople({ task, openFiles = false }: { task: TeamTask; openFiles?: boolean }) {
   const t = useTranslations("teamTasks");
   const done = task.people.filter((p) => p.done_at).length;
   return (
@@ -33,10 +40,26 @@ export function TaskPeople({ task }: { task: TeamTask }) {
             </span>
             {p.name.split(" ")[0]}
             <span className="sr-only">{p.done_at ? t("finished") : t("notYet")}</span>
+            {openFiles && p.file_path && (
+              <button type="button" onClick={() => openTaskFile(p.file_path!)} title={p.file_name ?? t("openFile")} aria-label={t("openFileOf", { name: p.name })}
+                      className="-mr-1 grid size-5 place-items-center rounded-full hover:bg-ok/25"><Paperclip size={12} /></button>
+            )}
           </li>
         ))}
       </ul>
     </div>
+  );
+}
+
+/** Due date, and a "needs a file" tag when the task must be handed in with a file. */
+function TaskMeta({ task, locale }: { task: TeamTask; locale: string }) {
+  const t = useTranslations("teamTasks");
+  if (!task.due_on && !task.needs_file) return null;
+  return (
+    <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+      {task.due_on && <span className="flex items-center gap-1"><Calendar size={12} /> {dayLabel(task.due_on, locale)}</span>}
+      {task.needs_file && <span className="flex items-center gap-1 rounded-full bg-brand/15 px-2 py-0.5 font-medium text-ink"><Paperclip size={11} /> {t("fileNeeded")}</span>}
+    </p>
   );
 }
 
@@ -50,6 +73,7 @@ export function AssignTasks({ tasks, people: allPeople, teams: allTeams, meId, p
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
   const [due, setDue] = useState("");
+  const [needsFile, setNeedsFile] = useState(false);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
   // Leaders can give the task to one project's people instead of the whole team
@@ -66,12 +90,12 @@ export function AssignTasks({ tasks, people: allPeople, teams: allTeams, meId, p
     e.preventDefault();
     if (!title.trim() || !picked.size || saving) return;
     setSaving(true);
-    const { data, error } = await supabase.from("team_tasks").insert({ title: title.trim(), details: details.trim(), due_on: due || null, project_id: targetProject }).select("id").single();
+    const { data, error } = await supabase.from("team_tasks").insert({ title: title.trim(), details: details.trim(), due_on: due || null, project_id: targetProject, needs_file: needsFile }).select("id").single();
     const res = data && !error ? await supabase.from("team_task_people").insert([...picked].map((user_id) => ({ task_id: data.id, user_id }))) : null;
     setSaving(false);
     if (error || res?.error) return toast("error", t("saveError"));
     toast("ok", t("sent", { count: picked.size }));
-    setTitle(""); setDetails(""); setDue(""); setPicked(new Set());
+    setTitle(""); setDetails(""); setDue(""); setNeedsFile(false); setPicked(new Set());
     router.refresh();
   }
   async function remove(id: string) {
@@ -104,6 +128,11 @@ export function AssignTasks({ tasks, people: allPeople, teams: allTeams, meId, p
         </label>
         <label className="block w-fit text-sm font-medium">{t("due")}
           <input type="date" value={due} onChange={(e) => setDue(e.target.value)} className="input mt-1.5" />
+        </label>
+        <label className="flex w-fit cursor-pointer items-start gap-2.5 text-sm">
+          <input type="checkbox" checked={needsFile} onChange={(e) => setNeedsFile(e.target.checked)} className="mt-0.5 size-4 accent-[var(--brand)]" />
+          <span><span className="flex items-center gap-1.5 font-medium"><Paperclip size={14} /> {t("needsFile")}</span>
+            <span className="block text-muted">{t("needsFileHint")}</span></span>
         </label>
 
         <fieldset>
@@ -150,11 +179,11 @@ export function AssignTasks({ tasks, people: allPeople, teams: allTeams, meId, p
                   <p className="font-semibold">{x.title}</p>
                   {x.project && <a href={`/projects/${x.project.id}?tab=tasks`} className="mt-0.5 inline-block rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-muted hover:text-link">{x.project.name}</a>}
                   {x.details && <p className="mt-0.5 text-sm text-muted">{x.details}</p>}
-                  {x.due_on && <p className="mt-1 flex items-center gap-1 text-xs text-muted"><Calendar size={12} /> {dayLabel(x.due_on, locale)}</p>}
+                  <TaskMeta task={x} locale={locale} />
                 </div>
                 <button onClick={() => remove(x.id)} aria-label={t("delete")} className="grid size-9 shrink-0 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-bad-text"><Trash2 size={15} /></button>
               </div>
-              <div className="mt-2"><TaskPeople task={x} /></div>
+              <div className="mt-2"><TaskPeople task={x} openFiles={x.needs_file} /></div>
             </li>
           ))}
           {!tasks.length && <li className="py-8 text-center text-sm text-muted">{t("noneGiven")}</li>}
@@ -179,6 +208,19 @@ export function MyTeamTasks({ tasks, meId }: { tasks: TeamTask[]; meId: string }
     if (error) return toast("error", t("saveError"));
     router.refresh();
   }
+  async function handIn(task: TeamTask, file: File) {
+    setBusy(task.id);
+    const blob = await compressImage(file);
+    const name = blob === file ? file.name : file.name.replace(/\.[^.]+$/, "") + ".jpg";
+    const path = `${meId}/${task.id}/${Date.now()}-${name.replace(/[^\w.-]+/g, "_").slice(-80)}`;
+    const up = await supabase.storage.from("task-files").upload(path, blob, { contentType: blob.type || "application/octet-stream" });
+    const { error } = up.error ? up : await supabase.from("team_task_people")
+      .update({ file_path: path, file_name: name.slice(0, 200), done_at: new Date().toISOString() }).eq("task_id", task.id).eq("user_id", meId);
+    setBusy(null);
+    if (error) return toast("error", up.error ? t("uploadError") : t("saveError"));
+    toast("ok", t("handedIn"));
+    router.refresh();
+  }
   const sorted = [...tasks].sort((a, b) => Number(!!a.people.find((p) => p.id === meId)?.done_at) - Number(!!b.people.find((p) => p.id === meId)?.done_at));
   if (!tasks.length) return null;
   return (
@@ -188,17 +230,32 @@ export function MyTeamTasks({ tasks, meId }: { tasks: TeamTask[]; meId: string }
         {sorted.map((x) => {
           const mine = x.people.find((p) => p.id === meId);
           const done = !!mine?.done_at;
+          const upload = x.needs_file && !done;
           return (
             <li key={x.id} className="flex items-start gap-3 px-5 py-4">
+              {upload ? (
+                <label title={t("uploadToFinish")} className={`mt-0.5 grid size-7 shrink-0 cursor-pointer place-items-center rounded-lg ring-2 ring-brand/60 text-brand transition hover:ring-brand ${busy === x.id ? "pointer-events-none opacity-60" : ""}`}>
+                  {busy === x.id ? <Loader2 size={15} className="animate-spin" /> : <Upload size={15} />}
+                  <input type="file" className="sr-only" aria-label={t("uploadFor", { title: x.title })} disabled={busy === x.id}
+                         onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) handIn(x, f); }} />
+                </label>
+              ) : (
               <button onClick={() => tick(x, !done)} disabled={busy === x.id} role="checkbox" aria-checked={done} aria-label={done ? t("untick", { title: x.title }) : t("tick", { title: x.title })}
                       className={`mt-0.5 grid size-7 shrink-0 place-items-center rounded-lg ring-2 transition ${done ? "bg-ok text-[#06281a] ring-ok" : "ring-line hover:ring-brand"}`}>
                 {done && <Check size={16} strokeWidth={3} />}
               </button>
+              )}
               <div className="min-w-0 flex-1">
                 <p className={`font-semibold ${done ? "text-muted line-through" : ""}`}>{x.title}</p>
                 {x.project && <a href={`/projects/${x.project.id}?tab=tasks`} className="mt-0.5 inline-block rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-muted hover:text-link">{x.project.name}</a>}
                 {x.details && <p className="mt-0.5 text-sm text-muted">{x.details}</p>}
-                {x.due_on && <p className="mt-1 flex items-center gap-1 text-xs text-muted"><Calendar size={12} /> {dayLabel(x.due_on, locale)}</p>}
+                <TaskMeta task={x} locale={locale} />
+                {upload && <p className="mt-1.5 text-xs font-medium text-brand">{t("uploadToFinish")}</p>}
+                {mine?.file_path && (
+                  <button type="button" onClick={() => openTaskFile(mine.file_path!)} className="mt-1.5 flex max-w-full items-center gap-1 text-xs text-muted hover:text-link">
+                    <Paperclip size={12} /> <span className="truncate">{mine.file_name ?? t("openFile")}</span>
+                  </button>
+                )}
                 <div className="mt-2.5"><TaskPeople task={x} /></div>
               </div>
             </li>

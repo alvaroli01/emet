@@ -1,6 +1,6 @@
 ---
 tags: [emet, history]
-updated: 2026-10-22
+updated: 2026-10-23
 ---
 
 # Timeline
@@ -12,7 +12,7 @@ updated: 2026-10-22
 | [[2026-10-15]] | Team tasks, money mountain, week calendar, class demo data |
 | 2026-10-19 → | Brainstorm week: what do we sell? |
 | [[2026-10-21]] | Obsidian vault; demo data removed; leaders set; My Projects, Documents, Google Calendar, Scout v2 + key pool, phone version; project ideas whiteboard |
-| [[2026-10-22]] | Notion step 1, Week/Month on Today, live task pop-ups, Leire joins as Coach (local, not pushed yet) |
+| [[2026-10-22]] | Notion step 1, Week/Month on Today, live task pop-ups, Leire joins as Coach (all live, migrations 0033–0035); first sale €388; new project [[Chinese event (25 Nov)]] with Olin |
 | **June 2027** | 🏁 €30K revenue / €15K profit |
 
 Full detail → [[Changelog]] · Back to [[🏔️ emet Dashboard]]
