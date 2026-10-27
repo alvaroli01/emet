@@ -9,6 +9,7 @@ import { HeaderRecord } from "@/components/camp/header-record";
 import { NotificationsBell } from "@/components/workspace/notifications";
 import { CommandPalette, SearchButton } from "@/components/workspace/command-palette";
 import { DailyBrief } from "@/components/workspace/daily-brief";
+import { Presence } from "@/components/workspace/presence";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("shell");
@@ -38,6 +39,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <BottomNav groups={groups} myGroupId={me.group_id} />
       <CommandPalette />
       <DailyBrief />
+      <Presence />
     </div>
   );
 }

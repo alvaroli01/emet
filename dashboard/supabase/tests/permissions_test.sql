@@ -454,13 +454,15 @@ select t.check('Marketing stores a place', $$insert into scout_places (fingerpri
 select t.check('Marketing saves a lead', $$insert into scout_leads (project_id, place_id, score, fit) select p.id, pl.id, 80, 'strong' from scout_projects p, scout_places pl limit 1$$, 'ok');
 select t.check('Same place cannot be judged twice for a project', $$insert into scout_leads (project_id, place_id) select p.id, pl.id from scout_projects p, scout_places pl limit 1$$, 'denied');
 select t.check('Marketing assigns the lead to Mario', $$update scout_leads set owner_id = (select id from profiles where full_name = 'Mario')$$, 'ok');
+select t.check('Marketing shares its Scout project with the team (private by default since 27 Oct)', $$update scout_projects set shared = true$$, 'ok');
 select t.login(2);  -- Stefan (Finance)
-select t.assert('Everyone sees Scout leads', t.num('select count(*) from scout_leads') = 1);
-select t.check('Finance cannot start searches', $$insert into scout_searches (project_id, country_code, city) select id, 'ES', 'Madrid' from scout_projects limit 1$$, 'denied');
-select t.check('Finance cannot change leads', $$update scout_leads set status = 'won'$$, 'denied');
+select t.assert('Everyone sees a shared Scout project''s leads', t.num('select count(*) from scout_leads') = 1);
+select t.check('Anyone can search in a shared Scout project (28 Oct)', $$insert into scout_searches (project_id, country_code, city) select id, 'ES', 'Madrid' from scout_projects limit 1$$, 'ok');
+select t.check('...but not change its setup', $$update scout_projects set niche = 'x'$$, 'denied');
+select t.check('...and work its leads', $$update scout_leads set status = 'contacted'$$, 'ok');
 select t.login(5);  -- Mario (Comms), owner of the lead
 select t.check('The lead owner moves it along', $$update scout_leads set status = 'contacted'$$, 'ok');
-select t.check('The lead owner cannot hand it to someone else', $$update scout_leads set owner_id = (select id from profiles where full_name = 'Stefan')$$, 'denied');
+select t.check('On a shared project the team can also reassign a lead (28 Oct)', $$update scout_leads set owner_id = (select id from profiles where full_name = 'Stefan')$$, 'ok');
 select t.check('Member runs the council on an idea', $$insert into lab_councils (idea_id) select id from lab_ideas limit 1$$, 'ok');
 select t.login(2);
 select t.check('Others cannot overwrite that council', $$update lab_councils set status = 'failed'$$, 'denied');
@@ -723,4 +725,199 @@ select t.assert('...and it is saved', t.num($$select count(*) from projects wher
 select t.assert('Finance sees projects they are not a member of', t.num($$select count(*) from projects p where name = 'Campus stall' and not exists (select 1 from project_members m where m.project_id = p.id and m.user_id = my_profile_id())$$) = 1);
 select t.login(3);  -- Rocco (Marketing)
 select t.check('Others cannot change the plan', $$update projects set expected_profit = 1 where name = 'Campus stall'$$, 'denied');
+reset role;
+-- ── Presence: "last active" = last time someone had emet open (not only the last logged change) ──
+set role authenticated;
+select t.login(3);  -- Rocco
+select t.check('Opening emet records that I was here', $$select touch_presence()$$, 'ok');
+select t.assert('...once per person', t.num('select count(*) from presence where user_id = my_profile_id()') = 1);
+select t.check('Nobody can fake someone else''s visit', $$insert into presence (user_id, last_seen_at) select id, now() from profiles where full_name = 'Stefan'$$, 'denied');
+select t.check('Nobody can change someone else''s visit', $$update presence set last_seen_at = now() - interval '9 days'$$, 'denied');
+select t.login(2);  -- Stefan
+select t.assert('Team members see when others were last here', t.num('select count(*) from presence') = 1);
+reset role;
+-- ── Points: community points, customer visits, learning points (each person logs their own) ──
+set role authenticated;
+select t.login(3);  -- Rocco
+select t.check('Rocco logs a customer visit', $$insert into member_points (kind, amount, note) values ('visit', 1, 'Café Iruña')$$, 'ok');
+select t.check('...and 2 community points', $$insert into member_points (kind, amount) values ('community', 2)$$, 'ok');
+select t.check('Only the three kinds exist', $$insert into member_points (kind, amount) values ('bonus', 1)$$, 'denied');
+select t.check('No zero or negative points', $$insert into member_points (kind, amount) values ('learning', 0)$$, 'denied');
+select t.check('Nobody logs points for someone else', $$insert into member_points (user_id, kind, amount) select id, 'visit', 1 from profiles where full_name = 'Stefan'$$, 'denied');
+select t.login(2);  -- Stefan
+select t.assert('Everyone sees everyone''s points', t.num($$select coalesce(sum(amount), 0) from member_points p join profiles r on r.id = p.user_id where r.full_name = 'Rocco'$$) = 3);
+select t.check('Others cannot change my points', $$update member_points set amount = 50$$, 'denied');
+select t.check('Others cannot delete my points', $$delete from member_points$$, 'denied');
+select t.login(3);
+select t.check('Rocco fixes his own entry', $$update member_points set amount = 3 where kind = 'community'$$, 'ok');
+select t.check('...and deletes one', $$delete from member_points where kind = 'visit'$$, 'ok');
+reset role;
+-- ── Scout for everyone: anyone can scout their own project; selling teams can scout all ──
+set role authenticated;
+select t.login(2);  -- Stefan (Finance, not a selling team)
+select t.check('Anyone creates their own Scout project', $$insert into scout_projects (title, offer, niche) values ('Stefan idea', 'Bookkeeping help', 'small shops')$$, 'ok');
+select t.assert('...and may scout it', t.num($$select count(*) from scout_projects where title = 'Stefan idea' and can_scout_project(id)$$) = 1);
+select t.check('...starts a search in it', $$insert into scout_searches (project_id, country_code, city) select id, 'ES', 'Bilbao' from scout_projects where title = 'Stefan idea'$$, 'ok');
+select t.check('...saves a place it found', $$insert into scout_places (fingerprint, name) values ('stefan-shop-1', 'Tienda Uno')$$, 'ok');
+select t.check('...and judges it as a lead', $$insert into scout_leads (project_id, place_id, score) select p.id, pl.id, 70 from scout_projects p, scout_places pl where p.title = 'Stefan idea' and pl.fingerprint = 'stefan-shop-1'$$, 'ok');
+select t.check('...renames their own project', $$update scout_projects set title = 'Stefan idea v2' where title = 'Stefan idea'$$, 'ok');
+select t.check('Cannot change someone else''s Scout project', $$update scout_projects set title = 'x' where title = 'Café content'$$, 'denied');
+select t.check('Can search in someone else''s shared Scout project', $$insert into scout_searches (project_id, country_code, city) select id, 'ES', 'Vitoria' from scout_projects where title = 'Café content'$$, 'ok');
+select t.check('...and its search can save leads there', $$insert into scout_leads (project_id, place_id) select p.id, pl.id from scout_projects p, scout_places pl where p.title = 'Café content' and pl.fingerprint = 'stefan-shop-1'$$, 'ok');
+select t.login(7);  -- Leire (coach, no group, not a selling team)
+select t.check('Others cannot change my Scout project', $$update scout_projects set title = 'hijack' where title = 'Stefan idea v2'$$, 'denied');
+select t.check('...nor delete it', $$delete from scout_projects where title = 'Stefan idea v2'$$, 'denied');
+select t.login(2);
+select t.check('Stefan shares his Scout project with the team', $$update scout_projects set shared = true where title = 'Stefan idea v2'$$, 'ok');
+select t.login(3);  -- Rocco (Marketing)
+select t.check('Selling teams work on shared Scout projects', $$update scout_projects set niche = 'shops' where title = 'Stefan idea v2'$$, 'ok');
+reset role;
+
+-- ── Project leads: places people found themselves, visited or not, and how it went ──
+set role authenticated;
+select t.login(1);
+select t.check('Leader adds Rocco to Campus stall', $$insert into project_members (project_id, user_id) select p.id, r.id from projects p, profiles r where p.name = 'Campus stall' and r.full_name = 'Rocco'$$, 'ok');
+select t.login(3);  -- Rocco, project member
+select t.check('A project member adds a place to visit', $$insert into project_places (project_id, name, address) select id, 'Bar Txoko', 'Calle Mayor 3' from projects where name = 'Campus stall'$$, 'ok');
+select t.check('...marks it visited: a yes', $$update project_places set visited_on = current_date, visit_result = 'yes', visit_note = 'Wants 20 units' where name = 'Bar Txoko'$$, 'ok');
+select t.check('Only yes / maybe / no', $$update project_places set visit_result = 'great' where name = 'Bar Txoko'$$, 'denied');
+select t.check('Nobody adds a place for someone else', $$insert into project_places (project_id, name, added_by) select p.id, 'x', r.id from projects p, profiles r where p.name = 'Campus stall' and r.full_name = 'Stefan'$$, 'denied');
+select t.login(6);  -- Emily, not in the project
+select t.assert('Outsiders don''t see the project''s places', t.num('select count(*) from project_places') = 0);
+select t.check('Outsiders cannot add places', $$insert into project_places (project_id, name) select id, 'x' from projects where name = 'Campus stall'$$, 'denied');
+reset role;
+update scout_leads set saved_project_id = (select id from projects where name = 'Campus stall') where place_id = (select id from scout_places where fingerprint = 'stefan-shop-1');
+set role authenticated;
+select t.login(6);
+select t.check('Outsiders cannot mark a Scout lead visited', $$select mark_lead_visit((select id from scout_leads where saved_project_id is not null limit 1), current_date, 'no', null)$$, 'denied');
+select t.login(3);
+select t.check('A project member marks a Scout lead visited: maybe', $$select mark_lead_visit((select id from scout_leads where saved_project_id is not null limit 1), current_date, 'maybe', 'Call back Friday')$$, 'ok');
+select t.assert('...and it is saved', t.num($$select count(*) from scout_leads where visit_result = 'maybe' and visited_on is not null$$) = 1);
+select t.check('...and can undo it', $$select mark_lead_visit((select id from scout_leads where saved_project_id is not null limit 1), null, null, null)$$, 'ok');
+reset role;
+-- ── Points: a file (e.g. the post-mortem) on an entry ──
+set role authenticated;
+select t.login(3);  -- Rocco
+select t.check('Rocco uploads his post-mortem', $$insert into storage.objects (bucket_id, name) values ('point-files', my_profile_id() || '/postmortem.pdf')$$, 'ok');
+select t.check('...and logs community points with it', $$insert into member_points (kind, amount, file_path, file_name) values ('community', 1, my_profile_id() || '/postmortem.pdf', 'postmortem.pdf')$$, 'ok');
+select t.check('A file must be in my own folder', $$insert into member_points (kind, amount, file_path) select 'community', 1, id || '/x.pdf' from profiles where full_name = 'Stefan'$$, 'denied');
+select t.check('Nobody uploads into someone else''s folder', $$insert into storage.objects (bucket_id, name) select 'point-files', id || '/x.pdf' from profiles where full_name = 'Stefan'$$, 'denied');
+select t.login(2);
+select t.assert('Team members can open the post-mortem', t.num($$select count(*) from storage.objects where bucket_id = 'point-files'$$) = 1);
+reset role;
+
+-- ── Scout privacy: new Scout projects are private until shared ──
+set role authenticated;
+select t.login(7);  -- Leire
+select t.check('Leire makes a private Scout project', $$insert into scout_projects (title, offer, niche) values ('Leire secret', 'Coaching', 'startups')$$, 'ok');
+select t.check('...with a search', $$insert into scout_searches (project_id, country_code, city) select id, 'ES', 'Bilbao' from scout_projects where title = 'Leire secret'$$, 'ok');
+select t.check('...and a lead', $$insert into scout_leads (project_id, place_id, score) select p.id, pl.id, 50 from scout_projects p, scout_places pl where p.title = 'Leire secret' and pl.fingerprint = 'stefan-shop-1'$$, 'ok');
+select t.login(3);  -- Rocco (selling team)
+select t.assert('Others don''t see a private Scout project', t.num($$select count(*) from scout_projects where title = 'Leire secret'$$) = 0);
+select t.assert('...nor its searches', t.num($$select count(*) from scout_searches s join scout_projects p on p.id = s.project_id where p.created_by = (select id from profiles where full_name = 'Leire')$$) = 0);
+select t.assert('...nor its leads', t.num($$select count(*) from scout_leads where score = 50$$) = 0);
+select t.check('...nor change it, even a selling team', $$update scout_projects set niche = 'x' where title = 'Leire secret'$$, 'denied');
+select t.login(1);  -- admin
+select t.assert('Private means private, even for admins', t.num($$select count(*) from scout_projects where title = 'Leire secret'$$) = 0);
+select t.login(7);
+select t.check('Leire shares it', $$update scout_projects set shared = true where title = 'Leire secret'$$, 'ok');
+select t.login(3);
+select t.assert('Once shared, the team sees it', t.num($$select count(*) from scout_projects where title = 'Leire secret'$$) = 1);
+select t.assert('...and its leads', t.num($$select count(*) from scout_leads where score = 50$$) = 1);
+reset role;
+
+-- ── Save several Scout leads to a project at once ──
+set role authenticated;
+select t.login(2);  -- Stefan: his Scout project, not a member of Campus stall
+select t.check('Cannot add leads to a project I am not in', $$select save_leads_to_project(array(select id from scout_leads where project_id = (select id from scout_projects where title = 'Stefan idea v2')), (select id from projects where name = 'Campus stall'))$$, 'denied');
+reset role;
+insert into project_members (project_id, user_id) select p.id, r.id from projects p, profiles r where p.name = 'Campus stall' and r.full_name = 'Stefan';
+update scout_leads set saved_project_id = null;
+set role authenticated;
+select t.login(2);
+select t.assert('Stefan adds his leads to Campus stall in one go', (select save_leads_to_project(array(select id from scout_leads where project_id = (select id from scout_projects where title = 'Stefan idea v2')), (select id from projects where name = 'Campus stall'))) = 1);
+select t.check('Can add leads from a shared Scout project to my project', $$select save_leads_to_project(array(select id from scout_leads where score = 50), (select id from projects where name = 'Campus stall'))$$, 'ok');
+select t.login(3);  -- Rocco, Campus stall member
+select t.assert('Project members see the saved leads', t.num($$select count(*) from scout_leads where saved_project_id = (select id from projects where name = 'Campus stall')$$) = 2);
+reset role;
+
+-- ── My board: a personal task board only its owner can see ──
+set role authenticated;
+select t.login(3);  -- Rocco
+select t.assert('Rocco gets his own board', (select my_board()) is not null);
+select t.assert('...the same one every time', (select my_board()) = (select my_board()));
+select t.assert('...with To do, Doing, Done', t.num($$select count(*) from board_lists where board_id = my_board()$$) = 3);
+select t.check('Rocco adds a private task', $$insert into cards (board_id, list_id, title, created_by) select my_board(), id, 'Buy a birthday present', my_profile_id() from board_lists where board_id = my_board() and name = 'To do'$$, 'ok');
+select t.check('...moves it', $$update cards set list_id = (select id from board_lists where board_id = my_board() and name = 'Doing') where title = 'Buy a birthday present'$$, 'ok');
+select t.check('...adds a column', $$insert into board_lists (board_id, name, position) values (my_board(), 'Someday', 9)$$, 'ok');
+select t.check('...can be assigned to it himself', $$insert into card_assignees (card_id, user_id) select id, my_profile_id() from cards where title = 'Buy a birthday present'$$, 'ok');
+select t.check('...but cannot assign anyone else (that would reveal it)', $$insert into card_assignees (card_id, user_id) select c.id, p.id from cards c, profiles p where c.title = 'Buy a birthday present' and p.full_name = 'Stefan'$$, 'denied');
+select t.login(1);  -- admin
+select t.assert('Nobody else sees the task, not even an admin', t.num($$select count(*) from cards where title = 'Buy a birthday present'$$) = 0);
+select t.assert('...nor the board', t.num($$select count(*) from boards b join profiles p on p.id = b.owner_id where p.full_name = 'Rocco'$$) = 0);
+select t.check('...nor change it', $$update cards set title = 'x' where title = 'Buy a birthday present'$$, 'denied');
+select t.assert('...and it never reaches the activity feed', t.num($$select count(*) from activity_log where summary::text like '%birthday%'$$) = 0);
+select t.check('Nobody adds tasks to someone else''s board', $$insert into cards (board_id, list_id, title) select b.id, l.id, 'x' from boards b join board_lists l on l.board_id = b.id join profiles p on p.id = b.owner_id where p.full_name = 'Rocco' limit 1$$, 'denied');
+reset role;
+select t.assert('The weekly report skips private boards', (select count(*) from cards c join boards b on b.id = c.board_id where b.owner_id is null and c.title = 'Buy a birthday present') = 0);
+-- ── Phone notifications (web push) ──
+set role authenticated;
+select t.login(3);  -- Rocco
+select t.check('Rocco turns on phone notifications', $$select save_push_subscription('https://push.example/rocco-1', 'p256', 'auth')$$, 'ok');
+select t.assert('...his phone is saved once', t.num($$select count(*) from push_subscriptions where user_id = my_profile_id()$$) = 1);
+select t.check('Push addresses must be https', $$select save_push_subscription('http://evil.example/x', 'p', 'a')$$, 'denied');
+select t.login(2);  -- Stefan
+select t.assert('Nobody sees someone else''s phones', t.num('select count(*) from push_subscriptions') = 0);
+select t.check('Nobody removes someone else''s phone', $$delete from push_subscriptions$$, 'denied');
+select t.check('Same phone, new person (shared device): it moves to them', $$select save_push_subscription('https://push.example/rocco-1', 'p256', 'auth')$$, 'ok');
+select t.assert('...and is now Stefan''s', t.num('select count(*) from push_subscriptions') = 1);
+select t.check('Stefan turns them off', $$delete from push_subscriptions where endpoint = 'https://push.example/rocco-1'$$, 'ok');
+reset role;
+select t.assert('Phone pushes are only for tasks, projects and deadlines',
+  push_worthy('assigned', '{}') and push_worthy('team_task', '{}') and push_worthy('due_soon', '{}') and push_worthy('project_added', '{}')
+  and push_worthy('project_post', '{"what":"project_files"}') and not push_worthy('project_post', '{"what":"project_links"}') and not push_worthy('card_comment', '{}'));
+-- One day before: team-leader tasks get the reminder too (not only board tasks)
+set role authenticated;
+select t.login(4);  -- Lassi
+select t.check('Leader gives a task due tomorrow', $$insert into team_tasks (title, due_on) values ('Hand in the survey', (now() at time zone 'Europe/Madrid')::date + 1)$$, 'ok');
+select t.check('...to Rocco', $$insert into team_task_people (task_id, user_id) select tt.id, p.id from team_tasks tt, profiles p where tt.title = 'Hand in the survey' and p.full_name = 'Rocco'$$, 'ok');
+reset role;
+select t.assert('The daily job reminds Rocco: 1 day left', (select notify_due_tomorrow()) >= 1);
+select t.assert('...exactly once', (select count(*) from notifications n join profiles p on p.id = n.user_id where p.full_name = 'Rocco' and n.kind = 'due_soon' and n.data->>'title' = 'Hand in the survey') = 1);
+select notify_due_tomorrow();
+select t.assert('...even if the job runs twice', (select count(*) from notifications n join profiles p on p.id = n.user_id where p.full_name = 'Rocco' and n.kind = 'due_soon' and n.data->>'title' = 'Hand in the survey') = 1);
+select t.assert('Push calls with a wrong secret are refused', not check_push_secret('x') and not check_push_secret(repeat('a', 64)));
+set role authenticated;
+select t.login(1);
+select t.check('Members cannot test push secrets', $$select check_push_secret(repeat('a', 64))$$, 'denied');
+reset role;
+-- ── Private Scout projects stay private for searches too ──
+set role authenticated;
+select t.login(7);  -- Leire
+select t.check('Leire makes a second, private Scout project', $$insert into scout_projects (title, offer, niche) values ('Leire private 2', 'x', 'y')$$, 'ok');
+select t.login(2);
+select t.check('Nobody else can search in a private Scout project', $$insert into scout_searches (project_id, country_code, city) select id, 'ES', 'Bilbao' from scout_projects where title = 'Leire private 2'$$, 'denied');
+select t.check('...even knowing its id', $$insert into scout_searches (project_id, country_code, city) select id, 'ES', 'Bilbao' from scout_projects where created_by = (select id from profiles where full_name = 'Leire') and not shared$$, 'denied');
+select t.check('...nor write leads into it', $$insert into scout_leads (project_id, place_id) select p.id, pl.id from scout_projects p, scout_places pl where p.title = 'Leire private 2' and pl.fingerprint = 'stefan-shop-1'$$, 'denied');
+reset role;
+
+-- ── Sunday: everyone learns next week's training leaders ──
+reset role;
+delete from training_leaders;
+insert into training_leaders (week_start, user_id) select '2026-11-02', id from profiles where full_name in ('Lassi', 'Rocco');
+select t.assert('On Sunday everyone is told who leads training next week', (select notify_training_week('2026-11-01')) > 1);
+select t.assert('...with the names', (select count(*) from notifications where kind = 'training_week' and data->>'names' like '%Lassi%' and data->>'names' like '%Rocco%') > 1);
+select t.assert('...once', (select notify_training_week('2026-11-01')) = 0);
+select t.assert('Not on other days', (select notify_training_week('2026-11-02')) = 0);
+select t.assert('Nothing when nobody is set for next week', (select notify_training_week('2026-11-08')) = 0);
+select t.assert('It goes to phones too', push_worthy('training_week', '{}') and push_worthy('training_lead', '{}'));
+set role authenticated;
+select t.login(3);
+select t.check('Members cannot send it', $$select notify_training_week('2026-11-01')$$, 'denied');
+reset role;
+-- ── Scout hook (reason to contact today) is stored with the lead ──
+set role authenticated;
+select t.login(3);
+select t.check('A lead keeps its hook', $$update scout_leads set hook = '{"kind":"hiring","text":"Buscan camarero"}' where saved_project_id is not null$$, 'ok');
+select t.assert('...readable by the team', t.num($$select count(*) from scout_leads where hook->>'kind' = 'hiring'$$) >= 1);
 reset role;

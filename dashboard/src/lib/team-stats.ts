@@ -13,7 +13,7 @@ export type TeamRow = {
 };
 
 type Act = { user_id: string; day: string; group_id: string | null; n: number };
-type CardRow = { id: string; title: string; due_at: string | null; completed_at: string | null; created_at: string; boards: { slug: string; name: string; group_id: string | null; project_id: string | null } | null; card_assignees: { user_id: string }[] };
+type CardRow = { id: string; title: string; due_at: string | null; completed_at: string | null; created_at: string; boards: { slug: string; name: string; group_id: string | null; project_id: string | null; owner_id: string | null } | null; card_assignees: { user_id: string }[] };
 
 /** Active = did something on 3+ different days in 30; somewhat = 1–2 days; inactive = nothing (or never logged in). */
 export const engagement = (activeDays: number, joined: boolean): Engagement => (!joined || !activeDays ? "inactive" : activeDays >= 3 ? "active" : "somewhat");
@@ -21,24 +21,28 @@ export const engagement = (activeDays: number, joined: boolean): Engagement => (
 async function load(since: number) {
   const sb = await createClient();
   const sinceIso = new Date(since).toISOString();
-  const [acts, cards, last] = await Promise.all([
+  const [acts, cards, last, seen] = await Promise.all([
     sb.rpc("team_activity", { since: sinceIso }),
-    sb.from("cards").select("id, title, due_at, completed_at, created_at, boards(slug, name, group_id, project_id), card_assignees!inner(user_id)")
+    sb.from("cards").select("id, title, due_at, completed_at, created_at, boards(slug, name, group_id, project_id, owner_id), card_assignees!inner(user_id)")
       .or(`completed_at.is.null,completed_at.gte.${sinceIso}`).returns<CardRow[]>(),
     sb.from("activity_log").select("user_id, created_at").order("created_at", { ascending: false }).limit(1000),
+    sb.from("presence").select("user_id, last_seen_at"),
   ]);
-  return { acts: ((acts.data ?? []) as Act[]).map((a) => ({ ...a, n: Number(a.n) })), cards: cards.data ?? [], last: last.data ?? [] };
+  return { acts: ((acts.data ?? []) as Act[]).map((a) => ({ ...a, n: Number(a.n) })), cards: (cards.data ?? []).filter((c) => !c.boards?.owner_id), last: last.data ?? [], seen: seen.data ?? [] };
 }
 
 export async function loadTeamTable(people: Profile[], groups: Group[]): Promise<TeamRow[]> {
   const since = Date.now() - 30 * DAY;
-  const { acts, cards, last } = await load(since);
+  const { acts, cards, last, seen } = await load(since);
   return people.filter((p) => p.active).map((p) => {
     const mine = cards.filter((c) => c.card_assignees.some((a) => a.user_id === p.id));
     const inWindow = mine.filter((c) => (c.completed_at && Date.parse(c.completed_at) >= since) || (c.due_at && Date.parse(c.due_at) >= since && Date.parse(c.due_at) <= Date.now()));
     const done = inWindow.filter((c) => c.completed_at).length;
     const days = new Set(acts.filter((a) => a.user_id === p.id).map((a) => a.day)).size;
-    const lastActive = last.find((x) => x.user_id === p.id)?.created_at ?? acts.filter((a) => a.user_id === p.id).map((a) => a.day).sort().at(-1) ?? null;
+    // Newest of: last time they had emet open, last logged change
+    const logged = last.find((x) => x.user_id === p.id)?.created_at ?? acts.filter((a) => a.user_id === p.id).map((a) => a.day).sort().at(-1) ?? null;
+    const opened = seen.find((x) => x.user_id === p.id)?.last_seen_at ?? null;
+    const lastActive = [logged, opened].filter((x): x is string => !!x).sort((a, b) => Date.parse(b) - Date.parse(a))[0] ?? null;
     return {
       id: p.id, name: p.full_name, avatar: p.avatar_url, role: p.role_title, team: groups.find((g) => g.id === p.group_id)?.name ?? null, joined: !!p.user_id,
       status: engagement(days, !!p.user_id), usedApp: days > 0, didTask: done > 0, done, total: inWindow.length, lastActive,
@@ -55,6 +59,8 @@ export type MemberData = {
   projects: { names: string[]; days: { label: string; values: number[] }[] };
   format: { own: number; elsewhere: number };
   due: { id: string; title: string; day: string; href: string; done: boolean }[];
+  /** Their board tasks (open, or finished in the last 60 days) for the to-do and not-on-time lists */
+  tasks: { id: string; title: string; due: string | null; done_at: string | null; href: string }[];
 };
 
 export async function loadMember(person: Profile, groups: Group[], weekStartIso: string, locale: string, companyLabel: string): Promise<MemberData> {
@@ -96,6 +102,7 @@ export async function loadMember(person: Profile, groups: Group[], weekStartIso:
       })),
     },
     format: { own: all ? own / all : 0, elsewhere: all ? 1 - own / all : 0 },
+    tasks: mine.map((c) => ({ id: c.id, title: c.title, due: c.due_at, done_at: c.completed_at, href: href(c) })),
     due: mine.filter((c) => c.due_at).map((c) => ({ id: c.id, title: c.title, day: c.due_at!.slice(0, 10), href: href(c), done: !!c.completed_at }))
       .sort((a, b) => a.day.localeCompare(b.day)),
   };

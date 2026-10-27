@@ -44,7 +44,7 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
   const supabase = useMemo(() => createClient(), []);
   const focus = useFocusTimer(d.today);
   const LIMIT = 6 * 3600;
-  const [view, setView] = useState<"today" | "week">("week");
+  const [view, setView] = useState<"today" | "week">("today");
   const [adding, setAdding] = useState(false);
   const [rem, setRem] = useState({ title: "", time: "", priority: "medium" as "low" | "medium" | "high" });
   const days = Array.from({ length: 5 }, (_, i) => new Date(Date.parse(d.weekStart + "T00:00:00Z") + i * 864e5).toISOString().slice(0, 10));

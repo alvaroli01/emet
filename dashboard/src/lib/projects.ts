@@ -32,8 +32,9 @@ export function daysLeft(endsOn: string | null, today: string): number | null {
   return endsOn ? Math.round((Date.parse(endsOn) - Date.parse(today)) / 864e5) : null;
 }
 
-export function cardHref(card: { id: string; boards?: { group_id: string | null; project_id?: string | null } | null }, slugOf: (gid: string) => string | undefined): string {
+export function cardHref(card: { id: string; boards?: { group_id: string | null; project_id?: string | null; owner_id?: string | null } | null }, slugOf: (gid: string) => string | undefined): string {
   const b = card.boards;
+  if (b?.owner_id) return `/my-tasks?card=${card.id}#my-board`;
   if (b?.project_id) return `/projects/${b.project_id}?tab=tasks&card=${card.id}`;
   const slug = b?.group_id ? slugOf(b.group_id) : undefined;
   return slug ? `/g/${slug}?card=${card.id}` : `/board?card=${card.id}`;

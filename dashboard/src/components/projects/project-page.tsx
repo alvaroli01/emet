@@ -17,7 +17,7 @@ import { ProjectUpdates } from "./project-updates";
 import { ProjectFiles } from "./project-files";
 import { ProjectMoney } from "./project-money";
 import { ProjectIcon } from "./project-icon";
-import { ProjectLeads, type ProjectLead } from "./project-leads";
+import { ProjectLeads, type ProjectLead, type ProjectPlace } from "./project-leads";
 import { AssignTasks, MyTeamTasks } from "@/components/tools/team-tasks";
 import type { TeamTask } from "@/lib/team-tasks";
 
@@ -32,10 +32,10 @@ type Tab = (typeof TABS)[number];
 export const STATUS_STYLE = { planning: "bg-surface-2 text-muted", live: "bg-ok/20 text-ok-text", closed: "bg-line text-muted" } as const;
 
 /** A project's page: header with goal and people, then Overview · Money · Tasks · Links · Files · Updates. */
-export function ProjectPage({ project, memberIds, people, board, viewer, meId, isLeader, money, weeks, links, updates, files, tickTasks, leads, tab, today }: {
+export function ProjectPage({ project, memberIds, people, board, viewer, meId, isLeader, money, weeks, links, updates, files, tickTasks, leads, places, tab, today }: {
   project: Project; memberIds: string[]; people: Member[]; board: BoardData | null; viewer: Viewer; meId: string; isLeader: boolean;
   money: Money; weeks: { week: string; revenue: number }[]; links: ProjectLink[]; updates: ProjectUpdate[]; files: ProjectFile[];
-  tickTasks: TeamTask[]; leads: ProjectLead[]; tab?: string; today: string;
+  tickTasks: TeamTask[]; leads: ProjectLead[]; places: ProjectPlace[]; tab?: string; today: string;
 }) {
   const t = useTranslations("projects");
   const locale = useLocale();
@@ -163,7 +163,7 @@ export function ProjectPage({ project, memberIds, people, board, viewer, meId, i
           {board ? <div className="panel p-3 sm:p-4"><Board data={board} viewer={viewer} /></div> : <p className="panel p-5 text-sm text-muted">{t("noBoard")}</p>}
         </div>
       )}
-      {active === "leads" && <ProjectLeads leads={leads} />}
+      {active === "leads" && <ProjectLeads leads={leads} places={places} projectId={project.id} meId={meId} names={Object.fromEntries(people.map((p) => [p.id, p.full_name]))} today={today} />}
       {active === "links" && <ProjectLinks projectId={project.id} links={links} people={name} meId={meId} isLeader={isLeader} />}
       {active === "files" && <ProjectFiles projectId={project.id} files={files} people={name} meId={meId} isLeader={isLeader} />}
       {active === "updates" && <ProjectUpdates projectId={project.id} updates={updates} people={name} meId={meId} isLeader={isLeader} />}

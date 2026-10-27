@@ -27,7 +27,7 @@
     "ical.js": "^2.2.1",
     "lucide-react": "^1.56.0",
     "motion": "^14.2.0",
-    "next": "15.5.27",
+    "next": "^15.5.28",
     "next-intl": "^4.14.9",
     "next-themes": "^0.4.6",
     "qrcode": "^1.5.4",
@@ -39,6 +39,7 @@
     "tailwind-merge": "^3.3.1",
     "three": "^0.185.1",
     "topojson-client": "^3.1.0",
+    "web-push": "^3.6.7",
     "world-atlas": "^2.0.2"
   },
   "devDependencies": {
@@ -50,9 +51,14 @@
     "@types/react-dom": "^19",
     "@types/three": "^0.185.0",
     "@types/topojson-client": "^3.1.5",
+    "@types/web-push": "^3.6.4",
     "eslint": "^9",
-    "eslint-config-next": "15.5.27",
+    "eslint-config-next": "^15.5.28",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "uuid": "^11.1.1",
+    "postcss": "^8.5.30"
   }
 }

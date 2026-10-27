@@ -258,7 +258,9 @@
       "noDate": "Ohne Datum",
       "done": "Erledigt"
     },
-    "fromNotion": "Aus Notion"
+    "fromNotion": "Aus Notion",
+    "myBoard": "Mein Board",
+    "myBoardHint": "nur du siehst es"
   },
   "group": {
     "names": {
@@ -616,7 +618,7 @@
     "tabs": {
       "week": "Meine Woche",
       "agenda": "Agenda",
-      "docs": "Dokumente",
+      "docs": "Aufgenommene Meetings",
       "ideas": "Ideenwand",
       "vault": "Tresor",
       "notion": "Notion"
@@ -670,7 +672,7 @@
       "empty": "Noch keine Dokumente. Vorlesungsnotizen, Meeting-Notizen, Pläne – leg mit Neu los.",
       "sharedWithYou": "Mit dir geteilt",
       "pickOne": "Öffne ein Dokument oder starte ein neues",
-      "pickOneHint": "Dokumente sind privat, solange du sie nicht teilst.",
+      "pickOneHint": "Aufnahmen und Notizen sind privat, solange du sie nicht teilst.",
       "saving": "Speichern…",
       "notSaved": "Nicht gespeichert",
       "savedAgo": "Gespeichert {when}",
@@ -712,7 +714,16 @@
         "peopleHint": "Nur die Teammitglieder, die du auswählst.",
         "readOnlyNote": "Personen, mit denen du teilst, können lesen und herunterladen, aber nicht bearbeiten."
       },
-      "record": "Notizen aufnehmen"
+      "record": "Notizen aufnehmen",
+      "writeSummary": "Zusammenfassung schreiben",
+      "writingSummary": "Zusammenfassung wird geschrieben…",
+      "summaryWaiting": "Kostenloses KI-Limit erreicht — weiter in {s} s…",
+      "summaryMissing": "Diese Aufnahme hat noch keine Zusammenfassung. Jetzt aus dem Transkript schreiben.",
+      "summaryMissingShared": "Diese Aufnahme hat noch keine Zusammenfassung. Jetzt schreiben — sie wird als deine eigene Kopie gespeichert.",
+      "summaryWritten": "Zusammenfassung geschrieben",
+      "summaryCopied": "Zusammenfassung in deinen Aufgenommenen Meetings gespeichert",
+      "summaryFailed": "Zusammenfassung konnte nicht geschrieben werden. Prüfe deinen Groq-Schlüssel unter Meine Verbindungen und versuche es erneut.",
+      "summaryTitle": "Zusammenfassung"
     },
     "ideas": {
       "saveError": "Speichern fehlgeschlagen. Versuch es nochmal.",
@@ -1095,20 +1106,28 @@
       "idea_comment": "Neuer Kommentar zur Idee „{title}“: {excerpt}",
       "doc_shared": "Ein Dokument wurde mit dir geteilt: „{title}“",
       "design_request": "Neue Designanfrage: „{title}“",
-      "due_soon": "Morgen fällig: „{title}“",
+      "due_soon": "Nur noch 1 Tag, um „{title}“ abzuschließen",
       "report": "Der Bericht dieser Woche ist fertig",
       "team_task": "Neue Aufgabe vom Teamleiter: „{title}“",
       "company_doc": "Neues Firmendokument: „{name}“",
       "project_added": "Du wurdest zum Projekt „{project}“ hinzugefügt",
       "project_post": "Neu in „{project}“: {title}",
-      "training_lead": "Du leitest diese Woche das Training"
+      "training_lead": "Du leitest diese Woche das Training",
+      "training_week": "Nächste Woche leitet {names} das Training"
     },
     "popupTitle": "Neue Aufgabe für dich",
     "popupDue": "Fällig {date}",
     "popupNoDue": "Kein Fälligkeitsdatum",
     "popupOpen": "Öffnen",
     "popupClose": "Schließen",
-    "desktopAlerts": "Desktop-Hinweise für neue Aufgaben einschalten"
+    "phone": {
+      "turnOn": "Handy-Benachrichtigungen einschalten (Aufgaben, Projekte, Dateien, 1 Tag übrig)",
+      "turningOn": "Wird eingeschaltet…",
+      "on": "Handy-Benachrichtigungen sind an",
+      "turnOff": "Ausschalten",
+      "blocked": "Benachrichtigungen für emet sind in den Einstellungen dieses Browsers blockiert.",
+      "iosInstall": "iPhone: Teilen → Zum Home-Bildschirm, emet von dort öffnen und hier Benachrichtigungen einschalten."
+    }
   },
   "palette": {
     "label": "Suchen und fragen",
@@ -1123,7 +1142,7 @@
     "ask": "Frag emet: „{q}“",
     "askHint": "Beantwortet mit den Live-Daten des Teams",
     "thinking": "Ich sehe mir die Daten des Teams an…",
-    "noKey": "Frag emet nutzt dein kostenloses Groq-Konto. Verbinde es im Basislager → Dokumente → Mikrofon oder im Ideenlabor.",
+    "noKey": "Frag emet nutzt dein kostenloses Groq-Konto. Verbinde es im Basislager → Aufgenommene Meetings → Mikrofon oder im Ideenlabor.",
     "askFailed": "Gerade keine Antwort möglich. Versuch es in einer Minute noch einmal.",
     "fromData": "Beantwortet mit emet-HQ-Daten, die du sehen kannst. Prüfe wichtige Zahlen im jeweiligen Tab.",
     "noResults": "Nichts gefunden.",
@@ -1933,7 +1952,7 @@
     "newProject": "Neues Projekt",
     "emptyTitle": "Fang damit an, was du verkaufst und an wen",
     "emptyText": "Beschreibe das Projekt, welche Art von Unternehmen du als Kunden willst und was einen Ort ausschließt. Wähl dann eine Stadt: Scout findet passende Orte, bewertet jeden für dieses Projekt und merkt sie sich, damit nichts doppelt geprüft wird.",
-    "viewOnly": "Customer, Marketing und Admins starten Suchen. Du kannst alle Ergebnisse lesen.",
+    "viewOnly": "Dieses Scout-Projekt gehört jemand anderem – du kannst alle Ergebnisse lesen. Mit Neues Projekt scoutest du deine eigene Idee.",
     "globeLabel": "Globus, der zeigt, wo Scout sucht",
     "examples": {
       "bilbao": "Bilbao · Cafés",
@@ -1985,7 +2004,9 @@
       "fewPlaces": "Nur {n} Orte gefunden – versuch einen größeren Radius",
       "pool": "Nutze die geteilten Schlüssel des Teams ({n} verfügbar)",
       "tokens": "~{tokens}K KI-Tokens verbraucht",
-      "webChecked": "Websuche: {results} Ergebnisse gelesen, die KI nannte {listed} Orte, {n} durch echte Ergebnisse bestätigt"
+      "webChecked": "Websuche: {results} Ergebnisse gelesen, die KI nannte {listed} Orte, {n} durch echte Ergebnisse bestätigt",
+      "widen": "Noch nicht genug – suche in größerem Umkreis ({km} km), {need} fehlen noch",
+      "ranOut": "Keine weiteren Orte im Umkreis von {km} km, bevor {n} erreicht wurden"
     },
     "fit": {
       "strong": "Starker Treffer",
@@ -2032,7 +2053,9 @@
         "ideal_client": "z. B. seit weniger als 3 Jahren offen, gute Bewertungen, schwaches Instagram",
         "must_have": "Hat einen Instagram-Account\nHat Sitzplätze drinnen",
         "deal_breakers": "Teil einer Kette\nArbeitet schon mit einer Agentur"
-      }
+      },
+      "shared": "Mit dem Team teilen",
+      "sharedHint": "Aus: nur du siehst dieses Projekt, seine Suchen und Leads. An: alle sehen sie und Kunden/Marketing können daran arbeiten."
     },
     "leads": {
       "title": "Leads",
@@ -2098,7 +2121,27 @@
       },
       "saveTo": "In Projekt speichern",
       "generalLeads": "Allgemeine Leads (kein Projekt)",
-      "foundTitle": "Was Scout gefunden hat"
+      "foundTitle": "Was Scout gefunden hat",
+      "pickAll": "Alle auswählen",
+      "clearPick": "Auswahl aufheben",
+      "picked": "{count, plural, one {# Lead ausgewählt} other {# Leads ausgewählt}}",
+      "toProject": "Projekt",
+      "addToProject": "Zum Projekt hinzufügen",
+      "addedToProject": "{count, plural, one {# Lead} other {# Leads}} zu {project} hinzugefügt",
+      "addError": "Konnte nicht hinzugefügt werden. Du kannst Leads aus deinen eigenen Scout-Projekten zu Projekten hinzufügen, in denen du bist.",
+      "pickLead": "{name} auswählen",
+      "record": "Bilanz: {yes} von {rated} Orten, die Scout gut oder stark bewertet hat, haben zugesagt{missed, plural, =0 {} one {, und # schlechter bewerteter wurde übersehen} other {, und # schlechter bewertete wurden übersehen}}. Jeder eingetragene Besuch lehrt Scout dazu.",
+      "recordNone": "Bilanz: noch keine Besuche eingetragen. Markiere Besuche in den Leads deines Projekts, dann lernt Scout daraus.",
+      "hookLabel": "Grund für den Kontakt heute",
+      "hooks": {
+        "hiring": "Stellen offen",
+        "new_opening": "Neu eröffnet",
+        "change": "Etwas hat sich geändert",
+        "unhappy_reviews": "Bewertungen verlangen es",
+        "weak_online": "Schwach online",
+        "events": "Steht bevor",
+        "none": "Kein konkretes Signal"
+      }
     },
     "check": {
       "label": "Einen Ort prüfen",
@@ -2112,7 +2155,15 @@
       "needKey": "Verbinde zuerst deinen kostenlosen Groq-Key.",
       "error": "Dieser Ort konnte nicht geprüft werden. Versuch es in einer Minute nochmal."
     },
-    "allOut": "Alle kostenlosen KI-Schlüssel sind vorerst aufgebraucht. Scout macht später weiter – oder früher, wenn jemand einen Schlüssel verleiht oder Mistral verbindet."
+    "allOut": "Alle kostenlosen KI-Schlüssel sind vorerst aufgebraucht. Scout macht später weiter – oder früher, wenn jemand einen Schlüssel verleiht oder Mistral verbindet.",
+    "maxHint": "Scout sucht weiter (mit größerem Umkreis), bis so viele Orte bewertet sind. 1–60.",
+    "sharedBadge": "Geteilt",
+    "privateBadge": "Privat",
+    "sharedBadgeHint": "Das ganze Team sieht dieses Scout-Projekt",
+    "privateBadgeHint": "Nur die Person, die es erstellt hat, sieht dieses Scout-Projekt",
+    "needKeyToRun": "Verbinde deinen kostenlosen Groq-Schlüssel (oben), um die Suche zu starten – einrichten kannst du schon alles.",
+    "signalsLabel": "Gründe für den Kontakt (Scout sucht zuerst danach – du bestätigst sie)",
+    "signalsPlaceholder": "z. B. sucht Personal, veraltete Website"
   },
   "hero": {
     "allClear": "Hier wartet nichts auf dich. Guter Moment, um vorzuarbeiten.",
@@ -2528,7 +2579,7 @@
     "priorities": "Prioritäten",
     "week": "Vergangene Woche",
     "today": "Heute",
-    "docs": "Dokumente",
+    "docs": "Aufgenommene Meetings",
     "dueThisWeek": "Diese Woche fällig",
     "tasks": "Aufgaben",
     "late": "{count, plural, one {# ist überfällig} other {# sind überfällig}}",
@@ -2559,7 +2610,7 @@
     "areaNames": {
       "week": "Meine Woche",
       "agenda": "Kalender",
-      "docs": "Dokumente",
+      "docs": "Aufgenommene Meetings",
       "ideas": "Ideenwand",
       "vault": "Tresor"
     },
@@ -2896,7 +2947,49 @@
     "leads": {
       "hint": "Mit Scout gefundene und in diesem Projekt gespeicherte Orte.",
       "openScout": "Scout öffnen",
-      "empty": "Noch keine Leads. Öffne in Scout einen Lead und wähle dieses Projekt unter „In Projekt speichern“."
+      "empty": "Noch keine Leads. Öffne in Scout einen Lead und wähle dieses Projekt unter „In Projekt speichern“.",
+      "hint2": "Orte zum Besuchen: mit Scout gefunden oder vom Team hinzugefügt. Markiere jeden, wenn du dort warst.",
+      "addPlace": "Ort hinzufügen",
+      "placeName": "Name des Geschäfts",
+      "placeNamePh": "z. B. Bar Txoko",
+      "address": "Adresse",
+      "addressPh": "Straße, Stadt",
+      "contact": "Kontakt",
+      "contactPh": "Telefon, Instagram oder Website",
+      "note": "Notiz",
+      "notePh": "Warum es passt, nach wem fragen",
+      "cancel": "Abbrechen",
+      "save": "Speichern",
+      "added": "{name} hinzugefügt",
+      "saveError": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
+      "filter": "Anzeigen",
+      "filters": {
+        "todo": "Noch nicht besucht",
+        "visited": "Besucht",
+        "all": "Alle"
+      },
+      "foundBy": "Gefunden von {name}",
+      "visitedOn": "Besucht am {date}",
+      "notVisited": "Noch nicht besucht",
+      "results": {
+        "yes": "Ja",
+        "maybe": "Vielleicht",
+        "no": "Nein"
+      },
+      "visitNote": "Wie es lief",
+      "visitNotePh": "Was sie gesagt haben, nächster Schritt",
+      "markVisited": "Als besucht markieren",
+      "undoVisit": "Nicht besucht",
+      "when": "Wann",
+      "howWasIt": "Erfolgreich?",
+      "addPoint": "Auch +1 Kundenbesuch zu meinen Punkten hinzufügen",
+      "saveVisit": "Besuch speichern",
+      "visited": "{name} als besucht markiert",
+      "visitedPoint": "{name} besucht · +1 Kundenbesuch",
+      "confirmDelete": "{name} aus diesem Projekt entfernen?",
+      "delete": "Entfernen",
+      "noneHere": "Nichts in dieser Liste.",
+      "empty2": "Noch keine Orte. Füge ein Geschäft hinzu, das du gefunden hast, oder speichere Leads aus Scout."
     }
   },
   "ai": {
@@ -2993,5 +3086,62 @@
     "addFor": "Leitung für {week} hinzufügen",
     "remove": "{name} entfernen",
     "saveError": "Speichern fehlgeschlagen. Bitte erneut versuchen."
+  },
+  "points": {
+    "title": "Punkte",
+    "deadline": "Ziel bis {date}",
+    "kinds": {
+      "community": "Community-Punkte",
+      "visit": "Kundenbesuche",
+      "learning": "Lernpunkte"
+    },
+    "reached": "Ziel erreicht!",
+    "perWeek": "{n} pro Woche bis zum Ziel",
+    "missed": "Frist vorbei · {left} fehlen",
+    "what": "Was",
+    "amount": "Wie viele",
+    "when": "Wann",
+    "note": "Notiz (optional)",
+    "notePlaceholder": {
+      "community": "z. B. beim Tag der offenen Tür geholfen",
+      "visit": "z. B. Café Iruña, mit dem Inhaber gesprochen",
+      "learning": "z. B. Workshop zu Preisen"
+    },
+    "log": "Eintragen",
+    "logged": "{kind} eingetragen",
+    "history": "Verlauf",
+    "entry": "+{n} {kind}",
+    "delete": "Eintrag löschen",
+    "confirmDelete": "Diesen Eintrag löschen?",
+    "empty": "Noch keine Punkte.",
+    "emptyMe": "Noch nichts eingetragen. Trage oben deine ersten Punkte ein.",
+    "saveError": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
+    "addFile": "Datei (optional) – z. B. das Post-Mortem",
+    "openFile": "Datei öffnen",
+    "uploadError": "Datei konnte nicht hochgeladen werden (max. 10 MB). Bitte erneut versuchen."
+  },
+  "memberTasks": {
+    "todo": "{name} muss noch erledigen",
+    "todoMe": "Du musst noch erledigen",
+    "overdue": "überfällig · {date}",
+    "noDate": "ohne Datum",
+    "todoNone": "Nichts offen. 🎉",
+    "late": "Nicht rechtzeitig erledigt",
+    "lateHint": "Letzte 60 Tage: nach der Frist erledigt oder noch offen nach der Frist.",
+    "finishedLate": "{n, plural, one {# Tag zu spät erledigt} other {# Tage zu spät erledigt}}",
+    "stillOpen": "{n, plural, one {# Tag überfällig} other {# Tage überfällig}}",
+    "lateNone": "Alles rechtzeitig erledigt.",
+    "more": "+ {count} weitere"
+  },
+  "push": {
+    "titles": {
+      "assigned": "Neue Aufgabe",
+      "team_task": "Neue Aufgabe",
+      "due_soon": "⏰ Noch 1 Tag",
+      "project_added": "Neues Projekt",
+      "project_post": "Neue Datei in deinem Projekt",
+      "training_week": "Training nächste Woche",
+      "training_lead": "Du leitest das Training"
+    }
   }
 }

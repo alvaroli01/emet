@@ -3,13 +3,13 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Copy, Download, ExternalLink, Globe2, AtSign, Loader2, MapPin, Phone, Search, Trash2, CheckCircle2, XCircle } from "lucide-react";
+import { Copy, Download, ExternalLink, Globe2, AtSign, Loader2, MapPin, Phone, Search, Trash2, CheckCircle2, XCircle, FolderInput, Lightbulb } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Modal } from "@/components/data-table";
 import { shortDate } from "@/lib/format";
 import type { ScoutLead, ScoutProject } from "./scout";
-import { mapsLink } from "@/lib/scout/core";
+import { mapsLink, trackRecord } from "@/lib/scout/core";
 
 type Person = { id: string; full_name: string };
 const STATUSES = ["new", "contacted", "meeting", "won", "lost", "ignored"] as const;
@@ -24,9 +24,29 @@ export function Leads({ leads, members, canScout, meId, project, onChecked, hasK
   const [status, setStatus] = useState<string>("");
   const [mine, setMine] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
+  // Pick several leads and add them to one of my projects at once
+  const router = useRouter();
+  const toast = useToast();
+  const supabase = useMemo(() => createClient(), []);
+  const [picked, setPicked] = useState<Set<string>>(new Set());
+  const [target, setTarget] = useState(ourProjects[0]?.id ?? "");
+  const [saving, setSaving] = useState(false);
+  const canPick = canScout && ourProjects.length > 0;
+  const toggle = (id: string) => setPicked((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  async function addPicked() {
+    if (!picked.size || !target || saving) return;
+    setSaving(true);
+    const { data, error } = await supabase.rpc("save_leads_to_project", { p_leads: [...picked], p: target });
+    setSaving(false);
+    if (error) return toast("error", t("addError"));
+    toast("ok", t("addedToProject", { count: Number(data ?? picked.size), project: ourProjects.find((x) => x.id === target)?.name ?? "" }));
+    setPicked(new Set()); router.refresh();
+  }
   const shown = leads.filter((l) => (fit === "all" ? true : fit === "worth" ? l.fit === "strong" || l.fit === "good" : l.fit === "maybe" || l.fit === "skip"))
     .filter((l) => !status || l.status === status).filter((l) => !mine || l.owner_id === meId);
   const counts = Object.fromEntries(FITS.map((f) => [f, leads.filter((l) => l.fit === f).length]));
+  // How right Scout has been on this project: visits (yes/no) and won/lost leads
+  const record = trackRecord(leads.map((l) => ({ name: l.place.name, score: l.score, fit: l.fit, status: l.status, visit_result: l.visit_result ?? null, visit_note: l.visit_note ?? null })));
   const lead = leads.find((l) => l.id === open) ?? null;
 
   function exportCsv() {
@@ -41,7 +61,8 @@ export function Leads({ leads, members, canScout, meId, project, onChecked, hasK
     <section className="space-y-3">
       {canScout && <CheckPlace project={project} onDone={(id) => { onChecked(); setOpen(id); }} hasKey={hasKey} />}
       <div className="flex flex-wrap items-center gap-2">
-        <h2 className="mr-auto text-lg font-semibold">{t("title")} <span className="text-sm font-normal text-muted">{t("summary", { strong: counts.strong, good: counts.good, rest: counts.maybe + counts.skip })}</span></h2>
+        <h2 className="mr-auto text-lg font-semibold">{t("title")} <span className="text-sm font-normal text-muted">{t("summary", { strong: counts.strong, good: counts.good, rest: counts.maybe + counts.skip })}</span>
+          <span className="block text-xs font-normal text-muted">{record.rated + record.missed ? t("record", { yes: record.yes, rated: record.rated, missed: record.missed }) : t("recordNone")}</span></h2>
         <div className="flex rounded-xl bg-surface-2 p-1 text-sm" role="tablist" aria-label={t("filter")}>
           {(["worth", "all", "skip"] as const).map((f) => <button key={f} role="tab" aria-selected={fit === f} onClick={() => setFit(f)} className={`rounded-lg px-3 py-1.5 ${fit === f ? "bg-surface font-medium shadow-sm" : "text-muted"}`}>{t(`f.${f}`)}</button>)}
         </div>
@@ -49,13 +70,28 @@ export function Leads({ leads, members, canScout, meId, project, onChecked, hasK
           <option value="">{t("anyStatus")}</option>{STATUSES.map((s) => <option key={s} value={s}>{ts(s)}</option>)}
         </select>
         <label className="flex items-center gap-1.5 text-sm text-muted"><input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} /> {t("mine")}</label>
+        {canPick && shown.length > 0 && <button onClick={() => setPicked(picked.size ? new Set() : new Set(shown.map((l) => l.id)))} className="rounded-xl px-3 py-2 text-sm text-muted hover:bg-surface-2 hover:text-ink">{picked.size ? t("clearPick") : t("pickAll")}</button>}
         {shown.length > 0 && <button onClick={exportCsv} className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm text-muted hover:bg-surface-2 hover:text-ink"><Download size={15} /> CSV</button>}
       </div>
+
+      {picked.size > 0 && (
+        <div className="panel sticky top-16 z-10 flex flex-wrap items-center gap-2 p-3">
+          <span className="text-sm font-medium">{t("picked", { count: picked.size })}</span>
+          <select value={target} onChange={(e) => setTarget(e.target.value)} className="input w-auto py-2 text-sm" aria-label={t("toProject")}>
+            {ourProjects.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}
+          </select>
+          <button onClick={addPicked} disabled={saving} className="flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast disabled:opacity-50">
+            {saving ? <Loader2 size={15} className="animate-spin" /> : <FolderInput size={15} />} {t("addToProject")}
+          </button>
+        </div>
+      )}
 
       {shown.length ? (
         <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {shown.map((l) => (
-            <li key={l.id}>
+            <li key={l.id} className="relative">
+              {canPick && <input type="checkbox" checked={picked.has(l.id)} onChange={() => toggle(l.id)} aria-label={t("pickLead", { name: l.place.name })}
+                                 className="absolute top-3 right-3 z-[1] size-5 accent-[var(--brand)]" />}
               <button onClick={() => setOpen(l.id)} className="panel panel-lift flex h-full w-full flex-col gap-2 p-4 text-left">
                 <div className="flex items-start gap-3">
                   <Dial score={l.score ?? 0} fit={l.fit ?? "maybe"} />
@@ -70,6 +106,7 @@ export function Leads({ leads, members, canScout, meId, project, onChecked, hasK
                     </p>
                   </div>
                 </div>
+                {l.hook && l.hook.kind !== "none" && <p className="flex items-start gap-1.5 text-sm"><Lightbulb size={14} className="mt-0.5 shrink-0 text-climbed" /><span><span className="font-medium">{t(`hooks.${l.hook.kind}`)}:</span> {l.hook.text}</span></p>}
                 {l.attack_with && (l.fit === "strong" || l.fit === "good") ? <p className="text-sm"><span className="text-muted">{t("offer")}</span> {l.attack_with}</p> : l.why && <p className="line-clamp-2 text-sm text-muted">{l.why}</p>}
               </button>
             </li>
@@ -173,6 +210,13 @@ function LeadDetail({ lead, members, canEdit, canScout, meId, onClose, ourProjec
             <p className="flex items-center gap-1.5 font-medium">{lead.worth_it ? <CheckCircle2 size={16} className="text-ok-text" /> : <XCircle size={16} className="text-muted" />}
               {lead.worth_it ? t("worth") : t("notWorth")} <span className={`rounded-full px-2 py-0.5 text-[11px] ${fitTone[lead.fit ?? "maybe"]}`}>{tf(lead.fit ?? "maybe")}</span></p>
             {lead.why && <p className="mt-0.5 text-sm text-muted">{lead.why}</p>}
+            {lead.hook && (
+              <p className="mt-2 flex items-start gap-1.5 rounded-xl bg-surface-2 p-2.5 text-sm">
+                <Lightbulb size={15} className="mt-0.5 shrink-0 text-climbed" />
+                <span><span className="block text-xs text-muted">{t("hookLabel")} · {t(`hooks.${lead.hook.kind}`)}</span>{lead.hook.text}
+                  {lead.hook.url && <a href={lead.hook.url} target="_blank" rel="noopener noreferrer" className="ml-1 text-climbed underline-offset-2 hover:underline"><ExternalLink size={11} className="inline" /></a>}</span>
+              </p>
+            )}
           </div>
         </div>
 

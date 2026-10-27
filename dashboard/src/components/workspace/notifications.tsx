@@ -6,6 +6,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { Bell, UserPlus, MessageSquare, AudioLines, Lightbulb, FileText, Palette, Clock, BarChart3, CheckCheck, ListChecks, X } from "lucide-react";
 import { BodyPortal } from "@/components/body-portal";
 import { isTaskPopup, dueLabel } from "@/lib/task-popup";
+import { PhoneAlerts } from "./phone-alerts";
+import { noteValues } from "@/lib/push";
 import { createClient } from "@/lib/supabase/client";
 import { timeAgo } from "@/lib/format";
 
@@ -25,9 +27,6 @@ export function NotificationsBell({ meId }: { meId: string }) {
   const [items, setItems] = useState<Notification[]>([]);
   const [open, setOpen] = useState(false);
   const [popups, setPopups] = useState<Notification[]>([]); // "you got a task" pop-ups on screen right now
-  // Desktop alerts (while emet is in a background tab) need the browser's permission, asked with one click
-  const [alerts, setAlerts] = useState<NotificationPermission | "unsupported">("unsupported");
-  useEffect(() => { if (typeof window !== "undefined" && "Notification" in window) setAlerts(Notification.permission); }, []);
   const box = useRef<HTMLDivElement>(null);
   const unread = items.filter((n) => !n.read_at).length;
 
@@ -38,19 +37,16 @@ export function NotificationsBell({ meId }: { meId: string }) {
     const ch = supabase.channel(`notifications-${meId}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.${meId}` }, (e) => {
         load();
-        // A new task for me → pop up on screen (and, if allowed, as a system notification while emet is in the background)
+        // A new task for me → pop up on screen (phone/desktop alerts come as push notifications, see PhoneAlerts)
         const n = e.new as Notification | undefined;
         if (e.eventType === "INSERT" && n && isTaskPopup(n)) {
           setPopups((p) => [n, ...p.filter((x) => x.id !== n.id)].slice(0, 3));
           setTimeout(() => setPopups((p) => p.filter((x) => x.id !== n.id)), 9000);
-          if (typeof Notification !== "undefined" && Notification.permission === "granted" && document.hidden) {
-            try { new Notification(t("popupTitle"), { body: n.data.title ?? "", tag: n.id }); } catch { /* not supported */ }
-          }
         }
       })
       .subscribe();
     return () => { supabase.removeChannel(ch); };
-  }, [meId, supabase]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [meId, supabase]);
 
   useEffect(() => {
     if (!open) return;
@@ -76,7 +72,7 @@ export function NotificationsBell({ meId }: { meId: string }) {
   }
 
   const text = (n: Notification) => {
-    const d = { title: n.data.title ?? "", excerpt: n.data.excerpt ?? "", type: n.data.kind ? tk(n.data.kind) : "" };
+    const d = { ...noteValues(n.data), type: n.data.kind ? tk(n.data.kind) : "" };
     return t.has(`kinds.${n.kind}`) ? t(`kinds.${n.kind}`, d) : n.kind;
   };
 
@@ -118,11 +114,7 @@ export function NotificationsBell({ meId }: { meId: string }) {
             <p className="font-semibold">{t("heading")}</p>
             {unread > 0 && <button onClick={readAll} className="flex items-center gap-1 text-xs text-muted hover:text-ink"><CheckCheck size={14} /> {t("readAll")}</button>}
           </div>
-          {alerts === "default" && (
-            <button type="button" onClick={() => Notification.requestPermission().then(setAlerts)} className="flex w-full items-center gap-2 border-b border-line px-4 py-2.5 text-left text-xs text-climbed hover:bg-surface-2/60">
-              <Bell size={13} /> {t("desktopAlerts")}
-            </button>
-          )}
+          <PhoneAlerts />
           <ul className="max-h-[min(70vh,520px)] overflow-y-auto">
             {items.length ? items.map((n) => {
               const Icon = ICON[n.kind] ?? Bell;

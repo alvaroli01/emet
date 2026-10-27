@@ -1,7 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Fail } from "@/lib/lab/ai";
-import { fingerprint, evidenceLevel, applyEvidence, type FoundPlace } from "./core";
+import { fingerprint, evidenceLevel, applyEvidence, scoreWithEvidence, pastOutcomes, type FoundPlace } from "./core";
 import { readSite } from "./web";
 import { judge, webCheck, type Plan, type Project } from "./ai";
 import type { KeyRing } from "@/lib/ai/pool";
@@ -51,12 +51,17 @@ export async function researchAndJudge(sb: SupabaseClient, key: string | KeyRing
       web = { url: "web:search", text_excerpt: "", robots_ok: true };
     }
   }
-  const j = await judge(key, project, plan, { place, pages, webNotes, webSources }, opts.locale);
+  // Learning: how earlier places of this Scout project really went (visits, won/lost) calibrate the judge
+  const { data: past } = await sb.from("scout_leads").select("score, fit, status, visit_result, visit_note, updated_at, scout_places(name)")
+    .eq("project_id", project.id).or("visit_result.not.is.null,status.in.(won,lost)").order("updated_at", { ascending: false }).limit(12);
+  const outcomes = pastOutcomes(((past ?? []) as unknown as { score: number | null; fit: string | null; status: string; visit_result: string | null; visit_note: string | null; scout_places: { name: string } | null }[])
+    .map((r) => ({ ...r, name: r.scout_places?.name ?? "?" })));
+  const j = await judge(key, project, plan, { place, pages, webNotes, webSources, outcomes }, opts.locale);
   if ("error" in j) return j;
   // How much real evidence the verdict rests on; with little, never more than "maybe"
   const evidence = evidenceLevel(pages.length, webSources.length);
   const capped = applyEvidence({ fit: j.fit as "strong" | "good" | "maybe" | "skip", worth_it: j.worth_it }, evidence);
-  const row = { project_id: project.id, place_id: place.id, search_id: opts.searchId, score: j.score, fit: capped.fit, worth_it: capped.worth_it, evidence, why: j.why, attack_with: j.attack_with, approach: capped.fit === "maybe" || capped.fit === "skip" ? null : j.approach, criteria: j.criteria, signals: j.signals };
+  const row = { project_id: project.id, place_id: place.id, search_id: opts.searchId, score: scoreWithEvidence(j.score, evidence), fit: capped.fit, worth_it: capped.worth_it, evidence, why: j.why, attack_with: j.attack_with, approach: capped.fit === "maybe" || capped.fit === "skip" ? null : j.approach, criteria: j.criteria, signals: j.signals, hook: j.hook };
   const { data, error } = await sb.from("scout_leads").upsert(row, { onConflict: "project_id,place_id" }).select("id, score, fit, worth_it").single();
   if (error || !data) return { error: "failed" };
   return { ok: true, lead: data as { id: string; score: number; fit: string; worth_it: boolean }, pages: pages.length };

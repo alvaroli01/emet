@@ -1,6 +1,7 @@
 import "server-only";
 import { call, CONTEXT, LANG, type Fail } from "@/lib/lab/ai";
 import { CRITERIA, normalizeJudgement, parseRelevance, keepRealLinks, verifyWebPlaces, type Judgement } from "./core";
+import { OUTREACH_RULES, SIGNAL_KINDS } from "./signals";
 import type { KeyRing } from "@/lib/ai/pool";
 import { PLAN_MODELS, FIND_MODELS, WEB_MODELS, RELEVANCE_MODELS, JUDGE_MODELS } from "./models";
 import { PLAYBOOKS, PLAYBOOK_KEYS, type PlaybookKey } from "./playbooks";
@@ -94,7 +95,20 @@ Return {"match":[numbers that ARE this kind of business],"not_match":[{"n":numbe
 }
 
 export type Evidence = { place: { name: string; category: string | null; address: string | null; website: string | null; instagram: string | null; phone: string | null; opening_hours: string | null };
-  pages: { url: string; text: string }[]; webNotes: string; webSources: { title: string; url: string }[] };
+  pages: { url: string; text: string }[]; webNotes: string; webSources: { title: string; url: string }[];
+  /** How earlier places of this Scout project really went (visits, won/lost) — calibration examples */
+  outcomes?: string[] };
+
+/** What each 0–10 step means, so the same evidence always gets the same score. */
+const RUBRIC = `Scoring scale — use these anchors exactly:
+need: 0 clearly already solved (they have it, recently, done well) · 3 unknown · 5 plausible from the kind of business only · 7 one concrete sign in the evidence · 10 several concrete signs (e.g. outdated/no website AND reviews complaining about it).
+fit: 0 a deal-breaker or the wrong kind of place · 3 unknown · 5 right kind of place, size unclear · 7 matches the ideal client · 10 textbook ideal client.
+ability_to_pay: 0 closing/struggling · 3 unknown · 5 small but active · 7 busy (many recent reviews, events, staff) · 10 clearly prosperous (several venues, premium prices).
+reachability: 0 no way to reach anyone · 3 only a generic channel · 5 public phone or open-to-visit premises · 7 owner/manager named or active Instagram DMs · 10 we know who decides and how to reach them.
+timing: 0 bad moment (closing, off season) · 3 no reason to act now · 5 general season fit · 7 a recent change (new opening, renovation, new menu) · 10 an explicit current need (hiring, asking for it).
+value_vs_effort: 0 tiny deal for big effort · 5 average · 10 a big deal that students can deliver easily.
+low_risk: 0 chain run from HQ / closed / hostile · 5 unknown · 10 independent, open, friendly.
+Rules: a score above 6 for need, ability_to_pay or timing MUST cite a source URL from the evidence. When unsure between two steps, pick the lower one.`;
 
 /** Short web check of one place (reviews, Instagram activity, news) plus its official links — real search results only. */
 export type WebCheck = { notes: string; sources: { title: string; url: string }[]; links: { website: string | null; instagram: string | null; maps_url: string | null; phone: string | null } };
@@ -127,16 +141,22 @@ export async function judge(key: string | KeyRing, p: Project, plan: Plan | null
     ev.webSources.length ? `Sources: ${ev.webSources.map((s) => s.url).join(" ")}` : "",
   ].filter(Boolean).join("\n").slice(0, 6000);
   const r = await call(key, {
-    reasoning_effort: "low", temperature: 0.2, response_format: { type: "json_object" },
+    reasoning_effort: "medium", temperature: 0.1, response_format: { type: "json_object" },
     messages: [
-      { role: "system", content: `You qualify sales leads for a student startup. Judge ONLY from the evidence given; if something is not in the evidence, say "unknown" and score it 3 (what we cannot show counts against the lead). Never invent facts, reviews or numbers. Be blunt: most places are NOT worth it. Every "source" must be one of the URLs in the evidence. Write all text in ${lang}; write "opener" in the local language of the business. Reply with JSON only.` },
+      { role: "system", content: `You qualify sales leads for a student startup and your scores must be accurate and consistent. Judge ONLY from the evidence given; if something is not in the evidence, say "unknown" and score it 3 (what we cannot show counts against the lead). Never invent facts, reviews or numbers. Be blunt: most places are NOT worth it. Every "source" must be one of the URLs in the evidence. Write all text in ${lang}; write "opener" in the local language of the business. Reply with JSON only.` },
       { role: "user", content: `${CONTEXT}
 
 ${project(p)}
-Signs of need: ${plan?.signals.join("; ") || "(infer)"}
+Signs of need (confirmed by the team — look for these first): ${plan?.signals.join("; ") || "(infer)"}
+Today is ${new Date().toISOString().slice(0, 10)}.
 Deal-breakers: ${plan?.deal_breakers.join("; ") || p.deal_breakers.join("; ") || "(none)"}
 Sales playbook: ${PLAYBOOKS[plan?.playbook ?? "b2b_service"]}
 
+${RUBRIC}
+${ev.outcomes?.length ? `
+WHAT REALLY HAPPENED with earlier places for this same project (learn from it: what made a YES or a NO). Score this place the way these outcomes show, not by general optimism:
+${ev.outcomes.join("\n")}
+` : ""}
 EVIDENCE
 ${evidence}
 
@@ -147,10 +167,13 @@ Return JSON:
   "why": "2 sentences: the honest verdict for THIS project",
   "attack_with": "the smallest first offer that proves value to them (free sample, pilot, specific package) — concrete",
   "signals": [{"text":"evidence-based fact that matters","url":"source url or null"}],
-  "approach": {"channel":"visit | phone | instagram_dm | contact_form | email","opener":"2-3 sentences, specific to them","best_time":"when to go/call, from opening hours","who_to_ask_for":"role","objections":[{"objection":"","answer":""},{"objection":"","answer":""}]}
+  "hook": {"kind":"${SIGNAL_KINDS.join(" | ")}","text":"the ONE strongest reason to contact them today, as found in the evidence","url":"source url or null","date":"YYYY-MM-DD if the evidence dates it, else null"},
+  "approach": {"channel":"visit | phone | instagram_dm | contact_form | email","opener":"2-3 sentences: first sentence states the hook plainly as an observation, then the angle and the smallest next step","best_time":"when to go/call, from opening hours","who_to_ask_for":"role","objections":[{"objection":"","answer":""},{"objection":"","answer":""}]}
 }
 Criteria: need = visibly has the problem we solve; fit = matches ideal client; ability_to_pay; reachability = we can reach a decision-maker; timing = a reason to act now; value_vs_effort = deal value vs effort for students; low_risk = 10 is safe (independent, open, friendly).
-Spain rule: unsolicited commercial email is not allowed even to companies, so prefer visit/phone/Instagram DM/contact form.` },
+Spain rule: unsolicited commercial email is not allowed even to companies, so prefer visit/phone/Instagram DM/contact form.
+
+${OUTREACH_RULES}` },
     ],
   }, JUDGE_MODELS);
   if (!("ok" in r)) return r;

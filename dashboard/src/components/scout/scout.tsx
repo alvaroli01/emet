@@ -13,7 +13,7 @@ import type { GlobePin } from "./globe";
 import { Leads } from "./leads";
 import { AiConnections } from "@/components/camp/ai-connections";
 
-export type ScoutProject = { id: string; title: string; idea_id: string | null; offer: string; niche: string; ideal_client: string | null; must_have: string[]; deal_breakers: string[]; avg_deal_value: number | null;
+export type ScoutProject = { id: string; title: string; idea_id: string | null; offer: string; niche: string; ideal_client: string | null; must_have: string[]; deal_breakers: string[]; avg_deal_value: number | null; created_by?: string | null; shared?: boolean;
   plan: { osm_tags: string[]; web_queries: string[]; signals: string[]; deal_breakers: string[]; playbook: string; summary: string } | null; created_at: string };
 export type LogLine = { at: string; k: string; p?: Record<string, string | number>; url?: string; place_id?: string };
 export type ScoutSearch = { id: string; project_id: string; city: string; country_code: string; lat: number | null; lng: number | null; radius_km: number; status: string; found: number; known: number; researched: number; max_places: number; log: LogLine[]; queue: string[]; created_by: string | null; created_at: string };
@@ -21,7 +21,7 @@ export type ScoutPlace = { id: string; name: string; category: string | null; ad
 export type ScoutLead = { id: string; project_id: string; place_id: string; search_id: string | null; score: number | null; fit: string | null; worth_it: boolean | null; why: string | null; attack_with: string | null;
   approach: { channel: string; opener: string; best_time: string; who_to_ask_for: string; objections: { objection: string; answer: string }[] } | null;
   criteria: { key: string; score: number; why: string; source?: string }[] | null; signals: { text: string; url?: string }[]; status: string; owner_id: string | null; next_step_at: string | null; prospect_id: string | null; created_at: string; place: ScoutPlace;
-  evidence?: "strong" | "some" | "little" | "none" | null; saved_project_id?: string | null };
+  evidence?: "strong" | "some" | "little" | "none" | null; saved_project_id?: string | null; visit_result?: string | null; visit_note?: string | null; hook?: { kind: string; text: string; url?: string; date?: string } | null };
 type Person = { id: string; full_name: string };
 
 const ACTIVE = ["queued", "finding", "filtering", "researching"];
@@ -41,11 +41,14 @@ export function Scout({ projects, searches, leads, members, meId, meName, canSco
   const t = useTranslations("scout");
   const router = useRouter();
   const [projectId, setProjectId] = useState<string | null>(initialProject && projects.some((p) => p.id === initialProject) ? initialProject : projects[0]?.id ?? null);
-  const [editing, setEditing] = useState<ScoutProject | "new" | null>(fromIdea && canScout ? "new" : null);
+  const [editing, setEditing] = useState<ScoutProject | "new" | null>(fromIdea ? "new" : null);
   const [hasKey, setHasKey] = useState(initialKey);
-  // Scout runs on my own key or, without one, on keys teammates lend to Scout
-  const canRun = hasKey || pool.lenders.length > 0;
   const project = projects.find((p) => p.id === projectId) ?? null;
+  // Changing a project's setup: its creator and the selling teams. Searching and working leads: anyone who can see the
+  // project (their own, or a shared one) — 2026-10-28
+  const mine = canScout || (!!project && project.created_by === meId);
+  // Selling teams run on their own key or keys teammates lend to Scout; everyone else on their own key
+  const canRun = hasKey || (canScout && pool.lenders.length > 0);
   const projectLeads = leads.filter((l) => l.project_id === projectId);
   const latest = searches.find((s) => s.project_id === projectId) ?? null;
   const th = useTranslations("hero");
@@ -59,7 +62,7 @@ export function Scout({ projects, searches, leads, members, meId, meName, canSco
         <div className="max-w-2xl">
           <div className="flex flex-wrap items-center gap-3">
             <p className="flex items-center gap-2 text-sm text-muted"><Radar size={15} /> {t("title")}</p>
-            {canScout && <AiConnections />}
+            <AiConnections />
           </div>
           <h1 className="mt-2 text-[clamp(1.6rem,3vw,2.3rem)] leading-[1.08] font-[650] tracking-[-0.02em] text-balance">{th("scout.title", { name: meName })}</h1>
           <p className="mt-1.5 text-[15px] text-muted">{t("intro")}</p>
@@ -76,28 +79,28 @@ export function Scout({ projects, searches, leads, members, meId, meName, canSco
             <select id="scout-project" value={projectId ?? ""} onChange={(e) => setProjectId(e.target.value)} className="input max-w-64 py-2">
               {projects.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}
             </select>
-            {canScout && project && <button onClick={() => setEditing(project)} aria-label={t("editProject")} className="rounded-xl p-2.5 text-muted hover:bg-surface-2 hover:text-ink"><Pencil size={16} /></button>}
-            {canScout && <button onClick={() => setEditing("new")} className="flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("newProject")}</button>}
+            {project && <span className="rounded-full bg-surface-2 px-2 py-1 text-[11px] text-muted" title={project.shared ? t("sharedBadgeHint") : t("privateBadgeHint")}>{project.shared ? t("sharedBadge") : t("privateBadge")}</span>}
+            {mine && project && <button onClick={() => setEditing(project)} aria-label={t("editProject")} className="rounded-xl p-2.5 text-muted hover:bg-surface-2 hover:text-ink"><Pencil size={16} /></button>}
+            <button onClick={() => setEditing("new")} className="flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("newProject")}</button>
           </div>
         )}
       </header>
 
-      {canScout && !canRun && <KeyNotice onConnected={() => setHasKey(true)} />}
+      {!canRun && <KeyNotice onConnected={() => setHasKey(true)} />}
 
       {!project ? (
         <section className="panel grid gap-6 overflow-hidden p-6 md:grid-cols-[1fr_minmax(0,420px)] md:items-center">
           <div>
             <h2 className="text-lg font-semibold">{t("emptyTitle")}</h2>
             <p className="mt-2 max-w-prose text-sm text-muted">{t("emptyText")}</p>
-            {canScout ? <button onClick={() => setEditing("new")} className="mt-4 flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("newProject")}</button>
-              : <p className="mt-4 text-sm text-muted">{t("viewOnly")}</p>}
+            <button onClick={() => setEditing("new")} className="mt-4 flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("newProject")}</button>
           </div>
           <Hero target={null} pins={[]} radiusKm={3} />
         </section>
       ) : (
         <>
-          <Finder key={project.id} project={project} latest={latest} canScout={canScout && canRun} meId={meId} />
-          <Leads leads={projectLeads} members={members} canScout={canScout} meId={meId} project={project} onChecked={() => router.refresh()} hasKey={canRun} ourProjects={ourProjects} />
+          <Finder key={project.id} project={project} latest={latest} canRun={canRun} canSetUp={mine} meId={meId} />
+          <Leads leads={projectLeads} members={members} canScout meId={meId} project={project} onChecked={() => router.refresh()} hasKey={canRun} ourProjects={ourProjects} />
         </>
       )}
 
@@ -114,7 +117,7 @@ function Hero({ target, pins, radiusKm }: { target: { lat: number; lng: number }
 }
 
 /** Search form + live step log, with the globe flying to the city. Drives the server one step at a time. */
-function Finder({ project, latest, canScout, meId }: { project: ScoutProject; latest: ScoutSearch | null; canScout: boolean; meId: string }) {
+function Finder({ project, latest, canRun, canSetUp, meId }: { project: ScoutProject; latest: ScoutSearch | null; canRun: boolean; canSetUp: boolean; meId: string }) {
   const t = useTranslations("scout");
   const locale = useLocale();
   const router = useRouter();
@@ -132,6 +135,8 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
   const [max, setMax] = useState(20);
   const [tags, setTags] = useState<string[]>(project.plan?.osm_tags ?? []);
   const [queries, setQueries] = useState<string[]>(project.plan?.web_queries ?? []);
+  // "You confirm what it looks for": the signs of need the judge looks for first (saved on the project's plan)
+  const [signals, setSignals] = useState<string[]>(project.plan?.signals ?? []);
   const [search, setSearch] = useState<ScoutSearch | null>(latest);
   const [pins, setPins] = useState<GlobePin[]>([]);
   const [waiting, setWaiting] = useState(0);
@@ -191,7 +196,7 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
   // Resume my own unfinished search when the page opens; show others' searches as they run
   useEffect(() => {
     if (latest) refresh(latest.id);
-    if (latest && ACTIVE.includes(latest.status) && latest.created_by === meId && canScout) drive(latest.id);
+    if (latest && ACTIVE.includes(latest.status) && latest.created_by === meId && canRun) drive(latest.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -204,6 +209,7 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
       log: [{ at: new Date().toISOString(), k: "start", p: { city: city.split(",")[0].trim() } }],
     }).select("*").single();
     if (error || !data) return toast("error", t("stepError"));
+    if (canSetUp && project.plan && signals.join("\n") !== project.plan.signals.join("\n")) await supabase.from("scout_projects").update({ plan: { ...project.plan, signals } }).eq("id", project.id);
     setSearch(data as ScoutSearch); setPins([]);
     drive(data.id);
   }
@@ -229,12 +235,12 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
         <form onSubmit={start} className="space-y-3">
           <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-2">
             <label className="block"><span className="mb-0.5 block text-xs text-muted">{t("country")}</span>
-              <select value={country} onChange={(e) => { setCountry(e.target.value); setPicked(null); }} className="input" disabled={!canScout || running}>
+              <select value={country} onChange={(e) => { setCountry(e.target.value); setPicked(null); }} className="input" disabled={running}>
                 {/* Country names come from the runtime: server and browser can word a few differently (e.g. Hong Kong) */}
                 {countries.map(({ c, name }) => <option key={c} value={c} suppressHydrationWarning>{name}</option>)}
               </select></label>
             <label className="relative block"><span className="mb-0.5 block text-xs text-muted">{t("city")}</span>
-              <input value={city} onChange={(e) => { setCity(e.target.value); setPicked(null); setTyped(true); }} onBlur={() => setTimeout(() => setSuggest([]), 150)} placeholder={t("cityPlaceholder")} className="input" disabled={!canScout || running} autoComplete="off" required />
+              <input value={city} onChange={(e) => { setCity(e.target.value); setPicked(null); setTyped(true); }} onBlur={() => setTimeout(() => setSuggest([]), 150)} placeholder={t("cityPlaceholder")} className="input" disabled={running} autoComplete="off" required />
               {suggest.length > 0 && (
                 <ul className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-line bg-solid shadow-lg" role="listbox">
                   {suggest.map((s) => (
@@ -246,22 +252,23 @@ function Finder({ project, latest, canScout, meId }: { project: ScoutProject; la
           </div>
           <div className="grid grid-cols-2 gap-2">
             <label className="block"><span className="mb-0.5 block text-xs text-muted">{t("radiusLabel")}</span>
-              <select value={radius} onChange={(e) => setRadius(Number(e.target.value))} className="input" disabled={!canScout || running}>{[1, 3, 5, 10, 20].map((k) => <option key={k} value={k}>{t("radius", { km: k })}</option>)}</select></label>
+              <select value={radius} onChange={(e) => setRadius(Number(e.target.value))} className="input" disabled={running}>{[1, 3, 5, 10, 20].map((k) => <option key={k} value={k}>{t("radius", { km: k })}</option>)}</select></label>
             <label className="block"><span className="mb-0.5 block text-xs text-muted">{t("maxLabel")}</span>
-              <select value={max} onChange={(e) => setMax(Number(e.target.value))} className="input" disabled={!canScout || running}>{[10, 20, 40].map((k) => <option key={k} value={k}>{t("maxPlaces", { n: k })}</option>)}</select></label>
+              <input type="number" min={1} max={60} value={max} onChange={(e) => setMax(Math.max(1, Math.min(60, Math.round(Number(e.target.value)) || 1)))} className="input" disabled={running} aria-describedby="scout-max-hint" />
+                <span id="scout-max-hint" className="mt-1 block text-xs font-normal text-muted">{t("maxHint")}</span></label>
           </div>
           {project.plan ? (
-            <details className="rounded-xl bg-surface-2/60 p-3 text-sm">
+            <details open className="rounded-xl bg-surface-2/60 p-3 text-sm">
               <summary className="cursor-pointer text-muted">{t("lookingFor")} <span className="text-ink">{project.plan.summary}</span></summary>
-              <Chips label={t("mapTags")} items={tags} onChange={setTags} disabled={!canScout || running} placeholder="amenity=cafe" />
-              <Chips label={t("webQueries", { city: "{city}" })} items={queries} onChange={setQueries} disabled={!canScout || running} placeholder={t("queryPlaceholder", { city: "{city}" })} />
+              <Chips label={t("mapTags")} items={tags} onChange={setTags} disabled={running} placeholder="amenity=cafe" />
+              <Chips label={t("webQueries", { city: "{city}" })} items={queries} onChange={setQueries} disabled={running} placeholder={t("queryPlaceholder", { city: "{city}" })} />
+              <Chips label={t("signalsLabel")} items={signals} onChange={setSignals} disabled={running || !canSetUp} placeholder={t("signalsPlaceholder")} />
             </details>
           ) : <p className="text-xs text-muted">{t("firstRunNote")}</p>}
-          {canScout ? (
-            <button disabled={running || !city.trim()} className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-brand-contrast disabled:opacity-60">
-              {running ? <Loader2 size={15} className="animate-spin" /> : <Search size={15} />} {running ? t("searching") : t("find")}
-            </button>
-          ) : <p className="text-xs text-muted">{t("viewOnly")}</p>}
+          <button disabled={running || !city.trim() || !canRun} className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-brand-contrast disabled:opacity-60">
+            {running ? <Loader2 size={15} className="animate-spin" /> : <Search size={15} />} {running ? t("searching") : t("find")}
+          </button>
+          {!canRun && <p className="text-xs text-muted">{t("needKeyToRun")}</p>}
         </form>
 
         <div className="min-h-0 flex-1">
@@ -313,13 +320,13 @@ function ProjectForm({ project, ideas, fromIdea, onClose, onSaved }: { project: 
   const [v, setV] = useState({
     title: src?.title ?? "", offer: src?.offer ?? "", niche: project?.niche ?? "", ideal_client: project?.ideal_client ?? "",
     must_have: (project?.must_have ?? []).join("\n"), deal_breakers: (project?.deal_breakers ?? []).join("\n"),
-    avg_deal_value: project?.avg_deal_value != null ? String(project.avg_deal_value) : "", idea_id: src?.idea_id ?? "",
+    avg_deal_value: project?.avg_deal_value != null ? String(project.avg_deal_value) : "", idea_id: src?.idea_id ?? "", shared: project?.shared ?? false,
   });
   async function save(e: React.FormEvent) {
     e.preventDefault();
     const lines = (s: string) => s.split("\n").map((x) => x.trim()).filter(Boolean).slice(0, 10);
     const row = { title: v.title.trim(), offer: v.offer.trim(), niche: v.niche.trim(), ideal_client: v.ideal_client.trim() || null, must_have: lines(v.must_have), deal_breakers: lines(v.deal_breakers),
-      avg_deal_value: v.avg_deal_value === "" ? null : Number(v.avg_deal_value), idea_id: v.idea_id || null,
+      avg_deal_value: v.avg_deal_value === "" ? null : Number(v.avg_deal_value), idea_id: v.idea_id || null, shared: v.shared,
       // Changing what we sell or to whom means Scout has to re-think what to search for
       ...(project && (project.offer !== v.offer.trim() || project.niche !== v.niche.trim() || (project.ideal_client ?? "") !== v.ideal_client.trim()) ? { plan: null } : {}) };
     const { data, error } = project ? await supabase.from("scout_projects").update(row).eq("id", project.id).select("id").single() : await supabase.from("scout_projects").insert(row).select("id").single();
@@ -346,6 +353,10 @@ function ProjectForm({ project, ideas, fromIdea, onClose, onSaved }: { project: 
         <div className="grid gap-3 sm:grid-cols-2">{area("must_have", 3)}{area("deal_breakers", 3)}</div>
         <label className="block max-w-48"><span className="mb-0.5 block text-xs text-muted">{tp("avg_deal_value")}</span>
           <input type="number" min="0" step="any" inputMode="decimal" value={v.avg_deal_value} onChange={(e) => setV({ ...v, avg_deal_value: e.target.value })} className="input" /></label>
+        <label className="flex items-start gap-2.5 text-sm">
+          <input type="checkbox" checked={v.shared} onChange={(e) => setV({ ...v, shared: e.target.checked })} className="mt-0.5 size-4 accent-[var(--brand)]" />
+          <span><span className="font-medium">{tp("shared")}</span><span className="block text-xs text-muted">{tp("sharedHint")}</span></span>
+        </label>
         <div className="flex justify-end gap-2"><button type="button" onClick={onClose} className="rounded-xl px-4 py-2 text-sm text-muted">{tp("cancel")}</button>
           <button className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-contrast">{tp("save")}</button></div>
       </form>

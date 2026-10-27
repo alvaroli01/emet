@@ -9,6 +9,7 @@ import { useToast } from "@/components/toast";
 import { shortDate, todayISO } from "@/lib/format";
 import type { Doc } from "./docs";
 import { decodeFile, planPieces, toWav, isSilent, MAX_SECONDS, SAMPLE_RATE } from "@/lib/ai/audio-file";
+import { writeNotesNow } from "@/lib/ai/notes-client";
 
 const CHUNK_MS = 30_000; // text appears every 30 s; each chunk is a standalone file
 type Lang = "auto" | "es" | "en";
@@ -333,13 +334,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     let notes = "";
     if (transcript && mode === "groq") {
       setStatus(t("writingNotes"));
-      for (let attempt = 0; attempt < 4 && !notes; attempt++) {
-        const res = await fetch("/api/notes", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ transcript }) });
-        const data = await res.json().catch(() => ({}));
-        if (res.ok) notes = data.markdown ?? "";
-        else if (data.error === "limit") { setWaitUntil(Date.now() + (data.retryAfter ?? 60) * 1000); await new Promise((r) => setTimeout(r, (data.retryAfter ?? 60) * 1000)); }
-        else break;
-      }
+      notes = (await writeNotesNow(transcript, (ms) => setWaitUntil(Date.now() + ms))) ?? "";
     }
     const mins = Math.max(1, Math.round((fileName.current ? fileSeconds.current * 1000 : Date.now() - startedAt.current) / 60000));
     if (destination) {

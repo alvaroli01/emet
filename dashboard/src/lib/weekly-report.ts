@@ -16,7 +16,8 @@ export async function buildWeeklyReport(db: SupabaseClient, now = Date.now()): P
   const [sales, expenses, cards, blockers, meetings, ideas] = await Promise.all([
     db.from("sales").select("date, amount, cost").returns<Sale[]>(),
     db.from("expenses").select("date, amount").returns<Expense[]>(),
-    db.from("cards").select("board_id, due_at, completed_at").returns<CardLite[]>(),
+    // Team numbers leave out people's own private boards (this job reads everything)
+    db.from("cards").select("board_id, due_at, completed_at, boards!inner(owner_id)").is("boards.owner_id", null).returns<CardLite[]>(),
     db.from("blockers").select("id", { count: "exact", head: true }).eq("status", "open"),
     db.from("meetings").select("id", { count: "exact", head: true }).gte("meeting_date", week).lt("meeting_date", weekEnd),
     db.from("lab_ideas").select("title, score, created_at").gte("created_at", week),

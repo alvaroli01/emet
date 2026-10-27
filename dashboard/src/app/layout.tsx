@@ -13,6 +13,8 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono"
 export const metadata: Metadata = {
   title: "emet HQ",
   description: "emet team dashboard — €30K revenue / €15K profit by June 2027",
+  // Opens full-screen from the iPhone home screen (needed there for phone notifications)
+  appleWebApp: { capable: true, title: "emet", statusBarStyle: "black-translucent" },
 };
 
 export const viewport: Viewport = {

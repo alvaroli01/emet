@@ -28,6 +28,8 @@ export function boardRights(board: BoardData["board"], v: Viewer) {
   // A project board is only reachable by its members (database rule), and every member works on it
   // Project boards: leaders add/remove tasks and columns; the project's people work on them (move, tick, comment)
   if (board.project_id) return { general: false, canEditLists: v.isAdmin, canAdd: v.isAdmin, canEditCard: () => true };
+  // My board (My Tasks): only its owner ever reaches it, and they do everything on it
+  if (board.owner_id) return { general: false, canEditLists: true, canAdd: true, canEditCard: () => true };
   const general = board.group_id === null;
   const groupEdit = v.isAdmin || (!!board.group_id && board.group_id === v.myGroupId);
   return {
@@ -243,7 +245,7 @@ export function Board({ data, viewer }: { data: BoardData; viewer: Viewer }) {
         </DragOverlay>
       </DndContext>
 
-      {viewer.isAdmin && !data.board.project_id && <TrelloPanel board={data.board} members={data.members} />}
+      {viewer.isAdmin && !data.board.project_id && !data.board.owner_id && <TrelloPanel board={data.board} members={data.members} />}
 
       {openCard && (
         <CardDialog card={openCard} lists={lists} members={data.members} groupId={data.board.group_id} viewerId={viewer.meId} trello={data.board.trello_sync_enabled}

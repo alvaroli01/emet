@@ -1,6 +1,6 @@
 ---
 tags: [emet, dashboard]
-updated: 2026-10-22
+updated: 2026-10-24
 ---
 
 # 🏔️ emet — Dashboard
@@ -15,11 +15,12 @@ updated: 2026-10-22
 
 Progress so far: **€388 real revenue** (one sale, Oct; demo numbers removed 21 Oct) → see [[Goal & Money]]
 
-## 🚦 Where we are (22 Oct 2026)
+## 🚦 Where we are (23 Oct 2026)
 - **What we sell:** ❓ not decided — 7 ideas on the whiteboard (events, raffle, cup cover, e-commerce, websites, Sunset Sessions, Chinese project); groups bring a path + one leader per project by Friday → [[Projects & ideas]]
 - **🏮 Chinese event:** Wed 25 Nov, Bilbao — first real event, with visiting Chinese students (planning) → [[Chinese event (25 Nov)]]
 - **Leaders:** ✅ Alvaro (Team Leader), Rocco (Finance), Stefan (Communications), Mario (Customer), Nahuel (Marketing); roles inside groups still open → [[Team structure]]
 - **emet HQ:** ✅ live → [[emet HQ (dashboard)]] · 22 Oct work (Notion, Week/Month, task pop-ups, Coach) is live and its database updates are applied; Notion still needs its app keys
+- **New (23 Oct, live):** Finance → Subscriptions · [[Team tasks]] can need a file to finish · daily pop-up with your tasks · training leaders per week (26 Oct = Mario & Rocco)
 - **Coach:** Leire has a Coach role in emet HQ (22 Oct) → [[Who's who]]
 - **Uni:** Finance Block 1 validation Thu 29 Oct → [[LEINN calendar]]
 - **Demo data:** ✅ removed on 21 Oct
@@ -39,11 +40,11 @@ Progress so far: **€388 real revenue** (one sale, Oct; demo numbers removed 21
 ## 🧩 Systems at a glance
 | System | Status |
 |---|---|
-| [[Today]] | ✅ Live · Week/Month switch (22 Oct, local) |
+| [[Today]] | ✅ Live · Week/Month switch (22 Oct) · daily pop-up (23 Oct) |
 | [[Overview (company dashboard)]] | ✅ Live |
-| [[Task boards]] (6) + [[Team tasks]] | ✅ Live |
+| [[Task boards]] (6) + [[Team tasks]] | ✅ Live · file-required tasks + training leaders (23 Oct) |
 | [[Base camp]] + note-taker | ✅ Live |
-| [[Finance tab]] | ✅ Live · Google Sheet waits |
+| [[Finance tab]] | ✅ Live · Subscriptions (23 Oct) · Google Sheet waits |
 | [[Marketing section]] | ✅ Live · Instagram later |
 | [[Idea lab]] + [[Idea lab council]] | ✅ Live |
 | [[Scout (lead finder)]] | ✅ v2 + shared key pool |
@@ -65,8 +66,8 @@ tag:#open
 Full list → [[Open questions]]
 
 ## 🕒 Latest changes
+- **2026-10-23** — Finance Subscriptions, tasks that need a file, daily pop-up, training leaders (live, 0036–0037); Chinese event venue + product review → [[2026-10-23]]
 - **2026-10-22 (evening)** — New project: [[Chinese event (25 Nov)]] in Bilbao
 - **2026-10-22** — [[Notion]] step 1, Week/Month on [[Today]], live task pop-ups, Leire as Coach (live); vault synced with the repo → [[2026-10-22]]
 - **2026-10-21** — Demo data removed, leaders set, [[My Projects]], [[Documents]], [[Google Calendar]], Scout v2 + key pool, [[Phone version]], project ideas whiteboard → [[2026-10-21]]
 - **2026-10-15** — Week calendar on Today, wellness waves, gold money mountain, Demo numbers switch, [[Team tasks]], `[DEMO]` class data → [[2026-10-15]]
-- **2026-10-14** — Online, many redesigns ending in "emet glass", Finance, Marketing, Idea lab, Scout, Meeting log, backups → [[2026-10-14]]

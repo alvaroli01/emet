@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
-  Plus, Search, Mic, Pin, PinOff, Trash2, Download, Share2, Bold, Heading1, Heading2, List, ListChecks, Eye, PenLine, ArrowLeft, Users, Lock, FileText,
+  Plus, Search, Mic, Pin, PinOff, Trash2, Download, Share2, Bold, Heading1, Heading2, List, ListChecks, Eye, PenLine, ArrowLeft, Users, Lock, FileText, Sparkles, Loader2,
 } from "lucide-react";
 import { SaveToNotion } from "@/components/notion/save-to-notion";
 import { createClient } from "@/lib/supabase/client";
@@ -14,6 +14,8 @@ import { shortDate, todayISO, timeAgo } from "@/lib/format";
 import type { Member } from "@/lib/boards";
 import { Recorder } from "./recorder";
 import { AudioPlayer } from "./audio-player";
+import { writeNotesNow } from "@/lib/ai/notes-client";
+import { missingNotes, withNotes } from "@/lib/ai/doc-notes";
 
 export type Doc = {
   id: string; owner_id: string; title: string; body: string; kind: "note" | "meeting"; pinned: boolean; tags: string[];
@@ -52,6 +54,18 @@ export function DocsTab({ mine, shared, members, meId, ai, initialOpen }: { mine
     const { id, title: tt, doc_date } = doc;
     const { error } = await supabase.from("docs").insert({ id, title: tt, doc_date });
     if (error) { setDocs((d) => d.filter((x) => x.id !== doc.id)); setOpenId(null); toast("error", t("saveError")); }
+  }
+
+  // Someone a recording was shared with wrote its summary: it becomes their own doc (they can't edit the original)
+  async function saveCopy(copy: { title: string; body: string }) {
+    const now = new Date().toISOString();
+    const doc: Doc = { id: crypto.randomUUID(), owner_id: meId, title: copy.title.slice(0, 200), body: copy.body, kind: "meeting", pinned: false, tags: [],
+      share_all: false, shared_with: [], doc_date: todayISO(), created_at: now, updated_at: now };
+    const { error } = await supabase.from("docs").insert({ id: doc.id, title: doc.title, body: doc.body, kind: doc.kind, doc_date: doc.doc_date });
+    if (error) return toast("error", t("saveError"));
+    setDocs((d) => [doc, ...d]);
+    setOpenId(doc.id);
+    toast("ok", t("summaryCopied"));
   }
 
   const update = (id: string, patch: Partial<Doc>) => setDocs((d) => d.map((x) => (x.id === id ? { ...x, ...patch, updated_at: new Date().toISOString() } : x)));
@@ -117,7 +131,7 @@ export function DocsTab({ mine, shared, members, meId, ai, initialOpen }: { mine
       </aside>
 
       {open ? (
-        <Editor key={open.id} doc={open} canEdit={open.owner_id === meId} members={members} meId={meId} ownerName={names[open.owner_id]?.full_name}
+        <Editor key={open.id} doc={open} canEdit={open.owner_id === meId} onCopy={saveCopy} members={members} meId={meId} ownerName={names[open.owner_id]?.full_name}
                 onBack={() => setOpenId(null)} onChange={(p) => update(open.id, p)} onDelete={() => remove(open)} />
       ) : (
         <div className="panel hidden place-items-center p-10 text-center lg:grid">
@@ -152,9 +166,9 @@ function DocRow({ d, active, onOpen, locale, owner }: { d: Doc; active: boolean;
   );
 }
 
-function Editor({ doc, canEdit, members, meId, ownerName, onBack, onChange, onDelete }: {
+function Editor({ doc, canEdit, members, meId, ownerName, onBack, onChange, onDelete, onCopy }: {
   doc: Doc; canEdit: boolean; members: Member[]; meId: string; ownerName?: string;
-  onBack: () => void; onChange: (p: Partial<Doc>) => void; onDelete: () => void;
+  onBack: () => void; onChange: (p: Partial<Doc>) => void; onDelete: () => void; onCopy: (copy: { title: string; body: string }) => void;
 }) {
   const t = useTranslations("camp.docs");
   const locale = useLocale();
@@ -180,6 +194,20 @@ function Editor({ doc, canEdit, members, meId, ownerName, onBack, onChange, onDe
     }, 700);
   }
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+
+  // A recording whose notes couldn't be written: write them again from the saved transcript
+  const transcript = useMemo(() => missingNotes(body), [body]);
+  const [writing, setWriting] = useState<string | null>(null);
+  async function writeSummary() {
+    if (!transcript || writing) return;
+    setWriting(t("writingSummary"));
+    const notes = await writeNotesNow(transcript, (ms) => setWriting(t("summaryWaiting", { s: Math.ceil(ms / 1000) })));
+    setWriting(null);
+    if (!notes) return toast("error", t("summaryFailed"));
+    const next = withNotes(body, notes);
+    if (canEdit) { setBody(next); persist({ body: next }); setPreview(true); toast("ok", t("summaryWritten")); }
+    else onCopy({ title: `${doc.title} · ${t("summaryTitle")}`, body: next });
+  }
 
   // Grow the writing area with its content, like a document page
   useEffect(() => {
@@ -278,6 +306,15 @@ function Editor({ doc, canEdit, members, meId, ownerName, onBack, onChange, onDe
           <button onClick={() => setPreview((p) => !p)}
                   className="ml-auto flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-ink">
             {preview ? <><PenLine size={15} /> {t("edit")}</> : <><Eye size={15} /> {t("read")}</>}
+          </button>
+        </div>
+      )}
+
+      {transcript && (
+        <div className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl bg-brand/10 p-3.5 ring-1 ring-brand/30">
+          <p className="min-w-0 flex-1 text-sm">{canEdit ? t("summaryMissing") : t("summaryMissingShared")}</p>
+          <button onClick={writeSummary} disabled={!!writing} className="flex min-h-10 items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold text-white disabled:opacity-70">
+            {writing ? <Loader2 size={15} className="animate-spin" /> : <Sparkles size={15} />} {writing ?? t("writeSummary")}
           </button>
         </div>
       )}

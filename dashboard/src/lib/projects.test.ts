@@ -40,3 +40,7 @@ test("task links open the right place", () => {
   assert.equal(cardHref({ id: "c", boards: { group_id: "g1" } }, slug), "/g/finance?card=c");
   assert.equal(cardHref({ id: "c", boards: { group_id: null } }, slug), "/board?card=c");
 });
+
+test("a task on someone's own board links to My Tasks", () => {
+  assert.equal(cardHref({ id: "c1", boards: { group_id: null, project_id: null, owner_id: "me" } }, () => "x"), "/my-tasks?card=c1#my-board");
+});

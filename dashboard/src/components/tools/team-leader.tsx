@@ -20,13 +20,14 @@ export async function TeamLeaderTools(props: ToolProps): Promise<ToolTab[]> {
     supabase.from("meeting_notes").select("*").order("meeting_date", { ascending: false }).returns<Row[]>(),
     supabase.from("outreach").select("*").order("updated_at", { ascending: false }).returns<Row[]>(),
     supabase.from("cards").select("board_id, due_at, completed_at").returns<CardLite[]>(),
-    supabase.from("boards").select("id, group_id"),
+    supabase.from("boards").select("id, group_id").is("owner_id", null),
     supabase.from("blockers").select("group_id").eq("status", "open"),
     supabase.from("training_leaders").select("week_start, user_id").gte("week_start", mondayOf(today)).order("created_at"),
   ]);
 
   const boardGroup = new Map((boards.data ?? []).map((b) => [b.id as string, b.group_id as string | null]));
-  const allCards = cards.data ?? [];
+  // Team numbers leave out people's own private boards
+  const allCards = (cards.data ?? []).filter((c) => boardGroup.has(c.board_id));
   const teamWide = onTimeRate(allCards);
   const perGroup = [
     { key: "general", label: `🏢 ${t("leader.general")}`, cards: allCards.filter((c) => boardGroup.get(c.board_id) === null), blockers: 0 },

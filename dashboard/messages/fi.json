@@ -258,7 +258,9 @@
       "noDate": "Ei määräpäivää",
       "done": "Valmiit"
     },
-    "fromNotion": "Notionista"
+    "fromNotion": "Notionista",
+    "myBoard": "Oma taulu",
+    "myBoardHint": "vain sinä näet sen"
   },
   "group": {
     "names": {
@@ -616,7 +618,7 @@
     "tabs": {
       "week": "Viikkoni",
       "agenda": "Kalenteri",
-      "docs": "Dokumentit",
+      "docs": "Tallennetut kokoukset",
       "ideas": "Ideaseinä",
       "vault": "Holvi",
       "notion": "Notion"
@@ -670,7 +672,7 @@
       "empty": "Ei vielä dokumentteja. Luentomuistiinpanot, palaverimuistiot, suunnitelmat – aloita uusi painamalla Uusi.",
       "sharedWithYou": "Sinulle jaetut",
       "pickOne": "Avaa dokumentti tai aloita uusi",
-      "pickOneHint": "Dokumentit ovat yksityisiä, ellet jaa niitä.",
+      "pickOneHint": "Tallenteet ja muistiinpanot ovat yksityisiä, ellet jaa niitä.",
       "saving": "Tallennetaan…",
       "notSaved": "Ei tallennettu",
       "savedAgo": "Tallennettu {when}",
@@ -712,7 +714,16 @@
         "peopleHint": "Vain valitsemasi tiimikaverit.",
         "readOnlyNote": "Henkilöt, joille jaat, voivat lukea ja ladata, mutta eivät muokata."
       },
-      "record": "Nauhoita muistiinpanot"
+      "record": "Nauhoita muistiinpanot",
+      "writeSummary": "Kirjoita yhteenveto",
+      "writingSummary": "Kirjoitetaan yhteenvetoa…",
+      "summaryWaiting": "Ilmaisen tekoälyn raja täynnä — jatkuu {s} s kuluttua…",
+      "summaryMissing": "Tällä tallenteella ei ole vielä yhteenvetoa. Kirjoita se nyt litteroinnista.",
+      "summaryMissingShared": "Tällä tallenteella ei ole vielä yhteenvetoa. Kirjoita se nyt — se tallennetaan omaksi kopioksesi.",
+      "summaryWritten": "Yhteenveto kirjoitettu",
+      "summaryCopied": "Yhteenveto tallennettu Tallennettuihin kokouksiisi",
+      "summaryFailed": "Yhteenvetoa ei voitu kirjoittaa. Tarkista Groq-avaimesi kohdassa Omat yhteydet ja yritä uudelleen.",
+      "summaryTitle": "yhteenveto"
     },
     "ideas": {
       "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
@@ -1095,20 +1106,28 @@
       "idea_comment": "Uusi kommentti ideaan ”{title}”: {excerpt}",
       "doc_shared": "Dokumentti jaettiin sinulle: ”{title}”",
       "design_request": "Uusi suunnittelupyyntö: ”{title}”",
-      "due_soon": "Erääntyy huomenna: ”{title}”",
+      "due_soon": "Enää 1 päivä aikaa saada ”{title}” valmiiksi",
       "report": "Tämän viikon raportti on valmis",
       "team_task": "Uusi tehtävä tiimin vetäjältä: “{title}”",
       "company_doc": "Uusi yrityksen dokumentti: ”{name}”",
       "project_added": "Sinut lisättiin projektiin ”{project}”",
       "project_post": "Uutta projektissa ”{project}”: {title}",
-      "training_lead": "Vedät treenit tällä viikolla"
+      "training_lead": "Vedät treenit tällä viikolla",
+      "training_week": "Ensi viikon treenit vetää {names}"
     },
     "popupTitle": "Uusi tehtävä sinulle",
     "popupDue": "Määräaika {date}",
     "popupNoDue": "Ei määräaikaa",
     "popupOpen": "Avaa",
     "popupClose": "Sulje",
-    "desktopAlerts": "Ota työpöytäilmoitukset käyttöön uusille tehtäville"
+    "phone": {
+      "turnOn": "Ota puhelinilmoitukset käyttöön (tehtävät, projektit, tiedostot, 1 päivä jäljellä)",
+      "turningOn": "Otetaan käyttöön…",
+      "on": "Puhelinilmoitukset ovat päällä",
+      "turnOff": "Poista käytöstä",
+      "blocked": "emetin ilmoitukset on estetty tämän selaimen asetuksissa.",
+      "iosInstall": "iPhone: Jaa → Lisää Koti-valikkoon, avaa emet sieltä ja ota ilmoitukset käyttöön täällä."
+    }
   },
   "palette": {
     "label": "Hae ja kysy",
@@ -1123,7 +1142,7 @@
     "ask": "Kysy emetiltä: ”{q}”",
     "askHint": "Vastaus tiimin reaaliaikaisesta datasta",
     "thinking": "Katson tiimin dataa…",
-    "noKey": "Kysy emetiltä käyttää ilmaista Groq-tiliäsi. Yhdistä se Perusleirissä → Dokumentit → mikrofoni tai Ideapajassa.",
+    "noKey": "Kysy emetiltä käyttää ilmaista Groq-tiliäsi. Yhdistä se Perusleirissä → Tallennetut kokoukset → mikrofoni tai Ideapajassa.",
     "askFailed": "Vastaaminen ei onnistunut nyt. Yritä minuutin kuluttua uudelleen.",
     "fromData": "Vastaus perustuu emet HQ:n dataan, jonka voit nähdä. Tarkista tärkeät luvut niiden omalta välilehdeltä.",
     "noResults": "Mitään ei löytynyt.",
@@ -1933,7 +1952,7 @@
     "newProject": "Uusi projekti",
     "emptyTitle": "Aloita siitä, mitä myyt ja kenelle",
     "emptyText": "Kuvaile projekti, millaisia yrityksiä haluat asiakkaiksi ja mikä sulkee paikan pois. Valitse sitten kaupunki: Scout löytää sopivat paikat, arvioi jokaisen tätä projektia varten ja muistaa ne, jotta mitään ei tarkisteta kahdesti.",
-    "viewOnly": "Customer, Marketing ja adminit ajavat hakuja. Sinä voit lukea kaikki tulokset.",
+    "viewOnly": "Tämä Scout-projekti on jonkun muun – voit lukea kaikki tulokset. Tee oma ideasi kohdasta Uusi projekti.",
     "globeLabel": "Karttapallo, joka näyttää missä Scout hakee",
     "examples": {
       "bilbao": "Bilbao · kahvilat",
@@ -1985,7 +2004,9 @@
       "fewPlaces": "Vain {n} paikkaa – kokeile isompaa sädettä",
       "pool": "Käytetään tiimin jaettuja avaimia ({n} käytettävissä)",
       "tokens": "Käytetty ~{tokens}K tekoälytokenia",
-      "webChecked": "Verkkohaku: {results} tulosta luettu, tekoäly nimesi {listed} paikkaa, {n} vahvistettu oikeista tuloksista"
+      "webChecked": "Verkkohaku: {results} tulosta luettu, tekoäly nimesi {listed} paikkaa, {n} vahvistettu oikeista tuloksista",
+      "widen": "Ei vielä tarpeeksi — haetaan laajemmalta alueelta ({km} km), {need} vielä arvioitavana",
+      "ranOut": "Paikat loppuivat {km} km säteellä ennen kuin {n} saavutettiin"
     },
     "fit": {
       "strong": "Vahva osuma",
@@ -2032,7 +2053,9 @@
         "ideal_client": "esim. auki alle 3 vuotta, hyvät arvostelut, heikko Instagram",
         "must_have": "Onko Instagram-tili\nOn istumapaikkoja sisällä",
         "deal_breakers": "Osa ketjua\nTyöskentelee jo toimiston kanssa"
-      }
+      },
+      "shared": "Jaa tiimin kanssa",
+      "sharedHint": "Pois: vain sinä näet tämän projektin, sen haut ja liidit. Päällä: kaikki näkevät ne ja Asiakkaat/Markkinointi voivat työstää sitä."
     },
     "leads": {
       "title": "Liidit",
@@ -2098,7 +2121,27 @@
       },
       "saveTo": "Tallenna projektiin",
       "generalLeads": "Yleiset liidit (ei projektia)",
-      "foundTitle": "Mitä Scout löysi"
+      "foundTitle": "Mitä Scout löysi",
+      "pickAll": "Valitse kaikki",
+      "clearPick": "Tyhjennä valinta",
+      "picked": "{count, plural, one {# liidi valittu} other {# liidiä valittu}}",
+      "toProject": "Projekti",
+      "addToProject": "Lisää projektiin",
+      "addedToProject": "{count, plural, one {# liidi lisätty} other {# liidiä lisätty}} projektiin {project}",
+      "addError": "Lisääminen epäonnistui. Voit lisätä liidejä omista Scout-projekteistasi projekteihin, joissa olet mukana.",
+      "pickLead": "Valitse {name}",
+      "record": "Tulos: {yes}/{rated} paikasta, jotka Scout arvioi hyviksi tai vahvoiksi, sanoi kyllä{missed, plural, =0 {} one {, ja # alemmaksi arvioitu jäi huomaamatta} other {, ja # alemmaksi arvioitua jäi huomaamatta}}. Jokainen kirjattu käynti opettaa sitä.",
+      "recordNone": "Tulos: ei vielä kirjattuja käyntejä. Merkitse käynnit projektisi Liideihin, niin Scout oppii niistä.",
+      "hookLabel": "Syy ottaa yhteyttä tänään",
+      "hooks": {
+        "hiring": "Rekrytoi",
+        "new_opening": "Juuri avattu",
+        "change": "Jotain muuttui",
+        "unhappy_reviews": "Arvostelut pyytävät sitä",
+        "weak_online": "Heikko verkossa",
+        "events": "Tulossa",
+        "none": "Ei selvää signaalia"
+      }
     },
     "check": {
       "label": "Tarkista paikka",
@@ -2112,7 +2155,15 @@
       "needKey": "Yhdistä ensin ilmainen Groq-avaimesi.",
       "error": "Paikkaa ei voitu tarkistaa. Yritä uudelleen minuutin päästä."
     },
-    "allOut": "Kaikki ilmaiset tekoälyavaimet on käytetty toistaiseksi. Scout jatkaa myöhemmin – tai aiemmin, jos joku lainaa avaimen tai yhdistää Mistralin."
+    "allOut": "Kaikki ilmaiset tekoälyavaimet on käytetty toistaiseksi. Scout jatkaa myöhemmin – tai aiemmin, jos joku lainaa avaimen tai yhdistää Mistralin.",
+    "maxHint": "Scout jatkaa hakua (aluetta laajentaen), kunnes näin monta paikkaa on arvioitu. 1–60.",
+    "sharedBadge": "Jaettu",
+    "privateBadge": "Yksityinen",
+    "sharedBadgeHint": "Koko tiimi näkee tämän Scout-projektin",
+    "privateBadgeHint": "Vain tekijä näkee tämän Scout-projektin",
+    "needKeyToRun": "Yhdistä ilmainen Groq-avaimesi (yllä) aloittaaksesi haun – voit jo valmistella kaiken.",
+    "signalsLabel": "Syyt ottaa yhteyttä (Scout etsii näitä ensin – sinä vahvistat ne)",
+    "signalsPlaceholder": "esim. rekrytoi, vanhentunut verkkosivu"
   },
   "hero": {
     "allClear": "Täällä ei ole mitään odottamassa sinua. Hyvä hetki ottaa ennakkoa.",
@@ -2528,7 +2579,7 @@
     "priorities": "Prioriteetit",
     "week": "Kulunut viikko",
     "today": "Tänään",
-    "docs": "Dokumentit",
+    "docs": "Tallennetut kokoukset",
     "dueThisWeek": "Erääntyy tällä viikolla",
     "tasks": "tehtävää",
     "late": "{count, plural, one {# on myöhässä} other {# on myöhässä}}",
@@ -2559,7 +2610,7 @@
     "areaNames": {
       "week": "Viikkoni",
       "agenda": "Kalenteri",
-      "docs": "Dokumentit",
+      "docs": "Tallennetut kokoukset",
       "ideas": "Ideaseinä",
       "vault": "Holvi"
     },
@@ -2896,7 +2947,49 @@
     "leads": {
       "hint": "Scoutilla löydetyt ja tähän projektiin tallennetut paikat.",
       "openScout": "Avaa Scout",
-      "empty": "Ei vielä liidejä. Avaa Scoutissa liidi ja valitse tämä projekti kohdassa ”Tallenna projektiin”."
+      "empty": "Ei vielä liidejä. Avaa Scoutissa liidi ja valitse tämä projekti kohdassa ”Tallenna projektiin”.",
+      "hint2": "Käytävät paikat: Scoutilla löydetyt tai tiimin lisäämät. Merkitse jokainen, kun olet käynyt.",
+      "addPlace": "Lisää paikka",
+      "placeName": "Yrityksen nimi",
+      "placeNamePh": "esim. Bar Txoko",
+      "address": "Osoite",
+      "addressPh": "Katu, kaupunki",
+      "contact": "Yhteystieto",
+      "contactPh": "Puhelin, Instagram tai verkkosivu",
+      "note": "Huomio",
+      "notePh": "Miksi sopii, keneltä kysyä",
+      "cancel": "Peruuta",
+      "save": "Tallenna",
+      "added": "{name} lisätty",
+      "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
+      "filter": "Näytä",
+      "filters": {
+        "todo": "Ei vielä käyty",
+        "visited": "Käyty",
+        "all": "Kaikki"
+      },
+      "foundBy": "Löysi: {name}",
+      "visitedOn": "Käyty {date}",
+      "notVisited": "Ei vielä käyty",
+      "results": {
+        "yes": "Kyllä",
+        "maybe": "Ehkä",
+        "no": "Ei"
+      },
+      "visitNote": "Miten meni",
+      "visitNotePh": "Mitä he sanoivat, seuraava askel",
+      "markVisited": "Merkitse käydyksi",
+      "undoVisit": "Ei käyty",
+      "when": "Milloin",
+      "howWasIt": "Onnistuiko?",
+      "addPoint": "Lisää myös +1 asiakaskäynti pisteisiini",
+      "saveVisit": "Tallenna käynti",
+      "visited": "{name} merkitty käydyksi",
+      "visitedPoint": "{name} käyty · +1 asiakaskäynti",
+      "confirmDelete": "Poistetaanko {name} tästä projektista?",
+      "delete": "Poista",
+      "noneHere": "Tässä listassa ei ole mitään.",
+      "empty2": "Ei vielä paikkoja. Lisää löytämäsi yritys tai tallenna liidejä Scoutista."
     }
   },
   "ai": {
@@ -2993,5 +3086,62 @@
     "addFor": "Lisää vetäjä viikolle {week}",
     "remove": "Poista {name}",
     "saveError": "Tallennus epäonnistui. Yritä uudelleen."
+  },
+  "points": {
+    "title": "Pisteet",
+    "deadline": "Tavoite {date} mennessä",
+    "kinds": {
+      "community": "Yhteisöpisteet",
+      "visit": "Asiakaskäynnit",
+      "learning": "Oppimispisteet"
+    },
+    "reached": "Tavoite saavutettu!",
+    "perWeek": "{n} viikossa tavoitteeseen",
+    "missed": "Määräaika ohi · {left} puuttuu",
+    "what": "Mitä",
+    "amount": "Montako",
+    "when": "Milloin",
+    "note": "Huomio (valinnainen)",
+    "notePlaceholder": {
+      "community": "esim. autoin avoimien ovien päivänä",
+      "visit": "esim. Café Iruña, juttelin omistajan kanssa",
+      "learning": "esim. hinnoittelutyöpaja"
+    },
+    "log": "Kirjaa",
+    "logged": "{kind} kirjattu",
+    "history": "Historia",
+    "entry": "+{n} {kind}",
+    "delete": "Poista merkintä",
+    "confirmDelete": "Poistetaanko tämä merkintä?",
+    "empty": "Ei vielä pisteitä.",
+    "emptyMe": "Ei vielä merkintöjä. Lisää ensimmäiset pisteesi yllä.",
+    "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
+    "addFile": "Tiedosto (valinnainen) – esim. post-mortem",
+    "openFile": "Avaa tiedosto",
+    "uploadError": "Tiedoston lataus epäonnistui (enintään 10 Mt). Yritä uudelleen."
+  },
+  "memberTasks": {
+    "todo": "{name} on vielä tekemättä",
+    "todoMe": "Sinulla on vielä tekemättä",
+    "overdue": "myöhässä · {date}",
+    "noDate": "ei päivää",
+    "todoNone": "Ei mitään auki. 🎉",
+    "late": "Ei valmistunut ajallaan",
+    "lateHint": "Viimeiset 60 päivää: valmistui määräajan jälkeen tai on yhä auki sen jälkeen.",
+    "finishedLate": "{n, plural, one {valmistui # päivän myöhässä} other {valmistui # päivää myöhässä}}",
+    "stillOpen": "{n, plural, one {# päivän myöhässä} other {# päivää myöhässä}}",
+    "lateNone": "Kaikki valmistui ajallaan.",
+    "more": "+ {count} lisää"
+  },
+  "push": {
+    "titles": {
+      "assigned": "Uusi tehtävä",
+      "team_task": "Uusi tehtävä",
+      "due_soon": "⏰ 1 päivä jäljellä",
+      "project_added": "Uusi projekti",
+      "project_post": "Uusi tiedosto projektissasi",
+      "training_week": "Ensi viikon treenit",
+      "training_lead": "Vedät treenit"
+    }
   }
 }

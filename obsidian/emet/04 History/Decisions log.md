@@ -7,7 +7,15 @@ updated: 2026-10-27
 
 | Date | Decision | Decided by |
 |---|---|---|
+| [[2026-10-28]] | Shared Scout projects can be searched and worked by everyone; only the setup stays with the creator and selling teams | Alvaro |
+| [[2026-10-28]] | Harvey (autonomous cold-email agent) is NOT integrated as-is: it needs a paid Claude/ChatGPT plan, runs on one computer and cold-emails (restricted in Spain). Its playbooks (signals, one hook, honesty rules, objection handling) were ported into Scout instead, on the free Groq keys | Alvaro |
 | [[2026-10-27]] | Each project has a plan Finance can edit: expected revenue (same number as the project goal), expected profit and budget, shown against actual numbers | Alvaro |
+| [[2026-10-27]] | Meeting notes are written part by part so long recordings always get a summary; recordings without notes get a "Write the summary" button; Base camp "Docs" is now "Recorded meetings" and My week opens on Today | Alvaro |
+| [[2026-10-27]] | Each person's goal by 1 June 2027: 20 Community Points, 50 Customer Visits, 40 Learning Points. Logged by each person on their own profile; everyone can see everyone's (`src/lib/points.ts`, migration 0040) | Alvaro |
+| [[2026-10-27]] | Scout is open to everyone for their own projects (own Groq key; lent keys stay with the selling teams); project Leads track visits (yes / maybe / no) for Scout and self-found places | Alvaro |
+| [[2026-10-27]] | Scout projects are private to their creator until shared (all projects from before were set to shared). Everyone has a private "My board" in My Tasks that nobody else sees, not even admins; it never counts in team numbers | Alvaro |
+| [[2026-10-27]] | Scout scores must be evidence-backed and calibrated: fixed rubric, sources required for high need/payment/timing scores, evidence caps the score, and each project's real visit outcomes teach the judge | Alvaro |
+| [[2026-10-27]] | Phone notifications via free web push: Supabase pg_net + Vault call `/api/push` (secret generated in and checked by the database), web-push VAPID keys in Vercel (`NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`). Only tasks, project membership, project files and 1-day reminders are pushed | Alvaro |
 | [[2026-10-23]] | Finance subscriptions book themselves as expenses (daily job, no login needed); deleting one keeps past charges. Team tasks can require a file to finish (enforced in the database) | Alvaro |
 | [[2026-10-23]] | Daily pop-up with your tasks (late + next 30 days) on the first visit of the day; training leaders change every week (Mon–Sun) up to 19 Dec, first week 26 Oct = Mario & Rocco, the rest to be decided by Alvaro | Alvaro |
 | [[2026-10-22]] | Notion is connected per member (their own uni or personal Notion, by OAuth), never shared; emet stores no Notion content, only encrypted tokens and which page/database each person picked | Alvaro |

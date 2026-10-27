@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 
-export type BoardRow = { id: string; slug: string; name: string; group_id: string | null; project_id?: string | null; trello_sync_enabled: boolean; trello_board_id: string | null };
+export type BoardRow = { id: string; slug: string; name: string; group_id: string | null; project_id?: string | null; owner_id?: string | null; trello_sync_enabled: boolean; trello_board_id: string | null };
 export type ListRow = { id: string; board_id: string; name: string; position: number };
 export type CardRow = {
   id: string; board_id: string; list_id: string; title: string; description: string | null;

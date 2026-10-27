@@ -1,4 +1,5 @@
 // Scout's pure logic: no network, no database, so it can be unit-tested.
+import { normalizeHook, type Hook } from "./signals.ts";
 // The AI collects evidence and sub-scores; the app does the maths (same rule as the Idea lab).
 
 export const CRITERIA = [
@@ -17,6 +18,8 @@ export type Approach = { channel: string; opener: string; best_time: string; who
 export type Judgement = {
   criteria: Criterion[]; dealBreaker: string | null; why: string; attack_with: string; approach: Approach | null; signals: { text: string; url?: string }[];
   score: number; fit: Fit; worth_it: boolean;
+  /** The one reason to contact them today (Harvey's signal playbook) */
+  hook: Hook | null;
 };
 
 const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
@@ -40,6 +43,10 @@ export function fitOf(score: number, dealBreaker: boolean): Fit {
 const str = (v: unknown, max = 600) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 const url = (v: unknown) => { const s = str(v, 500); return /^https?:\/\//.test(s) ? s : undefined; };
 
+/** Criteria that are facts about the place (not inferred from its kind): without a source they can't score above 6. */
+const NEEDS_SOURCE: readonly string[] = ["need", "ability_to_pay", "timing"];
+const UNSOURCED_MAX = 6;
+
 /** Validate the AI's JSON verdict; the score, fit and "worth it" are always computed here. */
 export function normalizeJudgement(raw: unknown): Judgement | null {
   if (!raw || typeof raw !== "object") return null;
@@ -48,7 +55,9 @@ export function normalizeJudgement(raw: unknown): Judgement | null {
   const criteria: Criterion[] = CRITERIA.map(({ key }) => {
     const c = crit.find((x) => x && typeof x === "object" && (x as { key?: unknown }).key === key) as Record<string, unknown> | undefined;
     const n = Number(c?.score);
-    return { key, score: Number.isFinite(n) ? clamp(Math.round(n), 0, 10) : UNKNOWN, why: str(c?.why, 300) || "—", source: url(c?.source) };
+    const source = url(c?.source);
+    const score = Number.isFinite(n) ? clamp(Math.round(n), 0, 10) : UNKNOWN;
+    return { key, score: !source && NEEDS_SOURCE.includes(key) ? Math.min(score, UNSOURCED_MAX) : score, why: str(c?.why, 300) || "—", source };
   });
   if (!crit.length) return null;
   const db = str(r.deal_breaker, 200);
@@ -61,7 +70,8 @@ export function normalizeJudgement(raw: unknown): Judgement | null {
     objections: (Array.isArray(a.objections) ? a.objections : []).slice(0, 3).map((o) => ({ objection: str((o as Record<string, unknown>)?.objection, 200), answer: str((o as Record<string, unknown>)?.answer, 300) })).filter((o) => o.objection),
   } : null;
   const signals = (Array.isArray(r.signals) ? r.signals : []).slice(0, 8).map((s) => ({ text: str((s as Record<string, unknown>)?.text, 240), url: url((s as Record<string, unknown>)?.url) })).filter((s) => s.text);
-  return { criteria, dealBreaker, why: str(r.why, 700), attack_with: str(r.attack_with, 500), approach: fit === "strong" || fit === "good" ? approach : null, signals, score, fit, worth_it: score >= 60 && !dealBreaker };
+  return { criteria, dealBreaker, why: str(r.why, 700), attack_with: str(r.attack_with, 500), approach: fit === "strong" || fit === "good" ? approach : null, signals, score, fit, worth_it: score >= 60 && !dealBreaker,
+    hook: normalizeHook(r.hook) };
 }
 
 /** One key per real-world place, so the same business is never collected or researched twice. */
@@ -180,6 +190,39 @@ export function evidenceLevel(pages: number, sources: number): Evidence {
 export function applyEvidence(j: { fit: Fit; worth_it: boolean }, level: Evidence): { fit: Fit; worth_it: boolean } {
   if (level !== "little" && level !== "none") return j;
   return { fit: j.fit === "strong" || j.fit === "good" ? "maybe" : j.fit, worth_it: false };
+}
+
+/** The score agrees with the evidence: with little to go on it can't read higher than "maybe" (59), with none "skip" (44). */
+export function scoreWithEvidence(score: number, level: Evidence): number {
+  return level === "none" ? Math.min(score, 44) : level === "little" ? Math.min(score, 59) : score;
+}
+
+// ── Learning from what happened ──────────────────────────────
+export type Outcome = "yes" | "maybe" | "no";
+/** What really happened with a lead: the visit result, else won / lost. */
+export function outcomeOf(l: { visit_result: string | null; status: string }): Outcome | null {
+  if (l.visit_result === "yes" || l.visit_result === "maybe" || l.visit_result === "no") return l.visit_result;
+  return l.status === "won" ? "yes" : l.status === "lost" ? "no" : null;
+}
+type Past = { name: string; score: number | null; fit: string | null; visit_result: string | null; status: string; visit_note: string | null };
+/** Past leads of the same Scout project with a known outcome, as calibration examples for the judge (newest first). */
+export function pastOutcomes(rows: Past[], max = 8): string[] {
+  return rows.flatMap((r) => {
+    const o = outcomeOf(r);
+    return o ? [`- ${r.name.slice(0, 80)} (Scout gave ${r.score ?? "?"}, ${r.fit ?? "?"}) → ${o.toUpperCase()}${r.visit_note ? `: ${r.visit_note.slice(0, 160)}` : ""}`] : [];
+  }).slice(0, max);
+}
+/** How right Scout was: of the leads it rated good/strong that got a clear yes/no, how many said yes; and how many it
+ *  rated maybe/skip that still said yes (missed). */
+export function trackRecord(rows: Past[]): { rated: number; yes: number; missed: number } {
+  let rated = 0, yes = 0, missed = 0;
+  for (const r of rows) {
+    const o = outcomeOf(r);
+    if (o !== "yes" && o !== "no") continue;
+    if (r.fit === "strong" || r.fit === "good") { rated++; if (o === "yes") yes++; }
+    else if (o === "yes") missed++;
+  }
+  return { rated, yes, missed };
 }
 
 /** The place in Google Maps: a saved Google link, else the exact spot (Google shows the business there), else a search. */

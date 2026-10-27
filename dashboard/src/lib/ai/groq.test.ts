@@ -43,3 +43,41 @@ test("a junk hint is never passed on to the next chunk", () => {
   assert.equal(usablePrompt("Rocco said the stall opens at ten. . . ."), "Rocco said the stall opens at ten.");
   assert.equal(usablePrompt("x".repeat(10) + " real words here " + "y".repeat(500))!.length <= 300, true);
 });
+
+test("notes: a model that hits its limit hands over to the next model (each has its own allowance)", async () => {
+  const { notesRequest, NOTES_MODELS } = await import("./groq.ts");
+  const real = globalThis.fetch;
+  const asked: string[] = [];
+  globalThis.fetch = (async (_url: string, init: { body: string }) => {
+    const model = JSON.parse(init.body).model as string;
+    asked.push(model);
+    if (model === NOTES_MODELS[0]) return new Response("{}", { status: 429, headers: { "retry-after": "30" } });
+    return new Response(JSON.stringify({ choices: [{ message: { content: "## Summary\nOk." } }] }), { status: 200 });
+  }) as typeof fetch;
+  try {
+    const r = await notesRequest("k", "Transcript:\n\nhola", "es");
+    assert.deepEqual(r, { markdown: "## Summary\nOk." });
+    assert.deepEqual(asked, NOTES_MODELS.slice(0, 2));
+  } finally { globalThis.fetch = real; }
+});
+
+test("notes: when every model is limited, wait for the soonest one", async () => {
+  const { notesRequest } = await import("./groq.ts");
+  const real = globalThis.fetch;
+  let i = 0;
+  globalThis.fetch = (async () => new Response("{}", { status: 429, headers: { "retry-after": String([40, 12, 25][i++] ?? 60) } })) as typeof fetch;
+  try {
+    assert.deepEqual(await notesRequest("k", "x", "en"), { kind: "limit", retryAfter: 12 });
+  } finally { globalThis.fetch = real; }
+});
+
+test("notes: a bad key stops at once", async () => {
+  const { notesRequest } = await import("./groq.ts");
+  const real = globalThis.fetch;
+  let n = 0;
+  globalThis.fetch = (async () => { n++; return new Response("{}", { status: 401 }); }) as typeof fetch;
+  try {
+    assert.deepEqual(await notesRequest("k", "x", "en"), { kind: "bad-key" });
+    assert.equal(n, 1);
+  } finally { globalThis.fetch = real; }
+});

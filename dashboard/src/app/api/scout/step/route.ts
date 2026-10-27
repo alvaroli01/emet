@@ -7,6 +7,8 @@ import { findCities, osmPlaces, openPlaces } from "@/lib/scout/web";
 import { planProject, webFind, relevance, type Plan, type Project } from "@/lib/scout/ai";
 import { line, upsertPlaces, researchAndJudge, type LogLine, type PlaceRow } from "@/lib/scout/run";
 
+/** The widest search radius (km) — also the database limit on scout_searches.radius_km. */
+const MAX_KM = 30;
 export const maxDuration = 60;
 
 /**
@@ -24,11 +26,13 @@ export async function POST(request: NextRequest) {
     sb.from("ai_keys").select("key_iv, key_data").maybeSingle(),
   ]);
   if (!s) return NextResponse.json({ error: "not-found" }, { status: 404 });
-  if (!canScout) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  // Anyone may search in a Scout project they can see (own or shared); lent keys only for the selling teams
+  const { data: mine } = canScout ? { data: true } : await sb.rpc("can_work_scout", { p: s.project_id });
+  if (!mine) return NextResponse.json({ error: "forbidden" }, { status: 403 });
   if (s.status === "done" || s.status === "failed") return NextResponse.json({ status: s.status });
   // Team key pool: my key first, then keys members lend to Scout (only after the can_scout check above)
   const { data: meId } = await sb.rpc("my_profile_id");
-  const key = await scoutRing(meId as string, keyRow);
+  const key = await scoutRing(meId as string, keyRow, !!canScout);
   if (!key) return NextResponse.json({ error: "no-key" }, { status: 400 });
   const locale = await getLocale();
   const { data: project } = await sb.from("scout_projects").select("*").eq("id", s.project_id).single();
@@ -88,7 +92,7 @@ export async function POST(request: NextRequest) {
     const fresh = researchOrder(unique.filter((r) => !known.has(r.id)), s.lat, s.lng).slice(0, 60);
     log.push(line("known", { known: known.size, todo: fresh.length }));
     if (unique.length < 10) log.push(line("fewPlaces", { n: unique.length }));
-    if (!fresh.length) { log.push(line("done", { strong: 0, good: 0, skip: 0 }), line("tokens", { tokens: tokens() })); await save({ status: "done", found: unique.length, known: known.size }); return NextResponse.json({ status: "done" }); }
+    if (!fresh.length) { await save({ found: unique.length, known: known.size }); return widen(); }
     await save({ status: "filtering", found: unique.length, known: known.size, queue: fresh.map((r) => r.id) });
     return NextResponse.json({ status: "filtering", places: fresh.map((r) => ({ id: r.id, lat: r.lat, lng: r.lng })) });
   }
@@ -103,16 +107,17 @@ export async function POST(request: NextRequest) {
     const keep = "error" in r ? list : list.filter((_, i) => r.keep.has(i));
     const drop = "error" in r ? [] : list.map((c, i) => ({ c, i })).filter(({ i }) => !r.keep.has(i));
     if (drop.length) await sb.from("scout_leads").upsert(drop.map(({ c, i }) => ({ project_id: s.project_id, place_id: c.id, search_id: id, score: 0, fit: "skip", worth_it: false, evidence: "none", why: `Not a match: ${r && !("error" in r) ? r.reasons.get(i) ?? "not the right kind of place" : ""}` })), { onConflict: "project_id,place_id", ignoreDuplicates: true });
-    const queue = keep.slice(0, s.max_places).map((c) => c.id);
+    // Only as many as still needed to reach the number asked for
+    const queue = keep.slice(0, Math.max(0, s.max_places - s.researched)).map((c) => c.id);
     log.push(line("filtered", { keep: keep.length, drop: drop.length }));
-    if (!queue.length) return finish();
+    if (!queue.length) return widen();
     await save({ status: "researching", queue });
     return NextResponse.json({ status: "researching", left: queue.length });
   }
 
   // ── 3. Research + judge the next TWO places in parallel (separate free model quotas, fits the 60 s limit) ──
   const batch = (s.queue as string[]).slice(0, 2), rest = (s.queue as string[]).slice(2);
-  if (!batch.length) return finish();
+  if (!batch.length) return s.researched >= s.max_places ? finish() : widen();
   const { data: places } = await sb.from("scout_places").select("*").in("id", batch);
   const results = await Promise.all((places ?? []).filter((p) => !p.forgotten).map(async (place) => ({ place, r: await researchAndJudge(sb, key, { place: place as PlaceRow, project: project as Project & { id: string }, plan: project.plan as Plan | null, searchId: id, locale }) })));
   const limited = results.find(({ r }) => "error" in r && r.error === "limit");
@@ -126,8 +131,19 @@ export async function POST(request: NextRequest) {
   await save({ queue: leftover, researched: s.researched + doneIds.length });
   if (limited) { const l = (limited.r as { retryAfter?: number }).retryAfter ?? 60; log.push(line("waiting", { s: l })); await save({}); return limit({ error: "limit", retryAfter: l }); }
   const restQueue = leftover;
-  if (!restQueue.length) return finish();
+  if (!restQueue.length) return s.researched + doneIds.length >= s.max_places ? finish() : widen();
   return NextResponse.json({ status: "researching", left: restQueue.length });
+
+  // Not enough places judged yet: search again over a bigger area (already-judged places are skipped), until the
+  // number asked for is reached or nothing new is left within the widest radius.
+  async function widen() {
+    const km = Number(s.radius_km);
+    if (km >= MAX_KM) { log.push(line("ranOut", { n: s.max_places, km })); return finish(); }
+    const next = Math.min(MAX_KM, km * 2);
+    log.push(line("widen", { km: next, need: s.max_places - s.researched }));
+    await save({ status: "finding", radius_km: next, queue: [] });
+    return NextResponse.json({ status: "finding" });
+  }
 
   async function finish() {
     const { data: leads } = await sb.from("scout_leads").select("fit").eq("search_id", id);

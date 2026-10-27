@@ -9,6 +9,9 @@ import type { MemberData } from "@/lib/team-stats";
 import { DocumentsSection } from "@/components/documents/documents-section";
 import { MyProjects, type ProjectCard } from "@/components/projects/my-projects";
 import { MyConnections } from "@/components/camp/ai-connections";
+import { PointsPanel, type PointEntry } from "./points-panel";
+import { MemberTasks } from "./member-tasks";
+import type { MemberTaskItem } from "@/lib/member-tasks";
 
 export type MemberInfo = { id: string; name: string; email: string; avatar: string | null; role: string | null; team: string | null; teamSlug: string | null };
 const COLORS = ["#ff6a1a", "#ffb07a", "#ffc23d", "#8b8b93"];
@@ -38,7 +41,7 @@ function Countdown({ to }: { to: string | null }) {
   return <span className="readout text-3xl">{d ? `${d}d ` : ""}{pad(Math.floor((s % 86400) / 3600))}:{pad(Math.floor((s % 3600) / 60))}:{pad(s % 60)}</span>;
 }
 
-export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, projects = [] }: { p: MemberInfo; d: MemberData; today: string; isMe?: boolean; isLeader?: boolean; projects?: ProjectCard[] }) {
+export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, projects = [], points = [], tasks = [] }: { p: MemberInfo; d: MemberData; today: string; isMe?: boolean; isLeader?: boolean; projects?: ProjectCard[]; points?: PointEntry[]; tasks?: MemberTaskItem[] }) {
   const t = useTranslations("member");
   const locale = useLocale();
   const [month, setMonth] = useState(() => today.slice(0, 7));
@@ -67,6 +70,9 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, p
         <Tile label={t("completed")} value={String(d.completed7)} unit={t("tasks", { n: d.completed7 })} delta={t("vsLastWeek", { n: sign(doneDelta) })} good={doneDelta === 0 ? null : doneDelta > 0} />
         <Tile label={t("sales")} value={eur(d.salesMonth, locale)} unit={t("perMonth")} delta={salesDelta === null ? t("noPrev") : t("vsLastMonth", { n: `${salesDelta > 0 ? "+" : ""}${salesDelta}%` })} good={salesDelta === null || salesDelta === 0 ? null : salesDelta > 0} href="/g/finance" />
       </div>
+
+      <MemberTasks tasks={tasks} name={p.name.split(" ")[0]} isMe={isMe} />
+      <PointsPanel entries={points} isMe={isMe} today={today} />
 
       <div className="grid gap-4 lg:grid-cols-[1.05fr_1fr_1fr]">
         {/* Profile + working format */}

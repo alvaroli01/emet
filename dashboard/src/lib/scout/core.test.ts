@@ -17,7 +17,7 @@ test("fit bands and deal-breakers", () => {
 });
 
 test("judgement: app computes score, drops approach for weak fits", () => {
-  const strong = normalizeJudgement({ criteria: [{ key: "need", score: 9, why: "no booking" }, { key: "fit", score: 9 }, { key: "ability_to_pay", score: 8 }, { key: "reachability", score: 9 }, { key: "timing", score: 8 }, { key: "value_vs_effort", score: 8 }, { key: "low_risk", score: 9 }],
+  const strong = normalizeJudgement({ criteria: [{ key: "need", score: 9, why: "no booking", source: "https://bar.es" }, { key: "fit", score: 9 }, { key: "ability_to_pay", score: 8, source: "https://bar.es/menu" }, { key: "reachability", score: 9 }, { key: "timing", score: 8, source: "https://bar.es/news" }, { key: "value_vs_effort", score: 8 }, { key: "low_risk", score: 9 }],
     approach: { channel: "visit", opener: "Hola…", objections: [{ objection: "no time", answer: "we do it" }] }, signals: [{ text: "4.6★", url: "javascript:x" }] })!;
   assert.equal(strong.fit, "strong");
   assert.equal(strong.worth_it, true);
@@ -158,4 +158,54 @@ import { JUDGE_MODELS, RELEVANCE_MODELS } from "./models.ts";
 test("the final score only ever comes from the strongest models", () => {
   assert.deepEqual(JUDGE_MODELS, ["openai/gpt-oss-120b", "mistral/mistral-medium-latest"]);
   assert.equal(RELEVANCE_MODELS.at(-1), "mistral/mistral-small-latest");
+});
+
+test("accuracy: a high score needs evidence — thin evidence can't show more than 'maybe'", async () => {
+  const { scoreWithEvidence } = await import("./core.ts");
+  assert.equal(scoreWithEvidence(82, "strong"), 82);
+  assert.equal(scoreWithEvidence(82, "some"), 82);
+  assert.equal(scoreWithEvidence(82, "little"), 59);
+  assert.equal(scoreWithEvidence(82, "none"), 44);
+  assert.equal(scoreWithEvidence(30, "little"), 30);
+});
+
+test("accuracy: need, ability to pay and timing can't score above 6 without a source", async () => {
+  const { normalizeJudgement } = await import("./core.ts");
+  const j = normalizeJudgement({ criteria: [
+    { key: "need", score: 9, why: "x" }, { key: "ability_to_pay", score: 9, why: "x", source: "https://a.es" },
+    { key: "timing", score: 8, why: "x", source: "null" }, { key: "fit", score: 9, why: "x" },
+  ] })!;
+  const s = (k: string) => j.criteria.find((c) => c.key === k)!.score;
+  assert.equal(s("need"), 6);
+  assert.equal(s("ability_to_pay"), 9);
+  assert.equal(s("timing"), 6);
+  assert.equal(s("fit"), 9); // judged from the kind of place, no link needed
+});
+
+test("learning: outcomes of visited / closed leads", async () => {
+  const { outcomeOf, pastOutcomes, trackRecord } = await import("./core.ts");
+  assert.equal(outcomeOf({ visit_result: "yes", status: "new" }), "yes");
+  assert.equal(outcomeOf({ visit_result: "no", status: "new" }), "no");
+  assert.equal(outcomeOf({ visit_result: null, status: "won" }), "yes");
+  assert.equal(outcomeOf({ visit_result: null, status: "lost" }), "no");
+  assert.equal(outcomeOf({ visit_result: "maybe", status: "new" }), "maybe");
+  assert.equal(outcomeOf({ visit_result: null, status: "contacted" }), null);
+
+  const rows = [
+    { name: "Bar A", score: 82, fit: "strong", visit_result: "yes", status: "new", visit_note: "wants 20" },
+    { name: "Bar B", score: 78, fit: "strong", visit_result: "no", status: "new", visit_note: "has a supplier" },
+    { name: "Bar C", score: 40, fit: "skip", visit_result: null, status: "won", visit_note: null },
+    { name: "Bar D", score: 65, fit: "good", visit_result: null, status: "new", visit_note: null },
+  ];
+  const lines = pastOutcomes(rows);
+  assert.equal(lines.length, 3);
+  assert.match(lines[1], /Bar B.*78.*NO.*has a supplier/);
+  assert.deepEqual(trackRecord(rows), { rated: 2, yes: 1, missed: 1 }); // 2 rated good/strong & decided, 1 said yes; 1 rated skip but won
+});
+
+test("the verdict keeps one checked hook (the reason to contact today)", async () => {
+  const { normalizeJudgement } = await import("./core.ts");
+  const j = normalizeJudgement({ criteria: [{ key: "need", score: 5 }], hook: { kind: "hiring", text: "Buscan camarero", url: "https://bar.es/empleo" } })!;
+  assert.deepEqual(j.hook, { kind: "hiring", text: "Buscan camarero", url: "https://bar.es/empleo" });
+  assert.equal(normalizeJudgement({ criteria: [{ key: "need", score: 5 }] })!.hook, null);
 });

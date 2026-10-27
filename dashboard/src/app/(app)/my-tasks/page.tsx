@@ -12,10 +12,13 @@ import { MyTeamTasks } from "@/components/tools/team-tasks";
 import { loadTeamTasks } from "@/lib/team-tasks";
 import { loadMyNotionDeadlinesFast } from "@/lib/notion/server";
 import { cardHref } from "@/lib/projects";
+import { loadBoardById } from "@/lib/boards";
+import { LazyBoard } from "@/components/board/board-lazy";
+import { Lock } from "lucide-react";
 
 type Row = {
   id: string; title: string; due_at: string | null; completed_at: string | null; labels: string[];
-  boards: { slug: string; name: string; group_id: string | null; project_id: string | null } | null;
+  boards: { slug: string; name: string; group_id: string | null; project_id: string | null; owner_id: string | null } | null;
   board_lists: { name: string } | null;
 };
 
@@ -28,11 +31,11 @@ export default async function MyTasksPage() {
     return key ? tl(key) : n;
   };
   const locale = await getLocale();
-  const { me, groups, isAdmin } = await getSession();
+  const { me, groups, isAdmin, viewer } = await getSession();
   const supabase = await createClient();
   const { data } = await supabase
     .from("cards")
-    .select("id, title, due_at, completed_at, labels, boards(slug, name, group_id, project_id), board_lists(name), card_assignees!inner(user_id)")
+    .select("id, title, due_at, completed_at, labels, boards(slug, name, group_id, project_id, owner_id), board_lists(name), card_assignees!inner(user_id)")
     .eq("card_assignees.user_id", me.id)
     .returns<Row[]>();
 
@@ -42,7 +45,10 @@ export default async function MyTasksPage() {
   const notion = (await loadMyNotionDeadlinesFast(supabase, new Date(Date.parse(today) - 14 * 864e5).toISOString().slice(0, 10), new Date(Date.parse(today) + 60 * 864e5).toISOString().slice(0, 10)))
     .items.filter((n) => !n.done).sort((a, b) => a.day.localeCompare(b.day));
   const now = Date.now();
-  const rows = data ?? [];
+  // Tasks on my own board live on that board below, not in these lists
+  const rows = (data ?? []).filter((r) => !r.boards?.owner_id);
+  const { data: myBoardId } = await supabase.rpc("my_board");
+  const myBoard = myBoardId ? await loadBoardById(myBoardId as string, [me.id]) : null;
   const open = rows.filter((r) => !r.completed_at);
   const sections = [
     { key: "overdue", items: open.filter((r) => r.due_at && Date.parse(r.due_at) < now) },
@@ -78,6 +84,12 @@ export default async function MyTasksPage() {
         ]}
         visual={<ProgressRing value={sections[3].items.length} max={rows.length} label={th("tasks.ring")} />}
       />
+      {myBoard && (
+        <section id="my-board" className="scroll-mt-20">
+          <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold"><Lock size={14} /> {t("myBoard")} <span className="font-normal text-muted">· {t("myBoardHint")}</span></h2>
+          <div className="panel p-3 sm:p-4"><LazyBoard data={myBoard} viewer={viewer} /></div>
+        </section>
+      )}
       <MyTeamTasks tasks={teamTasks} meId={me.id} />
       {notion.length > 0 && (
         <section>

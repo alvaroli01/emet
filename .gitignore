@@ -1,3 +1,6 @@
 
 # Obsidian's own window layout (changes every time someone opens the vault)
 obsidian/emet/.obsidian/workspace*.json
+
+# Personal notes (not for the team)
+obsidian/emet/07 Personal/

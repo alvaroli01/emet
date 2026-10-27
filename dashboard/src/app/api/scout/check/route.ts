@@ -21,10 +21,12 @@ export async function POST(request: NextRequest) {
     sb.from("ai_keys").select("key_iv, key_data").maybeSingle(),
   ]);
   if (!project) return NextResponse.json({ error: "not-found" }, { status: 404 });
-  if (!canScout) return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  // Anyone may search in a Scout project they can see (own or shared); lent keys only for the selling teams
+  const { data: mine } = canScout ? { data: true } : await sb.rpc("can_work_scout", { p: project_id });
+  if (!mine) return NextResponse.json({ error: "forbidden" }, { status: 403 });
   // Team key pool: my key first, then keys members lend to Scout (only after the can_scout check above)
   const { data: meId } = await sb.rpc("my_profile_id");
-  const key = await scoutRing(meId as string, keyRow);
+  const key = await scoutRing(meId as string, keyRow, !!canScout);
   if (!key) return NextResponse.json({ error: "no-key" }, { status: 400 });
   const locale = await getLocale();
 

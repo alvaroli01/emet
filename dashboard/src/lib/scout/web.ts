@@ -1,5 +1,6 @@
 import "server-only";
 import { overpassQuery, placesFromOsm, placesFromOpenPlaces, type FoundPlace, type OpenPlace } from "./core";
+import { pickLinks } from "./signals";
 
 // Free, legal data sources only: OpenStreetMap (Nominatim + Overpass) and the business's own public website.
 // No Google scraping (against Google's terms and blocked from servers). See docs/lead-finder-build-prompt.md §1.
@@ -93,10 +94,11 @@ export async function readSite(website: string): Promise<Page[]> {
   const raw = await get(home.href);
   if (!raw) return [];
   out.push({ url: home.href, text: strip(raw).slice(0, 4000), robots_ok: true });
-  // Follow at most two same-site links that look like about/services/contact pages
+  // Follow up to two about/services/menu pages and one hiring/news page (where "reasons to contact today" live)
   const links = [...raw.matchAll(/href=["']([^"'#]+)["']/gi)].map((m) => { try { return new URL(m[1], home); } catch { return null; } })
-    .filter((u): u is URL => !!u && u.hostname === home.hostname && /about|nosotros|quienes|servic|carta|menu|precio|price|contact|tarifa|empresa/i.test(u.pathname));
-  const picked = [...new Map(links.map((u) => [u.pathname, u])).values()].slice(0, 2);
+    .filter((u): u is URL => !!u && u.hostname === home.hostname);
+  const byPath = new Map(links.map((u) => [u.pathname, u]));
+  const picked = pickLinks([...byPath.keys()]).map((p) => byPath.get(p)!);
   for (const u of picked) {
     if (!(await robotsAllows(u))) continue;
     const r = await get(u.href);

@@ -37,7 +37,7 @@ export default async function OverviewPage() {
     supabase.from("sales").select("date, amount, cost, channel, description, reverses_id, item_id").returns<SaleRow[]>(),
     supabase.from("expenses").select("date, amount").returns<Expense[]>(),
     supabase.from("cards").select("id, title, board_id, due_at, completed_at").returns<CardRow[]>(),
-    supabase.from("boards").select("id, slug, group_id, project_id").returns<{ id: string; slug: string; group_id: string | null; project_id: string | null }[]>(),
+    supabase.from("boards").select("id, slug, group_id, project_id").is("owner_id", null).returns<{ id: string; slug: string; group_id: string | null; project_id: string | null }[]>(),
     supabase.from("blockers").select("id, group_id, description, owner_id, created_at").eq("status", "open").order("created_at", { ascending: false })
       .returns<{ id: string; group_id: string; description: string; owner_id: string | null; created_at: string }[]>(),
     supabase.from("activity_log").select("*").order("created_at", { ascending: false }).limit(10).returns<ActivityEntry[]>(),
@@ -81,8 +81,9 @@ export default async function OverviewPage() {
   const lowStock = (stock.data ?? []).filter((x) => x.stock <= (x.low_stock ?? 0) || x.stock === 0);
 
   // ── Work ──────────────────────────────────────────────────
-  const allCards = cards.data ?? [];
   const boardOf = new Map((boards.data ?? []).map((b) => [b.id, b]));
+  // Team numbers leave out people's own private boards
+  const allCards = (cards.data ?? []).filter((c) => boardOf.has(c.board_id));
   const groupOfCard = (c: CardRow) => boardOf.get(c.board_id)?.group_id ?? null;
   const href = (c: CardRow) => cardHref({ id: c.id, boards: boardOf.get(c.board_id) }, (gid) => groups.find((x) => x.id === gid)?.slug);
   const teamLabel = (gid: string | null) => { const g = groups.find((x) => x.id === gid); return g ? tg(g.slug) : t("company"); };

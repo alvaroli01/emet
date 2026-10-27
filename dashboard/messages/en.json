@@ -258,7 +258,9 @@
       "noDate": "No due date",
       "done": "Done"
     },
-    "fromNotion": "From Notion"
+    "fromNotion": "From Notion",
+    "myBoard": "My board",
+    "myBoardHint": "only you can see it"
   },
   "group": {
     "names": {
@@ -616,7 +618,7 @@
     "tabs": {
       "week": "My week",
       "agenda": "Agenda",
-      "docs": "Docs",
+      "docs": "Recorded meetings",
       "ideas": "Idea wall",
       "vault": "Vault",
       "notion": "Notion"
@@ -670,7 +672,7 @@
       "empty": "No docs yet. Class notes, meeting notes, plans — start one with New.",
       "sharedWithYou": "Shared with you",
       "pickOne": "Open a doc or start a new one",
-      "pickOneHint": "Docs are private unless you share them.",
+      "pickOneHint": "Recordings and notes are private unless you share them.",
       "saving": "Saving…",
       "notSaved": "Not saved",
       "savedAgo": "Saved {when}",
@@ -712,7 +714,16 @@
         "peopleHint": "Only the teammates you pick.",
         "readOnlyNote": "People you share with can read and download, not edit."
       },
-      "record": "Record notes"
+      "record": "Record notes",
+      "writeSummary": "Write the summary",
+      "writingSummary": "Writing the summary…",
+      "summaryWaiting": "Free AI limit reached — continuing in {s}s…",
+      "summaryMissing": "This recording has no summary yet. Write it now from the transcript.",
+      "summaryMissingShared": "This recording has no summary yet. Write it now — it's saved as your own copy.",
+      "summaryWritten": "Summary written",
+      "summaryCopied": "Summary saved in your Recorded meetings",
+      "summaryFailed": "Couldn't write the summary. Check your Groq key in My connections and try again.",
+      "summaryTitle": "summary"
     },
     "ideas": {
       "saveError": "Couldn’t save. Try again.",
@@ -1095,20 +1106,28 @@
       "idea_comment": "New comment on the idea “{title}”: {excerpt}",
       "doc_shared": "A doc was shared with you: “{title}”",
       "design_request": "New design request: “{title}”",
-      "due_soon": "Due tomorrow: “{title}”",
+      "due_soon": "Only 1 day left to finish “{title}”",
       "report": "This week’s report is ready",
       "team_task": "New task from the team leader: “{title}”",
       "company_doc": "New company document: “{name}”",
       "project_added": "You were added to the project “{project}”",
       "project_post": "New in “{project}”: {title}",
-      "training_lead": "You lead training this week"
+      "training_lead": "You lead training this week",
+      "training_week": "Training next week is led by {names}"
     },
     "popupTitle": "New task for you",
     "popupDue": "Due {date}",
     "popupNoDue": "No due date",
     "popupOpen": "Open",
     "popupClose": "Close",
-    "desktopAlerts": "Turn on desktop alerts for new tasks"
+    "phone": {
+      "turnOn": "Turn on phone notifications (new tasks, projects, files, 1 day left)",
+      "turningOn": "Turning on…",
+      "on": "Phone notifications are on",
+      "turnOff": "Turn off",
+      "blocked": "Notifications are blocked for emet in this browser's settings.",
+      "iosInstall": "iPhone: tap Share → Add to Home Screen, open emet from there, then turn on notifications here."
+    }
   },
   "palette": {
     "label": "Search and ask",
@@ -1123,7 +1142,7 @@
     "ask": "Ask emet: “{q}”",
     "askHint": "Answered from the team’s live data",
     "thinking": "Looking at the team’s data…",
-    "noKey": "Ask emet uses your free Groq account. Connect it in Base camp → Docs → microphone, or in the Idea lab.",
+    "noKey": "Ask emet uses your free Groq account. Connect it in Base camp → Recorded meetings → microphone, or in the Idea lab.",
     "askFailed": "Couldn’t answer right now. Try again in a minute.",
     "fromData": "Answered from emet HQ data you can see. Check important numbers in their tab.",
     "noResults": "Nothing found.",
@@ -1933,7 +1952,7 @@
     "newProject": "New project",
     "emptyTitle": "Start with what you sell and to whom",
     "emptyText": "Describe the project, the kind of business you want as clients and what rules a place out. Then pick a city: Scout finds matching places, judges each one for this project and remembers them so nothing is checked twice.",
-    "viewOnly": "Customer, Marketing and admins run searches. You can read every result.",
+    "viewOnly": "This Scout project belongs to someone else, so you can read every result here. Use New project to scout your own idea.",
     "globeLabel": "Globe showing where Scout is searching",
     "examples": {
       "bilbao": "Bilbao · cafés",
@@ -1985,7 +2004,9 @@
       "fewPlaces": "Only {n} places found — try a bigger radius",
       "pool": "Using the team's shared keys ({n} available)",
       "tokens": "Used ~{tokens}K AI tokens",
-      "webChecked": "Web search: {results} results read, the AI named {listed} places, {n} confirmed by the real results"
+      "webChecked": "Web search: {results} results read, the AI named {listed} places, {n} confirmed by the real results",
+      "widen": "Not enough yet — searching a wider area ({km} km), {need} still to judge",
+      "ranOut": "Ran out of places within {km} km before reaching {n}"
     },
     "fit": {
       "strong": "Strong fit",
@@ -2032,7 +2053,9 @@
         "ideal_client": "e.g. open less than 3 years, good reviews, weak Instagram",
         "must_have": "Has an Instagram account\nSeats inside",
         "deal_breakers": "Part of a chain\nAlready works with an agency"
-      }
+      },
+      "shared": "Share with the team",
+      "sharedHint": "Off: only you see this project, its searches and leads. On: everyone sees them and Customer/Marketing can work on it."
     },
     "leads": {
       "title": "Leads",
@@ -2098,7 +2121,27 @@
       },
       "saveTo": "Save to project",
       "generalLeads": "General leads (no project)",
-      "foundTitle": "What Scout found"
+      "foundTitle": "What Scout found",
+      "pickAll": "Select all",
+      "clearPick": "Clear selection",
+      "picked": "{count, plural, one {# lead selected} other {# leads selected}}",
+      "toProject": "Project",
+      "addToProject": "Add to project",
+      "addedToProject": "{count, plural, one {# lead added} other {# leads added}} to {project}",
+      "addError": "Couldn't add them. You can add leads from your own Scout projects to projects you're in.",
+      "pickLead": "Select {name}",
+      "record": "Track record: {yes} of {rated} places Scout rated good or strong said yes{missed, plural, =0 {} one {, and it missed # that it rated lower} other {, and it missed # that it rated lower}}. Every visit you log teaches it.",
+      "recordNone": "Track record: no visits logged yet. Mark visits in your project's Leads and Scout learns from them.",
+      "hookLabel": "Reason to contact today",
+      "hooks": {
+        "hiring": "Hiring",
+        "new_opening": "Just opened",
+        "change": "Something changed",
+        "unhappy_reviews": "Reviews ask for it",
+        "weak_online": "Weak online",
+        "events": "Coming up",
+        "none": "No specific signal"
+      }
     },
     "check": {
       "label": "Check a place",
@@ -2112,7 +2155,15 @@
       "needKey": "Connect your free Groq key first.",
       "error": "Couldn't check that place. Try again in a minute."
     },
-    "allOut": "All free AI keys are used up for now. Scout continues later, or sooner when someone lends a key or connects Mistral."
+    "allOut": "All free AI keys are used up for now. Scout continues later, or sooner when someone lends a key or connects Mistral.",
+    "maxHint": "Scout keeps searching (widening the area) until it has judged this many places. 1–60.",
+    "sharedBadge": "Shared",
+    "privateBadge": "Private",
+    "sharedBadgeHint": "The whole team can see this Scout project",
+    "privateBadgeHint": "Only its creator can see this Scout project",
+    "needKeyToRun": "Connect your free Groq key (above) to start the search — you can set everything up already.",
+    "signalsLabel": "Reasons to contact (Scout looks for these first — you confirm them)",
+    "signalsPlaceholder": "e.g. hiring staff, outdated website"
   },
   "hero": {
     "allClear": "Nothing is waiting on you here. Good moment to get ahead.",
@@ -2528,7 +2579,7 @@
     "priorities": "Priorities",
     "week": "Week passed",
     "today": "Today",
-    "docs": "Docs",
+    "docs": "Recorded meetings",
     "dueThisWeek": "Due this week",
     "tasks": "tasks",
     "late": "{count, plural, one {# is late} other {# are late}}",
@@ -2559,7 +2610,7 @@
     "areaNames": {
       "week": "My week",
       "agenda": "Agenda",
-      "docs": "Docs",
+      "docs": "Recorded meetings",
       "ideas": "Idea wall",
       "vault": "Vault"
     },
@@ -2896,7 +2947,49 @@
     "leads": {
       "hint": "Places found with Scout and saved to this project.",
       "openScout": "Open Scout",
-      "empty": "No leads saved yet. In Scout, open a lead and choose this project under “Save to project”."
+      "empty": "No leads saved yet. In Scout, open a lead and choose this project under “Save to project”.",
+      "hint2": "Places to visit: found with Scout or added by the team. Mark each one when you've been there.",
+      "addPlace": "Add a place",
+      "placeName": "Business name",
+      "placeNamePh": "e.g. Bar Txoko",
+      "address": "Address",
+      "addressPh": "Street, city",
+      "contact": "Contact",
+      "contactPh": "Phone, Instagram or website",
+      "note": "Note",
+      "notePh": "Why it's a good fit, who to ask for",
+      "cancel": "Cancel",
+      "save": "Save",
+      "added": "{name} added",
+      "saveError": "Couldn't save. Try again.",
+      "filter": "Show",
+      "filters": {
+        "todo": "Not visited yet",
+        "visited": "Visited",
+        "all": "All"
+      },
+      "foundBy": "Found by {name}",
+      "visitedOn": "Visited {date}",
+      "notVisited": "Not visited yet",
+      "results": {
+        "yes": "Yes",
+        "maybe": "Maybe",
+        "no": "No"
+      },
+      "visitNote": "How it went",
+      "visitNotePh": "What they said, next step",
+      "markVisited": "Mark visited",
+      "undoVisit": "Not visited",
+      "when": "When",
+      "howWasIt": "Successful?",
+      "addPoint": "Also add +1 Customer Visit to my points",
+      "saveVisit": "Save visit",
+      "visited": "{name} marked visited",
+      "visitedPoint": "{name} marked visited · +1 Customer Visit",
+      "confirmDelete": "Remove {name} from this project?",
+      "delete": "Remove",
+      "noneHere": "Nothing in this list.",
+      "empty2": "No places yet. Add a business you found, or save leads from Scout."
     }
   },
   "ai": {
@@ -2993,5 +3086,62 @@
     "addFor": "Add a leader for {week}",
     "remove": "Remove {name}",
     "saveError": "Couldn't save. Try again."
+  },
+  "points": {
+    "title": "Points",
+    "deadline": "Goal by {date}",
+    "kinds": {
+      "community": "Community Points",
+      "visit": "Customer Visits",
+      "learning": "Learning Points"
+    },
+    "reached": "Goal reached!",
+    "perWeek": "{n} a week to reach the goal",
+    "missed": "Deadline passed · {left} short",
+    "what": "What",
+    "amount": "How many",
+    "when": "When",
+    "note": "Note (optional)",
+    "notePlaceholder": {
+      "community": "e.g. helped at the open day",
+      "visit": "e.g. Café Iruña, talked to the owner",
+      "learning": "e.g. workshop on pricing"
+    },
+    "log": "Log",
+    "logged": "{kind} logged",
+    "history": "History",
+    "entry": "+{n} {kind}",
+    "delete": "Delete entry",
+    "confirmDelete": "Delete this entry?",
+    "empty": "No points logged yet.",
+    "emptyMe": "Nothing logged yet. Add your first points above.",
+    "saveError": "Couldn't save. Try again.",
+    "addFile": "File (optional) — e.g. the post-mortem",
+    "openFile": "Open file",
+    "uploadError": "Couldn't upload the file (max 10 MB). Try again."
+  },
+  "memberTasks": {
+    "todo": "{name} still has to do",
+    "todoMe": "You still have to do",
+    "overdue": "late · {date}",
+    "noDate": "no date",
+    "todoNone": "Nothing open. 🎉",
+    "late": "Not finished on time",
+    "lateHint": "Last 60 days: finished after the due date, or still open past it.",
+    "finishedLate": "{n, plural, one {finished # day late} other {finished # days late}}",
+    "stillOpen": "{n, plural, one {# day overdue} other {# days overdue}}",
+    "lateNone": "Everything finished on time.",
+    "more": "+ {count} more"
+  },
+  "push": {
+    "titles": {
+      "assigned": "New task",
+      "team_task": "New task",
+      "due_soon": "⏰ 1 day left",
+      "project_added": "New project",
+      "project_post": "New file in your project",
+      "training_week": "Training next week",
+      "training_lead": "You lead training"
+    }
   }
 }

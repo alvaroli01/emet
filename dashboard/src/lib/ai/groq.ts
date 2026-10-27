@@ -102,47 +102,48 @@ function system(lang: "es" | "en") {
   const [summary, points, decisions, actions, questions] = HEADINGS[lang];
   return `You turn a class or meeting transcript into clear notes for a university student team.
 Write in ${lang === "es" ? "Spanish" : "English"}. Use Markdown with exactly these headings, in this order, skipping any section that would be empty:
-## ${summary} — 2-4 sentences.
-## ${points} — bullets: the important ideas, facts, numbers and definitions.
+## ${summary} — what was talked about, start to finish: one short paragraph per main topic, in the order they came up.
+## ${points} — bullets: every important idea, fact, number, name, date and definition. Be complete rather than short.
 ## ${decisions} — bullets: only decisions actually stated.
 ## ${actions} — "- [ ] who: what (when)" for tasks actually assigned or agreed.
 ## ${questions} — bullets: only questions that were actually asked and left open. Never write your own questions.
 Be strictly faithful to the transcript: never invent facts, names, numbers, dates or questions. If a word looks mis-transcribed, keep it as heard.`;
 }
 
-export async function makeNotes(key: string, transcript: string, onUsage?: (model: string, tokens?: number) => unknown): Promise<{ markdown: string } | GroqError> {
-  const lang = mainLanguage(transcript);
-  const ask = async (content: string): Promise<{ markdown: string } | GroqError> => {
-    let last: GroqError = { kind: "failed", status: 404 };
-    for (const model of NOTES_MODELS) {
-      const res = await fetch(`${API}/chat/completions`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model, temperature: 0.2,
-          ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
-          messages: [{ role: "system", content: system(lang) }, { role: "user", content }],
-        }),
-      });
-      if (res.ok) {
-        const data = (await res.json()) as { choices?: { message?: { content?: string } }[]; usage?: { total_tokens?: number } };
-        await onUsage?.(model, data.usage?.total_tokens);
-        return { markdown: cleanNotes(data.choices?.[0]?.message?.content ?? "") };
-      }
-      // Retired or unavailable model → try the next one; anything else (limit, bad key) is final
-      if (res.status === 404 || res.status === 400) { last = { kind: "failed", status: res.status }; continue; }
-      return fail(res);
+/** One notes request (a whole short transcript, one part of a long one, or the merge). Each model has its own free
+ *  allowance, so a model that is retired, unavailable or at its limit hands over to the next; only when all are limited
+ *  does the caller wait (for the soonest). A bad key stops at once. */
+export async function notesRequest(key: string, content: string, lang: "es" | "en", onUsage?: (model: string, tokens?: number) => unknown): Promise<{ markdown: string } | GroqError> {
+  let last: GroqError = { kind: "failed", status: 404 };
+  let soonest: number | null = null;
+  for (const model of NOTES_MODELS) {
+    const res = await fetch(`${API}/chat/completions`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model, temperature: 0.2,
+        ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
+        messages: [{ role: "system", content: system(lang) }, { role: "user", content }],
+      }),
+    });
+    if (res.ok) {
+      const data = (await res.json()) as { choices?: { message?: { content?: string } }[]; usage?: { total_tokens?: number } };
+      await onUsage?.(model, data.usage?.total_tokens);
+      const markdown = cleanNotes(data.choices?.[0]?.message?.content ?? "");
+      if (markdown.trim()) return { markdown };
+      last = { kind: "failed", status: 204 }; continue; // empty answer → next model
     }
-    return last;
-  };
-  const parts = splitTranscript(transcript);
-  if (parts.length === 1) return ask(`Transcript:\n\n${parts[0]}`);
-  // Long sessions: notes per part, then one merged set of notes
-  const partial: string[] = [];
-  for (const [i, p] of parts.entries()) {
-    const r = await ask(`Part ${i + 1} of ${parts.length} of a longer transcript:\n\n${p}`);
-    if (!("markdown" in r)) return r;
-    partial.push(r.markdown);
+    const err = await fail(res);
+    if (err.kind === "bad-key") return err;
+    if (err.kind === "limit") { soonest = Math.min(soonest ?? err.retryAfter, err.retryAfter); continue; }
+    last = err; // 404 retired, 400/413 too big for this model, 5xx → next model
   }
-  return ask(`These are notes from consecutive parts of one session. Merge them into one set of notes, removing repetition:\n\n${partial.join("\n\n---\n\n")}`);
+  return soonest !== null ? { kind: "limit", retryAfter: soonest } : last;
+}
+
+/** What each notes step sends to the model. */
+export function notesPrompt(mode: "whole" | "part" | "merge", text: string, index = 1, total = 1): string {
+  if (mode === "part") return `Part ${index} of ${total} of a longer transcript. Write notes for this part only:\n\n${text}`;
+  if (mode === "merge") return `These are notes from consecutive parts of one session. Merge them into one complete set of notes: keep every key point, decision and action item, remove only repetition, and write the summary for the whole session:\n\n${text}`;
+  return `Transcript:\n\n${text}`;
 }

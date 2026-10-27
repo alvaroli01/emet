@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Machine endpoints check their own secret (cron, Trello signature) — no login cookie to look for
-const PUBLIC_PATHS = ["/login", "/auth", "/privacy", "/terms", "/api/trello/webhook", "/api/trello/sync", "/api/health", "/api/archive", "/api/calendar", "/go"];
+const PUBLIC_PATHS = ["/login", "/auth", "/privacy", "/terms", "/api/trello/webhook", "/api/trello/sync", "/api/health", "/api/archive", "/api/calendar", "/go", "/api/push", "/sw.js", "/manifest.webmanifest"];
 
 /** Refreshes the login session on every request and sends logged-out visitors to /login. */
 export async function updateSession(request: NextRequest) {

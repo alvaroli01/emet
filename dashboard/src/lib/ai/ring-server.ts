@@ -28,13 +28,14 @@ export function ownRing(meId: string, row: { key_iv: string; key_data: string })
  * usage. Server only (service role) — lent keys never reach the browser. Call it only after can_scout().
  * Without the service key (local dev) it falls back to my own key.
  */
-export async function scoutRing(meId: string, ownRow: { key_iv: string; key_data: string } | null): Promise<KeyRing | null> {
+/** pool = false: only my own keys (someone scouting their own project outside the selling teams — keys were lent to them). */
+export async function scoutRing(meId: string, ownRow: { key_iv: string; key_data: string } | null, pool = true): Promise<KeyRing | null> {
   const keys: PoolKey[] = ownRow ? [{ owner: meId, key: decryptKey(ownRow), own: true }] : [];
   const sb = service();
   if (!sb) return keys.length ? new KeyRing(keys) : null;
   const day = new Date().toISOString().slice(0, 10);
   const [{ data: lent }, { data: active }, { data: usage }, { data: backups }] = await Promise.all([
-    sb.from("ai_keys").select("owner_id, key_iv, key_data").eq("lend_scout", true).neq("owner_id", meId),
+    pool ? sb.from("ai_keys").select("owner_id, key_iv, key_data").eq("lend_scout", true).neq("owner_id", meId) : Promise.resolve({ data: [] as { owner_id: string; key_iv: string; key_data: string }[] }),
     sb.from("profiles").select("id").eq("active", true),
     sb.from("ai_key_usage").select("owner_id, model, tokens, limited_until, bad").eq("day", day),
     sb.from("backup_keys").select("owner_id, key_iv, key_data"),
