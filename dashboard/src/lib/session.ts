@@ -14,6 +14,7 @@ export type Profile = {
   role_title: string | null;
   is_admin: boolean;
   is_coach?: boolean;
+  is_leader?: boolean;
   locale: string | null;
   active: boolean;
 };
@@ -24,6 +25,7 @@ export type Session = {
   groups: Group[];
   /** Team Leader group or is_admin flag — mirrors public.is_admin() in the database */
   isAdmin: boolean;
+  isLeader: boolean;
   /** UI hint only. The database (RLS) is what actually enforces this. */
   canEditGroup: (groupId: string | null | undefined) => boolean;
   /** Plain object (safe to pass to client components) */
@@ -53,6 +55,8 @@ export const getSession = cache(async (): Promise<Session> => {
     myGroup,
     groups: allGroups,
     isAdmin,
+    /** Group leaders + admins: the Team Leaders tools (strikes, giving tasks, training leaders) */
+    isLeader: isAdmin || !!me.is_leader,
     canEditGroup: (gid) => isAdmin || (!!gid && gid === me.group_id),
     viewer: { meId: me.id, isAdmin, myGroupId: me.group_id, isCoach: !!me.is_coach },
   };

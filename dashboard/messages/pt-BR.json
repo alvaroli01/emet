@@ -29,7 +29,8 @@
     "mobileNav": "Principal",
     "askCard": "Pergunte à emet",
     "askCardText": "Dúvidas sobre o time, o dinheiro ou as tarefas? Respondemos com os nossos dados.",
-    "projects": "Projetos"
+    "projects": "Projetos",
+    "allProjects": "Todos os projetos"
   },
   "shell": {
     "noGroupYet": "Ainda sem grupo",
@@ -264,7 +265,7 @@
   },
   "group": {
     "names": {
-      "team-leader": "Liderança",
+      "team-leader": "Líderes",
       "finance": "Financeiro",
       "customer": "Clientes",
       "marketing": "Marketing",
@@ -1113,7 +1114,10 @@
       "project_added": "Você foi adicionado ao projeto “{project}”",
       "project_post": "Novo em “{project}”: {title}",
       "training_lead": "Você lidera o treino esta semana",
-      "training_week": "Na semana que vem o treino é liderado por {names}"
+      "training_week": "Na semana que vem o treino é liderado por {names}",
+      "strike": "Você recebeu um strike: {reason, select, late_tasks {mais de 3 tarefas atrasadas} sleeping {dormir na aula} phone {avisos pelo celular na aula} late_arrival {chegou 10+ min atrasado (€ 3)} missed_validation {perdeu uma validação (3 strikes)} missed_customer_deadline {perdeu um prazo com cliente (3 strikes)} other {strike}} · {total}/3 neste trimestre",
+      "punishment": "3 strikes: traga € 75 vendendo água até {due}",
+      "announcement": "{title}"
     },
     "popupTitle": "Nova tarefa para você",
     "popupDue": "Prazo: {date}",
@@ -3141,7 +3145,60 @@
       "project_added": "Novo projeto",
       "project_post": "Novo arquivo no seu projeto",
       "training_week": "Treino na semana que vem",
-      "training_lead": "Você lidera o treino"
+      "training_lead": "Você lidera o treino",
+      "strike": "Strike",
+      "punishment": "⚠️ 3 strikes",
+      "announcement": "emet"
     }
+  },
+  "strikes": {
+    "tool": "Strikes",
+    "title": "Strikes",
+    "give": "Dar um strike",
+    "who": "Quem",
+    "why": "Motivo",
+    "when": "Quando",
+    "note": "Nota (opcional)",
+    "giveButton": "Dar strike",
+    "rules": "Normal = 1 strike, grande = 3. Chegar 10+ min atrasado também custa € 3. 3 strikes no trimestre = trazer € {eur} vendendo água em 2 dias. Todos voltam a 0 em {reset}.",
+    "given": "Strike dado a {name}",
+    "saveError": "Não foi possível salvar. Tente de novo.",
+    "punishments": "Punições a acompanhar",
+    "punishmentText": "trazer € {eur} vendendo água",
+    "dueOn": "até {date}",
+    "overdue": "atrasado desde {date}",
+    "markDone": "Feito",
+    "thisQuarter": "Este trimestre",
+    "noneYet": "Nenhum strike ainda.",
+    "history": "Todos os strikes",
+    "paid": "pago",
+    "notPaid": "não pago ainda",
+    "by": "por {name}",
+    "delete": "Remover strike",
+    "confirmDelete": "Remover este strike de {name}? Só em caso de erro.",
+    "resets": "Volta a 0 em {date}",
+    "reached": "3 strikes atingidos",
+    "left": "{n, plural, one {mais # strike até a punição} other {mais # strikes até a punição}}",
+    "owes": "€ {eur} a pagar",
+    "punishmentMe": "Você chegou a 3 strikes: traga € {eur} vendendo água até {date}.",
+    "punishmentOther": "Chegou a 3 strikes: precisa trazer € {eur} vendendo água até {date}.",
+    "clean": "Nenhum strike neste trimestre. 👏",
+    "kinds": {
+      "late_tasks": "Mais de 3 tarefas atrasadas",
+      "sleeping": "Dormir na aula",
+      "phone": "Avisos repetidos por usar o celular na aula",
+      "late_arrival": "Chegar 10+ min atrasado",
+      "missed_validation": "Perder uma validação",
+      "missed_customer_deadline": "Perder um prazo com cliente"
+    }
+  },
+  "allProjects": {
+    "title": "Todos os projetos",
+    "heading": "No que cada um está trabalhando",
+    "hint": "Cada projeto, sua equipe e as tarefas abertas. Só leitura.",
+    "nothingOpen": "sem tarefas abertas",
+    "noPeople": "Ninguém neste projeto ainda.",
+    "lastUpdate": "Última atualização de {who}, {when}",
+    "none": "Nenhum projeto ainda."
   }
 }

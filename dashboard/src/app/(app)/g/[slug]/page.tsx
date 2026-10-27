@@ -17,7 +17,9 @@ import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { AssistantBubble } from "@/components/shell/assistant-bubble";
-import { LayoutDashboard, KanbanSquare, ListChecks, FolderOpen, FolderKanban } from "lucide-react";
+import { LayoutDashboard, KanbanSquare, ListChecks, FolderOpen, FolderKanban, Gavel } from "lucide-react";
+import { StrikesTool } from "@/components/tools/strikes";
+import { loadStrikes } from "@/lib/strikes-server";
 import { AssignTasks } from "@/components/tools/team-tasks";
 import { loadProjectPeople, loadMyProjects } from "@/lib/projects-server";
 import { MyProjects } from "@/components/projects/my-projects";
@@ -86,10 +88,15 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   const marketingDash = slug === "marketing" ? await loadMarketingDash() : null;
   // Team leader only: give tasks to everyone / several people / yourself (only leaders and admins see this tool)
   const tk = await getTranslations("teamTasks");
-  const assignTool = slug === "team-leader" && session.isAdmin ? [{
+  const assignTool = slug === "team-leader" && session.isLeader ? [{
     id: "assign", group: "work" as const, label: tk("tool"), icon: <ListChecks size={16} />,
     node: <AssignTasks tasks={await loadTeamTasks(undefined, undefined, true)} people={board.members} meId={session.me.id} projects={await loadProjectPeople(await createClient())}
                        teams={session.groups.map((g) => ({ id: g.id, name: t(`names.${g.slug}`) }))} />,
+  }] : [];
+  // Leaders: strikes (1 normal, 3 big; 3 in a quarter = the €75 punishment)
+  const strikesTool = slug === "team-leader" && session.isLeader ? [{
+    id: "strikes", group: "people" as const, label: (await getTranslations("strikes"))("tool"), icon: <Gavel size={16} />,
+    node: <StrikesTool people={board.members} data={await loadStrikes()} today={todayISO()} />,
   }] : [];
   // Team leader only: company documents everyone can open on their own profile
   const td = await getTranslations("documents");
@@ -105,6 +112,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   }] : [];
   const allTools = [
     ...assignTool,
+    ...strikesTool,
     ...projectsTool,
     ...docsTool,
     { id: "board", group: "work", label: t("board"), icon: <KanbanSquare size={16} />, node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },

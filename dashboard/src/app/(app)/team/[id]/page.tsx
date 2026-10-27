@@ -7,6 +7,7 @@ import { todayISO } from "@/lib/format";
 import { loadMember } from "@/lib/team-stats";
 import { loadTeamTasks } from "@/lib/team-tasks";
 import type { MemberTaskItem } from "@/lib/member-tasks";
+import { loadStrikes } from "@/lib/strikes-server";
 import { MemberDashboard } from "@/components/team/member-dashboard";
 import { loadMyProjects } from "@/lib/projects-server";
 import type { ProjectCard } from "@/components/projects/my-projects";
@@ -27,13 +28,13 @@ export default async function MemberPage({ params }: { params: Promise<{ id: str
   const projects: ProjectCard[] = person.id === me.id ? await loadMyProjects(supabase, me.id) : [];
   // Community points, customer visits, learning points — everyone can see anyone's
   // Tasks: their board tasks + the team-leader tasks given to them (with their own tick)
-  const teamTasks = await loadTeamTasks(person.id);
+  const [teamTasks, strikes] = await Promise.all([loadTeamTasks(person.id), loadStrikes(person.id)]);
   const tasks: MemberTaskItem[] = [...d.tasks, ...teamTasks.map((x) => ({ id: `tt-${x.id}`, title: x.title, due: x.due_on, done_at: x.people.find((p) => p.id === person.id)?.done_at ?? null,
     href: person.id === me.id ? "/my-tasks#team-tasks" : undefined }))];
   const { data: points } = await supabase.from("member_points").select("id, kind, amount, happened_on, note, file_path, file_name").eq("user_id", person.id)
     .order("happened_on", { ascending: false }).order("created_at", { ascending: false }).returns<PointEntry[]>();
   return (
-    <MemberDashboard today={todayISO()} d={d} isMe={person.id === me.id} isLeader={isAdmin} projects={projects} points={points ?? []} tasks={tasks}
+    <MemberDashboard today={todayISO()} d={d} isMe={person.id === me.id} isLeader={isAdmin} projects={projects} points={points ?? []} tasks={tasks} strikes={strikes}
       p={{ id: person.id, name: person.full_name, email: person.email, avatar: person.avatar_url, role: person.role_title, team: g?.name ?? null, teamSlug: g?.slug ?? null }} />
   );
 }

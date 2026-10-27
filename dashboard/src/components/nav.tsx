@@ -4,16 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent, AudioLines, Lightbulb, Sun, Radar, ChevronDown, ChevronsLeft, ChevronsRight, Sparkles } from "lucide-react";
+import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent, AudioLines, Lightbulb, Sun, Radar, ChevronDown, ChevronsLeft, ChevronsRight, Sparkles, FolderKanban } from "lucide-react";
 import type { Group } from "@/lib/session";
 import { LogoMark } from "@/components/summit/logo";
 import { GroupIcon } from "@/components/group-icon";
 
-type Props = { groups: Group[]; myGroupId: string | null };
+/** showProjects: the coach, leaders and admins get "All projects" (what everyone is working on) */
+type Props = { groups: Group[]; myGroupId: string | null; showProjects?: boolean };
 type Item = { href: string; label: string; icon: React.ReactNode; color?: string; mine?: boolean };
 
 /** The menu in three folding groups (like a file tree): your space, the five teams, shared tools. */
-function useSections({ groups, myGroupId }: Props) {
+function useSections({ groups, myGroupId, showProjects }: Props) {
   const t = useTranslations("nav");
   const tg = useTranslations("group.names");
   const sections: { key: string; label: string; items: Item[] }[] = [
@@ -32,6 +33,7 @@ function useSections({ groups, myGroupId }: Props) {
       { href: "/scout", label: t("scout"), icon: <Radar size={17} /> },
       { href: "/meetings", label: t("meetings"), icon: <AudioLines size={17} /> },
       { href: "/team", label: t("team"), icon: <Users size={17} /> },
+      ...(showProjects ? [{ href: "/projects", label: t("allProjects"), icon: <FolderKanban size={17} /> }] : []),
     ] },
   ];
   return { sections, t };

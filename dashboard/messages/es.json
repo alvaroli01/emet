@@ -29,7 +29,8 @@
     "mobileNav": "Principal",
     "askCard": "Pregunta a emet",
     "askCardText": "Dudas sobre el equipo, el dinero o las tareas: te respondemos con nuestros datos.",
-    "projects": "Proyectos"
+    "projects": "Proyectos",
+    "allProjects": "Todos los proyectos"
   },
   "shell": {
     "noGroupYet": "Sin grupo todavía",
@@ -264,7 +265,7 @@
   },
   "group": {
     "names": {
-      "team-leader": "Liderazgo",
+      "team-leader": "Líderes",
       "finance": "Finanzas",
       "customer": "Clientes",
       "marketing": "Marketing",
@@ -1113,7 +1114,10 @@
       "project_added": "Te han añadido al proyecto «{project}»",
       "project_post": "Novedad en «{project}»: {title}",
       "training_lead": "Esta semana lideras el entrenamiento",
-      "training_week": "La semana que viene el entrenamiento lo lidera {names}"
+      "training_week": "La semana que viene el entrenamiento lo lidera {names}",
+      "strike": "Te han puesto un strike: {reason, select, late_tasks {más de 3 tareas atrasadas} sleeping {dormir en clase} phone {avisos por el móvil en clase} late_arrival {llegar 10+ min tarde (3 €)} missed_validation {faltar a una validación (3 strikes)} missed_customer_deadline {incumplir un plazo con un cliente (3 strikes)} other {strike}} · {total}/3 este trimestre",
+      "punishment": "3 strikes: trae 75 € vendiendo agua antes del {due}",
+      "announcement": "{title}"
     },
     "popupTitle": "Nueva tarea para ti",
     "popupDue": "Para el {date}",
@@ -3141,7 +3145,60 @@
       "project_added": "Nuevo proyecto",
       "project_post": "Nuevo archivo en tu proyecto",
       "training_week": "Entrenamiento la semana que viene",
-      "training_lead": "Lideras el entrenamiento"
+      "training_lead": "Lideras el entrenamiento",
+      "strike": "Strike",
+      "punishment": "⚠️ 3 strikes",
+      "announcement": "emet"
     }
+  },
+  "strikes": {
+    "tool": "Strikes",
+    "title": "Strikes",
+    "give": "Poner un strike",
+    "who": "Quién",
+    "why": "Motivo",
+    "when": "Cuándo",
+    "note": "Nota (opcional)",
+    "giveButton": "Poner strike",
+    "rules": "Normal = 1 strike, grande = 3. Llegar 10+ min tarde además cuesta 3 €. 3 strikes en un trimestre = traer {eur} € vendiendo agua en 2 días. Todos vuelven a 0 el {reset}.",
+    "given": "Strike puesto a {name}",
+    "saveError": "No se ha podido guardar. Inténtalo otra vez.",
+    "punishments": "Castigos pendientes",
+    "punishmentText": "traer {eur} € vendiendo agua",
+    "dueOn": "antes del {date}",
+    "overdue": "vencido desde el {date}",
+    "markDone": "Hecho",
+    "thisQuarter": "Este trimestre",
+    "noneYet": "Aún no hay strikes.",
+    "history": "Todos los strikes",
+    "paid": "pagado",
+    "notPaid": "sin pagar",
+    "by": "por {name}",
+    "delete": "Quitar strike",
+    "confirmDelete": "¿Quitar este strike a {name}? Solo si fue un error.",
+    "resets": "Vuelve a 0 el {date}",
+    "reached": "3 strikes alcanzados",
+    "left": "{n, plural, one {# strike más para el castigo} other {# strikes más para el castigo}}",
+    "owes": "{eur} € por pagar",
+    "punishmentMe": "Has llegado a 3 strikes: trae {eur} € vendiendo agua antes del {date}.",
+    "punishmentOther": "Ha llegado a 3 strikes: tiene que traer {eur} € vendiendo agua antes del {date}.",
+    "clean": "Sin strikes este trimestre. 👏",
+    "kinds": {
+      "late_tasks": "Más de 3 tareas atrasadas",
+      "sleeping": "Dormir en clase",
+      "phone": "Avisos repetidos por usar el móvil en clase",
+      "late_arrival": "Llegar 10+ min tarde",
+      "missed_validation": "Faltar a una validación",
+      "missed_customer_deadline": "Incumplir un plazo con un cliente"
+    }
+  },
+  "allProjects": {
+    "title": "Todos los proyectos",
+    "heading": "En qué está trabajando cada uno",
+    "hint": "Cada proyecto, su gente y sus tareas abiertas. Solo lectura.",
+    "nothingOpen": "sin tareas abiertas",
+    "noPeople": "Aún no hay nadie en este proyecto.",
+    "lastUpdate": "Última novedad de {who}, {when}",
+    "none": "Aún no hay proyectos."
   }
 }

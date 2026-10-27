@@ -921,3 +921,58 @@ select t.login(3);
 select t.check('A lead keeps its hook', $$update scout_leads set hook = '{"kind":"hiring","text":"Buscan camarero"}' where saved_project_id is not null$$, 'ok');
 select t.assert('...readable by the team', t.num($$select count(*) from scout_leads where hook->>'kind' = 'hiring'$$) >= 1);
 reset role;
+-- ── Leaders: group leaders use the Team Leaders tools (not full admin) ──
+set role authenticated;
+select t.login(1);  -- Alvaro (admin)
+select t.check('Admin marks Rocco as a leader', $$update profiles set is_leader = true where full_name = 'Rocco'$$, 'ok');
+select t.login(3);  -- Rocco
+select t.assert('Rocco is a leader now', (select is_leader()));
+select t.check('A leader cannot make others leaders', $$update profiles set is_leader = true where full_name = 'Emily'$$, 'denied');
+select t.check('Leaders give tasks', $$insert into team_tasks (title) values ('Leader task from Rocco')$$, 'ok');
+select t.check('Leaders set training leaders', $$insert into training_leaders (week_start, user_id) select '2026-11-09', id from profiles where full_name = 'Emily'$$, 'ok');
+select t.check('...but are not admins (cannot create projects)', $$insert into projects (name) values ('Rocco project')$$, 'denied');
+select t.login(6);  -- Emily
+select t.assert('Emily is not a leader', not (select is_leader()));
+select t.check('Members cannot make themselves leaders', $$update profiles set is_leader = true where id = my_profile_id()$$, 'denied');
+reset role;
+
+-- ── Strikes: 1 for normal, 3 for big; late arrival also €3; 3 strikes in a quarter = the €75 punishment ──
+set role authenticated;
+select t.login(3);  -- Rocco, leader
+select t.check('Leader gives Emily a strike for sleeping in class', $$insert into strikes (user_id, kind, happened_on) select id, 'sleeping', '2026-10-27' from profiles where full_name = 'Emily'$$, 'ok');
+select t.check('...and one for arriving 10+ min late', $$insert into strikes (user_id, kind, happened_on) select id, 'late_arrival', '2026-10-27' from profiles where full_name = 'Emily'$$, 'ok');
+select t.assert('Late arrival counts 1 and costs €3', t.num($$select count(*) from strikes where kind = 'late_arrival' and weight = 1 and fine = 3$$) = 1);
+select t.assert('No punishment yet at 2 strikes', t.num($$select count(*) from strike_punishments$$) = 0);
+select t.check('Missing a validation is 3 strikes', $$insert into strikes (user_id, kind, happened_on) select id, 'missed_validation', '2026-10-28' from profiles where full_name = 'Emily'$$, 'ok');
+select t.assert('...weight 3', t.num($$select count(*) from strikes where kind = 'missed_validation' and weight = 3$$) = 1);
+select t.assert('Reaching 3 strikes creates the punishment', t.num($$select count(*) from strike_punishments$$) = 1);
+select t.assert('...due 2 days after she is told', t.num($$select count(*) from strike_punishments where due_on = told_on + 2$$) = 1);
+select t.check('Only known kinds', $$insert into strikes (user_id, kind) select id, 'bad_vibes' from profiles where full_name = 'Emily'$$, 'denied');
+select t.check('Missing a customer deadline is 3 more', $$insert into strikes (user_id, kind, happened_on) select id, 'missed_customer_deadline', '2026-10-28' from profiles where full_name = 'Emily'$$, 'ok');
+select t.assert('6+ strikes in a quarter: a second punishment', t.num($$select count(*) from strike_punishments$$) = 2);
+select t.check('Leader marks the €3 paid', $$update strikes set paid_at = now() where kind = 'late_arrival'$$, 'ok');
+select t.check('A strike given by mistake is removed', $$delete from strikes where kind = 'missed_customer_deadline'$$, 'ok');
+select t.assert('...and its extra punishment goes with it', t.num($$select count(*) from strike_punishments$$) = 1);
+select t.check('Leader marks the punishment done (€75 brought)', $$update strike_punishments set done_at = now()$$, 'ok');
+select t.check('An old strike from last quarter', $$insert into strikes (user_id, kind, happened_on) select id, 'phone', '2026-09-15' from profiles where full_name = 'Emily'$$, 'ok');
+select t.assert('Every 3 months it starts again from 0', (select strike_total(id, '2026-10-28') from profiles where full_name = 'Emily') = 5
+  and (select strike_total(id, '2026-09-30') from profiles where full_name = 'Emily') = 1);
+select t.login(6);  -- Emily
+select t.assert('Emily is told about her strikes and the punishment', t.num($$select count(*) from notifications where kind in ('strike', 'punishment')$$) >= 4);
+select t.check('Emily cannot mark her own €3 unpaid/paid', $$update strikes set paid_at = null$$, 'denied');
+select t.check('...nor delete a strike', $$delete from strikes$$, 'denied');
+select t.check('...nor give one', $$insert into strikes (user_id, kind) select id, 'phone' from profiles where full_name = 'Stefan'$$, 'denied');
+select t.login(2);  -- Stefan, member view
+select t.assert('Everyone can see strikes', t.num($$select count(*) from strikes s join profiles p on p.id = s.user_id where p.full_name = 'Emily'$$) = 4);
+select t.assert('Strikes and punishments reach phones', push_worthy('strike', '{}') and push_worthy('punishment', '{}'));
+reset role;
+
+-- ── Coach: sees every project and what people work on, changes nothing ──
+set role authenticated;
+select t.login(7);  -- Leire
+select t.assert('Coach sees projects she is not in', t.num($$select count(*) from projects p where name = 'Campus stall' and not exists (select 1 from project_members m where m.project_id = p.id and m.user_id = my_profile_id())$$) = 1);
+select t.assert('...and who is in them', t.num('select count(*) from project_members') > 0);
+select t.check('Coach cannot change a project', $$update projects set name = 'x'$$, 'denied');
+select t.check('Coach cannot post in a project', $$insert into project_updates (project_id, body, created_by) select id, 'hi', my_profile_id() from projects limit 1$$, 'denied');
+select t.check('Coach cannot add project places', $$insert into project_places (project_id, name) select id, 'x' from projects limit 1$$, 'denied');
+reset role;

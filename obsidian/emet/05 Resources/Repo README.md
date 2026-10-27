@@ -203,6 +203,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-27 | Phone notifications via free web push: Supabase pg_net + Vault call `/api/push` (secret generated in and checked by the database), web-push VAPID keys in Vercel (`NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`). Only tasks, project membership, project files and 1-day reminders are pushed | Alvaro |
 | 2026-10-28 | Shared Scout projects can be searched and worked by everyone; only the setup stays with the creator and selling teams | Alvaro |
 | 2026-10-28 | Harvey (autonomous cold-email agent) is NOT integrated as-is: it needs a paid Claude/ChatGPT plan, runs on one computer and cold-emails (restricted in Spain). Its playbooks (signals, one hook, honesty rules, objection handling) were ported into Scout instead, on the free Groq keys | Alvaro |
+| 2026-10-28 | Strikes: normal 1 (more than 3 late tasks, sleeping in class, repeated phone warnings, arriving 10+ min late = also €3), big 3 (missed validation, missed customer deadline); 3 strikes in a quarter = bring €75 from selling water within 2 days; quarterly reset; all leaders give strikes, everyone sees them. Group leaders get the Team Leaders tools (not full admin). The coach sees every project read-only | Alvaro |
 
 ## 10. Open questions
 

@@ -11,6 +11,8 @@ import { MyProjects, type ProjectCard } from "@/components/projects/my-projects"
 import { MyConnections } from "@/components/camp/ai-connections";
 import { PointsPanel, type PointEntry } from "./points-panel";
 import { MemberTasks } from "./member-tasks";
+import { StrikesPanel } from "./strikes-panel";
+import type { StrikesData } from "@/lib/strikes-server";
 import type { MemberTaskItem } from "@/lib/member-tasks";
 
 export type MemberInfo = { id: string; name: string; email: string; avatar: string | null; role: string | null; team: string | null; teamSlug: string | null };
@@ -41,7 +43,7 @@ function Countdown({ to }: { to: string | null }) {
   return <span className="readout text-3xl">{d ? `${d}d ` : ""}{pad(Math.floor((s % 86400) / 3600))}:{pad(Math.floor((s % 3600) / 60))}:{pad(s % 60)}</span>;
 }
 
-export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, projects = [], points = [], tasks = [] }: { p: MemberInfo; d: MemberData; today: string; isMe?: boolean; isLeader?: boolean; projects?: ProjectCard[]; points?: PointEntry[]; tasks?: MemberTaskItem[] }) {
+export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, projects = [], points = [], tasks = [], strikes }: { p: MemberInfo; d: MemberData; today: string; isMe?: boolean; isLeader?: boolean; projects?: ProjectCard[]; points?: PointEntry[]; tasks?: MemberTaskItem[]; strikes?: StrikesData }) {
   const t = useTranslations("member");
   const locale = useLocale();
   const [month, setMonth] = useState(() => today.slice(0, 7));
@@ -73,6 +75,7 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, p
 
       <MemberTasks tasks={tasks} name={p.name.split(" ")[0]} isMe={isMe} />
       <PointsPanel entries={points} isMe={isMe} today={today} />
+      {strikes && <StrikesPanel data={strikes} today={today} isMe={isMe} />}
 
       <div className="grid gap-4 lg:grid-cols-[1.05fr_1fr_1fr]">
         {/* Profile + working format */}

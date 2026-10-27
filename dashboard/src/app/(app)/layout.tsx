@@ -14,13 +14,14 @@ import { Presence } from "@/components/workspace/presence";
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("shell");
   const tg = await getTranslations("group.names");
-  const { me, myGroup, groups } = await getSession();
+  const { me, myGroup, groups, isLeader } = await getSession();
+  const showProjects = isLeader || !!me.is_coach;
 
   return (
     <div className="relative isolate flex min-h-dvh">
       <Backdrop />
       <LocaleSync saved={me.locale} />
-      <Sidebar groups={groups} myGroupId={me.group_id} />
+      <Sidebar groups={groups} myGroupId={me.group_id} showProjects={showProjects} />
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBarFrame>
           <MobileLogo />
@@ -36,7 +37,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </TopBarFrame>
         <main className="on-photo mx-auto w-full max-w-[1400px] flex-1 px-3 pt-3 pb-28 sm:px-4 sm:pt-5 lg:px-6 lg:pb-10">{children}</main>
       </div>
-      <BottomNav groups={groups} myGroupId={me.group_id} />
+      <BottomNav groups={groups} myGroupId={me.group_id} showProjects={showProjects} />
       <CommandPalette />
       <DailyBrief />
       <Presence />

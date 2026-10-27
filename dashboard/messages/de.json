@@ -29,7 +29,8 @@
     "mobileNav": "Hauptmenü",
     "askCard": "Frag emet",
     "askCardText": "Fragen zum Team, zu Geld oder Aufgaben – beantwortet mit unseren Daten.",
-    "projects": "Projekte"
+    "projects": "Projekte",
+    "allProjects": "Alle Projekte"
   },
   "shell": {
     "noGroupYet": "Noch keine Gruppe",
@@ -1113,7 +1114,10 @@
       "project_added": "Du wurdest zum Projekt „{project}“ hinzugefügt",
       "project_post": "Neu in „{project}“: {title}",
       "training_lead": "Du leitest diese Woche das Training",
-      "training_week": "Nächste Woche leitet {names} das Training"
+      "training_week": "Nächste Woche leitet {names} das Training",
+      "strike": "Du hast einen Strike bekommen: {reason, select, late_tasks {mehr als 3 überfällige Aufgaben} sleeping {im Unterricht geschlafen} phone {Handy-Warnungen im Unterricht} late_arrival {10+ Min. zu spät (3 €)} missed_validation {Validierung verpasst (3 Strikes)} missed_customer_deadline {Kundenfrist verpasst (3 Strikes)} other {Strike}} · {total}/3 in diesem Quartal",
+      "punishment": "3 Strikes: bring bis {due} 75 € durch Wasserverkauf",
+      "announcement": "{title}"
     },
     "popupTitle": "Neue Aufgabe für dich",
     "popupDue": "Fällig {date}",
@@ -3141,7 +3145,60 @@
       "project_added": "Neues Projekt",
       "project_post": "Neue Datei in deinem Projekt",
       "training_week": "Training nächste Woche",
-      "training_lead": "Du leitest das Training"
+      "training_lead": "Du leitest das Training",
+      "strike": "Strike",
+      "punishment": "⚠️ 3 Strikes",
+      "announcement": "emet"
     }
+  },
+  "strikes": {
+    "tool": "Strikes",
+    "title": "Strikes",
+    "give": "Strike vergeben",
+    "who": "Wer",
+    "why": "Grund",
+    "when": "Wann",
+    "note": "Notiz (optional)",
+    "giveButton": "Strike vergeben",
+    "rules": "Normal = 1 Strike, groß = 3. 10+ Min. zu spät kostet zusätzlich 3 €. 3 Strikes im Quartal = innerhalb von 2 Tagen {eur} € durch Wasserverkauf bringen. Am {reset} geht es für alle wieder bei 0 los.",
+    "given": "Strike für {name} vergeben",
+    "saveError": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
+    "punishments": "Offene Strafen",
+    "punishmentText": "{eur} € durch Wasserverkauf bringen",
+    "dueOn": "fällig {date}",
+    "overdue": "überfällig seit {date}",
+    "markDone": "Erledigt",
+    "thisQuarter": "Dieses Quartal",
+    "noneYet": "Noch keine Strikes.",
+    "history": "Alle Strikes",
+    "paid": "bezahlt",
+    "notPaid": "noch nicht bezahlt",
+    "by": "von {name}",
+    "delete": "Strike entfernen",
+    "confirmDelete": "Diesen Strike von {name} entfernen? Nur bei Fehlern.",
+    "resets": "Zurück auf 0 am {date}",
+    "reached": "3 Strikes erreicht",
+    "left": "{n, plural, one {noch # Strike bis zur Strafe} other {noch # Strikes bis zur Strafe}}",
+    "owes": "{eur} € offen",
+    "punishmentMe": "Du hast 3 Strikes: bring bis {date} {eur} € durch Wasserverkauf.",
+    "punishmentOther": "Hat 3 Strikes: muss bis {date} {eur} € durch Wasserverkauf bringen.",
+    "clean": "Keine Strikes in diesem Quartal. 👏",
+    "kinds": {
+      "late_tasks": "Mehr als 3 überfällige Aufgaben",
+      "sleeping": "Im Unterricht geschlafen",
+      "phone": "Wiederholte Handy-Warnungen im Unterricht",
+      "late_arrival": "10+ Min. zu spät",
+      "missed_validation": "Validierung verpasst",
+      "missed_customer_deadline": "Kundenfrist verpasst"
+    }
+  },
+  "allProjects": {
+    "title": "Alle Projekte",
+    "heading": "Woran alle gerade arbeiten",
+    "hint": "Jedes Projekt, seine Leute und ihre offenen Aufgaben. Nur lesen.",
+    "nothingOpen": "keine offenen Aufgaben",
+    "noPeople": "Noch niemand in diesem Projekt.",
+    "lastUpdate": "Letztes Update von {who}, {when}",
+    "none": "Noch keine Projekte."
   }
 }

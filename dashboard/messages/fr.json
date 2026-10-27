@@ -29,7 +29,8 @@
     "mobileNav": "Principal",
     "askCard": "Demande à emet",
     "askCardText": "Des questions sur l’équipe, l’argent ou les tâches ? Réponse à partir de nos données.",
-    "projects": "Projets"
+    "projects": "Projets",
+    "allProjects": "Tous les projets"
   },
   "shell": {
     "noGroupYet": "Pas encore de groupe",
@@ -264,7 +265,7 @@
   },
   "group": {
     "names": {
-      "team-leader": "Direction",
+      "team-leader": "Responsables",
       "finance": "Finance",
       "customer": "Clients",
       "marketing": "Marketing",
@@ -1113,7 +1114,10 @@
       "project_added": "Tu as été ajouté au projet « {project} »",
       "project_post": "Nouveau dans « {project} » : {title}",
       "training_lead": "Tu animes l’entraînement cette semaine",
-      "training_week": "La semaine prochaine, l’entraînement est animé par {names}"
+      "training_week": "La semaine prochaine, l’entraînement est animé par {names}",
+      "strike": "Tu as reçu un strike : {reason, select, late_tasks {plus de 3 tâches en retard} sleeping {dormir en cours} phone {téléphone en cours} late_arrival {10+ min de retard (3 €)} missed_validation {validation manquée (3 strikes)} missed_customer_deadline {échéance client manquée (3 strikes)} other {strike}} · {total}/3 ce trimestre",
+      "punishment": "3 strikes : rapporte 75 € en vendant de l’eau avant le {due}",
+      "announcement": "{title}"
     },
     "popupTitle": "Nouvelle tâche pour toi",
     "popupDue": "Pour le {date}",
@@ -3141,7 +3145,60 @@
       "project_added": "Nouveau projet",
       "project_post": "Nouveau fichier dans ton projet",
       "training_week": "Entraînement la semaine prochaine",
-      "training_lead": "Tu animes l’entraînement"
+      "training_lead": "Tu animes l’entraînement",
+      "strike": "Strike",
+      "punishment": "⚠️ 3 strikes",
+      "announcement": "emet"
     }
+  },
+  "strikes": {
+    "tool": "Strikes",
+    "title": "Strikes",
+    "give": "Donner un strike",
+    "who": "Qui",
+    "why": "Motif",
+    "when": "Quand",
+    "note": "Note (facultatif)",
+    "giveButton": "Donner le strike",
+    "rules": "Normal = 1 strike, gros = 3. Arriver avec 10+ min de retard coûte aussi 3 €. 3 strikes dans un trimestre = rapporter {eur} € en vendant de l’eau sous 2 jours. Tout le monde repart à 0 le {reset}.",
+    "given": "Strike donné à {name}",
+    "saveError": "Échec de l’enregistrement. Réessaie.",
+    "punishments": "Punitions à suivre",
+    "punishmentText": "rapporter {eur} € en vendant de l’eau",
+    "dueOn": "avant le {date}",
+    "overdue": "en retard depuis le {date}",
+    "markDone": "Fait",
+    "thisQuarter": "Ce trimestre",
+    "noneYet": "Pas encore de strikes.",
+    "history": "Tous les strikes",
+    "paid": "payé",
+    "notPaid": "pas encore payé",
+    "by": "par {name}",
+    "delete": "Retirer le strike",
+    "confirmDelete": "Retirer ce strike à {name} ? Seulement en cas d’erreur.",
+    "resets": "Retour à 0 le {date}",
+    "reached": "3 strikes atteints",
+    "left": "{n, plural, one {encore # strike avant la punition} other {encore # strikes avant la punition}}",
+    "owes": "{eur} € à payer",
+    "punishmentMe": "Tu as 3 strikes : rapporte {eur} € en vendant de l’eau avant le {date}.",
+    "punishmentOther": "A 3 strikes : doit rapporter {eur} € en vendant de l’eau avant le {date}.",
+    "clean": "Aucun strike ce trimestre. 👏",
+    "kinds": {
+      "late_tasks": "Plus de 3 tâches en retard",
+      "sleeping": "Dormir en cours",
+      "phone": "Avertissements répétés pour le téléphone en cours",
+      "late_arrival": "Arrivé·e avec 10+ min de retard",
+      "missed_validation": "Validation manquée",
+      "missed_customer_deadline": "Échéance client manquée"
+    }
+  },
+  "allProjects": {
+    "title": "Tous les projets",
+    "heading": "Sur quoi chacun travaille",
+    "hint": "Chaque projet, ses membres et leurs tâches en cours. Lecture seule.",
+    "nothingOpen": "aucune tâche en cours",
+    "noPeople": "Personne dans ce projet pour l’instant.",
+    "lastUpdate": "Dernière nouvelle de {who}, {when}",
+    "none": "Pas encore de projets."
   }
 }

@@ -29,7 +29,8 @@
     "mobileNav": "Main",
     "askCard": "Ask emet",
     "askCardText": "Questions about the team, money or tasks — answered from our data.",
-    "projects": "Projects"
+    "projects": "Projects",
+    "allProjects": "All projects"
   },
   "shell": {
     "noGroupYet": "No group yet",
@@ -264,7 +265,7 @@
   },
   "group": {
     "names": {
-      "team-leader": "Team Leader",
+      "team-leader": "Team Leaders",
       "finance": "Finance",
       "customer": "Customer",
       "marketing": "Marketing",
@@ -1113,7 +1114,10 @@
       "project_added": "You were added to the project “{project}”",
       "project_post": "New in “{project}”: {title}",
       "training_lead": "You lead training this week",
-      "training_week": "Training next week is led by {names}"
+      "training_week": "Training next week is led by {names}",
+      "strike": "You got a strike: {reason, select, late_tasks {more than 3 late tasks} sleeping {sleeping in class} phone {phone warnings in class} late_arrival {arrived 10+ min late (€3)} missed_validation {missed a validation (3 strikes)} missed_customer_deadline {missed a customer deadline (3 strikes)} other {strike}} · {total}/3 this quarter",
+      "punishment": "3 strikes: bring €75 from selling water by {due}",
+      "announcement": "{title}"
     },
     "popupTitle": "New task for you",
     "popupDue": "Due {date}",
@@ -3141,7 +3145,60 @@
       "project_added": "New project",
       "project_post": "New file in your project",
       "training_week": "Training next week",
-      "training_lead": "You lead training"
+      "training_lead": "You lead training",
+      "strike": "Strike",
+      "punishment": "⚠️ 3 strikes",
+      "announcement": "emet"
     }
+  },
+  "strikes": {
+    "tool": "Strikes",
+    "title": "Strikes",
+    "give": "Give a strike",
+    "who": "Who",
+    "why": "Why",
+    "when": "When",
+    "note": "Note (optional)",
+    "giveButton": "Give strike",
+    "rules": "Normal = 1 strike, big = 3. Arriving 10+ min late also costs €3. 3 strikes in a quarter = bring €{eur} from selling water within 2 days. Everyone goes back to 0 on {reset}.",
+    "given": "Strike given to {name}",
+    "saveError": "Couldn't save. Try again.",
+    "punishments": "Punishments to follow",
+    "punishmentText": "bring €{eur} from selling water",
+    "dueOn": "due {date}",
+    "overdue": "overdue since {date}",
+    "markDone": "Done",
+    "thisQuarter": "This quarter",
+    "noneYet": "No strikes yet.",
+    "history": "All strikes",
+    "paid": "paid",
+    "notPaid": "not paid yet",
+    "by": "by {name}",
+    "delete": "Remove strike",
+    "confirmDelete": "Remove this strike from {name}? Only for mistakes.",
+    "resets": "Back to 0 on {date}",
+    "reached": "3 strikes reached",
+    "left": "{n, plural, one {# more strike to the punishment} other {# more strikes to the punishment}}",
+    "owes": "€{eur} to pay",
+    "punishmentMe": "You reached 3 strikes: bring €{eur} from selling water by {date}.",
+    "punishmentOther": "Reached 3 strikes: has to bring €{eur} from selling water by {date}.",
+    "clean": "No strikes this quarter. 👏",
+    "kinds": {
+      "late_tasks": "More than 3 late tasks",
+      "sleeping": "Sleeping in class",
+      "phone": "Repeated phone warnings in class",
+      "late_arrival": "Arrived 10+ min late",
+      "missed_validation": "Missed a validation",
+      "missed_customer_deadline": "Missed a customer deadline"
+    }
+  },
+  "allProjects": {
+    "title": "All projects",
+    "heading": "What everyone is working on",
+    "hint": "Every project, its people and their open tasks. Read only.",
+    "nothingOpen": "no open tasks",
+    "noPeople": "Nobody in this project yet.",
+    "lastUpdate": "Last update by {who}, {when}",
+    "none": "No projects yet."
   }
 }

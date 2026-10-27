@@ -29,7 +29,8 @@
     "mobileNav": "Päävalikko",
     "askCard": "Kysy emetiltä",
     "askCardText": "Kysymyksiä tiimistä, rahasta tai tehtävistä – vastaus tulee meidän datastamme.",
-    "projects": "Projektit"
+    "projects": "Projektit",
+    "allProjects": "Kaikki projektit"
   },
   "shell": {
     "noGroupYet": "Ei vielä ryhmää",
@@ -264,7 +265,7 @@
   },
   "group": {
     "names": {
-      "team-leader": "Johto",
+      "team-leader": "Tiiminvetäjät",
       "finance": "Talous",
       "customer": "Asiakkaat",
       "marketing": "Markkinointi",
@@ -1113,7 +1114,10 @@
       "project_added": "Sinut lisättiin projektiin ”{project}”",
       "project_post": "Uutta projektissa ”{project}”: {title}",
       "training_lead": "Vedät treenit tällä viikolla",
-      "training_week": "Ensi viikon treenit vetää {names}"
+      "training_week": "Ensi viikon treenit vetää {names}",
+      "strike": "Sait striken: {reason, select, late_tasks {yli 3 myöhästynyttä tehtävää} sleeping {nukkui tunnilla} phone {puhelinvaroitukset tunnilla} late_arrival {myöhästyi 10+ min (3 €)} missed_validation {validointi jäi väliin (3 strikeä)} missed_customer_deadline {asiakkaan määräaika ylittyi (3 strikeä)} other {strike}} · {total}/3 tällä neljänneksellä",
+      "punishment": "3 strikeä: tuo 75 € myymällä vettä viimeistään {due}",
+      "announcement": "{title}"
     },
     "popupTitle": "Uusi tehtävä sinulle",
     "popupDue": "Määräaika {date}",
@@ -3141,7 +3145,60 @@
       "project_added": "Uusi projekti",
       "project_post": "Uusi tiedosto projektissasi",
       "training_week": "Ensi viikon treenit",
-      "training_lead": "Vedät treenit"
+      "training_lead": "Vedät treenit",
+      "strike": "Strike",
+      "punishment": "⚠️ 3 strikeä",
+      "announcement": "emet"
     }
+  },
+  "strikes": {
+    "tool": "Strikes",
+    "title": "Strikes",
+    "give": "Anna strike",
+    "who": "Kuka",
+    "why": "Syy",
+    "when": "Milloin",
+    "note": "Huomio (valinnainen)",
+    "giveButton": "Anna strike",
+    "rules": "Tavallinen = 1 strike, iso = 3. 10+ min myöhästyminen maksaa lisäksi 3 €. 3 strikeä neljänneksessä = tuo {eur} € myymällä vettä 2 päivän sisällä. Kaikki palaavat nollaan {reset}.",
+    "given": "Strike annettu: {name}",
+    "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
+    "punishments": "Seurattavat rangaistukset",
+    "punishmentText": "tuo {eur} € myymällä vettä",
+    "dueOn": "viimeistään {date}",
+    "overdue": "myöhässä {date} alkaen",
+    "markDone": "Tehty",
+    "thisQuarter": "Tämä neljännes",
+    "noneYet": "Ei vielä strikejä.",
+    "history": "Kaikki strikejä",
+    "paid": "maksettu",
+    "notPaid": "ei vielä maksettu",
+    "by": "antoi {name}",
+    "delete": "Poista strike",
+    "confirmDelete": "Poistetaanko tämä strike henkilöltä {name}? Vain virheissä.",
+    "resets": "Takaisin nollaan {date}",
+    "reached": "3 strikeä täynnä",
+    "left": "{n, plural, one {vielä # strike rangaistukseen} other {vielä # strikeä rangaistukseen}}",
+    "owes": "{eur} € maksamatta",
+    "punishmentMe": "Sinulla on 3 strikeä: tuo {eur} € myymällä vettä viimeistään {date}.",
+    "punishmentOther": "3 strikeä täynnä: pitää tuoda {eur} € myymällä vettä viimeistään {date}.",
+    "clean": "Ei strikejä tällä neljänneksellä. 👏",
+    "kinds": {
+      "late_tasks": "Yli 3 myöhästynyttä tehtävää",
+      "sleeping": "Nukkui tunnilla",
+      "phone": "Toistuvat puhelinvaroitukset tunnilla",
+      "late_arrival": "Myöhästyi 10+ min",
+      "missed_validation": "Validointi jäi väliin",
+      "missed_customer_deadline": "Asiakkaan määräaika ylittyi"
+    }
+  },
+  "allProjects": {
+    "title": "Kaikki projektit",
+    "heading": "Mitä kukin tekee",
+    "hint": "Jokainen projekti, sen ihmiset ja avoimet tehtävät. Vain luku.",
+    "nothingOpen": "ei avoimia tehtäviä",
+    "noPeople": "Projektissa ei ole vielä ketään.",
+    "lastUpdate": "Viimeisin päivitys: {who}, {when}",
+    "none": "Ei vielä projekteja."
   }
 }

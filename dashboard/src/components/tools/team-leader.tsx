@@ -86,7 +86,7 @@ export async function TeamLeaderTools(props: ToolProps): Promise<ToolTab[]> {
     },
     {
       id: "training", group: "people", label: t("leader.training"),
-      node: <TrainingLeaders weeks={trainingWeeks(today)} leaders={training.data ?? []} members={allMembers} thisWeek={mondayOf(today)} canEdit={session.isAdmin} />,
+      node: <TrainingLeaders weeks={trainingWeeks(today)} leaders={training.data ?? []} members={allMembers} thisWeek={mondayOf(today)} canEdit={session.isLeader} />,
     },
     {
       id: "meetings", group: "plan", label: t("leader.meetings"),
