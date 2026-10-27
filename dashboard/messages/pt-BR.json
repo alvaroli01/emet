@@ -1371,7 +1371,19 @@
       "end": "Fim",
       "color": "Cor",
       "cancel": "Cancelar",
-      "create": "Criar"
+      "create": "Criar",
+      "expectedRevenue": "Receita prevista",
+      "expectedProfit": "Lucro previsto",
+      "noPlan": "Sem plano: defina receita, lucro e orçamento previstos",
+      "edit": "Editar",
+      "plan": "Previsto vs real",
+      "notSet": "Ainda não definido",
+      "left": "Restam {amount}",
+      "reached": "Alcançado!",
+      "toGo": "Faltam {amount}",
+      "saved": "Projeto salvo",
+      "editTitle": "Editar {name}",
+      "save": "Salvar"
     },
     "ledgers": {
       "reasonPrompt": "Por que você está estornando este lançamento? (obrigatório)",

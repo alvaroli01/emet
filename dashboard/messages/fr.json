@@ -1371,7 +1371,19 @@
       "end": "Fin",
       "color": "Couleur",
       "cancel": "Annuler",
-      "create": "Créer"
+      "create": "Créer",
+      "expectedRevenue": "Chiffre d’affaires prévu",
+      "expectedProfit": "Bénéfice prévu",
+      "noPlan": "Pas encore de plan : indique le CA, le bénéfice et le budget prévus",
+      "edit": "Modifier",
+      "plan": "Prévu vs réel",
+      "notSet": "Pas encore défini",
+      "left": "Reste {amount}",
+      "reached": "Atteint !",
+      "toGo": "Encore {amount}",
+      "saved": "Projet enregistré",
+      "editTitle": "Modifier {name}",
+      "save": "Enregistrer"
     },
     "ledgers": {
       "reasonPrompt": "Pourquoi annules-tu cette écriture ? (obligatoire)",

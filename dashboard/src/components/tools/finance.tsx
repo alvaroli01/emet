@@ -99,7 +99,7 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
         </div>
       ),
     },
-    { id: "projects", group: "plan", label: tf("tabs.projects"), node: <FinanceProjects projects={p} sales={s} expenses={e} names={names} canEdit={editable} /> },
+    { id: "projects", group: "plan", label: tf("tabs.projects"), node: <FinanceProjects projects={p} sales={s} expenses={e} names={names} canEdit={editable} canCreate={session.isAdmin} /> },
     {
       id: "ledgers", group: "numbers", label: tf("tabs.ledgers"),
       node: <Ledgers sales={sales.data ?? []} expenses={expenses.data ?? []} salesFields={salesFields} expenseFields={expenseFields} members={allMembers}

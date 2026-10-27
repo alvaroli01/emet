@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
-import { Plus, Mountain, Trophy, Wallet, Search } from "lucide-react";
+import { Plus, Mountain, Trophy, Wallet, Search, Pencil, Target } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Modal } from "@/components/data-table";
@@ -14,8 +14,16 @@ import { MetricCard, Panel, Empty, HBars } from "./overview";
 
 const COLORS = ["#2f7d4f", "#2b6ca3", "#c9502e", "#5b4ba8", "#b7791f", "#8a5a7a"];
 
-export function FinanceProjects({ projects, sales, expenses, names, canEdit }: {
-  projects: Project[]; sales: SaleRow[]; expenses: ExpenseRow[]; names: Record<string, string>; canEdit: boolean;
+/** Expected numbers set by Finance: revenue (the project's goal), profit and budget. null = not set. */
+const plan = (p: Project | null) => ({
+  revenue: p?.goal != null && p.goal !== "" ? Number(p.goal) : null,
+  profit: p?.expected_profit != null && p.expected_profit !== "" ? Number(p.expected_profit) : null,
+  budget: p?.budget != null && p.budget !== "" ? Number(p.budget) : null,
+});
+
+/** canEdit = Finance/admins change projects and their plan; canCreate = leaders add new projects (decision 2026-10-21). */
+export function FinanceProjects({ projects, sales, expenses, names, canEdit, canCreate }: {
+  projects: Project[]; sales: SaleRow[]; expenses: ExpenseRow[]; names: Record<string, string>; canEdit: boolean; canCreate: boolean;
 }) {
   const t = useTranslations("finance.projects");
   const tf = useTranslations("finance");
@@ -24,6 +32,7 @@ export function FinanceProjects({ projects, sales, expenses, names, canEdit }: {
   const [selected, setSelected] = useState<string>("all");
   const [query, setQuery] = useState("");
   const [creating, setCreating] = useState(false);
+  const [editing, setEditing] = useState<Project | null>(null);
 
   // "General" = everything not tied to a project
   const views = useMemo(() => [
@@ -56,7 +65,7 @@ export function FinanceProjects({ projects, sales, expenses, names, canEdit }: {
           <option value="all">{t("all")}</option>
           {matches.map((v) => <option key={v.id} value={v.id}>{v.name}</option>)}
         </select>
-        {canEdit && (
+        {canCreate && (
           <button onClick={() => setCreating(true)} className="ml-auto flex items-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-medium text-brand-contrast"><Plus size={15} /> {t("new")}</button>
         )}
       </div>
@@ -83,6 +92,11 @@ export function FinanceProjects({ projects, sales, expenses, names, canEdit }: {
                     <span><span className="block text-muted">ROI</span><span className="readout block text-base">{v.roi === null ? "—" : `${v.roi}%`}</span></span>
                     <span><span className="block text-muted">{tf("cards.revenue")}</span><span className="readout block text-base">{eur(v.sum.revenue, locale)}</span></span>
                   </span>
+                  {v.project && (() => {
+                    const pl = plan(v.project);
+                    const parts = [pl.revenue !== null && `${t("expectedRevenue")} ${eur(pl.revenue, locale)}`, pl.profit !== null && `${t("expectedProfit")} ${eur(pl.profit, locale)}`, pl.budget !== null && `${t("budget")} ${eur(pl.budget, locale)}`].filter(Boolean);
+                    return <span className="relative mt-3 flex items-start gap-1.5 border-t border-line pt-2.5 text-xs text-muted"><Target size={12} className="mt-0.5 shrink-0" />{parts.length ? parts.join(" · ") : t("noPlan")}</span>;
+                  })()}
                 </button>
               </li>
             ))}
@@ -93,6 +107,7 @@ export function FinanceProjects({ projects, sales, expenses, names, canEdit }: {
       )}
 
       {creating && <ProjectForm onClose={() => setCreating(false)} />}
+      {editing && <ProjectForm project={editing} onClose={() => setEditing(null)} />}
     </div>
   );
 
@@ -111,6 +126,7 @@ export function FinanceProjects({ projects, sales, expenses, names, canEdit }: {
           <span className="size-3 rounded-full" style={{ background: v.color }} />
           <h3 className="text-xl font-semibold tracking-tight">{v.name}</h3>
           <span className="text-sm text-muted">{t(`status.${v.status}`)}</span>
+          {canEdit && v.project && <button onClick={() => setEditing(v.project)} className="glass-pill ml-auto h-9 px-3.5 text-sm"><Pencil size={14} /> {t("edit")}</button>}
         </div>
         {v.project?.description && <p className="text-sm text-muted">{v.project.description}</p>}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
@@ -121,13 +137,7 @@ export function FinanceProjects({ projects, sales, expenses, names, canEdit }: {
           <MetricCard label={tf("cards.netMargin")} value={pct(v.sum.netMargin, locale)} explain={tf("explain.netMargin")} />
           <MetricCard label="ROI" value={v.roi === null ? "—" : `${v.roi}%`} explain={t("roiExplain")} tone={v.roi === null ? undefined : v.roi >= 0 ? "ok" : "bad"} />
         </div>
-        {v.budget > 0 && (
-          <div className="panel p-4">
-            <div className="mb-1.5 flex justify-between text-sm"><span className="font-medium">{t("budget")}</span><span className="tabular-nums">{eur(spend, locale)} / {eur(v.budget, locale)}</span></div>
-            <div className="h-2.5 overflow-hidden rounded-full bg-surface-2"><div className={`h-full rounded-full ${spend > v.budget ? "bg-bad" : "bg-climbed"}`} style={{ width: `${Math.min(100, (spend / v.budget) * 100)}%` }} /></div>
-            {spend > v.budget && <p className="mt-1.5 text-xs text-bad-text">{t("overBudget", { amount: eur(spend - v.budget, locale) })}</p>}
-          </div>
-        )}
+        {v.project && <PlanVsActual p={plan(v.project)} revenue={v.sum.revenue} profit={v.sum.net} spend={spend} />}
         <div className="grid gap-4 lg:grid-cols-2">
           <Panel title={t("timeline")}>
             {timeline.length ? (
@@ -163,32 +173,77 @@ export function FinanceProjects({ projects, sales, expenses, names, canEdit }: {
   }
 }
 
-function ProjectForm({ onClose }: { onClose: () => void }) {
+/** Expected vs actual: revenue and profit should reach the plan, spending should stay under the budget. */
+function PlanVsActual({ p, revenue, profit, spend }: { p: ReturnType<typeof plan>; revenue: number; profit: number; spend: number }) {
+  const t = useTranslations("finance.projects");
+  const locale = useLocale();
+  const rows = [
+    { key: "revenue", label: t("expectedRevenue"), actual: revenue, target: p.revenue, cap: false },
+    { key: "profit", label: t("expectedProfit"), actual: profit, target: p.profit, cap: false },
+    { key: "budget", label: t("budget"), actual: spend, target: p.budget, cap: true },
+  ];
+  return (
+    <div className="panel p-4">
+      <p className="mb-3 flex items-center gap-2 text-sm font-medium"><Target size={15} /> {t("plan")}</p>
+      <div className="grid gap-4 sm:grid-cols-3">
+        {rows.map((r) => {
+          const share = r.target && r.target > 0 ? Math.max(0, r.actual) / r.target : null;
+          const bad = r.cap ? share !== null && share > 1 : false;
+          return (
+            <div key={r.key}>
+              <div className="mb-1.5 flex justify-between gap-2 text-sm"><span className="text-muted">{r.label}</span>
+                <span className="tabular-nums">{eur(r.actual, locale)} / {r.target === null ? "—" : eur(r.target, locale)}</span></div>
+              <div className="h-2.5 overflow-hidden rounded-full bg-surface-2">
+                {share !== null && <div className={`h-full rounded-full ${bad ? "bg-bad" : r.cap ? "bg-climbed" : "bg-ok"}`} style={{ width: `${Math.min(100, share * 100)}%` }} />}
+              </div>
+              <p className={`mt-1 text-xs ${bad ? "text-bad-text" : "text-muted"}`}>
+                {r.target === null ? t("notSet") : r.cap ? (bad ? t("overBudget", { amount: eur(r.actual - r.target, locale) }) : t("left", { amount: eur(r.target - r.actual, locale) }))
+                  : share !== null && share >= 1 ? t("reached") : t("toGo", { amount: eur(r.target - r.actual, locale) })}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/** New project (leaders) or edit an existing one (Finance/admins), including its expected revenue, profit and budget. */
+function ProjectForm({ onClose, project }: { onClose: () => void; project?: Project }) {
   const t = useTranslations("finance.projects");
   const router = useRouter();
   const toast = useToast();
   const supabase = useMemo(() => createClient(), []);
-  const [v, setV] = useState({ name: "", description: "", status: "planning", starts_on: "", ends_on: "", budget: "", color: COLORS[0] });
+  const str = (x: unknown) => (x == null ? "" : String(x));
+  const [v, setV] = useState(() => ({
+    name: project?.name ?? "", description: project?.description ?? "", status: project?.status ?? "planning", starts_on: str(project?.starts_on), ends_on: str(project?.ends_on),
+    budget: str(project?.budget), goal: str(project?.goal), expected_profit: str(project?.expected_profit), color: project?.color ?? COLORS[0],
+  }));
+  const num = (x: string) => (x.trim() === "" ? null : Number(x));
   const set = (k: keyof typeof v, x: string) => setV((s) => ({ ...s, [k]: x }));
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    const { data: me } = await supabase.rpc("my_profile_id");
-    const { error } = await supabase.from("projects").insert({
-      name: v.name.trim(), description: v.description.trim() || null, status: v.status, owner_id: me,
-      starts_on: v.starts_on || null, ends_on: v.ends_on || null, budget: v.budget ? Number(v.budget) : null, color: v.color,
-    });
+    const row = {
+      name: v.name.trim(), description: v.description.trim() || null, status: v.status, starts_on: v.starts_on || null, ends_on: v.ends_on || null,
+      budget: num(v.budget), goal: num(v.goal), expected_profit: num(v.expected_profit), color: v.color,
+    };
+    const { error } = project
+      ? await supabase.from("projects").update(row).eq("id", project.id)
+      : await supabase.from("projects").insert({ ...row, owner_id: (await supabase.rpc("my_profile_id")).data });
     if (error) return toast("error", t("saveError"));
-    toast("ok", t("created")); onClose(); router.refresh();
+    toast("ok", project ? t("saved") : t("created")); onClose(); router.refresh();
   }
   return (
-    <Modal title={t("new")} onClose={onClose}>
+    <Modal title={project ? t("editTitle", { name: project.name }) : t("new")} onClose={onClose}>
       <form onSubmit={save} className="space-y-3">
         <label className="block"><span className="mb-1 block text-sm font-medium">{t("name")} *</span><input required value={v.name} onChange={(e) => set("name", e.target.value)} className="input" /></label>
         <label className="block"><span className="mb-1 block text-sm font-medium">{t("description")}</span><textarea rows={2} value={v.description} onChange={(e) => set("description", e.target.value)} className="input" /></label>
         <div className="grid grid-cols-2 gap-3">
           <label className="block"><span className="mb-1 block text-sm font-medium">{t("statusLabel")}</span>
             <select value={v.status} onChange={(e) => set("status", e.target.value)} className="input">{["planning", "live", "closed"].map((s) => <option key={s} value={s}>{t(`status.${s}`)}</option>)}</select></label>
-          <label className="block"><span className="mb-1 block text-sm font-medium">{t("budget")} (€)</span><input type="number" min="0" step="0.01" value={v.budget} onChange={(e) => set("budget", e.target.value)} className="input" /></label>
+          <label className="block"><span className="mb-1 block text-sm font-medium">{t("budget")} (€)</span><input type="number" min="0" step="0.01" inputMode="decimal" value={v.budget} onChange={(e) => set("budget", e.target.value)} className="input" /></label>
+          <label className="block"><span className="mb-1 block text-sm font-medium">{t("expectedRevenue")} (€)</span><input type="number" min="0" step="0.01" inputMode="decimal" value={v.goal} onChange={(e) => set("goal", e.target.value)} className="input" /></label>
+          <label className="block"><span className="mb-1 block text-sm font-medium">{t("expectedProfit")} (€)</span><input type="number" step="0.01" inputMode="decimal" value={v.expected_profit} onChange={(e) => set("expected_profit", e.target.value)} className="input" /></label>
           <label className="block"><span className="mb-1 block text-sm font-medium">{t("start")}</span><input type="date" value={v.starts_on} onChange={(e) => set("starts_on", e.target.value)} className="input" /></label>
           <label className="block"><span className="mb-1 block text-sm font-medium">{t("end")}</span><input type="date" value={v.ends_on} onChange={(e) => set("ends_on", e.target.value)} className="input" /></label>
         </div>
@@ -197,7 +252,7 @@ function ProjectForm({ onClose }: { onClose: () => void }) {
             className={`size-7 rounded-full ring-offset-2 ring-offset-surface ${v.color === c ? "ring-2 ring-ink" : ""}`} style={{ background: c }} />)}</div></fieldset>
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onClose} className="rounded-xl px-4 py-2 text-sm text-muted">{t("cancel")}</button>
-          <button className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-contrast">{t("create")}</button>
+          <button className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-contrast">{project ? t("save") : t("create")}</button>
         </div>
       </form>
     </Modal>

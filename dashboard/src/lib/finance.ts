@@ -2,7 +2,7 @@
 export type Method = "cash" | "bizum" | "card" | "transfer" | "other";
 export type SaleRow = { id: string; date: string; description: string; amount: number | string; cost: number | string; channel: string | null; payment_method: Method | null; project_id: string | null; item_id?: string | null; quantity?: number; reverses_id?: string | null; logged_by: string | null; created_at: string };
 export type ExpenseRow = { id: string; date: string; description: string; category: string | null; amount: number | string; payment_method: Method | null; project_id: string | null; receipt_path?: string | null; reverses_id?: string | null; subscription_id?: string | null; logged_by: string | null; created_at: string };
-export type Project = { id: string; name: string; description: string | null; owner_id: string | null; status: "planning" | "live" | "closed"; starts_on: string | null; ends_on: string | null; budget: number | string | null; color: string };
+export type Project = { id: string; name: string; description: string | null; owner_id: string | null; status: "planning" | "live" | "closed"; starts_on: string | null; ends_on: string | null; budget: number | string | null; color: string; goal?: number | string | null; expected_profit?: number | string | null };
 export const METHODS: Method[] = ["cash", "bizum", "card", "transfer", "other"];
 
 const n = (v: unknown) => Number(v) || 0;

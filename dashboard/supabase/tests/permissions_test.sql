@@ -715,3 +715,12 @@ select t.assert('Rocco got "you lead training this week"', t.num($$select count(
 select t.login(1);
 select t.check('Admin removes a leader from a week', $$delete from training_leaders where week_start = '2026-10-26' and user_id = (select id from profiles where full_name = 'Rocco')$$, 'ok');
 reset role;
+-- ── Project plan: expected revenue (goal), expected profit and budget, editable by Finance ──
+set role authenticated;
+select t.login(2);  -- Stefan (Finance)
+select t.check('Finance sets a project''s expected revenue, profit and budget', $$update projects set goal = 2000, expected_profit = 600, budget = 400 where name = 'Campus stall'$$, 'ok');
+select t.assert('...and it is saved', t.num($$select count(*) from projects where name = 'Campus stall' and goal = 2000 and expected_profit = 600 and budget = 400$$) = 1);
+select t.assert('Finance sees projects they are not a member of', t.num($$select count(*) from projects p where name = 'Campus stall' and not exists (select 1 from project_members m where m.project_id = p.id and m.user_id = my_profile_id())$$) = 1);
+select t.login(3);  -- Rocco (Marketing)
+select t.check('Others cannot change the plan', $$update projects set expected_profit = 1 where name = 'Campus stall'$$, 'denied');
+reset role;

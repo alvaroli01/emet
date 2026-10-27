@@ -1,12 +1,13 @@
 ---
 tags: [emet, history]
-updated: 2026-10-23
+updated: 2026-10-27
 ---
 
-# Changelog (synced from the repo's CHANGELOG.md, 2026-10-23)
+# Changelog (synced from the repo's CHANGELOG.md, 2026-10-27)
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-10-27 — Alvaro — Finance → Projects: every project shows expected revenue, expected profit and budget; Finance/admins edit them (Edit button) and see Plan vs actual. Migration 0038 (`expected_profit`). Leire's invite sent to leire@tzbz.coop (26 Oct).
 - 2026-10-23 — Alvaro — Daily pop-up (first visit each day) with your late tasks + the next 30 days and this/next week's training leaders. Team Leader → Training leaders: one or more leaders per week up to 19 Dec, Monday reminder. Migration 0037; 26 Oct week = Mario & Rocco.
 - 2026-10-23 — Alvaro — Finance → Subscriptions: repeating costs that are booked as expenses automatically every day by the daily job; delete to stop. Team tasks can now need a file (photo, PDF, anything) before a person can tick them off. Migration 0036, 30 new permission tests.
 - 2026-10-23 — Alvaro — Chinese event: venue (BBF, all day, 200–400 people) and the honest product/sponsor review added to the vault note and the Claude Project doc.

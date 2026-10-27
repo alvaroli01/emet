@@ -1371,7 +1371,19 @@
       "end": "Fin",
       "color": "Color",
       "cancel": "Cancelar",
-      "create": "Crear"
+      "create": "Crear",
+      "expectedRevenue": "Ingresos previstos",
+      "expectedProfit": "Beneficio previsto",
+      "noPlan": "Sin plan: pon ingresos, beneficio y presupuesto previstos",
+      "edit": "Editar",
+      "plan": "Previsto vs real",
+      "notSet": "Sin definir",
+      "left": "Quedan {amount}",
+      "reached": "¡Conseguido!",
+      "toGo": "Faltan {amount}",
+      "saved": "Proyecto guardado",
+      "editTitle": "Editar {name}",
+      "save": "Guardar"
     },
     "ledgers": {
       "reasonPrompt": "¿Por qué anulas este movimiento? (obligatorio)",

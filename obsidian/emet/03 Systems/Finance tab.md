@@ -9,7 +9,7 @@ Status: ✅ Live · part of [[emet HQ (dashboard)]]
 
 Spec by **Stefan**. Migration 0016 (141 permission tests).
 - **Overview:** waterfall, margin gauge, expense donut, over-time vs €30K pace, sales heatmap, payment method & channel, 14 explained metric cards, Sankey money flow
-- **Projects:** picker, ROI, budget vs actual, leaderboard
+- **Projects:** picker, ROI, leaderboard; each project has a plan (expected revenue = goal, expected profit, budget) that Finance edits, with Plan vs actual (27 Oct, migration 0038)
 - **Ledgers:** by payment method/project, filters with totals, **reversals instead of deletes**
 - **Stock:** value, low-stock alerts, days left, product-linking switch (off)
 - **Bookkeeper:** quick add with receipt photo, expense claims, cash count, month close, audit log, CSV import, 24 h compliance

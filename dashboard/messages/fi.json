@@ -1371,7 +1371,19 @@
       "end": "Loppu",
       "color": "Väri",
       "cancel": "Peruuta",
-      "create": "Luo"
+      "create": "Luo",
+      "expectedRevenue": "Odotettu liikevaihto",
+      "expectedProfit": "Odotettu voitto",
+      "noPlan": "Ei suunnitelmaa: aseta odotettu liikevaihto, voitto ja budjetti",
+      "edit": "Muokkaa",
+      "plan": "Suunnitelma vs toteuma",
+      "notSet": "Ei vielä asetettu",
+      "left": "{amount} jäljellä",
+      "reached": "Saavutettu!",
+      "toGo": "Vielä {amount}",
+      "saved": "Projekti tallennettu",
+      "editTitle": "Muokkaa: {name}",
+      "save": "Tallenna"
     },
     "ledgers": {
       "reasonPrompt": "Miksi perut tämän kirjauksen? (pakollinen)",

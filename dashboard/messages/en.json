@@ -1371,7 +1371,19 @@
       "end": "End",
       "color": "Colour",
       "cancel": "Cancel",
-      "create": "Create"
+      "create": "Create",
+      "expectedRevenue": "Expected revenue",
+      "expectedProfit": "Expected profit",
+      "noPlan": "No plan yet: set expected revenue, profit and budget",
+      "edit": "Edit",
+      "plan": "Plan vs actual",
+      "notSet": "Not set yet",
+      "left": "{amount} left",
+      "reached": "Reached!",
+      "toGo": "{amount} to go",
+      "saved": "Project saved",
+      "editTitle": "Edit {name}",
+      "save": "Save"
     },
     "ledgers": {
       "reasonPrompt": "Why are you reversing this entry? (required)",

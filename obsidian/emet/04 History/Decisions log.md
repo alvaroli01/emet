@@ -1,12 +1,13 @@
 ---
 tags: [emet, decisions]
-updated: 2026-10-23
+updated: 2026-10-27
 ---
 
-# Decisions log (synced from README §9, 2026-10-23)
+# Decisions log (synced from README §9, 2026-10-27)
 
 | Date | Decision | Decided by |
 |---|---|---|
+| [[2026-10-27]] | Each project has a plan Finance can edit: expected revenue (same number as the project goal), expected profit and budget, shown against actual numbers | Alvaro |
 | [[2026-10-23]] | Finance subscriptions book themselves as expenses (daily job, no login needed); deleting one keeps past charges. Team tasks can require a file to finish (enforced in the database) | Alvaro |
 | [[2026-10-23]] | Daily pop-up with your tasks (late + next 30 days) on the first visit of the day; training leaders change every week (Mon–Sun) up to 19 Dec, first week 26 Oct = Mario & Rocco, the rest to be decided by Alvaro | Alvaro |
 | [[2026-10-22]] | Notion is connected per member (their own uni or personal Notion, by OAuth), never shared; emet stores no Notion content, only encrypted tokens and which page/database each person picked | Alvaro |

@@ -1371,7 +1371,19 @@
       "end": "Ende",
       "color": "Farbe",
       "cancel": "Abbrechen",
-      "create": "Erstellen"
+      "create": "Erstellen",
+      "expectedRevenue": "Erwarteter Umsatz",
+      "expectedProfit": "Erwarteter Gewinn",
+      "noPlan": "Noch kein Plan: erwarteten Umsatz, Gewinn und Budget eintragen",
+      "edit": "Bearbeiten",
+      "plan": "Plan vs. Ist",
+      "notSet": "Noch nicht festgelegt",
+      "left": "{amount} übrig",
+      "reached": "Erreicht!",
+      "toGo": "Noch {amount}",
+      "saved": "Projekt gespeichert",
+      "editTitle": "{name} bearbeiten",
+      "save": "Speichern"
     },
     "ledgers": {
       "reasonPrompt": "Warum stornierst du diese Buchung? (erforderlich)",
