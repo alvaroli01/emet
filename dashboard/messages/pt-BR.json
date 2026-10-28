@@ -1607,7 +1607,8 @@
       "campaigns": "Campanhas",
       "library": "O que funciona",
       "experiments": "Experimentos",
-      "attribution": "Atribuição"
+      "attribution": "Atribuição",
+      "simulate": "Agente de previsão"
     },
     "tags": {
       "product": "Produto",
@@ -1946,6 +1947,11 @@
       },
       "designSince": "pedido em {date}",
       "allClear": "Tudo em dia — nada esperando por você."
+    },
+    "simulate": {
+      "intro": "Simule como as pessoas reagem antes de postar: envie um brief ou relatório, descreva o que prever e o MiroFish roda uma multidão de agentes de IA. Faça simulações pequenas (poucos agentes, menos de 40 rodadas) — a chave de IA gratuita tem limites. Áudio e vídeo (MP3, MP4, M4A, WAV, MOV, até 500 MB) são transcritos automaticamente.",
+      "open": "Abrir em tela cheia",
+      "notSetUp": "Simular ainda não está configurado (faltam o endereço e o segredo do MiroFish)."
     }
   },
   "scout": {
@@ -2701,6 +2707,10 @@
     "note": "Ativo = fez algo no painel em 3 ou mais dias dos últimos 30. Meio ativo = 1–2 dias."
   },
   "member": {
+    "changePhoto": "Trocar foto",
+    "photoSaving": "Salvando…",
+    "photoSaved": "Foto salva — agora todos a veem.",
+    "photoError": "Não foi possível salvar a foto. Tente um JPG ou PNG.",
     "back": "Equipe",
     "inProgress": "Em andamento",
     "completed": "Concluídas (7 dias)",
@@ -3122,7 +3132,15 @@
     "saveError": "Não foi possível salvar. Tente de novo.",
     "addFile": "Arquivo (opcional) — ex.: o post-mortem",
     "openFile": "Abrir arquivo",
-    "uploadError": "Não foi possível enviar o arquivo (máx. 10 MB). Tente de novo."
+    "uploadError": "Não foi possível enviar o arquivo (máx. 10 MB). Tente de novo.",
+    "edit": "Editar registro",
+    "editing": "Editando registro",
+    "save": "Salvar",
+    "saved": "Registro atualizado",
+    "cancel": "Cancelar",
+    "link": "Link (opcional)",
+    "replaceFile": "Trocar arquivo · {name}",
+    "removeFile": "Remover arquivo"
   },
   "memberTasks": {
     "todo": "{name} ainda precisa fazer",

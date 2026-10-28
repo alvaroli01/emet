@@ -12,6 +12,7 @@ import { MyConnections } from "@/components/camp/ai-connections";
 import { PointsPanel, type PointEntry } from "./points-panel";
 import { MemberTasks } from "./member-tasks";
 import { StrikesPanel } from "./strikes-panel";
+import { AvatarUpload } from "./avatar-upload";
 import type { StrikesData } from "@/lib/strikes-server";
 import type { MemberTaskItem } from "@/lib/member-tasks";
 
@@ -85,6 +86,7 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, p
               {p.avatar
                 ? <img src={p.avatar} alt="" className="absolute inset-0 size-full object-cover" /> // eslint-disable-line @next/next/no-img-element
                 : <span aria-hidden className="absolute inset-0 grid place-items-center text-7xl font-medium tracking-tight text-white/90">{initials}</span>}
+              {(isMe || isLeader) && <AvatarUpload profileId={p.id} current={p.avatar} />}
             </div>
             <div className="glass absolute inset-x-3 bottom-3 flex items-center gap-3 rounded-2xl p-3">
               <div className="min-w-0 flex-1">

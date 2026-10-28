@@ -1607,7 +1607,8 @@
       "campaigns": "Kampanjat",
       "library": "Mikä toimii",
       "experiments": "Kokeilut",
-      "attribution": "Attribuutio"
+      "attribution": "Attribuutio",
+      "simulate": "Ennusteagentti"
     },
     "tags": {
       "product": "Tuote",
@@ -1946,6 +1947,11 @@
       },
       "designSince": "pyydetty {date}",
       "allClear": "Kaikki kunnossa — mikään ei odota sinua."
+    },
+    "simulate": {
+      "intro": "Simuloi, miten ihmiset reagoivat ennen julkaisua: lataa brief tai raportti, kuvaa mitä ennustetaan, ja MiroFish ajaa joukon tekoälyagentteja. Pidä ajot pieninä (vähän agentteja, alle 40 kierrosta) – ilmaisella tekoälyavaimella on rajat. Ääni ja video (MP3, MP4, M4A, WAV, MOV, enintään 500 Mt) litteroidaan automaattisesti.",
+      "open": "Avaa koko näytölle",
+      "notSetUp": "Simuloi ei ole vielä käytössä (MiroFishin osoite ja salaisuus puuttuvat)."
     }
   },
   "scout": {
@@ -2701,6 +2707,10 @@
     "note": "Aktiivinen = teki jotain hallintapaneelissa vähintään 3 päivänä viimeisen 30 päivän aikana. Melko aktiivinen = 1–2 päivänä."
   },
   "member": {
+    "changePhoto": "Vaihda kuva",
+    "photoSaving": "Tallennetaan…",
+    "photoSaved": "Kuva tallennettu – kaikki näkevät sen nyt.",
+    "photoError": "Kuvaa ei voitu tallentaa. Kokeile JPG- tai PNG-kuvaa.",
     "back": "Tiimi",
     "inProgress": "Työn alla",
     "completed": "Valmiit (7 päivää)",
@@ -3122,7 +3132,15 @@
     "saveError": "Tallennus epäonnistui. Yritä uudelleen.",
     "addFile": "Tiedosto (valinnainen) – esim. post-mortem",
     "openFile": "Avaa tiedosto",
-    "uploadError": "Tiedoston lataus epäonnistui (enintään 10 Mt). Yritä uudelleen."
+    "uploadError": "Tiedoston lataus epäonnistui (enintään 10 Mt). Yritä uudelleen.",
+    "edit": "Muokkaa merkintää",
+    "editing": "Muokataan merkintää",
+    "save": "Tallenna",
+    "saved": "Merkintä päivitetty",
+    "cancel": "Peruuta",
+    "link": "Linkki (valinnainen)",
+    "replaceFile": "Vaihda tiedosto · {name}",
+    "removeFile": "Poista tiedosto"
   },
   "memberTasks": {
     "todo": "{name} on vielä tekemättä",

@@ -14,5 +14,6 @@ Spec: `docs/marketing-build-prompt.md` (from a 4-part research report). Migratio
 - **Briefs** (leader approves → content) and **Campaigns** (objective, target, post-mortem)
 - **What works:** scale / iterate / kill, performance by tag, experiments, swipe file
 - **Attribution:** emet short links `/go/…` with UTMs, click counts, QR codes; discount codes per channel; DM inquiries; funnel
+- **Prediction agent** (2026-10-28): MiroFish inside the tab — upload a brief, say what to predict, AI agents react. Azure for Students VM `mirofish` (group `emet-mirofish`, Spain Central), signed 12-hour pass, backup to HF dataset `alvaroibnz/mirofish-data`. Setup: `mirofish-space/README.md`. Keep runs small (free keys). English by default; MP3/MP4/M4A/WAV/MOV (≤500 MB) are transcribed with ffmpeg + Groq Whisper (`patch.py`, `media.py`)
 
 Back to [[Systems map]]

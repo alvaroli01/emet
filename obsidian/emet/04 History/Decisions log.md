@@ -1,15 +1,17 @@
 ---
 tags: [emet, decisions]
-updated: 2026-10-27
+updated: 2026-10-28
 ---
 
-# Decisions log (synced from README §9, 2026-10-27)
+# Decisions log (synced from README §9, 2026-10-28)
 
 | Date | Decision | Decided by |
 |---|---|---|
+| [[2026-10-28]] | Points entries can be edited (not only deleted) and can carry a link next to the optional file (`src/components/team/points-panel.tsx`, migration 0048) | Alvaro |
 | [[2026-10-28]] | Shared Scout projects can be searched and worked by everyone; only the setup stays with the creator and selling teams | Alvaro |
 | [[2026-10-28]] | Harvey (autonomous cold-email agent) is NOT integrated as-is: it needs a paid Claude/ChatGPT plan, runs on one computer and cold-emails (restricted in Spain). Its playbooks (signals, one hook, honesty rules, objection handling) were ported into Scout instead, on the free Groq keys | Alvaro |
 | [[2026-10-28]] | Strikes: normal 1 (more than 3 late tasks, sleeping in class, repeated phone warnings, arriving 10+ min late = also €3), big 3 (missed validation, missed customer deadline); 3 strikes in a quarter = bring €75 from selling water within 2 days; quarterly reset; all leaders give strikes, everyone sees them. Group leaders get the Team Leaders tools (not full admin). The coach sees every project read-only | Alvaro |
+| [[2026-10-28]] | MiroFish (Marketing → Prediction agent) hosted on a free Azure for Students VM (Spain Central, 1 GB + swap); Hugging Face Docker Spaces became paid and Oracle sign-up failed | Alvaro |
 | [[2026-10-27]] | Each project has a plan Finance can edit: expected revenue (same number as the project goal), expected profit and budget, shown against actual numbers | Alvaro |
 | [[2026-10-27]] | Meeting notes are written part by part so long recordings always get a summary; recordings without notes get a "Write the summary" button; Base camp "Docs" is now "Recorded meetings" and My week opens on Today | Alvaro |
 | [[2026-10-27]] | Each person's goal by 1 June 2027: 20 Community Points, 50 Customer Visits, 40 Learning Points. Logged by each person on their own profile; everyone can see everyone's (`src/lib/points.ts`, migration 0040) | Alvaro |

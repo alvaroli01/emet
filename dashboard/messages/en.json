@@ -1607,7 +1607,8 @@
       "campaigns": "Campaigns",
       "library": "What works",
       "experiments": "Experiments",
-      "attribution": "Attribution"
+      "attribution": "Attribution",
+      "simulate": "Prediction agent"
     },
     "tags": {
       "product": "Product",
@@ -1946,6 +1947,11 @@
       },
       "designSince": "requested {date}",
       "allClear": "All clear — nothing waiting on you."
+    },
+    "simulate": {
+      "intro": "Simulate how people react before you post: upload a brief or report, describe what to predict, and MiroFish runs a crowd of AI agents. Keep runs small (few agents, under 40 rounds) — the free AI key has limits. Audio and video (MP3, MP4, M4A, WAV, MOV, up to 500 MB) are transcribed automatically.",
+      "open": "Open full screen",
+      "notSetUp": "Simulate isn't set up yet (MiroFish address and secret missing)."
     }
   },
   "scout": {
@@ -2701,6 +2707,10 @@
     "note": "Active = did something in the dashboard on 3 or more days in the last 30. Somewhat active = 1–2 days."
   },
   "member": {
+    "changePhoto": "Change photo",
+    "photoSaving": "Saving…",
+    "photoSaved": "Photo saved — everyone sees it now.",
+    "photoError": "Couldn't save the photo. Try a JPG or PNG.",
     "back": "Team",
     "inProgress": "In progress",
     "completed": "Completed (7 days)",
@@ -3122,7 +3132,15 @@
     "saveError": "Couldn't save. Try again.",
     "addFile": "File (optional) — e.g. the post-mortem",
     "openFile": "Open file",
-    "uploadError": "Couldn't upload the file (max 10 MB). Try again."
+    "uploadError": "Couldn't upload the file (max 10 MB). Try again.",
+    "edit": "Edit entry",
+    "editing": "Editing entry",
+    "save": "Save",
+    "saved": "Entry updated",
+    "cancel": "Cancel",
+    "link": "Link (optional)",
+    "replaceFile": "Replace file · {name}",
+    "removeFile": "Remove file"
   },
   "memberTasks": {
     "todo": "{name} still has to do",

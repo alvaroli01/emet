@@ -1607,7 +1607,8 @@
       "campaigns": "Campagnes",
       "library": "Ce qui marche",
       "experiments": "Expériences",
-      "attribution": "Attribution"
+      "attribution": "Attribution",
+      "simulate": "Agent de prédiction"
     },
     "tags": {
       "product": "Produit",
@@ -1946,6 +1947,11 @@
       },
       "designSince": "demandé le {date}",
       "allClear": "Tout est à jour : rien ne t'attend."
+    },
+    "simulate": {
+      "intro": "Simule la réaction des gens avant de publier : importe un brief ou un rapport, décris ce qu’il faut prédire, et MiroFish lance une foule d’agents IA. Garde des simulations petites (peu d’agents, moins de 40 tours) : la clé IA gratuite a des limites. L’audio et la vidéo (MP3, MP4, M4A, WAV, MOV, jusqu’à 500 Mo) sont transcrits automatiquement.",
+      "open": "Ouvrir en plein écran",
+      "notSetUp": "Simuler n’est pas encore configuré (adresse et secret de MiroFish manquants)."
     }
   },
   "scout": {
@@ -2701,6 +2707,10 @@
     "note": "Actif = a fait quelque chose dans le tableau de bord sur 3 jours ou plus parmi les 30 derniers. Un peu actif = 1 à 2 jours."
   },
   "member": {
+    "changePhoto": "Changer la photo",
+    "photoSaving": "Enregistrement…",
+    "photoSaved": "Photo enregistrée — tout le monde la voit.",
+    "photoError": "Impossible d’enregistrer la photo. Essaie un JPG ou un PNG.",
     "back": "Équipe",
     "inProgress": "En cours",
     "completed": "Terminées (7 jours)",
@@ -3122,7 +3132,15 @@
     "saveError": "Échec de l’enregistrement. Réessaie.",
     "addFile": "Fichier (facultatif) — ex. le post-mortem",
     "openFile": "Ouvrir le fichier",
-    "uploadError": "Impossible d’envoyer le fichier (10 Mo max). Réessaie."
+    "uploadError": "Impossible d’envoyer le fichier (10 Mo max). Réessaie.",
+    "edit": "Modifier l’entrée",
+    "editing": "Modification de l’entrée",
+    "save": "Enregistrer",
+    "saved": "Entrée mise à jour",
+    "cancel": "Annuler",
+    "link": "Lien (facultatif)",
+    "replaceFile": "Remplacer le fichier · {name}",
+    "removeFile": "Retirer le fichier"
   },
   "memberTasks": {
     "todo": "{name} doit encore faire",

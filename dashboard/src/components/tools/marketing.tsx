@@ -12,6 +12,7 @@ import { Campaigns, type Campaign } from "@/components/marketing/campaigns";
 import { Library } from "@/components/marketing/library";
 import { Attribution, type GoLink } from "@/components/marketing/attribution";
 import { MyWeek } from "@/components/marketing/my-week";
+import { Simulate } from "@/components/marketing/simulate";
 import { FollowersChart } from "./followers-chart";
 import type { ToolProps, ToolTab } from "./types";
 
@@ -137,6 +138,7 @@ export async function MarketingTools({ group, editable, session, allMembers }: T
                     briefs={(briefs.data ?? []) as Brief[]}
                     designs={(designs.data ?? []) as unknown as { id: string; title: string; status: string; assignee_id: string | null; requested_at: string }[]} />,
     },
+    { id: "simulate", group: "plan", label: tm("tabs.simulate"), node: <Simulate /> },
     {
       id: "content", group: "plan", label: tm("tabs.content"),
       node: <ContentPipeline items={c} metrics={m} glossary={(glossary.data ?? []) as { tag_type: Content["tags"] extends Partial<Record<infer K, string>> ? K : never; value: string }[]}

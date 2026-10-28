@@ -51,5 +51,16 @@ export async function GET(request: NextRequest) {
   const snapshot = await snapshotXlsx().catch(() => null);
   // Meeting audio older than 30 days → Google Drive (the nightly GitHub job does the bulk; this is the fallback)
   const archive = await archiveBatch(15_000);
-  return NextResponse.json({ ok: true, groups: count, ms, audioRemoved: removed, docsMarked, repeated, reminders, subscriptions, trainingLeads, trainingWeek, report, books, snapshot, archive, at: new Date().toISOString() });
+  // MiroFish (Marketing → Prediction agent): the daily visit checks the Azure VM; if it doesn't answer, tell the admins
+  let mirofish: boolean | null = null;
+  if (process.env.MIROFISH_URL) {
+    mirofish = await fetch(new URL("/healthz", process.env.MIROFISH_URL), { signal: AbortSignal.timeout(60_000) }).then((r) => r.ok, () => false);
+    if (!mirofish) {
+      const { data: admins } = await db.from("profiles").select("id").eq("is_admin", true).eq("active", true);
+      const day = new Date().toISOString().slice(0, 10);
+      await db.from("notifications").insert((admins ?? []).map((a) => ({ user_id: a.id, kind: "announcement", link: "/g/marketing",
+        data: { title: "MiroFish (Marketing → Prediction agent) is not answering — check the Azure VM \"mirofish\" (portal.azure.com, group emet-mirofish)" }, dedupe: `mirofish-down:${day}` })));
+    }
+  }
+  return NextResponse.json({ ok: true, groups: count, ms, audioRemoved: removed, docsMarked, repeated, reminders, subscriptions, trainingLeads, trainingWeek, report, books, snapshot, archive, mirofish, at: new Date().toISOString() });
 }

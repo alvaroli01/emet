@@ -31,7 +31,7 @@ export default async function MemberPage({ params }: { params: Promise<{ id: str
   const [teamTasks, strikes] = await Promise.all([loadTeamTasks(person.id), loadStrikes(person.id)]);
   const tasks: MemberTaskItem[] = [...d.tasks, ...teamTasks.map((x) => ({ id: `tt-${x.id}`, title: x.title, due: x.due_on, done_at: x.people.find((p) => p.id === person.id)?.done_at ?? null,
     href: person.id === me.id ? "/my-tasks#team-tasks" : undefined }))];
-  const { data: points } = await supabase.from("member_points").select("id, kind, amount, happened_on, note, file_path, file_name").eq("user_id", person.id)
+  const { data: points } = await supabase.from("member_points").select("id, kind, amount, happened_on, note, file_path, file_name, link").eq("user_id", person.id)
     .order("happened_on", { ascending: false }).order("created_at", { ascending: false }).returns<PointEntry[]>();
   return (
     <MemberDashboard today={todayISO()} d={d} isMe={person.id === me.id} isLeader={isAdmin} projects={projects} points={points ?? []} tasks={tasks} strikes={strikes}

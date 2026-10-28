@@ -1607,7 +1607,8 @@
       "campaigns": "Kampagnen",
       "library": "Was funktioniert",
       "experiments": "Experimente",
-      "attribution": "Attribution"
+      "attribution": "Attribution",
+      "simulate": "Prognose-Agent"
     },
     "tags": {
       "product": "Produkt",
@@ -1946,6 +1947,11 @@
       },
       "designSince": "angefragt am {date}",
       "allClear": "Alles erledigt – nichts wartet auf dich."
+    },
+    "simulate": {
+      "intro": "Simuliere, wie Leute reagieren, bevor du postest: Lade ein Briefing oder einen Bericht hoch, beschreibe, was vorhergesagt werden soll, und MiroFish lässt eine Menge KI-Agenten laufen. Halte Läufe klein (wenige Agenten, unter 40 Runden) – der kostenlose KI-Schlüssel hat Grenzen. Audio und Video (MP3, MP4, M4A, WAV, MOV, bis 500 MB) werden automatisch transkribiert.",
+      "open": "Im Vollbild öffnen",
+      "notSetUp": "Simulieren ist noch nicht eingerichtet (Adresse und Secret von MiroFish fehlen)."
     }
   },
   "scout": {
@@ -2701,6 +2707,10 @@
     "note": "Aktiv = an 3 oder mehr der letzten 30 Tage im Dashboard etwas getan. Etwas aktiv = 1–2 Tage."
   },
   "member": {
+    "changePhoto": "Foto ändern",
+    "photoSaving": "Speichern…",
+    "photoSaved": "Foto gespeichert – alle sehen es jetzt.",
+    "photoError": "Foto konnte nicht gespeichert werden. Versuch ein JPG oder PNG.",
     "back": "Team",
     "inProgress": "In Arbeit",
     "completed": "Erledigt (7 Tage)",
@@ -3122,7 +3132,15 @@
     "saveError": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
     "addFile": "Datei (optional) – z. B. das Post-Mortem",
     "openFile": "Datei öffnen",
-    "uploadError": "Datei konnte nicht hochgeladen werden (max. 10 MB). Bitte erneut versuchen."
+    "uploadError": "Datei konnte nicht hochgeladen werden (max. 10 MB). Bitte erneut versuchen.",
+    "edit": "Eintrag bearbeiten",
+    "editing": "Eintrag wird bearbeitet",
+    "save": "Speichern",
+    "saved": "Eintrag aktualisiert",
+    "cancel": "Abbrechen",
+    "link": "Link (optional)",
+    "replaceFile": "Datei ersetzen · {name}",
+    "removeFile": "Datei entfernen"
   },
   "memberTasks": {
     "todo": "{name} muss noch erledigen",
