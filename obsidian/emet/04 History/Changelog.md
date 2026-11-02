@@ -1,12 +1,13 @@
 ---
 tags: [emet, history]
-updated: 2026-10-28
+updated: 2026-11-02
 ---
 
-# Changelog (synced from the repo's CHANGELOG.md, 2026-10-28)
+# Changelog (synced from the repo's CHANGELOG.md, 2026-11-02)
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-02 — Alvaro — Wep (3D renders + virtual tours) added: what we sell and how a job runs (vault `01 Company/Wep (3D renders & virtual tours).md`), the free build pipeline (`03 Systems/Wep 3D pipeline.md`), README "What we sell" note, linked from home and Projects & ideas.
 - 2026-10-28 — Alvaro — Profile pictures: "Change photo" on each profile (the person themselves or an admin); the browser crops it square and shrinks it to 512 px JPEG; public bucket `avatars` so everyone sees it everywhere names show. Migration 0049 (storage rules tested as a normal member: own folder yes, someone else's no).
 - 2026-10-28 — Alvaro — Marketing → **Prediction agent** (future agents will be named the same way: what it does + "agent"): MiroFish (English by default, full screen on the same page, MP3/MP4/M4A/WAV/MOV uploads up to 500 MB transcribed with ffmpeg + Groq Whisper — `mirofish-space/patch.py` + `media.py`) (github.com/666ghj/MiroFish, AGPL, unmodified at commit 7657031) live inside emet. Runs on a free Azure for Students VM (`emet-mirofish.spaincentral.cloudapp.azure.com`, Caddy HTTPS) behind `mirofish-space/gate.mjs` — only a signed 12-hour pass from emet gets in; saved work backed up to the private HF dataset `alvaroibnz/mirofish-data`. Shared Groq key + free Zep key on the VM. `/api/health` checks it daily and notifies admins if it's down.
 - 2026-10-28 — Alvaro — Points: edit your own entries (pencil → the log form fills in: type, amount, date, note, replace or remove the file) instead of only deleting them; entries can also carry a link (e.g. the post or workshop page). Migration 0048 (`member_points.link`).

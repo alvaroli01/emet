@@ -35,7 +35,7 @@ Progress so far: **€388 real revenue** (one sale, Oct; demo numbers removed 21
 | [[Ground rules]] | [[Weekly rhythm]] | [[Tech stack]] | [[Design history]] |
 | [[Open questions]] | [[Groups/Team Leader group\|👑 Leaders]] | [[Repo map]] | [[Changelog]] |
 | [[Next steps]] | [[Working with Claude]] | [[Links & accounts]] | [[Workspace roadmap]] |
-| [[Projects & ideas]] · [[Chinese event (25 Nov)\|🏮 Chinese event]] | [[LEINN calendar]] | [[Specs and plans]] | |
+| [[Projects & ideas]] · [[Chinese event (25 Nov)\|🏮 Chinese event]] · [[Wep (3D renders & virtual tours)\|🏠 Wep 3D]] | [[LEINN calendar]] | [[Specs and plans]] | |
 
 ## 🧩 Systems at a glance
 | System | Status |

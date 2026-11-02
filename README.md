@@ -12,6 +12,7 @@ emet is a 15-person non-profit team that is part of **LEINN Internacional** (uni
 - **Started:** 13 Oct 2026 — everything is being built from scratch.
 - **Repo owner:** Alvaro
 - **What we sell:** _not decided yet_ — the team brainstorms this during the week of 19 Oct 2026.
+  - In progress: **Wep**, photoreal 3D renders and virtual tours of properties for estate agencies (first client job Nov 2026). Code: github.com/alvaroli01/3d-modeling-emet. Vault: `01 Company/Wep (3D renders & virtual tours).md`.
 
 ## 2. The goal
 

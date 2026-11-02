@@ -16,6 +16,7 @@ updated: 2026-10-22
 | Website development | Mario, Alvaro |
 | Sunset Sessions | Nahuel, Sasha, Lassi |
 | Chinese project | Mario, Alvaro, Nico, Martin |
+| **Wep: 3D renders & virtual tours** (first client job, Nov 2026) → [[Wep (3D renders & virtual tours)]] | Alvaro |
 
 ### 🏮 Chinese event — Wed 25 Nov 2026, Bilbao (planning, 22 Oct)
 First concrete project: a Chinese culture event with visiting students from a Chinese university. Joint with **Olin** (the other LEINN team in our class). emet: Alvaro, Mario, Nico (Empresa) · Olin: Andres, Eduardo, Gordon, Nico Yarnoz. €10 entrance, €5 raffle × 1,000 tickets, handcraft markets, fortune cookies, products brought from China → [[Chinese event (25 Nov)]]

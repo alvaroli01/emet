@@ -1,9 +1,9 @@
 ---
 tags: [emet, decisions]
-updated: 2026-10-28
+updated: 2026-11-02
 ---
 
-# Decisions log (synced from README §9, 2026-10-28)
+# Decisions log (synced from README §9, 2026-11-02)
 
 | Date | Decision | Decided by |
 |---|---|---|
