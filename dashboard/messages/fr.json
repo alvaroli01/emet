@@ -2910,7 +2910,9 @@
       "links": "Liens",
       "files": "Fichiers",
       "updates": "Actus",
-      "leads": "Leads"
+      "leads": "Leads",
+      "invites": "Invites",
+      "customers": "Customers"
     },
     "lists": {
       "todo": "À faire",
@@ -3004,7 +3006,18 @@
       "delete": "Retirer",
       "noneHere": "Rien dans cette liste.",
       "empty2": "Pas encore de lieux. Ajoute un commerce que tu as trouvé ou enregistre des leads depuis Scout."
-    }
+    },
+    "invites": "Invites",
+    "createInvite": "Create invite",
+    "noInvites": "No invites created yet.",
+    "creating": "Creating...",
+    "customers": "Customers",
+    "addCustomer": "Add customer",
+    "noCustomers": "No customers yet.",
+    "customerName": "Name",
+    "customerPhone": "Phone",
+    "adding": "Adding...",
+    "add": "Add"
   },
   "ai": {
     "button": "Connexions IA",

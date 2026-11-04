@@ -6,6 +6,8 @@ import { todayISO } from "@/lib/format";
 import { loadTeamTasks } from "@/lib/team-tasks";
 import type { ProjectLead, ProjectPlace } from "@/components/projects/project-leads";
 import { ProjectPage, type Project, type ProjectLink, type ProjectUpdate, type ProjectFile } from "@/components/projects/project-page";
+import type { ProjectInvite } from "@/components/projects/project-invites";
+import type { Customer } from "@/components/projects/project-customers";
 
 /** One project: only its members and the leaders get here (database rule); everyone else sees "not found". */
 export default async function ProjectRoute({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ tab?: string }> }) {
@@ -21,7 +23,7 @@ export default async function ProjectRoute({ params, searchParams }: { params: P
   if (!project) notFound();
   if (project.icon_path) project.icon_url = (await supabase.storage.from("projects").createSignedUrl(project.icon_path, 3600)).data?.signedUrl ?? null;
 
-  const [memberRows, money, weeks, links, updates, files, people, tickTasks, leads, places] = await Promise.all([
+  const [memberRows, money, weeks, links, updates, files, people, tickTasks, leads, places, invites, customers] = await Promise.all([
     supabase.from("project_members").select("user_id").eq("project_id", id),
     supabase.rpc("project_money", { p: id }),
     supabase.rpc("project_money_by_week", { p: id }),
@@ -32,6 +34,8 @@ export default async function ProjectRoute({ params, searchParams }: { params: P
     loadTeamTasks(undefined, id),
     supabase.from("scout_leads").select("id, score, fit, status, evidence, why, visited_on, visit_result, visit_note, scout_project_id:project_id, place:scout_places(name, address, city, lat, lng, website, instagram, phone, maps_url)").eq("saved_project_id", id).order("score", { ascending: false }).returns<ProjectLead[]>(),
     supabase.from("project_places").select("id, name, address, contact, note, added_by, created_at, visited_on, visit_result, visit_note").eq("project_id", id).order("created_at", { ascending: false }).returns<ProjectPlace[]>(),
+    supabase.from("project_invites").select("id, token, created_at").eq("project_id", id).order("created_at", { ascending: false }).returns<ProjectInvite[]>(),
+    supabase.from("customers").select("id, name, phone, added_by, created_at").eq("project_id", id).order("created_at", { ascending: false }).returns<Customer[]>(),
   ]);
   const memberIds = (memberRows.data ?? []).map((m) => m.user_id as string);
   // The project's task board points at the project (boards.project_id)
@@ -43,6 +47,7 @@ export default async function ProjectRoute({ params, searchParams }: { params: P
     <ProjectPage project={project} memberIds={memberIds} people={people} board={board} viewer={viewer} meId={me.id} isLeader={isAdmin}
       money={{ revenue: Number(m?.revenue ?? 0), costs: Number(m?.costs ?? 0), profit: Number(m?.profit ?? 0) }}
       weeks={((weeks.data ?? []) as { week: string; revenue: number }[]).map((w) => ({ week: w.week, revenue: Number(w.revenue) }))}
-      links={links.data ?? []} updates={updates.data ?? []} files={files.data ?? []} tickTasks={tickTasks} leads={leads.data ?? []} places={places.data ?? []} tab={tab} today={todayISO()} />
+      links={links.data ?? []} updates={updates.data ?? []} files={files.data ?? []} tickTasks={tickTasks} leads={leads.data ?? []} places={places.data ?? []}
+      invites={invites.data ?? []} customers={customers.data ?? []} tab={tab} today={todayISO()} />
   );
 }

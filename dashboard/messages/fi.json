@@ -2910,7 +2910,9 @@
       "links": "Linkit",
       "files": "Tiedostot",
       "updates": "Päivitykset",
-      "leads": "Liidit"
+      "leads": "Liidit",
+      "invites": "Invites",
+      "customers": "Customers"
     },
     "lists": {
       "todo": "Tehtävänä",
@@ -3004,7 +3006,18 @@
       "delete": "Poista",
       "noneHere": "Tässä listassa ei ole mitään.",
       "empty2": "Ei vielä paikkoja. Lisää löytämäsi yritys tai tallenna liidejä Scoutista."
-    }
+    },
+    "invites": "Invites",
+    "createInvite": "Create invite",
+    "noInvites": "No invites created yet.",
+    "creating": "Creating...",
+    "customers": "Customers",
+    "addCustomer": "Add customer",
+    "noCustomers": "No customers yet.",
+    "customerName": "Name",
+    "customerPhone": "Phone",
+    "adding": "Adding...",
+    "add": "Add"
   },
   "ai": {
     "button": "Tekoälyyhteydet",

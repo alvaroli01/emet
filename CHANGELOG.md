@@ -1,4 +1,5 @@
-# Changelog
+- 2026-11-04 — Claude — Projects: invite system with shareable tokens for Ollin team members to join specific projects; Customers list to store phone numbers from contacted leads. Migrations 0050 (project_invites, customers tables with RLS); new components ProjectInvites, ProjectCustomers; join route `/app/join?token=...` to redeem invites.
+
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 

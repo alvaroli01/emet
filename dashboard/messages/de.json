@@ -2910,7 +2910,9 @@
       "links": "Links",
       "files": "Dateien",
       "updates": "Updates",
-      "leads": "Leads"
+      "leads": "Leads",
+      "invites": "Invites",
+      "customers": "Customers"
     },
     "lists": {
       "todo": "Zu tun",
@@ -3004,7 +3006,18 @@
       "delete": "Entfernen",
       "noneHere": "Nichts in dieser Liste.",
       "empty2": "Noch keine Orte. Füge ein Geschäft hinzu, das du gefunden hast, oder speichere Leads aus Scout."
-    }
+    },
+    "invites": "Invites",
+    "createInvite": "Create invite",
+    "noInvites": "No invites created yet.",
+    "creating": "Creating...",
+    "customers": "Customers",
+    "addCustomer": "Add customer",
+    "noCustomers": "No customers yet.",
+    "customerName": "Name",
+    "customerPhone": "Phone",
+    "adding": "Adding...",
+    "add": "Add"
   },
   "ai": {
     "button": "KI-Verbindungen",

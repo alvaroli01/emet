@@ -20,6 +20,8 @@ import { ProjectIcon } from "./project-icon";
 import { ProjectLeads, type ProjectLead, type ProjectPlace } from "./project-leads";
 import { AssignTasks, MyTeamTasks } from "@/components/tools/team-tasks";
 import type { TeamTask } from "@/lib/team-tasks";
+import { ProjectInvites, type ProjectInvite } from "./project-invites";
+import { ProjectCustomers, type Customer } from "./project-customers";
 
 export type Project = { id: string; name: string; description: string | null; status: "planning" | "live" | "closed"; starts_on: string | null; ends_on: string | null; goal: number | null; color: string; icon_path?: string | null; icon_url?: string | null };
 export type ProjectLink = { id: string; title: string; url: string; created_by: string | null; created_at: string };
@@ -27,15 +29,15 @@ export type ProjectUpdate = { id: string; body: string; created_by: string | nul
 export type ProjectFile = { id: string; name: string; size: number; mime: string; path: string; uploaded_by: string | null; created_at: string };
 export type Money = { revenue: number; costs: number; profit: number };
 
-const TABS = ["overview", "money", "tasks", "leads", "links", "files", "updates"] as const;
+const TABS = ["overview", "money", "tasks", "leads", "links", "files", "updates", "invites", "customers"] as const;
 type Tab = (typeof TABS)[number];
 export const STATUS_STYLE = { planning: "bg-surface-2 text-muted", live: "bg-ok/20 text-ok-text", closed: "bg-line text-muted" } as const;
 
 /** A project's page: header with goal and people, then Overview · Money · Tasks · Links · Files · Updates. */
-export function ProjectPage({ project, memberIds, people, board, viewer, meId, isLeader, money, weeks, links, updates, files, tickTasks, leads, places, tab, today }: {
+export function ProjectPage({ project, memberIds, people, board, viewer, meId, isLeader, money, weeks, links, updates, files, tickTasks, leads, places, invites, customers, tab, today }: {
   project: Project; memberIds: string[]; people: Member[]; board: BoardData | null; viewer: Viewer; meId: string; isLeader: boolean;
   money: Money; weeks: { week: string; revenue: number }[]; links: ProjectLink[]; updates: ProjectUpdate[]; files: ProjectFile[];
-  tickTasks: TeamTask[]; leads: ProjectLead[]; places: ProjectPlace[]; tab?: string; today: string;
+  tickTasks: TeamTask[]; leads: ProjectLead[]; places: ProjectPlace[]; invites: ProjectInvite[]; customers: Customer[]; tab?: string; today: string;
 }) {
   const t = useTranslations("projects");
   const locale = useLocale();
@@ -167,6 +169,8 @@ export function ProjectPage({ project, memberIds, people, board, viewer, meId, i
       {active === "links" && <ProjectLinks projectId={project.id} links={links} people={name} meId={meId} isLeader={isLeader} />}
       {active === "files" && <ProjectFiles projectId={project.id} files={files} people={name} meId={meId} isLeader={isLeader} />}
       {active === "updates" && <ProjectUpdates projectId={project.id} updates={updates} people={name} meId={meId} isLeader={isLeader} />}
+      {active === "invites" && <ProjectInvites projectId={project.id} invites={invites} meId={meId} isLeader={isLeader} />}
+      {active === "customers" && <ProjectCustomers projectId={project.id} customers={customers} meId={meId} isLeader={isLeader} />}
 
       {editing && <ProjectForm project={{ ...project, memberIds }} people={people} onClose={() => setEditing(false)} />}
     </div>

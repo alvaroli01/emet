@@ -2910,7 +2910,9 @@
       "links": "Links",
       "files": "Arquivos",
       "updates": "Novidades",
-      "leads": "Leads"
+      "leads": "Leads",
+      "invites": "Invites",
+      "customers": "Customers"
     },
     "lists": {
       "todo": "A fazer",
@@ -3004,7 +3006,18 @@
       "delete": "Remover",
       "noneHere": "Nada nesta lista.",
       "empty2": "Ainda não há lugares. Adicione um negócio que você encontrou ou salve leads do Scout."
-    }
+    },
+    "invites": "Invites",
+    "createInvite": "Create invite",
+    "noInvites": "No invites created yet.",
+    "creating": "Creating...",
+    "customers": "Customers",
+    "addCustomer": "Add customer",
+    "noCustomers": "No customers yet.",
+    "customerName": "Name",
+    "customerPhone": "Phone",
+    "adding": "Adding...",
+    "add": "Add"
   },
   "ai": {
     "button": "Conexões de IA",

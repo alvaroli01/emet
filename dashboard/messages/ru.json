@@ -2910,7 +2910,9 @@
       "links": "Ссылки",
       "files": "Файлы",
       "updates": "Новости",
-      "leads": "Лиды"
+      "leads": "Лиды",
+      "invites": "Invites",
+      "customers": "Customers"
     },
     "lists": {
       "todo": "Сделать",
@@ -3004,7 +3006,18 @@
       "delete": "Убрать",
       "noneHere": "В этом списке ничего нет.",
       "empty2": "Мест пока нет. Добавьте найденный бизнес или сохраните лиды из Scout."
-    }
+    },
+    "invites": "Invites",
+    "createInvite": "Create invite",
+    "noInvites": "No invites created yet.",
+    "creating": "Creating...",
+    "customers": "Customers",
+    "addCustomer": "Add customer",
+    "noCustomers": "No customers yet.",
+    "customerName": "Name",
+    "customerPhone": "Phone",
+    "adding": "Adding...",
+    "add": "Add"
   },
   "ai": {
     "button": "ИИ-подключения",
