@@ -2911,8 +2911,8 @@
       "files": "Tiedostot",
       "updates": "Päivitykset",
       "leads": "Liidit",
-      "invites": "Invites",
-      "customers": "Customers"
+      "invites": "Kutsu Ollin",
+      "customers": "Asiakkaat"
     },
     "lists": {
       "todo": "Tehtävänä",
@@ -3007,17 +3007,17 @@
       "noneHere": "Tässä listassa ei ole mitään.",
       "empty2": "Ei vielä paikkoja. Lisää löytämäsi yritys tai tallenna liidejä Scoutista."
     },
-    "invites": "Invites",
-    "createInvite": "Create invite",
-    "noInvites": "No invites created yet.",
-    "creating": "Creating...",
-    "customers": "Customers",
-    "addCustomer": "Add customer",
-    "noCustomers": "No customers yet.",
-    "customerName": "Name",
-    "customerPhone": "Phone",
-    "adding": "Adding...",
-    "add": "Add"
+    "invitesHelp": "Lähetä linkki Ollinin ihmisille. He kirjoittavat nimensä ja Gmailinsa, saavat kirjautumissähköpostin ja näkevät vain tämän projektin – ei mitään muuta emetistä.",
+    "createInvite": "Uusi kutsulinkki",
+    "copyLink": "Kopioi linkki",
+    "copied": "Linkki kopioitu – liitä se WhatsAppiin tai sähköpostiin",
+    "deleteInvite": "Poista linkki (se lakkaa toimimasta)",
+    "noInvites": "Ei vielä kutsulinkkejä.",
+    "customersTitle": "Asiakkaat, joiden kanssa olemme puhuneet",
+    "customerName": "Asiakkaan nimi",
+    "customerPhone": "Puhelinnumero",
+    "addCustomer": "Lisää",
+    "noCustomers": "Ei vielä asiakkaita. Lisää ne, joiden kanssa olette jo puhuneet."
   },
   "ai": {
     "button": "Tekoälyyhteydet",
@@ -3231,5 +3231,18 @@
     "noPeople": "Projektissa ei ole vielä ketään.",
     "lastUpdate": "Viimeisin päivitys: {who}, {when}",
     "none": "Ei vielä projekteja."
+  },
+  "join": {
+    "title": "Liity projektiin {project}",
+    "intro": "emet kutsui sinut tähän projektiin. Kirjoita nimesi ja Gmailisi, niin lähetämme kirjautumislinkin.",
+    "name": "Nimesi",
+    "email": "Gmailisi",
+    "send": "Lähetä linkki",
+    "sending": "Lähetetään…",
+    "sent": "Valmis! Avaa osoitteeseen {email} lähettämämme sähköposti ja klikkaa linkkiä. Katso roskapostista, jos et näe sitä.",
+    "invalid": "Tämä kutsulinkki ei enää toimi. Pyydä uusi lähettäjältä.",
+    "notAllowed": "Tällä sähköpostilla ei voi liittyä emetiin. Kysy kutsujalta.",
+    "rateLimit": "Viimeisen tunnin aikana on lähetetty liian monta kirjautumissähköpostia. Yritä myöhemmin uudelleen.",
+    "error": "Jokin meni pieleen. Yritä uudelleen."
   }
 }

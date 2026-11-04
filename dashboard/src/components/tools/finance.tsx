@@ -34,7 +34,7 @@ export async function FinanceTools({ editable, session, allMembers }: ToolProps)
     editable ? supabase.from("cash_counts").select("*").order("counted_at", { ascending: false }).limit(10) : Promise.resolve({ data: [] }),
     editable ? supabase.from("finance_audit").select("*").order("at", { ascending: false }).limit(100) : Promise.resolve({ data: [] }),
     supabase.from("prospects").select("id", { count: "exact", head: true }).eq("stage", "won"),
-    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("active", true),
+    supabase.from("profiles").select("id", { count: "exact", head: true }).eq("active", true).eq("is_guest", false),
     supabase.from("discount_codes").select("code").eq("active", true).order("code"),
     supabase.from("subscriptions").select("*").order("next_charge_on").returns<Subscription[]>(),
   ]);

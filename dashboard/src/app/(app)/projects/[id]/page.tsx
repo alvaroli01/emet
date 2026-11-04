@@ -35,7 +35,7 @@ export default async function ProjectRoute({ params, searchParams }: { params: P
     supabase.from("scout_leads").select("id, score, fit, status, evidence, why, visited_on, visit_result, visit_note, scout_project_id:project_id, place:scout_places(name, address, city, lat, lng, website, instagram, phone, maps_url)").eq("saved_project_id", id).order("score", { ascending: false }).returns<ProjectLead[]>(),
     supabase.from("project_places").select("id, name, address, contact, note, added_by, created_at, visited_on, visit_result, visit_note").eq("project_id", id).order("created_at", { ascending: false }).returns<ProjectPlace[]>(),
     supabase.from("project_invites").select("id, token, created_at").eq("project_id", id).order("created_at", { ascending: false }).returns<ProjectInvite[]>(),
-    supabase.from("customers").select("id, name, phone, added_by, created_at").eq("project_id", id).order("created_at", { ascending: false }).returns<Customer[]>(),
+    supabase.from("project_customers").select("id, name, phone, added_by, created_at").eq("project_id", id).order("created_at", { ascending: false }).returns<Customer[]>(),
   ]);
   const memberIds = (memberRows.data ?? []).map((m) => m.user_id as string);
   // The project's task board points at the project (boards.project_id)
@@ -44,7 +44,7 @@ export default async function ProjectRoute({ params, searchParams }: { params: P
   const m = (money.data as { revenue: number; costs: number; profit: number }[] | null)?.[0];
 
   return (
-    <ProjectPage project={project} memberIds={memberIds} people={people} board={board} viewer={viewer} meId={me.id} isLeader={isAdmin}
+    <ProjectPage project={project} memberIds={memberIds} people={people} board={board} viewer={viewer} meId={me.id} isLeader={isAdmin} canInvite={!me.is_guest}
       money={{ revenue: Number(m?.revenue ?? 0), costs: Number(m?.costs ?? 0), profit: Number(m?.profit ?? 0) }}
       weeks={((weeks.data ?? []) as { week: string; revenue: number }[]).map((w) => ({ week: w.week, revenue: Number(w.revenue) }))}
       links={links.data ?? []} updates={updates.data ?? []} files={files.data ?? []} tickTasks={tickTasks} leads={leads.data ?? []} places={places.data ?? []}

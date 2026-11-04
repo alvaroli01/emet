@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     supabase.from("meetings").select("id, title, notes, transcript").or(`title.ilike.${like},notes.ilike.${like},transcript.ilike.${like}`).limit(5),
     supabase.from("decisions").select("id, decision, date").ilike("decision", like).limit(4),
     supabase.from("lab_ideas").select("id, title, pitch").or(`title.ilike.${like},pitch.ilike.${like}`).limit(4),
-    supabase.from("profiles").select("id, full_name, role_title").eq("active", true).ilike("full_name", like).limit(4),
+    supabase.from("profiles").select("id, full_name, role_title").eq("active", true).eq("is_guest", false).ilike("full_name", like).limit(4),
     supabase.from("groups").select("id, slug"),
   ]);
   const slug = new Map((groups.data ?? []).map((g) => [g.id, g.slug]));

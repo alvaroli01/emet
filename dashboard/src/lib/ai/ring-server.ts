@@ -36,7 +36,7 @@ export async function scoutRing(meId: string, ownRow: { key_iv: string; key_data
   const day = new Date().toISOString().slice(0, 10);
   const [{ data: lent }, { data: active }, { data: usage }, { data: backups }] = await Promise.all([
     pool ? sb.from("ai_keys").select("owner_id, key_iv, key_data").eq("lend_scout", true).neq("owner_id", meId) : Promise.resolve({ data: [] as { owner_id: string; key_iv: string; key_data: string }[] }),
-    sb.from("profiles").select("id").eq("active", true),
+    sb.from("profiles").select("id").eq("active", true).eq("is_guest", false),
     sb.from("ai_key_usage").select("owner_id, model, tokens, limited_until, bad").eq("day", day),
     sb.from("backup_keys").select("owner_id, key_iv, key_data"),
   ]);

@@ -2911,8 +2911,8 @@
       "files": "Arquivos",
       "updates": "Novidades",
       "leads": "Leads",
-      "invites": "Invites",
-      "customers": "Customers"
+      "invites": "Convidar Ollin",
+      "customers": "Clientes"
     },
     "lists": {
       "todo": "A fazer",
@@ -3007,17 +3007,17 @@
       "noneHere": "Nada nesta lista.",
       "empty2": "Ainda não há lugares. Adicione um negócio que você encontrou ou salve leads do Scout."
     },
-    "invites": "Invites",
-    "createInvite": "Create invite",
-    "noInvites": "No invites created yet.",
-    "creating": "Creating...",
-    "customers": "Customers",
-    "addCustomer": "Add customer",
-    "noCustomers": "No customers yet.",
-    "customerName": "Name",
-    "customerPhone": "Phone",
-    "adding": "Adding...",
-    "add": "Add"
+    "invitesHelp": "Envie um link para pessoas da Ollin. Elas digitam nome e Gmail, recebem um e-mail de login e veem só este projeto, nada mais do emet.",
+    "createInvite": "Novo link de convite",
+    "copyLink": "Copiar link",
+    "copied": "Link copiado: cole no WhatsApp ou num e-mail",
+    "deleteInvite": "Apagar link (ele para de funcionar)",
+    "noInvites": "Ainda não há links de convite.",
+    "customersTitle": "Clientes com quem falamos",
+    "customerName": "Nome do cliente",
+    "customerPhone": "Telefone",
+    "addCustomer": "Adicionar",
+    "noCustomers": "Ainda não há clientes. Adicione os que vocês já contataram."
   },
   "ai": {
     "button": "Conexões de IA",
@@ -3231,5 +3231,18 @@
     "noPeople": "Ninguém neste projeto ainda.",
     "lastUpdate": "Última atualização de {who}, {when}",
     "none": "Nenhum projeto ainda."
+  },
+  "join": {
+    "title": "Entrar em {project}",
+    "intro": "O emet convidou você para este projeto. Digite seu nome e seu Gmail: vamos enviar um link para você entrar.",
+    "name": "Seu nome",
+    "email": "Seu Gmail",
+    "send": "Me envie o link",
+    "sending": "Enviando…",
+    "sent": "Pronto! Abra o e-mail que enviamos para {email} e clique no link. Veja o spam se não encontrar.",
+    "invalid": "Este link de convite não funciona mais. Peça um novo a quem enviou.",
+    "notAllowed": "Este e-mail não pode entrar no emet. Pergunte a quem convidou você.",
+    "rateLimit": "Foram enviados e-mails de login demais na última hora. Tente de novo mais tarde.",
+    "error": "Algo deu errado. Tente de novo."
   }
 }

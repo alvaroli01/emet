@@ -2911,8 +2911,8 @@
       "files": "Файлы",
       "updates": "Новости",
       "leads": "Лиды",
-      "invites": "Invites",
-      "customers": "Customers"
+      "invites": "Пригласить Ollin",
+      "customers": "Клиенты"
     },
     "lists": {
       "todo": "Сделать",
@@ -3007,17 +3007,17 @@
       "noneHere": "В этом списке ничего нет.",
       "empty2": "Мест пока нет. Добавьте найденный бизнес или сохраните лиды из Scout."
     },
-    "invites": "Invites",
-    "createInvite": "Create invite",
-    "noInvites": "No invites created yet.",
-    "creating": "Creating...",
-    "customers": "Customers",
-    "addCustomer": "Add customer",
-    "noCustomers": "No customers yet.",
-    "customerName": "Name",
-    "customerPhone": "Phone",
-    "adding": "Adding...",
-    "add": "Add"
+    "invitesHelp": "Отправь ссылку людям из Ollin. Они вводят имя и Gmail, получают письмо для входа и видят только этот проект — больше ничего в emet.",
+    "createInvite": "Новая ссылка-приглашение",
+    "copyLink": "Скопировать ссылку",
+    "copied": "Ссылка скопирована — вставь её в WhatsApp или письмо",
+    "deleteInvite": "Удалить ссылку (она перестанет работать)",
+    "noInvites": "Пока нет ссылок-приглашений.",
+    "customersTitle": "Клиенты, с которыми мы говорили",
+    "customerName": "Имя клиента",
+    "customerPhone": "Телефон",
+    "addCustomer": "Добавить",
+    "noCustomers": "Пока нет клиентов. Добавь тех, с кем вы уже говорили."
   },
   "ai": {
     "button": "ИИ-подключения",
@@ -3231,5 +3231,18 @@
     "noPeople": "В проекте пока никого нет.",
     "lastUpdate": "Последнее обновление: {who}, {when}",
     "none": "Проектов пока нет."
+  },
+  "join": {
+    "title": "Присоединиться к {project}",
+    "intro": "emet пригласил тебя в этот проект. Введи имя и Gmail — мы пришлём ссылку для входа.",
+    "name": "Твоё имя",
+    "email": "Твой Gmail",
+    "send": "Прислать ссылку",
+    "sending": "Отправляем…",
+    "sent": "Готово! Открой письмо, отправленное на {email}, и нажми на ссылку. Проверь спам, если не видишь его.",
+    "invalid": "Эта ссылка-приглашение больше не работает. Попроси новую у того, кто её прислал.",
+    "notAllowed": "С этим адресом нельзя войти в emet. Спроси того, кто тебя пригласил.",
+    "rateLimit": "За последний час отправлено слишком много писем для входа. Попробуй позже.",
+    "error": "Что-то пошло не так. Попробуй ещё раз."
   }
 }

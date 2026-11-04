@@ -10,7 +10,7 @@ export default async function TeamPage() {
   const t = await getTranslations("team");
   const { groups, isAdmin, me } = await getSession();
   const supabase = await createClient();
-  const { data: people } = await supabase.from("profiles").select("*").order("full_name").returns<Profile[]>();
+  const { data: people } = await supabase.from("profiles").select("*").eq("is_guest", false).order("full_name").returns<Profile[]>();
   const active = (people ?? []).filter((p) => p.active);
 
   return (

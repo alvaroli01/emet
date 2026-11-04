@@ -2911,8 +2911,8 @@
       "files": "Fichiers",
       "updates": "Actus",
       "leads": "Leads",
-      "invites": "Invites",
-      "customers": "Customers"
+      "invites": "Inviter Ollin",
+      "customers": "Clients"
     },
     "lists": {
       "todo": "À faire",
@@ -3007,17 +3007,17 @@
       "noneHere": "Rien dans cette liste.",
       "empty2": "Pas encore de lieux. Ajoute un commerce que tu as trouvé ou enregistre des leads depuis Scout."
     },
-    "invites": "Invites",
-    "createInvite": "Create invite",
-    "noInvites": "No invites created yet.",
-    "creating": "Creating...",
-    "customers": "Customers",
-    "addCustomer": "Add customer",
-    "noCustomers": "No customers yet.",
-    "customerName": "Name",
-    "customerPhone": "Phone",
-    "adding": "Adding...",
-    "add": "Add"
+    "invitesHelp": "Envoie un lien aux personnes d'Ollin. Elles tapent leur nom et leur Gmail, reçoivent un e-mail de connexion et ne voient que ce projet, rien d'autre dans emet.",
+    "createInvite": "Nouveau lien d'invitation",
+    "copyLink": "Copier le lien",
+    "copied": "Lien copié : colle-le dans WhatsApp ou un e-mail",
+    "deleteInvite": "Supprimer le lien (il ne marchera plus)",
+    "noInvites": "Aucun lien d'invitation pour l'instant.",
+    "customersTitle": "Clients à qui nous avons parlé",
+    "customerName": "Nom du client",
+    "customerPhone": "Numéro de téléphone",
+    "addCustomer": "Ajouter",
+    "noCustomers": "Aucun client pour l'instant. Ajoute ceux à qui vous avez déjà parlé."
   },
   "ai": {
     "button": "Connexions IA",
@@ -3231,5 +3231,18 @@
     "noPeople": "Personne dans ce projet pour l’instant.",
     "lastUpdate": "Dernière nouvelle de {who}, {when}",
     "none": "Pas encore de projets."
+  },
+  "join": {
+    "title": "Rejoindre {project}",
+    "intro": "emet t'a invité·e à ce projet. Tape ton nom et ton Gmail : on t'envoie un lien pour te connecter.",
+    "name": "Ton nom",
+    "email": "Ton Gmail",
+    "send": "M'envoyer le lien",
+    "sending": "Envoi…",
+    "sent": "C'est fait ! Ouvre l'e-mail envoyé à {email} et clique sur le lien. Regarde dans les spams si tu ne le vois pas.",
+    "invalid": "Ce lien d'invitation ne marche plus. Demande-en un nouveau à la personne qui te l'a envoyé.",
+    "notAllowed": "Cet e-mail ne peut pas rejoindre emet. Demande à la personne qui t'a invité·e.",
+    "rateLimit": "Trop d'e-mails de connexion ont été envoyés cette dernière heure. Réessaie plus tard.",
+    "error": "Un problème est survenu. Réessaie."
   }
 }

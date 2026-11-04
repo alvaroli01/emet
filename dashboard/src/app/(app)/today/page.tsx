@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CalendarClock, ArrowUpRight, Clock, CheckCircle2 } from "lucide-react";
 import { HomeDashboard, type HomeData } from "@/components/home/home-dashboard";
-import { getSession } from "@/lib/session";
+import { getSession, sendGuestToProject } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { weekStart, GOAL, pace, totals, onTimeRate, type Sale, type Expense, type CardLite } from "@/lib/metrics";
 import { todayISO, shortDate } from "@/lib/format";
@@ -20,6 +20,7 @@ export default async function TodayPage() {
   const t = await getTranslations("today");
   const locale = await getLocale();
   const { me, myGroup, groups, isAdmin } = await getSession();
+  await sendGuestToProject(me);
   const supabase = await createClient();
   const today = todayISO();
   const week = weekStart(Date.now());

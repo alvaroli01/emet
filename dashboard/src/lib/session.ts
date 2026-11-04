@@ -15,6 +15,8 @@ export type Profile = {
   is_admin: boolean;
   is_coach?: boolean;
   is_leader?: boolean;
+  /** Ollin person who joined through a project invite link: sees only their projects */
+  is_guest?: boolean;
   locale: string | null;
   active: boolean;
 };
@@ -61,3 +63,11 @@ export const getSession = cache(async (): Promise<Session> => {
     viewer: { meId: me.id, isAdmin, myGroupId: me.group_id, isCoach: !!me.is_coach },
   };
 });
+
+/** Ollin guests have no team pages: send them from Today/Overview to their first project. */
+export async function sendGuestToProject(me: Profile) {
+  if (!me.is_guest) return;
+  const supabase = await createClient();
+  const { data } = await supabase.from("project_members").select("project_id").eq("user_id", me.id).limit(1).maybeSingle();
+  redirect(data ? `/projects/${data.project_id}` : "/auth/not-on-team");
+}

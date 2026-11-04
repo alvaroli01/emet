@@ -1,12 +1,13 @@
 ---
 tags: [emet, decisions]
-updated: 2026-11-02
+updated: 2026-11-04
 ---
 
-# Decisions log (synced from README §9, 2026-11-02)
+# Decisions log (synced from README §9, 2026-11-04)
 
 | Date | Decision | Decided by |
 |---|---|---|
+| 2026-11-04 | People from Ollin (the other LEINN team) join shared projects as **guests** through invite links instead of being added to the team list: they see only the projects they were invited to, never the rest of emet, and don't count in team numbers. A link works until someone deletes it |  |
 | [[2026-10-28]] | Points entries can be edited (not only deleted) and can carry a link next to the optional file (`src/components/team/points-panel.tsx`, migration 0048) | Alvaro |
 | [[2026-10-28]] | Shared Scout projects can be searched and worked by everyone; only the setup stays with the creator and selling teams | Alvaro |
 | [[2026-10-28]] | Harvey (autonomous cold-email agent) is NOT integrated as-is: it needs a paid Claude/ChatGPT plan, runs on one computer and cold-emails (restricted in Spain). Its playbooks (signals, one hook, honesty rules, objection handling) were ported into Scout instead, on the free Groq keys | Alvaro |

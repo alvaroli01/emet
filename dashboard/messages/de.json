@@ -2911,8 +2911,8 @@
       "files": "Dateien",
       "updates": "Updates",
       "leads": "Leads",
-      "invites": "Invites",
-      "customers": "Customers"
+      "invites": "Ollin einladen",
+      "customers": "Kunden"
     },
     "lists": {
       "todo": "Zu tun",
@@ -3007,17 +3007,17 @@
       "noneHere": "Nichts in dieser Liste.",
       "empty2": "Noch keine Orte. Füge ein Geschäft hinzu, das du gefunden hast, oder speichere Leads aus Scout."
     },
-    "invites": "Invites",
-    "createInvite": "Create invite",
-    "noInvites": "No invites created yet.",
-    "creating": "Creating...",
-    "customers": "Customers",
-    "addCustomer": "Add customer",
-    "noCustomers": "No customers yet.",
-    "customerName": "Name",
-    "customerPhone": "Phone",
-    "adding": "Adding...",
-    "add": "Add"
+    "invitesHelp": "Schick Leuten von Ollin einen Link. Sie geben Namen und Gmail ein, bekommen eine Login-E-Mail und sehen nur dieses Projekt – sonst nichts von emet.",
+    "createInvite": "Neuer Einladungslink",
+    "copyLink": "Link kopieren",
+    "copied": "Link kopiert – füg ihn in WhatsApp oder eine E-Mail ein",
+    "deleteInvite": "Link löschen (funktioniert dann nicht mehr)",
+    "noInvites": "Noch keine Einladungslinks.",
+    "customersTitle": "Kunden, mit denen wir gesprochen haben",
+    "customerName": "Name des Kunden",
+    "customerPhone": "Telefonnummer",
+    "addCustomer": "Hinzufügen",
+    "noCustomers": "Noch keine Kunden. Füg die hinzu, mit denen ihr schon gesprochen habt."
   },
   "ai": {
     "button": "KI-Verbindungen",
@@ -3231,5 +3231,18 @@
     "noPeople": "Noch niemand in diesem Projekt.",
     "lastUpdate": "Letztes Update von {who}, {when}",
     "none": "Noch keine Projekte."
+  },
+  "join": {
+    "title": "{project} beitreten",
+    "intro": "emet hat dich zu diesem Projekt eingeladen. Gib deinen Namen und deine Gmail-Adresse ein – wir schicken dir einen Login-Link.",
+    "name": "Dein Name",
+    "email": "Deine Gmail-Adresse",
+    "send": "Link per E-Mail senden",
+    "sending": "Wird gesendet …",
+    "sent": "Fertig! Öffne die E-Mail an {email} und klick auf den Link. Schau im Spam nach, falls sie fehlt.",
+    "invalid": "Dieser Einladungslink funktioniert nicht mehr. Bitte die Person, die ihn geschickt hat, um einen neuen.",
+    "notAllowed": "Mit dieser E-Mail kannst du emet nicht beitreten. Frag die Person, die dich eingeladen hat.",
+    "rateLimit": "In der letzten Stunde wurden zu viele Login-E-Mails verschickt. Versuch es später noch einmal.",
+    "error": "Etwas ist schiefgelaufen. Versuch es noch einmal."
   }
 }

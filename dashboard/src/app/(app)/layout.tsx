@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { getSession } from "@/lib/session";
+import { createClient } from "@/lib/supabase/server";
 import { Sidebar, BottomNav } from "@/components/nav";
 import { SyncIndicator } from "@/components/sync-indicator";
 import { LocaleSync } from "@/components/preferences";
@@ -16,6 +18,27 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const tg = await getTranslations("group.names");
   const { me, myGroup, groups, isLeader } = await getSession();
   const showProjects = isLeader || !!me.is_coach;
+
+  if (me.is_guest) {
+    // Ollin guests: only the projects they were invited to (the database shows them nothing else)
+    const { data: projects } = await (await createClient()).from("projects").select("id, name").order("name");
+    return (
+      <div className="relative isolate flex min-h-dvh flex-col">
+        <Backdrop />
+        <LocaleSync saved={me.locale} />
+        <TopBarFrame>
+          <nav className="flex min-w-0 flex-1 gap-1.5 overflow-x-auto [scrollbar-width:none]">
+            {(projects ?? []).map((p) => <Link key={p.id} href={`/projects/${p.id}`} className="glass-pill shrink-0 rounded-full px-3.5 py-1.5 text-sm font-medium text-white">{p.name}</Link>)}
+          </nav>
+          <div className="flex items-center gap-1 sm:gap-1.5">
+            <NotificationsBell meId={me.id} />
+            <UserMenu name={me.full_name} avatar={me.avatar_url} profileId={me.id} subtitle="Ollin" />
+          </div>
+        </TopBarFrame>
+        <main className="on-photo mx-auto w-full max-w-[1400px] flex-1 px-3 pt-3 pb-10 sm:px-4 sm:pt-5 lg:px-6">{children}</main>
+      </div>
+    );
+  }
 
   return (
     <div className="relative isolate flex min-h-dvh">

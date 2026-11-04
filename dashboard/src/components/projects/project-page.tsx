@@ -29,13 +29,13 @@ export type ProjectUpdate = { id: string; body: string; created_by: string | nul
 export type ProjectFile = { id: string; name: string; size: number; mime: string; path: string; uploaded_by: string | null; created_at: string };
 export type Money = { revenue: number; costs: number; profit: number };
 
-const TABS = ["overview", "money", "tasks", "leads", "links", "files", "updates", "invites", "customers"] as const;
+const TABS = ["overview", "money", "tasks", "leads", "links", "files", "updates", "customers", "invites"] as const;
 type Tab = (typeof TABS)[number];
 export const STATUS_STYLE = { planning: "bg-surface-2 text-muted", live: "bg-ok/20 text-ok-text", closed: "bg-line text-muted" } as const;
 
 /** A project's page: header with goal and people, then Overview · Money · Tasks · Links · Files · Updates. */
-export function ProjectPage({ project, memberIds, people, board, viewer, meId, isLeader, money, weeks, links, updates, files, tickTasks, leads, places, invites, customers, tab, today }: {
-  project: Project; memberIds: string[]; people: Member[]; board: BoardData | null; viewer: Viewer; meId: string; isLeader: boolean;
+export function ProjectPage({ project, memberIds, people, board, viewer, meId, isLeader, canInvite, money, weeks, links, updates, files, tickTasks, leads, places, invites, customers, tab, today }: {
+  project: Project; memberIds: string[]; people: Member[]; board: BoardData | null; viewer: Viewer; meId: string; isLeader: boolean; canInvite: boolean;
   money: Money; weeks: { week: string; revenue: number }[]; links: ProjectLink[]; updates: ProjectUpdate[]; files: ProjectFile[];
   tickTasks: TeamTask[]; leads: ProjectLead[]; places: ProjectPlace[]; invites: ProjectInvite[]; customers: Customer[]; tab?: string; today: string;
 }) {
@@ -43,7 +43,8 @@ export function ProjectPage({ project, memberIds, people, board, viewer, meId, i
   const locale = useLocale();
   const router = useRouter();
   const toast = useToast();
-  const [active, setActive] = useState<Tab>(TABS.includes(tab as Tab) ? (tab as Tab) : "overview");
+  const tabs = TABS.filter((k) => k !== "invites" || canInvite);
+  const [active, setActive] = useState<Tab>(tabs.includes(tab as Tab) ? (tab as Tab) : "overview");
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const name = new Map(people.map((p) => [p.id, p]));
@@ -119,7 +120,7 @@ export function ProjectPage({ project, memberIds, people, board, viewer, meId, i
 
       {/* Tabs */}
       <div role="tablist" className="-mx-3 flex gap-1 overflow-x-auto px-3 [scrollbar-width:none] sm:mx-0 sm:px-0">
-        {TABS.map((k) => (
+        {tabs.map((k) => (
           <button key={k} role="tab" aria-selected={active === k} onClick={() => go(k)}
                   className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${active === k ? "bg-brand text-brand-contrast" : "glass-pill text-white"}`}>
             {t(`tabs.${k}`)}
@@ -169,8 +170,8 @@ export function ProjectPage({ project, memberIds, people, board, viewer, meId, i
       {active === "links" && <ProjectLinks projectId={project.id} links={links} people={name} meId={meId} isLeader={isLeader} />}
       {active === "files" && <ProjectFiles projectId={project.id} files={files} people={name} meId={meId} isLeader={isLeader} />}
       {active === "updates" && <ProjectUpdates projectId={project.id} updates={updates} people={name} meId={meId} isLeader={isLeader} />}
-      {active === "invites" && <ProjectInvites projectId={project.id} invites={invites} meId={meId} isLeader={isLeader} />}
-      {active === "customers" && <ProjectCustomers projectId={project.id} customers={customers} meId={meId} isLeader={isLeader} />}
+      {active === "customers" && <ProjectCustomers projectId={project.id} customers={customers} people={name} />}
+      {active === "invites" && canInvite && <ProjectInvites projectId={project.id} invites={invites} />}
 
       {editing && <ProjectForm project={{ ...project, memberIds }} people={people} onClose={() => setEditing(false)} />}
     </div>

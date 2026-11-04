@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AlertOctagon, ArrowRight, CalendarClock, CircleAlert, Flag, Gavel, PackageX, Target, TrendingDown, TrendingUp, Users, Clock } from "lucide-react";
-import { getSession } from "@/lib/session";
+import { getSession, sendGuestToProject } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import {
   GOAL, DEADLINE, START, totals, pace, onTimeRate, weekly, groupHealth, weekStart,
@@ -25,7 +25,8 @@ export default async function OverviewPage() {
   const to = await getTranslations("overview");
   const tg = await getTranslations("group.names");
   const locale = await getLocale();
-  const { groups } = await getSession();
+  const { me, groups } = await getSession();
+  await sendGuestToProject(me);
   const supabase = await createClient();
   const today = todayISO();
   const now = Date.now();
@@ -41,7 +42,7 @@ export default async function OverviewPage() {
     supabase.from("blockers").select("id, group_id, description, owner_id, created_at").eq("status", "open").order("created_at", { ascending: false })
       .returns<{ id: string; group_id: string; description: string; owner_id: string | null; created_at: string }[]>(),
     supabase.from("activity_log").select("*").order("created_at", { ascending: false }).limit(10).returns<ActivityEntry[]>(),
-    supabase.from("profiles").select("id, full_name, group_id, active, user_id").returns<{ id: string; full_name: string; group_id: string | null; active: boolean; user_id: string | null }[]>(),
+    supabase.from("profiles").select("id, full_name, group_id, active, user_id").eq("is_guest", false).returns<{ id: string; full_name: string; group_id: string | null; active: boolean; user_id: string | null }[]>(),
     supabase.from("complaints").select("id, customer, issue, opened_at").neq("status", "resolved").order("opened_at")
       .returns<{ id: string; customer: string; issue: string; opened_at: string }[]>(),
     supabase.rpc("morale_weekly"),

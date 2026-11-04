@@ -2911,7 +2911,7 @@
       "files": "Files",
       "updates": "Updates",
       "leads": "Leads",
-      "invites": "Invites",
+      "invites": "Invite Ollin",
       "customers": "Customers"
     },
     "lists": {
@@ -3007,17 +3007,17 @@
       "noneHere": "Nothing in this list.",
       "empty2": "No places yet. Add a business you found, or save leads from Scout."
     },
-    "invites": "Invites",
-    "createInvite": "Create invite",
-    "noInvites": "No invites created yet.",
-    "creating": "Creating...",
-    "customers": "Customers",
-    "addCustomer": "Add customer",
-    "noCustomers": "No customers yet.",
-    "customerName": "Name",
-    "customerPhone": "Phone",
-    "adding": "Adding...",
-    "add": "Add"
+    "invitesHelp": "Send a link to people from Ollin. They type their name and Gmail, get a login email and see only this project — nothing else in emet.",
+    "createInvite": "New invite link",
+    "copyLink": "Copy link",
+    "copied": "Link copied — paste it in WhatsApp or an email",
+    "deleteInvite": "Delete link (it stops working)",
+    "noInvites": "No invite links yet.",
+    "customersTitle": "Customers we talked to",
+    "customerName": "Customer name",
+    "customerPhone": "Phone number",
+    "addCustomer": "Add",
+    "noCustomers": "No customers yet. Add the ones you've already talked to."
   },
   "ai": {
     "button": "AI connections",
@@ -3231,5 +3231,18 @@
     "noPeople": "Nobody in this project yet.",
     "lastUpdate": "Last update by {who}, {when}",
     "none": "No projects yet."
+  },
+  "join": {
+    "title": "Join {project}",
+    "intro": "emet invited you to this project. Type your name and Gmail: we'll email you a link to log in.",
+    "name": "Your name",
+    "email": "Your Gmail",
+    "send": "Email me the link",
+    "sending": "Sending…",
+    "sent": "Done! Open the email we sent to {email} and click the link. Check spam if you don't see it.",
+    "invalid": "This invite link doesn't work any more. Ask the person who sent it for a new one.",
+    "notAllowed": "This email can't join emet. Ask the person who invited you.",
+    "rateLimit": "Too many login emails were sent in the last hour. Try again later.",
+    "error": "Something went wrong. Try again."
   }
 }

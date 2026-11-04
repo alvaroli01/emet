@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     supabase.from("sales").select("date, amount, cost, channel").returns<(Sale & { channel: string | null })[]>(),
     supabase.from("expenses").select("date, amount, category").returns<(Expense & { category: string | null })[]>(),
     supabase.from("cards").select("id, title, due_at, completed_at, board_id, boards(slug), card_assignees(user_id)").limit(400),
-    supabase.from("profiles").select("id, full_name, role_title, group_id, is_admin").eq("active", true),
+    supabase.from("profiles").select("id, full_name, role_title, group_id, is_admin").eq("active", true).eq("is_guest", false),
     supabase.from("groups").select("id, slug, name"),
     supabase.from("blockers").select("description, group_id, created_at").eq("status", "open").limit(20),
     supabase.from("meetings").select("title, kind, meeting_date, notes").eq("status", "ready").order("meeting_date", { ascending: false }).limit(8),

@@ -1,100 +1,75 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
-import { Trash2, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { Phone, Plus, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
+import { timeAgo } from "@/lib/format";
+import type { Member } from "@/lib/boards";
 
 export type Customer = { id: string; name: string; phone: string | null; added_by: string | null; created_at: string };
 
-export function ProjectCustomers({ projectId, customers, meId, isLeader }: { projectId: string; customers: Customer[]; meId: string; isLeader: boolean }) {
-  const t = useTranslations("projects");
-  const toast = useToast();
-  const [isAdding, setIsAdding] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "" });
+const INPUT = "min-w-0 flex-1 rounded-xl bg-surface-2 px-3 py-2 text-sm outline-none ring-1 ring-line focus:ring-brand";
 
-  async function addCustomer() {
-    if (!form.name.trim()) return;
-    setLoading(true);
-    const supabase = createClient();
-    const { error } = await supabase.from("customers").insert({ project_id: projectId, name: form.name, phone: form.phone || null });
-    if (error) {
-      toast("error", "Failed to add customer");
-    } else {
-      toast("ok", "Customer added");
-      setForm({ name: "", phone: "" });
-      setIsAdding(false);
-    }
-    setLoading(false);
+/** Customers we already talked to in this project, with their phone numbers. Any project member adds or removes them. */
+export function ProjectCustomers({ projectId, customers, people }: { projectId: string; customers: Customer[]; people: Map<string, Member> }) {
+  const t = useTranslations("projects");
+  const locale = useLocale();
+  const router = useRouter();
+  const toast = useToast();
+  const [busy, setBusy] = useState(false);
+
+  async function add(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const name = String(data.get("name") ?? "").trim();
+    const phone = String(data.get("phone") ?? "").trim();
+    if (!name) return;
+    setBusy(true);
+    const { error } = await createClient().from("project_customers").insert({ project_id: projectId, name, phone: phone || null });
+    setBusy(false);
+    if (error) { toast("error", t("error")); return; }
+    form.reset();
+    router.refresh();
   }
 
-  async function deleteCustomer(id: string) {
-    const supabase = createClient();
-    const { error } = await supabase.from("customers").delete().eq("id", id);
-    if (error) {
-      toast("error", "Failed to delete customer");
-    } else {
-      toast("ok", "Customer deleted");
-    }
+  async function remove(id: string) {
+    const { error } = await createClient().from("project_customers").delete().eq("id", id);
+    if (error) { toast("error", t("error")); return; }
+    router.refresh();
   }
 
   return (
-    <div className="space-y-4">
-      <section className="panel p-5">
-        <h2 className="mb-4 font-semibold">{t("customers")}</h2>
-        {customers.length > 0 ? (
-          <ul className="space-y-3">
-            {customers.map((customer) => (
-              <li key={customer.id} className="flex items-center justify-between rounded-lg bg-surface-2 p-3">
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium">{customer.name}</p>
-                  {customer.phone && <p className="text-sm text-muted">{customer.phone}</p>}
-                </div>
-                <button onClick={() => deleteCustomer(customer.id)} className="rounded-lg p-2 text-muted hover:bg-surface-1 hover:text-bad-text">
-                  <Trash2 size={14} />
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-sm text-muted">{t("noCustomers")}</p>
-        )}
-      </section>
-
-      <section className="panel p-5">
-        {!isAdding ? (
-          <button onClick={() => setIsAdding(true)} className="flex items-center gap-2 rounded-lg bg-brand px-4 py-2 font-medium text-brand-contrast hover:opacity-90">
-            <Plus size={14} /> {t("addCustomer")}
-          </button>
-        ) : (
-          <form onSubmit={(e) => { e.preventDefault(); addCustomer(); }} className="space-y-3">
-            <input
-              type="text"
-              placeholder={t("customerName")}
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full rounded-lg bg-surface-2 px-3 py-2 text-sm outline-none ring-1 ring-line focus:ring-brand"
-            />
-            <input
-              type="tel"
-              placeholder={t("customerPhone")}
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              className="w-full rounded-lg bg-surface-2 px-3 py-2 text-sm outline-none ring-1 ring-line focus:ring-brand"
-            />
-            <div className="flex gap-2">
-              <button type="submit" disabled={loading} className="rounded-lg bg-brand px-4 py-2 font-medium text-brand-contrast disabled:opacity-50">
-                {loading ? t("adding") : t("add")}
-              </button>
-              <button type="button" onClick={() => setIsAdding(false)} className="rounded-lg px-4 py-2 hover:bg-surface-2">
-                {t("cancel")}
-              </button>
+    <section className="panel space-y-4 p-5">
+      <h2 className="font-semibold">{t("customersTitle")}</h2>
+      <form onSubmit={add} className="flex flex-col gap-2 sm:flex-row">
+        <input name="name" required maxLength={200} placeholder={t("customerName")} aria-label={t("customerName")} className={INPUT} />
+        <input name="phone" type="tel" maxLength={40} placeholder={t("customerPhone")} aria-label={t("customerPhone")} autoComplete="off" className={INPUT} />
+        <button disabled={busy} className="flex items-center justify-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-contrast disabled:opacity-50">
+          <Plus size={15} /> {t("addCustomer")}
+        </button>
+      </form>
+      {customers.length ? (
+        <ul className="divide-y divide-line">{customers.map((c) => (
+          <li key={c.id} className="flex items-center gap-3 py-2.5 text-sm">
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-medium">{c.name}</p>
+              <p className="text-xs text-muted">{people.get(c.added_by ?? "")?.full_name ?? "—"} · {timeAgo(c.created_at, locale)}</p>
             </div>
-          </form>
-        )}
-      </section>
-    </div>
+            {c.phone && (
+              <a href={`tel:${c.phone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-1.5 rounded-lg px-2 py-1 font-mono text-sm hover:bg-surface-2">
+                <Phone size={13} /> {c.phone}
+              </a>
+            )}
+            <button onClick={() => remove(c.id)} aria-label={t("delete")} title={t("delete")} className="grid size-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-bad-text">
+              <Trash2 size={14} />
+            </button>
+          </li>
+        ))}</ul>
+      ) : <p className="text-sm text-muted">{t("noCustomers")}</p>}
+    </section>
   );
 }
