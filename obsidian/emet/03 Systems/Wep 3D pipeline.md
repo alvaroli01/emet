@@ -37,4 +37,6 @@ Quick test before a full render: `--samples 24 --width 2048 --ids s03 s12`.
 - Keep the real measurements. Rooms feel more spacious from a wider viewer field of view (110°), light floors, white walls and brighter exposure, not from bigger rooms.
 - The full render takes about 2.5 h and needs memory: close heavy apps, or the system can stop it.
 
+Still photos (what the client actually bought): [[Wep render photos (playbook)]]
+
 Related: [[Systems map]] · [[Wep (3D renders & virtual tours)]] · Back to [[🏔️ emet Dashboard]]

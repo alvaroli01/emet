@@ -5,7 +5,7 @@ updated: 2026-11-02
 
 # Wep: 3D renders & virtual tours
 
-> Alvaro's photoreal 3D render and virtual-tour business, run with emet. First product that emet actually delivers to a client. How it is built → [[Wep 3D pipeline]]
+> Alvaro's photoreal 3D render and virtual-tour business, run with emet. First product that emet actually delivers to a client. How it is built → [[Wep 3D pipeline]] · how we make the still photos → [[Wep render photos (playbook)]]
 
 ## What we sell
 - **Photoreal virtual tours of properties.** They work like Matterport: you walk through by clicking anywhere, and there is a **3D dollhouse** and a **clickable floor plan**. Reference: century21.es/comprar/C0026-02688.
