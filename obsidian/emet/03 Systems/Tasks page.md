@@ -4,7 +4,7 @@ Built 2026-11-09 · **local preview only until Alvaro says go** · code `dashboa
 
 One page (`/tasks`) for every task. It replaces the General board, the team boards' "Task board" tool, the leader's "Assign tasks" tool, a project's Tasks tab and My Tasks (old links redirect).
 
-- **Tabs:** All tasks · My Tasks (mine + my private My board + my Notion deadlines) · EMET tasks (general + team boards) · Project tasks (pick a project; Goal card on top: goal, target date, progress = done / all tasks, milestones)
+- **Tabs:** All tasks · My Tasks (mine + my private My board + my Notion deadlines) · EMET tasks (general + team boards) · Project tasks (only projects you're in, admins too; pick a project; Goal card on top: goal, target date, progress = done / all tasks, milestones)
 - **Filters:** person, project, status, priority, due (overdue / this week / no date)
 - **A task:** title, description, due date, assignees, status (To do / In progress / Blocked / Done = its column), priority, per-person completion (Done by itself when everyone ticked), "needs a file", checklist, created by + date, red when late
 - **Who can do what:** leaders/admins anywhere; members add to their own projects and EMET and assign only people of that project (EMET: themselves + their group); assignees change status/checklist and tick their part

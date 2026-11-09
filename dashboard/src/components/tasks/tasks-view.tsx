@@ -3,10 +3,9 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { Calendar, Check, CheckSquare, Flag, Plus, Target, Pencil, X, Paperclip } from "lucide-react";
+import { Calendar, Check, CheckSquare, Flag, Plus, Target, Pencil, X, Paperclip, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
-import { Avatar } from "@/components/ui";
 import { TaskDialog } from "./task-dialog";
 import {
   statusOf, isOverdue, filterTasks, sortTasks, canAdd, progress, NO_FILTERS, STATUSES, PRIORITIES,
@@ -168,16 +167,12 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
                 </span>
                 {x.priority !== "medium" && <span className={`flex shrink-0 items-center gap-1 text-xs font-medium ${PRIORITY_STYLE[x.priority]}`}><Flag size={12} /> {t(`priority.${x.priority}`)}</span>}
                 {x.people.length > 0 && (
-                  <span className="flex shrink-0 items-center gap-2">
-                    <span className="flex -space-x-1.5">
-                      {x.people.slice(0, 5).map((p) => (
-                        <span key={p.user_id} className="relative rounded-full ring-2 ring-solid" title={`${names.get(p.user_id)?.full_name ?? ""}: ${p.done_at ? t("finished") : t("notYet")}`}>
-                          <Avatar name={names.get(p.user_id)?.full_name ?? "?"} src={names.get(p.user_id)?.avatar_url} size={24} />
-                          {p.done_at && <span className="absolute -right-0.5 -bottom-0.5 grid size-3 place-items-center rounded-full bg-ok text-[#06281a]"><Check size={8} strokeWidth={3} /></span>}
-                        </span>
-                      ))}
-                    </span>
-                    <span className="text-xs text-muted tabular-nums">{done}/{x.people.length}</span>
+                  // Who finished, as one calm chip (names on hover; the full list is inside the task)
+                  <span title={x.people.map((p) => `${names.get(p.user_id)?.full_name ?? "?"}: ${p.done_at ? t("finished") : t("notYet")}`).join("\n")}
+                        className={`flex w-24 shrink-0 items-center gap-2 rounded-full px-2.5 py-1 text-xs font-semibold tabular-nums ${done === x.people.length ? "bg-ok/15 text-ok-text" : "bg-surface-2 text-muted"}`}>
+                    {done === x.people.length ? <Check size={12} strokeWidth={3} /> : <Users size={12} />}
+                    <span className="h-1 flex-1 overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ok" style={{ width: `${(done / x.people.length) * 100}%` }} /></span>
+                    {done}/{x.people.length}
                   </span>
                 )}
               </button>
