@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   Search, Sparkles, KanbanSquare, FileText, AudioLines, Gavel, Lightbulb, User, ArrowRight, Loader2, Sun, LayoutDashboard,
-  Tent, Users, CheckSquare, Plus, Mic, CornerDownLeft, ArrowUp,
+  Tent, Users, CheckSquare, Plus, Mic, CornerDownLeft, ArrowUp, ListChecks,
 } from "lucide-react";
 import { mdToHtml } from "@/lib/markdown";
 
@@ -91,6 +91,7 @@ export function CommandPalette() {
       { id: "lab", icon: Lightbulb, label: tn("lab"), run: () => go("/lab") },
       { id: "meetings", icon: AudioLines, label: tn("meetings"), run: () => go("/meetings") },
       { id: "tasks", icon: CheckSquare, label: tn("myTasks"), run: () => go("/my-tasks") },
+      { id: "taskHub", icon: ListChecks, label: tn("tasks"), run: () => go("/tasks") },
       { id: "team", icon: Users, label: tn("team"), run: () => go("/team") },
       { id: "new-idea", icon: Plus, label: t("newIdea"), run: () => go("/lab") },
       { id: "new-doc", icon: Plus, label: t("newDoc"), run: () => go("/camp?tab=docs") },

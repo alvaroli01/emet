@@ -14,7 +14,7 @@ export function Breadcrumb() {
   const seg = path.split("/").filter(Boolean);
   const page = !seg.length ? t("overview")
     : seg[0] === "g" && seg[1] ? (tg.has(seg[1]) ? tg(seg[1]) : seg[1])
-    : ({ camp: t("camp"), board: t("generalBoard"), lab: t("lab"), scout: t("scout"), meetings: t("meetings"), team: t("team"), "my-tasks": t("myTasks") } as Record<string, string>)[seg[0]] ?? seg[0];
+    : ({ camp: t("camp"), board: t("generalBoard"), lab: t("lab"), scout: t("scout"), meetings: t("meetings"), team: t("team"), "my-tasks": t("myTasks"), tasks: t("tasks") } as Record<string, string>)[seg[0]] ?? seg[0];
   return (
     <p className="hidden items-center gap-1.5 text-sm md:flex">
       <Link href="/today" className="text-muted hover:text-ink">emet</Link>
@@ -53,7 +53,7 @@ const PHOTOS: [RegExp, string][] = [
   [/^\/g\/customer/, "/img/sections/customer.jpg"],
   [/^\/g\/marketing/, "/img/sections/marketing.jpg"],
   [/^\/g\/communications/, "/img/sections/communications.jpg"],
-  [/^\/(board|my-tasks)/, "/img/sections/board.jpg"],
+  [/^\/(board|my-tasks|tasks)/, "/img/sections/board.jpg"],
   [/^\/lab/, "/img/sections/lab.jpg"],
   [/^\/meetings/, "/img/sections/meetings.jpg"],
   [/^\/scout/, "/img/sections/scout.jpg"],
