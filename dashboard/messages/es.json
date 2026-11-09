@@ -3355,6 +3355,8 @@
     "delete": "Borrar tarea",
     "finishedOn": "Terminado · {date}",
     "editPeople": "Cambiar quién la hace",
-    "doneEditing": "Listo"
+    "doneEditing": "Listo",
+    "tickMine": "Marcar mi parte de {title} como hecha",
+    "untickMine": "Desmarcar mi parte de {title}"
   }
 }

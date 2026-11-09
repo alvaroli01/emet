@@ -3355,6 +3355,8 @@
     "delete": "Supprimer la tâche",
     "finishedOn": "Fini · {date}",
     "editPeople": "Changer qui la fait",
-    "doneEditing": "OK"
+    "doneEditing": "OK",
+    "tickMine": "Marquer ma part de {title} comme faite",
+    "untickMine": "Décocher ma part de {title}"
   }
 }

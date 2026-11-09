@@ -3355,6 +3355,8 @@
     "delete": "Удалить задачу",
     "finishedOn": "Готово · {date}",
     "editPeople": "Изменить, кто делает",
-    "doneEditing": "Готово"
+    "doneEditing": "Готово",
+    "tickMine": "Отметить мою часть «{title}» готовой",
+    "untickMine": "Снять отметку с моей части «{title}»"
   }
 }

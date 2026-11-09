@@ -3355,6 +3355,8 @@
     "delete": "Aufgabe löschen",
     "finishedOn": "Fertig · {date}",
     "editPeople": "Ändern, wer es macht",
-    "doneEditing": "Fertig"
+    "doneEditing": "Fertig",
+    "tickMine": "Meinen Teil von {title} als erledigt markieren",
+    "untickMine": "Meinen Teil von {title} wieder öffnen"
   }
 }

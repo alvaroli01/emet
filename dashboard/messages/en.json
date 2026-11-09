@@ -3355,6 +3355,8 @@
     "delete": "Delete task",
     "finishedOn": "Finished · {date}",
     "editPeople": "Change who does it",
-    "doneEditing": "Done"
+    "doneEditing": "Done",
+    "tickMine": "Mark my part of {title} done",
+    "untickMine": "Mark my part of {title} not done"
   }
 }

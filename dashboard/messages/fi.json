@@ -3355,6 +3355,8 @@
     "delete": "Poista tehtävä",
     "finishedOn": "Valmis · {date}",
     "editPeople": "Vaihda tekijät",
-    "doneEditing": "Valmis"
+    "doneEditing": "Valmis",
+    "tickMine": "Merkitse osuuteni tehtävästä {title} valmiiksi",
+    "untickMine": "Poista valmis-merkintä tehtävästä {title}"
   }
 }

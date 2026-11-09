@@ -38,6 +38,26 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
   const [filters, setFilters] = useState<Filters>(initial.overdue ? { ...NO_FILTERS, due: "overdue" } : NO_FILTERS);
   // open = a task id; "new" = the create form
   const [open, setOpen] = useState<string | null>(tasks.some((x) => x.id === initial.task) ? initial.task : null);
+  const router = useRouter();
+  const toast = useToast();
+  const supabase = useMemo(() => createClient(), []);
+  // My ticks from the list show at once; each is dropped as soon as the server's copy of my row changes
+  const [ticks, setTicks] = useState<Record<string, { base: string | null; value: string | null }>>({});
+  const live = useMemo(() => tasks.map((x) => {
+    const k = ticks[x.id];
+    return k ? { ...x, people: x.people.map((p) => (p.user_id === viewer.meId && p.done_at === k.base ? { ...p, done_at: k.value } : p)) } : x;
+  }), [tasks, ticks, viewer.meId]);
+  async function tick(x: Task, on: boolean) {
+    const base = tasks.find((y) => y.id === x.id)?.people.find((p) => p.user_id === viewer.meId)?.done_at ?? null;
+    const value = on ? new Date().toISOString() : null;
+    setTicks((m) => ({ ...m, [x.id]: { base, value } }));
+    const { error } = await supabase.from("card_assignees").update({ done_at: value }).eq("card_id", x.id).eq("user_id", viewer.meId);
+    if (error) {
+      setTicks((m) => { const n = { ...m }; delete n[x.id]; return n; });
+      return toast("error", error.message?.startsWith("emet:") ? error.message.slice(6) : t("saveError"));
+    }
+    router.refresh();
+  }
 
   const boardById = useMemo(() => new Map(boards.map((b) => [b.id, b])), [boards]);
   const projectById = useMemo(() => new Map(projects.map((p) => [p.id, p])), [projects]);
@@ -48,7 +68,6 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
   const projectBoard = boards.find((b) => b.project_id === projectId);
 
   // Keep the address in step so a link (or a reload) lands on the same view
-  const router = useRouter();
   // fetch = also reload the page data (a task that was just created isn't in it yet)
   function go(next: { view?: View; project?: string | null; task?: string | null }, fetch = false) {
     const v = next.view ?? view, p = next.project !== undefined ? next.project : projectId, k = next.task !== undefined ? next.task : open;
@@ -64,7 +83,7 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
     else window.history.replaceState(null, "", url);
   }
 
-  const inView = tasks.filter((x) => {
+  const inView = live.filter((x) => {
     const b = boardById.get(x.board_id);
     if (view === "mine") return x.people.some((p) => p.user_id === viewer.meId);
     if (view === "emet") return !b?.project_id;
@@ -150,11 +169,22 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
       <ul className="panel divide-y divide-line">
         {shown.map((x) => {
           const s = st(x), late = isOverdue(x, s), b = boardById.get(x.board_id);
+          const me = x.people.find((p) => p.user_id === viewer.meId);
           const done = x.people.filter((p) => p.done_at).length, items = x.checklist.filter((i) => i.done).length;
           return (
-            <li key={x.id}>
+            <li key={x.id} className={`flex items-stretch ${late ? "bg-bad/5 shadow-[inset_3px_0_0_var(--color-bad)]" : ""}`}>
+              {me && (
+                // My part: tick it off right here (a task that needs a file opens so I can upload it)
+                <button onClick={() => (x.needs_file && !me.done_at ? go({ task: x.id }) : tick(x, !me.done_at))} role="checkbox" aria-checked={!!me.done_at}
+                        aria-label={me.done_at ? t("untickMine", { title: x.title }) : t("tickMine", { title: x.title })} title={x.needs_file && !me.done_at ? t("uploadToFinish") : undefined}
+                        className="grid shrink-0 place-items-center pl-4">
+                  <span className={`grid size-6 place-items-center rounded-lg ring-2 transition-colors duration-150 ${me.done_at ? "bg-ok text-[#06281a] ring-ok" : x.needs_file ? "text-brand ring-brand/60 hover:ring-brand" : "ring-line hover:ring-brand"}`}>
+                    {me.done_at ? <Check size={14} strokeWidth={3} /> : x.needs_file ? <Paperclip size={12} /> : null}
+                  </span>
+                </button>
+              )}
               <button onClick={() => go({ task: x.id })} aria-label={t("openTask", { title: x.title })}
-                      className={`flex w-full flex-wrap items-center gap-x-3 gap-y-1.5 px-4 py-3 text-left transition hover:bg-surface-2/60 sm:flex-nowrap ${late ? "bg-bad/5 shadow-[inset_3px_0_0_var(--color-bad)]" : ""}`}>
+                      className={`flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1.5 py-3 pr-4 text-left transition hover:bg-surface-2/60 sm:flex-nowrap ${me ? "pl-3" : "pl-4"}`}>
                 <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${STATUS_STYLE[s]}`}>{t(`status.${s}`)}</span>
                 <span className="min-w-0 flex-1 basis-48">
                   <span className={`block truncate font-medium ${s === "done" ? "text-muted line-through" : ""}`}>{x.title}</span>
@@ -186,7 +216,7 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
 
       {open && (
         <TaskDialog
-          taskId={open === "new" ? null : open} tasks={tasks} board={(open === "new" ? newBoard : boardById.get(tasks.find((x) => x.id === open)?.board_id ?? "") ?? newBoard)!}
+          taskId={open === "new" ? null : open} tasks={live} board={(open === "new" ? newBoard : boardById.get(tasks.find((x) => x.id === open)?.board_id ?? "") ?? newBoard)!}
           people={people} projects={projectById} viewer={viewer} where={where}
           onCreated={(id) => go({ task: id }, true)} onClose={() => go({ task: null })} />
       )}
