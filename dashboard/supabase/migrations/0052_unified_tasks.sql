@@ -183,3 +183,22 @@ do $$ begin
     alter publication supabase_realtime add table public.project_goals;
   end if;
 end $$;
+
+-- ── 7. "Due tomorrow" reminder: cards only (leader tasks are cards now, so no double reminder),
+--       and only people who haven't finished their part yet ──
+create or replace function public.notify_due_tomorrow() returns int language plpgsql security definer set search_path = public as $$
+declare n int := 0; r record; tomorrow date := (now() at time zone 'Europe/Madrid')::date + 1;
+begin
+  for r in
+    select c.id, c.title, array_agg(a.user_id) as users
+    from cards c join card_assignees a on a.card_id = c.id
+    where c.completed_at is null and a.done_at is null and (c.due_at at time zone 'Europe/Madrid')::date = tomorrow
+    group by c.id, c.title
+  loop
+    perform public.notify(r.users, 'due_soon', jsonb_build_object('title', r.title), public.card_link(r.id), null, 'due:' || r.id || ':' || current_date);
+    n := n + 1;
+  end loop;
+  return n;
+end $$;
+revoke all on function public.notify_due_tomorrow() from public, anon, authenticated;
+grant execute on function public.notify_due_tomorrow() to service_role;
