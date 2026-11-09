@@ -1,12 +1,13 @@
 ---
 tags: [emet, history]
-updated: 2026-11-05
+updated: 2026-11-09
 ---
 
-# Changelog (synced from the repo's CHANGELOG.md, 2026-11-05)
+# Changelog (synced from the repo's CHANGELOG.md, 2026-11-09)
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-09 — Alvaro — Fix: the note-taker could keep "recording" with a dead microphone (a 67-min class saved ~6 s of audio). If the mic stops mid-recording (screen lock, another app, headset switch) it now reopens it and carries on, warns on screen if it can't, and keeps the phone screen awake while recording.
 - 2026-11-05 — Alvaro — New emet logo (the hand-drawn figure) in the menu, top bar, login page, browser tab and phone home-screen icons; replaces the orange summit tile.
 - 2026-11-04 — Alvaro — Fix: Ollin guests got "your account is not active on the team list" after logging in. They now join the project the moment they fill in the invite form, so it no longer matters where the login email sends them. Nicolás Suárez Company added to Chinese/Asian Event.
 - 2026-11-04 — Alvaro — Projects: **Invite Ollin** tab (members of the project make invite links; the person opens `/join/<code>`, types name + Gmail, gets a login email and joins only that project as an Ollin guest — guests see their projects and the people in them, nothing else in emet, and are left out of the Team page and team numbers) and **Customers** tab (customers we already talked to, with tap-to-call phone numbers; every project member, guests too, can add them). Migrations 0050 + 0051 (`project_invites`, `project_customers`, `profiles.is_guest`; `is_member()` now excludes guests). Tested on production in a rolled-back transaction: a guest sees 1 of 9 projects, 4 of 19 people, no sales, and can't make themselves a member.
