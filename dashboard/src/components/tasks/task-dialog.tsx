@@ -44,6 +44,9 @@ export function TaskDialog({ taskId, tasks, board, people, projects, viewer, whe
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
   const [newItem, setNewItem] = useState("");
+  // My tick shows at once; it is dropped as soon as the server's copy of my row changes (saved or not)
+  const [myTick, setMyTick] = useState<{ base: string | null; value: string | null } | null>(null);
+  const [editPeople, setEditPeople] = useState(false);
 
   const fail = (e: { message?: string } | null) => { if (e) toast("error", e.message?.startsWith("emet:") ? e.message.slice(6) : t("saveError")); return !!e; };
   const done = async (p: PromiseLike<{ error: { message?: string } | null }>) => { setBusy(true); const { error } = await p; setBusy(false); if (!fail(error)) router.refresh(); return !error; };
@@ -128,11 +131,20 @@ export function TaskDialog({ taskId, tasks, board, people, projects, viewer, whe
 
   const status: Status = statusOf(board.lists.find((l) => l.id === task.list_id)?.name);
   const editable = canEdit(viewer, board, task, project);
-  const mine = task.people.find((p) => p.user_id === viewer.meId);
-  const allDone = task.people.length > 0 && task.people.every((p) => p.done_at);
+  const assignees = task.people.map((p) => (p.user_id === viewer.meId && myTick && myTick.base === p.done_at ? { ...p, done_at: myTick.value } : p));
+  const mine = assignees.find((p) => p.user_id === viewer.meId);
+  const finished = assignees.filter((p) => p.done_at).length;
+  const allDone = assignees.length > 0 && assignees.every((p) => p.done_at);
   const assigned = new Set(task.people.map((p) => p.user_id));
   const save = (patch: Record<string, unknown>) => done(supabase.from("cards").update(patch).eq("id", task.id));
-  const tick = (on: boolean) => done(supabase.from("card_assignees").update({ done_at: on ? new Date().toISOString() : null }).eq("card_id", task.id).eq("user_id", viewer.meId));
+  async function tick(on: boolean) {
+    const base = task!.people.find((p) => p.user_id === viewer.meId)?.done_at ?? null;
+    const value = on ? new Date().toISOString() : null;
+    setMyTick({ base, value });
+    const { error } = await supabase.from("card_assignees").update({ done_at: value }).eq("card_id", task!.id).eq("user_id", viewer.meId);
+    if (fail(error)) return setMyTick(null);
+    router.refresh();
+  }
   async function handIn(file: File) {
     setBusy(true);
     const blob = await compressImage(file);
@@ -202,39 +214,60 @@ export function TaskDialog({ taskId, tasks, board, people, projects, viewer, whe
       </section>
 
       <section>
-        <div className="mb-2 flex items-baseline justify-between">
+        <div className="mb-2 flex items-baseline justify-between gap-2">
           <h3 className="text-sm font-semibold">{t("whoFinished")}</h3>
-          {task.people.length > 0 && <span className="text-xs text-muted tabular-nums">{t("progressCount", { done: task.people.filter((p) => p.done_at).length, total: task.people.length })}</span>}
+          {assignees.length > 0 && <span className="text-xs text-muted tabular-nums">{t("progressCount", { done: finished, total: assignees.length })}</span>}
         </div>
+        {assignees.length > 0 && (
+          <div className="mb-3 h-1.5 overflow-hidden rounded-full bg-surface-2" aria-hidden>
+            <div className="h-full rounded-full bg-ok transition-[width] duration-300" style={{ width: `${(finished / assignees.length) * 100}%` }} />
+          </div>
+        )}
         {mine && (
-          <div className="mb-3 flex flex-wrap items-center gap-3 rounded-2xl bg-surface-2 p-3">
+          <div className="mb-3">
             {task.needs_file && !mine.done_at ? (
-              <label className={`flex min-h-10 cursor-pointer items-center gap-2 rounded-full bg-brand px-4 text-sm font-semibold text-white ${busy ? "pointer-events-none opacity-60" : ""}`}>
+              <label className={`flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-brand px-4 text-sm font-semibold text-white ${busy ? "pointer-events-none opacity-60" : ""}`}>
                 {busy ? <Loader2 size={15} className="animate-spin" /> : <Upload size={15} />} {t("uploadToFinish")}
                 <input type="file" className="sr-only" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) handIn(f); }} />
               </label>
             ) : (
-              <button onClick={() => tick(!mine.done_at)} disabled={busy} role="checkbox" aria-checked={!!mine.done_at}
-                      className={`flex min-h-10 items-center gap-2 rounded-full px-4 text-sm font-semibold ring-2 transition ${mine.done_at ? "bg-ok text-[#06281a] ring-ok" : "ring-brand hover:bg-brand/10"}`}>
+              <button onClick={() => tick(!mine.done_at)} role="checkbox" aria-checked={!!mine.done_at}
+                      className={`flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl px-4 text-sm font-semibold ring-2 transition-colors duration-150 ${mine.done_at ? "bg-ok text-[#06281a] ring-ok" : "ring-brand hover:bg-brand/10"}`}>
                 <Check size={16} strokeWidth={3} /> {mine.done_at ? t("myPartDone") : t("markMyPart")}
               </button>
             )}
-            {mine.file_path && <button onClick={() => openFile(mine.file_path!)} className="flex items-center gap-1 text-xs text-muted hover:text-link"><Paperclip size={12} /> {mine.file_name ?? t("openFile")}</button>}
           </div>
         )}
-        {editable ? picker(assigned, togglePerson) : null}
-        <ul className="mt-3 flex flex-wrap gap-1.5">
-          {task.people.map((p) => (
-            <li key={p.user_id} className={`flex items-center gap-1.5 rounded-full py-0.5 pr-2.5 pl-0.5 text-xs ${p.done_at ? "bg-ok/15 text-ok-text" : "bg-surface-2 text-muted"}`}>
-              <Avatar name={names.get(p.user_id)?.full_name ?? "?"} src={names.get(p.user_id)?.avatar_url} size={22} />
-              {names.get(p.user_id)?.full_name.split(" ")[0] ?? "?"} · {p.done_at ? t("finished") : t("notYet")}
-              {p.file_path && (p.user_id === viewer.meId || viewer.isAdmin) && (
-                <button onClick={() => openFile(p.file_path!)} aria-label={t("openFile")} className="grid size-5 place-items-center rounded-full hover:bg-ok/25"><Paperclip size={11} /></button>
-              )}
-            </li>
-          ))}
-          {!task.people.length && <li className="text-sm text-muted">{t("nobody")}</li>}
+        {/* One row per person: finished (with when) first, then who still has to */}
+        <ul className="divide-y divide-line overflow-hidden rounded-2xl ring-1 ring-line">
+          {[...assignees].sort((a, b) => Number(!a.done_at) - Number(!b.done_at) || (a.done_at ?? "").localeCompare(b.done_at ?? "")).map((p) => {
+            const who = names.get(p.user_id);
+            return (
+              <li key={p.user_id} className={`flex items-center gap-3 px-3 py-2 ${p.done_at ? "bg-ok/[0.07]" : ""}`}>
+                <span className="relative shrink-0">
+                  <Avatar name={who?.full_name ?? "?"} src={who?.avatar_url} size={30} />
+                  {p.done_at && <span className="absolute -right-1 -bottom-1 grid size-4 place-items-center rounded-full bg-ok text-[#06281a] ring-2 ring-solid"><Check size={10} strokeWidth={3} /></span>}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-sm font-medium">{who?.full_name ?? "?"}{p.user_id === viewer.meId && <span className="font-normal text-muted"> ({t("me")})</span>}</span>
+                {p.file_path && (p.user_id === viewer.meId || viewer.isAdmin) && (
+                  <button onClick={() => openFile(p.file_path!)} title={p.file_name ?? t("openFile")} aria-label={t("openFile")} className="grid size-8 shrink-0 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-link"><Paperclip size={14} /></button>
+                )}
+                <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold first-letter:uppercase ${p.done_at ? "bg-ok/20 text-ok-text" : "bg-surface-2 text-muted"}`}>
+                  {p.done_at ? t("finishedOn", { date: new Date(p.done_at).toLocaleDateString(locale, { day: "numeric", month: "short" }) }) : t("notYet")}
+                </span>
+              </li>
+            );
+          })}
+          {!assignees.length && <li className="px-3 py-3 text-sm text-muted">{t("nobody")}</li>}
         </ul>
+        {editable && (
+          <div className="mt-3">
+            <button onClick={() => setEditPeople((v) => !v)} aria-expanded={editPeople} className="flex min-h-9 items-center gap-1.5 rounded-full bg-surface-2 px-3.5 text-sm font-medium ring-1 ring-line hover:ring-brand/50">
+              <Users size={14} /> {editPeople ? t("doneEditing") : t("editPeople")}
+            </button>
+            {editPeople && <div className="mt-3">{picker(assigned, togglePerson)}</div>}
+          </div>
+        )}
         {editable && (
           <label className="mt-3 flex w-fit cursor-pointer items-center gap-2 text-sm">
             <input type="checkbox" checked={task.needs_file} onChange={(e) => save({ needs_file: e.target.checked })} className="size-4 accent-[var(--brand)]" />

@@ -3352,6 +3352,9 @@
     "checklist": "Tarkistuslista",
     "removeItem": "Poista {text}",
     "addItem": "Lisää kohta",
-    "delete": "Poista tehtävä"
+    "delete": "Poista tehtävä",
+    "finishedOn": "Valmis · {date}",
+    "editPeople": "Vaihda tekijät",
+    "doneEditing": "Valmis"
   }
 }

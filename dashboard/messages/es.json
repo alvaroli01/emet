@@ -3352,6 +3352,9 @@
     "checklist": "Lista de pasos",
     "removeItem": "Quitar {text}",
     "addItem": "Añadir un paso",
-    "delete": "Borrar tarea"
+    "delete": "Borrar tarea",
+    "finishedOn": "Terminado · {date}",
+    "editPeople": "Cambiar quién la hace",
+    "doneEditing": "Listo"
   }
 }

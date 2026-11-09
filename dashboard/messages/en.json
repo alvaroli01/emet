@@ -3352,6 +3352,9 @@
     "checklist": "Checklist",
     "removeItem": "Remove {text}",
     "addItem": "Add an item",
-    "delete": "Delete task"
+    "delete": "Delete task",
+    "finishedOn": "Finished · {date}",
+    "editPeople": "Change who does it",
+    "doneEditing": "Done"
   }
 }

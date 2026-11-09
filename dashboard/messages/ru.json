@@ -3352,6 +3352,9 @@
     "checklist": "Чек-лист",
     "removeItem": "Убрать {text}",
     "addItem": "Добавить пункт",
-    "delete": "Удалить задачу"
+    "delete": "Удалить задачу",
+    "finishedOn": "Готово · {date}",
+    "editPeople": "Изменить, кто делает",
+    "doneEditing": "Готово"
   }
 }
