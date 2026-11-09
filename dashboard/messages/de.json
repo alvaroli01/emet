@@ -831,6 +831,7 @@
       "saveError": "Das Dokument konnte nicht gespeichert werden. Versuch es nochmal.",
       "saved": "Notizen in deinen Dokumenten gespeichert",
       "micDenied": "Der Mikrofonzugriff wurde blockiert. Erlaube ihn im Browser und versuch es nochmal.",
+      "micLost": "Das Mikrofon ist ausgefallen. Es wird neu verbunden – lass diesen Tab offen und prüfe, dass keine andere App das Mikro nutzt.",
       "keyStopped": "Groq akzeptiert deinen Schlüssel nicht mehr. Verbinde ihn erneut unter „Notizen aufnehmen“.",
       "savingAudio": "Audio wird in deinem Konto gespeichert…",
       "audioPartial": "Einige Minuten Audio konnten nicht gespeichert werden (Verbindung). Das Transkript ist vollständig.",

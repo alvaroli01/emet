@@ -100,7 +100,14 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
   useEffect(() => {
     if (phase !== "recording") return;
     const id = setInterval(() => setSeconds((s) => s + 1), 1000);
-    return () => clearInterval(id);
+    // Phones cut the mic when the screen sleeps; keep it awake while recording (re-taken when the tab is shown again)
+    type Lock = { release: () => Promise<void> };
+    const wl = (navigator as unknown as { wakeLock?: { request: (t: "screen") => Promise<Lock> } }).wakeLock;
+    let lock: Lock | null = null;
+    const take = () => { if (document.visibilityState === "visible") wl?.request("screen").then((l) => { lock = l; }).catch(() => {}); };
+    take();
+    document.addEventListener("visibilitychange", take);
+    return () => { clearInterval(id); document.removeEventListener("visibilitychange", take); lock?.release().catch(() => {}); };
   }, [phase]);
 
   function cleanup() {
@@ -131,9 +138,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     if (!name.trim()) return;
     try {
       // Tuned for a room: the browser cleans background noise and lifts quiet voices
-      stream.current = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 },
-      });
+      stream.current = await navigator.mediaDevices.getUserMedia(MIC);
     } catch {
       return toast("error", t("micDenied"));
     }
@@ -201,11 +206,29 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
     draw();
   }
 
+  const MIC = { audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } };
+  const micLive = () => !!stream.current?.getAudioTracks().some((tr) => tr.readyState === "live");
+
+  // The mic can die mid-class (screen lock, another app, headset switch): reopen it instead of "recording" nothing
+  async function reopenMic(index: number, tries = 0) {
+    try {
+      stream.current?.getTracks().forEach((tr) => tr.stop());
+      stream.current = await navigator.mediaDevices.getUserMedia(MIC);
+      cancelAnimationFrame(raf.current);
+      meter(stream.current);
+      nextSegment(index);
+    } catch {
+      if (tries === 0) toast("error", t("micLost"));
+      if (!stopping.current) setTimeout(() => reopenMic(index, tries + 1), 3000);
+    }
+  }
+
   // A fresh MediaRecorder per minute gives standalone audio files the transcriber can read on their own
   function nextSegment(index: number) {
-    if (!stream.current) return;
+    if (stopping.current) return;
+    if (!micLive()) { reopenMic(index); return; }
     const type = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm"].find((m) => MediaRecorder.isTypeSupported(m)) ?? "";
-    const rec = new MediaRecorder(stream.current, { mimeType: type || undefined, audioBitsPerSecond: 24_000 });
+    const rec = new MediaRecorder(stream.current!, { mimeType: type || undefined, audioBitsPerSecond: 24_000 });
     const parts: Blob[] = [];
     rec.ondataavailable = (e) => e.data.size && parts.push(e.data);
     segPeak.current = 0;
@@ -218,7 +241,7 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
       }
       if (!stopping.current) nextSegment(index + 1);
     };
-    rec.start();
+    try { rec.start(); } catch { reopenMic(index); return; }
     recorder.current = rec;
     setTimeout(() => { if (rec.state === "recording") rec.stop(); }, CHUNK_MS);
   }

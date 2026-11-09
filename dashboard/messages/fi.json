@@ -831,6 +831,7 @@
       "saveError": "Dokumentin tallennus epäonnistui. Yritä uudelleen.",
       "saved": "Muistiinpanot tallennettu dokumentteihisi",
       "micDenied": "Mikrofonin käyttö estettiin. Salli se selaimessa ja yritä uudelleen.",
+      "micLost": "Mikrofoni katkesi. Yhdistetään uudelleen – pidä tämä välilehti auki ja varmista, ettei mikään muu sovellus käytä mikrofonia.",
       "keyStopped": "Groq ei enää hyväksy avaintasi. Yhdistä se uudelleen kohdassa Nauhoita muistiinpanot.",
       "savingAudio": "Tallennetaan ääntä tilillesi…",
       "audioPartial": "Osaa äänestä ei voitu tallentaa (yhteys). Litterointi on kokonainen.",

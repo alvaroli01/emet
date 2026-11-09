@@ -831,6 +831,7 @@
       "saveError": "No se pudo guardar el doc. Inténtalo de nuevo.",
       "saved": "Apuntes guardados en tus docs",
       "micDenied": "Se bloqueó el acceso al micrófono. Permítelo en el navegador e inténtalo de nuevo.",
+      "micLost": "El micrófono se ha cortado. Intentando reconectarlo: deja esta pestaña abierta y comprueba que ninguna otra app usa el micro.",
       "keyStopped": "Groq dejó de aceptar tu clave. Vuelve a conectarla en Grabar apuntes.",
       "savingAudio": "Guardando el audio en tu cuenta…",
       "audioPartial": "No se pudieron guardar algunos minutos de audio (conexión). La transcripción está completa.",

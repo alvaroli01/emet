@@ -831,6 +831,7 @@
       "saveError": "Couldn't save the doc. Try again.",
       "saved": "Notes saved to your docs",
       "micDenied": "Microphone access was blocked. Allow it in the browser and try again.",
+      "micLost": "The microphone stopped. Trying to reconnect it — keep this tab open and make sure no other app is using the mic.",
       "keyStopped": "Groq stopped accepting your key. Connect it again in Record notes.",
       "savingAudio": "Saving the audio to your account…",
       "audioPartial": "Some minutes of audio couldn't be saved (connection). The transcript is complete.",

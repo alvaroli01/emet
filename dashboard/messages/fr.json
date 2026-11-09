@@ -831,6 +831,7 @@
       "saveError": "Impossible d’enregistrer le doc. Réessayez.",
       "saved": "Notes enregistrées dans vos docs",
       "micDenied": "L’accès au microphone a été bloqué. Autorisez-le dans le navigateur et réessayez.",
+      "micLost": "Le micro s'est coupé. Reconnexion en cours : garde cet onglet ouvert et vérifie qu'aucune autre appli n'utilise le micro.",
       "keyStopped": "Groq n’accepte plus votre clé. Reconnectez-la dans Enregistrer des notes.",
       "savingAudio": "Enregistrement de l’audio dans votre compte…",
       "audioPartial": "Quelques minutes d’audio n’ont pas pu être enregistrées (connexion). La transcription est complète.",
