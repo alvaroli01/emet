@@ -45,10 +45,11 @@ test("filters by person, EMET vs project, open, priority and due", () => {
   assert.deepEqual(sortTasks([b, c, a], st).map((t) => t.id), ["a", "c", "b"]);
 });
 
-test("you only see tasks given to you or that you created", () => {
+test("you only see tasks given to you (and your own not-yet-given ones)", () => {
   const p = (user_id: string) => ({ user_id, done_at: null, file_path: null, file_name: null });
   assert.equal(isMineToSee(task({ people: [p("u1")] }), "u1"), true);
-  assert.equal(isMineToSee(task({ created_by: "u1", people: [p("u2")] }), "u1"), true);
+  assert.equal(isMineToSee(task({ created_by: "u1", people: [p("u2")] }), "u1"), false);
+  assert.equal(isMineToSee(task({ created_by: "u1", people: [] }), "u1"), true);
   assert.equal(isMineToSee(task({ people: [p("u2")] }), "u1"), false);
   assert.equal(isMineToSee(task({ people: [] }), "u1"), false);
 });

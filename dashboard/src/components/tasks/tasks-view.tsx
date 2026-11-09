@@ -220,7 +220,7 @@ export function TasksView({ tasks, boards, people, projects, goals, goalProgress
         <TaskDialog
           taskId={open === "new" ? null : open} tasks={live} board={(open === "new" ? newBoard : boardById.get(tasks.find((x) => x.id === open)?.board_id ?? "") ?? newBoard)!}
           people={people} projects={projectById} viewer={viewer} where={where}
-          onCreated={(id) => go({ task: id }, true)} onClose={() => go({ task: null })} />
+          onCreated={(id, keepOpen) => go({ task: keepOpen ? id : null }, true)} onClose={() => go({ task: null })} />
       )}
     </div>
   );

@@ -23,7 +23,7 @@ async function openFile(path: string) {
 
 export function TaskDialog({ taskId, tasks, board, people, projects, viewer, where, onCreated, onClose }: {
   taskId: string | null; tasks: Task[]; board: TaskBoard; people: Person[]; projects: Map<string, ProjectInfo>; viewer: Viewer;
-  where: (b?: TaskBoard) => string; onCreated: (id: string) => void; onClose: () => void;
+  where: (b?: TaskBoard) => string; onCreated: (id: string, open: boolean) => void; onClose: () => void;
 }) {
   const t = useTranslations("taskHub");
   const locale = useLocale();
@@ -65,7 +65,8 @@ export function TaskDialog({ taskId, tasks, board, people, projects, viewer, whe
     setBusy(false);
     if (fail(error ?? res?.error ?? null) || !data) return;
     toast("ok", t("created"));
-    onCreated(data.id);
+    // Given only to other people: it won't be in my list, so just close
+    onCreated(data.id, !picked.size || picked.has(viewer.meId));
   }
 
   const shell = (body: React.ReactNode, label: string) => (
