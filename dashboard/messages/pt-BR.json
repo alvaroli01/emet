@@ -187,7 +187,8 @@
       "todo": "A fazer",
       "doing": "Fazendo",
       "review": "Revisão",
-      "done": "Feito"
+      "done": "Feito",
+      "blocked": "Bloqueada"
     },
     "labels": {
       "urgent": "Urgente",
@@ -2258,7 +2259,8 @@
       "board": "Quadro de tarefas",
       "health": "Saúde da equipe",
       "generalBoard": "Quadro geral",
-      "outreach": "Prospecção"
+      "outreach": "Prospecção",
+      "tasks": "Tarefas"
     },
     "tabGroups": {
       "work": "Trabalho",

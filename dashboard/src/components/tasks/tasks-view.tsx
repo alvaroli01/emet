@@ -15,7 +15,7 @@ import {
 
 export type Person = { id: string; full_name: string; avatar_url: string | null; group_id: string | null };
 export type Goal = { project_id: string; statement: string; target_on: string | null; milestones: { text: string; done: boolean }[] };
-type View = "all" | "emet" | "project";
+type View = "all" | "mine" | "emet" | "project";
 
 const dayLabel = (iso: string, locale: string) => new Date(iso).toLocaleDateString(locale, { day: "numeric", month: "short", timeZone: "Europe/Madrid" });
 
@@ -24,16 +24,19 @@ export const STATUS_STYLE: Record<Status, string> = {
 };
 export const PRIORITY_STYLE = { high: "text-bad-text", medium: "text-muted", low: "text-muted/60" } as const;
 
-export function TasksView({ tasks, boards, people, projects, goals, groups, viewer, initial }: {
+export function TasksView({ tasks, boards, people, projects, goals, groups, viewer, initial, mine }: {
   tasks: Task[]; boards: TaskBoard[]; people: Person[]; projects: ProjectInfo[]; goals: Goal[];
-  groups: { id: string; slug: string }[]; viewer: Viewer; initial: { view: View; project: string | null; task: string | null };
+  groups: { id: string; slug: string }[]; viewer: Viewer; initial: { view: View; project: string | null; task: string | null; overdue?: boolean };
+  /** Shown under "My tasks": my private board and Notion deadlines (rendered on the server) */
+  mine?: React.ReactNode;
 }) {
   const t = useTranslations("taskHub");
   const tg = useTranslations("group.names");
+  const tn = useTranslations("nav");
   const locale = useLocale();
   const [view, setView] = useState<View>(initial.view === "project" && !projects.length ? "all" : initial.view);
   const [projectId, setProjectId] = useState<string | null>(projects.find((p) => p.id === initial.project)?.id ?? projects[0]?.id ?? null);
-  const [filters, setFilters] = useState<Filters>(NO_FILTERS);
+  const [filters, setFilters] = useState<Filters>(initial.overdue ? { ...NO_FILTERS, due: "overdue" } : NO_FILTERS);
   // open = a task id; "new" = the create form
   const [open, setOpen] = useState<string | null>(tasks.some((x) => x.id === initial.task) ? initial.task : null);
 
@@ -64,6 +67,7 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
 
   const inView = tasks.filter((x) => {
     const b = boardById.get(x.board_id);
+    if (view === "mine") return x.people.some((p) => p.user_id === viewer.meId);
     if (view === "emet") return !b?.project_id;
     if (view === "project") return b?.project_id === projectId;
     return true;
@@ -77,7 +81,7 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
     : b?.group_id ? tg(groups.find((g) => g.id === b.group_id)?.slug ?? "") : "EMET";
 
   const tabs: { id: View; label: string }[] = [
-    { id: "all", label: t("tabAll") }, { id: "emet", label: t("tabEmet") },
+    { id: "all", label: t("tabAll") }, { id: "mine", label: tn("myTasks") }, { id: "emet", label: t("tabEmet") },
     ...(projects.length ? [{ id: "project" as const, label: t("tabProjects") }] : []),
   ];
   const set = <K extends keyof Filters>(k: K, v: Filters[K]) => setFilters((f) => ({ ...f, [k]: v }));
@@ -88,7 +92,7 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
       <div className="flex flex-wrap items-center gap-2">
         <div role="tablist" aria-label={t("title")} className="flex rounded-full bg-surface-2 p-1 ring-1 ring-line">
           {tabs.map((x) => (
-            <button key={x.id} role="tab" aria-selected={view === x.id} onClick={() => { go({ view: x.id }); if (x.id !== "all") set("project", ""); }}
+            <button key={x.id} role="tab" aria-selected={view === x.id} onClick={() => { go({ view: x.id }); if (x.id !== "all" && x.id !== "mine") set("project", ""); if (x.id === "mine") set("person", ""); }}
                     className={`min-h-9 rounded-full px-4 text-sm font-semibold transition ${view === x.id ? "bg-solid shadow-sm ring-1 ring-line" : "text-muted hover:text-ink"}`}>
               {x.label}
             </button>
@@ -113,12 +117,12 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
       )}
 
       <div className="flex flex-wrap items-center gap-2" aria-label={t("filters")}>
-        <select value={filters.person} onChange={(e) => set("person", e.target.value)} aria-label={t("fPerson")} className="input min-h-9 w-auto py-1 text-sm">
+        {view !== "mine" && <select value={filters.person} onChange={(e) => set("person", e.target.value)} aria-label={t("fPerson")} className="input min-h-9 w-auto py-1 text-sm">
           <option value="">{t("fAnyone")}</option>
           <option value={viewer.meId}>{t("fMe")}</option>
           {peopleInView.filter((p) => p.id !== viewer.meId).map((p) => <option key={p.id} value={p.id}>{p.full_name}</option>)}
-        </select>
-        {view === "all" && (
+        </select>}
+        {(view === "all" || view === "mine") && (
           <select value={filters.project} onChange={(e) => set("project", e.target.value)} aria-label={t("fProject")} className="input min-h-9 w-auto py-1 text-sm">
             <option value="">{t("fEverywhere")}</option>
             <option value="emet">EMET</option>
@@ -182,6 +186,8 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
         })}
         {!shown.length && <li className="px-4 py-10 text-center text-sm text-muted">{active ? t("noneFiltered") : t("none")}</li>}
       </ul>
+
+      {view === "mine" && mine}
 
       {open && (
         <TaskDialog

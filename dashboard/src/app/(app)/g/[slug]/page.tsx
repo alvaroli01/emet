@@ -1,11 +1,9 @@
-import { Suspense } from "react";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { getSession } from "@/lib/session";
 import { loadBoard, BOARD_TABLES } from "@/lib/boards";
 import { loadKpis } from "@/lib/kpi-data";
 import { Avatar, ViewOnlyBadge } from "@/components/ui";
-import { LazyBoard as Board } from "@/components/board/board-lazy";
 import { KpiCards } from "@/components/kpi-cards";
 import { LiveRefresh } from "@/components/live-refresh";
 import { BlockersTool } from "@/components/tools/blockers";
@@ -17,15 +15,13 @@ import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { AssistantBubble } from "@/components/shell/assistant-bubble";
-import { LayoutDashboard, KanbanSquare, ListChecks, FolderOpen, FolderKanban, Gavel } from "lucide-react";
+import { LayoutDashboard, FolderOpen, FolderKanban, Gavel } from "lucide-react";
 import { StrikesTool } from "@/components/tools/strikes";
 import { loadStrikes } from "@/lib/strikes-server";
-import { AssignTasks } from "@/components/tools/team-tasks";
-import { loadProjectPeople, loadMyProjects } from "@/lib/projects-server";
+import { loadMyProjects } from "@/lib/projects-server";
 import { MyProjects } from "@/components/projects/my-projects";
 import { Drive } from "@/components/documents/drive";
 import { StorageBar } from "@/components/documents/storage-bar";
-import { loadTeamTasks } from "@/lib/team-tasks";
 import { SectionAssistant } from "@/components/shell/section-assistant";
 import { createClient } from "@/lib/supabase/server";
 import { PageHero } from "@/components/shell/page-hero";
@@ -49,8 +45,8 @@ const ACTIONS: Record<string, { key: string; tab?: string; href?: string; edit?:
   finance: [{ key: "logSale", tab: "books", edit: true }, { key: "ledgers", tab: "ledgers" }, { key: "overview", tab: "money" }],
   marketing: [{ key: "newContent", tab: "content" }, { key: "myWeek", tab: "my-week" }, { key: "pulse", tab: "pulse" }],
   customer: [{ key: "prospects", tab: "sales" }, { key: "findClients", href: "/scout" }, { key: "complaints", tab: "complaints" }],
-  communications: [{ key: "decisions", tab: "decisions" }, { key: "morale", tab: "morale" }, { key: "board", tab: "board" }],
-  "team-leader": [{ key: "health", tab: "health" }, { key: "generalBoard", href: "/board" }, { key: "outreach", tab: "outreach" }],
+  communications: [{ key: "decisions", tab: "decisions" }, { key: "morale", tab: "morale" }, { key: "tasks", href: "/tasks?view=emet" }],
+  "team-leader": [{ key: "health", tab: "health" }, { key: "tasks", href: "/tasks?view=emet" }, { key: "outreach", tab: "outreach" }],
 };
 
 const TOOLS: Record<string, (p: ToolProps) => Promise<ToolTab[]>> = {
@@ -64,6 +60,8 @@ const TOOLS: Record<string, (p: ToolProps) => Promise<ToolTab[]>> = {
 export default async function GroupPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ tab?: string }> }) {
   const { slug } = await params;
   const { tab } = await searchParams;
+  // Team boards are part of EMET tasks on the Tasks page now
+  if (tab === "board" || tab === "assign") redirect("/tasks?view=emet");
   const t = await getTranslations("group");
   const session = await getSession();
   const group = session.groups.find((g) => g.slug === slug);
@@ -86,13 +84,6 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   const { data: aiKey } = await (await createClient()).from("ai_keys").select("last4").maybeSingle();
   const financeDash = slug === "finance" ? await loadFinanceDash(todayISO()) : null;
   const marketingDash = slug === "marketing" ? await loadMarketingDash() : null;
-  // Team leader only: give tasks to everyone / several people / yourself (only leaders and admins see this tool)
-  const tk = await getTranslations("teamTasks");
-  const assignTool = slug === "team-leader" && session.isLeader ? [{
-    id: "assign", group: "work" as const, label: tk("tool"), icon: <ListChecks size={16} />,
-    node: <AssignTasks tasks={await loadTeamTasks(undefined, undefined, true)} people={board.members} meId={session.me.id} projects={await loadProjectPeople(await createClient())}
-                       teams={session.groups.map((g) => ({ id: g.id, name: t(`names.${g.slug}`) }))} />,
-  }] : [];
   // Leaders: strikes (1 normal, 3 big; 3 in a quarter = the €75 punishment)
   const strikesTool = slug === "team-leader" && session.isLeader ? [{
     id: "strikes", group: "people" as const, label: (await getTranslations("strikes"))("tool"), icon: <Gavel size={16} />,
@@ -111,11 +102,9 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     node: <MyProjects projects={await loadMyProjects(await createClient(), session.me.id, true)} canCreate people={board.members} today={todayISO()} title={tp("allTitle")} />,
   }] : [];
   const allTools = [
-    ...assignTool,
     ...strikesTool,
     ...projectsTool,
     ...docsTool,
-    { id: "board", group: "work", label: t("board"), icon: <KanbanSquare size={16} />, node: <Suspense><Board data={board} viewer={session.viewer} /></Suspense> },
     ...toolTabs,
     ...(slug !== "team-leader" ? [{ id: "blockers", group: "work" as const, label: tt("blockers.title"), node: await BlockersTool({ ...props, onlyThisGroup: true }) }] : []),
   ];
@@ -135,7 +124,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     <div className="space-y-6">
       <LiveRefresh tables={[...BOARD_TABLES, "kpi_targets", "blockers", "sales", "expenses", "inventory", "prospects",
         "complaints", "content_posts", "campaigns", "design_requests", "experiments", "follower_snapshots",
-        "decisions", "morale_checks", "meeting_notes", "outreach", "profiles", "team_tasks", "team_task_people"]} />
+        "decisions", "morale_checks", "meeting_notes", "outreach", "profiles"]} />
 
       <ToolWorkspace initial={tab} groups={{ work: th("tabGroups.work"), plan: th("tabGroups.plan"), numbers: th("tabGroups.numbers"), people: th("tabGroups.people") }}
         tools={[{ id: "overview", group: "overview", label: th("overviewTool"), icon: <LayoutDashboard size={16} />, node: (

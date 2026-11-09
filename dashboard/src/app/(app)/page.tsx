@@ -86,7 +86,7 @@ export default async function OverviewPage() {
   // Team numbers leave out people's own private boards
   const allCards = (cards.data ?? []).filter((c) => boardOf.has(c.board_id));
   const groupOfCard = (c: CardRow) => boardOf.get(c.board_id)?.group_id ?? null;
-  const href = (c: CardRow) => cardHref({ id: c.id, boards: boardOf.get(c.board_id) }, (gid) => groups.find((x) => x.id === gid)?.slug);
+  const href = (c: CardRow) => cardHref({ id: c.id, boards: boardOf.get(c.board_id) });
   const teamLabel = (gid: string | null) => { const g = groups.find((x) => x.id === gid); return g ? tg(g.slug) : t("company"); };
   const overdue = allCards.filter((c) => !c.completed_at && c.due_at && Date.parse(c.due_at) < now).sort((a, b) => a.due_at!.localeCompare(b.due_at!));
   const upcoming = allCards.filter((c) => !c.completed_at && c.due_at && Date.parse(c.due_at) >= now && Date.parse(c.due_at) < now + 7 * DAY).sort((a, b) => a.due_at!.localeCompare(b.due_at!));

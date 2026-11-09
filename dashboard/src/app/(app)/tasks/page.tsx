@@ -8,6 +8,7 @@ import { LiveRefresh } from "@/components/live-refresh";
 import { PageHero } from "@/components/shell/page-hero";
 import { ProgressRing } from "@/components/shell/hero-visuals";
 import { TasksView, type Goal } from "@/components/tasks/tasks-view";
+import { MyExtras } from "@/components/tasks/my-extras";
 import { statusOf, isOverdue, type Task, type TaskBoard } from "@/lib/tasks";
 
 type RawTask = Omit<Task, "people" | "checklist"> & {
@@ -15,7 +16,7 @@ type RawTask = Omit<Task, "people" | "checklist"> & {
 };
 
 /** Every task in one place: EMET tasks (the general + team boards) and each project's tasks, with its goal. */
-export default async function TasksPage({ searchParams }: { searchParams: Promise<{ view?: string; project?: string; task?: string }> }) {
+export default async function TasksPage({ searchParams }: { searchParams: Promise<{ view?: string; project?: string; task?: string; due?: string }> }) {
   const sp = await searchParams;
   const { me, groups, isAdmin, isLeader, canEditGroup } = await getSession();
   const supabase = await createClient();
@@ -67,7 +68,8 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
         groups={groups.map((g) => ({ id: g.id, slug: g.slug }))}
         viewer={{ meId: me.id, myGroupId: me.group_id, isLeader, isAdmin, isCoach: !!me.is_coach, isGuest: !!me.is_guest,
                   editGroups: groups.filter((g) => canEditGroup(g.id)).map((g) => g.id) }}
-        initial={{ view: sp.view === "emet" || sp.view === "project" ? sp.view : "all", project: sp.project ?? null, task: sp.task ?? null }}
+        mine={<MyExtras />}
+        initial={{ view: sp.view === "mine" || sp.view === "emet" || sp.view === "project" ? sp.view : "all", project: sp.project ?? null, task: sp.task ?? null, overdue: sp.due === "overdue" }}
       />
     </div>
   );

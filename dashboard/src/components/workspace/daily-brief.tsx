@@ -83,7 +83,7 @@ export function DailyBrief() {
         </section>
 
         <div className="flex flex-wrap justify-end gap-2">
-          <Link href="/my-tasks" onClick={close} className="glass-pill min-h-11 px-4.5 text-sm font-medium">{t("openTasks")}</Link>
+          <Link href="/tasks?view=mine" onClick={close} className="glass-pill min-h-11 px-4.5 text-sm font-medium">{t("openTasks")}</Link>
           <button type="button" onClick={close} className="min-h-11 rounded-full bg-brand px-5 text-sm font-semibold text-white">{t("gotIt")}</button>
         </div>
       </div>

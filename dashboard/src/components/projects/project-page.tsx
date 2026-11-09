@@ -4,13 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { CalendarDays, Pencil, Trash2, Users } from "lucide-react";
-import { Board, type Viewer } from "@/components/board/board";
 import { Avatar } from "@/components/ui";
 import { useToast } from "@/components/toast";
 import { createClient } from "@/lib/supabase/client";
 import { eur, shortDate, timeAgo } from "@/lib/format";
 import { daysLeft, progress } from "@/lib/projects";
-import type { BoardData, Member } from "@/lib/boards";
+import type { Member } from "@/lib/boards";
 import { ProjectForm } from "./project-form";
 import { ProjectLinks, LinkIcon } from "./project-links";
 import { ProjectUpdates } from "./project-updates";
@@ -18,8 +17,6 @@ import { ProjectFiles } from "./project-files";
 import { ProjectMoney } from "./project-money";
 import { ProjectIcon } from "./project-icon";
 import { ProjectLeads, type ProjectLead, type ProjectPlace } from "./project-leads";
-import { AssignTasks, MyTeamTasks } from "@/components/tools/team-tasks";
-import type { TeamTask } from "@/lib/team-tasks";
 import { ProjectInvites, type ProjectInvite } from "./project-invites";
 import { ProjectCustomers, type Customer } from "./project-customers";
 
@@ -34,10 +31,10 @@ type Tab = (typeof TABS)[number];
 export const STATUS_STYLE = { planning: "bg-surface-2 text-muted", live: "bg-ok/20 text-ok-text", closed: "bg-line text-muted" } as const;
 
 /** A project's page: header with goal and people, then Overview · Money · Tasks · Links · Files · Updates. */
-export function ProjectPage({ project, memberIds, people, board, viewer, meId, isLeader, canInvite, money, weeks, links, updates, files, tickTasks, leads, places, invites, customers, tab, today }: {
-  project: Project; memberIds: string[]; people: Member[]; board: BoardData | null; viewer: Viewer; meId: string; isLeader: boolean; canInvite: boolean;
+export function ProjectPage({ project, memberIds, people, meId, isLeader, canInvite, money, weeks, links, updates, files, leads, places, invites, customers, tab, today }: {
+  project: Project; memberIds: string[]; people: Member[]; meId: string; isLeader: boolean; canInvite: boolean;
   money: Money; weeks: { week: string; revenue: number }[]; links: ProjectLink[]; updates: ProjectUpdate[]; files: ProjectFile[];
-  tickTasks: TeamTask[]; leads: ProjectLead[]; places: ProjectPlace[]; invites: ProjectInvite[]; customers: Customer[]; tab?: string; today: string;
+  leads: ProjectLead[]; places: ProjectPlace[]; invites: ProjectInvite[]; customers: Customer[]; tab?: string; today: string;
 }) {
   const t = useTranslations("projects");
   const locale = useLocale();
@@ -53,6 +50,8 @@ export function ProjectPage({ project, memberIds, people, board, viewer, meId, i
   const left = daysLeft(project.ends_on, today);
 
   function go(next: Tab) {
+    // A project's tasks (and its goal) live on the Tasks page now
+    if (next === "tasks") return router.push(`/tasks?view=project&project=${project.id}`);
     setActive(next);
     const url = new URL(window.location.href);
     url.searchParams.set("tab", next); url.searchParams.delete("card");
@@ -158,14 +157,6 @@ export function ProjectPage({ project, memberIds, people, board, viewer, meId, i
         </div>
       )}
       {active === "money" && <ProjectMoney money={money} weeks={weeks} />}
-      {active === "tasks" && (
-        <div className="space-y-4">
-          {/* Tick-off tasks, like "From the team leader" in My Tasks: leaders give them, each person ticks their own */}
-          <MyTeamTasks tasks={tickTasks.filter((x) => x.people.some((p) => p.id === meId))} meId={meId} />
-          {isLeader && <AssignTasks tasks={tickTasks} people={members.map((m) => ({ id: m.id, full_name: m.full_name, avatar_url: m.avatar_url, group_id: m.group_id }))} teams={[]} meId={meId} projectId={project.id} />}
-          {board ? <div className="panel p-3 sm:p-4"><Board data={board} viewer={viewer} /></div> : <p className="panel p-5 text-sm text-muted">{t("noBoard")}</p>}
-        </div>
-      )}
       {active === "leads" && <ProjectLeads leads={leads} places={places} projectId={project.id} meId={meId} names={Object.fromEntries(people.map((p) => [p.id, p.full_name]))} today={today} />}
       {active === "links" && <ProjectLinks projectId={project.id} links={links} people={name} meId={meId} isLeader={isLeader} />}
       {active === "files" && <ProjectFiles projectId={project.id} files={files} people={name} meId={meId} isLeader={isLeader} />}

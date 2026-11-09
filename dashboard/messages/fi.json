@@ -187,7 +187,8 @@
       "todo": "Tehtävänä",
       "doing": "Työn alla",
       "review": "Tarkistettavana",
-      "done": "Valmis"
+      "done": "Valmis",
+      "blocked": "Jumissa"
     },
     "labels": {
       "urgent": "Kiireellinen",
@@ -2258,7 +2259,8 @@
       "board": "Tehtävätaulu",
       "health": "Tiimin vointi",
       "generalBoard": "Yleistaulu",
-      "outreach": "Yhteydenotot"
+      "outreach": "Yhteydenotot",
+      "tasks": "Tehtävät"
     },
     "tabGroups": {
       "work": "Työ",

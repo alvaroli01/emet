@@ -135,7 +135,7 @@ create policy assignees_same_team on public.card_assignees as restrictive for in
 
 -- Notifications open the task on the new page (private boards keep their old link)
 create or replace function public.card_link(p_card uuid) returns text language sql stable security definer set search_path = public as $$
-  select case when b.owner_id is not null then '/my-tasks'
+  select case when b.owner_id is not null then '/tasks?view=mine&card=' || c.id
               else '/tasks?task=' || c.id end
   from public.cards c join public.boards b on b.id = c.board_id
   where c.id = p_card

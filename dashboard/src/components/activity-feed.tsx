@@ -32,7 +32,7 @@ export function useDescribe() {
       return t(e.entity === "sales" ? "loggedSale" : "loggedExpense", { amount: eur(Number(amount), locale, 2) });
     if (e.entity === "card_comments" && e.action === "insert") return t("commented");
     if (e.entity === "cards" && moved_to) {
-      const key = { "to do": "todo", doing: "doing", review: "review", done: "done" }[moved_to.toLowerCase()];
+      const key = { "to do": "todo", doing: "doing", review: "review", blocked: "blocked", done: "done" }[moved_to.toLowerCase()];
       return t("moved", { title: quote(label), list: key ? tl(key) : moved_to });
     }
     return t(e.action, { thing, title: quote(label) }).replace(/\s+/g, " ").trim();

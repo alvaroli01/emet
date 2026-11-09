@@ -15,7 +15,7 @@ export const PRESET_LABELS: Record<string, string> = {
 export function useListName() {
   const t = useTranslations("board.lists");
   return (name: string) => {
-    const key = ({ "to do": "todo", doing: "doing", review: "review", done: "done" } as Record<string, string>)[name.toLowerCase()];
+    const key = ({ "to do": "todo", doing: "doing", review: "review", blocked: "blocked", done: "done" } as Record<string, string>)[name.toLowerCase()];
     return key ? t(key) : name;
   };
 }

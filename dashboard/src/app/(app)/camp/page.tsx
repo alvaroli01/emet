@@ -65,7 +65,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   ]);
 
   const link = (b: { slug: string; group_id: string | null; project_id?: string | null } | null | undefined, cardId: string) =>
-    cardHref({ id: cardId, boards: b }, (gid) => groups.find((g) => g.id === gid)?.slug);
+    cardHref({ id: cardId, boards: b });
 
   // Everything with a date that is mine: cards I'm on, and small tasks given to me
   const due: DueTask[] = [

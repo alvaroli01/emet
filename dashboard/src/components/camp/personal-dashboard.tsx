@@ -89,7 +89,7 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
             {/* Today's tasks */}
             <section className="panel p-5">
               <div className="flex items-center justify-between"><p className="font-medium">{t("todayTasks")} <span className="ml-1 rounded-full bg-surface-2 px-2 py-0.5 text-xs">{d.tasks.length}</span></p>
-                <Link href="/my-tasks" className="flex items-center text-xs text-link">{t("manage")} <ChevronRight size={13} /></Link></div>
+                <Link href="/tasks?view=mine" className="flex items-center text-xs text-link">{t("manage")} <ChevronRight size={13} /></Link></div>
               <ul className="mt-3 space-y-2">
                 {d.tasks.slice(0, 4).map((x, i) => (
                   <li key={x.id}>

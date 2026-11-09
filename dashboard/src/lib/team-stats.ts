@@ -13,7 +13,13 @@ export type TeamRow = {
 };
 
 type Act = { user_id: string; day: string; group_id: string | null; n: number };
-type CardRow = { id: string; title: string; due_at: string | null; completed_at: string | null; created_at: string; boards: { slug: string; name: string; group_id: string | null; project_id: string | null; owner_id: string | null } | null; card_assignees: { user_id: string }[] };
+type CardRow = { id: string; title: string; due_at: string | null; completed_at: string | null; created_at: string; boards: { slug: string; name: string; group_id: string | null; project_id: string | null; owner_id: string | null } | null; card_assignees: { user_id: string; done_at?: string | null }[] };
+
+/** A person's tasks, each finished when *they* finished their part (or when the whole task was done). */
+export const mineOf = <C extends CardRow>(cards: C[], id: string): C[] => cards.flatMap((c) => {
+  const a = c.card_assignees.find((x) => x.user_id === id);
+  return a ? [{ ...c, completed_at: a.done_at ?? c.completed_at }] : [];
+});
 
 /** Active = did something on 3+ different days in 30; somewhat = 1–2 days; inactive = nothing (or never logged in). */
 export const engagement = (activeDays: number, joined: boolean): Engagement => (!joined || !activeDays ? "inactive" : activeDays >= 3 ? "active" : "somewhat");
@@ -23,7 +29,7 @@ async function load(since: number) {
   const sinceIso = new Date(since).toISOString();
   const [acts, cards, last, seen] = await Promise.all([
     sb.rpc("team_activity", { since: sinceIso }),
-    sb.from("cards").select("id, title, due_at, completed_at, created_at, boards(slug, name, group_id, project_id, owner_id), card_assignees!inner(user_id)")
+    sb.from("cards").select("id, title, due_at, completed_at, created_at, boards(slug, name, group_id, project_id, owner_id), card_assignees!inner(user_id, done_at)")
       .or(`completed_at.is.null,completed_at.gte.${sinceIso}`).returns<CardRow[]>(),
     sb.from("activity_log").select("user_id, created_at").order("created_at", { ascending: false }).limit(1000),
     sb.from("presence").select("user_id, last_seen_at"),
@@ -35,7 +41,7 @@ export async function loadTeamTable(people: Profile[], groups: Group[]): Promise
   const since = Date.now() - 30 * DAY;
   const { acts, cards, last, seen } = await load(since);
   return people.filter((p) => p.active).map((p) => {
-    const mine = cards.filter((c) => c.card_assignees.some((a) => a.user_id === p.id));
+    const mine = mineOf(cards, p.id);
     const inWindow = mine.filter((c) => (c.completed_at && Date.parse(c.completed_at) >= since) || (c.due_at && Date.parse(c.due_at) >= since && Date.parse(c.due_at) <= Date.now()));
     const done = inWindow.filter((c) => c.completed_at).length;
     const days = new Set(acts.filter((a) => a.user_id === p.id).map((a) => a.day)).size;
@@ -72,9 +78,8 @@ export async function loadMember(person: Profile, groups: Group[], weekStartIso:
   const { data: sales } = await sb.from("sales").select("amount, date, rep_id, logged_by, reverses_id")
     .gte("date", iso(prevMonthStart)).or(`rep_id.eq.${person.id},logged_by.eq.${person.id}`);
 
-  const slugOf = (gid: string | null) => groups.find((g) => g.id === gid)?.slug;
-  const href = (c: CardRow) => cardHref(c, (gid) => slugOf(gid));
-  const mine = cards.filter((c) => c.card_assignees.some((a) => a.user_id === person.id));
+  const href = (c: CardRow) => cardHref(c);
+  const mine = mineOf(cards, person.id);
   const open = mine.filter((c) => !c.completed_at).sort((a, b) => (a.due_at ?? "9").localeCompare(b.due_at ?? "9"));
   const doneBetween = (from: number, to: number) => mine.filter((c) => c.completed_at && Date.parse(c.completed_at) >= from && Date.parse(c.completed_at) < to).length;
   const sum = (from: string, to?: string) => (sales ?? []).filter((s) => Number(s.amount) > 0 && !s.reverses_id && s.date >= from && (!to || s.date < to)).reduce((a, s) => a + Number(s.amount), 0);

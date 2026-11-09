@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-09 — Alvaro — **Tasks page** (local preview, not live yet): one page for every task — All / My Tasks / EMET / Project tasks with a goal card, filters, priority, Blocked status, per-person completion (Done when everyone finished), checklists, file hand-ins, overdue in red. Migration 0052 (additive: priority + needs_file on cards, done/file per assignee, Blocked column, `project_goals`, member permissions, leader tasks copied into cards). Old General board, My Tasks, team board tabs and project Tasks tab redirect to it.
 - 2026-11-09 — Alvaro — Fix: the note-taker could keep "recording" with a dead microphone (a 67-min class saved ~6 s of audio). If the mic stops mid-recording (screen lock, another app, headset switch) it now reopens it and carries on, warns on screen if it can't, and keeps the phone screen awake while recording.
 - 2026-11-05 — Alvaro — New emet logo (the hand-drawn figure) in the menu, top bar, login page, browser tab and phone home-screen icons; replaces the orange summit tile.
 - 2026-11-04 — Alvaro — Fix: Ollin guests got "your account is not active on the team list" after logging in. They now join the project the moment they fill in the invite form, so it no longer matters where the login email sends them. Nicolás Suárez Company added to Chinese/Asian Event.

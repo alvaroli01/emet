@@ -104,7 +104,7 @@ export async function groupHero(slug: string, meId: string, groupId: string, tod
     sb.from("cards").select("id", { count: "exact", head: true }).is("completed_at", null).lt("due_at", today),
   ]);
   if (slug === "communications" && !(morale.data ?? []).some((m) => m.user_id === meId)) needs.push({ key: "morale", count: 1, tab: "morale", tone: "info" });
-  if (slug === "team-leader" && allOverdue.count) needs.push({ key: "teamOverdue", count: allOverdue.count, href: "/board", tone: "warn" });
+  if (slug === "team-leader" && allOverdue.count) needs.push({ key: "teamOverdue", count: allOverdue.count, href: "/tasks?view=emet&due=overdue", tone: "warn" });
   const ms = (morale.data ?? []).map((m) => Number(m.score)).filter((n) => n > 0);
   return {
     needs, stats: [{ key: "decisions30", value: decisions.count ?? 0, kind: "num" }, { key: "moraleAvg", value: ms.length ? Math.round((ms.reduce((a, b) => a + b, 0) / ms.length) * 10) / 10 : null, kind: "num" }, { key: "teamOverdue", value: allOverdue.count ?? 0, kind: "num" }],

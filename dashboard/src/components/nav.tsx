@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, KanbanSquare, CheckSquare, Users, Menu, X, Tent, AudioLines, Lightbulb, Sun, Radar, ChevronDown, ChevronsLeft, ChevronsRight, Sparkles, FolderKanban, ListChecks } from "lucide-react";
+import { LayoutDashboard, Users, Menu, X, Tent, AudioLines, Lightbulb, Sun, Radar, ChevronDown, ChevronsLeft, ChevronsRight, Sparkles, FolderKanban, ListChecks } from "lucide-react";
 import type { Group } from "@/lib/session";
 import { LogoMark } from "@/components/summit/logo";
 import { GroupIcon } from "@/components/group-icon";
@@ -22,14 +22,12 @@ function useSections({ groups, myGroupId, showProjects }: Props) {
       { href: "/today", label: t("today"), icon: <Sun size={17} /> },
       { href: "/", label: t("overview"), icon: <LayoutDashboard size={17} /> },
       { href: "/camp", label: t("camp"), icon: <Tent size={17} /> },
-      { href: "/my-tasks", label: t("myTasks"), icon: <CheckSquare size={17} /> },
       { href: "/tasks", label: t("tasks"), icon: <ListChecks size={17} /> },
     ] },
     { key: "teams", label: t("groups"), items: groups.map((g) => ({
       href: `/g/${g.slug}`, label: tg(g.slug), color: g.color, mine: g.id === myGroupId, icon: <GroupIcon slug={g.slug} size={17} />,
     })) },
     { key: "tools", label: t("sectionTools"), items: [
-      { href: "/board", label: t("generalBoard"), icon: <KanbanSquare size={17} /> },
       { href: "/lab", label: t("lab"), icon: <Lightbulb size={17} /> },
       { href: "/scout", label: t("scout"), icon: <Radar size={17} /> },
       { href: "/meetings", label: t("meetings"), icon: <AudioLines size={17} /> },
@@ -146,7 +144,7 @@ export function BottomNav(props: Props) {
   const myGroup = props.groups.find((g) => g.id === props.myGroupId);
   const items = [
     { href: "/today", label: t("today"), icon: <Sun size={20} /> },
-    { href: "/board", label: t("board"), icon: <KanbanSquare size={20} /> },
+    { href: "/tasks", label: t("tasks"), icon: <ListChecks size={20} /> },
     myGroup
       ? { href: `/g/${myGroup.slug}`, label: t("myTeam"), icon: <GroupIcon slug={myGroup.slug} size={20} /> }
       : { href: "/team", label: t("team"), icon: <Users size={20} /> },

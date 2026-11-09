@@ -63,7 +63,7 @@ export default async function TodayPage() {
   const notionDl = await notionP;
 
   const slug = (gid: string | null | undefined) => (gid ? groups.find((g) => g.id === gid)?.slug : undefined);
-  const href = (b: { group_id: string | null; project_id?: string | null } | null | undefined, id: string) => cardHref({ id, boards: b }, (gid) => slug(gid));
+  const href = (b: { group_id: string | null; project_id?: string | null } | null | undefined, id: string) => cardHref({ id, boards: b });
   const due: Due[] = [
     ...((cards.data ?? []) as unknown as { id: string; title: string; due_at: string; boards: { group_id: string | null } | null }[])
       .map((c) => ({ id: c.id, title: c.title, day: c.due_at.slice(0, 10), href: href(c.boards, c.id) })),
@@ -138,7 +138,7 @@ export default async function TodayPage() {
         <section className="panel p-5">
           <div className="mb-3 flex items-baseline justify-between gap-2">
             <h2 className="text-lg font-semibold tracking-tight">{t("due")}</h2>
-            <Link href="/my-tasks" className="text-xs text-muted hover:text-ink">{t("allTasks")}</Link>
+            <Link href="/tasks?view=mine" className="text-xs text-muted hover:text-ink">{t("allTasks")}</Link>
           </div>
           {overdue.length + dueToday.length ? (
             <ul className="divide-y divide-line">

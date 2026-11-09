@@ -5,7 +5,6 @@ import { createClient } from "@/lib/supabase/server";
 import { weekStart } from "@/lib/metrics";
 import { todayISO } from "@/lib/format";
 import { loadMember } from "@/lib/team-stats";
-import { loadTeamTasks } from "@/lib/team-tasks";
 import type { MemberTaskItem } from "@/lib/member-tasks";
 import { loadStrikes } from "@/lib/strikes-server";
 import { MemberDashboard } from "@/components/team/member-dashboard";
@@ -27,10 +26,9 @@ export default async function MemberPage({ params }: { params: Promise<{ id: str
   // My Projects (own profile only): the projects I'm a member of
   const projects: ProjectCard[] = person.id === me.id ? await loadMyProjects(supabase, me.id) : [];
   // Community points, customer visits, learning points — everyone can see anyone's
-  // Tasks: their board tasks + the team-leader tasks given to them (with their own tick)
-  const [teamTasks, strikes] = await Promise.all([loadTeamTasks(person.id), loadStrikes(person.id)]);
-  const tasks: MemberTaskItem[] = [...d.tasks, ...teamTasks.map((x) => ({ id: `tt-${x.id}`, title: x.title, due: x.due_on, done_at: x.people.find((p) => p.id === person.id)?.done_at ?? null,
-    href: person.id === me.id ? "/my-tasks#team-tasks" : undefined }))];
+  // Tasks: every task given to them (leader tasks included), each finished when they ticked their part
+  const strikes = await loadStrikes(person.id);
+  const tasks: MemberTaskItem[] = d.tasks;
   const { data: points } = await supabase.from("member_points").select("id, kind, amount, happened_on, note, file_path, file_name, link").eq("user_id", person.id)
     .order("happened_on", { ascending: false }).order("created_at", { ascending: false }).returns<PointEntry[]>();
   return (

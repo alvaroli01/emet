@@ -1,12 +1,13 @@
 ---
 tags: [emet, decisions]
-updated: 2026-11-05
+updated: 2026-11-09
 ---
 
-# Decisions log (synced from README §9, 2026-11-05)
+# Decisions log (synced from README §9, 2026-11-09)
 
 | Date | Decision | Decided by |
 |---|---|---|
+| [[2026-11-09]] | One **Tasks** page replaces the General board, team Task boards, the leader's Assign tasks tool, the project Tasks tab and My Tasks. Built on the existing cards tables (no data dropped); a task is Done when every assignee has ticked their part; members assign only within their project / group. Previewed locally first; goes live only after Alvaro's OK | Alvaro |
 | [[2026-11-04]] | People from Ollin (the other LEINN team) join shared projects as **guests** through invite links instead of being added to the team list: they see only the projects they were invited to, never the rest of emet, and don't count in team numbers. A link works until someone deletes it |  |
 | [[2026-10-28]] | Points entries can be edited (not only deleted) and can carry a link next to the optional file (`src/components/team/points-panel.tsx`, migration 0048) | Alvaro |
 | [[2026-10-28]] | Shared Scout projects can be searched and worked by everyone; only the setup stays with the creator and selling teams | Alvaro |

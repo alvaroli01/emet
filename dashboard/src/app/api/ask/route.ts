@@ -44,11 +44,10 @@ export async function POST(request: NextRequest) {
   // The asker's own schedule (last 14 → next 60 days): only their rows, read as them
   const today = todayISO();
   const { from, to } = scheduleRange(today);
-  const [myCards, mySubtasks, myTeamTasks, myPlans, google, notionDl, notionPages] = await Promise.all([
-    supabase.from("cards").select("title, due_at, completed_at, boards(slug), card_assignees!inner(user_id)").eq("card_assignees.user_id", me.data)
+  const [myCards, mySubtasks, myPlans, google, notionDl, notionPages] = await Promise.all([
+    supabase.from("cards").select("title, due_at, completed_at, boards(slug), card_assignees!inner(user_id, done_at)").eq("card_assignees.user_id", me.data)
       .gte("due_at", `${from}T00:00:00Z`).lte("due_at", `${to}T23:59:59Z`).limit(300),
     supabase.from("card_checklist_items").select("text, due_on, cards(title)").eq("assignee_id", me.data).eq("done", false).gte("due_on", from).lte("due_on", to).limit(300),
-    supabase.from("team_task_people").select("done_at, team_tasks(title, due_on)").eq("user_id", me.data).limit(300),
     supabase.from("agenda_items").select("title, day, start_time, end_time, done").eq("owner_id", me.data).gte("day", from).lte("day", to).limit(300),
     loadMyGoogleEvents(supabase, from, to),
     loadMyNotionDeadlinesFast(supabase, from, to),
@@ -56,12 +55,11 @@ export async function POST(request: NextRequest) {
   ]);
   const mySchedule = buildMySchedule({
     today, from, to, google, notion: notionDl,
-    cards: ((myCards.data ?? []) as unknown as { title: string; due_at: string; completed_at: string | null; boards: { slug: string } | null }[])
-      .map((c) => ({ title: c.title, board: c.boards?.slug, due_at: c.due_at, completed_at: c.completed_at })),
+    cards: ((myCards.data ?? []) as unknown as { title: string; due_at: string; completed_at: string | null; boards: { slug: string } | null; card_assignees: { done_at: string | null }[] }[])
+      .map((c) => ({ title: c.title, board: c.boards?.slug, due_at: c.due_at, completed_at: c.card_assignees[0]?.done_at ?? c.completed_at })),
     subtasks: ((mySubtasks.data ?? []) as unknown as { text: string; due_on: string; cards: { title: string } | null }[])
       .map((x) => ({ text: x.text, card: x.cards?.title, due_on: x.due_on })),
-    teamTasks: ((myTeamTasks.data ?? []) as unknown as { done_at: string | null; team_tasks: { title: string; due_on: string | null } | null }[])
-      .flatMap((x) => (x.team_tasks ? [{ title: x.team_tasks.title, due_on: x.team_tasks.due_on, done_at: x.done_at }] : [])),
+    teamTasks: [],
     plans: myPlans.data ?? [],
   });
 

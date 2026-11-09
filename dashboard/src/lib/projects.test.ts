@@ -35,12 +35,12 @@ test("goal progress and days left", () => {
 });
 
 test("task links open the right place", () => {
-  const slug = (g: string) => (g === "g1" ? "finance" : undefined);
-  assert.equal(cardHref({ id: "c", boards: { group_id: null, project_id: "p" } }, slug), "/projects/p?tab=tasks&card=c");
-  assert.equal(cardHref({ id: "c", boards: { group_id: "g1" } }, slug), "/g/finance?card=c");
-  assert.equal(cardHref({ id: "c", boards: { group_id: null } }, slug), "/board?card=c");
+  // Every shared task opens on the Tasks page (project, team and EMET alike)
+  assert.equal(cardHref({ id: "c", boards: { group_id: null, project_id: "p" } }), "/tasks?task=c");
+  assert.equal(cardHref({ id: "c", boards: { group_id: "g1" } }), "/tasks?task=c");
+  assert.equal(cardHref({ id: "c", boards: { group_id: null } }), "/tasks?task=c");
 });
 
-test("a task on someone's own board links to My Tasks", () => {
-  assert.equal(cardHref({ id: "c1", boards: { group_id: null, project_id: null, owner_id: "me" } }, () => "x"), "/my-tasks?card=c1#my-board");
+test("a task on someone's own board links to My tasks on the Tasks page", () => {
+  assert.equal(cardHref({ id: "c1", boards: { group_id: null, project_id: null, owner_id: "me" } }), "/tasks?view=mine&card=c1#my-board");
 });
