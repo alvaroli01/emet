@@ -96,6 +96,10 @@ export function assignable<P extends { id: string; group_id: string | null }>(v:
   return people.filter((p) => p.id === v.meId || (!!v.myGroupId && p.group_id === v.myGroupId));
 }
 
+/** You only see a task if it is given to you or you created it (so whoever gives a task can follow it). */
+export const isMineToSee = (task: Pick<Task, "people" | "created_by">, meId: string) =>
+  task.created_by === meId || task.people.some((p) => p.user_id === meId);
+
 /** Goal progress: tasks done / all tasks of the project. */
 export function progress(tasks: Task[], statusById: (t: Task) => Status): { done: number; total: number } {
   return { done: tasks.filter((t) => statusById(t) === "done").length, total: tasks.length };

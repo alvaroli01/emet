@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { statusOf, listFor, isOverdue, filterTasks, sortTasks, canAdd, canEdit, canDelete, assignable, NO_FILTERS, type Task, type TaskBoard, type Viewer } from "./tasks.ts";
+import { isMineToSee, statusOf, listFor, isOverdue, filterTasks, sortTasks, canAdd, canEdit, canDelete, assignable, NO_FILTERS, type Task, type TaskBoard, type Viewer } from "./tasks.ts";
 
 const board = (over: Partial<TaskBoard> = {}): TaskBoard => ({ id: "b1", name: "emet", group_id: null, project_id: null,
   lists: [{ id: "l1", name: "To do" }, { id: "l2", name: "Doing" }, { id: "l3", name: "Review" }, { id: "l4", name: "Blocked" }, { id: "l5", name: "Done" }], ...over });
@@ -43,6 +43,14 @@ test("filters by person, EMET vs project, open, priority and due", () => {
   assert.deepEqual(ids({ due: "week" }), ["a", "c"]);
   assert.deepEqual(ids({ due: "none" }), ["b"]);
   assert.deepEqual(sortTasks([b, c, a], st).map((t) => t.id), ["a", "c", "b"]);
+});
+
+test("you only see tasks given to you or that you created", () => {
+  const p = (user_id: string) => ({ user_id, done_at: null, file_path: null, file_name: null });
+  assert.equal(isMineToSee(task({ people: [p("u1")] }), "u1"), true);
+  assert.equal(isMineToSee(task({ created_by: "u1", people: [p("u2")] }), "u1"), true);
+  assert.equal(isMineToSee(task({ people: [p("u2")] }), "u1"), false);
+  assert.equal(isMineToSee(task({ people: [] }), "u1"), false);
 });
 
 test("permissions match the database rules", () => {

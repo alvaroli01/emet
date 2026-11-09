@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { TaskDialog } from "./task-dialog";
 import {
-  statusOf, isOverdue, filterTasks, sortTasks, canAdd, progress, NO_FILTERS, STATUSES, PRIORITIES,
+  statusOf, isOverdue, filterTasks, sortTasks, canAdd, NO_FILTERS, STATUSES, PRIORITIES,
   type Task, type TaskBoard, type Viewer, type ProjectInfo, type Status, type Filters,
 } from "@/lib/tasks";
 
@@ -23,8 +23,10 @@ export const STATUS_STYLE: Record<Status, string> = {
 };
 export const PRIORITY_STYLE = { high: "text-bad-text", medium: "text-muted", low: "text-muted/60" } as const;
 
-export function TasksView({ tasks, boards, people, projects, goals, groups, viewer, initial, mine }: {
+export function TasksView({ tasks, boards, people, projects, goals, goalProgress, groups, viewer, initial, mine }: {
   tasks: Task[]; boards: TaskBoard[]; people: Person[]; projects: ProjectInfo[]; goals: Goal[];
+  /** Per project: done / all of its tasks (also the ones not given to me) */
+  goalProgress: Record<string, { done: number; total: number }>;
   groups: { id: string; slug: string }[]; viewer: Viewer; initial: { view: View; project: string | null; task: string | null; overdue?: boolean };
   /** Shown under "My tasks": my private board and Notion deadlines (rendered on the server) */
   mine?: React.ReactNode;
@@ -130,7 +132,7 @@ export function TasksView({ tasks, boards, people, projects, goals, groups, view
 
       {view === "project" && projectId && (
         <GoalCard key={projectId} projectId={projectId} goal={goals.find((g) => g.project_id === projectId)}
-                  progress={progress(inView, st)} locale={locale}
+                  progress={goalProgress[projectId] ?? { done: 0, total: 0 }} locale={locale}
                   canEdit={viewer.isLeader || !!projectById.get(projectId)?.memberIds.includes(viewer.meId)} />
       )}
 

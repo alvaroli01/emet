@@ -9,7 +9,7 @@ import { PageHero } from "@/components/shell/page-hero";
 import { ProgressRing } from "@/components/shell/hero-visuals";
 import { TasksView, type Goal } from "@/components/tasks/tasks-view";
 import { MyExtras } from "@/components/tasks/my-extras";
-import { statusOf, isOverdue, type Task, type TaskBoard } from "@/lib/tasks";
+import { statusOf, isOverdue, isMineToSee, progress, type Task, type TaskBoard } from "@/lib/tasks";
 
 type RawTask = Omit<Task, "people" | "checklist"> & {
   card_assignees: Task["people"]; card_checklist_items: Task["checklist"];
@@ -37,15 +37,18 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
   const myProjects = new Set(projects.filter((p) => p.memberIds.includes(me.id)).map((p) => p.id));
   const boards = allBoards.filter((b) => !b.project_id || myProjects.has(b.project_id));
   const boardIds = new Set(boards.map((b) => b.id));
-  const tasks: Task[] = (cards.data ?? []).filter((c) => boardIds.has(c.board_id)).map(({ card_assignees, card_checklist_items, ...c }) => ({
+  const everyTask: Task[] = (cards.data ?? []).filter((c) => boardIds.has(c.board_id)).map(({ card_assignees, card_checklist_items, ...c }) => ({
     ...c, people: card_assignees, checklist: [...card_checklist_items].sort((a, b) => a.position - b.position),
   }));
+  // Only tasks given to me or that I created; a project's goal still counts all its tasks
+  const tasks = everyTask.filter((x) => isMineToSee(x, me.id));
   // Only projects that have a board here (a project you can see)
   const shown = projects.filter((p) => myProjects.has(p.id) && boards.some((b) => b.project_id === p.id));
 
   const t = await getTranslations("taskHub");
   const listName = new Map(boards.flatMap((b) => b.lists.map((l) => [l.id, l.name] as const)));
   const st = (x: Task) => statusOf(listName.get(x.list_id));
+  const goalProgress = Object.fromEntries(shown.map((p) => [p.id, progress(everyTask.filter((x) => boards.find((b) => b.id === x.board_id)?.project_id === p.id), st)]));
   const open = tasks.filter((x) => st(x) !== "done");
   const late = open.filter((x) => isOverdue(x, "todo")).length;
   const mine = open.filter((x) => x.people.some((p) => p.user_id === me.id && !p.done_at)).length;
@@ -68,7 +71,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
         visual={<ProgressRing value={tasks.length - open.length} max={tasks.length} label={t("ring")} />}
       />
       <TasksView
-        tasks={tasks} boards={boards} people={people} projects={shown} goals={goals.data ?? []}
+        tasks={tasks} boards={boards} people={people} projects={shown} goals={goals.data ?? []} goalProgress={goalProgress}
         groups={groups.map((g) => ({ id: g.id, slug: g.slug }))}
         viewer={{ meId: me.id, myGroupId: me.group_id, isLeader, isAdmin, isCoach: !!me.is_coach, isGuest: !!me.is_guest,
                   editGroups: groups.filter((g) => canEditGroup(g.id)).map((g) => g.id) }}
