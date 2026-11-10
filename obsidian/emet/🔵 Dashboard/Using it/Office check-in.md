@@ -4,7 +4,7 @@ Built 2026-11-10 · **live** · migration `0053_office_and_leader_messages.sql` 
 
 ## What it does
 - **Today → At the office:** who is in right now and since when (Spanish time), my hours today and this week, everyone's hours this week, and a **Check in / Check out** button as a fallback.
-- **Automatic:** each member's phone checks them in when they come within **30 m** of the office (Alvaro picked 30 m on 10 Nov because the building is big) and out when they are **150 m** away. It works with emet closed and on mobile data.
+- **Automatic:** each member's phone checks them in when they come within **30 m** of the office (Alvaro picked 30 m on 10 Nov because the building is big) and out when they are **80 m** away. It works with emet closed and on mobile data.
 - **Privacy:** emet only receives "arrived" / "left" and the time. It never gets a location.
 
 ## Why the phone does the detecting
@@ -13,8 +13,8 @@ A website can't read location while it's closed (iPhones block it completely), a
 ## Phone setup (each member, once)
 Today → At the office → *Check in automatically with my phone* → **Create my check-in links**, then:
 - **iPhone:** tap **1. Add the emet shortcut** (emet copies your link and opens `emet-check-in.shortcut`) → Add Shortcut → paste the link in the box. Then Shortcuts → Automation → + → **Arrive** → the office → Run Immediately → pick *emet check-in*; again with **Leave**. Allow location the first time.
-- **Why it still means 30 m:** iPhone zones can't be smaller than ~100 m, so the automation only *wakes* the shortcut. The shortcut sends its position every 15 s (up to 6 min) and emet decides: within 30 m = in, 150 m away = out, otherwise "wait".
-- **Android (MacroDroid, free):** geofence 30 m "Area entered" → Get location (lat/lng variables) → HTTP POST your link with JSON `{"lat":"{v=lat}","lng":"{v=lng}"}`; copy the macro for 150 m "Area exited". *Menu names still to check on the Samsung phone.*
+- **Why it still means 30 m:** iPhone zones can't be smaller than ~100 m, so the automation only *wakes* the shortcut. The shortcut sends its position every 15 s (up to 6 min) and emet decides: within 30 m = in, 80 m away = out, otherwise "wait".
+- **Android (MacroDroid, free):** geofence 30 m "Area entered" → Get location (lat/lng variables) → HTTP POST your link with JSON `{"lat":"{v=lat}","lng":"{v=lng}"}`; copy the macro for 80 m "Area exited". *Menu names still to check on the Samsung phone.*
 - **The office point:** **Dock Bilbao, Uribitarte Pasealekua 3, 48001 Bilbao** (43.2646286, -2.9268837), set 10 Nov from Alvaro's Google Maps link (table `office_place`, migration 0055). An admin can fine-tune it by pressing **Move the office location to here** at the door.
 - **Tested 10 Nov on Alvaro's Mac** with the real shortcut against live emet: location sent every 15 s, check-in, 200 m check-out, resume as a new stretch. The first file failed (empty If value, pasted link not applied); the fixed one has no If step and an empty link box.
 - The shortcut file is built and signed on Alvaro's Mac (`shortcuts sign --mode anyone`); the build script is in the 10 Nov session.

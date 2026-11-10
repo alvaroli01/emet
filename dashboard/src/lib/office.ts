@@ -50,7 +50,7 @@ export const hm = (ms: number) => { const m = Math.round(ms / 60e3); return `${M
 export const madridTime = (iso: string) => new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" });
 
 export const IN_M = 30;   // within 30 m of the office = arrived
-export const OUT_M = 150; // 150 m away = left
+export const OUT_M = 80;  // 80 m away = left (Alvaro, 2026-11-10)
 
 /** Metres between two points (haversine). */
 export function distanceM(a: { lat: number; lng: number }, b: { lat: number; lng: number }): number {

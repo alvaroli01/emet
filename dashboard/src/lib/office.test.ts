@@ -48,16 +48,16 @@ test("hours: closed and open visits; formatting in Spanish time", () => {
   assert.equal(madridMidnight("2026-07-10"), "2026-07-09T22:00:00.000Z");
 });
 
-test("shortcut positions: in within 30 m, out from 150 m, keep checking in between", () => {
+test("shortcut positions: in within 30 m, out from 80 m, keep checking in between", () => {
   const office = { lat: 43.263, lng: -2.935 };
   const north = (m: number) => ({ lat: office.lat + m / 111195, lng: office.lng });
   assert.ok(Math.abs(distanceM(office, north(100)) - 100) < 0.5);
-  assert.deepEqual(zoneStep(distanceM(office, north(100)), false), { event: null, reply: "wait" });   // woke up at Apple's 100 m zone
+  assert.deepEqual(zoneStep(distanceM(office, north(100)), false), { event: null, reply: "done" });   // woke up at Apple's 100 m zone: nothing yet (the shortcut keeps sending)
   assert.deepEqual(zoneStep(distanceM(office, north(31)), false), { event: null, reply: "wait" });
   assert.deepEqual(zoneStep(distanceM(office, north(29)), false), { event: "arrive", reply: "done" });
   assert.deepEqual(zoneStep(10, true), { event: null, reply: "done" });     // already in
-  assert.deepEqual(zoneStep(120, true), { event: null, reply: "wait" });    // walking away, not yet 150 m
-  assert.deepEqual(zoneStep(150, true), { event: "leave", reply: "done" });
+  assert.deepEqual(zoneStep(79, true), { event: null, reply: "wait" });     // walking away, not yet 80 m
+  assert.deepEqual(zoneStep(80, true), { event: "leave", reply: "done" });
   assert.deepEqual(zoneStep(400, false), { event: null, reply: "done" });   // already out
 });
 

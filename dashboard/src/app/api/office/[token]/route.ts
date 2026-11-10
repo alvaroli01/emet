@@ -4,7 +4,7 @@ import { applyEvent, madridTime, distanceM, zoneStep, isInNow, type Visit } from
 /**
  * Automatic office check-in from the member's phone (dashboard closed, mobile data is fine): POST /api/office/<token>
  * with JSON {lat, lng}. iPhone: the emet shortcut, every 15 s after Apple's ~100 m zone wakes it. Android: MacroDroid.
- * emet decides from the real position only — in within 30 m, out from 150 m — so nobody can start or stop their time
+ * emet decides from the real position only — in within 30 m, out from 80 m — so nobody can start or stop their time
  * by hand (Alvaro, 2026-11-10: "nobody can cheat"). Answers "done" or "wait" (keep checking). The position is only
  * compared with the office point; it is never stored. POST only, so a link preview can't trigger it.
  */
