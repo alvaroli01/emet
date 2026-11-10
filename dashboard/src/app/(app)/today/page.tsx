@@ -49,10 +49,11 @@ export default async function TodayPage() {
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 6 * DAY).toISOString().slice(0, 10);
   const googleP = loadMyGoogleEvents(supabase, week, weekEnd); // in parallel with the queries below
   const notionP = loadMyNotionDeadlinesFast(supabase, week, weekEnd); // my Notion deadlines database, if I picked one
-  const [weekSales, myPoints, teamActs, members, dueCards, blockers, morale, myDone, weekAgenda, weekTasks] = await Promise.all([
+  const [weekSales, myPoints, teamActs, seen, members, dueCards, blockers, morale, myDone, weekAgenda, weekTasks] = await Promise.all([
     supabase.from("sales").select("date, amount, heard_about, channel").gte("date", lastMonday),
     supabase.from("member_points").select("kind, amount").eq("user_id", me.id),
     supabase.rpc("team_activity", { since: new Date(Date.parse(week + "T00:00:00Z") - DAY).toISOString() }), // a day early; trimmed to this week below
+    supabase.from("presence").select("user_id").gte("last_seen_at", new Date(Date.parse(week + "T00:00:00Z") - 3600e3).toISOString()),
     loadMembers(),
     supabase.from("cards").select("board_id, due_at, completed_at").not("due_at", "is", null),
     supabase.from("blockers").select("id", { count: "exact", head: true }).eq("status", "open"),
@@ -99,7 +100,8 @@ export default async function TodayPage() {
   const perPerson = new Map<string, number>();
   for (const a of acts) perPerson.set(a.user_id, (perPerson.get(a.user_id) ?? 0) + Number(a.n));
   const activity = {
-    active: perPerson.size, total: classmates.length,
+    // Active = did something or opened emet this week
+    active: new Set([...perPerson.keys(), ...(seen.data ?? []).map((x) => x.user_id as string).filter((id) => inClass.has(id))]).size, total: classmates.length,
     days: Array.from({ length: 7 }, (_, i) => acts.filter((a) => dayIdx(a.day) === i).reduce((s, a) => s + Number(a.n), 0)),
     top: [...perPerson].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([id, n]) => ({ id, n, name: inClass.get(id)!.full_name, avatar: inClass.get(id)!.avatar_url })),
   };
