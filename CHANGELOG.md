@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-10 — Alvaro — **Office check-in**: Today → *At the office* shows who is in now and since when (Spanish time), your hours today and this week, and everyone's hours this week. Phones check people in and out by themselves (iPhone Shortcuts or Android MacroDroid, 30 m around the office), even with emet closed and on mobile data; a Check in/out button is the fallback. **Team Leaders → Send a notification**: leaders send a message to everyone, a team or chosen people (bell + phone). Migration 0053, 7 languages.
 - 2026-11-10 — Alvaro — Today mountain: the € summit coin sits higher and a little to the right so it no longer covers the €30,000 label, and its € face now tilts up toward you and reads the right way (gentle sway instead of flipping over).
 - 2026-11-10 — Alvaro — Today cards accessibility pass (Web Interface Guidelines): the activity chart is read out to screen readers, today's bar comes from the server (no wrong day near midnight), bigger tap targets for "Not seen this week" and "See all", hover feedback on the late/blockers tiles.
 - 2026-11-10 — Alvaro — Today page: the Tasks card is now **My points** (Community / Customer Visits / Learning against the June goals, total, link to my page). **Team health** (score + waves) is replaced by **Team this week**: classmates active (did something or opened emet), team late tasks, open blockers, activity per day, the 3 most active and who hasn't been seen this week (coach, bot and Ollin left out).

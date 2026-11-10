@@ -1121,7 +1121,8 @@
       "training_week": "Na semana que vem o treino é liderado por {names}",
       "strike": "Você recebeu um strike: {reason, select, late_tasks {mais de 3 tarefas atrasadas} sleeping {dormir na aula} phone {avisos pelo celular na aula} late_arrival {chegou 10+ min atrasado (€ 3)} missed_validation {perdeu uma validação (3 strikes)} missed_customer_deadline {perdeu um prazo com cliente (3 strikes)} other {strike}} · {total}/3 neste trimestre",
       "punishment": "3 strikes: traga € 75 vendendo água até {due}",
-      "announcement": "{title}"
+      "announcement": "{title}",
+      "leader_message": "{name}: {title}"
     },
     "popupTitle": "Nova tarefa para você",
     "popupDue": "Prazo: {date}",
@@ -1205,7 +1206,38 @@
     "perWeekNeeded": "necessários por semana a partir de agora",
     "mountainLabel": "Montanha 3D: a receita já subiu {pct} do caminho até € 30.000",
     "summit": "Cume {amount}",
-    "camp": "Acampamento {n} · {amount}"
+    "camp": "Acampamento {n} · {amount}",
+    "office": {
+      "title": "No escritório",
+      "checkIn": "Registrar entrada",
+      "checkOut": "Registrar saída",
+      "mine": "Você: {today} hoje · {week} nesta semana",
+      "inNow": "Aqui agora · {n}",
+      "since": "desde {time}",
+      "nobody": "Ninguém registrou entrada.",
+      "weekTitle": "Horas nesta semana",
+      "setupToggle": "Registrar automaticamente com meu celular",
+      "setupHint": "Seu celular registra sua entrada quando você chega a menos de 30 m do escritório e a saída quando você vai embora — mesmo com o emet fechado e usando dados móveis. O emet só recebe “chegou” ou “saiu” e o horário, nunca sua localização.",
+      "create": "Criar meus links de ponto",
+      "copyArrive": "Copiar link de chegada",
+      "copyLeave": "Copiar link de saída",
+      "copied": "Link copiado",
+      "iphoneTitle": "iPhone (app Atalhos, já instalado)",
+      "i1": "Atalhos → Automação → + → Chegar.",
+      "i2": "Local: escolha o escritório, raio de 30 m → Executar Imediatamente → Seguinte.",
+      "i3": "Nova automação em branco → adicione “Obter Conteúdo da URL” → cole o link de chegada → Método: POST.",
+      "i4": "Desative “Notificar ao Executar” se quiser → OK.",
+      "i5": "Faça o mesmo com Sair e o link de saída.",
+      "androidTitle": "Android (app grátis MacroDroid)",
+      "a1": "Instale o MacroDroid → Adicionar macro.",
+      "a2": "Gatilho: Localização → Geofence → o escritório, raio de 30 m, “Área entrada”.",
+      "a3": "Ação: Conectividade → Requisição HTTP → POST → cole o link de chegada.",
+      "a4": "Crie uma segunda macro com “Área saída” e o link de saída. Permita a localização “O tempo todo”.",
+      "private": "Estes links são só seus.",
+      "reset": "Redefinir",
+      "confirmReset": "Criar links novos? Os antigos param de funcionar e você precisará colar os novos no celular.",
+      "error": "Algo deu errado. Tente de novo."
+    }
   },
   "report": {
     "title": "Relatório semanal · semana de {date}",
@@ -3196,7 +3228,8 @@
       "training_lead": "Você lidera o treino",
       "strike": "Strike",
       "punishment": "⚠️ 3 strikes",
-      "announcement": "emet"
+      "announcement": "emet",
+      "leader_message": "📣 Team Leaders"
     }
   },
   "strikes": {
@@ -3371,5 +3404,18 @@
     "doneEditing": "Pronto",
     "tickMine": "Marcar minha parte de {title} como feita",
     "untickMine": "Desmarcar minha parte de {title}"
+  },
+  "leaderMessage": {
+    "tool": "Enviar notificação",
+    "title": "Enviar uma notificação",
+    "hint": "Chega no sino e no celular (se ativaram os alertas no celular).",
+    "to": "Para",
+    "everyone": "Todos ({n})",
+    "pick": "Escolher pessoas…",
+    "message": "Mensagem",
+    "placeholder": "ex. Reunião do time passou para 11:00, sala 2",
+    "send": "{n, plural, =0 {Enviar} one {Enviar para # pessoa} other {Enviar para # pessoas}}",
+    "sent": "{n, plural, one {Enviado para # pessoa} other {Enviado para # pessoas}}",
+    "error": "Não foi possível enviar. Tente de novo."
   }
 }

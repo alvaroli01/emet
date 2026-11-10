@@ -1121,7 +1121,8 @@
       "training_week": "Ensi viikon treenit vetää {names}",
       "strike": "Sait striken: {reason, select, late_tasks {yli 3 myöhästynyttä tehtävää} sleeping {nukkui tunnilla} phone {puhelinvaroitukset tunnilla} late_arrival {myöhästyi 10+ min (3 €)} missed_validation {validointi jäi väliin (3 strikeä)} missed_customer_deadline {asiakkaan määräaika ylittyi (3 strikeä)} other {strike}} · {total}/3 tällä neljänneksellä",
       "punishment": "3 strikeä: tuo 75 € myymällä vettä viimeistään {due}",
-      "announcement": "{title}"
+      "announcement": "{title}",
+      "leader_message": "{name}: {title}"
     },
     "popupTitle": "Uusi tehtävä sinulle",
     "popupDue": "Määräaika {date}",
@@ -1205,7 +1206,38 @@
     "perWeekNeeded": "tarvitaan viikossa tästä eteenpäin",
     "mountainLabel": "3D-vuori: liikevaihto on noussut {pct} matkasta kohti 30 000 €:a",
     "summit": "Huippu {amount}",
-    "camp": "Leiri {n} · {amount}"
+    "camp": "Leiri {n} · {amount}",
+    "office": {
+      "title": "Toimistolla",
+      "checkIn": "Kirjaudu sisään",
+      "checkOut": "Kirjaudu ulos",
+      "mine": "Sinä: {today} tänään · {week} tällä viikolla",
+      "inNow": "Paikalla nyt · {n}",
+      "since": "klo {time} alkaen",
+      "nobody": "Kukaan ei ole kirjautunut.",
+      "weekTitle": "Tunnit tällä viikolla",
+      "setupToggle": "Kirjaudu automaattisesti puhelimella",
+      "setupHint": "Puhelimesi kirjaa sinut sisään, kun tulet 30 m:n päähän toimistosta, ja ulos, kun lähdet – vaikka emet on kiinni ja käytät mobiilidataa. emet saa vain ”saapui” tai ”lähti” ja kellonajan, ei koskaan sijaintiasi.",
+      "create": "Luo kirjautumislinkkini",
+      "copyArrive": "Kopioi saapumislinkki",
+      "copyLeave": "Kopioi lähtölinkki",
+      "copied": "Linkki kopioitu",
+      "iphoneTitle": "iPhone (Pikakomennot-appi, valmiiksi asennettu)",
+      "i1": "Pikakomennot → Automaatio → + → Saavu.",
+      "i2": "Sijainti: valitse toimisto, säde 30 m → Suorita heti → Seuraava.",
+      "i3": "Uusi tyhjä automaatio → lisää ”Hae URL-osoitteen sisältö” → liitä saapumislinkki → Tapa: POST.",
+      "i4": "Poista ”Ilmoita suoritettaessa” halutessasi → Valmis.",
+      "i5": "Tee sama: Poistu ja lähtölinkki.",
+      "androidTitle": "Android (ilmainen MacroDroid-appi)",
+      "a1": "Asenna MacroDroid → Lisää makro.",
+      "a2": "Laukaisin: Sijainti → Geoaita → toimisto, säde 30 m, ”Alueelle saavuttu”.",
+      "a3": "Toiminto: Yhteydet → HTTP-pyyntö → POST → liitä saapumislinkki.",
+      "a4": "Tee toinen makro: ”Alueelta poistuttu” ja lähtölinkki. Salli sijainti ”Aina”.",
+      "private": "Nämä linkit ovat vain sinun.",
+      "reset": "Nollaa ne",
+      "confirmReset": "Luodaanko uudet linkit? Vanhat lakkaavat toimimasta ja uudet pitää liittää puhelimeen.",
+      "error": "Jokin meni pieleen. Yritä uudelleen."
+    }
   },
   "report": {
     "title": "Viikkoraportti · viikko alkaen {date}",
@@ -3196,7 +3228,8 @@
       "training_lead": "Vedät treenit",
       "strike": "Strike",
       "punishment": "⚠️ 3 strikeä",
-      "announcement": "emet"
+      "announcement": "emet",
+      "leader_message": "📣 Team Leaders"
     }
   },
   "strikes": {
@@ -3371,5 +3404,18 @@
     "doneEditing": "Valmis",
     "tickMine": "Merkitse osuuteni tehtävästä {title} valmiiksi",
     "untickMine": "Poista valmis-merkintä tehtävästä {title}"
+  },
+  "leaderMessage": {
+    "tool": "Lähetä ilmoitus",
+    "title": "Lähetä ilmoitus",
+    "hint": "Menee heidän kelloonsa ja puhelimeen (jos puhelinilmoitukset ovat päällä).",
+    "to": "Vastaanottaja",
+    "everyone": "Kaikki ({n})",
+    "pick": "Valitse henkilöt…",
+    "message": "Viesti",
+    "placeholder": "esim. Tiimipalaveri siirtyy klo 11:00, huone 2",
+    "send": "{n, plural, =0 {Lähetä} one {Lähetä # henkilölle} other {Lähetä # henkilölle}}",
+    "sent": "{n, plural, one {Lähetetty # henkilölle} other {Lähetetty # henkilölle}}",
+    "error": "Lähetys epäonnistui. Yritä uudelleen."
   }
 }

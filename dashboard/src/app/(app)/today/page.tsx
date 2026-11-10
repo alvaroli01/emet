@@ -15,6 +15,8 @@ import { cardHref } from "@/lib/projects";
 import { loadMembers } from "@/lib/boards";
 import { getsTasks } from "@/lib/tasks";
 import { pointTotals } from "@/lib/points";
+import { OfficeCard, type OfficeData } from "@/components/office/office-card";
+import { visitMs, isInNow, hm, madridTime, madridMidnight, type Visit } from "@/lib/office";
 
 type Due = { id: string; title: string; day: string; href: string; parent?: string };
 
@@ -49,7 +51,7 @@ export default async function TodayPage() {
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 6 * DAY).toISOString().slice(0, 10);
   const googleP = loadMyGoogleEvents(supabase, week, weekEnd); // in parallel with the queries below
   const notionP = loadMyNotionDeadlinesFast(supabase, week, weekEnd); // my Notion deadlines database, if I picked one
-  const [weekSales, myPoints, teamActs, seen, members, dueCards, blockers, myDone, weekAgenda, weekTasks] = await Promise.all([
+  const [weekSales, myPoints, teamActs, seen, members, dueCards, blockers, myDone, weekAgenda, weekTasks, visits] = await Promise.all([
     supabase.from("sales").select("date, amount, heard_about, channel").gte("date", lastMonday),
     supabase.from("member_points").select("kind, amount").eq("user_id", me.id),
     supabase.rpc("team_activity", { since: new Date(Date.parse(week + "T00:00:00Z") - DAY).toISOString() }), // a day early; trimmed to this week below
@@ -62,6 +64,8 @@ export default async function TodayPage() {
     supabase.from("agenda_items").select("id, title, day, start_time, end_time, done").eq("owner_id", me.id).gte("day", week).lte("day", weekEnd).order("start_time"),
     supabase.from("cards").select("id, title, due_at, completed_at, boards(group_id, project_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).gte("due_at", `${week}T00:00:00Z`).lte("due_at", `${weekEnd}T23:59:59Z`),
+    // Office check-ins this week (+ anyone still in from before Monday)
+    supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").or(`arrived_at.gte.${madridMidnight(week)},left_at.is.null`).returns<Visit[]>(),
   ]);
 
   const google = await googleP;
@@ -143,11 +147,24 @@ export default async function TodayPage() {
     },
   };
   const reportIsFresh = report.data && report.data.week_start === week;
+  // ── At the office ──
+  const now = Date.now();
+  const vs = visits.data ?? [];
+  const who = new Map(members.map((m) => [m.id, m]));
+  const msOf = (uid: string, from: string) => vs.filter((v) => v.user_id === uid && Date.parse(v.arrived_at) >= Date.parse(from)).reduce((a, v) => a + visitMs(v, now), 0);
+  const dayFrom = madridMidnight(today), weekFrom = madridMidnight(week);
+  const office: OfficeData = {
+    inNow: vs.filter((v) => isInNow(v, now) && who.has(v.user_id)).sort((a, b) => a.arrived_at.localeCompare(b.arrived_at))
+      .map((v) => ({ id: v.user_id, name: who.get(v.user_id)!.full_name, avatar: who.get(v.user_id)!.avatar_url, since: madridTime(v.arrived_at) })),
+    me: { in: vs.some((v) => v.user_id === me.id && isInNow(v, now)), today: hm(msOf(me.id, dayFrom)), week: hm(msOf(me.id, weekFrom)) },
+    week: [...new Set(vs.map((v) => v.user_id))].filter((id) => who.has(id)).map((id) => ({ id, name: who.get(id)!.full_name, avatar: who.get(id)!.avatar_url, ms: msOf(id, weekFrom) }))
+      .filter((p) => p.ms > 0).sort((a, b) => b.ms - a.ms).map((p) => ({ ...p, hours: hm(p.ms) })),
+  };
 
 
   return (
     <div className="space-y-5">
-      <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads", "member_points"]} />
+      <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads", "member_points", "office_visits"]} />
       <HomeDashboard d={home} />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
@@ -179,6 +196,7 @@ export default async function TodayPage() {
         </section>
 
         <div className="space-y-4">
+          <OfficeCard d={office} />
           <section className="panel p-5">
             <div className="mb-3 flex items-baseline justify-between gap-2">
               <h2 className="text-lg font-semibold tracking-tight">{t("priorities")}</h2>

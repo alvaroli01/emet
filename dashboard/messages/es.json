@@ -1121,7 +1121,8 @@
       "training_week": "La semana que viene el entrenamiento lo lidera {names}",
       "strike": "Te han puesto un strike: {reason, select, late_tasks {más de 3 tareas atrasadas} sleeping {dormir en clase} phone {avisos por el móvil en clase} late_arrival {llegar 10+ min tarde (3 €)} missed_validation {faltar a una validación (3 strikes)} missed_customer_deadline {incumplir un plazo con un cliente (3 strikes)} other {strike}} · {total}/3 este trimestre",
       "punishment": "3 strikes: trae 75 € vendiendo agua antes del {due}",
-      "announcement": "{title}"
+      "announcement": "{title}",
+      "leader_message": "{name}: {title}"
     },
     "popupTitle": "Nueva tarea para ti",
     "popupDue": "Para el {date}",
@@ -1205,7 +1206,38 @@
     "perWeekNeeded": "necesarios por semana desde ahora",
     "mountainLabel": "Montaña 3D: los ingresos han subido {pct} del camino hasta 30.000 €",
     "summit": "Cumbre {amount}",
-    "camp": "Campo {n} · {amount}"
+    "camp": "Campo {n} · {amount}",
+    "office": {
+      "title": "En la oficina",
+      "checkIn": "Fichar entrada",
+      "checkOut": "Fichar salida",
+      "mine": "Tú: {today} hoy · {week} esta semana",
+      "inNow": "Dentro ahora · {n}",
+      "since": "desde las {time}",
+      "nobody": "No hay nadie fichado.",
+      "weekTitle": "Horas esta semana",
+      "setupToggle": "Fichar automáticamente con mi móvil",
+      "setupHint": "Tu móvil te ficha al llegar a menos de 30 m de la oficina y te saca al irte, aunque emet esté cerrado y uses datos. emet solo recibe “llegó” o “se fue” y la hora, nunca tu ubicación.",
+      "create": "Crear mis enlaces de fichaje",
+      "copyArrive": "Copiar enlace de llegada",
+      "copyLeave": "Copiar enlace de salida",
+      "copied": "Enlace copiado",
+      "iphoneTitle": "iPhone (app Atajos, ya instalada)",
+      "i1": "Atajos → Automatización → + → Llegar.",
+      "i2": "Ubicación: elige la oficina y pon el radio en 30 m → Ejecutar inmediatamente → Siguiente.",
+      "i3": "Nueva automatización en blanco → añade “Obtener contenido de URL” → pega el enlace de llegada → Método: POST.",
+      "i4": "Desactiva “Notificar al ejecutar” si quieres → OK.",
+      "i5": "Haz lo mismo con Salir y el enlace de salida.",
+      "androidTitle": "Android (app gratis MacroDroid)",
+      "a1": "Instala MacroDroid → Añadir macro.",
+      "a2": "Disparador: Ubicación → Geovalla → la oficina, radio 30 m, “Área entrada”.",
+      "a3": "Acción: Conectividad → Solicitud HTTP → POST → pega el enlace de llegada.",
+      "a4": "Crea una segunda macro con “Área salida” y el enlace de salida. Permite la ubicación “Todo el tiempo”.",
+      "private": "Estos enlaces son solo tuyos.",
+      "reset": "Restablecerlos",
+      "confirmReset": "¿Crear enlaces nuevos? Los antiguos dejarán de funcionar y tendrás que pegar los nuevos en tu móvil.",
+      "error": "Algo ha fallado. Inténtalo de nuevo."
+    }
   },
   "report": {
     "title": "Informe semanal · semana del {date}",
@@ -3196,7 +3228,8 @@
       "training_lead": "Lideras el entrenamiento",
       "strike": "Strike",
       "punishment": "⚠️ 3 strikes",
-      "announcement": "emet"
+      "announcement": "emet",
+      "leader_message": "📣 Team Leaders"
     }
   },
   "strikes": {
@@ -3371,5 +3404,18 @@
     "doneEditing": "Listo",
     "tickMine": "Marcar mi parte de {title} como hecha",
     "untickMine": "Desmarcar mi parte de {title}"
+  },
+  "leaderMessage": {
+    "tool": "Enviar notificación",
+    "title": "Enviar una notificación",
+    "hint": "Les llega a la campana y al móvil (si activaron los avisos en el móvil).",
+    "to": "Para",
+    "everyone": "Todos ({n})",
+    "pick": "Elegir personas…",
+    "message": "Mensaje",
+    "placeholder": "p. ej. La reunión pasa a las 11:00, sala 2",
+    "send": "{n, plural, =0 {Enviar} one {Enviar a # persona} other {Enviar a # personas}}",
+    "sent": "{n, plural, one {Enviado a # persona} other {Enviado a # personas}}",
+    "error": "No se pudo enviar. Inténtalo de nuevo."
   }
 }

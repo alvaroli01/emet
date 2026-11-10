@@ -1121,7 +1121,8 @@
       "training_week": "La semaine prochaine, l’entraînement est animé par {names}",
       "strike": "Tu as reçu un strike : {reason, select, late_tasks {plus de 3 tâches en retard} sleeping {dormir en cours} phone {téléphone en cours} late_arrival {10+ min de retard (3 €)} missed_validation {validation manquée (3 strikes)} missed_customer_deadline {échéance client manquée (3 strikes)} other {strike}} · {total}/3 ce trimestre",
       "punishment": "3 strikes : rapporte 75 € en vendant de l’eau avant le {due}",
-      "announcement": "{title}"
+      "announcement": "{title}",
+      "leader_message": "{name}: {title}"
     },
     "popupTitle": "Nouvelle tâche pour toi",
     "popupDue": "Pour le {date}",
@@ -1205,7 +1206,38 @@
     "perWeekNeeded": "nécessaires par semaine à partir de maintenant",
     "mountainLabel": "Montagne 3D : le chiffre d’affaires a gravi {pct} du chemin vers 30 000 €",
     "summit": "Sommet {amount}",
-    "camp": "Camp {n} · {amount}"
+    "camp": "Camp {n} · {amount}",
+    "office": {
+      "title": "Au bureau",
+      "checkIn": "Pointer l’arrivée",
+      "checkOut": "Pointer le départ",
+      "mine": "Toi : {today} aujourd’hui · {week} cette semaine",
+      "inNow": "Présents · {n}",
+      "since": "depuis {time}",
+      "nobody": "Personne n’a pointé.",
+      "weekTitle": "Heures cette semaine",
+      "setupToggle": "Pointer automatiquement avec mon téléphone",
+      "setupHint": "Ton téléphone te pointe quand tu arrives à moins de 30 m du bureau et te dépointe quand tu pars — même emet fermé et en données mobiles. emet ne reçoit que « arrivé » ou « parti » et l’heure, jamais ta position.",
+      "create": "Créer mes liens de pointage",
+      "copyArrive": "Copier le lien d’arrivée",
+      "copyLeave": "Copier le lien de départ",
+      "copied": "Lien copié",
+      "iphoneTitle": "iPhone (app Raccourcis, déjà installée)",
+      "i1": "Raccourcis → Automatisation → + → Arrivée.",
+      "i2": "Lieu : choisis le bureau, rayon 30 m → Exécuter immédiatement → Suivant.",
+      "i3": "Nouvelle automatisation vide → ajoute « Obtenir le contenu de l’URL » → colle le lien d’arrivée → Méthode : POST.",
+      "i4": "Désactive « Avertir lors de l’exécution » si tu veux → OK.",
+      "i5": "Pareil avec Départ et le lien de départ.",
+      "androidTitle": "Android (app gratuite MacroDroid)",
+      "a1": "Installe MacroDroid → Ajouter une macro.",
+      "a2": "Déclencheur : Localisation → Géorepérage → le bureau, rayon 30 m, « Zone entrée ».",
+      "a3": "Action : Connectivité → Requête HTTP → POST → colle le lien d’arrivée.",
+      "a4": "Crée une deuxième macro avec « Zone quittée » et le lien de départ. Autorise la localisation « Tout le temps ».",
+      "private": "Ces liens sont privés.",
+      "reset": "Les réinitialiser",
+      "confirmReset": "Créer de nouveaux liens ? Les anciens ne marcheront plus et tu devras coller les nouveaux dans ton téléphone.",
+      "error": "Un problème est survenu. Réessaie."
+    }
   },
   "report": {
     "title": "Rapport hebdomadaire · semaine du {date}",
@@ -3196,7 +3228,8 @@
       "training_lead": "Tu animes l’entraînement",
       "strike": "Strike",
       "punishment": "⚠️ 3 strikes",
-      "announcement": "emet"
+      "announcement": "emet",
+      "leader_message": "📣 Team Leaders"
     }
   },
   "strikes": {
@@ -3371,5 +3404,18 @@
     "doneEditing": "OK",
     "tickMine": "Marquer ma part de {title} comme faite",
     "untickMine": "Décocher ma part de {title}"
+  },
+  "leaderMessage": {
+    "tool": "Envoyer une notification",
+    "title": "Envoyer une notification",
+    "hint": "Elle arrive dans leur cloche et sur leur téléphone (s’ils ont activé les alertes).",
+    "to": "À",
+    "everyone": "Tout le monde ({n})",
+    "pick": "Choisir des personnes…",
+    "message": "Message",
+    "placeholder": "ex. Réunion d’équipe déplacée à 11h00, salle 2",
+    "send": "{n, plural, =0 {Envoyer} one {Envoyer à # personne} other {Envoyer à # personnes}}",
+    "sent": "{n, plural, one {Envoyé à # personne} other {Envoyé à # personnes}}",
+    "error": "Envoi impossible. Réessaie."
   }
 }

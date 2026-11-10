@@ -15,6 +15,7 @@ updated: 2026-11-10
 
 ## 2. You do your work
 - [[Tasks page]]: one page for every task (All / My Tasks / EMET / Projects)
+- [[Office check-in]]: phones check people in/out at the office, hours counted; leaders send team notifications
 - [[Task boards]] · [[Team tasks]]: older boards that fold into the Tasks page
 - [[My Projects]]: each project with its people, tasks, money, links, files and customers
 - [[Documents]]: company documents + your private folder
@@ -40,6 +41,7 @@ updated: 2026-11-10
 |---|---|
 | [[Today]] · [[Overview (company dashboard)]] · [[Base camp]] · [[Meeting log]] | ✅ Live |
 | [[Tasks page]] | 🟡 Local preview (9 Nov), not live yet |
+| [[Office check-in]] | ✅ Live (10 Nov), each member sets up their phone once |
 | [[Task boards]] · [[Team tasks]] · [[My Projects]] · [[Documents]] | ✅ Live |
 | [[Finance tab]] · [[Marketing section]] | ✅ Live (the Google Sheet link is still waiting) |
 | [[Idea lab]] · [[Idea lab council]] · [[Scout (lead finder)]] | ✅ Live |

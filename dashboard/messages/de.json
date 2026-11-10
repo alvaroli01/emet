@@ -1121,7 +1121,8 @@
       "training_week": "Nächste Woche leitet {names} das Training",
       "strike": "Du hast einen Strike bekommen: {reason, select, late_tasks {mehr als 3 überfällige Aufgaben} sleeping {im Unterricht geschlafen} phone {Handy-Warnungen im Unterricht} late_arrival {10+ Min. zu spät (3 €)} missed_validation {Validierung verpasst (3 Strikes)} missed_customer_deadline {Kundenfrist verpasst (3 Strikes)} other {Strike}} · {total}/3 in diesem Quartal",
       "punishment": "3 Strikes: bring bis {due} 75 € durch Wasserverkauf",
-      "announcement": "{title}"
+      "announcement": "{title}",
+      "leader_message": "{name}: {title}"
     },
     "popupTitle": "Neue Aufgabe für dich",
     "popupDue": "Fällig {date}",
@@ -1205,7 +1206,38 @@
     "perWeekNeeded": "pro Woche ab jetzt nötig",
     "mountainLabel": "3D-Berg: Der Umsatz hat {pct} des Wegs zu 30.000 € geschafft",
     "summit": "Gipfel {amount}",
-    "camp": "Lager {n} · {amount}"
+    "camp": "Lager {n} · {amount}",
+    "office": {
+      "title": "Im Büro",
+      "checkIn": "Einchecken",
+      "checkOut": "Auschecken",
+      "mine": "Du: {today} heute · {week} diese Woche",
+      "inNow": "Gerade da · {n}",
+      "since": "seit {time}",
+      "nobody": "Niemand ist eingecheckt.",
+      "weekTitle": "Stunden diese Woche",
+      "setupToggle": "Automatisch mit meinem Handy einchecken",
+      "setupHint": "Dein Handy checkt dich ein, wenn du näher als 30 m ans Büro kommst, und aus, wenn du gehst – auch wenn emet geschlossen ist und du mobile Daten nutzt. emet bekommt nur „angekommen“ oder „gegangen“ und die Uhrzeit, nie deinen Standort.",
+      "create": "Meine Check-in-Links erstellen",
+      "copyArrive": "Ankunfts-Link kopieren",
+      "copyLeave": "Abgangs-Link kopieren",
+      "copied": "Link kopiert",
+      "iphoneTitle": "iPhone (Kurzbefehle-App, schon installiert)",
+      "i1": "Kurzbefehle → Automation → + → Ankommen.",
+      "i2": "Ort: das Büro wählen, Radius auf 30 m → Sofort ausführen → Weiter.",
+      "i3": "Neue leere Automation → „Inhalte von URL abrufen“ hinzufügen → Ankunfts-Link einfügen → Methode: POST.",
+      "i4": "„Bei Ausführung mitteilen“ ausschalten, wenn du willst → Fertig.",
+      "i5": "Dasselbe mit Verlassen und dem Abgangs-Link.",
+      "androidTitle": "Android (kostenlose App MacroDroid)",
+      "a1": "MacroDroid installieren → Makro hinzufügen.",
+      "a2": "Auslöser: Standort → Geofence → das Büro, Radius 30 m, „Bereich betreten“.",
+      "a3": "Aktion: Konnektivität → HTTP-Anfrage → POST → Ankunfts-Link einfügen.",
+      "a4": "Ein zweites Makro mit „Bereich verlassen“ und dem Abgangs-Link. Standort „Immer erlauben“.",
+      "private": "Diese Links gehören nur dir.",
+      "reset": "Zurücksetzen",
+      "confirmReset": "Neue Links erstellen? Die alten funktionieren nicht mehr und du musst die neuen im Handy einfügen.",
+      "error": "Etwas ist schiefgelaufen. Versuch es nochmal."
+    }
   },
   "report": {
     "title": "Wochenbericht · Woche vom {date}",
@@ -3196,7 +3228,8 @@
       "training_lead": "Du leitest das Training",
       "strike": "Strike",
       "punishment": "⚠️ 3 Strikes",
-      "announcement": "emet"
+      "announcement": "emet",
+      "leader_message": "📣 Team Leaders"
     }
   },
   "strikes": {
@@ -3371,5 +3404,18 @@
     "doneEditing": "Fertig",
     "tickMine": "Meinen Teil von {title} als erledigt markieren",
     "untickMine": "Meinen Teil von {title} wieder öffnen"
+  },
+  "leaderMessage": {
+    "tool": "Benachrichtigung senden",
+    "title": "Eine Benachrichtigung senden",
+    "hint": "Sie landet in ihrer Glocke und auf dem Handy (wenn Handy-Hinweise an sind).",
+    "to": "An",
+    "everyone": "Alle ({n})",
+    "pick": "Personen wählen…",
+    "message": "Nachricht",
+    "placeholder": "z. B. Teammeeting jetzt um 11:00, Raum 2",
+    "send": "{n, plural, =0 {Senden} one {An # Person senden} other {An # Personen senden}}",
+    "sent": "{n, plural, one {An # Person gesendet} other {An # Personen gesendet}}",
+    "error": "Senden fehlgeschlagen. Versuch es nochmal."
   }
 }

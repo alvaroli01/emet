@@ -15,8 +15,9 @@ import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { AssistantBubble } from "@/components/shell/assistant-bubble";
-import { LayoutDashboard, FolderOpen, FolderKanban, Gavel } from "lucide-react";
+import { LayoutDashboard, FolderOpen, FolderKanban, Gavel, Megaphone } from "lucide-react";
 import { StrikesTool } from "@/components/tools/strikes";
+import { LeaderMessage } from "@/components/tools/leader-message";
 import { loadStrikes } from "@/lib/strikes-server";
 import { loadMyProjects } from "@/lib/projects-server";
 import { MyProjects } from "@/components/projects/my-projects";
@@ -89,6 +90,12 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     id: "strikes", group: "people" as const, label: (await getTranslations("strikes"))("tool"), icon: <Gavel size={16} />,
     node: <StrikesTool people={board.members} data={await loadStrikes()} today={todayISO()} />,
   }] : [];
+  // Leaders: send a notification to everyone, one team or chosen people (bell + phone)
+  const messageTool = slug === "team-leader" && session.isLeader ? [{
+    id: "message", group: "people" as const, label: (await getTranslations("leaderMessage"))("tool"), icon: <Megaphone size={16} />,
+    node: <LeaderMessage meId={session.me.id} people={board.members.filter((m) => m.role_title !== "AI assistant")}
+                         teams={session.groups.map((g) => ({ id: g.id, emoji: g.emoji, name: t(`names.${g.slug}`) }))} />,
+  }] : [];
   // Team leader only: company documents everyone can open on their own profile
   const td = await getTranslations("documents");
   const docsTool = slug === "team-leader" && session.isAdmin ? [{
@@ -102,6 +109,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     node: <MyProjects projects={await loadMyProjects(await createClient(), session.me.id, true)} canCreate people={board.members} today={todayISO()} title={tp("allTitle")} />,
   }] : [];
   const allTools = [
+    ...messageTool,
     ...strikesTool,
     ...projectsTool,
     ...docsTool,
