@@ -26,7 +26,7 @@ export function HeaderRecord() {
       </button>
       {/* Portalled to <body>: the top bar's blur would otherwise trap a fixed window inside it */}
       {ai && createPortal(
-        <Recorder connected={ai.connected} last4={ai.last4} onClose={() => setAi(null)}
+        <Recorder connected={ai.connected} last4={ai.last4} onClose={() => setAi(null)} notesHref="/camp?tab=docs#camp-tabs"
                   onCreated={(doc) => { setAi(null); router.push(`/camp?tab=docs&doc=${doc.id}`); router.refresh(); }} />,
         document.body,
       )}

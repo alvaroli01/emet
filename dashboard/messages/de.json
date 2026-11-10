@@ -779,6 +779,7 @@
     },
     "recorder": {
       "title": "Notizen aufnehmen",
+      "myNotes": "Zu meinen aufgenommenen Notizen",
       "subtitle": "Nimm eine Vorlesung oder ein Meeting auf. Du bekommst ein Dokument mit den wichtigsten Punkten und dem vollständigen Transkript.",
       "close": "Schließen",
       "connected": "Dein Groq-Konto ist verbunden",

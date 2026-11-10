@@ -779,6 +779,7 @@
     },
     "recorder": {
       "title": "Record notes",
+      "myNotes": "Take me to my recorded notes",
       "subtitle": "Record a class or meeting. You get a doc with the key points and the full transcript.",
       "close": "Close",
       "connected": "Your Groq account is connected",

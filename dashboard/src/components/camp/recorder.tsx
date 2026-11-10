@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Mic, Square, Loader2, X, KeyRound, ExternalLink, Check, AlertTriangle, Unplug, FileAudio } from "lucide-react";
+import Link from "next/link";
+import { Mic, Square, Loader2, X, KeyRound, ExternalLink, Check, AlertTriangle, Unplug, FileAudio, FolderOpen } from "lucide-react";
 import { BodyPortal } from "@/components/body-portal";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
@@ -45,8 +46,10 @@ export type Destination = {
   save: (a: { id: string; name: string; kind?: string; notes: string; transcript: string; minutes: number; audioParts: number }) => Promise<boolean>;
 };
 
-export function Recorder({ connected: initiallyConnected, last4: initialLast4, onClose, onCreated, destination }: {
+export function Recorder({ connected: initiallyConnected, last4: initialLast4, onClose, onCreated, destination, notesHref }: {
   connected: boolean; last4: string | null; onClose: () => void; onCreated: (doc: Doc) => void; destination?: Destination;
+  /** Shows a link to where my recorded notes are kept (the top-bar mic) */
+  notesHref?: string;
 }) {
   const t = useTranslations("camp.recorder");
   const locale = useLocale();
@@ -451,6 +454,11 @@ export function Recorder({ connected: initiallyConnected, last4: initialLast4, o
           <div>
             <h2 className="text-xl font-semibold tracking-tight">{destination?.title ?? t("title")}</h2>
             <p className="text-sm text-muted">{destination ? t("subtitleMeeting") : t("subtitle")}</p>
+            {notesHref && phase === "setup" && (
+              <Link href={notesHref} onClick={onClose} className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
+                <FolderOpen size={15} /> {t("myNotes")}
+              </Link>
+            )}
           </div>
           <button onClick={onClose} aria-label={t("close")} className="rounded-lg p-1.5 text-muted hover:bg-surface-2"><X size={18} /></button>
         </div>

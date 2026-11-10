@@ -779,6 +779,7 @@
     },
     "recorder": {
       "title": "Gravar anotações",
+      "myNotes": "Ir para minhas anotações gravadas",
       "subtitle": "Grave uma aula ou reunião. Você recebe um doc com os pontos principais e a transcrição completa.",
       "close": "Fechar",
       "connected": "Sua conta Groq está conectada",

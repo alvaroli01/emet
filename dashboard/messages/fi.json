@@ -779,6 +779,7 @@
     },
     "recorder": {
       "title": "Nauhoita muistiinpanot",
+      "myNotes": "Siirry nauhoitettuihin muistiinpanoihini",
       "subtitle": "Nauhoita luento tai palaveri. Saat dokumentin, jossa on tärkeimmät kohdat ja koko litteraatti.",
       "close": "Sulje",
       "connected": "Groq-tilisi on yhdistetty",

@@ -779,6 +779,7 @@
     },
     "recorder": {
       "title": "Enregistrer des notes",
+      "myNotes": "Voir mes notes enregistrées",
       "subtitle": "Enregistrez un cours ou une réunion. Vous obtenez un doc avec les points clés et la transcription complète.",
       "close": "Fermer",
       "connected": "Votre compte Groq est connecté",
