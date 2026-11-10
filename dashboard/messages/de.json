@@ -2792,7 +2792,14 @@
     "prevMonth": "Voriger Monat",
     "nextMonth": "Nächster Monat",
     "upcoming": "Demnächst",
-    "noUpcoming": "Bald ist nichts fällig"
+    "noUpcoming": "Bald ist nichts fällig",
+    "office": {
+      "title": "Im Büro",
+      "inSince": "Da seit {time}",
+      "pausedSince": "Pausiert seit {time}",
+      "out": "Nicht im Büro",
+      "hours": "{today} heute · {week} diese Woche"
+    }
   },
   "overviewDash": {
     "eyebrow": "Firmenübersicht · {date}",
@@ -3280,7 +3287,8 @@
       "missed_validation": "Validierung verpasst",
       "missed_customer_deadline": "Kundenfrist verpasst",
       "late_fine": "9:11–9:29 angekommen (3 €, kein Strike)"
-    }
+    },
+    "auto": "automatisch"
   },
   "allProjects": {
     "title": "Alle Projekte",
@@ -3426,5 +3434,39 @@
     "send": "{n, plural, =0 {Senden} one {An # Person senden} other {An # Personen senden}}",
     "sent": "{n, plural, one {An # Person gesendet} other {An # Personen gesendet}}",
     "error": "Senden fehlgeschlagen. Versuch es nochmal."
+  },
+  "officePill": {
+    "in": "Im Büro",
+    "paused": "Pausiert",
+    "out": "Nicht im Büro",
+    "inSince": "Im Büro seit {time}",
+    "pausedSince": "Pausiert seit {time} – zurück vor 21:00, dann läuft es weiter",
+    "outLong": "Du bist nicht im Büro",
+    "today": "Heute",
+    "week": "Diese Woche",
+    "rulesTitle": "So funktioniert's",
+    "r1": "Dein Handy checkt dich näher als 30 m am Büro (Dock Bilbao) ein und 80 m entfernt aus. Nur Montag bis Freitag.",
+    "r2": "Gehen pausiert deinen Tag; zurück vor 21:00 läuft die Zeit weiter. Zeit draußen zählt nie.",
+    "r3": "Kein Check-out bis Mitternacht (Handy aus, Automation gelöscht) = dieser Abschnitt zählt 0 h. Niemand kann die Zeit von Hand starten oder stoppen.",
+    "r4": "Dienstag und Donnerstag, erste Ankunft: nach 9:10:59 = 3 € Strafe; nach 9:29:59 = 3 € + 1 Strike. 3 Strikes im Quartal = die 75-€-Strafe.",
+    "r5": "An dem Tag woanders gearbeitet? Sag es einem Leader: er kann die Strafe oder den Strike löschen.",
+    "setup": "Handy einrichten oder prüfen →"
+  },
+  "officeReview": {
+    "tool": "Büro",
+    "title": "Im Büro",
+    "hint": "Wer da ist, die Stunden aller und bei wem das Handy-Einchecken nicht funktioniert. Montag bis Freitag.",
+    "inSince": "Da seit {time}",
+    "pausedSince": "Pausiert seit {time}",
+    "out": "Weg",
+    "hours": "{today} heute · {week} Woche",
+    "noLink": "Nicht eingerichtet",
+    "neverSignal": "Eingerichtet, noch kein Signal",
+    "lastSignal": "Letztes Signal {when}",
+    "missingTitle": "{n, plural, one {# Person hat ihr Handy nicht verbunden} other {# Personen haben ihr Handy nicht verbunden}}",
+    "missingHint": "Ihr Handy hat noch nie eine Position gesendet, also können sie nicht eingecheckt werden. Bitte sie, die Einrichtung unter Heute → Im Büro zu machen.",
+    "strikesTitle": "Verspätungsstrafen und Strikes",
+    "strikesHint": "Verspätungen am Dienstag und Donnerstag kommen automatisch dazu („Automatic: checked in at …“). Hat jemand an dem Tag woanders gearbeitet, lösche es im Tab Strikes.",
+    "openStrikes": "Strikes öffnen →"
   }
 }

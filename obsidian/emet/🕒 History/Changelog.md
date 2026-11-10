@@ -7,6 +7,7 @@ updated: 2026-11-10
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-10 — Alvaro — Office: **In the office / Out of office** pill next to the bell (tap: my time today and this week + how it works, the fines and strikes). **Team Leaders → Office**: everyone's status and hours, and whose phone isn't set up or hasn't sent a signal (migration 0056, `last_ping_at`). Every **profile** shows that person's office time today and this week. Check-in runs **Monday–Friday only**. Automatic strikes show "automatic" in Team Leaders → Strikes, where leaders delete them for people who worked elsewhere.
 - 2026-11-10 — Alvaro — Office check-in: **Add the emet shortcut** now opens a one-tap iCloud link (opens straight in Shortcuts → Add Shortcut → Paste). The downloadable .shortcut file is gone.
 - 2026-11-10 — Alvaro — Office check-in: check-out now at **80 m** from the office (was 150 m); check-in stays at 30 m. Office point set to Dock Bilbao (Uribitarte Pasealekua 3).
 - 2026-11-10 — Alvaro — Office check-in made easy and cheat-proof: a ready-made **emet check-in** iPhone shortcut (tap → Add Shortcut → Paste → two quick automations); the phone sends its position and emet decides (in within 30 m, out at 150 m, works although iPhone zones start at ~100 m). Admins set the office point once (**Set office location here**, migration 0055). The Check in/out button and the arrive/leave links are gone: only a real position counts; never checked out by midnight = 0 h for that stretch. Android (MacroDroid) sends its position too.

@@ -2792,7 +2792,14 @@
     "prevMonth": "Mes anterior",
     "nextMonth": "Mes siguiente",
     "upcoming": "Próximamente",
-    "noUpcoming": "Nada vence pronto"
+    "noUpcoming": "Nada vence pronto",
+    "office": {
+      "title": "En la oficina",
+      "inSince": "Dentro desde las {time}",
+      "pausedSince": "En pausa desde las {time}",
+      "out": "No está en la oficina",
+      "hours": "{today} hoy · {week} esta semana"
+    }
   },
   "overviewDash": {
     "eyebrow": "Resumen de la empresa · {date}",
@@ -3280,7 +3287,8 @@
       "missed_validation": "Faltar a una validación",
       "missed_customer_deadline": "Incumplir un plazo con un cliente",
       "late_fine": "Llegar 9:11–9:29 (3 €, sin strike)"
-    }
+    },
+    "auto": "automático"
   },
   "allProjects": {
     "title": "Todos los proyectos",
@@ -3426,5 +3434,39 @@
     "send": "{n, plural, =0 {Enviar} one {Enviar a # persona} other {Enviar a # personas}}",
     "sent": "{n, plural, one {Enviado a # persona} other {Enviado a # personas}}",
     "error": "No se pudo enviar. Inténtalo de nuevo."
+  },
+  "officePill": {
+    "in": "En la oficina",
+    "paused": "En pausa",
+    "out": "Fuera de la oficina",
+    "inSince": "En la oficina desde las {time}",
+    "pausedSince": "En pausa desde las {time}: si vuelves antes de las 21:00, sigue contando",
+    "outLong": "Estás fuera de la oficina",
+    "today": "Hoy",
+    "week": "Esta semana",
+    "rulesTitle": "Cómo funciona",
+    "r1": "Tu móvil te ficha a menos de 30 m de la oficina (Dock Bilbao) y te saca a 80 m. Solo de lunes a viernes.",
+    "r2": "Al irte, tu día se pausa; si vuelves antes de las 21:00, sigue contando. El tiempo fuera nunca cuenta.",
+    "r3": "Sin salida antes de medianoche (móvil apagado, automatización borrada) = ese tramo cuenta 0 h. Nadie puede iniciar ni parar el tiempo a mano.",
+    "r4": "Martes y jueves, primera llegada: después de las 9:10:59 = multa de 3 €; después de las 9:29:59 = 3 € + 1 strike. 3 strikes en un trimestre = el castigo de 75 €.",
+    "r5": "¿Trabajas en otro sitio ese día? Díselo a un líder: puede borrar la multa o el strike.",
+    "setup": "Configurar o revisar mi móvil →"
+  },
+  "officeReview": {
+    "tool": "Oficina",
+    "title": "En la oficina",
+    "hint": "Quién está dentro, las horas de todos y a quién no le funciona el fichaje del móvil. De lunes a viernes.",
+    "inSince": "Dentro desde las {time}",
+    "pausedSince": "En pausa desde las {time}",
+    "out": "Fuera",
+    "hours": "{today} hoy · {week} semana",
+    "noLink": "Sin configurar",
+    "neverSignal": "Configurado, aún sin señal",
+    "lastSignal": "Última señal {when}",
+    "missingTitle": "{n, plural, one {# persona no ha conectado su móvil} other {# personas no han conectado su móvil}}",
+    "missingHint": "Su móvil nunca ha enviado una posición, así que no se les puede fichar. Pídeles que hagan la configuración en Hoy → En la oficina.",
+    "strikesTitle": "Multas y strikes por llegar tarde",
+    "strikesHint": "Las llegadas tarde de martes y jueves se añaden solas (“Automatic: checked in at …”). Si alguien trabajaba en otro sitio ese día, bórralo en la pestaña Strikes.",
+    "openStrikes": "Abrir Strikes →"
   }
 }

@@ -25,6 +25,14 @@ Today → At the office → *Check in automatically with my phone* → **Create 
 - Visits are written only by the server. Members can read everyone's visits but can't edit hours.
 - The link only accepts POST, so a WhatsApp link preview can't check anyone in.
 
+## Where to see it (10 Nov)
+- **Top bar:** a pill next to the bell, green *In the office* / grey *Out of office* (amber dot = paused). Tap it for my time today and this week and the rules.
+- **Profiles:** everyone can see anyone's office time today and this week.
+- **Team Leaders → Office:** everyone's status and hours, and whose phone isn't set up or has no signal (`last_ping_at`, migration 0056).
+- **Monday–Friday only:** weekend positions are ignored.
+- **Deleting fines/strikes:** Team Leaders → Strikes. Automatic ones say *automatic*; delete them for anyone who worked elsewhere that day.
+- **iOS 27:** the Arrive/Leave triggers live inside the shortcut (open emet check-in → Edit → Automation). There is no separate Automation tab anymore. Turn on ⓘ → Privacy → Allow Running When Locked.
+
 ## Late fines (Tuesdays & Thursdays, migration 0054)
 - From the **first** check-in of the day (before 14:00), Spanish time: up to 9:10:59 on time · **9:11:00–9:29:59 = €3** (kind `late_fine`, 0 strikes) · **9:30:00+ = €3 + 1 strike** (`late_arrival`).
 - Added automatically by the DB trigger `office_late`; the person gets a bell + phone alert. Coach, Ollin guests and the bot are never charged. One per day.

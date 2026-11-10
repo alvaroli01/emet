@@ -2792,7 +2792,14 @@
     "prevMonth": "Previous month",
     "nextMonth": "Next month",
     "upcoming": "Coming up",
-    "noUpcoming": "Nothing due soon"
+    "noUpcoming": "Nothing due soon",
+    "office": {
+      "title": "At the office",
+      "inSince": "In since {time}",
+      "pausedSince": "Paused since {time}",
+      "out": "Not in the office",
+      "hours": "{today} today · {week} this week"
+    }
   },
   "overviewDash": {
     "eyebrow": "Company overview · {date}",
@@ -3280,7 +3287,8 @@
       "missed_validation": "Missed a validation",
       "missed_customer_deadline": "Missed a customer deadline",
       "late_fine": "Arrived 9:11–9:29 (€3, no strike)"
-    }
+    },
+    "auto": "automatic"
   },
   "allProjects": {
     "title": "All projects",
@@ -3426,5 +3434,39 @@
     "send": "{n, plural, =0 {Send} one {Send to # person} other {Send to # people}}",
     "sent": "{n, plural, one {Sent to # person} other {Sent to # people}}",
     "error": "Couldn’t send. Try again."
+  },
+  "officePill": {
+    "in": "In the office",
+    "paused": "Paused",
+    "out": "Out of office",
+    "inSince": "In the office since {time}",
+    "pausedSince": "Paused since {time} — back before 21:00 and it carries on",
+    "outLong": "You're out of the office",
+    "today": "Today",
+    "week": "This week",
+    "rulesTitle": "How it works",
+    "r1": "Your phone checks you in within 30 m of the office (Dock Bilbao) and out 80 m away. Monday to Friday only.",
+    "r2": "Leaving pauses your day; back before 21:00 and the time carries on. Time away never counts.",
+    "r3": "No check-out by midnight (phone off, automation deleted) = that stretch counts 0 h. Nobody can start or stop the timer by hand.",
+    "r4": "Tuesdays and Thursdays, first arrival: after 9:10:59 = €3 fine; after 9:29:59 = €3 + 1 strike. 3 strikes in a quarter = the €75 punishment.",
+    "r5": "Working somewhere else that day? Tell a leader: they can delete the fine or strike.",
+    "setup": "Set up or check my phone →"
+  },
+  "officeReview": {
+    "tool": "Office",
+    "title": "At the office",
+    "hint": "Who is in, everyone's hours, and whose phone check-in isn't working. Monday to Friday.",
+    "inSince": "In since {time}",
+    "pausedSince": "Paused since {time}",
+    "out": "Out",
+    "hours": "{today} today · {week} week",
+    "noLink": "Not set up",
+    "neverSignal": "Set up, no signal yet",
+    "lastSignal": "Last signal {when}",
+    "missingTitle": "{n, plural, one {# person hasn't connected their phone} other {# people haven't connected their phone}}",
+    "missingHint": "Their phone has never sent a position, so they can't be checked in. Ask them to do the setup on Today → At the office.",
+    "strikesTitle": "Late fines and strikes",
+    "strikesHint": "Late arrivals on Tuesdays and Thursdays are added automatically (“Automatic: checked in at …”). If someone was working elsewhere that day, delete it in the Strikes tab.",
+    "openStrikes": "Open Strikes →"
   }
 }

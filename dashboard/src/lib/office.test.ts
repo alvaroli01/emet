@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { distanceM, zoneStep, isStale, decide, visitMs, isInNow, isPaused, hm, madridTime, madridMidnight, STALE_MS, type Visit } from "./office.ts";
+import { distanceM, zoneStep, isStale, isWorkday, officeStatus, decide, visitMs, isInNow, isPaused, hm, madridTime, madridMidnight, STALE_MS, type Visit } from "./office.ts";
 
 const T = Date.parse("2026-11-10T09:00:00Z");
 const v = (p: Partial<Visit>): Visit => ({ id: "a", user_id: "u", arrived_at: new Date(T).toISOString(), left_at: null, forgot: false, ...p });
@@ -67,4 +67,21 @@ test("never checked out by midnight (phone off, Leave deleted) → that stretch 
   assert.equal(isStale(v1, Date.parse("2026-11-10T23:00:00Z")), true);  // 00:00 → never checked out
   assert.equal(visitMs(v1, Date.parse("2026-11-10T23:30:00Z")), 0);
   assert.deepEqual(decide(v1, "arrive", Date.parse("2026-11-11T07:00:00Z")), [{ op: "forgot", id: "a" }, { op: "insert" }]);
+});
+
+test("weekdays only, and one person's status (in / paused, hours today and this week)", () => {
+  assert.equal(isWorkday(Date.parse("2026-11-10T09:00:00Z")), true);  // Tuesday
+  assert.equal(isWorkday(Date.parse("2026-11-14T09:00:00Z")), false); // Saturday
+  assert.equal(isWorkday(Date.parse("2026-11-15T23:30:00Z")), true);  // Sunday 23:30 UTC = Monday 00:30 in Spain
+  const vs: Visit[] = [
+    v({ id: "mon", arrived_at: "2026-11-09T08:00:00Z", left_at: "2026-11-09T12:00:00Z" }), // Monday 4 h
+    v({ id: "t1", arrived_at: "2026-11-10T08:00:00Z", left_at: "2026-11-10T10:00:00Z" }),  // Tuesday 2 h
+    v({ id: "t2", arrived_at: "2026-11-10T11:00:00Z" }),                                   // back at 12:00, still in
+    v({ id: "x", user_id: "other", arrived_at: "2026-11-10T08:00:00Z" }),
+  ];
+  const s = officeStatus(vs, "u", Date.parse("2026-11-10T12:00:00Z"));
+  assert.equal(s.inNow, true); assert.equal(s.since, "12:00");
+  assert.equal(hm(s.todayMs), "3h 00m"); assert.equal(hm(s.weekMs), "7h 00m");
+  const p = officeStatus(vs.slice(0, 2), "u", Date.parse("2026-11-10T13:00:00Z"));
+  assert.equal(p.inNow, false); assert.equal(p.paused, true); assert.equal(p.since, "11:00");
 });

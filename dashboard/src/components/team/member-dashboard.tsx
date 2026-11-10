@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowUpRight, Mail, Play, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight, Mail, Play, ChevronLeft, ChevronRight, Building2 } from "lucide-react";
 import { eur } from "@/lib/format";
 import type { MemberData } from "@/lib/team-stats";
 import { DocumentsSection } from "@/components/documents/documents-section";
@@ -44,7 +44,8 @@ function Countdown({ to }: { to: string | null }) {
   return <span className="readout text-3xl">{d ? `${d}d ` : ""}{pad(Math.floor((s % 86400) / 3600))}:{pad(Math.floor((s % 3600) / 60))}:{pad(s % 60)}</span>;
 }
 
-export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, projects = [], points = [], tasks = [], strikes }: { p: MemberInfo; d: MemberData; today: string; isMe?: boolean; isLeader?: boolean; projects?: ProjectCard[]; points?: PointEntry[]; tasks?: MemberTaskItem[]; strikes?: StrikesData }) {
+export type MemberOffice = { inNow: boolean; paused: boolean; since: string | null; today: string; week: string };
+export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, projects = [], points = [], tasks = [], strikes, office }: { p: MemberInfo; d: MemberData; today: string; isMe?: boolean; isLeader?: boolean; projects?: ProjectCard[]; points?: PointEntry[]; tasks?: MemberTaskItem[]; strikes?: StrikesData; office?: MemberOffice }) {
   const t = useTranslations("member");
   const locale = useLocale();
   const [month, setMonth] = useState(() => today.slice(0, 7));
@@ -73,6 +74,16 @@ export function MemberDashboard({ p, d, today, isMe = false, isLeader = false, p
         <Tile label={t("completed")} value={String(d.completed7)} unit={t("tasks", { n: d.completed7 })} delta={t("vsLastWeek", { n: sign(doneDelta) })} good={doneDelta === 0 ? null : doneDelta > 0} />
         <Tile label={t("sales")} value={eur(d.salesMonth, locale)} unit={t("perMonth")} delta={salesDelta === null ? t("noPrev") : t("vsLastMonth", { n: `${salesDelta > 0 ? "+" : ""}${salesDelta}%` })} good={salesDelta === null || salesDelta === 0 ? null : salesDelta > 0} href="/g/finance" />
       </div>
+
+      {office && (
+        <section className="panel flex flex-wrap items-center gap-x-4 gap-y-2 p-4 text-sm">
+          <span className="flex items-center gap-1.5 font-semibold"><Building2 size={16} /> {t("office.title")}</span>
+          <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${office.inNow ? "bg-ok/15 text-ok-text" : office.paused ? "bg-warn/15 text-warn-text" : "bg-surface-2 text-muted"}`}>
+            {office.inNow ? t("office.inSince", { time: office.since ?? "" }) : office.paused ? t("office.pausedSince", { time: office.since ?? "" }) : t("office.out")}
+          </span>
+          <span className="text-muted">{t("office.hours", { today: office.today, week: office.week })}</span>
+        </section>
+      )}
 
       <MemberTasks tasks={tasks} name={p.name.split(" ")[0]} isMe={isMe} />
       <PointsPanel entries={points} isMe={isMe} today={today} />

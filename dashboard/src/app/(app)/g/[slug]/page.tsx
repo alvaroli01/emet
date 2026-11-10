@@ -15,9 +15,10 @@ import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { AssistantBubble } from "@/components/shell/assistant-bubble";
-import { LayoutDashboard, FolderOpen, FolderKanban, Gavel, Megaphone } from "lucide-react";
+import { LayoutDashboard, FolderOpen, FolderKanban, Gavel, Megaphone, Building2 } from "lucide-react";
 import { StrikesTool } from "@/components/tools/strikes";
 import { LeaderMessage } from "@/components/tools/leader-message";
+import { OfficeReview } from "@/components/tools/office-review";
 import { loadStrikes } from "@/lib/strikes-server";
 import { loadMyProjects } from "@/lib/projects-server";
 import { MyProjects } from "@/components/projects/my-projects";
@@ -96,6 +97,11 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     node: <LeaderMessage meId={session.me.id} people={board.members.filter((m) => m.role_title !== "AI assistant")}
                          teams={session.groups.map((g) => ({ id: g.id, emoji: g.emoji, name: t(`names.${g.slug}`) }))} />,
   }] : [];
+  // Leaders: who is at the office, hours, and whose phone check-in isn't working
+  const officeTool = slug === "team-leader" && session.isLeader ? [{
+    id: "office", group: "people" as const, label: (await getTranslations("officeReview"))("tool"), icon: <Building2 size={16} />,
+    node: await OfficeReview({ people: board.members }),
+  }] : [];
   // Team leader only: company documents everyone can open on their own profile
   const td = await getTranslations("documents");
   const docsTool = slug === "team-leader" && session.isAdmin ? [{
@@ -110,6 +116,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
   }] : [];
   const allTools = [
     ...messageTool,
+    ...officeTool,
     ...strikesTool,
     ...projectsTool,
     ...docsTool,

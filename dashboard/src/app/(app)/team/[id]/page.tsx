@@ -11,6 +11,7 @@ import { MemberDashboard } from "@/components/team/member-dashboard";
 import { loadMyProjects } from "@/lib/projects-server";
 import type { ProjectCard } from "@/components/projects/my-projects";
 import type { PointEntry } from "@/components/team/points-panel";
+import { officeStatus, hm, madridMidnight, type Visit } from "@/lib/office";
 
 /** One person's page: their open and finished tasks, sales, weekly activity and what's coming up. */
 export default async function MemberPage({ params }: { params: Promise<{ id: string }> }) {
@@ -31,8 +32,13 @@ export default async function MemberPage({ params }: { params: Promise<{ id: str
   const tasks: MemberTaskItem[] = d.tasks;
   const { data: points } = await supabase.from("member_points").select("id, kind, amount, happened_on, note, file_path, file_name, link").eq("user_id", person.id)
     .order("happened_on", { ascending: false }).order("created_at", { ascending: false }).returns<PointEntry[]>();
+  // At the office: everyone can see anyone's time today and this week
+  const { data: visits } = await supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot")
+    .eq("user_id", person.id).gte("arrived_at", madridMidnight(weekStart(Date.now()))).returns<Visit[]>();
+  const os = officeStatus(visits ?? [], person.id, Date.now());
+  const office = { inNow: os.inNow, paused: os.paused, since: os.since, today: hm(os.todayMs), week: hm(os.weekMs) };
   return (
-    <MemberDashboard today={todayISO()} d={d} isMe={person.id === me.id} isLeader={isAdmin} projects={projects} points={points ?? []} tasks={tasks} strikes={strikes}
+    <MemberDashboard today={todayISO()} office={office} d={d} isMe={person.id === me.id} isLeader={isAdmin} projects={projects} points={points ?? []} tasks={tasks} strikes={strikes}
       p={{ id: person.id, name: person.full_name, email: person.email, avatar: person.avatar_url, role: person.role_title, team: g?.name ?? null, teamSlug: g?.slug ?? null }} />
   );
 }

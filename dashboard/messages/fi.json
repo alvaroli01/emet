@@ -2792,7 +2792,14 @@
     "prevMonth": "Edellinen kuukausi",
     "nextMonth": "Seuraava kuukausi",
     "upcoming": "Tulossa",
-    "noUpcoming": "Ei pian erääntyviä"
+    "noUpcoming": "Ei pian erääntyviä",
+    "office": {
+      "title": "Toimistolla",
+      "inSince": "Paikalla klo {time} alkaen",
+      "pausedSince": "Tauolla klo {time} alkaen",
+      "out": "Ei toimistolla",
+      "hours": "{today} tänään · {week} tällä viikolla"
+    }
   },
   "overviewDash": {
     "eyebrow": "Yrityksen yleiskatsaus · {date}",
@@ -3280,7 +3287,8 @@
       "missed_validation": "Validointi jäi väliin",
       "missed_customer_deadline": "Asiakkaan määräaika ylittyi",
       "late_fine": "Saapui 9:11–9:29 (3 €, ei strikea)"
-    }
+    },
+    "auto": "automaattinen"
   },
   "allProjects": {
     "title": "Kaikki projektit",
@@ -3426,5 +3434,39 @@
     "send": "{n, plural, =0 {Lähetä} one {Lähetä # henkilölle} other {Lähetä # henkilölle}}",
     "sent": "{n, plural, one {Lähetetty # henkilölle} other {Lähetetty # henkilölle}}",
     "error": "Lähetys epäonnistui. Yritä uudelleen."
+  },
+  "officePill": {
+    "in": "Toimistolla",
+    "paused": "Tauolla",
+    "out": "Poissa toimistolta",
+    "inSince": "Toimistolla klo {time} alkaen",
+    "pausedSince": "Tauolla klo {time} alkaen – palaa ennen klo 21:00, niin aika jatkuu",
+    "outLong": "Olet poissa toimistolta",
+    "today": "Tänään",
+    "week": "Tällä viikolla",
+    "rulesTitle": "Näin se toimii",
+    "r1": "Puhelimesi kirjaa sinut sisään 30 m:n päässä toimistosta (Dock Bilbao) ja ulos 80 m:n päässä. Vain maanantaista perjantaihin.",
+    "r2": "Lähteminen keskeyttää päiväsi; palaa ennen klo 21:00, niin aika jatkuu. Poissaoloaika ei koskaan laske.",
+    "r3": "Ei uloskirjausta ennen keskiyötä (puhelin pois, automaatio poistettu) = se jakso on 0 h. Kukaan ei voi käynnistää tai pysäyttää aikaa käsin.",
+    "r4": "Tiistaisin ja torstaisin, ensimmäinen saapuminen: klo 9:10:59 jälkeen = 3 € sakko; klo 9:29:59 jälkeen = 3 € + 1 strike. 3 strikea neljänneksessä = 75 € rangaistus.",
+    "r5": "Teitkö sinä päivänä töitä muualla? Kerro leaderille: hän voi poistaa sakon tai striken.",
+    "setup": "Puhelimen asetukset →"
+  },
+  "officeReview": {
+    "tool": "Toimisto",
+    "title": "Toimistolla",
+    "hint": "Kuka on paikalla, kaikkien tunnit ja kenen puhelinkirjautuminen ei toimi. Maanantaista perjantaihin.",
+    "inSince": "Paikalla klo {time} alkaen",
+    "pausedSince": "Tauolla klo {time} alkaen",
+    "out": "Poissa",
+    "hours": "{today} tänään · {week} viikko",
+    "noLink": "Ei asetettu",
+    "neverSignal": "Asetettu, ei vielä signaalia",
+    "lastSignal": "Viimeisin signaali {when}",
+    "missingTitle": "{n, plural, one {# henkilö ei ole yhdistänyt puhelintaan} other {# henkilöä ei ole yhdistänyt puhelintaan}}",
+    "missingHint": "Heidän puhelimensa ei ole koskaan lähettänyt sijaintia, joten heitä ei voi kirjata sisään. Pyydä heitä tekemään asetukset kohdassa Tänään → Toimistolla.",
+    "strikesTitle": "Myöhästymissakot ja strike-merkinnät",
+    "strikesHint": "Tiistain ja torstain myöhästymiset lisätään automaattisesti (”Automatic: checked in at …”). Jos joku teki sinä päivänä töitä muualla, poista se Strikes-välilehdellä.",
+    "openStrikes": "Avaa Strikes →"
   }
 }

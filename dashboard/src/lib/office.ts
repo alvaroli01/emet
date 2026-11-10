@@ -89,3 +89,21 @@ export async function applyEvent(db: SupabaseClient, userId: string, event: Offi
   const { data: cur } = await db.from("office_visits").select("arrived_at").eq("user_id", userId).is("left_at", null).maybeSingle();
   return { arrivedAt: (cur?.arrived_at as string | undefined) ?? null };
 }
+
+/** Office check-in only runs Monday–Friday (Spanish time); weekend positions are ignored. */
+export const isWorkday = (now: number) => !["Sat", "Sun"].includes(new Date(now).toLocaleDateString("en-US", { weekday: "short", timeZone: "Europe/Madrid" }));
+
+/** One person's office status from their visits: in now / paused, since when, hours today and this week. */
+export function officeStatus(visits: Visit[], userId: string, now: number) {
+  const mine = visits.filter((v) => v.user_id === userId).sort((a, b) => Date.parse(b.arrived_at) - Date.parse(a.arrived_at));
+  const latest = mine[0];
+  const today = Date.parse(madridMidnight(madridDay(now)));
+  const week = Date.parse(madridMidnight(new Date(today + 12 * H - ((new Date(today + 12 * H).getUTCDay() + 6) % 7) * 24 * H).toISOString().slice(0, 10)));
+  const sum = (from: number) => mine.filter((v) => Date.parse(v.arrived_at) >= from).reduce((a, v) => a + visitMs(v, now), 0);
+  const inNow = !!latest && isInNow(latest, now);
+  return {
+    inNow, paused: !!latest && !inNow && isPaused(latest, now),
+    since: latest ? madridTime(inNow ? latest.arrived_at : latest.left_at ?? latest.arrived_at) : null,
+    todayMs: sum(today), weekMs: sum(week),
+  };
+}

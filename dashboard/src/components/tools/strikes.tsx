@@ -117,7 +117,7 @@ export function StrikesTool({ people, data, today }: { people: Member[]; data: S
                 <button onClick={() => patch("strikes", s.id, { paid_at: s.paid_at ? null : new Date().toISOString() })}
                         className={`rounded-full px-3 py-1 text-xs font-medium ${s.paid_at ? "bg-ok/15 text-ok-text" : "bg-warn/15 text-warn-text"}`}>{s.paid_at ? t("paid") : t("notPaid")}</button>
               )}
-              <span className="text-xs text-muted">{t("by", { name: s.given_by ? name(s.given_by) : "—" })}</span>
+              <span className="text-xs text-muted">{s.given_by ? t("by", { name: name(s.given_by) }) : t("auto")}</span>
               <button onClick={() => remove(s)} aria-label={t("delete")} className="grid size-8 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-bad-text"><Trash2 size={14} /></button>
             </li>
           ))}

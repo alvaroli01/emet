@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { applyEvent, madridTime, distanceM, zoneStep, isInNow, type Visit } from "@/lib/office";
+import { applyEvent, madridTime, distanceM, zoneStep, isInNow, isWorkday, type Visit } from "@/lib/office";
 
 /**
  * Automatic office check-in from the member's phone (dashboard closed, mobile data is fine): POST /api/office/<token>
@@ -22,6 +22,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
   const body = (await request.json().catch(() => ({}))) as { lat?: unknown; lng?: unknown };
   const here = { lat: num(body.lat), lng: num(body.lng) };
   if (!Number.isFinite(here.lat) || !Number.isFinite(here.lng) || Math.abs(here.lat) > 90 || Math.abs(here.lng) > 180) return text("emet: no location", 400);
+  // "Phone connected": leaders see when each phone last reported (Team Leaders → Office)
+  await db.from("office_links").update({ last_ping_at: new Date().toISOString() }).eq("token", token);
+  if (!isWorkday(Date.now())) return text("done emet: weekends don't count"); // Monday–Friday only
   const [{ data: office }, { data: open }] = await Promise.all([
     db.from("office_place").select("lat, lng").maybeSingle<{ lat: number; lng: number }>(),
     db.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").eq("user_id", link.user_id).is("left_at", null).maybeSingle<Visit>(),
