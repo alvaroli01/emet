@@ -225,7 +225,7 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
     // Summit flag
     const flagMat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
     const summit = pts[N].clone();
-    const bigCoinBase = summit.y + 1.25;
+    const bigCoinBase = summit.y + (variant === "money" ? 1.7 : 1.25); // money: clear of the €30,000 label under it
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.6, 6), flagMat);
     pole.position.copy(summit).add(new THREE.Vector3(0, 0.3, 0));
     const flagShape = new THREE.Shape([new THREE.Vector2(0, 0), new THREE.Vector2(0.32, -0.09), new THREE.Vector2(0, -0.18)]);
@@ -274,7 +274,8 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
     }
     const euroTex = new THREE.CanvasTexture(euroCanvas);
     const bigCoin = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.05, 40), [goldSide, new THREE.MeshBasicMaterial({ map: euroTex }), new THREE.MeshBasicMaterial({ map: euroTex })]);
-    bigCoin.rotation.x = Math.PI / 2;
+    bigCoin.rotation.order = "YXZ"; // stand it up (x), then turn it (y) — never tips toward the ground
+    bigCoin.rotation.x = Math.PI / 2 - 0.3; // face tilted up toward the camera
     if (money) bigCoin.scale.setScalar(1.6);
     world.add(bigCoin);
 
@@ -447,8 +448,10 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
         if (c.mesh.visible && !reduced) { c.mesh.rotation.z = tsec * 1.6 + c.phase; c.mesh.position.y = c.base + Math.sin(tsec * 2 + c.phase) * 0.025; }
       }
       for (const st of stacks) st.group.visible = st.at <= shown + 1e-6;
-      bigCoin.position.set(summit.x, bigCoinBase + (reduced ? 0 : Math.sin(tsec * 1.2) * 0.06), summit.z);
-      if (!reduced) bigCoin.rotation.z = tsec * 0.9;
+      // Money: a little right of the summit on screen (offset undoes the world's turn); € face stays toward the viewer, gently swaying
+      const dx = money ? 0.45 : 0;
+      bigCoin.position.set(summit.x + dx * Math.cos(rotY), bigCoinBase + (reduced ? 0 : Math.sin(tsec * 1.2) * 0.06), summit.z + dx * Math.sin(rotY));
+      bigCoin.rotation.y = -rotY + (reduced ? 0 : Math.sin(tsec * 0.9) * 0.45);
       if (money) {
         halo.position.copy(bigCoin.position);
         halo.scale.setScalar(2.2 + (reduced ? 0 : Math.sin(tsec * 1.6) * 0.18));
