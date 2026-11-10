@@ -2441,6 +2441,7 @@
     "mostActive": "Más activos",
     "notSeen": "Sin entrar esta semana",
     "allSeen": "Todos han entrado esta semana",
+    "activityAria": "Actividad del equipo por día: {days}",
     "needHelp": "Hola, {name}, ¿necesitas ayuda?",
     "askLabel": "Pregunta lo que quieras a emet",
     "askPlaceholder": "Pregúntame lo que quieras",

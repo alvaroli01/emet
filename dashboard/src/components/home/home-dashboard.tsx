@@ -32,11 +32,10 @@ export type HomeData = {
 const POINT_ICON = { community: Users, visit: Store, learning: GraduationCap } as const;
 
 /** Things the team did per day this week (from the activity log); today in orange. */
-function ActivityBars({ days, labels }: { days: number[]; labels: string[] }) {
+function ActivityBars({ days, labels, today, label }: { days: number[]; labels: string[]; today: number; label: string }) {
   const max = Math.max(1, ...days);
-  const today = (new Date().getDay() + 6) % 7;
   return (
-    <div className="mt-2 grid grid-cols-7 gap-1.5" aria-hidden>
+    <div className="mt-2 grid grid-cols-7 gap-1.5" role="img" aria-label={label}>
       {days.map((n, i) => (
         <div key={i} className="flex flex-col items-center gap-1">
           <div className="flex h-12 w-full items-end rounded-md bg-white/5">
@@ -260,7 +259,7 @@ export function HomeDashboard({ d }: { d: HomeData }) {
             </ul>
             <div className="mt-auto flex items-end justify-between gap-2 pt-3">
               <p className="readout text-3xl">{POINT_KINDS.reduce((a, k) => a + d.points[k], 0)} <span className="text-base font-normal text-muted">{t("pointsTotal")}</span></p>
-              <Link href={`/team/${d.meId}`} className="flex items-center gap-0.5 pb-1 text-xs font-medium text-muted hover:text-ink">{t("seeAll")} <ArrowUpRight size={13} /></Link>
+              <Link href={`/team/${d.meId}`} className="-mr-2 flex min-h-9 items-center gap-0.5 px-2 text-xs font-medium text-muted hover:text-ink">{t("seeAll")} <ArrowUpRight size={13} /></Link>
             </div>
           </Card>
           <Card icon={<Coins size={19} />} title={t("money")} note={view.note} className="sm:col-span-2 lg:col-span-1">
@@ -276,14 +275,15 @@ export function HomeDashboard({ d }: { d: HomeData }) {
               <p className="text-xs text-muted"><b className="readout text-base text-ink">{d.activity.active}</b>/{d.activity.total} {t("activeWeek")}</p>
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2">
-              <Link href="/" className={`rounded-2xl px-3 py-2 ${d.team.late ? "bg-bad/15 text-bad-text" : "bg-surface-2"}`}>
+              <Link href="/" className={`rounded-2xl px-3 py-2 transition-[filter] hover:brightness-125 ${d.team.late ? "bg-bad/15 text-bad-text" : "bg-surface-2"}`}>
                 <p className="readout text-xl">{d.team.late}</p><p className="text-xs">{t("lateTasks")}</p>
               </Link>
-              <Link href="/" className={`rounded-2xl px-3 py-2 ${d.team.blockers ? "bg-bad/15 text-bad-text" : "bg-surface-2"}`}>
+              <Link href="/" className={`rounded-2xl px-3 py-2 transition-[filter] hover:brightness-125 ${d.team.blockers ? "bg-bad/15 text-bad-text" : "bg-surface-2"}`}>
                 <p className="readout text-xl">{d.team.blockers}</p><p className="text-xs">{t("blockers")}</p>
               </Link>
             </div>
-            <ActivityBars days={d.activity.days} labels={weekdays} />
+            <ActivityBars days={d.activity.days} labels={weekdays} today={d.calendar.days.indexOf(d.calendar.today)}
+                          label={t("activityAria", { days: d.activity.days.map((n, i) => `${weekdays[i]} ${n}`).join(", ") })} />
             {d.activity.top.length > 0 && (
               <>
                 <h3 className="mt-3 text-xs font-medium text-muted">{t("mostActive")}</h3>
@@ -303,10 +303,10 @@ export function HomeDashboard({ d }: { d: HomeData }) {
             )}
             <h3 className="mt-3 text-xs font-medium text-muted">{t("notSeen")}</h3>
             {d.activity.quiet.length ? (
-              <div className="mt-1.5 flex flex-wrap gap-1">
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
                 {d.activity.quiet.map((p) => (
-                  <Link key={p.id} href={`/team/${p.id}`} title={p.name} aria-label={p.name} className="rounded-full ring-1 ring-line transition hover:ring-brand">
-                    <Avatar name={p.name} src={p.avatar} size={26} />
+                  <Link key={p.id} href={`/team/${p.id}`} title={p.name} aria-label={p.name} className="rounded-full ring-1 ring-line transition-shadow hover:ring-2 hover:ring-brand">
+                    <Avatar name={p.name} src={p.avatar} size={36} />
                   </Link>
                 ))}
               </div>

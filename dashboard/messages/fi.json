@@ -2441,6 +2441,7 @@
     "mostActive": "Aktiivisimmat",
     "notSeen": "Ei nähty tällä viikolla",
     "allSeen": "Kaikki ovat käyneet tällä viikolla",
+    "activityAria": "Tiimin aktiivisuus päivittäin: {days}",
     "needHelp": "Hei {name}, tarvitsetko apua?",
     "askLabel": "Kysy emetiltä mitä vain",
     "askPlaceholder": "Kysy minulta mitä vain",

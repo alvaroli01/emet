@@ -7,6 +7,7 @@ updated: 2026-11-10
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-10 — Alvaro — Today cards accessibility pass (Web Interface Guidelines): the activity chart is read out to screen readers, today's bar comes from the server (no wrong day near midnight), bigger tap targets for "Not seen this week" and "See all", hover feedback on the late/blockers tiles.
 - 2026-11-10 — Alvaro — Today page: the Tasks card is now **My points** (Community / Customer Visits / Learning against the June goals, total, link to my page). **Team health** (score + waves) is replaced by **Team this week**: classmates active (did something or opened emet), team late tasks, open blockers, activity per day, the 3 most active and who hasn't been seen this week (coach, bot and Ollin left out).
 - 2026-11-10 — Alvaro — Top-bar mic: the recorder window now has a **Take me to my recorded notes** link (Base camp → Docs), in all 7 languages. Hidden while recording.
 - 2026-11-10 — Alvaro — Ollin guests stay out of EMET tasks: **Everyone** in the task form picks only emet people, and Ollin names never appear outside projects (EMET/team boards, person filter, meetings, camp, scout, lab). In a project's task form, Ollin people get their own **Ollin** row, shown only when the project has someone from Ollin. Leire (coach) and the Grok bot can't be given tasks and aren't in the task person filter.
