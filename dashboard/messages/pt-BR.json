@@ -1119,10 +1119,11 @@
       "project_post": "Novo em “{project}”: {title}",
       "training_lead": "Você lidera o treino esta semana",
       "training_week": "Na semana que vem o treino é liderado por {names}",
-      "strike": "Você recebeu um strike: {reason, select, late_tasks {mais de 3 tarefas atrasadas} sleeping {dormir na aula} phone {avisos pelo celular na aula} late_arrival {chegou 10+ min atrasado (€ 3)} missed_validation {perdeu uma validação (3 strikes)} missed_customer_deadline {perdeu um prazo com cliente (3 strikes)} other {strike}} · {total}/3 neste trimestre",
+      "strike": "Você recebeu um strike: {reason, select, late_tasks {mais de 3 tarefas atrasadas} sleeping {dormir na aula} phone {avisos pelo celular na aula} late_arrival {chegou depois das 9:30 (€3)} missed_validation {perdeu uma validação (3 strikes)} missed_customer_deadline {perdeu um prazo com cliente (3 strikes)} other {strike}} · {total}/3 neste trimestre",
       "punishment": "3 strikes: traga € 75 vendendo água até {due}",
       "announcement": "{title}",
-      "leader_message": "{name}: {title}"
+      "leader_message": "{name}: {title}",
+      "late_fine": "Multa de €3: você chegou atrasado (depois das 9:10). Sem strike. ({reason})"
     },
     "popupTitle": "Nova tarefa para você",
     "popupDue": "Prazo: {date}",
@@ -1217,7 +1218,7 @@
       "nobody": "Ninguém registrou entrada.",
       "weekTitle": "Horas nesta semana",
       "setupToggle": "Registrar automaticamente com meu celular",
-      "setupHint": "Seu celular registra sua entrada quando você chega a menos de 30 m do escritório e a saída quando você vai embora — mesmo com o emet fechado e usando dados móveis. O emet só recebe “chegou” ou “saiu” e o horário, nunca sua localização.",
+      "setupHint": "Seu celular registra sua entrada quando você chega a menos de 30 m do escritório e a saída quando está a 150 m — mesmo com o emet fechado e usando dados móveis. Sair pausa o seu dia; se voltar antes das 21:00, ele continua (o tempo fora não conta). O emet só recebe “chegou” ou “saiu” e o horário, nunca sua localização.",
       "create": "Criar meus links de ponto",
       "copyArrive": "Copiar link de chegada",
       "copyLeave": "Copiar link de saída",
@@ -1227,16 +1228,19 @@
       "i2": "Local: escolha o escritório, raio de 30 m → Executar Imediatamente → Seguinte.",
       "i3": "Nova automação em branco → adicione “Obter Conteúdo da URL” → cole o link de chegada → Método: POST.",
       "i4": "Desative “Notificar ao Executar” se quiser → OK.",
-      "i5": "Faça o mesmo com Sair e o link de saída.",
+      "i5": "Faça o mesmo com Sair: escolha o escritório, raio de 150 m, e cole o link de saída.",
       "androidTitle": "Android (app grátis MacroDroid)",
       "a1": "Instale o MacroDroid → Adicionar macro.",
       "a2": "Gatilho: Localização → Geofence → o escritório, raio de 30 m, “Área entrada”.",
       "a3": "Ação: Conectividade → Requisição HTTP → POST → cole o link de chegada.",
-      "a4": "Crie uma segunda macro com “Área saída” e o link de saída. Permita a localização “O tempo todo”.",
+      "a4": "Crie uma segunda macro: Geofence → o escritório, raio de 150 m, “Área saída” → Requisição HTTP POST com o link de saída. Permita a localização “O tempo todo”.",
       "private": "Estes links são só seus.",
       "reset": "Redefinir",
       "confirmReset": "Criar links novos? Os antigos param de funcionar e você precisará colar os novos no celular.",
-      "error": "Algo deu errado. Tente de novo."
+      "error": "Algo deu errado. Tente de novo.",
+      "youPaused": "em pausa",
+      "pausedTitle": "Em pausa · {n}",
+      "pausedSince": "saiu {time} · {hours} hoje"
     }
   },
   "report": {
@@ -3229,7 +3233,8 @@
       "strike": "Strike",
       "punishment": "⚠️ 3 strikes",
       "announcement": "emet",
-      "leader_message": "📣 Team Leaders"
+      "leader_message": "📣 Team Leaders",
+      "late_fine": "Multa de €3 por atraso"
     }
   },
   "strikes": {
@@ -3268,9 +3273,10 @@
       "late_tasks": "Mais de 3 tarefas atrasadas",
       "sleeping": "Dormir na aula",
       "phone": "Avisos repetidos por usar o celular na aula",
-      "late_arrival": "Chegar 10+ min atrasado",
+      "late_arrival": "Chegar depois das 9:30",
       "missed_validation": "Perder uma validação",
-      "missed_customer_deadline": "Perder um prazo com cliente"
+      "missed_customer_deadline": "Perder um prazo com cliente",
+      "late_fine": "Chegar 9:11–9:29 (€3, sem strike)"
     }
   },
   "allProjects": {

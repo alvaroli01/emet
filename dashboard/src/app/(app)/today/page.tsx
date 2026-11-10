@@ -16,7 +16,7 @@ import { loadMembers } from "@/lib/boards";
 import { getsTasks } from "@/lib/tasks";
 import { pointTotals } from "@/lib/points";
 import { OfficeCard, type OfficeData } from "@/components/office/office-card";
-import { visitMs, isInNow, hm, madridTime, madridMidnight, type Visit } from "@/lib/office";
+import { visitMs, isInNow, isPaused, hm, madridTime, madridMidnight, type Visit } from "@/lib/office";
 
 type Due = { id: string; title: string; day: string; href: string; parent?: string };
 
@@ -153,10 +153,15 @@ export default async function TodayPage() {
   const who = new Map(members.map((m) => [m.id, m]));
   const msOf = (uid: string, from: string) => vs.filter((v) => v.user_id === uid && Date.parse(v.arrived_at) >= Date.parse(from)).reduce((a, v) => a + visitMs(v, now), 0);
   const dayFrom = madridMidnight(today), weekFrom = madridMidnight(week);
+  const latest = new Map<string, Visit>();
+  for (const v of vs) if (!latest.has(v.user_id) || v.arrived_at > latest.get(v.user_id)!.arrived_at) latest.set(v.user_id, v);
+  const pausedNow = (uid: string) => !!latest.get(uid) && isPaused(latest.get(uid)!, now);
   const office: OfficeData = {
     inNow: vs.filter((v) => isInNow(v, now) && who.has(v.user_id)).sort((a, b) => a.arrived_at.localeCompare(b.arrived_at))
       .map((v) => ({ id: v.user_id, name: who.get(v.user_id)!.full_name, avatar: who.get(v.user_id)!.avatar_url, since: madridTime(v.arrived_at) })),
-    me: { in: vs.some((v) => v.user_id === me.id && isInNow(v, now)), today: hm(msOf(me.id, dayFrom)), week: hm(msOf(me.id, weekFrom)) },
+    paused: [...latest.values()].filter((v) => isPaused(v, now) && who.has(v.user_id)).sort((a, b) => b.left_at!.localeCompare(a.left_at!))
+      .map((v) => ({ id: v.user_id, name: who.get(v.user_id)!.full_name, avatar: who.get(v.user_id)!.avatar_url, since: madridTime(v.left_at!), today: hm(msOf(v.user_id, dayFrom)) })),
+    me: { in: vs.some((v) => v.user_id === me.id && isInNow(v, now)), paused: pausedNow(me.id), today: hm(msOf(me.id, dayFrom)), week: hm(msOf(me.id, weekFrom)) },
     week: [...new Set(vs.map((v) => v.user_id))].filter((id) => who.has(id)).map((id) => ({ id, name: who.get(id)!.full_name, avatar: who.get(id)!.avatar_url, ms: msOf(id, weekFrom) }))
       .filter((p) => p.ms > 0).sort((a, b) => b.ms - a.ms).map((p) => ({ ...p, hours: hm(p.ms) })),
   };

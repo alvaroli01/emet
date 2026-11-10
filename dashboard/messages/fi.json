@@ -1119,10 +1119,11 @@
       "project_post": "Uutta projektissa ”{project}”: {title}",
       "training_lead": "Vedät treenit tällä viikolla",
       "training_week": "Ensi viikon treenit vetää {names}",
-      "strike": "Sait striken: {reason, select, late_tasks {yli 3 myöhästynyttä tehtävää} sleeping {nukkui tunnilla} phone {puhelinvaroitukset tunnilla} late_arrival {myöhästyi 10+ min (3 €)} missed_validation {validointi jäi väliin (3 strikeä)} missed_customer_deadline {asiakkaan määräaika ylittyi (3 strikeä)} other {strike}} · {total}/3 tällä neljänneksellä",
+      "strike": "Sait striken: {reason, select, late_tasks {yli 3 myöhästynyttä tehtävää} sleeping {nukkui tunnilla} phone {puhelinvaroitukset tunnilla} late_arrival {saapui klo 9:30 jälkeen (3 €)} missed_validation {validointi jäi väliin (3 strikeä)} missed_customer_deadline {asiakkaan määräaika ylittyi (3 strikeä)} other {strike}} · {total}/3 tällä neljänneksellä",
       "punishment": "3 strikeä: tuo 75 € myymällä vettä viimeistään {due}",
       "announcement": "{title}",
-      "leader_message": "{name}: {title}"
+      "leader_message": "{name}: {title}",
+      "late_fine": "3 € sakko: myöhästyit (klo 9:10 jälkeen). Ei strikea. ({reason})"
     },
     "popupTitle": "Uusi tehtävä sinulle",
     "popupDue": "Määräaika {date}",
@@ -1217,7 +1218,7 @@
       "nobody": "Kukaan ei ole kirjautunut.",
       "weekTitle": "Tunnit tällä viikolla",
       "setupToggle": "Kirjaudu automaattisesti puhelimella",
-      "setupHint": "Puhelimesi kirjaa sinut sisään, kun tulet 30 m:n päähän toimistosta, ja ulos, kun lähdet – vaikka emet on kiinni ja käytät mobiilidataa. emet saa vain ”saapui” tai ”lähti” ja kellonajan, ei koskaan sijaintiasi.",
+      "setupHint": "Puhelimesi kirjaa sinut sisään, kun tulet 30 m:n päähän toimistosta, ja ulos, kun olet 150 m:n päässä – vaikka emet on kiinni ja käytät mobiilidataa. Lähteminen keskeyttää päiväsi; jos palaat ennen klo 21:00, se jatkuu (poissaoloaika ei laske). emet saa vain ”saapui” tai ”lähti” ja kellonajan, ei koskaan sijaintiasi.",
       "create": "Luo kirjautumislinkkini",
       "copyArrive": "Kopioi saapumislinkki",
       "copyLeave": "Kopioi lähtölinkki",
@@ -1227,16 +1228,19 @@
       "i2": "Sijainti: valitse toimisto, säde 30 m → Suorita heti → Seuraava.",
       "i3": "Uusi tyhjä automaatio → lisää ”Hae URL-osoitteen sisältö” → liitä saapumislinkki → Tapa: POST.",
       "i4": "Poista ”Ilmoita suoritettaessa” halutessasi → Valmis.",
-      "i5": "Tee sama: Poistu ja lähtölinkki.",
+      "i5": "Tee sama: Poistu → valitse toimisto, säde 150 m, liitä lähtölinkki.",
       "androidTitle": "Android (ilmainen MacroDroid-appi)",
       "a1": "Asenna MacroDroid → Lisää makro.",
       "a2": "Laukaisin: Sijainti → Geoaita → toimisto, säde 30 m, ”Alueelle saavuttu”.",
       "a3": "Toiminto: Yhteydet → HTTP-pyyntö → POST → liitä saapumislinkki.",
-      "a4": "Tee toinen makro: ”Alueelta poistuttu” ja lähtölinkki. Salli sijainti ”Aina”.",
+      "a4": "Tee toinen makro: Geoaita → toimisto, säde 150 m, ”Alueelta poistuttu” → HTTP-pyyntö POST lähtölinkillä. Salli sijainti ”Aina”.",
       "private": "Nämä linkit ovat vain sinun.",
       "reset": "Nollaa ne",
       "confirmReset": "Luodaanko uudet linkit? Vanhat lakkaavat toimimasta ja uudet pitää liittää puhelimeen.",
-      "error": "Jokin meni pieleen. Yritä uudelleen."
+      "error": "Jokin meni pieleen. Yritä uudelleen.",
+      "youPaused": "tauolla",
+      "pausedTitle": "Tauolla · {n}",
+      "pausedSince": "lähti {time} · {hours} tänään"
     }
   },
   "report": {
@@ -3229,7 +3233,8 @@
       "strike": "Strike",
       "punishment": "⚠️ 3 strikeä",
       "announcement": "emet",
-      "leader_message": "📣 Team Leaders"
+      "leader_message": "📣 Team Leaders",
+      "late_fine": "3 € myöhästymissakko"
     }
   },
   "strikes": {
@@ -3268,9 +3273,10 @@
       "late_tasks": "Yli 3 myöhästynyttä tehtävää",
       "sleeping": "Nukkui tunnilla",
       "phone": "Toistuvat puhelinvaroitukset tunnilla",
-      "late_arrival": "Myöhästyi 10+ min",
+      "late_arrival": "Saapui klo 9:30 jälkeen",
       "missed_validation": "Validointi jäi väliin",
-      "missed_customer_deadline": "Asiakkaan määräaika ylittyi"
+      "missed_customer_deadline": "Asiakkaan määräaika ylittyi",
+      "late_fine": "Saapui 9:11–9:29 (3 €, ei strikea)"
     }
   },
   "allProjects": {

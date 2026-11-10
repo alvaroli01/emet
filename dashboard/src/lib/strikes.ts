@@ -1,10 +1,10 @@
 /** Strikes (pure, tested). The database computes weight/fine and creates punishments; this mirrors it for the screens. */
-export const STRIKE_KINDS = ["late_tasks", "sleeping", "phone", "late_arrival", "missed_validation", "missed_customer_deadline"] as const;
+export const STRIKE_KINDS = ["late_tasks", "sleeping", "phone", "late_arrival", "late_fine", "missed_validation", "missed_customer_deadline"] as const;
 export type StrikeKind = (typeof STRIKE_KINDS)[number];
 export const PUNISHMENT_EUR = 75;
 
-export const weightOf = (k: string) => (k === "missed_validation" || k === "missed_customer_deadline" ? 3 : 1);
-export const fineOf = (k: string) => (k === "late_arrival" ? 3 : 0);
+export const weightOf = (k: string) => (k === "missed_validation" || k === "missed_customer_deadline" ? 3 : k === "late_fine" ? 0 : 1);
+export const fineOf = (k: string) => (k === "late_arrival" || k === "late_fine" ? 3 : 0);
 
 /** The first day of the quarter a day falls in (strikes reset every 3 months). */
 export function quarterOf(day: string): string {

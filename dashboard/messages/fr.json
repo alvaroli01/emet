@@ -1119,10 +1119,11 @@
       "project_post": "Nouveau dans « {project} » : {title}",
       "training_lead": "Tu animes l’entraînement cette semaine",
       "training_week": "La semaine prochaine, l’entraînement est animé par {names}",
-      "strike": "Tu as reçu un strike : {reason, select, late_tasks {plus de 3 tâches en retard} sleeping {dormir en cours} phone {téléphone en cours} late_arrival {10+ min de retard (3 €)} missed_validation {validation manquée (3 strikes)} missed_customer_deadline {échéance client manquée (3 strikes)} other {strike}} · {total}/3 ce trimestre",
+      "strike": "Tu as reçu un strike : {reason, select, late_tasks {plus de 3 tâches en retard} sleeping {dormir en cours} phone {téléphone en cours} late_arrival {arrivé·e après 9h30 (3 €)} missed_validation {validation manquée (3 strikes)} missed_customer_deadline {échéance client manquée (3 strikes)} other {strike}} · {total}/3 ce trimestre",
       "punishment": "3 strikes : rapporte 75 € en vendant de l’eau avant le {due}",
       "announcement": "{title}",
-      "leader_message": "{name}: {title}"
+      "leader_message": "{name}: {title}",
+      "late_fine": "Amende de 3 € : tu es arrivé·e en retard (après 9h10). Pas de strike. ({reason})"
     },
     "popupTitle": "Nouvelle tâche pour toi",
     "popupDue": "Pour le {date}",
@@ -1217,7 +1218,7 @@
       "nobody": "Personne n’a pointé.",
       "weekTitle": "Heures cette semaine",
       "setupToggle": "Pointer automatiquement avec mon téléphone",
-      "setupHint": "Ton téléphone te pointe quand tu arrives à moins de 30 m du bureau et te dépointe quand tu pars — même emet fermé et en données mobiles. emet ne reçoit que « arrivé » ou « parti » et l’heure, jamais ta position.",
+      "setupHint": "Ton téléphone te pointe quand tu arrives à moins de 30 m du bureau et te dépointe à 150 m — même emet fermé et en données mobiles. Partir met ta journée en pause ; si tu reviens avant 21h00, elle reprend (le temps dehors ne compte pas). emet ne reçoit que « arrivé » ou « parti » et l’heure, jamais ta position.",
       "create": "Créer mes liens de pointage",
       "copyArrive": "Copier le lien d’arrivée",
       "copyLeave": "Copier le lien de départ",
@@ -1227,16 +1228,19 @@
       "i2": "Lieu : choisis le bureau, rayon 30 m → Exécuter immédiatement → Suivant.",
       "i3": "Nouvelle automatisation vide → ajoute « Obtenir le contenu de l’URL » → colle le lien d’arrivée → Méthode : POST.",
       "i4": "Désactive « Avertir lors de l’exécution » si tu veux → OK.",
-      "i5": "Pareil avec Départ et le lien de départ.",
+      "i5": "Pareil avec Départ : choisis le bureau, rayon 150 m, et colle le lien de départ.",
       "androidTitle": "Android (app gratuite MacroDroid)",
       "a1": "Installe MacroDroid → Ajouter une macro.",
       "a2": "Déclencheur : Localisation → Géorepérage → le bureau, rayon 30 m, « Zone entrée ».",
       "a3": "Action : Connectivité → Requête HTTP → POST → colle le lien d’arrivée.",
-      "a4": "Crée une deuxième macro avec « Zone quittée » et le lien de départ. Autorise la localisation « Tout le temps ».",
+      "a4": "Crée une deuxième macro : Géorepérage → le bureau, rayon 150 m, « Zone quittée » → Requête HTTP POST avec le lien de départ. Autorise la localisation « Tout le temps ».",
       "private": "Ces liens sont privés.",
       "reset": "Les réinitialiser",
       "confirmReset": "Créer de nouveaux liens ? Les anciens ne marcheront plus et tu devras coller les nouveaux dans ton téléphone.",
-      "error": "Un problème est survenu. Réessaie."
+      "error": "Un problème est survenu. Réessaie.",
+      "youPaused": "en pause",
+      "pausedTitle": "En pause · {n}",
+      "pausedSince": "parti·e à {time} · {hours} aujourd’hui"
     }
   },
   "report": {
@@ -3229,7 +3233,8 @@
       "strike": "Strike",
       "punishment": "⚠️ 3 strikes",
       "announcement": "emet",
-      "leader_message": "📣 Team Leaders"
+      "leader_message": "📣 Team Leaders",
+      "late_fine": "Amende de retard 3 €"
     }
   },
   "strikes": {
@@ -3268,9 +3273,10 @@
       "late_tasks": "Plus de 3 tâches en retard",
       "sleeping": "Dormir en cours",
       "phone": "Avertissements répétés pour le téléphone en cours",
-      "late_arrival": "Arrivé·e avec 10+ min de retard",
+      "late_arrival": "Arrivé·e après 9h30",
       "missed_validation": "Validation manquée",
-      "missed_customer_deadline": "Échéance client manquée"
+      "missed_customer_deadline": "Échéance client manquée",
+      "late_fine": "Arrivé·e 9h11–9h29 (3 €, sans strike)"
     }
   },
   "allProjects": {

@@ -1119,10 +1119,11 @@
       "project_post": "Neu in „{project}“: {title}",
       "training_lead": "Du leitest diese Woche das Training",
       "training_week": "Nächste Woche leitet {names} das Training",
-      "strike": "Du hast einen Strike bekommen: {reason, select, late_tasks {mehr als 3 überfällige Aufgaben} sleeping {im Unterricht geschlafen} phone {Handy-Warnungen im Unterricht} late_arrival {10+ Min. zu spät (3 €)} missed_validation {Validierung verpasst (3 Strikes)} missed_customer_deadline {Kundenfrist verpasst (3 Strikes)} other {Strike}} · {total}/3 in diesem Quartal",
+      "strike": "Du hast einen Strike bekommen: {reason, select, late_tasks {mehr als 3 überfällige Aufgaben} sleeping {im Unterricht geschlafen} phone {Handy-Warnungen im Unterricht} late_arrival {nach 9:30 angekommen (3 €)} missed_validation {Validierung verpasst (3 Strikes)} missed_customer_deadline {Kundenfrist verpasst (3 Strikes)} other {Strike}} · {total}/3 in diesem Quartal",
       "punishment": "3 Strikes: bring bis {due} 75 € durch Wasserverkauf",
       "announcement": "{title}",
-      "leader_message": "{name}: {title}"
+      "leader_message": "{name}: {title}",
+      "late_fine": "3 € Strafe: du warst zu spät (nach 9:10). Kein Strike. ({reason})"
     },
     "popupTitle": "Neue Aufgabe für dich",
     "popupDue": "Fällig {date}",
@@ -1217,7 +1218,7 @@
       "nobody": "Niemand ist eingecheckt.",
       "weekTitle": "Stunden diese Woche",
       "setupToggle": "Automatisch mit meinem Handy einchecken",
-      "setupHint": "Dein Handy checkt dich ein, wenn du näher als 30 m ans Büro kommst, und aus, wenn du gehst – auch wenn emet geschlossen ist und du mobile Daten nutzt. emet bekommt nur „angekommen“ oder „gegangen“ und die Uhrzeit, nie deinen Standort.",
+      "setupHint": "Dein Handy checkt dich ein, wenn du näher als 30 m ans Büro kommst, und aus, wenn du 150 m weg bist – auch wenn emet geschlossen ist und du mobile Daten nutzt. Gehen pausiert deinen Tag; kommst du vor 21:00 zurück, läuft er weiter (die Zeit draußen zählt nicht). emet bekommt nur „angekommen“ oder „gegangen“ und die Uhrzeit, nie deinen Standort.",
       "create": "Meine Check-in-Links erstellen",
       "copyArrive": "Ankunfts-Link kopieren",
       "copyLeave": "Abgangs-Link kopieren",
@@ -1227,16 +1228,19 @@
       "i2": "Ort: das Büro wählen, Radius auf 30 m → Sofort ausführen → Weiter.",
       "i3": "Neue leere Automation → „Inhalte von URL abrufen“ hinzufügen → Ankunfts-Link einfügen → Methode: POST.",
       "i4": "„Bei Ausführung mitteilen“ ausschalten, wenn du willst → Fertig.",
-      "i5": "Dasselbe mit Verlassen und dem Abgangs-Link.",
+      "i5": "Dasselbe mit Verlassen: das Büro wählen, Radius auf 150 m, den Abgangs-Link einfügen.",
       "androidTitle": "Android (kostenlose App MacroDroid)",
       "a1": "MacroDroid installieren → Makro hinzufügen.",
       "a2": "Auslöser: Standort → Geofence → das Büro, Radius 30 m, „Bereich betreten“.",
       "a3": "Aktion: Konnektivität → HTTP-Anfrage → POST → Ankunfts-Link einfügen.",
-      "a4": "Ein zweites Makro mit „Bereich verlassen“ und dem Abgangs-Link. Standort „Immer erlauben“.",
+      "a4": "Ein zweites Makro: Geofence → das Büro, Radius 150 m, „Bereich verlassen“ → HTTP-Anfrage POST mit dem Abgangs-Link. Standort „Immer erlauben“.",
       "private": "Diese Links gehören nur dir.",
       "reset": "Zurücksetzen",
       "confirmReset": "Neue Links erstellen? Die alten funktionieren nicht mehr und du musst die neuen im Handy einfügen.",
-      "error": "Etwas ist schiefgelaufen. Versuch es nochmal."
+      "error": "Etwas ist schiefgelaufen. Versuch es nochmal.",
+      "youPaused": "pausiert",
+      "pausedTitle": "Pausiert · {n}",
+      "pausedSince": "weg seit {time} · {hours} heute"
     }
   },
   "report": {
@@ -3229,7 +3233,8 @@
       "strike": "Strike",
       "punishment": "⚠️ 3 Strikes",
       "announcement": "emet",
-      "leader_message": "📣 Team Leaders"
+      "leader_message": "📣 Team Leaders",
+      "late_fine": "3 € Verspätungsstrafe"
     }
   },
   "strikes": {
@@ -3268,9 +3273,10 @@
       "late_tasks": "Mehr als 3 überfällige Aufgaben",
       "sleeping": "Im Unterricht geschlafen",
       "phone": "Wiederholte Handy-Warnungen im Unterricht",
-      "late_arrival": "10+ Min. zu spät",
+      "late_arrival": "Nach 9:30 angekommen",
       "missed_validation": "Validierung verpasst",
-      "missed_customer_deadline": "Kundenfrist verpasst"
+      "missed_customer_deadline": "Kundenfrist verpasst",
+      "late_fine": "9:11–9:29 angekommen (3 €, kein Strike)"
     }
   },
   "allProjects": {

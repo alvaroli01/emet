@@ -10,7 +10,8 @@ import { Avatar } from "@/components/ui";
 
 export type OfficeData = {
   inNow: { id: string; name: string; avatar: string | null; since: string }[]; // since = "09:12" Spanish time
-  me: { in: boolean; today: string; week: string };                            // "7h 05m"
+  paused: { id: string; name: string; avatar: string | null; since: string; today: string }[]; // left today, may come back before 21:00
+  me: { in: boolean; paused: boolean; today: string; week: string };           // "7h 05m"
   week: { id: string; name: string; avatar: string | null; hours: string; ms: number }[];
 };
 
@@ -51,7 +52,7 @@ export function OfficeCard({ d }: { d: OfficeData }) {
           {busy ? <Loader2 size={14} className="animate-spin" /> : d.me.in ? <LogOut size={14} /> : <LogIn size={14} />} {d.me.in ? t("checkOut") : t("checkIn")}
         </button>
       </div>
-      <p className="mb-3 text-sm text-muted">{t("mine", { today: d.me.today, week: d.me.week })}</p>
+      <p className="mb-3 text-sm text-muted">{t("mine", { today: d.me.today, week: d.me.week })}{d.me.paused && <> · <span className="font-medium text-ink">{t("youPaused")}</span></>}</p>
 
       <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted">{t("inNow", { n: d.inNow.length })}</h3>
       {d.inNow.length ? (
@@ -65,6 +66,21 @@ export function OfficeCard({ d }: { d: OfficeData }) {
           ))}
         </ul>
       ) : <p className="mb-4 text-sm text-muted">{t("nobody")}</p>}
+
+      {d.paused.length > 0 && (
+        <>
+          <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted">{t("pausedTitle", { n: d.paused.length })}</h3>
+          <ul className="mb-4 space-y-1.5">
+            {d.paused.map((p) => (
+              <li key={p.id} className="flex items-center gap-2.5 text-sm text-muted">
+                <span className="opacity-60"><Avatar name={p.name} src={p.avatar} size={24} /></span>
+                <span className="min-w-0 flex-1 truncate">{p.name}</span>
+                <span className="text-xs tabular-nums">{t("pausedSince", { time: p.since, hours: p.today })}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
 
       {d.week.length > 0 && (
         <details className="mb-3">

@@ -3,19 +3,18 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type OfficeEvent = "arrive" | "leave";
 export type Visit = { id: string; user_id: string; arrived_at: string; left_at: string | null; forgot: boolean };
-export type Op = { op: "insert" } | { op: "close"; id: string } | { op: "forgot"; id: string } | { op: "reopen"; id: string };
+export type Op = { op: "insert" } | { op: "close"; id: string } | { op: "forgot"; id: string };
 
 const H = 3600e3;
-export const STALE_MS = 16 * H;   // still "in" after 16 h → they forgot to check out; that visit counts 0 h
-export const REJOIN_MS = 15 * 60e3; // left and back within 15 min (GPS wobble, a coffee) → same visit
+export const STALE_MS = 16 * H; // still "in" after 16 h → they forgot to check out; that visit counts 0 h
+export const PAUSE_UNTIL = "21:00"; // left the office: the day is paused until 21:00 (Spanish time); back before then = it resumes
 
-export function decide(open: Visit | null, lastClosed: Visit | null, event: OfficeEvent, now: number): Op[] {
+/** Each stretch inside the office is one visit. Leaving pauses the day (the time away never counts); arriving resumes it. */
+export function decide(open: Visit | null, event: OfficeEvent, now: number): Op[] {
   const stale = open && now - Date.parse(open.arrived_at) >= STALE_MS;
   if (event === "arrive") {
     if (open && !stale) return [];
-    if (open) return [{ op: "forgot", id: open.id }, { op: "insert" }];
-    if (lastClosed?.left_at && !lastClosed.forgot && now - Date.parse(lastClosed.left_at) < REJOIN_MS) return [{ op: "reopen", id: lastClosed.id }];
-    return [{ op: "insert" }];
+    return open ? [{ op: "forgot", id: open.id }, { op: "insert" }] : [{ op: "insert" }];
   }
   if (!open) return [];
   return [stale ? { op: "forgot", id: open.id } : { op: "close", id: open.id }];
@@ -30,6 +29,13 @@ export function visitMs(v: Visit, now: number): number {
 }
 
 export const isInNow = (v: Visit, now: number) => !v.left_at && !v.forgot && now - Date.parse(v.arrived_at) < STALE_MS;
+
+const madridDay = (t: number | string) => new Date(t).toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
+/** Someone's latest visit ended today and it isn't 21:00 yet → their day is paused (they may still come back). */
+export function isPaused(latest: Visit, now: number): boolean {
+  if (!latest.left_at || latest.forgot || madridDay(latest.left_at) !== madridDay(now)) return false;
+  return madridTime(new Date(now).toISOString()) < PAUSE_UNTIL;
+}
 
 /** "7h 05m" */
 export const hm = (ms: number) => { const m = Math.round(ms / 60e3); return `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m`; };
@@ -46,19 +52,17 @@ export function madridMidnight(day: string): string {
 
 /** Apply a phone/button event for one person. `db` must be the service-role client (visits are server-written only). */
 export async function applyEvent(db: SupabaseClient, userId: string, event: OfficeEvent, source: "phone" | "manual") {
-  const { data } = await db.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").eq("user_id", userId)
-    .order("arrived_at", { ascending: false }).limit(2).returns<Visit[]>();
-  const rows = data ?? [];
-  const open = rows.find((v) => !v.left_at) ?? null;
-  const lastClosed = rows.find((v) => v.left_at) ?? null;
+  const { data: open } = await db.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").eq("user_id", userId)
+    .is("left_at", null).maybeSingle<Visit>();
   const now = new Date().toISOString();
-  for (const o of decide(open, lastClosed, event, Date.now())) {
+  for (const o of decide(open, event, Date.now())) {
     const { error } =
       o.op === "insert" ? await db.from("office_visits").insert({ user_id: userId, source })
       : o.op === "close" ? await db.from("office_visits").update({ left_at: now }).eq("id", o.id)
-      : o.op === "forgot" ? await db.from("office_visits").update({ left_at: open!.arrived_at, forgot: true }).eq("id", o.id)
-      : await db.from("office_visits").update({ left_at: null }).eq("id", o.id);
+      : await db.from("office_visits").update({ left_at: open!.arrived_at, forgot: true }).eq("id", o.id);
     if (error && error.code !== "23505") throw error; // 23505: two "arrived" at the same instant — the first one won
   }
-  return event;
+  // When this person's current visit started (for the phone's reply), so a repeated "arrive" shows the real time
+  const { data: cur } = await db.from("office_visits").select("arrived_at").eq("user_id", userId).is("left_at", null).maybeSingle();
+  return { arrivedAt: (cur?.arrived_at as string | undefined) ?? null };
 }

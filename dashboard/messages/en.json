@@ -1119,10 +1119,11 @@
       "project_post": "New in “{project}”: {title}",
       "training_lead": "You lead training this week",
       "training_week": "Training next week is led by {names}",
-      "strike": "You got a strike: {reason, select, late_tasks {more than 3 late tasks} sleeping {sleeping in class} phone {phone warnings in class} late_arrival {arrived 10+ min late (€3)} missed_validation {missed a validation (3 strikes)} missed_customer_deadline {missed a customer deadline (3 strikes)} other {strike}} · {total}/3 this quarter",
+      "strike": "You got a strike: {reason, select, late_tasks {more than 3 late tasks} sleeping {sleeping in class} phone {phone warnings in class} late_arrival {arrived after 9:30 (€3)} missed_validation {missed a validation (3 strikes)} missed_customer_deadline {missed a customer deadline (3 strikes)} other {strike}} · {total}/3 this quarter",
       "punishment": "3 strikes: bring €75 from selling water by {due}",
       "announcement": "{title}",
-      "leader_message": "{name}: {title}"
+      "leader_message": "{name}: {title}",
+      "late_fine": "€3 fine: you arrived late (after 9:10). No strike. ({reason})"
     },
     "popupTitle": "New task for you",
     "popupDue": "Due {date}",
@@ -1217,7 +1218,7 @@
       "nobody": "Nobody is checked in.",
       "weekTitle": "Hours this week",
       "setupToggle": "Check in automatically with my phone",
-      "setupHint": "Your phone checks you in when you come within 30 m of the office and out when you leave — even with emet closed and on mobile data. emet only gets “arrived” or “left” and the time, never your location.",
+      "setupHint": "Your phone checks you in when you come within 30 m of the office and out when you are 150 m away — even with emet closed and on mobile data. Leaving pauses your day; if you come back before 21:00 it carries on (the time away doesn't count). emet only gets “arrived” or “left” and the time, never your location.",
       "create": "Create my check-in links",
       "copyArrive": "Copy arrive link",
       "copyLeave": "Copy leave link",
@@ -1227,16 +1228,19 @@
       "i2": "Location: choose the office and set the radius to 30 m → Run Immediately → Next.",
       "i3": "New Blank Automation → add “Get Contents of URL” → paste the arrive link → Method: POST.",
       "i4": "Turn off “Notify When Run” if you like → Done.",
-      "i5": "Do the same with Leave and the leave link.",
+      "i5": "Do the same with Leave: choose the office, set the radius to 150 m, and paste the leave link.",
       "androidTitle": "Android (free MacroDroid app)",
       "a1": "Install MacroDroid → Add macro.",
       "a2": "Trigger: Location → Geofence → the office, radius 30 m, “Area entered”.",
       "a3": "Action: Connectivity → HTTP Request → POST → paste the arrive link.",
-      "a4": "Make a second macro with “Area exited” and the leave link. Allow location “All the time”.",
+      "a4": "Make a second macro: Geofence → the office, radius 150 m, “Area exited” → HTTP Request POST with the leave link. Allow location “All the time”.",
       "private": "These links are private to you.",
       "reset": "Reset them",
       "confirmReset": "Make new links? The old ones stop working and you’ll need to paste the new ones into your phone.",
-      "error": "Something went wrong. Try again."
+      "error": "Something went wrong. Try again.",
+      "youPaused": "paused",
+      "pausedTitle": "Paused · {n}",
+      "pausedSince": "left {time} · {hours} today"
     }
   },
   "report": {
@@ -3229,7 +3233,8 @@
       "strike": "Strike",
       "punishment": "⚠️ 3 strikes",
       "announcement": "emet",
-      "leader_message": "📣 Team Leaders"
+      "leader_message": "📣 Team Leaders",
+      "late_fine": "€3 late fine"
     }
   },
   "strikes": {
@@ -3268,9 +3273,10 @@
       "late_tasks": "More than 3 late tasks",
       "sleeping": "Sleeping in class",
       "phone": "Repeated phone warnings in class",
-      "late_arrival": "Arrived 10+ min late",
+      "late_arrival": "Arrived after 9:30",
       "missed_validation": "Missed a validation",
-      "missed_customer_deadline": "Missed a customer deadline"
+      "missed_customer_deadline": "Missed a customer deadline",
+      "late_fine": "Arrived 9:11–9:29 (€3, no strike)"
     }
   },
   "allProjects": {

@@ -14,7 +14,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
   const { data: link } = await db.from("office_links").select("user_id, profiles(active)").eq("token", token)
     .maybeSingle<{ user_id: string; profiles: { active: boolean } | null }>();
   if (!link?.profiles?.active) return new Response("Not found", { status: 404 });
-  await applyEvent(db, link.user_id, event, "phone");
-  const time = madridTime(new Date().toISOString());
+  const { arrivedAt } = await applyEvent(db, link.user_id, event, "phone");
+  const time = madridTime(event === "arrive" && arrivedAt ? arrivedAt : new Date().toISOString());
   return new Response(event === "arrive" ? `emet: checked in ${time}` : `emet: checked out ${time}`, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
 }

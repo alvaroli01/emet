@@ -3,11 +3,13 @@ import assert from "node:assert/strict";
 import { STRIKE_KINDS, weightOf, fineOf, quarterOf, strikeSummary } from "./strikes.ts";
 
 test("normal strikes count 1, big ones 3; arriving late also costs €3", () => {
-  assert.deepEqual(STRIKE_KINDS, ["late_tasks", "sleeping", "phone", "late_arrival", "missed_validation", "missed_customer_deadline"]);
+  assert.deepEqual(STRIKE_KINDS, ["late_tasks", "sleeping", "phone", "late_arrival", "late_fine", "missed_validation", "missed_customer_deadline"]);
   assert.equal(weightOf("sleeping"), 1);
   assert.equal(weightOf("missed_validation"), 3);
   assert.equal(fineOf("late_arrival"), 3);
   assert.equal(fineOf("phone"), 0);
+  assert.equal(weightOf("late_fine"), 0); // 9:11–9:29 on Tue/Thu: €3, no strike
+  assert.equal(fineOf("late_fine"), 3);
 });
 
 test("every 3 months starts again (calendar quarters)", () => {
