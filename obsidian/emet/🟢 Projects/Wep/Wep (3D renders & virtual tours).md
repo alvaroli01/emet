@@ -1,13 +1,14 @@
 ---
 tags: [emet, company, wep, project]
-updated: 2026-11-02
+updated: 2026-11-09
 ---
 
 # Wep: 3D renders & virtual tours
 
-> Alvaro's photoreal 3D render and virtual-tour business, run with emet. First product that emet actually delivers to a client. How it is built → [[Wep 3D pipeline]] · how we make the still photos → [[Wep render photos (playbook)]]
+> Alvaro's photoreal 3D render and virtual-tour business, run with emet. First product that emet actually delivers to a client. How it is built → [[Wep 3D pipeline]] · how we make the still photos → [[Wep render photos (playbook)]] · first client, all 26 photos → [[Wep - Piso reforma (cliente 1)]] · our public website (wepemet) → [[wepemet website]]
 
 ## What we sell
+- **Ultra-realistic still photos of unbuilt or renovated homes** (what the first client actually bought, Nov 2026): 2 views per room from opposite corners, delivered on Drive. Method → [[Wep render photos (playbook)]].
 - **Photoreal virtual tours of properties.** They work like Matterport: you walk through by clicking anywhere, and there is a **3D dollhouse** and a **clickable floor plan**. Reference: century21.es/comprar/C0026-02688.
 - **Unbuilt or renovation jobs:** we model the flat from the blueprint at its **real measurements**, furnish it, and render every viewpoint as a 360° image. The buyer sees the finished home before the work is done.
 - **Existing homes:** real 360° photos would go in the same tour viewer (not done yet).
@@ -36,7 +37,7 @@ updated: 2026-11-02
 - Bathroom 2:
   - grey glossy vertical tiles over light grey stone, with an LED cove
   - charcoal vanity and black fittings
-- Live link: wep-tour.netlify.app. Visitor access is still team-only, so it has to be made public before the client sees it. #open
+- Live link: wep-tour.netlify.app (team-only). **Outcome:** on 3 Nov the agency said they don't want a tour; they want still photos. The tour is on hold. **26 photos delivered on 5 Nov**; the client asked for changes and **round 2 was delivered on 9 Nov** → [[Wep - Piso reforma (cliente 1)]]
 
 ## Open
 - [ ] Price list per m² / per job #open

@@ -35,6 +35,8 @@ updated: 2026-10-22
 - [ ] Members to connect Groq + Mistral and switch on "Lend my key to Scout" → [[My connections & AI keys]] #open
 
 ### ✔️ Answered
+- [ ] **Fight Night** (Rocco, 22 Oct: ≈ €500, until 19 Dec): still not a project in the dashboard. Add it or drop it? → [[Projects in emet HQ]]
+- [ ] Wep client 1: what does "un lavabo y un lavamanos" mean in the small bathroom? (we assumed WC + basin) → [[Wep - Piso reforma (cliente 1)]]
 - [x] Remove `[DEMO]` data → done 21 Oct
 - [x] Group leaders → Alvaro, Rocco, Stefan, Mario, Nahuel (21 Oct) → [[Who's who]]
 - [x] Deadline → June 2027

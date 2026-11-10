@@ -1,6 +1,6 @@
 ---
 tags: [emet, system, wep, playbook]
-updated: 2026-11-05
+updated: 2026-11-09
 ---
 
 # Wep render photos — playbook
@@ -40,6 +40,15 @@ How we turn a blueprint into **ultra-realistic still photos** of a home that isn
 - **Upload to Flow / Drive:** patch `HTMLInputElement.prototype.click` so it doesn't open the native picker, click "Subir archivo", then use `file_upload` on the file input. Drive takes max ~10 MB per call → batch the photos.
 - **Download from ChatGPT:** JS `fetch` of the last `img[alt^="Generated image"]` → blob → `<a download>`. File lands in `~/Downloads`.
 - **Replacing a photo on Drive:** move the old file to the trash first, then upload. Uploading the same name otherwise creates a duplicate.
+- **If Chrome blocks ChatGPT downloads** (9 Nov: every download silently refused): run a tiny local receiver (`python3 recv_server.py` on 127.0.0.1:8765), add a button to the ChatGPT page that `window.open`s it and `postMessage`s the image blobs, click the button. Batch all images in one click and auto-close the tab — Alvaro doesn't want that tab popping up all the time.
+
+## Client change rounds (learned 7–9 Nov)
+- Read the client's list photo by photo and map each message to photo numbers first. Ask only what is truly ambiguous.
+- **"Make it match the real structure" = render that view again from the 3D model** (`blender/render_view.py`, camera saved per photo) with finish tweaks in `blender/tweak_hall.py`, then one ChatGPT pass: "make it a real photo, change nothing structural". Attach only the render as the full image; describe the look in words, or the AI copies the old framing.
+- Every sibling view must agree: same kitchen position, same layout seen through doorways, same LEDs, same handle (one reference crop used everywhere).
+- When an AI fix breaks the rest of the image, paste only the fixed region back into the approved photo (PIL crop + feathered mask, measured with a coordinate grid).
+- Keep every version in `old/` and be ready to show a labelled contact sheet of all versions — Alvaro often picks an earlier one.
+- Don't upscale with Upscayl for the natural "UGC" look; it turns fabric and wood waxy.
 
 ## Where things live
 | What | Where |
@@ -48,13 +57,17 @@ How we turn a blueprint into **ultra-realistic still photos** of a home that isn
 | Client inputs (blueprints, notes, ref photos) | `~/Desktop/Wep 3D Modeling/` |
 | Base renders, ref crops | `out/stills/` |
 | Final photos per room + `old/` | `out/final/<room>/` |
-| Delivery set (26 photos, numbered) | `out/final/Entrega completa/` |
-| Client Drive | "Wep · Demos render vivienda" → `Entrega completa` (Emet account) |
+| Delivery set (26 photos, numbered) | `out/final/Entrega completa/` (5 Nov), `out/final/Entrega 2 - 9 nov/` (round 2) |
+| Client Drive | "Wep · Render vivienda" → `Entrega completa` (5 Nov) and `Entrega 2 - 9 nov` (9 Nov) (Emet account) |
 
 ## First job: timeline
 - 3 Nov: agency wants still photos, not a tour. 4 demo photos (living/kitchen ×2, bedroom 1 ×2) → **client liked them** (4 Nov).
 - 4 Nov: rest of the flat: main bedroom + walk-in + study, bathrooms, hallway, bedroom 2. Many layout changes from the agency (walk-in closets, north wing +1.55 m, main door moved).
 - 5 Nov: kitchen/living extra views, bathrooms made to match across views, **26 photos delivered on Drive**.
+- 7 Nov: client sends a list of changes (white kitchen + entrance cabinet, wider hallway, new bedroom-2 layout, bath changes, stainless handles, glass walk-in).
+- 9 Nov: round 2 delivered on Drive → `Entrega 2 - 9 nov`.
 - Still open: what the agency means by "un lavabo y un lavamanos" in the small bathroom (we assumed shower + WC + small basin). #open
+
+The first job in full, with every photo → [[Wep - Piso reforma (cliente 1)]]
 
 Related: [[Wep 3D pipeline]] · [[Wep (3D renders & virtual tours)]] · Back to [[🏔️ emet Dashboard]]

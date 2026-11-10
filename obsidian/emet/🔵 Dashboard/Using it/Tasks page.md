@@ -11,4 +11,4 @@ One page (`/tasks`) for every task. It replaces the General board, the team boar
 - **Who can do what:** leaders/admins anywhere; members add to their own projects and EMET and assign only people of that project (EMET: themselves + their group); assignees change status/checklist and tick their part
 - **Data:** built on the existing `cards` tables, so home, Today, Overview, Ask emet, search, calendar feed, reminders and the section assistant keep working. The 14 leader tasks (`team_tasks`) were copied into cards with everyone's ticks and files; `team_tasks` itself is untouched.
 
-Related: [[emet Dashboard]]
+Related: [[🏔️ emet Dashboard]]

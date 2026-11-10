@@ -27,3 +27,6 @@ First concrete project: a Chinese culture event with visiting students from a Ch
 - E-commerce is seen as longer-term: the team has only around €300 of starting money → [[Goal & Money]]
 
 Related: [[What emet is]] · [[Next steps]] · [[Open questions]] · Back to [[🏔️ emet Dashboard]]
+
+
+Who is on each project in the dashboard, with dates → [[Projects in emet HQ]]

@@ -1,12 +1,14 @@
 ---
 tags: [emet, history]
-updated: 2026-11-09
+updated: 2026-11-10
 ---
 
-# Changelog (synced from the repo's CHANGELOG.md, 2026-11-09)
+# Changelog (synced from the repo's CHANGELOG.md, 2026-11-10)
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-10 — Alvaro — Wep business website **wepemet** documented: live at wep-emet.pages.dev (ES/EN; renders, tours, projects, about us, new **Webs** section with two example sites), code in the private repo `alvaroli01/wep-emet-web`. Vault: `03 Systems/wepemet website.md`, day notes for 6 and 10 Nov.
+- 2026-11-10 — Alvaro — Vault split into **3 connected bubbles**, linked from the top of the home note: 🟠 About emet (who we are, goal, team, history), 🔵 How the dashboard works (emet HQ step by step), 🟢 My projects (Wep, events, all projects). Folders now match the bubbles (`🟠 About emet/`, `🔵 Dashboard/`, `🟢 Projects/`, `🕒 History/`) instead of 01–07, the home note is short, and the new canvas `🫧 emet Bubbles.canvas` replaces the old emet Map. The Graph view colours notes by bubble. Personal notes and Wep client files stay out of the repo (.gitignore).
 - 2026-11-09 — Alvaro — **Tasks page** (local preview, not live yet): one page for every task — All / My Tasks / EMET / Project tasks with a goal card, filters, priority, Blocked status, per-person completion (Done when everyone finished), checklists, file hand-ins, overdue in red. Migration 0052 (additive: priority + needs_file on cards, done/file per assignee, Blocked column, `project_goals`, member permissions, leader tasks copied into cards). Old General board, My Tasks, team board tabs and project Tasks tab redirect to it.
 - 2026-11-09 — Alvaro — Fix: the note-taker could keep "recording" with a dead microphone (a 67-min class saved ~6 s of audio). If the mic stops mid-recording (screen lock, another app, headset switch) it now reopens it and carries on, warns on screen if it can't, and keeps the phone screen awake while recording.
 - 2026-11-05 — Alvaro — New emet logo (the hand-drawn figure) in the menu, top bar, login page, browser tab and phone home-screen icons; replaces the orange summit tile.

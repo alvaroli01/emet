@@ -22,7 +22,7 @@ updated: 2026-10-22
 | [[Fernando]] | Marketing | _TBD_ |  |
 | [[Sasha]] | Marketing | _TBD_ | Added as view-only member (14 Oct) |
 | [[Mirage]] | Marketing | _TBD_ |  |
-| Leire | — (Coach) | Coach | Team coach/teacher; Coach role in emet HQ since 22 Oct: sees everything, adds tasks on any board, edits only her own |
+| [[Leire]] | — (Coach) | Coach | Team coach/teacher; Coach role in emet HQ since 22 Oct: sees everything, adds tasks on any board, edits only her own |
 
 > Groups come from the Team Contract (18 Oct); leaders set 21 Oct. Roles inside groups are not final.
 

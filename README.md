@@ -12,7 +12,7 @@ emet is a 15-person non-profit team that is part of **LEINN Internacional** (uni
 - **Started:** 13 Oct 2026 — everything is being built from scratch.
 - **Repo owner:** Alvaro
 - **What we sell:** _not decided yet_ — the team brainstorms this during the week of 19 Oct 2026.
-  - In progress: **Wep**, photoreal 3D renders and virtual tours of properties for estate agencies (first client job Nov 2026). Code: github.com/alvaroli01/3d-modeling-emet. Vault: `01 Company/Wep (3D renders & virtual tours).md`.
+  - In progress: **Wep**, photoreal 3D renders and virtual tours of properties for estate agencies (first client job Nov 2026). Code: github.com/alvaroli01/3d-modeling-emet. Vault: `🟢 Projects/Wep/`. Business website **wepemet**: https://wep-emet.pages.dev (private code: github.com/alvaroli01/wep-emet-web, vault `🟢 Projects/Wep/wepemet website.md`).
 
 ## 2. The goal
 
@@ -184,7 +184,7 @@ Each member's self-review and peer-review results are summarised in [`docs/team-
 | 2026-10-21 | Added the 11 Replica skills to `.claude/skills/` so everyone's Claude can clone an existing app's features (never its code, brand or content) and fix what its users complain about | Alvaro |
 | 2026-10-22 | Notion is connected per member (their own uni or personal Notion, by OAuth), never shared; emet stores no Notion content, only encrypted tokens and which page/database each person picked | Alvaro |
 | 2026-10-22 | Leire (the team's coach / teacher) joins as **Coach**: no group, sees everything, can add tasks on any team board and assign people, and edit only her own tasks. Only admins can make someone a coach | Alvaro |
-| 2026-10-22 | New project: Chinese culture event in Bilbao on Wed 25 Nov 2026 with visiting students from a Chinese university (they bring products from China). Joint project with Olin (the other 15-person LEINN team in our class of 30) — emet: Alvaro, Mario, Nico; Olin: Andres, Eduardo, Gordon, Nico Yarnoz. Plan in the vault: `obsidian/emet/01 Company/Chinese event (25 Nov).md` | Alvaro |
+| 2026-10-22 | New project: Chinese culture event in Bilbao on Wed 25 Nov 2026 with visiting students from a Chinese university (they bring products from China). Joint project with Olin (the other 15-person LEINN team in our class of 30) — emet: Alvaro, Mario, Nico; Olin: Andres, Eduardo, Gordon, Nico Yarnoz. Plan in the vault: `obsidian/emet/🟢 Projects/Chinese event/Chinese event (25 Nov).md` | Alvaro |
 | 2026-10-22 | Getting a task shows a live pop-up (title + due date) on whatever page you're on; Today's Sales / Tasks / Money cards can show any week or month | Alvaro |
 | 2026-10-23 | Finance subscriptions book themselves as expenses (daily job, no login needed); deleting one keeps past charges. Team tasks can require a file to finish (enforced in the database) | Alvaro |
 | 2026-10-23 | Daily pop-up with your tasks (late + next 30 days) on the first visit of the day; training leaders change every week (Mon–Sun) up to 19 Dec, first week 26 Oct = Mario & Rocco, the rest to be decided by Alvaro | Alvaro |
