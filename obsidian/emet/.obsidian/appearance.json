@@ -1,1 +1,6 @@
-{}
+{
+  "enabledCssSnippets": [
+    "emet"
+  ],
+  "accentColor": "#f08a24"
+}

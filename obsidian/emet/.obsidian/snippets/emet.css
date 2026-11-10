@@ -1,0 +1,97 @@
+/* emet vault look: bubble colours, cards on the home note, cleaner reading. */
+body {
+  --emet-orange: #f08a24;
+  --emet-blue: #3b82f6;
+  --emet-green: #22a55b;
+  --emet-grey: #8a8f98;
+  --file-line-width: 820px;
+  --h1-size: 2em;
+  --h2-size: 1.4em;
+  --h3-size: 1.12em;
+  --h1-weight: 800;
+  --h2-weight: 700;
+  --link-decoration: none;
+  --callout-radius: 12px;
+}
+
+/* ---- Sidebar: each bubble folder gets its colour ---- */
+.nav-folder-title[data-path] { border-radius: 8px; font-weight: 600; }
+.nav-folder-title[data-path^="🟠"] { color: var(--emet-orange); }
+.nav-folder-title[data-path^="🔵"] { color: var(--emet-blue); }
+.nav-folder-title[data-path^="🟢"] { color: var(--emet-green); }
+.nav-folder-title[data-path^="🕒"],
+.nav-folder-title[data-path^="🔒"] { color: var(--emet-grey); }
+.nav-folder-title[data-path^="🟠"]:not([data-path*="/"]) { background: color-mix(in srgb, var(--emet-orange) 12%, transparent); }
+.nav-folder-title[data-path^="🔵"]:not([data-path*="/"]) { background: color-mix(in srgb, var(--emet-blue) 12%, transparent); }
+.nav-folder-title[data-path^="🟢"]:not([data-path*="/"]) { background: color-mix(in srgb, var(--emet-green) 12%, transparent); }
+.nav-folder-title[data-path^="🟠"]:not([data-path*="/"]),
+.nav-folder-title[data-path^="🔵"]:not([data-path*="/"]),
+.nav-folder-title[data-path^="🟢"]:not([data-path*="/"]) { margin: 3px 0; padding-top: 5px; padding-bottom: 5px; }
+.nav-folder-children .nav-folder-children { border-left: 1px solid var(--background-modifier-border); }
+
+/* ---- Headings ---- */
+.markdown-rendered h1, .markdown-source-view .cm-header-1 { letter-spacing: -0.02em; }
+.markdown-rendered h2 {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  margin-top: 1.6em;
+}
+
+/* ---- Links: soft underline on hover ---- */
+.markdown-rendered a.internal-link { font-weight: 550; }
+.markdown-rendered a.internal-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---- Tables: rounded, airy ---- */
+.markdown-rendered table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.markdown-rendered th { background: var(--background-secondary); font-weight: 650; }
+.markdown-rendered th, .markdown-rendered td { border: none; border-bottom: 1px solid var(--background-modifier-border); padding: 8px 12px; }
+.markdown-rendered tr:last-child td { border-bottom: none; }
+
+/* ---- Blockquote intro lines ---- */
+.markdown-rendered blockquote {
+  border-left: 3px solid var(--interactive-accent);
+  background: var(--background-secondary);
+  border-radius: 0 10px 10px 0;
+  padding: 8px 14px;
+  font-style: normal;
+}
+
+/* ---- Home note (cssclasses: home): the 3 bubbles as cards ---- */
+.home table { border: none; border-spacing: 14px 0; width: 100%; table-layout: fixed; margin-left: -14px; }
+.home table th, .home table td { border: none; text-align: left; padding: 14px 18px; vertical-align: top; }
+.home table th { font-size: 1.1em; border-radius: 14px 14px 0 0; }
+.home table td { border-radius: 0 0 14px 14px; color: var(--text-muted); }
+.home table th:nth-child(1), .home table td:nth-child(1) { background: color-mix(in srgb, var(--emet-orange) 14%, transparent); }
+.home table th:nth-child(2), .home table td:nth-child(2) { background: color-mix(in srgb, var(--emet-blue) 14%, transparent); }
+.home table th:nth-child(3), .home table td:nth-child(3) { background: color-mix(in srgb, var(--emet-green) 14%, transparent); }
+
+/* ---- Hub notes: coloured title bar ---- */
+.hub-orange h1, .hub-blue h1, .hub-green h1 { padding: 10px 16px; border-radius: 12px; }
+.hub-orange h1 { background: color-mix(in srgb, var(--emet-orange) 16%, transparent); }
+.hub-blue h1 { background: color-mix(in srgb, var(--emet-blue) 16%, transparent); }
+.hub-green h1 { background: color-mix(in srgb, var(--emet-green) 16%, transparent); }
+.hub-orange h2 { border-color: color-mix(in srgb, var(--emet-orange) 45%, transparent); }
+.hub-blue h2 { border-color: color-mix(in srgb, var(--emet-blue) 45%, transparent); }
+.hub-green h2 { border-color: color-mix(in srgb, var(--emet-green) 45%, transparent); }
+
+/* ---- Day notes: the auto-captured block stands out a little ---- */
+.markdown-rendered h2:has(+ h3) { color: var(--text-accent); }
+
+/* ---- Sidebar order: home, bubbles 🟠 🔵 🟢, then History, Personal ---- */
+.nav-files-container > div:has(> .tree-item) { display: flex; flex-direction: column; }
+.nav-files-container .tree-item:has(> [data-path^="🏔"]) { order: 0; }
+.nav-files-container .tree-item:has(> [data-path^="🫧"]) { order: 1; }
+.nav-files-container .tree-item:has(> [data-path="🟠 About emet"]) { order: 2; }
+.nav-files-container .tree-item:has(> [data-path="🔵 Dashboard"]) { order: 3; }
+.nav-files-container .tree-item:has(> [data-path="🟢 Projects"]) { order: 4; }
+.nav-files-container .tree-item:has(> [data-path="🕒 History"]) { order: 5; }
+.nav-files-container .tree-item:has(> [data-path="🔒 Personal"]) { order: 6; }
+
+/* ---- Home cards: keep titles on one line when the pane is narrow ---- */
+.home table th { font-size: 1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

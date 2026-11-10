@@ -1,4 +1,5 @@
 ---
+cssclasses: [home]
 tags: [emet, dashboard]
 updated: 2026-11-10
 ---

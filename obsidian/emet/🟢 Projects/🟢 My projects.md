@@ -1,4 +1,5 @@
 ---
+cssclasses: [hub-green]
 tags: [emet, hub]
 updated: 2026-11-10
 ---
