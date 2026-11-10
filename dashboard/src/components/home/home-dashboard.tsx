@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, Trophy, Coins, HeartPulse, Target, ArrowUp, ChevronLeft, ChevronRight, Loader2, Users, Store, GraduationCap, ArrowUpRight } from "lucide-react";
+import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, Trophy, Coins, Target, ArrowUp, ChevronLeft, ChevronRight, Loader2, Users, Store, GraduationCap, ArrowUpRight } from "lucide-react";
 import { Avatar } from "@/components/ui";
 import { POINT_KINDS, POINT_GOALS, type PointKind } from "@/lib/points";
 import type { Period, Series, Unit } from "@/lib/today-periods";
@@ -21,10 +21,10 @@ export type HomeData = {
   sales: { week: number; count: number; rows: { label: string; days: number[] }[] };
   meId: string;
   points: Record<PointKind, number>;
-  activity: { active: number; total: number; days: number[]; top: { id: string; name: string; avatar: string | null; n: number }[] };
+  activity: { active: number; total: number; days: number[]; top: { id: string; name: string; avatar: string | null; n: number }[]; quiet: { id: string; name: string; avatar: string | null }[] };
   money: { days: number[]; week: number };
   goal: { revenue: number; goal: number; pct: number; daysLeft: number; nextCampAt: number | null; teams: { slug: string; color: string; label: string; mine: boolean }[] };
-  health: { score: number | null; onTime: number | null; blockers: number; mood: number | null };
+  team: { late: number; blockers: number };
   focus: { score: number | null; dueToday: number; late: number; doneWeek: number };
   calendar: { today: string; days: string[]; items: CalendarItem[]; google: GoogleStatus };
 };
@@ -109,39 +109,6 @@ function BlockColumns({ values, labels }: { values: number[]; labels: string[] }
           </div>
         );
       })}
-    </div>
-  );
-}
-
-/**
- * The "Wellness score" waves from the home page picture: three soft sine waves (orange, gold, white) that keep
- * flowing across and weaving through each other. Each wave is drawn twice as wide and slid left by exactly one
- * width, so the loop is seamless; each has its own speed so they keep crossing. A healthier team flows calmer.
- */
-const WAVES = [
-  { color: "#ff7a2e", amp: 0.34, cycles: 2, phase: 0, speed: 1, opacity: 0.95 },
-  { color: "#ffc23d", amp: 0.26, cycles: 3, phase: 1.6, speed: 1.45, opacity: 0.9 },
-  { color: "#f5f5f7", amp: 0.2, cycles: 2, phase: 3.1, speed: 0.75, opacity: 0.45 },
-];
-function Waves({ score }: { score: number | null }) {
-  const W = 320, H = 70, mid = H / 2;
-  const base = score === null ? 0 : score >= 75 ? 9 : score >= 50 ? 7 : 5; // seconds per loop
-  const wave = (amp: number, cycles: number, phase: number) => {
-    const n = 96;
-    return Array.from({ length: n + 1 }, (_, i) => {
-      const x = (i / n) * W * 2, yy = mid + Math.sin((x / W) * cycles * Math.PI * 2 + phase) * amp * H;
-      return `${i ? "L" : "M"} ${Math.round(x * 10) / 10} ${Math.round(yy * 10) / 10}`;
-    }).join(" ");
-  };
-  return (
-    <div aria-hidden className="relative mt-3 h-20 w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]">
-      {WAVES.map((w, i) => (
-        <div key={i} className={`absolute inset-y-0 left-0 w-[200%] ${base ? "wave-flow" : ""}`} style={{ animationDuration: `${base * w.speed}s` }}>
-          <svg viewBox={`0 0 ${W * 2} ${H}`} preserveAspectRatio="none" className="size-full">
-            <path d={base ? wave(w.amp, w.cycles, w.phase) : `M 0 ${mid} H ${W * 2}`} fill="none" stroke={w.color} strokeOpacity={base ? w.opacity : 0.25} strokeWidth="2" vectorEffect="non-scaling-stroke" />
-          </svg>
-        </div>
-      ))}
     </div>
   );
 }
@@ -302,27 +269,25 @@ export function HomeDashboard({ d }: { d: HomeData }) {
             <p className="flex items-center gap-1 text-xs text-muted"><span className="text-[#ff7a2e]">●</span> {t("moneyNote")}</p>
           </Card>
 
-          <section className="panel p-4 sm:col-span-2 sm:p-5 lg:col-span-1 lg:[grid-column:span_1]">
-            <h2 className="text-[15px] font-medium">{t("health")}</h2>
-            <div className="mt-1 text-center">
-              <p className="readout text-3xl text-[#ff7a2e]">{d.health.score ?? "—"}</p>
-              <p className="text-sm font-medium">{d.health.score === null ? t("noData") : d.health.score >= 75 ? t("good") : d.health.score >= 50 ? t("ok") : t("needsCare")}</p>
+          {/* Team this week: who's in, who to check on, what's stuck */}
+          <section className="panel flex flex-col p-4 sm:col-span-2 sm:p-5 lg:col-span-1">
+            <div className="flex items-baseline justify-between gap-2">
+              <h2 className="text-[15px] font-medium">{t("teamWeek")}</h2>
+              <p className="text-xs text-muted"><b className="readout text-base text-ink">{d.activity.active}</b>/{d.activity.total} {t("activeWeek")}</p>
             </div>
-            <Waves score={d.health.score} />
-            <dl className="mt-2 grid grid-cols-3 text-xs">
-              <div><dt className="text-muted">{t("onTime")}</dt><dd className="readout text-lg">{d.health.onTime === null ? "—" : `${Math.round(d.health.onTime * 100)}%`}</dd></div>
-              <div className="text-center"><HeartPulse size={18} className="mx-auto text-muted" /><dd className="mt-0.5 text-muted">{t("insights")}</dd></div>
-              <div className="text-right"><dt className="text-muted">{t("blockers")}</dt><dd className="readout text-lg">{d.health.blockers}</dd></div>
-            </dl>
-            {/* Team activity this week: who is moving, per day, and the most active people */}
-            <div className="mt-4 border-t border-line pt-3">
-              <div className="flex items-baseline justify-between gap-2">
-                <h3 className="text-[13px] font-medium">{t("activity")}</h3>
-                <p className="text-xs text-muted"><b className="readout text-ink">{d.activity.active}</b>/{d.activity.total} {t("activeWeek")}</p>
-              </div>
-              <ActivityBars days={d.activity.days} labels={weekdays} />
-              {d.activity.top.length > 0 && (
-                <ul className="mt-3 space-y-1.5">
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <Link href="/" className={`rounded-2xl px-3 py-2 ${d.team.late ? "bg-bad/15 text-bad-text" : "bg-surface-2"}`}>
+                <p className="readout text-xl">{d.team.late}</p><p className="text-xs">{t("lateTasks")}</p>
+              </Link>
+              <Link href="/" className={`rounded-2xl px-3 py-2 ${d.team.blockers ? "bg-bad/15 text-bad-text" : "bg-surface-2"}`}>
+                <p className="readout text-xl">{d.team.blockers}</p><p className="text-xs">{t("blockers")}</p>
+              </Link>
+            </div>
+            <ActivityBars days={d.activity.days} labels={weekdays} />
+            {d.activity.top.length > 0 && (
+              <>
+                <h3 className="mt-3 text-xs font-medium text-muted">{t("mostActive")}</h3>
+                <ul className="mt-1.5 space-y-1.5">
                   {d.activity.top.map((p, i) => (
                     <li key={p.id}>
                       <Link href={`/team/${p.id}`} className="flex items-center gap-2 text-sm hover:text-link">
@@ -334,8 +299,18 @@ export function HomeDashboard({ d }: { d: HomeData }) {
                     </li>
                   ))}
                 </ul>
-              )}
-            </div>
+              </>
+            )}
+            <h3 className="mt-3 text-xs font-medium text-muted">{t("notSeen")}</h3>
+            {d.activity.quiet.length ? (
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {d.activity.quiet.map((p) => (
+                  <Link key={p.id} href={`/team/${p.id}`} title={p.name} aria-label={p.name} className="rounded-full ring-1 ring-line transition hover:ring-brand">
+                    <Avatar name={p.name} src={p.avatar} size={26} />
+                  </Link>
+                ))}
+              </div>
+            ) : <p className="mt-1 text-sm text-ok-text">{t("allSeen")}</p>}
           </section>
 
           <section className="panel p-4 sm:col-span-2 sm:p-5 lg:col-span-2">

@@ -4,7 +4,7 @@ import { CalendarClock, ArrowUpRight, Clock, CheckCircle2 } from "lucide-react";
 import { HomeDashboard, type HomeData } from "@/components/home/home-dashboard";
 import { getSession, sendGuestToProject } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
-import { weekStart, GOAL, pace, totals, onTimeRate, type Sale, type Expense, type CardLite } from "@/lib/metrics";
+import { weekStart, GOAL, pace, totals, type Sale, type Expense } from "@/lib/metrics";
 import { todayISO, shortDate } from "@/lib/format";
 import { LiveRefresh } from "@/components/live-refresh";
 import { loadMyGoogleEvents } from "@/lib/gcal-server";
@@ -49,7 +49,7 @@ export default async function TodayPage() {
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 6 * DAY).toISOString().slice(0, 10);
   const googleP = loadMyGoogleEvents(supabase, week, weekEnd); // in parallel with the queries below
   const notionP = loadMyNotionDeadlinesFast(supabase, week, weekEnd); // my Notion deadlines database, if I picked one
-  const [weekSales, myPoints, teamActs, seen, members, dueCards, blockers, morale, myDone, weekAgenda, weekTasks] = await Promise.all([
+  const [weekSales, myPoints, teamActs, seen, members, dueCards, blockers, myDone, weekAgenda, weekTasks] = await Promise.all([
     supabase.from("sales").select("date, amount, heard_about, channel").gte("date", lastMonday),
     supabase.from("member_points").select("kind, amount").eq("user_id", me.id),
     supabase.rpc("team_activity", { since: new Date(Date.parse(week + "T00:00:00Z") - DAY).toISOString() }), // a day early; trimmed to this week below
@@ -57,7 +57,6 @@ export default async function TodayPage() {
     loadMembers(),
     supabase.from("cards").select("board_id, due_at, completed_at").not("due_at", "is", null),
     supabase.from("blockers").select("id", { count: "exact", head: true }).eq("status", "open"),
-    supabase.from("morale_checks").select("score").eq("week_start", week),
     supabase.from("cards").select("completed_at, card_assignees!inner(user_id)").eq("card_assignees.user_id", me.id).not("completed_at", "is", null).gte("completed_at", since30),
     // My week calendar: my own agenda plus tasks assigned to me that are due this week
     supabase.from("agenda_items").select("id, title, day, start_time, end_time, done").eq("owner_id", me.id).gte("day", week).lte("day", weekEnd).order("start_time"),
@@ -99,16 +98,16 @@ export default async function TodayPage() {
   const acts = ((teamActs.data ?? []) as { user_id: string; day: string; n: number }[]).filter((a) => inClass.has(a.user_id) && a.day >= week);
   const perPerson = new Map<string, number>();
   for (const a of acts) perPerson.set(a.user_id, (perPerson.get(a.user_id) ?? 0) + Number(a.n));
+  const activeIds = new Set([...perPerson.keys(), ...(seen.data ?? []).map((x) => x.user_id as string).filter((id) => inClass.has(id))]);
   const activity = {
-    // Active = did something or opened emet this week
-    active: new Set([...perPerson.keys(), ...(seen.data ?? []).map((x) => x.user_id as string).filter((id) => inClass.has(id))]).size, total: classmates.length,
+    // Active = did something or opened emet this week; the rest are "not seen" (someone to check on)
+    active: activeIds.size, total: classmates.length,
+    quiet: classmates.filter((m) => !activeIds.has(m.id)).map((m) => ({ id: m.id, name: m.full_name, avatar: m.avatar_url })),
     days: Array.from({ length: 7 }, (_, i) => acts.filter((a) => dayIdx(a.day) === i).reduce((s, a) => s + Number(a.n), 0)),
     top: [...perPerson].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([id, n]) => ({ id, n, name: inClass.get(id)!.full_name, avatar: inClass.get(id)!.avatar_url })),
   };
   const moneyDays = Array.from({ length: 7 }, (_, i) => ws.filter((x) => dayIdx(x.date) === i).reduce((a, x) => a + Number(x.amount), 0));
-  const ot = onTimeRate((dueCards.data ?? []) as CardLite[]);
-  const moods = (morale.data ?? []).map((m) => Number(m.score)).filter((n) => n > 0);
-  const healthScore = ot.rate === null && !moods.length ? null : Math.round(((ot.rate ?? 0.7) * 0.6 + (moods.length ? (moods.reduce((a, b) => a + b, 0) / moods.length) / 5 : 0.7) * 0.3 + (blockers.count ? 0 : 0.1)) * 100);
+  const lateTeam = (dueCards.data ?? []).filter((c) => !c.completed_at && c.due_at!.slice(0, 10) < today).length;
   const prioDone = priorities.filter((x: string) => x.startsWith("✓ ")).length;
   const doneWeekMine = (myDone.data ?? []).filter((x) => x.completed_at!.slice(0, 10) >= week).length;
   const focusScore = priorities.length || doneWeekMine ? Math.min(100, Math.round((priorities.length ? (prioDone / priorities.length) * 60 : 30) + Math.min(40, doneWeekMine * 8) - overdue.length * 5)) : null;
@@ -124,7 +123,7 @@ export default async function TodayPage() {
     money: { days: moneyDays, week: moneyDays.reduce((a, b) => a + b, 0) },
     goal: { revenue: all.revenue, goal: GOAL.revenue, pct: revPct, daysLeft: p.daysLeft, nextCampAt: nextCamp ? nextCamp.amount / GOAL.revenue : null,
             teams: groups.map((g) => ({ slug: g.slug, color: g.color, label: tg(g.slug), mine: g.id === me.group_id })) },
-    health: { score: healthScore, onTime: ot.rate, blockers: blockers.count ?? 0, mood: moods.length ? moods.reduce((a, b) => a + b, 0) / moods.length : null },
+    team: { late: lateTeam, blockers: blockers.count ?? 0 },
     focus: { score: focusScore, dueToday: dueToday.length, late: overdue.length, doneWeek: doneWeekMine },
     calendar: {
       today,
