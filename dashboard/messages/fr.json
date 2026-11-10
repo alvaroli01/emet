@@ -3467,6 +3467,7 @@
     "missingHint": "Leur téléphone n’a jamais envoyé de position, donc on ne peut pas les pointer. Demande-leur de faire la configuration dans Aujourd’hui → Au bureau.",
     "strikesTitle": "Amendes et strikes de retard",
     "strikesHint": "Les retards du mardi et du jeudi s’ajoutent tout seuls (« Automatic: checked in at … »). Si quelqu’un travaillait ailleurs ce jour-là, supprime-le dans l’onglet Strikes.",
-    "openStrikes": "Ouvrir Strikes →"
+    "openStrikes": "Ouvrir Strikes →",
+    "away": "à {m} m"
   }
 }

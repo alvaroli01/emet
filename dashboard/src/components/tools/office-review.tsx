@@ -17,7 +17,7 @@ export async function OfficeReview({ people }: { people: Member[] }) {
     supabase.rpc("office_setup_status"),
     supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").gte("arrived_at", madridMidnight(weekStart(now))).returns<Visit[]>(),
   ]);
-  const phone = new Map(((setup ?? []) as { user_id: string; has_link: boolean; last_ping_at: string | null }[]).map((r) => [r.user_id, r]));
+  const phone = new Map(((setup ?? []) as { user_id: string; has_link: boolean; last_ping_at: string | null; last_distance_m: number | null }[]).map((r) => [r.user_id, r]));
   const rows = people.filter((p) => phone.has(p.id)).map((p) => ({ p, s: officeStatus(visits ?? [], p.id, now), ph: phone.get(p.id)! }))
     .sort((a, b) => Number(b.s.inNow) - Number(a.s.inNow) || b.s.todayMs - a.s.todayMs || a.p.full_name.localeCompare(b.p.full_name));
   const notSetUp = rows.filter((r) => !r.ph.last_ping_at);
@@ -36,8 +36,8 @@ export async function OfficeReview({ people }: { people: Member[] }) {
                 {s.inNow ? t("inSince", { time: s.since ?? "" }) : s.paused ? t("pausedSince", { time: s.since ?? "" }) : t("out")}
               </span>
               <span className="whitespace-nowrap text-right text-xs tabular-nums text-muted sm:w-48">{t("hours", { today: hm(s.todayMs), week: hm(s.weekMs) })}</span>
-              <span className={`w-40 text-right text-xs ${ph.last_ping_at ? "text-muted" : "font-medium text-bad-text"}`}>
-                {!ph.has_link ? t("noLink") : !ph.last_ping_at ? t("neverSignal") : t("lastSignal", { when: timeAgo(ph.last_ping_at, locale, now) })}
+              <span className={`w-56 text-right text-xs ${ph.last_ping_at ? "text-muted" : "font-medium text-bad-text"}`}>
+                {!ph.has_link ? t("noLink") : !ph.last_ping_at ? t("neverSignal") : t("lastSignal", { when: timeAgo(ph.last_ping_at, locale, now) }) + (ph.last_distance_m !== null ? ` · ${t("away", { m: ph.last_distance_m })}` : "")}
               </span>
             </li>
           ))}

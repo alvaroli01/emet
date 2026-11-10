@@ -3467,6 +3467,7 @@
     "missingHint": "Ihr Handy hat noch nie eine Position gesendet, also können sie nicht eingecheckt werden. Bitte sie, die Einrichtung unter Heute → Im Büro zu machen.",
     "strikesTitle": "Verspätungsstrafen und Strikes",
     "strikesHint": "Verspätungen am Dienstag und Donnerstag kommen automatisch dazu („Automatic: checked in at …“). Hat jemand an dem Tag woanders gearbeitet, lösche es im Tab Strikes.",
-    "openStrikes": "Strikes öffnen →"
+    "openStrikes": "Strikes öffnen →",
+    "away": "{m} m entfernt"
   }
 }

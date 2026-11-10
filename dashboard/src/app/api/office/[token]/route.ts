@@ -22,16 +22,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
   const body = (await request.json().catch(() => ({}))) as { lat?: unknown; lng?: unknown };
   const here = { lat: num(body.lat), lng: num(body.lng) };
   if (!Number.isFinite(here.lat) || !Number.isFinite(here.lng) || Math.abs(here.lat) > 90 || Math.abs(here.lng) > 180) return text("emet: no location", 400);
-  // "Phone connected": leaders see when each phone last reported (Team Leaders → Office)
-  await db.from("office_links").update({ last_ping_at: new Date().toISOString() }).eq("token", token);
-  if (!isWorkday(Date.now())) return text("done emet: weekends don't count"); // Monday–Friday only
   const [{ data: office }, { data: open }] = await Promise.all([
     db.from("office_place").select("lat, lng").maybeSingle<{ lat: number; lng: number }>(),
     db.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").eq("user_id", link.user_id).is("left_at", null).maybeSingle<Visit>(),
   ]);
-  if (!office) return text("done emet: the office location isn't set yet");
-  const step = zoneStep(distanceM(office, here), !!open && isInNow(open, Date.now()));
-  if (!step.event) return text(step.reply);
+  const dist = office ? distanceM(office, here) : null;
+  // "Phone connected": leaders see when each phone last reported and how far away it was (the distance only, never the position)
+  await db.from("office_links").update({ last_ping_at: new Date().toISOString(), last_distance_m: dist === null ? null : Math.round(dist) }).eq("token", token);
+  if (!isWorkday(Date.now())) return text("done emet: weekends don't count"); // Monday–Friday only
+  if (dist === null) return text("done emet: the office location isn't set yet");
+  const step = zoneStep(dist, !!open && isInNow(open, Date.now()));
+  if (!step.event) return text(`${step.reply} emet: ${Math.round(dist)} m from the office`);
   const ev = step.event;
   const { arrivedAt } = await applyEvent(db, link.user_id, ev, "phone");
   const time = madridTime(ev === "arrive" && arrivedAt ? arrivedAt : new Date().toISOString());

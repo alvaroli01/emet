@@ -3467,6 +3467,7 @@
     "missingHint": "Heidän puhelimensa ei ole koskaan lähettänyt sijaintia, joten heitä ei voi kirjata sisään. Pyydä heitä tekemään asetukset kohdassa Tänään → Toimistolla.",
     "strikesTitle": "Myöhästymissakot ja strike-merkinnät",
     "strikesHint": "Tiistain ja torstain myöhästymiset lisätään automaattisesti (”Automatic: checked in at …”). Jos joku teki sinä päivänä töitä muualla, poista se Strikes-välilehdellä.",
-    "openStrikes": "Avaa Strikes →"
+    "openStrikes": "Avaa Strikes →",
+    "away": "{m} m päässä"
   }
 }

@@ -3467,6 +3467,7 @@
     "missingHint": "Su móvil nunca ha enviado una posición, así que no se les puede fichar. Pídeles que hagan la configuración en Hoy → En la oficina.",
     "strikesTitle": "Multas y strikes por llegar tarde",
     "strikesHint": "Las llegadas tarde de martes y jueves se añaden solas (“Automatic: checked in at …”). Si alguien trabajaba en otro sitio ese día, bórralo en la pestaña Strikes.",
-    "openStrikes": "Abrir Strikes →"
+    "openStrikes": "Abrir Strikes →",
+    "away": "a {m} m"
   }
 }

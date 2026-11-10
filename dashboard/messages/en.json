@@ -3467,6 +3467,7 @@
     "missingHint": "Their phone has never sent a position, so they can't be checked in. Ask them to do the setup on Today → At the office.",
     "strikesTitle": "Late fines and strikes",
     "strikesHint": "Late arrivals on Tuesdays and Thursdays are added automatically (“Automatic: checked in at …”). If someone was working elsewhere that day, delete it in the Strikes tab.",
-    "openStrikes": "Open Strikes →"
+    "openStrikes": "Open Strikes →",
+    "away": "{m} m away"
   }
 }

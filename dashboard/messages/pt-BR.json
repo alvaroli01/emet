@@ -3467,6 +3467,7 @@
     "missingHint": "O celular delas nunca enviou uma posição, então não dá para registrar a entrada. Peça para fazerem a configuração em Hoje → No escritório.",
     "strikesTitle": "Multas e strikes por atraso",
     "strikesHint": "Os atrasos de terça e quinta entram sozinhos (“Automatic: checked in at …”). Se alguém estava trabalhando em outro lugar nesse dia, apague na aba Strikes.",
-    "openStrikes": "Abrir Strikes →"
+    "openStrikes": "Abrir Strikes →",
+    "away": "a {m} m"
   }
 }
