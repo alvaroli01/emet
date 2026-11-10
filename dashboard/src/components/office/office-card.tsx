@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Building2, Copy, Loader2, LogIn, LogOut, RotateCcw, Smartphone } from "lucide-react";
+import { Building2, Copy, Loader2, MapPin, RotateCcw, Smartphone } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
@@ -13,9 +13,11 @@ export type OfficeData = {
   paused: { id: string; name: string; avatar: string | null; since: string; today: string }[]; // left today, may come back before 21:00
   me: { in: boolean; paused: boolean; today: string; week: string };           // "7h 05m"
   week: { id: string; name: string; avatar: string | null; hours: string; ms: number }[];
+  isAdmin: boolean; officeSet: boolean; // the office point the iPhone shortcut is measured against
 };
 
-/** At the office: who is in right now, my hours, and the phone automation that checks me in and out by itself. */
+/** At the office: who is in right now, my hours, and the phone automation that checks me in and out by itself.
+ *  There is no manual check-in: only the phone's real position counts, so nobody can start or stop their time. */
 export function OfficeCard({ d }: { d: OfficeData }) {
   const t = useTranslations("today.office");
   const toast = useToast();
@@ -26,13 +28,6 @@ export function OfficeCard({ d }: { d: OfficeData }) {
   const [token, setToken] = useState<string | null | undefined>(undefined);
   useEffect(() => { if (setup && token === undefined) supabase.from("office_links").select("token").maybeSingle().then(({ data }) => setToken(data?.token ?? null)); }, [setup, token, supabase]);
 
-  async function press() {
-    setBusy(true);
-    const r = await fetch("/api/office", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ event: d.me.in ? "leave" : "arrive" }) });
-    setBusy(false);
-    if (!r.ok) { toast("error", t("error")); return; }
-    router.refresh();
-  }
   async function create(reset = false) {
     setToken(undefined);
     if (reset) await supabase.from("office_links").delete().not("token", "is", null);
@@ -40,17 +35,31 @@ export function OfficeCard({ d }: { d: OfficeData }) {
     if (error) { toast("error", t("error")); setToken(null); return; }
     setToken(data.token);
   }
-  const url = (e: "arrive" | "leave") => (token ? `${window.location.origin}/api/office/${token}?event=${e}` : "");
-  const copy = async (e: "arrive" | "leave") => { await navigator.clipboard.writeText(url(e)); toast("ok", t("copied")); };
+  // iPhone: copy my link (the shortcut asks for it once while being added), then open the ready-made emet shortcut
+  async function addShortcut() {
+    await navigator.clipboard.writeText(`${window.location.origin}/api/office/${token}`).catch(() => {});
+    toast("ok", t("copied"));
+    window.location.href = "/emet-check-in.shortcut";
+  }
+  // Admin, standing in the office: save this spot as the office (what "30 m" and "150 m" are measured from)
+  function setOffice() {
+    if (!navigator.geolocation) { toast("error", t("error")); return; }
+    setBusy(true);
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { error } = await supabase.from("office_place").upsert({ id: true, lat: pos.coords.latitude, lng: pos.coords.longitude, updated_at: new Date().toISOString() });
+      setBusy(false);
+      if (error) { toast("error", t("error")); return; }
+      toast("ok", t("officeSaved", { acc: Math.round(pos.coords.accuracy) }));
+      router.refresh();
+    }, () => { setBusy(false); toast("error", t("noLocation")); }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+  }
+  const copy = async () => { await navigator.clipboard.writeText(`${window.location.origin}/api/office/${token}`); toast("ok", t("copied")); };
 
   return (
     <section className="panel p-5">
       <div className="mb-3 flex items-center justify-between gap-2">
         <h2 className="flex items-center gap-1.5 text-lg font-semibold tracking-tight"><Building2 size={17} /> {t("title")}</h2>
-        <button onClick={press} disabled={busy}
-                className={`flex min-h-9 items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-medium ${d.me.in ? "bg-surface-2 hover:bg-line" : "bg-brand text-brand-contrast"}`}>
-          {busy ? <Loader2 size={14} className="animate-spin" /> : d.me.in ? <LogOut size={14} /> : <LogIn size={14} />} {d.me.in ? t("checkOut") : t("checkIn")}
-        </button>
+        {d.me.in && <span className="rounded-full bg-ok px-2.5 py-1 text-xs font-medium text-white">{t("youIn")}</span>}
       </div>
       <p className="mb-3 text-sm text-muted">{t("mine", { today: d.me.today, week: d.me.week })}{d.me.paused && <> · <span className="font-medium text-ink">{t("youPaused")}</span></>}</p>
 
@@ -103,23 +112,27 @@ export function OfficeCard({ d }: { d: OfficeData }) {
       {setup && (
         <div className="mt-3 space-y-3 rounded-xl bg-surface-2 p-4 text-sm">
           <p className="text-muted">{t("setupHint")}</p>
+          {!d.officeSet && <p className="rounded-lg bg-surface px-3 py-2 text-xs font-medium">{t("officeMissing")}</p>}
+          {d.isAdmin && (
+            <button onClick={setOffice} disabled={busy} className="flex items-center gap-1.5 text-xs underline underline-offset-2 hover:text-ink">
+              <MapPin size={12} /> {d.officeSet ? t("moveOffice") : t("setOffice")}
+            </button>
+          )}
           {token === undefined ? <Loader2 size={16} className="animate-spin text-muted" /> : !token ? (
             <button onClick={() => create()} className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-contrast">{t("create")}</button>
           ) : (
             <>
-              <div className="flex flex-wrap gap-2">
-                <button onClick={() => copy("arrive")} className="flex items-center gap-1.5 rounded-xl bg-surface px-3 py-2 text-sm font-medium hover:bg-line"><Copy size={13} /> {t("copyArrive")}</button>
-                <button onClick={() => copy("leave")} className="flex items-center gap-1.5 rounded-xl bg-surface px-3 py-2 text-sm font-medium hover:bg-line"><Copy size={13} /> {t("copyLeave")}</button>
-              </div>
               <div>
                 <p className="font-medium">{t("iphoneTitle")}</p>
-                <ol className="mt-1 list-decimal space-y-0.5 pl-5 text-muted">
-                  {(["i1", "i2", "i3", "i4", "i5"] as const).map((k) => <li key={k}>{t(k)}</li>)}
+                <button onClick={addShortcut} className="mt-1.5 flex items-center gap-1.5 rounded-xl bg-brand px-3.5 py-2 text-sm font-medium text-brand-contrast"><Smartphone size={14} /> {t("addShortcut")}</button>
+                <ol className="mt-2 list-decimal space-y-0.5 pl-5 text-muted">
+                  {(["i1", "i2", "i3", "i4"] as const).map((k) => <li key={k}>{t(k)}</li>)}
                 </ol>
               </div>
               <div>
                 <p className="font-medium">{t("androidTitle")}</p>
-                <ol className="mt-1 list-decimal space-y-0.5 pl-5 text-muted">
+                <button onClick={copy} className="mt-1.5 flex items-center gap-1.5 rounded-xl bg-surface px-3 py-2 text-sm font-medium hover:bg-line"><Copy size={13} /> {t("copyLink")}</button>
+                <ol className="mt-2 list-decimal space-y-0.5 pl-5 text-muted">
                   {(["a1", "a2", "a3", "a4"] as const).map((k) => <li key={k}>{t(k)}</li>)}
                 </ol>
               </div>

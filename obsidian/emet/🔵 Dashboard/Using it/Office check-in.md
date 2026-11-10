@@ -12,13 +12,15 @@ A website can't read location while it's closed (iPhones block it completely), a
 
 ## Phone setup (each member, once)
 Today → At the office → *Check in automatically with my phone* → **Create my check-in links**, then:
-- **iPhone (Shortcuts):** Automation → + → Arrive → the office, radius 30 m → Run Immediately → "Get Contents of URL" → paste the *arrive* link → Method **POST**. Repeat with Leave (radius **150 m**) + the *leave* link.
-- **Android (MacroDroid, free):** Geofence trigger (office, 30 m, Area entered) → HTTP Request POST with the arrive link; a second macro: geofence 150 m, Area exited + the leave link. Location "All the time".
-- The links are private. **Reset them** makes new ones (the old ones stop working).
+- **iPhone:** tap **1. Add the emet shortcut** (emet copies your link and opens `emet-check-in.shortcut`) → Add Shortcut → paste the link in the box. Then Shortcuts → Automation → + → **Arrive** → the office → Run Immediately → pick *emet check-in*; again with **Leave**. Allow location the first time.
+- **Why it still means 30 m:** iPhone zones can't be smaller than ~100 m, so the automation only *wakes* the shortcut. The shortcut sends its position every 15 s (up to 6 min) and emet decides: within 30 m = in, 150 m away = out, otherwise "wait".
+- **Android (MacroDroid, free):** geofence 30 m "Area entered" → Get location (lat/lng variables) → HTTP POST your link with JSON `{"lat":"{v=lat}","lng":"{v=lng}"}`; copy the macro for 150 m "Area exited". *Menu names still to check on the Samsung phone.*
+- **The office point:** an admin stands in the office and presses **Set office location here** (table `office_place`, migration 0055). Until then nobody can be checked in.
+- The shortcut file is built and signed on Alvaro's Mac (`shortcuts sign --mode anyone`); the build script is in the 10 Nov session.
 
 ## Rules
 - **Pause:** leaving pauses the day until 21:00. Coming back before then resumes it, and the time away never counts. If they don't come back, the hours stop where they paused. Today shows a *Paused* list.
-- Never checked out after 16 h = "forgotten", counts 0 h.
+- **No cheating (Alvaro, 10 Nov):** there is no Check in/out button and no arrive/leave links. Only a real phone position counts, so running the shortcut from home can never check you in. No check-out by midnight (phone off, Leave deleted) = that stretch counts 0 h.
 - Visits are written only by the server. Members can read everyone's visits but can't edit hours.
 - The link only accepts POST, so a WhatsApp link preview can't check anyone in.
 

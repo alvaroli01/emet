@@ -51,7 +51,7 @@ export default async function TodayPage() {
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 6 * DAY).toISOString().slice(0, 10);
   const googleP = loadMyGoogleEvents(supabase, week, weekEnd); // in parallel with the queries below
   const notionP = loadMyNotionDeadlinesFast(supabase, week, weekEnd); // my Notion deadlines database, if I picked one
-  const [weekSales, myPoints, teamActs, seen, members, dueCards, blockers, myDone, weekAgenda, weekTasks, visits] = await Promise.all([
+  const [weekSales, myPoints, teamActs, seen, members, dueCards, blockers, myDone, weekAgenda, weekTasks, officePlace, visits] = await Promise.all([
     supabase.from("sales").select("date, amount, heard_about, channel").gte("date", lastMonday),
     supabase.from("member_points").select("kind, amount").eq("user_id", me.id),
     supabase.rpc("team_activity", { since: new Date(Date.parse(week + "T00:00:00Z") - DAY).toISOString() }), // a day early; trimmed to this week below
@@ -65,6 +65,7 @@ export default async function TodayPage() {
     supabase.from("cards").select("id, title, due_at, completed_at, boards(group_id, project_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).gte("due_at", `${week}T00:00:00Z`).lte("due_at", `${weekEnd}T23:59:59Z`),
     // Office check-ins this week (+ anyone still in from before Monday)
+    supabase.from("office_place").select("id").maybeSingle(),
     supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").or(`arrived_at.gte.${madridMidnight(week)},left_at.is.null`).returns<Visit[]>(),
   ]);
 
@@ -164,6 +165,7 @@ export default async function TodayPage() {
     me: { in: vs.some((v) => v.user_id === me.id && isInNow(v, now)), paused: pausedNow(me.id), today: hm(msOf(me.id, dayFrom)), week: hm(msOf(me.id, weekFrom)) },
     week: [...new Set(vs.map((v) => v.user_id))].filter((id) => who.has(id)).map((id) => ({ id, name: who.get(id)!.full_name, avatar: who.get(id)!.avatar_url, ms: msOf(id, weekFrom) }))
       .filter((p) => p.ms > 0).sort((a, b) => b.ms - a.ms).map((p) => ({ ...p, hours: hm(p.ms) })),
+    isAdmin, officeSet: !!officePlace.data,
   };
 
 
