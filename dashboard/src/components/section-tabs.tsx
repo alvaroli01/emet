@@ -14,6 +14,8 @@ export function SectionTabs({ tabs, initial, label, groups }: { tabs: SectionTab
   const [active, setActive] = useState(tabs.some((t) => t.id === initial) ? initial! : tabs[0]?.id);
   // Links like ?tab=books (from the hero) switch the open tab without a full reload
   useEffect(() => { if (initial && tabs.some((t) => t.id === initial)) setActive(initial); }, [initial]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Links like ?tab=docs#camp-tabs: the page streams in after the browser looked for the anchor, so jump to it once the tabs exist
+  useEffect(() => { if (initial && location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView(); }, [initial]);
   const cats = groups ? [...new Set(tabs.map((t) => t.group ?? "other"))].filter((g) => tabs.some((t) => (t.group ?? "other") === g)) : [];
   const activeCat = tabs.find((t) => t.id === active)?.group ?? "other";
   const visible = cats.length > 1 ? tabs.filter((t) => (t.group ?? "other") === activeCat) : tabs;
