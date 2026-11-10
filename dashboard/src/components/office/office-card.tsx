@@ -36,10 +36,11 @@ export function OfficeCard({ d }: { d: OfficeData }) {
     setToken(data.token);
   }
   // iPhone: copy my link (the shortcut asks for it once while being added), then open the ready-made emet shortcut
+  // (iCloud link made 2026-11-10 from Alvaro's Mac; tested there against live emet)
   async function addShortcut() {
     await navigator.clipboard.writeText(`${window.location.origin}/api/office/${token}`).catch(() => {});
     toast("ok", t("copied"));
-    window.location.href = "/emet-check-in.shortcut";
+    window.location.href = "https://www.icloud.com/shortcuts/6f03e588bf8f4db588d0cd26be2e5538";
   }
   // Admin, standing in the office: save this spot as the office (what "30 m" and "150 m" are measured from)
   function setOffice() {

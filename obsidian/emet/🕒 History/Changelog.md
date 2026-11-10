@@ -7,6 +7,7 @@ updated: 2026-11-10
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-10 — Alvaro — Office check-in: **Add the emet shortcut** now opens a one-tap iCloud link (opens straight in Shortcuts → Add Shortcut → Paste). The downloadable .shortcut file is gone.
 - 2026-11-10 — Alvaro — Office check-in: check-out now at **80 m** from the office (was 150 m); check-in stays at 30 m. Office point set to Dock Bilbao (Uribitarte Pasealekua 3).
 - 2026-11-10 — Alvaro — Office check-in made easy and cheat-proof: a ready-made **emet check-in** iPhone shortcut (tap → Add Shortcut → Paste → two quick automations); the phone sends its position and emet decides (in within 30 m, out at 150 m, works although iPhone zones start at ~100 m). Admins set the office point once (**Set office location here**, migration 0055). The Check in/out button and the arrive/leave links are gone: only a real position counts; never checked out by midnight = 0 h for that stretch. Android (MacroDroid) sends its position too.
 - 2026-11-10 — Alvaro — Office check-in: check-out at **150 m** (check-in stays 30 m); leaving **pauses** the day until 21:00 and coming back resumes it (time away doesn't count; a *Paused* list on Today). **Late fines on Tuesdays/Thursdays**, automatic from the first check-in: after 9:10:59 = €3 (new kind *late fine*, no strike), after 9:29:59 = €3 + 1 strike; the person gets a bell + phone alert. Migration 0054. Fixes: the phone's reply shows the real arrival time.
