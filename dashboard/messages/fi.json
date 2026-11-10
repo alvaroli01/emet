@@ -2430,6 +2430,12 @@
     "bubble": "Kysy emetiltä tästä osiosta"
   },
   "home": {
+    "myPoints": "Pisteeni",
+    "pointsTotal": "pistettä",
+    "seeAll": "Näytä kaikki",
+    "activity": "Tiimin aktiivisuus",
+    "activeWeek": "aktiivisena tällä viikolla",
+    "actions": "{count, plural, one {# toiminto} other {# toimintoa}}",
     "needHelp": "Hei {name}, tarvitsetko apua?",
     "askLabel": "Kysy emetiltä mitä vain",
     "askPlaceholder": "Kysy minulta mitä vain",

@@ -2430,6 +2430,12 @@
     "bubble": "Спроси emet об этом разделе"
   },
   "home": {
+    "myPoints": "Мои баллы",
+    "pointsTotal": "баллов",
+    "seeAll": "Смотреть все",
+    "activity": "Активность команды",
+    "activeWeek": "активны на этой неделе",
+    "actions": "{count, plural, one {# действие} few {# действия} many {# действий} other {# действия}}",
     "needHelp": "Привет, {name}, нужна помощь?",
     "askLabel": "Спроси emet о чём угодно",
     "askPlaceholder": "Спрашивай что угодно",

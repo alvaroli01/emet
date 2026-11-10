@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-10 — Alvaro — Today page: the Tasks card is now **My points** (Community / Customer Visits / Learning against the June goals, total, link to my page). **Team health** now shows **Team activity** for this week: how many classmates were active, activity per day, and the 3 most active people (coach, bot and Ollin left out).
 - 2026-11-10 — Alvaro — Top-bar mic: the recorder window now has a **Take me to my recorded notes** link (Base camp → Docs), in all 7 languages. Hidden while recording.
 - 2026-11-10 — Alvaro — Ollin guests stay out of EMET tasks: **Everyone** in the task form picks only emet people, and Ollin names never appear outside projects (EMET/team boards, person filter, meetings, camp, scout, lab). In a project's task form, Ollin people get their own **Ollin** row, shown only when the project has someone from Ollin. Leire (coach) and the Grok bot can't be given tasks and aren't in the task person filter.
 - 2026-11-10 — Alvaro — Vault look: `.obsidian/snippets/emet.css` (bubble colours on sidebar folders and hub titles, the home note's 3 bubbles as coloured cards, rounded tables, emet orange accent, sidebar ordered home → 🟠 🔵 🟢 → History). Inline title and the properties box are hidden.

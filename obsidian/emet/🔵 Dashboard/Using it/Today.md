@@ -19,3 +19,4 @@ First screen after login. Full-screen Bilbao-at-night photo, icon rail, **"Hey {
 - **Week / Month** switch with ‹ › on the Sales, Tasks and Money cards: any past week or month; Tasks also looks ahead (tasks due). (22 Oct 2026)
 
 Back to [[Systems map]]
+- **10 Nov 2026:** the Tasks card is now **My points** (Community / Customer Visits / Learning against the June goals, total, See all → my page). **Team health** also shows **Team activity** this week: classmates active (x/15), activity per day, top 3 most active.

@@ -2430,6 +2430,12 @@
     "bubble": "Frag emet zu diesem Bereich"
   },
   "home": {
+    "myPoints": "Meine Punkte",
+    "pointsTotal": "Punkte",
+    "seeAll": "Alle ansehen",
+    "activity": "Team-Aktivität",
+    "activeWeek": "aktiv diese Woche",
+    "actions": "{count, plural, one {# Aktion} other {# Aktionen}}",
     "needHelp": "Hey {name}, brauchst du Hilfe?",
     "askLabel": "Frag emet alles",
     "askPlaceholder": "Frag mich einfach alles",

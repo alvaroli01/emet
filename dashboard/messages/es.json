@@ -2430,6 +2430,12 @@
     "bubble": "Pregunta a emet sobre esta sección"
   },
   "home": {
+    "myPoints": "Mis puntos",
+    "pointsTotal": "puntos",
+    "seeAll": "Ver todo",
+    "activity": "Actividad del equipo",
+    "activeWeek": "activos esta semana",
+    "actions": "{count, plural, one {# acción} other {# acciones}}",
     "needHelp": "Hola, {name}, ¿necesitas ayuda?",
     "askLabel": "Pregunta lo que quieras a emet",
     "askPlaceholder": "Pregúntame lo que quieras",

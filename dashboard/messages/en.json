@@ -2430,6 +2430,12 @@
     "bubble": "Ask emet about this section"
   },
   "home": {
+    "myPoints": "My points",
+    "pointsTotal": "points",
+    "seeAll": "See all",
+    "activity": "Team activity",
+    "activeWeek": "active this week",
+    "actions": "{count, plural, one {# action} other {# actions}}",
     "needHelp": "Hey {name}, need help?",
     "askLabel": "Ask emet anything",
     "askPlaceholder": "Just ask me anything",

@@ -3,7 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, ListChecks, Coins, HeartPulse, Target, ArrowUp, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { Search, PenLine, CalendarDays, Plus, FileText, Receipt, Trophy, Coins, HeartPulse, Target, ArrowUp, ChevronLeft, ChevronRight, Loader2, Users, Store, GraduationCap, ArrowUpRight } from "lucide-react";
+import { Avatar } from "@/components/ui";
+import { POINT_KINDS, POINT_GOALS, type PointKind } from "@/lib/points";
 import type { Period, Series, Unit } from "@/lib/today-periods";
 import { MountainLazy } from "@/components/summit/mountain-lazy";
 import { GroupIcon } from "@/components/group-icon";
@@ -17,13 +19,35 @@ export type HomeData = {
   weekLabel: string;
   canLogSale: boolean;
   sales: { week: number; count: number; rows: { label: string; days: number[] }[] };
-  tasks: { thisWeek: number[]; lastWeek: number[]; done: number; delta: number };
+  meId: string;
+  points: Record<PointKind, number>;
+  activity: { active: number; total: number; days: number[]; top: { id: string; name: string; avatar: string | null; n: number }[] };
   money: { days: number[]; week: number };
   goal: { revenue: number; goal: number; pct: number; daysLeft: number; nextCampAt: number | null; teams: { slug: string; color: string; label: string; mine: boolean }[] };
   health: { score: number | null; onTime: number | null; blockers: number; mood: number | null };
   focus: { score: number | null; dueToday: number; late: number; doneWeek: number };
   calendar: { today: string; days: string[]; items: CalendarItem[]; google: GoogleStatus };
 };
+
+const POINT_ICON = { community: Users, visit: Store, learning: GraduationCap } as const;
+
+/** Things the team did per day this week (from the activity log); today in orange. */
+function ActivityBars({ days, labels }: { days: number[]; labels: string[] }) {
+  const max = Math.max(1, ...days);
+  const today = (new Date().getDay() + 6) % 7;
+  return (
+    <div className="mt-2 grid grid-cols-7 gap-1.5" aria-hidden>
+      {days.map((n, i) => (
+        <div key={i} className="flex flex-col items-center gap-1">
+          <div className="flex h-12 w-full items-end rounded-md bg-white/5">
+            <div className={`w-full rounded-md ${i === today ? "bg-[#ff7a2e]" : "bg-white/35"}`} style={{ height: `${n ? Math.max(8, (n / max) * 100) : 0}%` }} />
+          </div>
+          <span className="text-[10px] text-muted">{labels[i]}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 /** One glass card with the round icon chip and a "Last 7 days" style note — the building block of Home. */
 function Card({ icon, title, note, children, className = "" }: { icon: React.ReactNode; title: string; note?: string; children: React.ReactNode; className?: string }) {
@@ -64,27 +88,6 @@ function ChannelStrip({ rows, labels }: { rows: { label: string; days: number[] 
       ))}
       <span />
       <div className="grid text-center" style={cols}>{days.map((d, i) => <span key={i} className="truncate">{d}</span>)}</div>
-    </div>
-  );
-}
-
-/** Two step-lines: tasks finished this week (orange) vs last week (lime). */
-function StepLines({ a, b, labels }: { a: number[]; b: number[]; labels: string[] }) {
-  const days = labels;
-  const max = Math.max(4, ...a, ...b);
-  const W = 220, H = 92;
-  const path = (v: number[]) => v.map((y, i) => { const x = (i / Math.max(1, v.length - 1)) * W, yy = H - (y / max) * H; return i ? `H ${x} V ${yy}` : `M 0 ${yy}`; }).join(" ");
-  return (
-    <div className="mt-3 flex gap-2">
-      <div className="flex flex-col justify-between py-0.5 text-[10px] text-muted">{[max, Math.round(max / 2), 0].map((v) => <span key={v}>{v}</span>)}</div>
-      <div className="flex-1">
-        <svg viewBox={`0 0 ${W} ${H}`} className="h-24 w-full overflow-visible" preserveAspectRatio="none" aria-hidden>
-          {[0, 0.5, 1].map((f) => <line key={f} x1="0" x2={W} y1={H * f} y2={H * f} stroke="var(--grid)" />)}
-          <path d={path(b)} fill="none" stroke="#c8e86b" strokeWidth="2" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-          <path d={path(a)} fill="none" stroke="#ffb02e" strokeWidth="2.5" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-        </svg>
-        <div className="mt-1 grid text-center text-[10px] text-muted" style={{ gridTemplateColumns: `repeat(${days.length}, minmax(0, 1fr))` }}>{days.map((d, i) => <span key={i} className="truncate">{d}</span>)}</div>
-      </div>
     </div>
   );
 }
@@ -196,6 +199,7 @@ function useTypewriter(lines: string[], paused: boolean) {
 /** Home: the Bilbao-at-night page — ask box on top, glass cards at the bottom (from the "home page example"). */
 export function HomeDashboard({ d }: { d: HomeData }) {
   const t = useTranslations("home");
+  const tp = useTranslations("points");
   const locale = useLocale();
   const [q, setQ] = useState("");
   const examples = useMemo(() => [t("askPlaceholder"), ...(t.raw("askExamples") as string[])], [t]);
@@ -222,9 +226,8 @@ export function HomeDashboard({ d }: { d: HomeData }) {
     note: live.period.unit === "month" ? fmt(live.period.from, { month: "short" }) : t("week"),
     future: live.period.future,
     sales: { week: live.series.moneyTotal, count: live.series.salesCount, rows: (["stall", "online", "other"] as const).map((k, i) => ({ label: d.sales.rows[i]?.label ?? k, days: live.series.channels[k] })) },
-    tasks: { thisWeek: live.series.tasks.this, lastWeek: live.series.tasks.prev, done: live.series.tasks.done, delta: (live.series.tasks.this.at(-1) ?? 0) - (live.series.tasks.prev.at(-1) ?? 0), due: live.series.tasks.mode === "due" },
     money: { days: live.series.money, week: live.series.moneyTotal },
-  } : { label: d.weekLabel, labels: weekdays, note: t("last7"), future: false, sales: d.sales, tasks: { ...d.tasks, due: false }, money: d.money };
+  } : { label: d.weekLabel, labels: weekdays, note: t("last7"), future: false, sales: d.sales, money: d.money };
   const switchUnit = (u: Unit) => { setUnit(u); setOffset(0); };
 
   return (
@@ -272,10 +275,26 @@ export function HomeDashboard({ d }: { d: HomeData }) {
             <p className="readout mt-3 text-3xl"><NumberTicker value={Math.round(view.sales.week)} locale={locale} options={{ style: "currency", currency: "EUR", maximumFractionDigits: 0 }} /></p>
             <p className="text-xs text-muted">{view.future ? t("notYet") : t(live ? "salesCountPeriod" : "salesCount", { count: view.sales.count })}</p>
           </Card>
-          <Card icon={<ListChecks size={19} />} title={t("tasks")} note={view.note}>
-            <StepLines a={view.tasks.thisWeek} b={view.tasks.lastWeek} labels={view.labels} />
-            <p className="readout mt-2 text-3xl">{view.tasks.done} <span className="text-base font-normal text-muted">{view.tasks.due ? t("dueLabel") : t("done")}</span></p>
-            <p className="text-xs text-muted">{view.tasks.due ? t("dueNote") : <>{view.tasks.delta >= 0 ? "+" : ""}{view.tasks.delta} {unit === "month" && live ? t("vsLastMonth") : t("vsLastWeek")}</>}</p>
+          {/* My points: everyone's goal for June 2027, one bar per kind; the full list is on my member page */}
+          <Card icon={<Trophy size={19} />} title={t("myPoints")}>
+            <ul className="mt-3 space-y-2.5">
+              {POINT_KINDS.map((k) => {
+                const Icon = POINT_ICON[k], done = d.points[k], goal = POINT_GOALS[k];
+                return (
+                  <li key={k}>
+                    <p className="flex items-center gap-1.5 text-xs"><Icon size={13} className="text-muted" /> <span className="flex-1 truncate">{tp(`kinds.${k}`)}</span>
+                      <b className="readout">{done}</b><span className="text-muted">/{goal}</span></p>
+                    <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-line" role="progressbar" aria-valuenow={done} aria-valuemin={0} aria-valuemax={goal} aria-label={tp(`kinds.${k}`)}>
+                      <div className={`h-full rounded-full ${done >= goal ? "bg-ok" : "bg-[#ff7a2e]"}`} style={{ width: `${Math.min(100, (done / goal) * 100)}%` }} />
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="mt-auto flex items-end justify-between gap-2 pt-3">
+              <p className="readout text-3xl">{POINT_KINDS.reduce((a, k) => a + d.points[k], 0)} <span className="text-base font-normal text-muted">{t("pointsTotal")}</span></p>
+              <Link href={`/team/${d.meId}`} className="flex items-center gap-0.5 pb-1 text-xs font-medium text-muted hover:text-ink">{t("seeAll")} <ArrowUpRight size={13} /></Link>
+            </div>
           </Card>
           <Card icon={<Coins size={19} />} title={t("money")} note={view.note} className="sm:col-span-2 lg:col-span-1">
             <BlockColumns values={view.money.days} labels={view.labels} />
@@ -295,6 +314,28 @@ export function HomeDashboard({ d }: { d: HomeData }) {
               <div className="text-center"><HeartPulse size={18} className="mx-auto text-muted" /><dd className="mt-0.5 text-muted">{t("insights")}</dd></div>
               <div className="text-right"><dt className="text-muted">{t("blockers")}</dt><dd className="readout text-lg">{d.health.blockers}</dd></div>
             </dl>
+            {/* Team activity this week: who is moving, per day, and the most active people */}
+            <div className="mt-4 border-t border-line pt-3">
+              <div className="flex items-baseline justify-between gap-2">
+                <h3 className="text-[13px] font-medium">{t("activity")}</h3>
+                <p className="text-xs text-muted"><b className="readout text-ink">{d.activity.active}</b>/{d.activity.total} {t("activeWeek")}</p>
+              </div>
+              <ActivityBars days={d.activity.days} labels={weekdays} />
+              {d.activity.top.length > 0 && (
+                <ul className="mt-3 space-y-1.5">
+                  {d.activity.top.map((p, i) => (
+                    <li key={p.id}>
+                      <Link href={`/team/${p.id}`} className="flex items-center gap-2 text-sm hover:text-link">
+                        <span className="w-3 text-xs text-muted">{i + 1}</span>
+                        <Avatar name={p.name} src={p.avatar} size={22} />
+                        <span className="flex-1 truncate">{p.name.split(" ")[0]}</span>
+                        <span className="readout text-xs text-muted">{t("actions", { count: p.n })}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </section>
 
           <section className="panel p-4 sm:col-span-2 sm:p-5 lg:col-span-2">

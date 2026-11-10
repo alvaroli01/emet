@@ -12,6 +12,9 @@ import { loadMyNotionDeadlinesFast } from "@/lib/notion/server";
 import { ReportCard } from "@/components/workspace/report-card";
 import type { WeeklyReport } from "@/lib/weekly-report";
 import { cardHref } from "@/lib/projects";
+import { loadMembers } from "@/lib/boards";
+import { getsTasks } from "@/lib/tasks";
+import { pointTotals } from "@/lib/points";
 
 type Due = { id: string; title: string; day: string; href: string; parent?: string };
 
@@ -46,9 +49,11 @@ export default async function TodayPage() {
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 6 * DAY).toISOString().slice(0, 10);
   const googleP = loadMyGoogleEvents(supabase, week, weekEnd); // in parallel with the queries below
   const notionP = loadMyNotionDeadlinesFast(supabase, week, weekEnd); // my Notion deadlines database, if I picked one
-  const [weekSales, doneCards, dueCards, blockers, morale, myDone, weekAgenda, weekTasks] = await Promise.all([
+  const [weekSales, myPoints, teamActs, members, dueCards, blockers, morale, myDone, weekAgenda, weekTasks] = await Promise.all([
     supabase.from("sales").select("date, amount, heard_about, channel").gte("date", lastMonday),
-    supabase.from("cards").select("completed_at").not("completed_at", "is", null).gte("completed_at", lastMonday),
+    supabase.from("member_points").select("kind, amount").eq("user_id", me.id),
+    supabase.rpc("team_activity", { since: new Date(Date.parse(week + "T00:00:00Z") - DAY).toISOString() }), // a day early; trimmed to this week below
+    loadMembers(),
     supabase.from("cards").select("board_id, due_at, completed_at").not("due_at", "is", null),
     supabase.from("blockers").select("id", { count: "exact", head: true }).eq("status", "open"),
     supabase.from("morale_checks").select("score").eq("week_start", week),
@@ -87,9 +92,17 @@ export default async function TodayPage() {
   const ws = (weekSales.data ?? []).filter((x) => x.date >= week && Number(x.amount) > 0);
   const chan = (x: { heard_about: string | null; channel: string | null }) => x.heard_about === "stall" ? "stall" : ["instagram", "tiktok", "whatsapp"].includes(x.heard_about ?? "") || /insta|tiktok|online|web/i.test(x.channel ?? "") ? "online" : "other";
   const rows = (["stall", "online", "other"] as const).map((k) => ({ label: tHome(`channels.${k}`), days: Array.from({ length: 7 }, (_, i) => ws.filter((x) => chan(x) === k && dayIdx(x.date) === i).length) }));
-  const doneDays = (from: string) => { const c = Array(7).fill(0); for (const x of doneCards.data ?? []) { const i = Math.floor((Date.parse(x.completed_at!) - Date.parse(from + "T00:00:00Z")) / DAY); if (i >= 0 && i < 7) c[i]++; } return c.map((_, i) => c.slice(0, i + 1).reduce((a: number, b: number) => a + b, 0)); };
-  const todayIdx = Math.min(6, dayIdx(today));
-  const thisW = doneDays(week).map((v, i) => (i <= todayIdx ? v : v)), lastW = doneDays(lastMonday);
+  // Team activity this week: class members only (no coach, bot or Ollin guests)
+  const classmates = members.filter(getsTasks);
+  const inClass = new Map(classmates.map((m) => [m.id, m]));
+  const acts = ((teamActs.data ?? []) as { user_id: string; day: string; n: number }[]).filter((a) => inClass.has(a.user_id) && a.day >= week);
+  const perPerson = new Map<string, number>();
+  for (const a of acts) perPerson.set(a.user_id, (perPerson.get(a.user_id) ?? 0) + Number(a.n));
+  const activity = {
+    active: perPerson.size, total: classmates.length,
+    days: Array.from({ length: 7 }, (_, i) => acts.filter((a) => dayIdx(a.day) === i).reduce((s, a) => s + Number(a.n), 0)),
+    top: [...perPerson].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([id, n]) => ({ id, n, name: inClass.get(id)!.full_name, avatar: inClass.get(id)!.avatar_url })),
+  };
   const moneyDays = Array.from({ length: 7 }, (_, i) => ws.filter((x) => dayIdx(x.date) === i).reduce((a, x) => a + Number(x.amount), 0));
   const ot = onTimeRate((dueCards.data ?? []) as CardLite[]);
   const moods = (morale.data ?? []).map((m) => Number(m.score)).filter((n) => n > 0);
@@ -103,7 +116,9 @@ export default async function TodayPage() {
     weekLabel: `${fmtDay(week)} – ${fmtDay(new Date(Date.parse(week) + 6 * DAY).toISOString().slice(0, 10))}`,
     canLogSale: canLogSales,
     sales: { week: moneyDays.reduce((a, b) => a + b, 0), count: ws.length, rows },
-    tasks: { thisWeek: thisW, lastWeek: lastW, done: thisW[todayIdx] ?? 0, delta: (thisW[todayIdx] ?? 0) - (lastW[todayIdx] ?? 0) },
+    meId: me.id,
+    points: pointTotals(myPoints.data ?? []),
+    activity,
     money: { days: moneyDays, week: moneyDays.reduce((a, b) => a + b, 0) },
     goal: { revenue: all.revenue, goal: GOAL.revenue, pct: revPct, daysLeft: p.daysLeft, nextCampAt: nextCamp ? nextCamp.amount / GOAL.revenue : null,
             teams: groups.map((g) => ({ slug: g.slug, color: g.color, label: tg(g.slug), mine: g.id === me.group_id })) },
@@ -131,7 +146,7 @@ export default async function TodayPage() {
 
   return (
     <div className="space-y-5">
-      <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads"]} />
+      <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads", "member_points"]} />
       <HomeDashboard d={home} />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">

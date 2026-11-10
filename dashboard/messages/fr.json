@@ -2430,6 +2430,12 @@
     "bubble": "Demande à emet à propos de cette section"
   },
   "home": {
+    "myPoints": "Mes points",
+    "pointsTotal": "points",
+    "seeAll": "Tout voir",
+    "activity": "Activité de l'équipe",
+    "activeWeek": "actifs cette semaine",
+    "actions": "{count, plural, one {# action} other {# actions}}",
     "needHelp": "Salut {name}, besoin d’aide ?",
     "askLabel": "Demande n’importe quoi à emet",
     "askPlaceholder": "Demande-moi ce que tu veux",
