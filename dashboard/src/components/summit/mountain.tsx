@@ -273,6 +273,7 @@ export default function Mountain({ progress, nextCampAt, labels, ariaLabel, vari
       ec.fillStyle = "#8a5600"; ec.fillText("€", 64, 70);
     }
     const euroTex = new THREE.CanvasTexture(euroCanvas);
+    euroTex.center.set(0.5, 0.5); euroTex.rotation = Math.PI / 2; // the coin stands upright, so turn the € to read normally
     const bigCoin = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.05, 40), [goldSide, new THREE.MeshBasicMaterial({ map: euroTex }), new THREE.MeshBasicMaterial({ map: euroTex })]);
     bigCoin.rotation.order = "YXZ"; // stand it up (x), then turn it (y) — never tips toward the ground
     bigCoin.rotation.x = Math.PI / 2 - 0.3; // face tilted up toward the camera
