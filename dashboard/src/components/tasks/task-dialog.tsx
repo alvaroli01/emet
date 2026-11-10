@@ -83,7 +83,7 @@ export function TaskDialog({ taskId, tasks, board, people, projects, viewer, whe
     </BodyPortal>
   );
 
-  const chip = (selected: Set<string>, toggle: (id: string) => void) => (p: Person) => (
+  const chip = (selected: Set<string>, toggle: (id: string) => void, p: Person) => (
     <button key={p.id} type="button" onClick={() => toggle(p.id)} aria-pressed={selected.has(p.id)}
             className={`flex min-h-9 items-center gap-1.5 rounded-full py-0.5 pr-3 pl-0.5 text-sm transition ${selected.has(p.id) ? "bg-brand/20 font-semibold ring-2 ring-brand" : "bg-surface-2 ring-1 ring-line"}`}>
       <Avatar name={p.full_name} src={p.avatar_url} size={26} /> {p.id === viewer.meId ? t("me") : p.full_name.split(" ")[0]}
@@ -95,12 +95,12 @@ export function TaskDialog({ taskId, tasks, board, people, projects, viewer, whe
         {all && team.length > 1 && (
           <button type="button" onClick={all} className="flex min-h-9 items-center gap-1.5 rounded-full bg-surface-2 px-3 text-sm font-semibold ring-1 ring-line"><Users size={14} /> {t("everyone")}</button>
         )}
-        {team.map(chip(selected, toggle))}
+        {team.map((p) => chip(selected, toggle, p))}
       </div>
       {ollin.length > 0 && (
         <div className="mt-3">
           <p className="mb-1.5 text-xs font-semibold tracking-wide text-muted uppercase">Ollin</p>
-          <div className="flex flex-wrap gap-1.5">{ollin.map(chip(selected, toggle))}</div>
+          <div className="flex flex-wrap gap-1.5">{ollin.map((p) => chip(selected, toggle, p))}</div>
         </div>
       )}
       {!viewer.isLeader && <p className="mt-1.5 text-xs text-muted">{board.project_id ? t("assignProjectOnly") : t("assignGroupOnly")}</p>}
