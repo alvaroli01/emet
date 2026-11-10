@@ -68,6 +68,13 @@ test("permissions match the database rules", () => {
   assert.deepEqual(assignable(member, board(), people).map((x) => x.id), ["u1", "u3"]);
   assert.deepEqual(assignable(leader, board(), people).map((x) => x.id), ["u1", "u2", "u3", "u4"]);
   assert.deepEqual(assignable(leader, proj, people, p).map((x) => x.id), ["u1", "u2"]);
+  // Ollin guests: only in their project, never on EMET boards
+  const withGuest = [...people, { id: "o1", group_id: null, is_guest: true }];
+  assert.deepEqual(assignable(leader, board(), withGuest).map((x) => x.id), ["u1", "u2", "u3", "u4"]);
+  assert.deepEqual(assignable(leader, proj, withGuest, { ...p, memberIds: ["u1", "o1"] }).map((x) => x.id), ["u1", "o1"]);
+  // The coach and the AI bot never get tasks
+  const extra = [...people, { id: "c1", group_id: null, is_coach: true }, { id: "b1", group_id: null, role_title: "AI assistant" }];
+  assert.deepEqual(assignable(leader, board(), extra).map((x) => x.id), ["u1", "u2", "u3", "u4"]);
   // Edit: assignees and creators on EMET; delete project tasks: admins only
   const t = task();
   assert.equal(canEdit(member, board(), t), false);

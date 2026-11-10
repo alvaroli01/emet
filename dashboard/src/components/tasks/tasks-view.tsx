@@ -8,11 +8,11 @@ import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { TaskDialog } from "./task-dialog";
 import {
-  statusOf, isOverdue, filterTasks, sortTasks, canAdd, NO_FILTERS, STATUSES, PRIORITIES,
+  statusOf, isOverdue, filterTasks, sortTasks, canAdd, getsTasks, NO_FILTERS, STATUSES, PRIORITIES,
   type Task, type TaskBoard, type Viewer, type ProjectInfo, type Status, type Filters,
 } from "@/lib/tasks";
 
-export type Person = { id: string; full_name: string; avatar_url: string | null; group_id: string | null };
+export type Person = { id: string; full_name: string; avatar_url: string | null; group_id: string | null; is_guest?: boolean; is_coach?: boolean; role_title?: string | null };
 export type Goal = { project_id: string; statement: string; target_on: string | null; milestones: { text: string; done: boolean }[] };
 type View = "all" | "mine" | "emet" | "project";
 
@@ -96,7 +96,7 @@ export function TasksView({ tasks, boards, people, projects, goals, goalProgress
   // Where "New task" puts it
   const newBoard = view === "project" ? projectBoard : general;
   const mayAdd = !!newBoard && canAdd(viewer, newBoard, newBoard.project_id ? projectById.get(newBoard.project_id) : undefined);
-  const peopleInView = view === "project" && projectId ? people.filter((p) => projectById.get(projectId)?.memberIds.includes(p.id)) : people;
+  const peopleInView = (view === "project" && projectId ? people.filter((p) => projectById.get(projectId)?.memberIds.includes(p.id)) : people.filter((p) => !p.is_guest)).filter(getsTasks);
   const where = (b?: TaskBoard) => b?.project_id ? projectById.get(b.project_id)?.name ?? b.name
     : b?.group_id ? tg(groups.find((g) => g.id === b.group_id)?.slug ?? "") : "EMET";
 

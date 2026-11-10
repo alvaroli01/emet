@@ -29,7 +29,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
       ? supabase.from("cards").select("id, board_id, list_id, title, description, due_at, completed_at, priority, needs_file, created_by, created_at, card_assignees(user_id, done_at, file_path, file_name), card_checklist_items(id, text, done, position)")
           .in("board_id", allBoards.map((b) => b.id)).order("created_at", { ascending: false }).limit(1000).returns<RawTask[]>()
       : Promise.resolve({ data: [] as RawTask[] }),
-    loadMembers(),
+    loadMembers(true),
     loadProjectPeople(supabase),
     supabase.from("project_goals").select("project_id, statement, target_on, milestones").returns<Goal[]>(),
   ]);

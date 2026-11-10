@@ -8,6 +8,7 @@ One page (`/tasks`) for every task. It replaces the General board, the team boar
 - **Tabs:** All tasks · My Tasks (mine + my private My board + my Notion deadlines) · EMET tasks (general + team boards) · Project tasks (only projects you're in, admins too; pick a project; Goal card on top: goal, target date, progress = done / all tasks, milestones)
 - **Filters:** person, project, status, priority, due (overdue / this week / no date)
 - **A task:** title, description, due date, assignees, status (To do / In progress / Blocked / Done = its column), priority, per-person completion (Done by itself when everyone ticked), "needs a file", checklist, created by + date, red when late
+- **Ollin (2026-11-10):** "Everyone" picks only emet people. Ollin guests appear only in their project's task form, in a separate **Ollin** row (hidden when the project has nobody from Ollin), never on EMET or team tasks. Leire (coach) and the Grok bot never get tasks.
 - **Who can do what:** leaders/admins anywhere; members add to their own projects and EMET and assign only people of that project (EMET: themselves + their group); assignees change status/checklist and tick their part
 - **Data:** built on the existing `cards` tables, so home, Today, Overview, Ask emet, search, calendar feed, reminders and the section assistant keep working. The 14 leader tasks (`team_tasks`) were copied into cards with everyone's ticks and files; `team_tasks` itself is untouched.
 

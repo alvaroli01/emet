@@ -88,9 +88,14 @@ export function canDelete(v: Viewer, board: TaskBoard, task: Task, project?: Pro
   return board.project_id ? v.isAdmin : canEdit(v, board, task, project);
 }
 
+/** The coach and the AI bot aren't in the class that way: they never get tasks. */
+export const getsTasks = (p: { is_coach?: boolean; role_title?: string | null }) => !p.is_coach && p.role_title !== "AI assistant";
+
 /** People a task on this board can go to. Project tasks always stay within the project (others couldn't see them). */
-export function assignable<P extends { id: string; group_id: string | null }>(v: Viewer, board: TaskBoard, people: P[], project?: ProjectInfo): P[] {
-  if (board.project_id) return people.filter((p) => project?.memberIds.includes(p.id) && (v.isLeader || v.isCoach || project.memberIds.includes(v.meId) || p.id === v.meId));
+export function assignable<P extends { id: string; group_id: string | null; is_guest?: boolean; is_coach?: boolean; role_title?: string | null }>(v: Viewer, board: TaskBoard, everyone: P[], project?: ProjectInfo): P[] {
+  const allPeople = everyone.filter(getsTasks);
+  if (board.project_id) return allPeople.filter((p) => project?.memberIds.includes(p.id) && (v.isLeader || v.isCoach || project.memberIds.includes(v.meId) || p.id === v.meId));
+  const people = allPeople.filter((p) => !p.is_guest); // Ollin guests only get tasks in their project
   if (v.isLeader || v.isCoach) return people;
   if (board.group_id) return people.filter((p) => p.group_id === board.group_id || p.id === v.meId);
   return people.filter((p) => p.id === v.meId || (!!v.myGroupId && p.group_id === v.myGroupId));

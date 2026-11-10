@@ -31,7 +31,7 @@ export default async function ProjectRoute({ params, searchParams }: { params: P
     supabase.from("project_links").select("id, title, url, created_by, created_at").eq("project_id", id).order("created_at", { ascending: false }).returns<ProjectLink[]>(),
     supabase.from("project_updates").select("id, body, created_by, created_at").eq("project_id", id).order("created_at", { ascending: false }).limit(50).returns<ProjectUpdate[]>(),
     supabase.from("project_files").select("id, name, size, mime, path, uploaded_by, created_at").eq("project_id", id).order("created_at", { ascending: false }).returns<ProjectFile[]>(),
-    loadMembers(),
+    loadMembers(true),
     supabase.from("scout_leads").select("id, score, fit, status, evidence, why, visited_on, visit_result, visit_note, scout_project_id:project_id, place:scout_places(name, address, city, lat, lng, website, instagram, phone, maps_url)").eq("saved_project_id", id).order("score", { ascending: false }).returns<ProjectLead[]>(),
     supabase.from("project_places").select("id, name, address, contact, note, added_by, created_at, visited_on, visit_result, visit_note").eq("project_id", id).order("created_at", { ascending: false }).returns<ProjectPlace[]>(),
     supabase.from("project_invites").select("id, token, created_at").eq("project_id", id).order("created_at", { ascending: false }).returns<ProjectInvite[]>(),

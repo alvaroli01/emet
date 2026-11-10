@@ -21,7 +21,7 @@ export default async function AllProjectsPage() {
   const sb = await createClient();
   const [{ data: projects }, people] = await Promise.all([
     sb.from("projects").select("id, name, status, color, project_members(user_id), boards(id)").neq("status", "closed").order("name").returns<P[]>(),
-    loadMembers(),
+    loadMembers(true),
   ]);
   const boardIds = (projects ?? []).flatMap((p) => p.boards.map((b) => b.id));
   const [{ data: cards }, { data: updates }] = await Promise.all([

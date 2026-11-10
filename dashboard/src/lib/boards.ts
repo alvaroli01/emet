@@ -8,7 +8,7 @@ export type CardRow = {
   created_by: string | null; created_at: string; trello_card_id?: string | null;
 };
 export type BoardCard = CardRow & { assignees: string[]; checklist: { done: number; total: number }; comments: number };
-export type Member = { id: string; full_name: string; avatar_url: string | null; group_id: string | null; role_title: string | null };
+export type Member = { id: string; full_name: string; avatar_url: string | null; group_id: string | null; role_title: string | null; is_guest: boolean; is_coach: boolean };
 
 export type BoardData = { board: BoardRow; lists: ListRow[]; cards: BoardCard[]; members: Member[] };
 
@@ -31,10 +31,12 @@ export function shapeCard(c: RawCard): BoardCard {
 
 export const CARD_SELECT = "*, card_assignees(user_id), card_checklist_items(done), card_comments(count)";
 
-export async function loadMembers(): Promise<Member[]> {
+/** Active emet members. Ollin guests only where projects are shown (withGuests), so their names stay out of the rest of emet. */
+export async function loadMembers(withGuests = false): Promise<Member[]> {
   const supabase = await createClient();
-  const { data } = await supabase.from("profiles").select("id, full_name, avatar_url, group_id, role_title")
-    .eq("active", true).order("full_name").returns<Member[]>();
+  let q = supabase.from("profiles").select("id, full_name, avatar_url, group_id, role_title, is_guest, is_coach").eq("active", true);
+  if (!withGuests) q = q.eq("is_guest", false);
+  const { data } = await q.order("full_name").returns<Member[]>();
   return data ?? [];
 }
 
