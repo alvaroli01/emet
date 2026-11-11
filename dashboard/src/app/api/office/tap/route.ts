@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient as admin } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, isWorkday, isOutsideDay, madridTime, LUNCH_MS, type Visit } from "@/lib/office";
+import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, isWorkday, isOutsideDay, madridTime, dayClosesAt, LUNCH_MS, type Visit } from "@/lib/office";
 
 /**
  * One-tap office check-in (Alvaro, 2026-11-11; replaces the phone apps): the 9:00 notification opens /office, which sends
@@ -27,6 +27,7 @@ export async function POST(request: NextRequest) {
   if (![lat, lng, accuracy].every(Number.isFinite) || Math.abs(lat) > 90 || Math.abs(lng) > 180 || accuracy < 0) return NextResponse.json({ status: "no-location" }, { status: 400 });
   const now = Date.now();
   if (!isWorkday(now)) return NextResponse.json({ status: "weekend" });
+  if (now >= dayClosesAt(now)) return NextResponse.json({ status: "closed" }); // the day closes at 21:00
 
   const db = admin(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
   const userId = me as string;
@@ -44,7 +45,8 @@ export async function POST(request: NextRequest) {
   if (action === "in") {
     if (isIn) return NextResponse.json({ status: "already-in", distance: dist });
     if (accuracy > 150) return NextResponse.json({ status: "vague", distance: dist });
-    if (zoneStepWithAccuracy(dist, accuracy, false).event !== "arrive") return NextResponse.json({ status: "too-far", distance: dist });
+    if (zoneStepWithAccuracy(dist, accuracy, false).event !== "arrive")
+      return NextResponse.json({ status: isOutsideDay(now) && !outside ? "too-far-outside" : "too-far", distance: dist }); // Mon/Wed/Fri: offer working outside
     await endOutside();
     await applyEvent(db, userId, "arrive", "phone");
     return NextResponse.json({ status: "in", distance: dist });

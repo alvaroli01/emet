@@ -1216,26 +1216,33 @@
     "office": {
       "title": "Im Büro",
       "mine": "Du: {today} heute · {week} diese Woche",
-      "inNow": "Gerade da · {n}",
-      "since": "seit {time}",
-      "nobody": "Niemand ist eingecheckt.",
       "weekTitle": "Stunden diese Woche",
       "error": "Etwas ist schiefgelaufen. Versuch es nochmal.",
       "youPaused": "pausiert",
-      "pausedTitle": "Pausiert · {n}",
-      "pausedSince": "weg seit {time} · {hours} heute",
       "officeMissing": "Der Bürostandort ist noch nicht gesetzt – ein Admin muss im Büro „Bürostandort hier setzen“ drücken.",
       "setOffice": "Bürostandort hier setzen (im Büro stehen)",
       "moveOffice": "Bürostandort hierher verschieben",
       "officeSaved": "Bürostandort gespeichert (±{acc} m)",
       "noLocation": "Standort konnte nicht gelesen werden. Erlaube den Standort für emet und versuch es nochmal.",
       "youIn": "Du bist da",
-      "outsideNow": "Arbeitet auswärts · {n}",
-      "outsideWeek": "Auswärts gearbeitet diese Woche",
       "now": "jetzt",
-      "where": "wo",
       "open": "Ein- / Ausstempeln",
-      "tapHint": "Jeden Werktag um 9:00 schickt emet eine Benachrichtigung: ein Tipp stempelt dich ein (nur im Dock). Mo/Mi/Fr kannst du sagen, dass du auswärts arbeitest. Tippe vor dem Gehen auf „Ausstempeln“ — es zählt nur im Dock."
+      "tapHint": "Jeden Werktag um 9:00 schickt emet eine Benachrichtigung: ein Tipp stempelt dich ein (nur im Dock). Mo/Mi/Fr kannst du sagen, dass du auswärts arbeitest. Tippe vor dem Gehen auf „Ausstempeln“ — es zählt nur im Dock.",
+      "calendar": "Team-Kalender diese Woche",
+      "zero": "0 h",
+      "startPlace": "wo die Person sagte, sie sei auswärts",
+      "lastPlace": "letzter Ort",
+      "teamNow": "Alle gerade",
+      "seen": "Zuletzt in emet: {time}",
+      "neverSeen": "Hat emet noch nicht geöffnet",
+      "atDockToday": "{hours} heute im Dock",
+      "st": {
+        "in": "Im Dock seit {time}",
+        "lunch": "Beim Essen · zurück bis {time}",
+        "outside": "Auswärts seit {time} · {note}",
+        "left": "Gegangen um {time}",
+        "none": "Nicht da"
+      }
     }
   },
   "report": {
@@ -3443,8 +3450,8 @@
     "week": "Diese Woche",
     "rulesTitle": "So funktioniert's",
     "r1": "Um 9:00 (Mo–Fr) schickt emet eine Benachrichtigung: ein Tipp stempelt dich ein, nur wenn dein Handy im Dock ist (unter 30 m).",
-    "r2": "Gehen pausiert deinen Tag; zurück vor 21:00 läuft die Zeit weiter. Zeit draußen zählt nie.",
-    "r3": "Tippe vor dem Gehen auf „Ausstempeln“. Es zählt nur im Dock: woanders oder gar nicht ausstempeln = dieser Abschnitt zählt 0 h.",
+    "r2": "Gehen pausiert deinen Tag; zurück vor 21:00 und die Zeit läuft weiter. Zeit weg zählt nie. Alles erscheint im Team-Kalender unter Heute.",
+    "r3": "Tippe vor dem Gehen auf „Ausstempeln“. Es zählt nur im Dock. Um 21:00 schließt der Tag: noch eingestempelt = dieser Abschnitt zählt 0 h.",
     "r4": "Dienstag und Donnerstag, erste Ankunft: nach 9:10:59 = 3 € Strafe; nach 9:29:59 = 3 € + 1 Strike. 3 Strikes im Quartal = die 75-€-Strafe.",
     "r5": "An dem Tag woanders gearbeitet? Sag es einem Leader: er kann die Strafe oder den Strike löschen.",
     "setup": "Ein- / Ausstempeln →"
@@ -3485,7 +3492,7 @@
     "blocked": "Der Standort ist für emet blockiert. Erlaube ihn in den Handy-Einstellungen (Safari/Chrome → Standort) und versuch es erneut.",
     "rulesTitle": "So funktioniert es",
     "r1": "Einstempeln geht nur im Dock (unter 30 m). Verspätungsstrafen am Dienstag und Donnerstag gelten weiter.",
-    "r2": "Ausstempeln zählt nur im Dock. Woanders oder gar nicht ausstempeln = dieser Abschnitt zählt 0 h.",
+    "r2": "Ausstempeln zählt nur im Dock. Woanders ausstempeln = dieser Abschnitt zählt 0 h. Um 21:00 schließt der Tag: noch eingestempelt = 0 h.",
     "r3": "Montag, Mittwoch und Freitag kannst du auswärts arbeiten: schreib, was du machst; dein Standort wird beim Start, alle 2 Stunden und am Ende gespeichert.",
     "r4": "Keine Antwort auf „Arbeitest du noch auswärts?“ in 30 Minuten beendet es beim letzten Tipp.",
     "s": {
@@ -3508,7 +3515,9 @@
       "no-note": "Schreib zuerst, was du machst.",
       "error": "Etwas ist schiefgelaufen. Versuch es erneut.",
       "lunch": "Guten Appetit! Sei bis {time} zurück im Dock und tippe „Ich bin im Büro“.",
-      "lunch-far": "Du bist {m} m vom Dock entfernt. Tippe „Essen gehen“, bevor du das Dock verlässt — von hier geht nur Ausstempeln (0 h)."
+      "lunch-far": "Du bist {m} m vom Dock entfernt. Tippe „Essen gehen“, bevor du das Dock verlässt — von hier geht nur Ausstempeln (0 h).",
+      "too-far-outside": "Du bist {m} m vom Dock entfernt. Arbeitest du auswärts? Schreib unten, was du machst — emet speichert genau diesen Ort.",
+      "closed": "Der Tag wurde um 21:00 geschlossen. Bis morgen."
     },
     "lunch": "Essen gehen (max. 1 h)",
     "lunchUntil": "Beim Essen — sei bis {time} zurück im Dock und stempel ein.",

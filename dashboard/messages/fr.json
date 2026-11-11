@@ -1216,26 +1216,33 @@
     "office": {
       "title": "Au bureau",
       "mine": "Toi : {today} aujourd’hui · {week} cette semaine",
-      "inNow": "Présents · {n}",
-      "since": "depuis {time}",
-      "nobody": "Personne n’a pointé.",
       "weekTitle": "Heures cette semaine",
       "error": "Un problème est survenu. Réessaie.",
       "youPaused": "en pause",
-      "pausedTitle": "En pause · {n}",
-      "pausedSince": "parti·e à {time} · {hours} aujourd’hui",
       "officeMissing": "La position du bureau n’est pas encore définie — un admin doit être au bureau et appuyer sur « Définir le bureau ici ».",
       "setOffice": "Définir le bureau ici (être au bureau)",
       "moveOffice": "Déplacer le bureau ici",
       "officeSaved": "Position du bureau enregistrée (±{acc} m)",
       "noLocation": "Impossible de lire ta position. Autorise la localisation pour emet et réessaie.",
       "youIn": "Tu es là",
-      "outsideNow": "En extérieur · {n}",
-      "outsideWeek": "Travail en extérieur cette semaine",
       "now": "maintenant",
-      "where": "où",
       "open": "Pointer arrivée / départ",
-      "tapHint": "Chaque jour ouvré à 9:00, emet envoie une notification : un appui te pointe (seulement au Dock). Lun/mer/ven tu peux dire que tu travailles dehors. Appuie sur « Pointer le départ » avant de partir — ça ne compte qu’au Dock."
+      "tapHint": "Chaque jour ouvré à 9:00, emet envoie une notification : un appui te pointe (seulement au Dock). Lun/mer/ven tu peux dire que tu travailles dehors. Appuie sur « Pointer le départ » avant de partir — ça ne compte qu’au Dock.",
+      "calendar": "Calendrier de l’équipe cette semaine",
+      "zero": "0 h",
+      "startPlace": "où la personne a dit être dehors",
+      "lastPlace": "dernier lieu",
+      "teamNow": "Tout le monde maintenant",
+      "seen": "Dernière fois dans emet : {time}",
+      "neverSeen": "N’a pas encore ouvert emet",
+      "atDockToday": "{hours} au Dock aujourd’hui",
+      "st": {
+        "in": "Au Dock depuis {time}",
+        "lunch": "En pause déjeuner · retour avant {time}",
+        "outside": "Dehors depuis {time} · {note}",
+        "left": "Parti à {time}",
+        "none": "Absent"
+      }
     }
   },
   "report": {
@@ -3443,8 +3450,8 @@
     "week": "Cette semaine",
     "rulesTitle": "Comment ça marche",
     "r1": "À 9:00 (lun–ven) emet envoie une notification : un appui te pointe, seulement si ton téléphone est au Dock (à moins de 30 m).",
-    "r2": "Partir met ta journée en pause ; de retour avant 21h00, le temps continue. Le temps dehors ne compte jamais.",
-    "r3": "Appuie sur « Pointer le départ » avant de partir. Ça ne compte qu’au Dock : pointer ailleurs, ou jamais, donne 0 h pour cette période.",
+    "r2": "Partir met ta journée en pause ; reviens avant 21:00 et le temps continue. Le temps d’absence ne compte jamais. Tout apparaît dans le calendrier de l’équipe sur Aujourd’hui.",
+    "r3": "Appuie sur « Pointer le départ » avant de partir. Ça ne compte qu’au Dock. À 21:00 la journée se clôture : toujours pointé = 0 h pour cette période.",
     "r4": "Mardi et jeudi, première arrivée : après 9h10:59 = amende de 3 € ; après 9h29:59 = 3 € + 1 strike. 3 strikes dans le trimestre = la punition de 75 €.",
     "r5": "Tu travailles ailleurs ce jour-là ? Dis-le à un leader : il peut supprimer l’amende ou le strike.",
     "setup": "Pointer arrivée / départ →"
@@ -3485,7 +3492,7 @@
     "blocked": "La localisation est bloquée pour emet. Autorise-la dans les réglages du téléphone (Safari/Chrome → Localisation) et réessaie.",
     "rulesTitle": "Comment ça marche",
     "r1": "Le pointage ne marche qu’au Dock (à moins de 30 m). Les amendes de retard du mardi et jeudi restent.",
-    "r2": "Le départ ne compte qu’au Dock. Pointer ailleurs, ou jamais, donne 0 h pour cette période.",
+    "r2": "Le départ ne compte qu’au Dock. Pointer ailleurs donne 0 h pour cette période. À 21:00 la journée se clôture : toujours pointé = 0 h.",
     "r3": "Lundi, mercredi et vendredi tu peux travailler dehors : écris ce que tu fais ; ta position est enregistrée au début, toutes les 2 heures et à la fin.",
     "r4": "Sans réponse à « Toujours en extérieur ? » en 30 minutes, ça s’arrête à ton dernier appui.",
     "s": {
@@ -3508,7 +3515,9 @@
       "no-note": "Écris d’abord ce que tu fais.",
       "error": "Un problème est survenu. Réessaie.",
       "lunch": "Bon appétit ! Reviens au Dock et appuie sur « Je suis au bureau » avant {time}.",
-      "lunch-far": "Tu es à {m} m du Dock. Appuie sur « Je vais manger » avant de quitter le Dock — d’ici, seul le départ marche (0 h)."
+      "lunch-far": "Tu es à {m} m du Dock. Appuie sur « Je vais manger » avant de quitter le Dock — d’ici, seul le départ marche (0 h).",
+      "too-far-outside": "Tu es à {m} m du Dock. Tu travailles dehors ? Écris ci-dessous ce que tu fais — emet enregistre cet endroit exact.",
+      "closed": "La journée a été clôturée à 21:00. À demain."
     },
     "lunch": "Je vais manger (1 h max)",
     "lunchUntil": "En pause déjeuner — reviens au Dock et pointe avant {time}.",

@@ -61,11 +61,11 @@ test("shortcut positions: in within 30 m, out from 80 m, keep checking in betwee
   assert.deepEqual(zoneStep(400, false), { event: null, reply: "done" });   // already out
 });
 
-test("never checked out by midnight (phone off, Leave deleted) → that stretch counts 0", () => {
+test("never checked out by 21:00 (the day closes) → that stretch counts 0", () => {
   const v1 = v({ arrived_at: "2026-11-10T08:00:00Z" }); // 09:00 Spanish time
-  assert.equal(isStale(v1, Date.parse("2026-11-10T22:59:00Z")), false); // 23:59 → still counting
-  assert.equal(isStale(v1, Date.parse("2026-11-10T23:00:00Z")), true);  // 00:00 → never checked out
-  assert.equal(visitMs(v1, Date.parse("2026-11-10T23:30:00Z")), 0);
+  assert.equal(isStale(v1, Date.parse("2026-11-10T19:59:00Z")), false); // 20:59 → still counting
+  assert.equal(isStale(v1, Date.parse("2026-11-10T20:00:00Z")), true);  // 21:00 → the day is closed
+  assert.equal(visitMs(v1, Date.parse("2026-11-10T20:30:00Z")), 0);
   assert.deepEqual(decide(v1, "arrive", Date.parse("2026-11-11T07:00:00Z")), [{ op: "forgot", id: "a" }, { op: "insert" }]);
 });
 

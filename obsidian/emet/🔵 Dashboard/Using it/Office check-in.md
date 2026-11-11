@@ -6,19 +6,23 @@ Built 2026-11-10 · **live** · one tap since 2026-11-11 (migration `0060_office
 - **9:00, Monday–Friday:** everyone gets a notification (bell + phone): *At the office? Tap to check in.* It opens **/office**, which reads the phone's position once. emet checks them in **only within 30 m of Dock** (up to 20 m GPS slack in their favour).
   - Tuesday/Thursday (office days) the tap checks in straight away (`/office?go=in`).
   - Monday/Wednesday/Friday the page also offers **I'm working outside**.
-- **Check out:** they tap *Check out* when they leave. It **only counts at Dock (within 80 m)**. Anywhere else, emet warns first; checking out anyway, or never checking out, makes that stretch **0 h**. So leaving the time running earns nothing. **18:00** reminder to check out.
+- **Check out:** they tap *Check out* when they leave. It **only counts at Dock (within 80 m)**. Anywhere else, emet warns first; checking out anyway, or never checking out, makes that stretch **0 h**. So leaving the time running earns nothing. 
 - **14:00 and 17:00:** everyone still checked in gets *Still at the office? If you've left, check out.* (Alvaro: someone leaving at 2 without saying anything.)
 - **Going to eat (14:00 option, also on /office):** tapped **at Dock**, before leaving. The time stops for **max 1 hour** and the break doesn't count. 10 minutes before the end: *Lunch ends soon — back at Dock by 15:42*. Back at Dock and checked in within the hour = the morning counts; not back = the morning counts **0 h** (`office_visits.lunch_until`, handled by `office_tick`). Tested 11 Nov in a rolled-back transaction: 14:00 and 17:00 questions, reminder, back in time, not back.
 - **Working outside (Mon/Wed/Fri):** they write what they're doing (e.g. *Visiting shops in Indautxu*). emet saves the position at the start, every **2 hours** (notification *Still working outside?* → one tap) and at the end (`office_outside.places`). No answer within 30 minutes ends it at the last tap. Checking in at Dock ends it, and the questions stop.
-- **Everyone can see:** Today → At the office → *Working outside now* and *Working outside this week* (day, time, person, note, map link to the last position). That's the "calendar" for any doubts.
+- **Everyone can see (Today → At the office):**
+  - **Everyone now:** each class member with their status — *At Dock since 09:02* / *Eating · back by 15:10* / *Outside since 10:00 · note* / *Left at 14:00* / *Not in* — their time at Dock today, and **when they last opened emet** (`presence.last_seen_at`).
+  - **Team calendar this week:** every Dock stretch (from–to, hours, or **0 h** in red if never checked out at Dock) and every outside stretch (note, map links to where they said they were out and the last place).
+- **21:00 the day closes** (Alvaro, 11 Nov): anyone still checked in gets 0 h for that stretch, working outside ends at the last tap, and no check-in is accepted after 21:00 (migration 0063). The 18:00 reminder was dropped.
+- **The 9:00 tap checks in straight away** at Dock. Away from Dock on Mon/Wed/Fri, emet says how far they are and opens *working outside*, saving that exact spot.
 - **Phones only:** a laptop's location is easy to fake in dev tools.
 - Pause rule stays: checking out pauses the day until 21:00; checking in again resumes it.
 
 ## How it runs
-- `office_tick()` runs **every 5 minutes** (pg_cron job `office-tick`, Supabase free plan): 9:00 check-in notifications (one per person per day, dedupe `office_checkin:<date>`), 18:00 check-out reminders (only people still in), 2-hour outside questions, and closing unanswered outside stretches.
+- `office_tick()` runs **every 5 minutes** (pg_cron job `office-tick`, Supabase free plan): 9:00 check-in notifications (one per person per day, dedupe `office_checkin:<date>`), 14:00 and 17:00 questions (only people still in), lunch reminders and expiry, 2-hour outside questions, closing unanswered outside stretches, and the 21:00 day close.
 - New notification kinds: `office_checkin`, `office_checkout`, `office_outside_check` (in `push_worthy`, texts in all 7 languages).
 - Who gets them: `office_people()` = active class members (no coach, Ollin guests or bot).
-- Tested 11 Nov in a rolled-back transaction with a fake clock: Thu 9:00 → 14 notifications linking `/office?go=in`, no duplicates on the next run; Fri 9:00 → offers working outside; Wed 18:00 → only Alvaro (still in); outside question once per 2 h, ended 30 min after an unanswered question.
+- Tested 11 Nov in a rolled-back transaction with a fake clock: Thu 9:00 → 14 notifications linking `/office?go=in`, no duplicates on the next run; Fri 9:00 → offers working outside; Wed 18:00 → only Alvaro (still in; that reminder was removed later the same day — tested again: 0 at 18:00, Alvaro's open stretch closed as 0 h at 21:01); outside question once per 2 h, ended 30 min after an unanswered question.
 
 ## Why not an app (11 Nov)
 - Same day we first moved to **OwnTracks** (free background app). It worked on Alvaro's iPhone at Dock (signals 14:34, 14:43, 14:50), but iPhone blocks its one-tap setup ("URI or file configuration not allowed") and Alvaro decided people won't install and keep an app → removed, along with the iPhone shortcut and MacroDroid links (`/api/office/<token>` deleted).

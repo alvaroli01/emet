@@ -28,6 +28,7 @@ export function OfficeTap({ state, workday, outsideDay, go }: { state: State; wo
       setBusy(null);
       const s = j?.status ?? "error";
       if (s === "far") { setFar(j?.distance ?? 0); return; }
+      if (s === "too-far-outside") setTimeout(() => document.getElementById("outside-note")?.focus(), 50); // Mon/Wed/Fri away from Dock: say what you're doing
       const good = ["in", "out", "lunch", "outside", "outside-still", "outside-done", "already-in"].includes(s);
       setMsg({ ok: good, text: t.has(`s.${s}`) ? t(`s.${s}`, { m: j?.distance ?? 0, time: j?.time ?? "" }) : t("s.error") });
       router.refresh();
@@ -81,7 +82,7 @@ export function OfficeTap({ state, workday, outsideDay, go }: { state: State; wo
             {state.kind === "none" && outsideDay && (
               <div className="space-y-2 border-t border-line pt-4">
                 <p className="text-sm font-medium">{t("outsideTitle")}</p>
-                <input value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} placeholder={t("notePlaceholder")}
+                <input id="outside-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} placeholder={t("notePlaceholder")}
                   className="w-full rounded-xl border border-line bg-surface px-3 py-2.5 text-sm" />
                 <button onClick={() => send("outside", { note })} disabled={!!busy || !note.trim()} className={`${big} bg-surface-2 hover:bg-line`}>{spin("outside") ?? <Briefcase size={18} />} {t("workingOutside")}</button>
                 <p className="text-xs text-muted">{t("outsideHint")}</p>

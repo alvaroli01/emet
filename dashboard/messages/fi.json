@@ -1216,26 +1216,33 @@
     "office": {
       "title": "Toimistolla",
       "mine": "Sinä: {today} tänään · {week} tällä viikolla",
-      "inNow": "Paikalla nyt · {n}",
-      "since": "klo {time} alkaen",
-      "nobody": "Kukaan ei ole kirjautunut.",
       "weekTitle": "Tunnit tällä viikolla",
       "error": "Jokin meni pieleen. Yritä uudelleen.",
       "youPaused": "tauolla",
-      "pausedTitle": "Tauolla · {n}",
-      "pausedSince": "lähti {time} · {hours} tänään",
       "officeMissing": "Toimiston sijaintia ei ole vielä asetettu – adminin pitää olla toimistolla ja painaa ”Aseta toimisto tähän”.",
       "setOffice": "Aseta toimisto tähän (ole toimistolla)",
       "moveOffice": "Siirrä toimisto tähän",
       "officeSaved": "Toimiston sijainti tallennettu (±{acc} m)",
       "noLocation": "Sijaintia ei voitu lukea. Salli sijainti emetille ja yritä uudelleen.",
       "youIn": "Olet paikalla",
-      "outsideNow": "Töissä ulkona · {n}",
-      "outsideWeek": "Ulkona tehty työ tällä viikolla",
       "now": "nyt",
-      "where": "missä",
       "open": "Leimaa sisään / ulos",
-      "tapHint": "Joka arkipäivä klo 9:00 emet lähettää ilmoituksen: yksi napautus leimaa sinut sisään (vain Dockissa). Ma/ke/pe voit kertoa olevasi töissä ulkona. Napauta ”Leimaa ulos” ennen lähtöä — se lasketaan vain Dockissa."
+      "tapHint": "Joka arkipäivä klo 9:00 emet lähettää ilmoituksen: yksi napautus leimaa sinut sisään (vain Dockissa). Ma/ke/pe voit kertoa olevasi töissä ulkona. Napauta ”Leimaa ulos” ennen lähtöä — se lasketaan vain Dockissa.",
+      "calendar": "Tiimin kalenteri tällä viikolla",
+      "zero": "0 h",
+      "startPlace": "missä hän sanoi olevansa ulkona",
+      "lastPlace": "viimeisin paikka",
+      "teamNow": "Kaikki nyt",
+      "seen": "Viimeksi emetissä: {time}",
+      "neverSeen": "Ei ole vielä avannut emetiä",
+      "atDockToday": "{hours} Dockissa tänään",
+      "st": {
+        "in": "Dockissa klo {time} alkaen",
+        "lunch": "Syömässä · takaisin klo {time}",
+        "outside": "Ulkona klo {time} alkaen · {note}",
+        "left": "Lähti klo {time}",
+        "none": "Ei paikalla"
+      }
     }
   },
   "report": {
@@ -3443,8 +3450,8 @@
     "week": "Tällä viikolla",
     "rulesTitle": "Näin se toimii",
     "r1": "Klo 9:00 (ma–pe) emet lähettää ilmoituksen: yksi napautus leimaa sinut sisään, vain jos puhelimesi on Dockissa (alle 30 m).",
-    "r2": "Lähteminen keskeyttää päiväsi; palaa ennen klo 21:00, niin aika jatkuu. Poissaoloaika ei koskaan laske.",
-    "r3": "Napauta ”Leimaa ulos” ennen lähtöä. Se lasketaan vain Dockissa: muualla tai ei lainkaan leimattu = jakso on 0 h.",
+    "r2": "Lähteminen keskeyttää päiväsi; palaa ennen klo 21:00 ja aika jatkuu. Poissaoloaika ei koskaan lasketa. Kaikki näkyy tiimin kalenterissa kohdassa Tänään.",
+    "r3": "Napauta ”Leimaa ulos” ennen lähtöä. Se lasketaan vain Dockissa. Klo 21:00 päivä suljetaan: vielä sisällä = jakso on 0 h.",
     "r4": "Tiistaisin ja torstaisin, ensimmäinen saapuminen: klo 9:10:59 jälkeen = 3 € sakko; klo 9:29:59 jälkeen = 3 € + 1 strike. 3 strikea neljänneksessä = 75 € rangaistus.",
     "r5": "Teitkö sinä päivänä töitä muualla? Kerro leaderille: hän voi poistaa sakon tai striken.",
     "setup": "Leimaa sisään / ulos →"
@@ -3485,7 +3492,7 @@
     "blocked": "Sijainti on estetty emetiltä. Salli se puhelimen asetuksista (Safari/Chrome → Sijainti) ja yritä uudelleen.",
     "rulesTitle": "Näin se toimii",
     "r1": "Sisään voi leimata vain Dockissa (alle 30 m). Tiistain ja torstain myöhästymismaksut ovat yhä voimassa.",
-    "r2": "Ulosleimaus lasketaan vain Dockissa. Muualla tai ei lainkaan = jakso on 0 h.",
+    "r2": "Ulosleimaus lasketaan vain Dockissa. Muualla leimattu = jakso on 0 h. Klo 21:00 päivä suljetaan: vielä sisällä = 0 h.",
     "r3": "Maanantaina, keskiviikkona ja perjantaina voit työskennellä ulkona: kirjoita mitä teet; sijaintisi tallennetaan alussa, 2 tunnin välein ja lopussa.",
     "r4": "Jos et vastaa kysymykseen ”Vieläkö töissä ulkona?” 30 minuutissa, se päättyy viimeiseen napautukseesi.",
     "s": {
@@ -3508,7 +3515,9 @@
       "no-note": "Kirjoita ensin, mitä teet.",
       "error": "Jokin meni vikaan. Yritä uudelleen.",
       "lunch": "Hyvää ruokahalua! Palaa Dockiin ja napauta ”Olen toimistolla” klo {time} mennessä.",
-      "lunch-far": "Olet {m} m:n päässä Dockista. Napauta ”Menen syömään” ennen kuin lähdet Dockista — täältä toimii vain ulosleimaus (0 h)."
+      "lunch-far": "Olet {m} m:n päässä Dockista. Napauta ”Menen syömään” ennen kuin lähdet Dockista — täältä toimii vain ulosleimaus (0 h).",
+      "too-far-outside": "Olet {m} m:n päässä Dockista. Oletko töissä ulkona? Kirjoita alle mitä teet — emet tallentaa tämän tarkan paikan.",
+      "closed": "Päivä suljettiin klo 21:00. Nähdään huomenna."
     },
     "lunch": "Menen syömään (enint. 1 h)",
     "lunchUntil": "Syömässä — palaa Dockiin ja leimaa sisään klo {time} mennessä.",

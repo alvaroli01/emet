@@ -6,15 +6,13 @@ export type Visit = { id: string; user_id: string; arrived_at: string; left_at: 
 export type Op = { op: "insert" } | { op: "close"; id: string } | { op: "forgot"; id: string };
 
 const H = 3600e3;
-export const STALE_MS = 16 * H; // still "in" after 16 h, or at midnight → never checked out; that stretch counts 0 h (no cheating by switching the phone off)
+export const STALE_MS = 16 * H; // still "in" after 16 h, or at 21:00 → never checked out; that stretch counts 0 h (no cheating by leaving it running)
 export const PAUSE_UNTIL = "21:00"; // left the office: the day is paused until 21:00 (Spanish time); back before then = it resumes
 
 /** Each stretch inside the office is one visit. Leaving pauses the day (the time away never counts); arriving resumes it. */
-/** A visit still open at the next Spanish midnight (or after 16 h) was never checked out. */
-export const isStale = (v: Visit, now: number) => {
-  const nextDay = new Date(Date.parse(madridMidnight(madridDay(v.arrived_at))) + 36 * H).toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
-  return now >= Date.parse(madridMidnight(nextDay)) || now - Date.parse(v.arrived_at) >= STALE_MS;
-};
+/** The day closes at 21:00 Spanish time (Alvaro, 2026-11-11): a visit still open then (or after 16 h) was never checked out. */
+export const dayClosesAt = (t: number | string) => Date.parse(madridMidnight(madridDay(t))) + 21 * H;
+export const isStale = (v: Visit, now: number) => now >= dayClosesAt(v.arrived_at) || now - Date.parse(v.arrived_at) >= STALE_MS;
 
 export function decide(open: Visit | null, event: OfficeEvent, now: number): Op[] {
   const stale = open && isStale(open, now);

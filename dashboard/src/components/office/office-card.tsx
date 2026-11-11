@@ -4,21 +4,25 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { Briefcase, Building2, MapPin } from "lucide-react";
+import { Briefcase, Building2, CalendarDays, Clock, MapPin, Utensils } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
 
 export type OfficeData = {
-  inNow: { id: string; name: string; avatar: string | null; since: string }[]; // since = "09:12" Spanish time
-  paused: { id: string; name: string; avatar: string | null; since: string; today: string }[]; // left today, may come back before 21:00
+  // Everyone: where they are now, since/until when (Spanish time), time at Dock today, last time they opened emet
+  team: { id: string; name: string; avatar: string | null; status: "in" | "lunch" | "outside" | "left" | "none"; since: string | null;
+    note: string | null; today: string; seen: string | null }[];
   me: { in: boolean; paused: boolean; today: string; week: string };           // "7h 05m"
   week: { id: string; name: string; avatar: string | null; hours: string; ms: number }[];
   isAdmin: boolean; officeSet: boolean; // the office point the phones are measured against
   // Working outside (Mon/Wed/Fri): who is out now, and this week's log for everyone — the "outside calendar"
-  outsideNow: { id: string; name: string; avatar: string | null; since: string; note: string }[];
-  outsideWeek: { day: string; items: { id: string; name: string; note: string; from: string; to: string | null; map: string | null }[] }[];
+  calendar: { day: string; items: { id: string; kind: "office" | "outside"; name: string; from: string; to: string | null; hours: string; zero: boolean;
+    note: string | null; start: string | null; end: string | null }[] }[];
 };
+
+const STATUS_STYLE = { in: "bg-ok/15 text-ok-text", lunch: "bg-warn/15 text-warn-text", outside: "bg-brand/15 text-ink", left: "bg-surface-2 text-muted", none: "bg-surface-2 text-muted" } as const;
+const STATUS_ICON = { in: <Building2 size={11} />, lunch: <Utensils size={11} />, outside: <Briefcase size={11} />, left: <Clock size={11} />, none: null } as const;
 
 /** At the office: who is in right now, who is working outside (and this week's outside log), my hours, and the
  *  one-tap check-in page. Only the phone's real position counts (the server decides), so nobody can fake their time. */
@@ -49,33 +53,24 @@ export function OfficeCard({ d }: { d: OfficeData }) {
       </div>
       <p className="mb-3 text-sm text-muted">{t("mine", { today: d.me.today, week: d.me.week })}{d.me.paused && <> · <span className="font-medium text-ink">{t("youPaused")}</span></>}</p>
 
-      <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted">{t("inNow", { n: d.inNow.length })}</h3>
-      {d.inNow.length ? (
-        <ul className="mb-4 space-y-1.5">
-          {d.inNow.map((p) => (
-            <li key={p.id} className="flex items-center gap-2.5 text-sm">
-              <Avatar name={p.name} src={p.avatar} size={24} />
-              <span className="min-w-0 flex-1 truncate">{p.name}</span>
-              <span className="text-xs text-muted tabular-nums">{t("since", { time: p.since })}</span>
-            </li>
-          ))}
-        </ul>
-      ) : <p className="mb-4 text-sm text-muted">{t("nobody")}</p>}
-
-      {d.paused.length > 0 && (
-        <>
-          <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted">{t("pausedTitle", { n: d.paused.length })}</h3>
-          <ul className="mb-4 space-y-1.5">
-            {d.paused.map((p) => (
-              <li key={p.id} className="flex items-center gap-2.5 text-sm text-muted">
-                <span className="opacity-60"><Avatar name={p.name} src={p.avatar} size={24} /></span>
-                <span className="min-w-0 flex-1 truncate">{p.name}</span>
-                <span className="text-xs tabular-nums">{t("pausedSince", { time: p.since, hours: p.today })}</span>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+      <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted">{t("teamNow")}</h3>
+      <ul className="mb-4 divide-y divide-line">
+        {d.team.map((p) => (
+          <li key={p.id} className="flex items-center gap-2.5 py-2 text-sm">
+            <span className={p.status === "none" ? "opacity-50" : ""}><Avatar name={p.name} src={p.avatar} size={26} /></span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate font-medium">{p.name}</span>
+              <span className="block truncate text-xs text-muted">{p.seen ? t("seen", { time: p.seen }) : t("neverSeen")}</span>
+            </span>
+            <span className="text-right">
+              <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLE[p.status]}`}>
+                {STATUS_ICON[p.status]} {t(`st.${p.status}`, { time: p.since ?? "", note: p.note ?? "" })}
+              </span>
+              <span className="block text-xs tabular-nums text-muted">{t("atDockToday", { hours: p.today })}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
 
       {d.week.length > 0 && (
         <details className="mb-3">
@@ -92,34 +87,24 @@ export function OfficeCard({ d }: { d: OfficeData }) {
         </details>
       )}
 
-      {d.outsideNow.length > 0 && (
-        <>
-          <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-muted">{t("outsideNow", { n: d.outsideNow.length })}</h3>
-          <ul className="mb-4 space-y-1.5">
-            {d.outsideNow.map((p) => (
-              <li key={p.id} className="flex items-center gap-2.5 text-sm">
-                <Avatar name={p.name} src={p.avatar} size={24} />
-                <span className="min-w-0 flex-1 truncate">{p.name} <span className="text-muted">· {p.note}</span></span>
-                <span className="text-xs text-muted tabular-nums">{t("since", { time: p.since })}</span>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {d.outsideWeek.length > 0 && (
+      {d.calendar.length > 0 && (
         <details className="mb-3">
-          <summary className="cursor-pointer text-xs font-medium uppercase tracking-wide text-muted hover:text-ink"><Briefcase size={12} className="mr-1 inline" />{t("outsideWeek")}</summary>
+          <summary className="cursor-pointer text-xs font-medium uppercase tracking-wide text-muted hover:text-ink"><CalendarDays size={12} className="mr-1 inline" />{t("calendar")}</summary>
           <div className="mt-2 space-y-3">
-            {d.outsideWeek.map((day) => (
+            {d.calendar.map((day) => (
               <div key={day.day}>
                 <p className="mb-1 text-xs font-medium text-muted">{day.day}</p>
                 <ul className="space-y-1">
                   {day.items.map((x) => (
-                    <li key={x.id} className="flex items-baseline gap-2 text-sm">
-                      <span className="readout w-24 shrink-0 text-xs tabular-nums text-muted">{x.from}–{x.to ?? t("now")}</span>
-                      <span className="min-w-0 flex-1"><span className="font-medium">{x.name}</span> · {x.note}</span>
-                      {x.map && <a href={x.map} target="_blank" rel="noreferrer" className="shrink-0 text-xs text-muted underline underline-offset-2 hover:text-ink"><MapPin size={11} className="inline" /> {t("where")}</a>}
+                    <li key={x.id} className="flex flex-wrap items-baseline gap-x-2 text-sm">
+                      <span className="readout w-24 shrink-0 text-xs tabular-nums text-muted">{x.from}–{x.to ?? (x.zero ? "?" : t("now"))}</span>
+                      <span className="min-w-0 flex-1">
+                        {x.kind === "office" ? <Building2 size={12} className="mr-1 inline text-muted" /> : <Briefcase size={12} className="mr-1 inline text-muted" />}
+                        <span className="font-medium">{x.name}</span>{x.note && <> · {x.note}</>}
+                      </span>
+                      <span className={`text-xs tabular-nums ${x.zero ? "font-medium text-bad-text" : "text-muted"}`}>{x.zero ? t("zero") : x.hours}</span>
+                      {x.start && <a href={x.start} target="_blank" rel="noreferrer" className="text-xs text-muted underline underline-offset-2 hover:text-ink"><MapPin size={11} className="inline" /> {t("startPlace")}</a>}
+                      {x.end && <a href={x.end} target="_blank" rel="noreferrer" className="text-xs text-muted underline underline-offset-2 hover:text-ink"><MapPin size={11} className="inline" /> {t("lastPlace")}</a>}
                     </li>
                   ))}
                 </ul>

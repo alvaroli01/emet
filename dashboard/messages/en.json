@@ -1216,26 +1216,33 @@
     "office": {
       "title": "At the office",
       "mine": "You: {today} today · {week} this week",
-      "inNow": "In now · {n}",
-      "since": "since {time}",
-      "nobody": "Nobody is checked in.",
       "weekTitle": "Hours this week",
       "error": "Something went wrong. Try again.",
       "youPaused": "paused",
-      "pausedTitle": "Paused · {n}",
-      "pausedSince": "left {time} · {hours} today",
       "officeMissing": "The office location isn't set yet — an admin needs to stand in the office and press “Set office location here”.",
       "setOffice": "Set office location here (stand in the office)",
       "moveOffice": "Move the office location to here",
       "officeSaved": "Office location saved (±{acc} m)",
       "noLocation": "Couldn't read your location. Allow location for emet and try again.",
       "youIn": "You're in",
-      "outsideNow": "Working outside · {n}",
-      "outsideWeek": "Working outside this week",
       "now": "now",
-      "where": "where",
       "open": "Check in / out",
-      "tapHint": "Every weekday at 9:00 emet sends a notification: one tap checks you in (only at Dock). Mon/Wed/Fri you can say you're working outside. Tap “Check out” before you leave — it only counts at Dock."
+      "tapHint": "Every weekday at 9:00 emet sends a notification: one tap checks you in (only at Dock). Mon/Wed/Fri you can say you're working outside. Tap “Check out” before you leave — it only counts at Dock.",
+      "calendar": "Team calendar this week",
+      "zero": "0 h",
+      "startPlace": "where they said they were out",
+      "lastPlace": "last place",
+      "teamNow": "Everyone now",
+      "seen": "Last in emet: {time}",
+      "neverSeen": "Hasn't opened emet yet",
+      "atDockToday": "{hours} at Dock today",
+      "st": {
+        "in": "At Dock since {time}",
+        "lunch": "Eating · back by {time}",
+        "outside": "Outside since {time} · {note}",
+        "left": "Left at {time}",
+        "none": "Not in"
+      }
     }
   },
   "report": {
@@ -3443,8 +3450,8 @@
     "week": "This week",
     "rulesTitle": "How it works",
     "r1": "At 9:00 (Mon–Fri) emet sends a notification: one tap checks you in, only if your phone is at Dock (within 30 m).",
-    "r2": "Leaving pauses your day; back before 21:00 and the time carries on. Time away never counts.",
-    "r3": "Tap “Check out” before you leave. It only counts at Dock: checking out anywhere else, or never, makes that stretch 0 h.",
+    "r2": "Leaving pauses your day; back before 21:00 and the time carries on. Time away never counts. Everything shows in the team calendar on Today.",
+    "r3": "Tap “Check out” before you leave. It only counts at Dock. At 21:00 the day closes: still checked in = that stretch counts 0 h.",
     "r4": "Tuesdays and Thursdays, first arrival: after 9:10:59 = €3 fine; after 9:29:59 = €3 + 1 strike. 3 strikes in a quarter = the €75 punishment.",
     "r5": "Working somewhere else that day? Tell a leader: they can delete the fine or strike.",
     "setup": "Check in / out →"
@@ -3485,7 +3492,7 @@
     "blocked": "Location is blocked for emet. Allow it in your phone's settings (Safari/Chrome → Location) and try again.",
     "rulesTitle": "How it works",
     "r1": "Check-in only works at Dock (within 30 m). Tuesday and Thursday late fines still apply.",
-    "r2": "Check-out only counts at Dock. Checking out anywhere else, or never, makes that stretch 0 h.",
+    "r2": "Check-out only counts at Dock. Checking out anywhere else makes that stretch 0 h. At 21:00 the day closes: still checked in = 0 h.",
     "r3": "Monday, Wednesday and Friday you can work outside: write what you're doing; your location is saved when you start, every 2 hours and when you finish.",
     "r4": "No answer to “Still working outside?” within 30 minutes ends it at your last tap.",
     "s": {
@@ -3508,7 +3515,9 @@
       "no-note": "Write what you're doing first.",
       "error": "Something went wrong. Try again.",
       "lunch": "Enjoy! Be back at Dock and tap “I'm at the office” by {time}.",
-      "lunch-far": "You're {m} m from Dock. Tap “Going to eat” before you leave Dock — from here only Check out works (0 h)."
+      "lunch-far": "You're {m} m from Dock. Tap “Going to eat” before you leave Dock — from here only Check out works (0 h).",
+      "too-far-outside": "You're {m} m from Dock. Working outside? Write what you're doing below — emet saves this exact spot.",
+      "closed": "The day closed at 21:00. See you tomorrow."
     },
     "lunch": "Going to eat (max 1 h)",
     "lunchUntil": "Eating — be back at Dock and check in by {time}.",
