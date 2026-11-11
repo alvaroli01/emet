@@ -11,7 +11,7 @@ const geist = Geist({ subsets: ["latin", "latin-ext", "cyrillic"], variable: "--
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "emet HQ",
+  title: "emet",
   description: "emet team dashboard — €30K revenue / €15K profit by June 2027",
   // Opens full-screen from the iPhone home screen (needed there for phone notifications)
   appleWebApp: { capable: true, title: "emet", statusBarStyle: "black-translucent" },

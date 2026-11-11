@@ -68,7 +68,11 @@ export default async function TodayPage() {
     supabase.from("office_place").select("lat, lng").maybeSingle<{ lat: number; lng: number }>(),
     supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot, lunch_until").or(`arrived_at.gte.${madridMidnight(week)},left_at.is.null`).returns<(Visit & { lunch_until: string | null })[]>(),
   ]);
-  const { data: seenAll } = await supabase.from("presence").select("user_id, last_seen_at").returns<{ user_id: string; last_seen_at: string }[]>();
+  const [{ data: seenAll }, { data: absences }] = await Promise.all([
+    supabase.from("presence").select("user_id, last_seen_at").returns<{ user_id: string; last_seen_at: string }[]>(),
+    supabase.from("office_absences").select("id, user_id, from_day, to_day, reason").gte("to_day", week).lte("from_day", weekEnd)
+      .returns<{ id: string; user_id: string; from_day: string; to_day: string; reason: string }[]>(),
+  ]);
   // Working outside this week (Mon/Wed/Fri log everyone can see)
   const { data: outside } = await supabase.from("office_outside").select("id, user_id, note, started_at, ended_at, places")
     .gte("started_at", madridMidnight(week)).order("started_at")
@@ -169,18 +173,19 @@ export default async function TodayPage() {
       const seen = new Map((seenAll ?? []).map((x) => [x.user_id, x.last_seen_at]));
       const outsideOpen = new Map((outside ?? []).filter((o) => !o.ended_at).map((o) => [o.user_id, o]));
       const when = (iso: string) => (iso >= dayFrom ? madridTime(iso) : `${fmtDay(new Date(iso).toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" }))} ${madridTime(iso)}`);
-      const rank = { in: 0, lunch: 1, outside: 2, left: 3, none: 4 } as const;
+      const rank = { in: 0, lunch: 1, outside: 2, left: 3, away: 4, none: 5 } as const;
+      const awayToday = new Map((absences ?? []).filter((x) => x.from_day <= today && x.to_day >= today).map((x) => [x.user_id, x]));
       return classmates.map((m) => {
         const l = latest.get(m.id) as (Visit & { lunch_until: string | null }) | undefined;
         const o = outsideOpen.get(m.id);
         const status: keyof typeof rank = l && isInNow(l, now) ? "in"
           : l?.lunch_until && Date.parse(l.lunch_until) > now ? "lunch"
           : o ? "outside"
-          : l?.left_at && l.left_at >= dayFrom ? "left" : "none";
+          : l?.left_at && l.left_at >= dayFrom ? "left" : awayToday.has(m.id) ? "away" : "none";
         const since = status === "in" ? madridTime(l!.arrived_at) : status === "lunch" ? madridTime(l!.lunch_until!) : status === "outside" ? madridTime(o!.started_at)
-          : status === "left" ? madridTime(l!.left_at!) : null;
+          : status === "left" ? madridTime(l!.left_at!) : status === "away" ? fmtDay(awayToday.get(m.id)!.to_day) : null;
         const s = seen.get(m.id);
-        return { id: m.id, name: m.full_name, avatar: m.avatar_url, status, since, note: o?.note ?? null, today: hm(msOf(m.id, dayFrom)), seen: s ? when(s) : null, rank: rank[status] };
+        return { id: m.id, name: m.full_name, avatar: m.avatar_url, status, since, note: o?.note ?? awayToday.get(m.id)?.reason ?? null, today: hm(msOf(m.id, dayFrom)), seen: s ? when(s) : null, rank: rank[status] };
       }).sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name)).map(({ rank: _r, ...x }) => x); // eslint-disable-line @typescript-eslint/no-unused-vars
     })(),
     me: { in: vs.some((v) => v.user_id === me.id && isInNow(v, now)), paused: pausedNow(me.id), today: hm(msOf(me.id, dayFrom)), week: hm(msOf(me.id, weekFrom)) },
@@ -201,6 +206,11 @@ export default async function TodayPage() {
           from: madridTime(o.started_at), to: o.ended_at ? madridTime(o.ended_at) : null,
           hours: hm((o.ended_at ? Date.parse(o.ended_at) : now) - Date.parse(o.started_at)), zero: false, note: o.note,
           start: map(o.places[0]), end: o.places.length > 1 ? map(o.places[o.places.length - 1]) : null })),
+        // Away (trip, sick…): one line per day of this week up to today
+        ...(absences ?? []).filter((x) => who.has(x.user_id)).flatMap((x) => Array.from({ length: 7 }, (_, i) => new Date(Date.parse(week + "T12:00:00Z") + i * DAY).toISOString().slice(0, 10))
+          .filter((d) => d >= x.from_day && d <= x.to_day && d <= today).map((d) => ({
+            id: `${x.id}-${d}`, at: `${d}T00:00`, day: d, kind: "away" as const, name: who.get(x.user_id)!.full_name,
+            from: "", to: null, hours: "", zero: false, note: x.reason, start: null, end: null }))),
       ].sort((a, b) => a.at.localeCompare(b.at));
       return [...Map.groupBy(rows, (r) => r.day)].sort((a, b) => b[0].localeCompare(a[0])).map(([d, items]) => ({ day: fmtDay(d), items }));
     })(),

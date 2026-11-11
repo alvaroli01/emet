@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Briefcase, Building2, Check, Loader2, LogOut, MapPin, Utensils } from "lucide-react";
+import { Briefcase, ChevronRight, Loader2, LogOut, MapPin, Utensils } from "lucide-react";
 
-type State = { kind: "none" } | { kind: "in"; since: string } | { kind: "lunch"; since: string } | { kind: "outside"; since: string; note: string };
+type State = { kind: "none" } | { kind: "in"; since: string; at: string } | { kind: "lunch"; since: string; at: string } | { kind: "outside"; since: string; at: string; note: string };
 type Action = "in" | "out" | "lunch" | "outside" | "still" | "done";
 
 /** The page a check-in notification opens: one tap reads the phone's position and emet decides (see /api/office/tap). */
@@ -45,57 +45,78 @@ export function OfficeTap({ state, workday, outsideDay, go }: { state: State; wo
     if (go === "still" && state.kind === "outside") send("still");
   }, [go, state.kind, send]);
 
-  const big = "flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-4 text-base font-semibold disabled:opacity-60";
-  const spin = (a: Action) => busy === a ? <Loader2 size={18} className="animate-spin" /> : null;
+  // Live clock: time at Dock / outside so far, or minutes of lunch left
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => { const id = setInterval(() => setNow(Date.now()), 15_000); return () => clearInterval(id); }, []);
+  const mins = state.kind === "none" ? 0 : Math.max(0, Math.round((state.kind === "lunch" ? Date.parse(state.at) - now : now - Date.parse(state.at)) / 60e3));
+  const clock = `${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, "0")}`;
+  const tone = { none: "ring-line text-ink", in: "ring-ok text-ok-text", lunch: "ring-warn text-warn-text", outside: "ring-brand text-ink" }[state.kind];
+  const primary: Action | null = !workday ? null : state.kind === "in" ? "out" : state.kind === "outside" ? "still" : "in";
+  const label = state.kind === "in" ? t("inSince", { time: state.since }) : state.kind === "lunch" ? t("lunchUntil", { time: state.since })
+    : state.kind === "outside" ? t("outsideSince", { time: state.since, note: state.note }) : workday ? t("notIn") : t("weekend");
+
+  // A secondary choice: a full-width row (icon, label, chevron) — long words wrap instead of overflowing
+  const row = (a: Action, icon: React.ReactNode, text: string, extra?: Record<string, unknown>, off?: boolean) => (
+    <button key={a} onClick={() => send(a, extra)} disabled={!!busy || off}
+      className="flex w-full items-center gap-3 rounded-2xl bg-surface-2 px-4 py-3.5 text-left text-sm font-medium transition-colors hover:bg-line disabled:opacity-50">
+      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-surface">{busy === a ? <Loader2 size={15} className="animate-spin" /> : icon}</span>
+      <span className="min-w-0 flex-1 leading-snug">{text}</span>
+      <ChevronRight size={16} className="shrink-0 text-muted" />
+    </button>
+  );
 
   return (
-    <div className="mx-auto max-w-md space-y-4 px-4 py-6">
-      <section className="panel space-y-4 p-5">
-        <h1 className="flex items-center gap-2 text-xl font-semibold tracking-tight"><Building2 size={20} /> {t("title")}</h1>
-        <p className="text-sm text-muted">
-          {state.kind === "in" ? t("inSince", { time: state.since }) : state.kind === "lunch" ? t("lunchUntil", { time: state.since }) : state.kind === "outside" ? t("outsideSince", { time: state.since, note: state.note }) : t("notIn")}
-        </p>
+    <div className="mx-auto max-w-md px-4 py-8">
+      <h1 className="text-center text-sm font-medium text-muted">{t("title")}</h1>
 
-        {!workday ? <p className="text-sm text-muted">{t("weekend")}</p> : (
-          <>
-            {state.kind !== "in" && (
-              <button onClick={() => send("in")} disabled={!!busy} className={`${big} bg-brand text-brand-contrast`}>{spin("in") ?? <MapPin size={18} />} {t("atOffice")}</button>
-            )}
-            {state.kind === "in" && (
-              <div className="grid grid-cols-2 gap-2">
-                <button onClick={() => send("lunch")} disabled={!!busy} className={`${big} bg-surface-2 text-sm hover:bg-line`}>{spin("lunch") ?? <Utensils size={16} />} {t("lunch")}</button>
-                <button onClick={() => send("out")} disabled={!!busy} className={`${big} bg-surface-2 text-sm hover:bg-line`}>{spin("out") ?? <LogOut size={16} />} {t("checkOut")}</button>
-              </div>
-            )}
-            {far !== null && (
-              <div className="space-y-2 rounded-xl bg-bad/10 p-3 text-sm">
-                <p className="text-bad-text">{t("farWarn", { m: far })}</p>
-                <button onClick={() => send("out", { anyway: true })} disabled={!!busy} className="text-xs font-medium underline underline-offset-2">{t("farAnyway")}</button>
-              </div>
-            )}
-            {state.kind === "outside" && (
-              <div className="grid grid-cols-2 gap-2">
-                <button onClick={() => send("still")} disabled={!!busy} className={`${big} bg-surface-2 text-sm hover:bg-line`}>{spin("still") ?? <Check size={16} />} {t("still")}</button>
-                <button onClick={() => send("done")} disabled={!!busy} className={`${big} bg-surface-2 text-sm hover:bg-line`}>{spin("done") ?? <LogOut size={16} />} {t("done")}</button>
-              </div>
-            )}
-            {state.kind === "none" && outsideDay && (
-              <div className="space-y-2 border-t border-line pt-4">
-                <p className="text-sm font-medium">{t("outsideTitle")}</p>
-                <input id="outside-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} placeholder={t("notePlaceholder")}
-                  className="w-full rounded-xl border border-line bg-surface px-3 py-2.5 text-sm" />
-                <button onClick={() => send("outside", { note })} disabled={!!busy || !note.trim()} className={`${big} bg-surface-2 hover:bg-line`}>{spin("outside") ?? <Briefcase size={18} />} {t("workingOutside")}</button>
-                <p className="text-xs text-muted">{t("outsideHint")}</p>
-              </div>
-            )}
-          </>
-        )}
-        {msg && <p className={`rounded-xl px-3 py-2 text-sm ${msg.ok ? "bg-ok/15 text-ok-text" : "bg-bad/10 text-bad-text"}`}>{msg.text}</p>}
-      </section>
-      <section className="panel p-5 text-xs text-muted">
-        <p className="mb-1 font-medium uppercase tracking-wide">{t("rulesTitle")}</p>
-        <ul className="list-disc space-y-1 pl-4">{(["r1", "r2", "r5", "r3", "r4"] as const).map((k) => <li key={k}>{t(k)}</li>)}</ul>
-      </section>
+      {/* The one big thing: a round button that is also the status — tap it to do the main action */}
+      <div className="my-8 flex flex-col items-center">
+        <button onClick={() => primary && send(primary)} disabled={!primary || !!busy} aria-label={primary ? t(primary === "in" ? "atOffice" : primary === "out" ? "checkOut" : "still") : label}
+          className={`relative grid size-56 place-items-center rounded-full bg-surface ring-[10px] ${tone} shadow-[0_0_80px_-20px_currentColor] transition-transform active:scale-95 disabled:active:scale-100`}>
+          {state.kind === "none" && workday && <span className="absolute inset-0 animate-ping rounded-full ring-2 ring-brand/30 motion-reduce:hidden" />}
+          <span className="flex flex-col items-center gap-1">
+            {busy && busy === primary ? <Loader2 size={34} className="animate-spin" />
+              : state.kind === "none" ? <MapPin size={38} /> : <span className="readout text-5xl font-semibold tabular-nums tracking-tight">{clock}</span>}
+            <span className="max-w-40 text-center text-sm font-semibold leading-tight">
+              {state.kind === "none" ? (workday ? t("atOffice") : t("weekend")) : state.kind === "in" ? t("checkOut") : state.kind === "outside" ? t("still") : t("lunchLeft")}
+            </span>
+          </span>
+        </button>
+        <p className="mt-5 max-w-72 text-center text-sm text-muted">{label}</p>
+      </div>
+
+      {msg && <p className={`mb-4 rounded-2xl px-4 py-3 text-sm ${msg.ok ? "bg-ok/15 text-ok-text" : "bg-bad/10 text-bad-text"}`}>{msg.text}</p>}
+      {far !== null && (
+        <div className="mb-4 space-y-2 rounded-2xl bg-bad/10 p-4 text-sm">
+          <p className="text-bad-text">{t("farWarn", { m: far })}</p>
+          <button onClick={() => send("out", { anyway: true })} disabled={!!busy} className="text-xs font-medium underline underline-offset-2">{t("farAnyway")}</button>
+        </div>
+      )}
+
+      {workday && (
+        <div className="space-y-2">
+          {state.kind === "in" && row("lunch", <Utensils size={15} />, t("lunch"))}
+          {state.kind === "lunch" && row("in", <MapPin size={15} />, t("atOffice"))}
+          {state.kind === "outside" && <>{row("in", <MapPin size={15} />, t("atOffice"))}{row("done", <LogOut size={15} />, t("done"))}</>}
+          {state.kind === "none" && outsideDay && (
+            <div className="space-y-2 rounded-2xl bg-surface-2 p-4">
+              <p className="text-sm font-medium">{t("outsideTitle")}</p>
+              <input id="outside-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} placeholder={t("notePlaceholder")}
+                className="w-full rounded-xl border border-line bg-surface px-3 py-2.5 text-sm" />
+              <button onClick={() => send("outside", { note })} disabled={!!busy || !note.trim()}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-brand-contrast disabled:opacity-50">
+                {busy === "outside" ? <Loader2 size={16} className="animate-spin" /> : <Briefcase size={16} />} {t("workingOutside")}
+              </button>
+              <p className="text-xs text-muted">{t("outsideHint")}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      <details className="mt-6 rounded-2xl bg-surface-2/60 p-4 text-xs text-muted">
+        <summary className="cursor-pointer text-sm font-medium text-ink">{t("rulesTitle")}</summary>
+        <ul className="mt-2 list-disc space-y-1 pl-4">{(["r1", "r2", "r5", "r3", "r4"] as const).map((k) => <li key={k}>{t(k)}</li>)}</ul>
+      </details>
     </div>
   );
 }

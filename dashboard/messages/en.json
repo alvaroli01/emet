@@ -1241,8 +1241,10 @@
         "lunch": "Eating · back by {time}",
         "outside": "Outside since {time} · {note}",
         "left": "Left at {time}",
-        "none": "Not in"
-      }
+        "none": "Not in",
+        "away": "Away until {time} · {note}"
+      },
+      "allDay": "all day"
     }
   },
   "report": {
@@ -3470,7 +3472,8 @@
     "strikesHint": "Late arrivals on Tuesdays and Thursdays are added automatically (“Automatic: checked in at …”). If someone was working elsewhere that day, delete it in the Strikes tab.",
     "openStrikes": "Open Strikes →",
     "pushOn": "Phone alerts on",
-    "pushOff": "Phone alerts off"
+    "pushOff": "Phone alerts off",
+    "away": "Away until {to} · {reason}"
   },
   "officeTap": {
     "title": "Office check-in",
@@ -3521,6 +3524,33 @@
     },
     "lunch": "Going to eat (max 1 h)",
     "lunchUntil": "Eating — be back at Dock and check in by {time}.",
-    "r5": "At 14:00 and 17:00 emet asks if you're still here. Going to eat? Tap “Going to eat” at Dock: up to 1 hour, the break doesn't count. Not back at Dock within 1 hour = the stretch before counts 0 h."
+    "r5": "At 14:00 and 17:00 emet asks if you're still here. Going to eat? Tap “Going to eat” at Dock: up to 1 hour, the break doesn't count. Not back at Dock within 1 hour = the stretch before counts 0 h.",
+    "lunchLeft": "left of lunch"
+  },
+  "officeAdmin": {
+    "fixTitle": "Check someone in or out",
+    "fixHint": "For when a phone failed or someone forgot. Leave the time empty for now, or pick today's time.",
+    "at": "at",
+    "in": "Check in",
+    "out": "Check out",
+    "timeHint": "Check-out also fixes a stretch closed as 0 h today. Automatic fines stay until you delete them below.",
+    "checkedIn": "{name} checked in",
+    "checkedOut": "{name} checked out",
+    "finesTitle": "Today's late fines",
+    "noFines": "No late fines today.",
+    "fine3": "€3",
+    "fineStrike": "€3 + 1 strike",
+    "delete": "Delete",
+    "confirmFine": "Delete this fine for {name}? Only if it was a mistake.",
+    "fineDeleted": "Fine deleted",
+    "awayTitle": "Away (trip, sick, other)",
+    "awayHint": "Away people get no check-in notifications and no automatic €3 or strikes. Everyone sees it on Today.",
+    "from": "from",
+    "to": "to",
+    "reasonPlaceholder": "Reason, e.g. Trip to Madrid",
+    "awaySave": "Mark away",
+    "awaySaved": "{name} marked away",
+    "awayInvalid": "Write a reason and check the dates.",
+    "error": "Something went wrong. Try again."
   }
 }

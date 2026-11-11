@@ -1241,8 +1241,10 @@
         "lunch": "Almoçando · volta até {time}",
         "outside": "Fora desde {time} · {note}",
         "left": "Saiu às {time}",
-        "none": "Não está"
-      }
+        "none": "Não está",
+        "away": "Ausente até {time} · {note}"
+      },
+      "allDay": "o dia todo"
     }
   },
   "report": {
@@ -3470,7 +3472,8 @@
     "strikesHint": "Os atrasos de terça e quinta entram sozinhos (“Automatic: checked in at …”). Se alguém estava trabalhando em outro lugar nesse dia, apague na aba Strikes.",
     "openStrikes": "Abrir Strikes →",
     "pushOn": "Alertas do celular ligados",
-    "pushOff": "Alertas do celular desligados"
+    "pushOff": "Alertas do celular desligados",
+    "away": "Ausente até {to} · {reason}"
   },
   "officeTap": {
     "title": "Registro no escritório",
@@ -3521,6 +3524,33 @@
     },
     "lunch": "Vou comer (máx. 1 h)",
     "lunchUntil": "Almoçando — volte ao Dock e registre a entrada até {time}.",
-    "r5": "Às 14:00 e 17:00 o emet pergunta se você ainda está aqui. Vai comer? Toque em “Vou comer” no Dock: até 1 hora, a pausa não conta. Sem voltar ao Dock em 1 hora = o trecho anterior conta 0 h."
+    "r5": "Às 14:00 e 17:00 o emet pergunta se você ainda está aqui. Vai comer? Toque em “Vou comer” no Dock: até 1 hora, a pausa não conta. Sem voltar ao Dock em 1 hora = o trecho anterior conta 0 h.",
+    "lunchLeft": "de almoço"
+  },
+  "officeAdmin": {
+    "fixTitle": "Registrar entrada ou saída de alguém",
+    "fixHint": "Para quando um celular falhou ou alguém esqueceu. Hora vazia = agora, ou escolha uma hora de hoje.",
+    "at": "às",
+    "in": "Registrar entrada",
+    "out": "Registrar saída",
+    "timeHint": "A saída também corrige um trecho fechado com 0 h hoje. As multas automáticas ficam até você apagar abaixo.",
+    "checkedIn": "Entrada registrada para {name}",
+    "checkedOut": "Saída registrada para {name}",
+    "finesTitle": "Multas por atraso de hoje",
+    "noFines": "Nenhuma multa por atraso hoje.",
+    "fine3": "€3",
+    "fineStrike": "€3 + 1 strike",
+    "delete": "Apagar",
+    "confirmFine": "Apagar esta multa de {name}? Só se foi um erro.",
+    "fineDeleted": "Multa apagada",
+    "awayTitle": "Ausente (viagem, doente, outro)",
+    "awayHint": "Ausentes não recebem notificações de registro nem €3 ou strikes automáticos. Todos veem em Hoje.",
+    "from": "de",
+    "to": "até",
+    "reasonPlaceholder": "Motivo, ex. Viagem a Madri",
+    "awaySave": "Marcar ausente",
+    "awaySaved": "{name} marcado como ausente",
+    "awayInvalid": "Escreva um motivo e confira as datas.",
+    "error": "Algo deu errado. Tente de novo."
   }
 }

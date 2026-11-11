@@ -1241,8 +1241,10 @@
         "lunch": "Syömässä · takaisin klo {time}",
         "outside": "Ulkona klo {time} alkaen · {note}",
         "left": "Lähti klo {time}",
-        "none": "Ei paikalla"
-      }
+        "none": "Ei paikalla",
+        "away": "Poissa {time} asti · {note}"
+      },
+      "allDay": "koko päivän"
     }
   },
   "report": {
@@ -3470,7 +3472,8 @@
     "strikesHint": "Tiistain ja torstain myöhästymiset lisätään automaattisesti (”Automatic: checked in at …”). Jos joku teki sinä päivänä töitä muualla, poista se Strikes-välilehdellä.",
     "openStrikes": "Avaa Strikes →",
     "pushOn": "Puhelinilmoitukset päällä",
-    "pushOff": "Puhelinilmoitukset pois"
+    "pushOff": "Puhelinilmoitukset pois",
+    "away": "Poissa {to} asti · {reason}"
   },
   "officeTap": {
     "title": "Toimiston leimaus",
@@ -3521,6 +3524,33 @@
     },
     "lunch": "Menen syömään (enint. 1 h)",
     "lunchUntil": "Syömässä — palaa Dockiin ja leimaa sisään klo {time} mennessä.",
-    "r5": "Klo 14:00 ja 17:00 emet kysyy, oletko vielä paikalla. Menetkö syömään? Napauta ”Menen syömään” Dockissa: enintään 1 tunti, tauko ei lasketa. Jos et palaa Dockiin tunnissa, sitä edeltävä jakso on 0 h."
+    "r5": "Klo 14:00 ja 17:00 emet kysyy, oletko vielä paikalla. Menetkö syömään? Napauta ”Menen syömään” Dockissa: enintään 1 tunti, tauko ei lasketa. Jos et palaa Dockiin tunnissa, sitä edeltävä jakso on 0 h.",
+    "lunchLeft": "lounasta jäljellä"
+  },
+  "officeAdmin": {
+    "fixTitle": "Leimaa joku sisään tai ulos",
+    "fixHint": "Kun puhelin petti tai joku unohti. Tyhjä aika = nyt, tai valitse tämän päivän kellonaika.",
+    "at": "klo",
+    "in": "Leimaa sisään",
+    "out": "Leimaa ulos",
+    "timeHint": "Ulosleimaus korjaa myös tänään 0 h:ksi suljetun jakson. Automaattiset maksut jäävät, kunnes poistat ne alta.",
+    "checkedIn": "{name} leimattu sisään",
+    "checkedOut": "{name} leimattu ulos",
+    "finesTitle": "Tämän päivän myöhästymismaksut",
+    "noFines": "Ei myöhästymismaksuja tänään.",
+    "fine3": "3 €",
+    "fineStrike": "3 € + 1 strike",
+    "delete": "Poista",
+    "confirmFine": "Poistetaanko tämä maksu henkilöltä {name}? Vain jos se oli virhe.",
+    "fineDeleted": "Maksu poistettu",
+    "awayTitle": "Poissa (matka, sairas, muu)",
+    "awayHint": "Poissaolevat eivät saa leimausilmoituksia eivätkä automaattisia 3 € maksuja tai strikejä. Kaikki näkevät sen kohdassa Tänään.",
+    "from": "alkaen",
+    "to": "asti",
+    "reasonPlaceholder": "Syy, esim. Matka Madridiin",
+    "awaySave": "Merkitse poissaolevaksi",
+    "awaySaved": "{name} merkitty poissaolevaksi",
+    "awayInvalid": "Kirjoita syy ja tarkista päivät.",
+    "error": "Jokin meni vikaan. Yritä uudelleen."
   }
 }

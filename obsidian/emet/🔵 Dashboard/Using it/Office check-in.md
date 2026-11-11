@@ -32,6 +32,13 @@ Built 2026-11-10 · **live** · one tap since 2026-11-11 (migration `0060_office
 ## The office point
 **Dock Bilbao, Uribitarte Pasealekua 3, 48001 Bilbao** (43.2646286, -2.9268837), set 10 Nov (table `office_place`, migration 0055). Alvaro's Mac read 15 m from it at the office on 11 Nov (±35 m), so it was left as is. An admin can fine-tune it with **Move the office location to here** on Today → At the office.
 
+## Away, automatic fines, leader tools (11 Nov, migration 0064)
+- **Not checked in at all on Tue/Thu:** at **9:11** emet adds €3 (`late_fine`, bell + phone alert); still not in at **9:30** it becomes €3 + 1 strike (`late_arrival`). Each step runs once per person per day (`office_auto_fines`), so a fine a leader deletes is never added again. Coach, guests, bot and **away** people are never charged. `office-tick` now runs every minute so 9:11 and 9:30 are on time. Tested in a rolled-back transaction: 14 fined at 9:11 (the away one not), no duplicates, a deleted fine not re-added, 12 strikes at 9:30 (the 9:20 arrival kept only €3).
+- **Away (trip, sick, other):** Team Leaders → Office → *Away*: person, from, to, reason (`office_absences`). Away people get no check-in / 14:00 / 17:00 notifications and no automatic fines; everyone sees *Away until … · reason* in Everyone now and in the team calendar.
+- **Team Leaders → Office → Check someone in or out:** now, or at a time today (`office_leader_set(p_user, 'in'|'out', p_time)`, leaders only; refuses the future and overlaps). Check-out also fixes a stretch closed as 0 h. **Today's late fines** list with Delete (also in Team Leaders → Strikes).
+- **Check-in screen (/office):** one big round button that is also the status (green ring + live timer at Dock, amber while eating with minutes left), the other choices as full-width rows (no text overflowing), rules folded away.
+- **Phone app icon/name:** the app is called **emet** (was "emet HQ"); icons renamed to `emet-icon-192/512.png` so Android refreshes them. iPhones keep the icon from when emet was added (before the 5 Nov logo it was an "E"): remove emet from the Home Screen and add it again.
+
 ## Late fines (Tuesdays & Thursdays, migration 0054)
 - From the **first** check-in of the day (before 14:00), Spanish time: up to 9:10:59 on time · **9:11:00–9:29:59 = €3** (kind `late_fine`, 0 strikes) · **9:30:00+ = €3 + 1 strike** (`late_arrival`).
 - Added automatically by the DB trigger `office_late`; the person gets a bell + phone alert. Coach, Ollin guests and the bot are never charged. One per day.

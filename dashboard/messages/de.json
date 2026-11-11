@@ -1241,8 +1241,10 @@
         "lunch": "Beim Essen · zurück bis {time}",
         "outside": "Auswärts seit {time} · {note}",
         "left": "Gegangen um {time}",
-        "none": "Nicht da"
-      }
+        "none": "Nicht da",
+        "away": "Abwesend bis {time} · {note}"
+      },
+      "allDay": "ganztägig"
     }
   },
   "report": {
@@ -3470,7 +3472,8 @@
     "strikesHint": "Verspätungen am Dienstag und Donnerstag kommen automatisch dazu („Automatic: checked in at …“). Hat jemand an dem Tag woanders gearbeitet, lösche es im Tab Strikes.",
     "openStrikes": "Strikes öffnen →",
     "pushOn": "Handy-Benachrichtigungen an",
-    "pushOff": "Handy-Benachrichtigungen aus"
+    "pushOff": "Handy-Benachrichtigungen aus",
+    "away": "Abwesend bis {to} · {reason}"
   },
   "officeTap": {
     "title": "Büro-Check-in",
@@ -3521,6 +3524,33 @@
     },
     "lunch": "Essen gehen (max. 1 h)",
     "lunchUntil": "Beim Essen — sei bis {time} zurück im Dock und stempel ein.",
-    "r5": "Um 14:00 und 17:00 fragt emet, ob du noch da bist. Essen gehen? Tippe „Essen gehen“ im Dock: bis zu 1 Stunde, die Pause zählt nicht. Nicht innerhalb 1 Stunde zurück im Dock = der Abschnitt davor zählt 0 h."
+    "r5": "Um 14:00 und 17:00 fragt emet, ob du noch da bist. Essen gehen? Tippe „Essen gehen“ im Dock: bis zu 1 Stunde, die Pause zählt nicht. Nicht innerhalb 1 Stunde zurück im Dock = der Abschnitt davor zählt 0 h.",
+    "lunchLeft": "Pause übrig"
+  },
+  "officeAdmin": {
+    "fixTitle": "Jemanden ein- oder ausstempeln",
+    "fixHint": "Wenn ein Handy versagt hat oder jemand es vergessen hat. Zeit leer = jetzt, oder eine Uhrzeit von heute wählen.",
+    "at": "um",
+    "in": "Einstempeln",
+    "out": "Ausstempeln",
+    "timeHint": "Ausstempeln korrigiert auch einen heute mit 0 h geschlossenen Abschnitt. Automatische Strafen bleiben, bis du sie unten löschst.",
+    "checkedIn": "{name} eingestempelt",
+    "checkedOut": "{name} ausgestempelt",
+    "finesTitle": "Verspätungsstrafen heute",
+    "noFines": "Heute keine Verspätungsstrafen.",
+    "fine3": "3 €",
+    "fineStrike": "3 € + 1 Strike",
+    "delete": "Löschen",
+    "confirmFine": "Diese Strafe für {name} löschen? Nur wenn es ein Fehler war.",
+    "fineDeleted": "Strafe gelöscht",
+    "awayTitle": "Abwesend (Reise, krank, anderes)",
+    "awayHint": "Abwesende bekommen keine Check-in-Benachrichtigungen und keine automatischen 3 € oder Strikes. Alle sehen es unter Heute.",
+    "from": "vom",
+    "to": "bis",
+    "reasonPlaceholder": "Grund, z. B. Reise nach Madrid",
+    "awaySave": "Als abwesend markieren",
+    "awaySaved": "{name} als abwesend markiert",
+    "awayInvalid": "Schreib einen Grund und prüf die Daten.",
+    "error": "Etwas ist schiefgelaufen. Versuch es erneut."
   }
 }

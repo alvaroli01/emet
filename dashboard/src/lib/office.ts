@@ -34,7 +34,7 @@ export function visitMs(v: Visit, now: number): number {
 
 export const isInNow = (v: Visit, now: number) => !v.left_at && !v.forgot && !isStale(v, now);
 
-const madridDay = (t: number | string) => new Date(t).toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
+export const madridDay = (t: number | string) => new Date(t).toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
 /** Someone's latest visit ended today and it isn't 21:00 yet → their day is paused (they may still come back). */
 export function isPaused(latest: Visit, now: number): boolean {
   if (!latest.left_at || latest.forgot || madridDay(latest.left_at) !== madridDay(now)) return false;

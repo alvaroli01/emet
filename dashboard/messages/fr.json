@@ -1241,8 +1241,10 @@
         "lunch": "En pause déjeuner · retour avant {time}",
         "outside": "Dehors depuis {time} · {note}",
         "left": "Parti à {time}",
-        "none": "Absent"
-      }
+        "none": "Absent",
+        "away": "Absent jusqu’au {time} · {note}"
+      },
+      "allDay": "toute la journée"
     }
   },
   "report": {
@@ -3470,7 +3472,8 @@
     "strikesHint": "Les retards du mardi et du jeudi s’ajoutent tout seuls (« Automatic: checked in at … »). Si quelqu’un travaillait ailleurs ce jour-là, supprime-le dans l’onglet Strikes.",
     "openStrikes": "Ouvrir Strikes →",
     "pushOn": "Alertes téléphone activées",
-    "pushOff": "Alertes téléphone coupées"
+    "pushOff": "Alertes téléphone coupées",
+    "away": "Absent jusqu’au {to} · {reason}"
   },
   "officeTap": {
     "title": "Pointage au bureau",
@@ -3521,6 +3524,33 @@
     },
     "lunch": "Je vais manger (1 h max)",
     "lunchUntil": "En pause déjeuner — reviens au Dock et pointe avant {time}.",
-    "r5": "À 14:00 et 17:00 emet demande si tu es toujours là. Tu vas manger ? Appuie sur « Je vais manger » au Dock : jusqu’à 1 heure, la pause ne compte pas. Pas de retour au Dock en 1 heure = la période d’avant compte 0 h."
+    "r5": "À 14:00 et 17:00 emet demande si tu es toujours là. Tu vas manger ? Appuie sur « Je vais manger » au Dock : jusqu’à 1 heure, la pause ne compte pas. Pas de retour au Dock en 1 heure = la période d’avant compte 0 h.",
+    "lunchLeft": "de pause restante"
+  },
+  "officeAdmin": {
+    "fixTitle": "Pointer l’arrivée ou le départ de quelqu’un",
+    "fixHint": "Quand un téléphone a échoué ou que quelqu’un a oublié. Heure vide = maintenant, ou choisis une heure d’aujourd’hui.",
+    "at": "à",
+    "in": "Pointer l’arrivée",
+    "out": "Pointer le départ",
+    "timeHint": "Le départ corrige aussi une période clôturée à 0 h aujourd’hui. Les amendes automatiques restent jusqu’à ce que tu les supprimes ci-dessous.",
+    "checkedIn": "Arrivée pointée pour {name}",
+    "checkedOut": "Départ pointé pour {name}",
+    "finesTitle": "Amendes de retard du jour",
+    "noFines": "Aucune amende de retard aujourd’hui.",
+    "fine3": "3 €",
+    "fineStrike": "3 € + 1 strike",
+    "delete": "Supprimer",
+    "confirmFine": "Supprimer cette amende pour {name} ? Seulement si c’était une erreur.",
+    "fineDeleted": "Amende supprimée",
+    "awayTitle": "Absent (voyage, malade, autre)",
+    "awayHint": "Les absents ne reçoivent ni notifications de pointage ni 3 € ou strikes automatiques. Tout le monde le voit sur Aujourd’hui.",
+    "from": "du",
+    "to": "au",
+    "reasonPlaceholder": "Motif, ex. Voyage à Madrid",
+    "awaySave": "Marquer absent",
+    "awaySaved": "{name} marqué absent",
+    "awayInvalid": "Écris un motif et vérifie les dates.",
+    "error": "Un problème est survenu. Réessaie."
   }
 }
