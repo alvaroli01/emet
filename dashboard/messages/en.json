@@ -1238,7 +1238,10 @@
       "o2": "Back here on the same phone, tap “2. Connect it to emet” and accept the import.",
       "o3": "Allow location “Always” (and motion if it asks). Done: you never need to open OwnTracks or emet again.",
       "o4i": "Keep Background App Refresh on for OwnTracks (Settings → OwnTracks) and don't swipe it closed.",
-      "o4a": "Set OwnTracks' battery to “Unrestricted” (Settings → Apps → OwnTracks → Battery) so Android doesn't stop it."
+      "o4a": "Set OwnTracks' battery to “Unrestricted” (Settings → Apps → OwnTracks → Battery) so Android doesn't stop it.",
+      "copied": "Link copied",
+      "copyLink": "Copy my link",
+      "otBlocked": "Does OwnTracks say “configuration not allowed”? Do it by hand instead: copy your link → in OwnTracks tap ⓘ → Settings → Mode: HTTP → paste the link in URL → turn Authentication off → back to the map and tap the up arrow once."
     }
   },
   "report": {

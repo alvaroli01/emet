@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Building2, Download, Link2, Loader2, MapPin, RotateCcw, Smartphone } from "lucide-react";
+import { Building2, Copy, Download, Link2, Loader2, MapPin, RotateCcw, Smartphone } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
@@ -49,6 +49,7 @@ export function OfficeCard({ d }: { d: OfficeData }) {
     };
     return `owntracks:///config?inline=${btoa(JSON.stringify(conf))}`;
   }
+  const copy = async () => { await navigator.clipboard.writeText(`${window.location.origin}/api/office/${token}`); toast("ok", t("copied")); };
   // Admin, standing in the office: save this spot as the office (what "30 m" and "150 m" are measured from)
   function setOffice() {
     if (!navigator.geolocation) { toast("error", t("error")); return; }
@@ -138,6 +139,8 @@ export function OfficeCard({ d }: { d: OfficeData }) {
                 <ol className="mt-2 list-decimal space-y-0.5 pl-5 text-muted">
                   {(["o1", "o2", "o3", isIphone ? "o4i" : "o4a"] as const).map((k) => <li key={k}>{t(k)}</li>)}
                 </ol>
+                <p className="mt-2 text-muted">{t("otBlocked")}</p>
+                <button onClick={copy} className="mt-1.5 flex items-center gap-1.5 rounded-xl bg-surface px-3 py-2 text-sm font-medium hover:bg-line"><Copy size={13} /> {t("copyLink")}</button>
               </div>
               <p className="text-xs text-muted">{t("private")}{" "}
                 <button onClick={() => confirm(t("confirmReset")) && create(true)} className="inline-flex items-center gap-1 underline underline-offset-2 hover:text-ink"><RotateCcw size={11} /> {t("reset")}</button>

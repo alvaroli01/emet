@@ -1238,7 +1238,10 @@
       "o2": "Volte aqui no mesmo celular, toque em “2. Conectar ao emet” e aceite a importação.",
       "o3": "Permita a localização “Sempre” (e movimento, se pedir). Pronto: você nunca mais precisa abrir o OwnTracks nem o emet.",
       "o4i": "Deixe a Atualização em segundo plano ligada para o OwnTracks (Ajustes → OwnTracks) e não feche o app deslizando.",
-      "o4a": "Coloque a bateria do OwnTracks em “Sem restrições” (Configurações → Apps → OwnTracks → Bateria) para o Android não pará-lo."
+      "o4a": "Coloque a bateria do OwnTracks em “Sem restrições” (Configurações → Apps → OwnTracks → Bateria) para o Android não pará-lo.",
+      "copied": "Link copiado",
+      "copyLink": "Copiar meu link",
+      "otBlocked": "O OwnTracks diz “configuration not allowed”? Faça à mão: copie seu link → no OwnTracks toque em ⓘ → Settings → Mode: HTTP → cole o link em URL → desligue Authentication → volte ao mapa e toque na seta para cima uma vez."
     }
   },
   "report": {

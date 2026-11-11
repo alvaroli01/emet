@@ -1238,7 +1238,10 @@
       "o2": "Palaa tänne samalla puhelimella, napauta ”2. Yhdistä emetiin” ja hyväksy tuonti.",
       "o3": "Salli sijainti ”Aina” (ja liike, jos sitä kysytään). Valmis: sinun ei tarvitse enää avata OwnTracksia tai emetiä.",
       "o4i": "Pidä taustapäivitys päällä OwnTracksille (Asetukset → OwnTracks) äläkä sulje sitä pyyhkäisemällä.",
-      "o4a": "Aseta OwnTracksin akku tilaan ”Ei rajoituksia” (Asetukset → Sovellukset → OwnTracks → Akku), jotta Android ei pysäytä sitä."
+      "o4a": "Aseta OwnTracksin akku tilaan ”Ei rajoituksia” (Asetukset → Sovellukset → OwnTracks → Akku), jotta Android ei pysäytä sitä.",
+      "copied": "Linkki kopioitu",
+      "copyLink": "Kopioi linkkini",
+      "otBlocked": "Sanooko OwnTracks ”configuration not allowed”? Tee se käsin: kopioi linkkisi → OwnTracksissa ⓘ → Settings → Mode: HTTP → liitä linkki URL-kenttään → laita Authentication pois → palaa kartalle ja napauta ylänuolta kerran."
     }
   },
   "report": {

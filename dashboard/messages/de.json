@@ -1238,7 +1238,10 @@
       "o2": "Zurück hier auf demselben Handy: tippe auf „2. Mit emet verbinden“ und bestätige den Import.",
       "o3": "Erlaube den Standort „Immer“ (und Bewegung, falls gefragt). Fertig: Du musst OwnTracks oder emet nie wieder öffnen.",
       "o4i": "Lass die Hintergrundaktualisierung für OwnTracks an (Einstellungen → OwnTracks) und wische die App nicht weg.",
-      "o4a": "Stell den Akku von OwnTracks auf „Nicht eingeschränkt“ (Einstellungen → Apps → OwnTracks → Akku), damit Android sie nicht stoppt."
+      "o4a": "Stell den Akku von OwnTracks auf „Nicht eingeschränkt“ (Einstellungen → Apps → OwnTracks → Akku), damit Android sie nicht stoppt.",
+      "copied": "Link kopiert",
+      "copyLink": "Meinen Link kopieren",
+      "otBlocked": "Sagt OwnTracks „configuration not allowed“? Dann von Hand: Link kopieren → in OwnTracks auf ⓘ → Settings → Mode: HTTP → Link bei URL einfügen → Authentication ausschalten → zurück zur Karte und einmal auf den Pfeil nach oben tippen."
     }
   },
   "report": {

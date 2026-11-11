@@ -19,14 +19,18 @@ const ASK_DELAY_MS = 8e3;        // ~one position every 10 s while asking
 const MAX_ACC_M = 80;            // a rougher fix than ±80 m decides nothing (no wrong check-out inside the building)
 const MAX_AGE_S = 5 * 60;        // OwnTracks re-sends queued positions after being offline: old ones decide nothing
 
-type Body = { _type?: unknown; lat?: unknown; lng?: unknown; lon?: unknown; acc?: unknown; tst?: unknown };
+type Body = { _type?: unknown; lat?: unknown; lng?: unknown; lon?: unknown; acc?: unknown; tst?: unknown; inregions?: unknown };
+const ZONE = "emet office";
 
 export async function POST(request: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   if (!/^[a-f0-9]{40,80}$/.test(token)) return text("Not found", 404);
   const body = (await request.json().catch(() => ({}))) as Body;
   const ot = typeof body._type === "string"; // OwnTracks always sends _type and expects a JSON array back
-  const reply = (s: string, cmds: object[] = []) => (ot ? Response.json(cmds) : text(s));
+  // Phones set up by hand (the one-tap import is blocked by default on iPhone) don't have the office zone that wakes
+  // OwnTracks on arrival: emet sends it with every answer until the phone reports from inside it (same tst = same zone).
+  let zone: object[] = [];
+  const reply = (s: string, cmds: object[] = []) => (ot ? Response.json([...cmds, ...zone]) : text(s));
   if (ot && body._type !== "location" && body._type !== "transition") return Response.json([]); // waypoints, status, card…
 
   const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
@@ -43,6 +47,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
     db.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").eq("user_id", link.user_id).is("left_at", null).maybeSingle<Visit>(),
   ]);
   const dist = office ? distanceM(office, here) : null;
+  if (ot && office && !(Array.isArray(body.inregions) && body.inregions.includes(ZONE)))
+    zone = [{ _type: "cmd", action: "setWaypoints", waypoints: { _type: "waypoints", waypoints: [{ _type: "waypoint", desc: ZONE, lat: office.lat, lon: office.lng, rad: 100, tst: 1762819200 }] } }];
   const rough = ot && num(body.acc) > MAX_ACC_M;
   const step = dist === null || rough ? { event: null, reply: "wait" as const } : zoneStep(dist, !!open && isInNow(open, Date.now()));
   const fresh = link.wait_since && Date.now() - Date.parse(link.wait_since) < 60 * 60e3; // a new approach after an hour starts a new 10 min
@@ -55,7 +61,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
     // OwnTracks only reports when it moves a lot; close to the office, ask it for another position in a few seconds
     if (ot && waitSince && Date.now() - Date.parse(waitSince) < WAIT_MAX_MS && dist < 500) {
       await new Promise((r) => setTimeout(r, ASK_DELAY_MS));
-      return Response.json(ASK_AGAIN);
+      return reply("", ASK_AGAIN);
     }
     return reply(`${step.reply} emet: ${Math.round(dist)} m from the office`);
   }
