@@ -3460,7 +3460,11 @@
     "r4": "Tiistaisin ja torstaisin, ensimmäinen saapuminen: klo 9:10:59 jälkeen = 3 € sakko; klo 9:29:59 jälkeen = 3 € + 1 strike. 3 strikea neljänneksessä = 75 € rangaistus.",
     "r5": "Teitkö sinä päivänä töitä muualla? Kerro leaderille: hän voi poistaa sakon tai striken.",
     "setup": "Leimaa sisään / ulos →",
-    "autoOut": "Et ollut Dockissa, joten emet leimasi sinut ulos nyt (paikka näkyy tiimin kalenterissa)."
+    "autoOut": "Et ole Dockissa, joten emet leimasi sinut ulos nyt (paikka näkyy tiimin kalenterissa). Palaatko myöhemmin?",
+    "willReturn": "Lähden, palaan myöhemmin",
+    "doneToday": "Valmis tältä päivältä",
+    "willReturnSaved": "Tauolla — päiväsi jatkuu, kun avaat emetin taas Dockissa.",
+    "autoBack": "Tervetuloa takaisin — päiväsi jatkuu."
   },
   "officeReview": {
     "tool": "Toimisto",

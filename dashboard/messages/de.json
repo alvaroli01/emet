@@ -3460,7 +3460,11 @@
     "r4": "Dienstag und Donnerstag, erste Ankunft: nach 9:10:59 = 3 € Strafe; nach 9:29:59 = 3 € + 1 Strike. 3 Strikes im Quartal = die 75-€-Strafe.",
     "r5": "An dem Tag woanders gearbeitet? Sag es einem Leader: er kann die Strafe oder den Strike löschen.",
     "setup": "Ein- / Ausstempeln →",
-    "autoOut": "Du warst nicht im Dock, daher hat emet dich jetzt ausgestempelt (der Ort erscheint im Team-Kalender)."
+    "autoOut": "Du bist nicht im Dock, daher hat emet dich jetzt ausgestempelt (der Ort erscheint im Team-Kalender). Kommst du später zurück?",
+    "willReturn": "Ich bin weg, komme zurück",
+    "doneToday": "Fertig für heute",
+    "willReturnSaved": "Pause — dein Tag läuft weiter, wenn du emet wieder im Dock öffnest.",
+    "autoBack": "Willkommen zurück — dein Tag läuft weiter."
   },
   "officeReview": {
     "tool": "Büro",

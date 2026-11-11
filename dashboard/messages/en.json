@@ -3460,7 +3460,11 @@
     "r4": "Tuesdays and Thursdays, first arrival: after 9:10:59 = €3 fine; after 9:29:59 = €3 + 1 strike. 3 strikes in a quarter = the €75 punishment.",
     "r5": "Working somewhere else that day? Tell a leader: they can delete the fine or strike.",
     "setup": "Check in / out →",
-    "autoOut": "You weren't at Dock, so emet checked you out now (the spot shows in the team calendar)."
+    "autoOut": "You're not at Dock, so emet checked you out now (the spot shows in the team calendar). Coming back later?",
+    "willReturn": "I'm out, I'll be back",
+    "doneToday": "Done for today",
+    "willReturnSaved": "Paused — your day carries on when you open emet back at Dock.",
+    "autoBack": "Welcome back — your day carries on."
   },
   "officeReview": {
     "tool": "Office",

@@ -3460,7 +3460,11 @@
     "r4": "Martes y jueves, primera llegada: después de las 9:10:59 = multa de 3 €; después de las 9:29:59 = 3 € + 1 strike. 3 strikes en un trimestre = el castigo de 75 €.",
     "r5": "¿Trabajas en otro sitio ese día? Díselo a un líder: puede borrar la multa o el strike.",
     "setup": "Fichar entrada / salida →",
-    "autoOut": "No estabas en Dock, así que emet ha fichado tu salida ahora (el sitio aparece en el calendario del equipo)."
+    "autoOut": "No estás en Dock, así que emet ha fichado tu salida ahora (el sitio aparece en el calendario del equipo). ¿Vuelves luego?",
+    "willReturn": "Salgo, vuelvo luego",
+    "doneToday": "He terminado por hoy",
+    "willReturnSaved": "En pausa: tu día sigue cuando abras emet de vuelta en Dock.",
+    "autoBack": "Bienvenido de vuelta: tu día sigue contando."
   },
   "officeReview": {
     "tool": "Oficina",

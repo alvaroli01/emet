@@ -12,15 +12,16 @@ import { officeStatus, hm, madridMidnight, type Visit } from "@/lib/office";
 export function OfficePill({ meId }: { meId: string }) {
   const t = useTranslations("officePill");
   const supabase = useMemo(() => createClient(), []);
-  const [visits, setVisits] = useState<Visit[] | null>(null);
+  const [visits, setVisits] = useState<(Visit & { lunch_until: string | null })[] | null>(null);
+  const [autoOut, setAutoOut] = useState(false); // just checked out automatically: offer "I'm out, I'll be back"
   const [now, setNow] = useState(() => Date.now());
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
 
   const load = useCallback(async () => {
     const since = new Date(Date.now() - 8 * 864e5).toISOString().slice(0, 10); // a little more than a week; officeStatus trims it
-    const { data } = await supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot")
-      .eq("user_id", meId).gte("arrived_at", madridMidnight(since)).returns<Visit[]>();
+    const { data } = await supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot, lunch_until")
+      .eq("user_id", meId).gte("arrived_at", madridMidnight(since)).returns<(Visit & { lunch_until: string | null })[]>();
     setVisits(data ?? []); setNow(Date.now());
   }, [supabase, meId]);
   useEffect(() => {
@@ -36,15 +37,20 @@ export function OfficePill({ meId }: { meId: string }) {
   const toast = useToast();
   useEffect(() => {
     if (checked.current || !visits || !/iPhone|iPad|Android/i.test(navigator.userAgent) || !navigator.geolocation) return;
-    if (!officeStatus(visits, meId, Date.now()).inNow) return;
+    // Paused ("I'll be back") and opening emet again → if at Dock, the day carries on by itself
+    const latest = [...visits].sort((a, b) => b.arrived_at.localeCompare(a.arrived_at))[0];
+    const pausedToday = !!latest?.lunch_until && !!latest.left_at && latest.left_at >= madridMidnight(new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" }));
+    const inNow = officeStatus(visits, meId, Date.now()).inNow;
+    if (!inNow && !pausedToday) return;
     checked.current = true;
     navigator.permissions?.query({ name: "geolocation" as PermissionName }).then((p) => {
       if (p.state !== "granted") return;
       navigator.geolocation.getCurrentPosition(async (pos) => {
         const r = await fetch("/api/office/tap", { method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "auto-out", lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(() => null);
+          body: JSON.stringify({ action: inNow ? "auto-out" : "in", lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(() => null);
         const j = (r?.ok ? await r.json().catch(() => null) : null) as { status?: string } | null;
-        if (j?.status === "out-away") { toast("ok", t("autoOut")); load(); }
+        if (j?.status === "out-away") { setAutoOut(true); load(); }
+        if (j?.status === "in") { toast("ok", t("autoBack")); load(); }
       }, () => {}, { enableHighAccuracy: true, timeout: 20000, maximumAge: 60_000 });
     }).catch(() => {});
   }, [visits, meId, load, toast, t]);
@@ -55,10 +61,28 @@ export function OfficePill({ meId }: { meId: string }) {
     return () => document.removeEventListener("mousedown", close);
   }, [open]);
 
+  async function willReturn(back: boolean) {
+    setAutoOut(false);
+    if (!back) return;
+    const r = await fetch("/api/office/tap", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "will-return", lat: 0, lng: 0, accuracy: 0 }) }).catch(() => null);
+    const j = (r?.ok ? await r.json().catch(() => null) : null) as { status?: string } | null;
+    if (j?.status === "lunch") { toast("ok", t("willReturnSaved")); load(); }
+  }
+
   if (!visits) return null;
   const s = officeStatus(visits, meId, now);
   return (
     <div ref={box} className="relative">
+      {autoOut && (
+        <div role="dialog" className="panel bg-solid fixed inset-x-3 top-[4.5rem] z-50 space-y-3 p-4 text-sm shadow-[var(--shadow-lift)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+8px)] sm:w-80">
+          <p>{t("autoOut")}</p>
+          <div className="flex flex-col gap-2">
+            <button onClick={() => willReturn(true)} className="rounded-xl bg-brand px-3 py-2.5 font-medium text-brand-contrast">{t("willReturn")}</button>
+            <button onClick={() => willReturn(false)} className="rounded-xl bg-surface-2 px-3 py-2.5 font-medium hover:bg-line">{t("doneToday")}</button>
+          </div>
+        </div>
+      )}
       <button onClick={() => setOpen(!open)} aria-expanded={open}
               className={`flex min-h-9 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium ${s.inNow ? "bg-ok text-white" : "glass-pill text-muted"}`}>
         <span className={`size-2 rounded-full ${s.inNow ? "bg-white" : s.paused ? "bg-warn" : "bg-muted"}`} />

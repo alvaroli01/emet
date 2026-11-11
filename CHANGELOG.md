@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-11 — Alvaro — Office: after an automatic check-out emet asks **"I'm out, I'll be back"** or **"Done for today"**. "I'll be back" turns it into a pause, and the day carries on by itself the next time they open emet at Dock.
 - 2026-11-11 — Alvaro — Office: opening emet on the phone while still checked in **away from Dock** checks you out automatically at that moment and spot (only if location is already allowed; a message says so).
 - 2026-11-11 — Alvaro — Office: **I'm out works anywhere** — finished away from Dock, the exact spot is kept and shown in the team calendar ("checked out here, not at Dock", migration 0066). I'm in and Pause stay Dock-only.
 - 2026-11-11 — Alvaro — Office: **I'm in, Pause and I'm out only work at Dock.** Away from Dock the only choices are **I'm out eating** (time stops, carries on when back at Dock) and, Mon/Wed/Fri, **I'm out working** (note + this exact spot; ends the Dock stretch). No more "check out anyway (0 h)".

@@ -64,6 +64,13 @@ export async function POST(request: NextRequest) {
     await db.from("office_visits").update({ left_at: place.at, out_distance_m: dist, out_lat: place.lat, out_lng: place.lng }).eq("id", open!.id);
     return NextResponse.json({ status: "out-away", distance: dist });
   }
+  if (action === "will-return") { // after an automatic check-out: "I'm out, I'll be back" → that stretch becomes a pause
+    const { data: last } = await db.from("office_visits").select("id, left_at").eq("user_id", userId).not("left_at", "is", null).eq("forgot", false)
+      .order("arrived_at", { ascending: false }).limit(1).maybeSingle<{ id: string; left_at: string }>();
+    if (isIn || !last || Date.parse(last.left_at) < now - 6 * 3600e3) return NextResponse.json({ status: "nothing" });
+    await db.from("office_visits").update({ lunch_until: new Date(Date.parse(last.left_at) + LUNCH_MS).toISOString() }).eq("id", last.id);
+    return NextResponse.json({ status: "lunch" });
+  }
   if (action === "lunch") {
     if (!isIn) return NextResponse.json({ status: "not-in", distance: dist });
     // Pause only at Dock; away from Dock the only way to stop is "I'm out eating" (away: true). The time carries on when they're back
