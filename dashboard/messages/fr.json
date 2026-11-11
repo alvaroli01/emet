@@ -1128,7 +1128,7 @@
       "office_checkout": "Tu pars ? Pointe ton départ au Dock avant de partir — sinon aujourd’hui compte 0 h.",
       "office_outside_check": "Toujours en extérieur ({title}) ? Appuie pour confirmer — sans réponse en 30 min, c’est terminé.",
       "office_midday": "{late, select, true {Toujours au Dock ? Si tu es parti, pointe ton départ.} other {Si tu es parti, pointe ton départ. Tu vas manger ? Appuie sur « Je vais manger » (1 h max).}}",
-      "office_lunch_end": "Reviens au Dock avant {due} et appuie sur « Je suis au bureau » — sinon la matinée compte 0 h."
+      "office_lunch_end": "Reviens au Dock avant {due} et appuie sur « Je suis au bureau ». Les pauses plus longues apparaissent dans le calendrier de l’équipe."
     },
     "popupTitle": "Nouvelle tâche pour toi",
     "popupDue": "Pour le {date}",
@@ -1242,9 +1242,11 @@
         "outside": "Dehors depuis {time} · {note}",
         "left": "Parti à {time}",
         "none": "Absent",
-        "away": "Absent jusqu’au {time} · {note}"
+        "away": "Absent jusqu’au {time} · {note}",
+        "lunchOver": "Déjeuner · {time} jusqu’ici (plus d’1 h)"
       },
-      "allDay": "toute la journée"
+      "allDay": "toute la journée",
+      "eating": "Déjeuner"
     }
   },
   "report": {
@@ -3517,15 +3519,16 @@
       "phone-only": "Pointe depuis ton téléphone.",
       "no-note": "Écris d’abord ce que tu fais.",
       "error": "Un problème est survenu. Réessaie.",
-      "lunch": "Bon appétit ! Reviens au Dock et appuie sur « Je suis au bureau » avant {time}.",
+      "lunch": "Bon appétit ! Reviens au Dock avant {time} et appuie sur « Je suis au bureau ».",
       "lunch-far": "Tu es à {m} m du Dock. Appuie sur « Je vais manger » avant de quitter le Dock — d’ici, seul le départ marche (0 h).",
       "too-far-outside": "Tu es à {m} m du Dock. Tu travailles dehors ? Écris ci-dessous ce que tu fais — emet enregistre cet endroit exact.",
       "closed": "La journée a été clôturée à 21:00. À demain."
     },
     "lunch": "Je vais manger (1 h max)",
     "lunchUntil": "En pause déjeuner — reviens au Dock et pointe avant {time}.",
-    "r5": "À 14:00 et 17:00 emet demande si tu es toujours là. Tu vas manger ? Appuie sur « Je vais manger » au Dock : jusqu’à 1 heure, la pause ne compte pas. Pas de retour au Dock en 1 heure = la période d’avant compte 0 h.",
-    "lunchLeft": "de pause restante"
+    "r5": "À 14:00 et 17:00 emet demande si tu es toujours là. Tu vas manger ? Appuie sur « Je vais manger » au Dock : jusqu’à 1 heure, la pause ne compte pas. Au-delà d’1 heure, ça apparaît comme une pause plus longue dans le calendrier de l’équipe.",
+    "lunchLeft": "de pause restante",
+    "lunchOver": "au-delà de l’heure"
   },
   "officeAdmin": {
     "fixTitle": "Pointer l’arrivée ou le départ de quelqu’un",

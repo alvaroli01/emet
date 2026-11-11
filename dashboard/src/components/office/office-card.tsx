@@ -11,18 +11,18 @@ import { Avatar } from "@/components/ui";
 
 export type OfficeData = {
   // Everyone: where they are now, since/until when (Spanish time), time at Dock today, last time they opened emet
-  team: { id: string; name: string; avatar: string | null; status: "in" | "lunch" | "outside" | "left" | "away" | "none"; since: string | null;
+  team: { id: string; name: string; avatar: string | null; status: "in" | "lunch" | "lunchOver" | "outside" | "left" | "away" | "none"; since: string | null;
     note: string | null; today: string; seen: string | null }[];
   me: { in: boolean; paused: boolean; today: string; week: string };           // "7h 05m"
   week: { id: string; name: string; avatar: string | null; hours: string; ms: number }[];
   isAdmin: boolean; officeSet: boolean; // the office point the phones are measured against
   // Working outside (Mon/Wed/Fri): who is out now, and this week's log for everyone — the "outside calendar"
-  calendar: { day: string; items: { id: string; kind: "office" | "outside" | "away"; name: string; from: string; to: string | null; hours: string; zero: boolean;
+  calendar: { day: string; items: { id: string; kind: "office" | "outside" | "lunch" | "away"; name: string; from: string; to: string | null; hours: string; zero: boolean;
     note: string | null; start: string | null; end: string | null }[] }[];
 };
 
-const STATUS_STYLE = { in: "bg-ok/15 text-ok-text", lunch: "bg-warn/15 text-warn-text", outside: "bg-brand/15 text-ink", left: "bg-surface-2 text-muted", away: "bg-surface-2 text-ink", none: "bg-surface-2 text-muted" } as const;
-const STATUS_ICON = { in: <Building2 size={11} />, lunch: <Utensils size={11} />, outside: <Briefcase size={11} />, left: <Clock size={11} />, away: <Plane size={11} />, none: null } as const;
+const STATUS_STYLE = { in: "bg-ok/15 text-ok-text", lunch: "bg-warn/15 text-warn-text", lunchOver: "bg-bad/10 text-bad-text", outside: "bg-brand/15 text-ink", left: "bg-surface-2 text-muted", away: "bg-surface-2 text-ink", none: "bg-surface-2 text-muted" } as const;
+const STATUS_ICON = { in: <Building2 size={11} />, lunch: <Utensils size={11} />, lunchOver: <Utensils size={11} />, outside: <Briefcase size={11} />, left: <Clock size={11} />, away: <Plane size={11} />, none: null } as const;
 
 /** At the office: who is in right now, who is working outside (and this week's outside log), my hours, and the
  *  one-tap check-in page. Only the phone's real position counts (the server decides), so nobody can fake their time. */
@@ -99,8 +99,8 @@ export function OfficeCard({ d }: { d: OfficeData }) {
                     <li key={x.id} className="flex flex-wrap items-baseline gap-x-2 text-sm">
                       <span className="readout w-24 shrink-0 text-xs tabular-nums text-muted">{x.kind === "away" ? t("allDay") : `${x.from}–${x.to ?? (x.zero ? "?" : t("now"))}`}</span>
                       <span className="min-w-0 flex-1">
-                        {x.kind === "office" ? <Building2 size={12} className="mr-1 inline text-muted" /> : x.kind === "away" ? <Plane size={12} className="mr-1 inline text-muted" /> : <Briefcase size={12} className="mr-1 inline text-muted" />}
-                        <span className="font-medium">{x.name}</span>{x.note && <> · {x.note}</>}
+                        {x.kind === "office" ? <Building2 size={12} className="mr-1 inline text-muted" /> : x.kind === "away" ? <Plane size={12} className="mr-1 inline text-muted" /> : x.kind === "lunch" ? <Utensils size={12} className="mr-1 inline text-muted" /> : <Briefcase size={12} className="mr-1 inline text-muted" />}
+                        <span className="font-medium">{x.name}</span>{x.kind === "lunch" ? <> · {t("eating")}{x.note && <span className="font-medium text-bad-text"> {x.note}</span>}</> : x.note && <> · {x.note}</>}
                       </span>
                       <span className={`text-xs tabular-nums ${x.zero ? "font-medium text-bad-text" : "text-muted"}`}>{x.zero ? t("zero") : x.hours}</span>
                       {x.start && <a href={x.start} target="_blank" rel="noreferrer" className="text-xs text-muted underline underline-offset-2 hover:text-ink"><MapPin size={11} className="inline" /> {t("startPlace")}</a>}

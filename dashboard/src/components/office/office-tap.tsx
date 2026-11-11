@@ -48,9 +48,10 @@ export function OfficeTap({ state, workday, outsideDay, go }: { state: State; wo
   // Live clock: time at Dock / outside so far, or minutes of lunch left
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => { const id = setInterval(() => setNow(Date.now()), 15_000); return () => clearInterval(id); }, []);
-  const mins = state.kind === "none" ? 0 : Math.max(0, Math.round((state.kind === "lunch" ? Date.parse(state.at) - now : now - Date.parse(state.at)) / 60e3));
-  const clock = `${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, "0")}`;
-  const tone = { none: "ring-line text-ink", in: "ring-ok text-ok-text", lunch: "ring-warn text-warn-text", outside: "ring-brand text-ink" }[state.kind];
+  const over = state.kind === "lunch" && now > Date.parse(state.at); // eating longer than the hour: counts up in red
+  const mins = state.kind === "none" ? 0 : Math.round(Math.abs(state.kind === "lunch" ? Date.parse(state.at) - now : now - Date.parse(state.at)) / 60e3);
+  const clock = `${over ? "+" : ""}${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, "0")}`;
+  const tone = over ? "ring-bad text-bad-text" : { none: "ring-line text-ink", in: "ring-ok text-ok-text", lunch: "ring-warn text-warn-text", outside: "ring-brand text-ink" }[state.kind];
   const primary: Action | null = !workday ? null : state.kind === "in" ? "out" : state.kind === "outside" ? "still" : "in";
   const label = state.kind === "in" ? t("inSince", { time: state.since }) : state.kind === "lunch" ? t("lunchUntil", { time: state.since })
     : state.kind === "outside" ? t("outsideSince", { time: state.since, note: state.note }) : workday ? t("notIn") : t("weekend");
@@ -78,7 +79,7 @@ export function OfficeTap({ state, workday, outsideDay, go }: { state: State; wo
             {busy && busy === primary ? <Loader2 size={34} className="animate-spin" />
               : state.kind === "none" ? <MapPin size={38} /> : <span className="readout text-5xl font-semibold tabular-nums tracking-tight">{clock}</span>}
             <span className="max-w-40 text-center text-sm font-semibold leading-tight">
-              {state.kind === "none" ? (workday ? t("atOffice") : t("weekend")) : state.kind === "in" ? t("checkOut") : state.kind === "outside" ? t("still") : t("lunchLeft")}
+              {state.kind === "none" ? (workday ? t("atOffice") : t("weekend")) : state.kind === "in" ? t("checkOut") : state.kind === "outside" ? t("still") : over ? t("lunchOver") : t("lunchLeft")}
             </span>
           </span>
         </button>

@@ -1128,7 +1128,7 @@
       "office_checkout": "Leaving? Check out at Dock before you go — otherwise today counts 0 h.",
       "office_outside_check": "Still working outside ({title})? Tap to confirm — no answer in 30 min ends it.",
       "office_midday": "{late, select, true {Still at Dock? If you've left, check out.} other {If you've left, check out. Going to eat? Tap “Going to eat” (max 1 h).}}",
-      "office_lunch_end": "Back at Dock by {due} and tap “I'm at the office” — otherwise this morning counts 0 h."
+      "office_lunch_end": "Back at Dock by {due} and tap “I'm at the office”. Longer breaks show in the team calendar."
     },
     "popupTitle": "New task for you",
     "popupDue": "Due {date}",
@@ -1242,9 +1242,11 @@
         "outside": "Outside since {time} · {note}",
         "left": "Left at {time}",
         "none": "Not in",
-        "away": "Away until {time} · {note}"
+        "away": "Away until {time} · {note}",
+        "lunchOver": "Eating · {time} so far (over 1 h)"
       },
-      "allDay": "all day"
+      "allDay": "all day",
+      "eating": "Eating"
     }
   },
   "report": {
@@ -3517,15 +3519,16 @@
       "phone-only": "Check in from your phone.",
       "no-note": "Write what you're doing first.",
       "error": "Something went wrong. Try again.",
-      "lunch": "Enjoy! Be back at Dock and tap “I'm at the office” by {time}.",
+      "lunch": "Enjoy! Back at Dock by {time} and tap “I'm at the office”.",
       "lunch-far": "You're {m} m from Dock. Tap “Going to eat” before you leave Dock — from here only Check out works (0 h).",
       "too-far-outside": "You're {m} m from Dock. Working outside? Write what you're doing below — emet saves this exact spot.",
       "closed": "The day closed at 21:00. See you tomorrow."
     },
     "lunch": "Going to eat (max 1 h)",
     "lunchUntil": "Eating — be back at Dock and check in by {time}.",
-    "r5": "At 14:00 and 17:00 emet asks if you're still here. Going to eat? Tap “Going to eat” at Dock: up to 1 hour, the break doesn't count. Not back at Dock within 1 hour = the stretch before counts 0 h.",
-    "lunchLeft": "left of lunch"
+    "r5": "At 14:00 and 17:00 emet asks if you're still here. Going to eat? Tap “Going to eat” at Dock: up to 1 hour, the break doesn't count. Longer than 1 hour shows as a longer lunch in the team calendar.",
+    "lunchLeft": "left of lunch",
+    "lunchOver": "over the hour"
   },
   "officeAdmin": {
     "fixTitle": "Check someone in or out",

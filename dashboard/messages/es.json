@@ -1128,7 +1128,7 @@
       "office_checkout": "¿Te vas? Ficha la salida en Dock antes de irte; si no, hoy cuenta 0 h.",
       "office_outside_check": "¿Sigues trabajando fuera ({title})? Toca para confirmar; si no respondes en 30 min, se cierra.",
       "office_midday": "{late, select, true {¿Sigues en Dock? Si te has ido, ficha la salida.} other {Si te has ido, ficha la salida. ¿Vas a comer? Pulsa “Voy a comer” (máx. 1 h).}}",
-      "office_lunch_end": "Vuelve a Dock antes de las {due} y pulsa “Estoy en la oficina”; si no, esta mañana cuenta 0 h."
+      "office_lunch_end": "Vuelve a Dock antes de las {due} y pulsa “Estoy en la oficina”. Los descansos más largos se ven en el calendario del equipo."
     },
     "popupTitle": "Nueva tarea para ti",
     "popupDue": "Para el {date}",
@@ -1242,9 +1242,11 @@
         "outside": "Fuera desde las {time} · {note}",
         "left": "Se fue a las {time}",
         "none": "No está",
-        "away": "Ausente hasta {time} · {note}"
+        "away": "Ausente hasta {time} · {note}",
+        "lunchOver": "Comiendo · {time} (más de 1 h)"
       },
-      "allDay": "todo el día"
+      "allDay": "todo el día",
+      "eating": "Comiendo"
     }
   },
   "report": {
@@ -3517,15 +3519,16 @@
       "phone-only": "Ficha desde tu móvil.",
       "no-note": "Escribe primero qué estás haciendo.",
       "error": "Algo ha fallado. Inténtalo otra vez.",
-      "lunch": "¡Que aproveche! Vuelve a Dock y pulsa “Estoy en la oficina” antes de las {time}.",
+      "lunch": "¡Que aproveche! Vuelve a Dock antes de las {time} y pulsa “Estoy en la oficina”.",
       "lunch-far": "Estás a {m} m de Dock. Pulsa “Voy a comer” antes de salir de Dock; desde aquí solo puedes fichar la salida (0 h).",
       "too-far-outside": "Estás a {m} m de Dock. ¿Trabajas fuera? Escribe abajo qué estás haciendo: emet guarda este sitio exacto.",
       "closed": "El día se cerró a las 21:00. Hasta mañana."
     },
     "lunch": "Voy a comer (máx. 1 h)",
     "lunchUntil": "Comiendo: vuelve a Dock y ficha antes de las {time}.",
-    "r5": "A las 14:00 y a las 17:00 emet pregunta si sigues aquí. ¿Vas a comer? Pulsa “Voy a comer” en Dock: hasta 1 hora, el descanso no cuenta. Si no vuelves a Dock en 1 hora, el tramo anterior cuenta 0 h.",
-    "lunchLeft": "de comida"
+    "r5": "A las 14:00 y a las 17:00 emet pregunta si sigues aquí. ¿Vas a comer? Pulsa “Voy a comer” en Dock: hasta 1 hora, el descanso no cuenta. Si pasa de 1 hora, se ve como una comida más larga en el calendario del equipo.",
+    "lunchLeft": "de comida",
+    "lunchOver": "más de la hora"
   },
   "officeAdmin": {
     "fixTitle": "Fichar entrada o salida de alguien",

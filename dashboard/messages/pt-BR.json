@@ -1128,7 +1128,7 @@
       "office_checkout": "Vai sair? Registre a saída no Dock antes de ir — senão hoje conta 0 h.",
       "office_outside_check": "Ainda trabalhando fora ({title})? Toque para confirmar — sem resposta em 30 min, termina.",
       "office_midday": "{late, select, true {Ainda no Dock? Se você saiu, registre a saída.} other {Se você saiu, registre a saída. Vai comer? Toque em “Vou comer” (máx. 1 h).}}",
-      "office_lunch_end": "Volte ao Dock até {due} e toque em “Estou no escritório” — senão a manhã conta 0 h."
+      "office_lunch_end": "Volte ao Dock até {due} e toque em “Estou no escritório”. Pausas mais longas aparecem no calendário da equipe."
     },
     "popupTitle": "Nova tarefa para você",
     "popupDue": "Prazo: {date}",
@@ -1242,9 +1242,11 @@
         "outside": "Fora desde {time} · {note}",
         "left": "Saiu às {time}",
         "none": "Não está",
-        "away": "Ausente até {time} · {note}"
+        "away": "Ausente até {time} · {note}",
+        "lunchOver": "Almoçando · {time} até agora (mais de 1 h)"
       },
-      "allDay": "o dia todo"
+      "allDay": "o dia todo",
+      "eating": "Almoçando"
     }
   },
   "report": {
@@ -3517,15 +3519,16 @@
       "phone-only": "Registre pelo celular.",
       "no-note": "Escreva primeiro o que está fazendo.",
       "error": "Algo deu errado. Tente de novo.",
-      "lunch": "Bom almoço! Volte ao Dock e toque em “Estou no escritório” até {time}.",
+      "lunch": "Bom almoço! Volte ao Dock até {time} e toque em “Estou no escritório”.",
       "lunch-far": "Você está a {m} m do Dock. Toque em “Vou comer” antes de sair do Dock — daqui só funciona registrar a saída (0 h).",
       "too-far-outside": "Você está a {m} m do Dock. Trabalhando fora? Escreva abaixo o que está fazendo — o emet salva este lugar exato.",
       "closed": "O dia fechou às 21:00. Até amanhã."
     },
     "lunch": "Vou comer (máx. 1 h)",
     "lunchUntil": "Almoçando — volte ao Dock e registre a entrada até {time}.",
-    "r5": "Às 14:00 e 17:00 o emet pergunta se você ainda está aqui. Vai comer? Toque em “Vou comer” no Dock: até 1 hora, a pausa não conta. Sem voltar ao Dock em 1 hora = o trecho anterior conta 0 h.",
-    "lunchLeft": "de almoço"
+    "r5": "Às 14:00 e 17:00 o emet pergunta se você ainda está aqui. Vai comer? Toque em “Vou comer” no Dock: até 1 hora, a pausa não conta. Mais de 1 hora aparece como almoço mais longo no calendário da equipe.",
+    "lunchLeft": "de almoço",
+    "lunchOver": "passou da hora"
   },
   "officeAdmin": {
     "fixTitle": "Registrar entrada ou saída de alguém",
