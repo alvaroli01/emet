@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Building2, Copy, Loader2, MapPin, RotateCcw, Smartphone } from "lucide-react";
+import { Building2, Download, Link2, Loader2, MapPin, RotateCcw, Smartphone } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
@@ -13,7 +13,8 @@ export type OfficeData = {
   paused: { id: string; name: string; avatar: string | null; since: string; today: string }[]; // left today, may come back before 21:00
   me: { in: boolean; paused: boolean; today: string; week: string };           // "7h 05m"
   week: { id: string; name: string; avatar: string | null; hours: string; ms: number }[];
-  isAdmin: boolean; officeSet: boolean; // the office point the iPhone shortcut is measured against
+  isAdmin: boolean; officeSet: boolean; // the office point the phones are measured against
+  officePoint: { lat: number; lng: number } | null;
 };
 
 /** At the office: who is in right now, my hours, and the phone automation that checks me in and out by itself.
@@ -35,12 +36,18 @@ export function OfficeCard({ d }: { d: OfficeData }) {
     if (error) { toast("error", t("error")); setToken(null); return; }
     setToken(data.token);
   }
-  // iPhone: copy my link (the shortcut asks for it once while being added), then open the ready-made emet shortcut
-  // (iCloud link made 2026-11-10 from Alvaro's Mac; tested there against live emet)
-  async function addShortcut() {
-    await navigator.clipboard.writeText(`${window.location.origin}/api/office/${token}`).catch(() => {});
-    toast("ok", t("copied"));
-    window.location.href = "https://www.icloud.com/shortcuts/6f03e588bf8f4db588d0cd26be2e5538";
+  // OwnTracks (free, iPhone + Android, Alvaro 2026-11-11): one tap imports this whole setup — HTTP to my link, background
+  // reporting, and a 100 m office zone that wakes the phone (emet itself decides 30 m in / 80 m out from the position).
+  const isIphone = typeof navigator !== "undefined" && /iPhone|iPad/i.test(navigator.userAgent);
+  const installUrl = isIphone ? "https://apps.apple.com/app/owntracks/id692424691" : "https://play.google.com/store/apps/details?id=org.owntracks.android";
+  function connectUrl() {
+    const conf = {
+      _type: "configuration", mode: 3, url: `${window.location.origin}/api/office/${token}`, tid: "em",
+      monitoring: 1, cmd: true, allowRemoteLocation: true, autostartOnBoot: true, extendedData: false,
+      locatorDisplacement: 50, locatorInterval: 300, locatorPriority: 1, days: 0,
+      waypoints: d.officePoint ? [{ _type: "waypoint", desc: "emet office", lat: d.officePoint.lat, lon: d.officePoint.lng, rad: 100, tst: 1762819200 }] : [],
+    };
+    return `owntracks:///config?inline=${btoa(JSON.stringify(conf))}`;
   }
   // Admin, standing in the office: save this spot as the office (what "30 m" and "150 m" are measured from)
   function setOffice() {
@@ -54,7 +61,6 @@ export function OfficeCard({ d }: { d: OfficeData }) {
       router.refresh();
     }, () => { setBusy(false); toast("error", t("noLocation")); }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
   }
-  const copy = async () => { await navigator.clipboard.writeText(`${window.location.origin}/api/office/${token}`); toast("ok", t("copied")); };
 
   return (
     <section className="panel p-5">
@@ -124,17 +130,13 @@ export function OfficeCard({ d }: { d: OfficeData }) {
           ) : (
             <>
               <div>
-                <p className="font-medium">{t("iphoneTitle")}</p>
-                <button onClick={addShortcut} className="mt-1.5 flex items-center gap-1.5 rounded-xl bg-brand px-3.5 py-2 text-sm font-medium text-brand-contrast"><Smartphone size={14} /> {t("addShortcut")}</button>
+                <p className="font-medium">{t("otTitle")}</p>
+                <div className="mt-1.5 flex flex-wrap gap-2">
+                  <a href={installUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-xl bg-surface px-3.5 py-2 text-sm font-medium hover:bg-line"><Download size={14} /> {t("otInstall")}</a>
+                  <a href={connectUrl()} className="flex items-center gap-1.5 rounded-xl bg-brand px-3.5 py-2 text-sm font-medium text-brand-contrast"><Link2 size={14} /> {t("otConnect")}</a>
+                </div>
                 <ol className="mt-2 list-decimal space-y-0.5 pl-5 text-muted">
-                  {(["i1", "i2", "i3", "i4"] as const).map((k) => <li key={k}>{t(k)}</li>)}
-                </ol>
-              </div>
-              <div>
-                <p className="font-medium">{t("androidTitle")}</p>
-                <button onClick={copy} className="mt-1.5 flex items-center gap-1.5 rounded-xl bg-surface px-3 py-2 text-sm font-medium hover:bg-line"><Copy size={13} /> {t("copyLink")}</button>
-                <ol className="mt-2 list-decimal space-y-0.5 pl-5 text-muted">
-                  {(["a1", "a2", "a3", "a4"] as const).map((k) => <li key={k}>{t(k)}</li>)}
+                  {(["o1", "o2", "o3", isIphone ? "o4i" : "o4a"] as const).map((k) => <li key={k}>{t(k)}</li>)}
                 </ol>
               </div>
               <p className="text-xs text-muted">{t("private")}{" "}

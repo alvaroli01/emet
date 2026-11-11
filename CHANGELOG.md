@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-11 — Alvaro — Office check-in now uses the free **OwnTracks** app (iPhone + Android): Today → At the office → *Install OwnTracks* → *Connect it to emet* (one tap imports everything), allow location Always, done. emet answers OwnTracks with a fresh-position request near the office (max 10 min, migration 0059), ignores rough (±80 m+) and old queued fixes. Replaces the shortcut/MacroDroid steps (their links still work).
 - 2026-11-10 — Alvaro — Office: first real walk to Dock (phone sent positions but was never within 30 m; iPhone stopped the shortcut after ~4–5 min). emet now keeps the **distance** of each phone's last signal (never the position), shown in Team Leaders → Office (migration 0057).
 - 2026-11-10 — Alvaro — Office: **In the office / Out of office** pill next to the bell (tap: my time today and this week + how it works, the fines and strikes). **Team Leaders → Office**: everyone's status and hours, and whose phone isn't set up or hasn't sent a signal (migration 0056, `last_ping_at`). Every **profile** shows that person's office time today and this week. Check-in runs **Monday–Friday only**. Automatic strikes show "automatic" in Team Leaders → Strikes, where leaders delete them for people who worked elsewhere.
 - 2026-11-10 — Alvaro — Office check-in: **Add the emet shortcut** now opens a one-tap iCloud link (opens straight in Shortcuts → Add Shortcut → Paste). The downloadable .shortcut file is gone.

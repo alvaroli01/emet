@@ -65,7 +65,7 @@ export default async function TodayPage() {
     supabase.from("cards").select("id, title, due_at, completed_at, boards(group_id, project_id), card_assignees!inner(user_id)")
       .eq("card_assignees.user_id", me.id).gte("due_at", `${week}T00:00:00Z`).lte("due_at", `${weekEnd}T23:59:59Z`),
     // Office check-ins this week (+ anyone still in from before Monday)
-    supabase.from("office_place").select("id").maybeSingle(),
+    supabase.from("office_place").select("lat, lng").maybeSingle<{ lat: number; lng: number }>(),
     supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").or(`arrived_at.gte.${madridMidnight(week)},left_at.is.null`).returns<Visit[]>(),
   ]);
 
@@ -165,7 +165,7 @@ export default async function TodayPage() {
     me: { in: vs.some((v) => v.user_id === me.id && isInNow(v, now)), paused: pausedNow(me.id), today: hm(msOf(me.id, dayFrom)), week: hm(msOf(me.id, weekFrom)) },
     week: [...new Set(vs.map((v) => v.user_id))].filter((id) => who.has(id)).map((id) => ({ id, name: who.get(id)!.full_name, avatar: who.get(id)!.avatar_url, ms: msOf(id, weekFrom) }))
       .filter((p) => p.ms > 0).sort((a, b) => b.ms - a.ms).map((p) => ({ ...p, hours: hm(p.ms) })),
-    isAdmin, officeSet: !!officePlace.data,
+    isAdmin, officeSet: !!officePlace.data, officePoint: officePlace.data ?? null,
   };
 
 

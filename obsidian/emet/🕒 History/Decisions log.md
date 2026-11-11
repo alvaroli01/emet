@@ -1,14 +1,15 @@
 ---
 tags: [emet, decisions]
-updated: 2026-11-10
+updated: 2026-11-11
 ---
 
-# Decisions log (synced from README §9, 2026-11-10)
+# Decisions log (synced from README §9, 2026-11-11)
 
 | Date | Decision | Decided by |
 |---|---|---|
+| [[2026-11-11]] | Office check-in moves to the free **OwnTracks** app (set up once with one tap, runs in the background forever) because the iPhone shortcut didn't fire reliably, was too hard to set up and asked for confirmations. No office device (none spare) and no NFC (Alvaro's choice). Our own app was ruled out: iPhone background location needs Apple's €99/year developer account | Alvaro |
 | [[2026-11-10]] | Ollin names show only inside projects. "Everyone" in a task form means emet people only; a project with Ollin people shows them in a separate **Ollin** row in its task form. The coach and the Grok bot (role "AI assistant") never get tasks |  |
-| [[2026-11-10]] | Office attendance is checked by each member's phone automation (iPhone Shortcuts / MacroDroid, 30 m — the university building is big and shares Wi-Fi), not by the website: a web page can't see location with the app closed. Only arrival/leave times are stored. Leaders (not every member) can send team notifications. Check-out at 150 m; leaving pauses the day until 21:00. Tue/Thu late: after 9:10:59 = €3, after 9:29:59 = €3 + 1 strike, charged automatically | Alvaro |
+| [[2026-11-10]] | Office attendance is checked by each member's phone automation (iPhone Shortcuts / MacroDroid, 30 m — the university building is big and shares Wi-Fi), not by the website: a web page can't see location with the app closed. Only arrival/leave times are stored. Leaders (not every member) can send team notifications. Check-out at 80 m; leaving pauses the day until 21:00. Tue/Thu late: after 9:10:59 = €3, after 9:29:59 = €3 + 1 strike, charged automatically | Alvaro |
 | [[2026-11-09]] | One **Tasks** page replaces the General board, team Task boards, the leader's Assign tasks tool, the project Tasks tab and My Tasks. Built on the existing cards tables (no data dropped); a task is Done when every assignee has ticked their part; members assign only within their project / group. Previewed locally first; goes live only after Alvaro's OK | Alvaro |
 | [[2026-11-04]] | People from Ollin (the other LEINN team) join shared projects as **guests** through invite links instead of being added to the team list: they see only the projects they were invited to, never the rest of emet, and don't count in team numbers. A link works until someone deletes it |  |
 | [[2026-10-28]] | Points entries can be edited (not only deleted) and can carry a link next to the optional file (`src/components/team/points-panel.tsx`, migration 0048) | Alvaro |

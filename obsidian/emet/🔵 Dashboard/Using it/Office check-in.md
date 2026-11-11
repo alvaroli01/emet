@@ -1,20 +1,23 @@
 # Office check-in
 
-Built 2026-11-10 · **live** · migration `0053_office_and_leader_messages.sql` · code `dashboard/src/lib/office.ts`, `src/app/api/office/`, `src/components/office/office-card.tsx`, `src/components/tools/leader-message.tsx`
+Built 2026-11-10 · **live** · OwnTracks since 2026-11-11 (migration `0059_office_owntracks.sql`) · migration `0053_office_and_leader_messages.sql` · code `dashboard/src/lib/office.ts`, `src/app/api/office/`, `src/components/office/office-card.tsx`, `src/components/tools/leader-message.tsx`
 
 ## What it does
-- **Today → At the office:** who is in right now and since when (Spanish time), my hours today and this week, everyone's hours this week, and a **Check in / Check out** button as a fallback.
+- **Today → At the office:** who is in right now and since when (Spanish time), my hours today and this week, everyone's hours this week. There is no Check in / Check out button (anti-cheat).
 - **Automatic:** each member's phone checks them in when they come within **30 m** of the office (Alvaro picked 30 m on 10 Nov because the building is big) and out when they are **80 m** away. It works with emet closed and on mobile data.
 - **Privacy:** emet only receives "arrived" / "left" and the time. It never gets a location.
 
 ## Why the phone does the detecting
 A website can't read location while it's closed (iPhones block it completely), and GPS is ±10–30 m indoors, so 7 m wasn't possible. The university Wi-Fi is shared, so Wi-Fi detection was out too. The phone's own geofence (Shortcuts / MacroDroid) runs in the background for free.
 
-## Phone setup (each member, once)
-Today → At the office → *Check in automatically with my phone* → **Create my check-in links**, then:
-- **iPhone:** tap **1. Add the emet shortcut** (emet copies your link and opens the iCloud shortcut https://www.icloud.com/shortcuts/6f03e588bf8f4db588d0cd26be2e5538) → Add Shortcut → paste the link in the box. Then Shortcuts → Automation → + → **Arrive** → the office → Run Immediately → pick *emet check-in*; again with **Leave**. Allow location the first time.
-- **Why it still means 30 m:** iPhone zones can't be smaller than ~100 m, so the automation only *wakes* the shortcut. The shortcut sends its position every 15 s (up to 6 min) and emet decides: within 30 m = in, 80 m away = out, otherwise "wait".
-- **Android (MacroDroid, free):** geofence 30 m "Area entered" → Get location (lat/lng variables) → HTTP POST your link with JSON `{"lat":"{v=lat}","lng":"{v=lng}"}`; copy the macro for 80 m "Area exited". *Menu names still to check on the Samsung phone.*
+## Phone setup (each member, once) — OwnTracks since 11 Nov
+The iPhone shortcut didn't work well (didn't fire, too hard to set up, asked for confirmations, wrong in/out), so on 11 Nov Alvaro moved check-in to **OwnTracks**: a free, open-source app (iPhone + Android, no account) that runs in the background and sends the phone's position to emet.
+- Today → At the office → *Check in automatically with my phone* → **Create my check-in links** → **1. Install OwnTracks** → open it once → back in emet on the same phone **2. Connect it to emet** (an `owntracks:///config?inline=…` link that imports everything: HTTP mode to my link, *significant* monitoring, remote commands on, a 100 m zone around the office). Allow location **Always**. Then never open OwnTracks or emet again.
+- iPhone: keep Background App Refresh on for OwnTracks and don't swipe it closed. Android: battery → Unrestricted.
+- **How emet decides:** OwnTracks posts `{_type: location|transition, lat, lon, acc, tst}`. Within 30 m = in, 80 m away = out. Between 30 and 80 m (and up to 500 m) emet answers `[{"_type":"cmd","action":"reportLocation"}]` after ~8 s, so the phone sends a fresh position about every 10 s — for at most 10 min (`office_links.wait_since`). Fixes rougher than ±80 m and queued ones older than 5 min decide nothing.
+- Tested 11 Nov on live emet with fake OwnTracks payloads: far = nothing, 50 m = reportLocation after 8.6 s, rough fix = no decision, old queued = ignored, at the door = checked in, 160 m = checked out (test visit deleted). **Not yet tested on a real phone at Dock.**
+- The old iPhone shortcut and MacroDroid links still work (same `/api/office/<token>`), but emet no longer shows their steps.
+- **Why not something else (11 Nov):** no spare device to leave at the office (a door screen was the other idea); NFC sticker rejected by Alvaro; our own app would need Apple's €99/year developer account; Bluetooth can't identify iPhones (they change address); the university Wi-Fi is shared.
 - **The office point:** **Dock Bilbao, Uribitarte Pasealekua 3, 48001 Bilbao** (43.2646286, -2.9268837), set 10 Nov from Alvaro's Google Maps link (table `office_place`, migration 0055). An admin can fine-tune it by pressing **Move the office location to here** at the door.
 - **Tested 10 Nov on Alvaro's Mac** with the real shortcut against live emet: location sent every 15 s, check-in, 200 m check-out, resume as a new stretch. The first file failed (empty If value, pasted link not applied); the fixed one has no If step and an empty link box.
 - The shortcut lives in Alvaro's Mac Shortcuts app as **emet check-in** and is shared by that iCloud link. Don't delete it there (the link points to it). To change it, edit it on the Mac and share a new iCloud link.
@@ -43,7 +46,9 @@ Today → At the office → *Check in automatically with my phone* → **Create 
 Team Leaders section → **Send a notification**: leaders and admins write up to 300 characters to everyone, one team or chosen people. It goes to the bell and to the phone (kind `leader_message`, DB function `leader_send`, which checks `is_leader()`).
 
 ## Open
-- Every member has to do the phone setup.
+- Every member has to do the OwnTracks setup (on 11 Nov only Alvaro had a link).
+- Test OwnTracks for real at Dock on an iPhone and an Android: does it keep sending in the background, and does reportLocation work while the phone is locked?
+- The first walk (10 Nov) never got within 30 m by GPS. If that repeats with OwnTracks, the unfinished GPS-accuracy slack (`zoneStepWithAccuracy`, uncommitted since 10 Nov) could be reused.
 - Should only leaders see everyone's hours?
 
 Related: [[Today]], [[Phone version]], [[🔵 How the dashboard works]]

@@ -1,9 +1,9 @@
 ---
 tags: [emet, resource]
-updated: 2026-11-10
+updated: 2026-11-11
 ---
 
-# Specs and plans (synced 2026-11-10)
+# Specs and plans (synced 2026-11-11)
 
 Design specs and build plans for each feature, newest first.
 
