@@ -3459,7 +3459,8 @@
     "r3": "Tippe „Ich gehe“, wenn du fertig bist — im Dock oder überall (außerhalb erscheint der Ort im Team-Kalender). Um 21:00 schließt der Tag: noch eingestempelt = 0 h.",
     "r4": "Dienstag und Donnerstag, erste Ankunft: nach 9:10:59 = 3 € Strafe; nach 9:29:59 = 3 € + 1 Strike. 3 Strikes im Quartal = die 75-€-Strafe.",
     "r5": "An dem Tag woanders gearbeitet? Sag es einem Leader: er kann die Strafe oder den Strike löschen.",
-    "setup": "Ein- / Ausstempeln →"
+    "setup": "Ein- / Ausstempeln →",
+    "autoOut": "Du warst nicht im Dock, daher hat emet dich jetzt ausgestempelt (der Ort erscheint im Team-Kalender)."
   },
   "officeReview": {
     "tool": "Büro",

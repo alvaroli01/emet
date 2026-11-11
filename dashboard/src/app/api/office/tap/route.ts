@@ -59,6 +59,11 @@ export async function POST(request: NextRequest) {
     await db.from("office_visits").update({ left_at: place.at, out_distance_m: dist, ...(atDock ? {} : { out_lat: place.lat, out_lng: place.lng }) }).eq("id", open!.id);
     return NextResponse.json({ status: atDock ? "out" : "out-away", distance: dist });
   }
+  if (action === "auto-out") { // emet opened on the phone away from Dock while still checked in → checked out now, here
+    if (!isIn || checkoutCounts(dist, accuracy) || accuracy > 150) return NextResponse.json({ status: "nothing", distance: dist });
+    await db.from("office_visits").update({ left_at: place.at, out_distance_m: dist, out_lat: place.lat, out_lng: place.lng }).eq("id", open!.id);
+    return NextResponse.json({ status: "out-away", distance: dist });
+  }
   if (action === "lunch") {
     if (!isIn) return NextResponse.json({ status: "not-in", distance: dist });
     // Pause only at Dock; away from Dock the only way to stop is "I'm out eating" (away: true). The time carries on when they're back

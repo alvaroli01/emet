@@ -3459,7 +3459,8 @@
     "r3": "Appuie sur « Je pars » quand tu as fini — au Dock ou ailleurs (hors du Dock l’endroit apparaît dans le calendrier de l’équipe). À 21:00 la journée se clôture : toujours pointé = 0 h.",
     "r4": "Mardi et jeudi, première arrivée : après 9h10:59 = amende de 3 € ; après 9h29:59 = 3 € + 1 strike. 3 strikes dans le trimestre = la punition de 75 €.",
     "r5": "Tu travailles ailleurs ce jour-là ? Dis-le à un leader : il peut supprimer l’amende ou le strike.",
-    "setup": "Pointer arrivée / départ →"
+    "setup": "Pointer arrivée / départ →",
+    "autoOut": "Tu n’étais pas au Dock : emet a pointé ton départ maintenant (l’endroit apparaît dans le calendrier de l’équipe)."
   },
   "officeReview": {
     "tool": "Bureau",

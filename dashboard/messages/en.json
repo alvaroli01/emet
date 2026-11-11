@@ -3459,7 +3459,8 @@
     "r3": "Tap “I'm out” when you finish — at Dock or anywhere (away from Dock the spot shows in the team calendar). At 21:00 the day closes: still checked in = that stretch counts 0 h.",
     "r4": "Tuesdays and Thursdays, first arrival: after 9:10:59 = €3 fine; after 9:29:59 = €3 + 1 strike. 3 strikes in a quarter = the €75 punishment.",
     "r5": "Working somewhere else that day? Tell a leader: they can delete the fine or strike.",
-    "setup": "Check in / out →"
+    "setup": "Check in / out →",
+    "autoOut": "You weren't at Dock, so emet checked you out now (the spot shows in the team calendar)."
   },
   "officeReview": {
     "tool": "Office",

@@ -3459,7 +3459,8 @@
     "r3": "Toque em “Estou saindo” quando terminar — no Dock ou em qualquer lugar (fora do Dock o lugar aparece no calendário da equipe). Às 21:00 o dia fecha: ainda com entrada = 0 h.",
     "r4": "Terças e quintas, primeira chegada: depois das 9:10:59 = multa de €3; depois das 9:29:59 = €3 + 1 strike. 3 strikes no trimestre = a punição de €75.",
     "r5": "Trabalhando em outro lugar nesse dia? Avise um líder: ele pode apagar a multa ou o strike.",
-    "setup": "Registrar entrada / saída →"
+    "setup": "Registrar entrada / saída →",
+    "autoOut": "Você não estava no Dock, então o emet registrou sua saída agora (o lugar aparece no calendário da equipe)."
   },
   "officeReview": {
     "tool": "Escritório",

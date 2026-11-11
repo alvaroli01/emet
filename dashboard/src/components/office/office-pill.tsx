@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Building2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { useToast } from "@/components/toast";
 import { officeStatus, hm, madridMidnight, type Visit } from "@/lib/office";
 
 /** Top bar, next to the bell: "In the office" / "Out of office". Tap it for my time today and this week, and the rules. */
@@ -29,6 +30,24 @@ export function OfficePill({ meId }: { meId: string }) {
       .on("postgres_changes", { event: "*", schema: "public", table: "office_visits", filter: `user_id=eq.${meId}` }, load).subscribe();
     return () => { clearInterval(tick); supabase.removeChannel(ch); };
   }, [load, supabase, meId]);
+  // Opening emet on a phone while checked in, away from Dock → checked out now, at this spot (Alvaro, 2026-11-11: he got
+  // home and his time was still running). Only when location is already allowed (never a surprise prompt); once per visit.
+  const checked = useRef(false);
+  const toast = useToast();
+  useEffect(() => {
+    if (checked.current || !visits || !/iPhone|iPad|Android/i.test(navigator.userAgent) || !navigator.geolocation) return;
+    if (!officeStatus(visits, meId, Date.now()).inNow) return;
+    checked.current = true;
+    navigator.permissions?.query({ name: "geolocation" as PermissionName }).then((p) => {
+      if (p.state !== "granted") return;
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const r = await fetch("/api/office/tap", { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "auto-out", lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(() => null);
+        const j = (r?.ok ? await r.json().catch(() => null) : null) as { status?: string } | null;
+        if (j?.status === "out-away") { toast("ok", t("autoOut")); load(); }
+      }, () => {}, { enableHighAccuracy: true, timeout: 20000, maximumAge: 60_000 });
+    }).catch(() => {});
+  }, [visits, meId, load, toast, t]);
   useEffect(() => {
     if (!open) return;
     const close = (e: MouseEvent) => { if (!box.current?.contains(e.target as Node)) setOpen(false); };

@@ -3459,7 +3459,8 @@
     "r3": "Pulsa “Me voy” al terminar, en Dock o donde estés (fuera de Dock el sitio aparece en el calendario del equipo). A las 21:00 se cierra el día: si sigues fichado, ese tramo cuenta 0 h.",
     "r4": "Martes y jueves, primera llegada: después de las 9:10:59 = multa de 3 €; después de las 9:29:59 = 3 € + 1 strike. 3 strikes en un trimestre = el castigo de 75 €.",
     "r5": "¿Trabajas en otro sitio ese día? Díselo a un líder: puede borrar la multa o el strike.",
-    "setup": "Fichar entrada / salida →"
+    "setup": "Fichar entrada / salida →",
+    "autoOut": "No estabas en Dock, así que emet ha fichado tu salida ahora (el sitio aparece en el calendario del equipo)."
   },
   "officeReview": {
     "tool": "Oficina",

@@ -3459,7 +3459,8 @@
     "r3": "Napauta ”Lähden”, kun lopetat — Dockissa tai missä vain (muualla paikka näkyy tiimin kalenterissa). Klo 21:00 päivä suljetaan: vielä sisällä = 0 h.",
     "r4": "Tiistaisin ja torstaisin, ensimmäinen saapuminen: klo 9:10:59 jälkeen = 3 € sakko; klo 9:29:59 jälkeen = 3 € + 1 strike. 3 strikea neljänneksessä = 75 € rangaistus.",
     "r5": "Teitkö sinä päivänä töitä muualla? Kerro leaderille: hän voi poistaa sakon tai striken.",
-    "setup": "Leimaa sisään / ulos →"
+    "setup": "Leimaa sisään / ulos →",
+    "autoOut": "Et ollut Dockissa, joten emet leimasi sinut ulos nyt (paikka näkyy tiimin kalenterissa)."
   },
   "officeReview": {
     "tool": "Toimisto",
