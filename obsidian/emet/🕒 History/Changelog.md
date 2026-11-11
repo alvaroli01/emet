@@ -7,6 +7,7 @@ updated: 2026-11-11
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-11 — Alvaro — Office: **I'm in, Pause and I'm out only work at Dock.** Away from Dock the only choices are **I'm out eating** (time stops, carries on when back at Dock) and, Mon/Wed/Fri, **I'm out working** (note + this exact spot; ends the Dock stretch). No more "check out anyway (0 h)".
 - 2026-11-11 — Alvaro — Office check-in screen: three choices — **I'm in**, **I'm out** (done for the day) and **Pause — going out, back later** (replaces “Going to eat”; back at Dock → **I'm back** and the day carries on). The big clock shows the **whole day's time**, not the current stretch; a paused day shows the break timer (red over 1 h).
 - 2026-11-11 — Alvaro — Office: back late from eating no longer makes the morning 0 h — Everyone now and the team calendar show the longer lunch (e.g. *Eating 1h 25m +25 min*), and the check-in screen counts up in red (migration 0065).
 - 2026-11-11 — Alvaro — Office: Tue/Thu **not checked in** by 9:11 = €3 automatically, by 9:30 = €3 + strike (once per day; deleted fines stay deleted). **Away** days (leaders set from–to + reason: no notifications, no fines, everyone sees it). **Team Leaders → Office**: check people in/out (optional time), delete today's late fines, manage away days. New round check-in screen with a live timer. The phone app is now called **emet** with new icon files (on iPhone: remove it from the Home Screen and add it again to get the logo instead of the old "E"). Migration 0064.

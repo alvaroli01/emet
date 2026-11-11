@@ -3455,7 +3455,7 @@
     "rulesTitle": "Como funciona",
     "r1": "Às 9:00 (seg–sex) o emet manda uma notificação: um toque registra sua entrada, só se o celular estiver no Dock (a menos de 30 m).",
     "r2": "Sair pausa seu dia; volte antes das 21:00 e o tempo continua. O tempo fora nunca conta. Tudo aparece no calendário da equipe em Hoje.",
-    "r3": "Toque em “Registrar saída” antes de ir. Só conta no Dock. Às 21:00 o dia fecha: ainda com entrada registrada = esse trecho conta 0 h.",
+    "r3": "Toque em “Estou saindo” antes de sair do Dock — só funciona lá. Às 21:00 o dia fecha: ainda com entrada = esse trecho conta 0 h.",
     "r4": "Terças e quintas, primeira chegada: depois das 9:10:59 = multa de €3; depois das 9:29:59 = €3 + 1 strike. 3 strikes no trimestre = a punição de €75.",
     "r5": "Trabalhando em outro lugar nesse dia? Avise um líder: ele pode apagar a multa ou o strike.",
     "setup": "Registrar entrada / saída →"
@@ -3485,8 +3485,7 @@
     "weekend": "O registro funciona de segunda a sexta.",
     "atOffice": "Cheguei",
     "checkOut": "Estou saindo",
-    "farWarn": "Você está a {m} m do Dock. Registrar a saída aqui deixa este trecho com 0 h.",
-    "farAnyway": "Registrar mesmo assim (0 h)",
+    "farWarn": "Você está a {m} m do Dock. “Cheguei”, “Pausa” e “Estou saindo” só funcionam no Dock. Você está fora comendo ou trabalhando?",
     "still": "Ainda trabalhando fora",
     "done": "Terminei por hoje",
     "outsideTitle": "Trabalhando fora hoje?",
@@ -3497,13 +3496,12 @@
     "blocked": "A localização está bloqueada para o emet. Permita nas configurações do celular (Safari/Chrome → Localização) e tente de novo.",
     "rulesTitle": "Como funciona",
     "r1": "O registro de entrada só funciona no Dock (a menos de 30 m). As multas por atraso de terça e quinta continuam.",
-    "r2": "A saída só conta no Dock. Registrar em outro lugar deixa esse trecho com 0 h. Às 21:00 o dia fecha: ainda com entrada registrada = 0 h.",
+    "r2": "“Cheguei”, “Pausa” e “Estou saindo” só funcionam no Dock. Fora do Dock você só pode dizer que está comendo ou trabalhando fora. Às 21:00 o dia fecha: ainda com entrada = esse trecho conta 0 h.",
     "r3": "Segunda, quarta e sexta você pode trabalhar fora: escreva o que está fazendo; sua localização é salva no início, a cada 2 horas e no fim.",
     "r4": "Sem resposta a “Ainda trabalhando fora?” em 30 minutos, termina no seu último toque.",
     "s": {
       "in": "Entrada registrada ✓ (a {m} m do Dock)",
       "out": "Saída registrada ✓",
-      "out-zero": "Saída registrada fora do Dock — este trecho conta 0 h.",
       "outside": "Trabalhando fora ✓ — localização salva",
       "outside-still": "Confirmado ✓ — localização salva",
       "outside-done": "Pronto ✓ — salvo em Trabalho fora",
@@ -3520,7 +3518,6 @@
       "no-note": "Escreva primeiro o que está fazendo.",
       "error": "Algo deu errado. Tente de novo.",
       "lunch": "Em pausa ✓ — seu dia continua quando você voltar ao Dock.",
-      "lunch-far": "Você está a {m} m do Dock. Toque em Pausa antes de sair do Dock — daqui só funciona “Estou saindo” (0 h).",
       "too-far-outside": "Você está a {m} m do Dock. Trabalhando fora? Escreva abaixo o que está fazendo — o emet salva este lugar exato.",
       "closed": "O dia fechou às 21:00. Até amanhã."
     },
@@ -3529,7 +3526,9 @@
     "r5": "Vai sair e voltar (comer, resolver algo)? Toque em “Pausa” no Dock. De volta ao Dock, toque em “Voltei” e seu dia continua. Pausas de mais de 1 hora aparecem em vermelho no calendário da equipe.",
     "back": "Voltei",
     "breakSoFar": "Pausa: {time}",
-    "breakOver": "Pausa: {time} (mais de 1 h)"
+    "breakOver": "Pausa: {time} (mais de 1 h)",
+    "outEating": "Estou fora comendo",
+    "outWorkingHint": "Trabalhando fora (seg/qua/sex)? Escreva abaixo o que está fazendo — o emet salva este lugar exato."
   },
   "officeAdmin": {
     "fixTitle": "Registrar entrada ou saída de alguém",

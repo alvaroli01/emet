@@ -3455,7 +3455,7 @@
     "rulesTitle": "Cómo funciona",
     "r1": "A las 9:00 (lun–vie) emet manda una notificación: un toque y fichas, solo si tu móvil está en Dock (a menos de 30 m).",
     "r2": "Salir pausa tu día; si vuelves antes de las 21:00, sigue contando. El tiempo fuera nunca cuenta. Todo aparece en el calendario del equipo en Hoy.",
-    "r3": "Pulsa “Fichar salida” antes de irte. Solo cuenta en Dock. A las 21:00 se cierra el día: si sigues fichado, ese tramo cuenta 0 h.",
+    "r3": "Pulsa “Me voy” antes de salir de Dock: solo funciona allí. A las 21:00 se cierra el día: si sigues fichado, ese tramo cuenta 0 h.",
     "r4": "Martes y jueves, primera llegada: después de las 9:10:59 = multa de 3 €; después de las 9:29:59 = 3 € + 1 strike. 3 strikes en un trimestre = el castigo de 75 €.",
     "r5": "¿Trabajas en otro sitio ese día? Díselo a un líder: puede borrar la multa o el strike.",
     "setup": "Fichar entrada / salida →"
@@ -3485,8 +3485,7 @@
     "weekend": "El fichaje funciona de lunes a viernes.",
     "atOffice": "Estoy dentro",
     "checkOut": "Me voy",
-    "farWarn": "Estás a {m} m de Dock. Si fichas la salida aquí, este tramo cuenta 0 h.",
-    "farAnyway": "Fichar salida igualmente (0 h)",
+    "farWarn": "Estás a {m} m de Dock. “Estoy dentro”, “Pausa” y “Me voy” solo funcionan en Dock. ¿Estás fuera comiendo o trabajando?",
     "still": "Sigo trabajando fuera",
     "done": "He terminado por hoy",
     "outsideTitle": "¿Trabajas fuera hoy?",
@@ -3497,13 +3496,12 @@
     "blocked": "La ubicación está bloqueada para emet. Permítela en los ajustes del móvil (Safari/Chrome → Ubicación) y vuelve a intentarlo.",
     "rulesTitle": "Cómo funciona",
     "r1": "Solo puedes fichar en Dock (a menos de 30 m). Las multas por llegar tarde los martes y jueves siguen.",
-    "r2": "La salida solo cuenta en Dock. Ficharla en otro sitio deja ese tramo en 0 h. A las 21:00 se cierra el día: si sigues fichado = 0 h.",
+    "r2": "“Estoy dentro”, “Pausa” y “Me voy” solo funcionan en Dock. Fuera de Dock solo puedes decir que estás comiendo o trabajando fuera. A las 21:00 se cierra el día: si sigues fichado, ese tramo cuenta 0 h.",
     "r3": "Lunes, miércoles y viernes puedes trabajar fuera: escribe qué haces; tu ubicación se guarda al empezar, cada 2 horas y al terminar.",
     "r4": "Si no respondes a “¿Sigues trabajando fuera?” en 30 minutos, se cierra en tu último toque.",
     "s": {
       "in": "Fichado ✓ (a {m} m de Dock)",
       "out": "Salida fichada ✓",
-      "out-zero": "Salida fichada fuera de Dock: este tramo cuenta 0 h.",
       "outside": "Trabajando fuera ✓ — ubicación guardada",
       "outside-still": "Confirmado ✓ — ubicación guardada",
       "outside-done": "Hecho ✓ — guardado en Trabajo fuera",
@@ -3520,7 +3518,6 @@
       "no-note": "Escribe primero qué estás haciendo.",
       "error": "Algo ha fallado. Inténtalo otra vez.",
       "lunch": "En pausa ✓ — tu día sigue cuando vuelvas a Dock.",
-      "lunch-far": "Estás a {m} m de Dock. Pulsa Pausa antes de salir de Dock; desde aquí solo funciona “Me voy” (0 h).",
       "too-far-outside": "Estás a {m} m de Dock. ¿Trabajas fuera? Escribe abajo qué estás haciendo: emet guarda este sitio exacto.",
       "closed": "El día se cerró a las 21:00. Hasta mañana."
     },
@@ -3529,7 +3526,9 @@
     "r5": "¿Sales y vuelves (comer, un recado)? Pulsa “Pausa” en Dock. Al volver a Dock, pulsa “He vuelto” y tu día sigue. Las pausas de más de 1 hora se ven en rojo en el calendario del equipo.",
     "back": "He vuelto",
     "breakSoFar": "Pausa: {time}",
-    "breakOver": "Pausa: {time} (más de 1 h)"
+    "breakOver": "Pausa: {time} (más de 1 h)",
+    "outEating": "Estoy fuera comiendo",
+    "outWorkingHint": "¿Trabajando fuera (lun/mié/vie)? Escribe abajo qué estás haciendo: emet guarda este sitio exacto."
   },
   "officeAdmin": {
     "fixTitle": "Fichar entrada o salida de alguien",

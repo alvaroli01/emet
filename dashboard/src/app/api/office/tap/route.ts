@@ -7,13 +7,14 @@ import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, i
  * One-tap office check-in (Alvaro, 2026-11-11; replaces the phone apps): the 9:00 notification opens /office, which sends
  * the phone's position with one of these actions. The server decides from the real position:
  * - in: within 30 m of Dock (up to 20 m GPS slack in the person's favour). Also ends a working-outside stretch.
- * - out: within 80 m of Dock = a normal check-out; anywhere else = that stretch counts 0 h (no time left running).
- * - lunch: "going to eat", tapped at Dock — stops the time for at most 1 h; not back at Dock by then = 0 h (office_tick).
+ * - out: only at Dock (within 80 m). Never checked out by 21:00 = that stretch counts 0 h (no time left running).
+ * - lunch: Pause at Dock / "I'm out eating" anywhere — the time stops and carries on when they check in again at Dock.
+ * - outside while checked in ("I'm out working", Mon/Wed/Fri): the Dock stretch ends now and the outside one starts here.
  * - outside: Mon/Wed/Fri only, with a note — logged with the position for everyone to see (the outside calendar).
  * - still: "still working outside" (asked every 2 h) — logs the position again. done: ends it (position logged).
  * Phones only: a laptop's location is easy to fake in dev tools.
  */
-type Body = { action?: unknown; lat?: unknown; lng?: unknown; accuracy?: unknown; note?: unknown; anyway?: unknown };
+type Body = { action?: unknown; lat?: unknown; lng?: unknown; accuracy?: unknown; note?: unknown; away?: unknown };
 type Outside = { id: string; places: unknown[] };
 
 export async function POST(request: NextRequest) {
@@ -53,16 +54,15 @@ export async function POST(request: NextRequest) {
   }
   if (action === "out") {
     if (!isIn) return NextResponse.json({ status: "not-in", distance: dist });
-    const counts = checkoutCounts(dist, accuracy);
-    if (!counts && b.anyway !== true) return NextResponse.json({ status: "far", distance: dist }); // warn first: 0 h
-    await (counts
-      ? db.from("office_visits").update({ left_at: place.at }).eq("id", open!.id)
-      : db.from("office_visits").update({ left_at: place.at, forgot: true }).eq("id", open!.id)); // not at Dock → 0 h
-    return NextResponse.json({ status: counts ? "out" : "out-zero", distance: dist });
+    // "I'm out" only works at Dock (Alvaro, 2026-11-11). Away from Dock the only choices are "out eating" or "out working".
+    if (!checkoutCounts(dist, accuracy)) return NextResponse.json({ status: "far", distance: dist });
+    await db.from("office_visits").update({ left_at: place.at }).eq("id", open!.id);
+    return NextResponse.json({ status: "out", distance: dist });
   }
   if (action === "lunch") {
     if (!isIn) return NextResponse.json({ status: "not-in", distance: dist });
-    if (!checkoutCounts(dist, accuracy)) return NextResponse.json({ status: "lunch-far", distance: dist }); // tap it before leaving Dock
+    // Pause only at Dock; away from Dock the only way to stop is "I'm out eating" (away: true). The time carries on when they're back
+    if (!checkoutCounts(dist, accuracy) && b.away !== true) return NextResponse.json({ status: "far", distance: dist });
     const until = new Date(now + LUNCH_MS).toISOString();
     await db.from("office_visits").update({ left_at: place.at, lunch_until: until }).eq("id", open!.id);
     return NextResponse.json({ status: "lunch", time: madridTime(until) });
@@ -71,8 +71,8 @@ export async function POST(request: NextRequest) {
     const note = String(b.note ?? "").trim().slice(0, 200);
     if (!isOutsideDay(now)) return NextResponse.json({ status: "office-day" });
     if (!note) return NextResponse.json({ status: "no-note" }, { status: 400 });
-    if (isIn) return NextResponse.json({ status: "already-in", distance: dist });
     if (outside) return NextResponse.json({ status: "already-outside" });
+    if (isIn) await db.from("office_visits").update({ left_at: place.at }).eq("id", open!.id); // "I'm out working": the Dock stretch ends now
     const { error } = await db.from("office_outside").insert({ user_id: userId, note, places: [place] });
     if (error && error.code !== "23505") throw error;
     return NextResponse.json({ status: "outside" });

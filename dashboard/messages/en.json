@@ -3455,7 +3455,7 @@
     "rulesTitle": "How it works",
     "r1": "At 9:00 (Mon–Fri) emet sends a notification: one tap checks you in, only if your phone is at Dock (within 30 m).",
     "r2": "Leaving pauses your day; back before 21:00 and the time carries on. Time away never counts. Everything shows in the team calendar on Today.",
-    "r3": "Tap “Check out” before you leave. It only counts at Dock. At 21:00 the day closes: still checked in = that stretch counts 0 h.",
+    "r3": "Tap “I'm out” before you leave Dock — it only works there. At 21:00 the day closes: still checked in = that stretch counts 0 h.",
     "r4": "Tuesdays and Thursdays, first arrival: after 9:10:59 = €3 fine; after 9:29:59 = €3 + 1 strike. 3 strikes in a quarter = the €75 punishment.",
     "r5": "Working somewhere else that day? Tell a leader: they can delete the fine or strike.",
     "setup": "Check in / out →"
@@ -3485,8 +3485,7 @@
     "weekend": "Check-in runs Monday to Friday.",
     "atOffice": "I'm in",
     "checkOut": "I'm out",
-    "farWarn": "You're {m} m from Dock. Checking out here makes this stretch count 0 h.",
-    "farAnyway": "Check out anyway (0 h)",
+    "farWarn": "You're {m} m from Dock. “I'm in”, “Pause” and “I'm out” only work at Dock. Are you out eating or out working?",
     "still": "Still working outside",
     "done": "Done for today",
     "outsideTitle": "Working outside today?",
@@ -3497,13 +3496,12 @@
     "blocked": "Location is blocked for emet. Allow it in your phone's settings (Safari/Chrome → Location) and try again.",
     "rulesTitle": "How it works",
     "r1": "Check-in only works at Dock (within 30 m). Tuesday and Thursday late fines still apply.",
-    "r2": "Check-out only counts at Dock. Checking out anywhere else makes that stretch 0 h. At 21:00 the day closes: still checked in = 0 h.",
+    "r2": "“I'm in”, “Pause” and “I'm out” only work at Dock. Away from Dock you can only say you're out eating or out working. At 21:00 the day closes: still checked in = that stretch counts 0 h.",
     "r3": "Monday, Wednesday and Friday you can work outside: write what you're doing; your location is saved when you start, every 2 hours and when you finish.",
     "r4": "No answer to “Still working outside?” within 30 minutes ends it at your last tap.",
     "s": {
       "in": "Checked in ✓ ({m} m from Dock)",
       "out": "Checked out ✓",
-      "out-zero": "Checked out away from Dock — this stretch counts 0 h.",
       "outside": "Working outside ✓ — location saved",
       "outside-still": "Confirmed ✓ — location saved",
       "outside-done": "Done ✓ — saved in Working outside",
@@ -3520,7 +3518,6 @@
       "no-note": "Write what you're doing first.",
       "error": "Something went wrong. Try again.",
       "lunch": "Paused ✓ — your day carries on when you're back at Dock.",
-      "lunch-far": "You're {m} m from Dock. Tap Pause before you leave Dock — from here only “I'm out” works (0 h).",
       "too-far-outside": "You're {m} m from Dock. Working outside? Write what you're doing below — emet saves this exact spot.",
       "closed": "The day closed at 21:00. See you tomorrow."
     },
@@ -3529,7 +3526,9 @@
     "r5": "Going out and coming back (eating, an errand)? Tap “Pause” at Dock. Back at Dock, tap “I'm back” and your day carries on. Breaks over 1 hour show in red in the team calendar.",
     "back": "I'm back",
     "breakSoFar": "Break: {time}",
-    "breakOver": "Break: {time} (over 1 h)"
+    "breakOver": "Break: {time} (over 1 h)",
+    "outEating": "I'm out eating",
+    "outWorkingHint": "Out working (Mon/Wed/Fri)? Write what you're doing below — emet saves this exact spot."
   },
   "officeAdmin": {
     "fixTitle": "Check someone in or out",

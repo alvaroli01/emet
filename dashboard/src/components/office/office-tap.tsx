@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Briefcase, ChevronRight, Loader2, LogOut, MapPin, Pause } from "lucide-react";
+import { Briefcase, ChevronRight, Loader2, LogOut, MapPin, Pause, Utensils } from "lucide-react";
 
 type State = { kind: "none" } | { kind: "in"; since: string; at: string } | { kind: "lunch"; since: string; at: string } | { kind: "outside"; since: string; at: string; note: string };
 type Action = "in" | "out" | "lunch" | "outside" | "still" | "done";
@@ -92,10 +92,12 @@ export function OfficeTap({ state, doneMs, workday, outsideDay, go }: { state: S
       </div>
 
       {msg && <p className={`mb-4 rounded-2xl px-4 py-3 text-sm ${msg.ok ? "bg-ok/15 text-ok-text" : "bg-bad/10 text-bad-text"}`}>{msg.text}</p>}
-      {far !== null && (
+      {/* Away from Dock while checked in: "I'm in / out / Pause" only work at Dock — here only "out eating" or "out working" */}
+      {far !== null && state.kind === "in" && (
         <div className="mb-4 space-y-2 rounded-2xl bg-bad/10 p-4 text-sm">
           <p className="text-bad-text">{t("farWarn", { m: far })}</p>
-          <button onClick={() => send("out", { anyway: true })} disabled={!!busy} className="text-xs font-medium underline underline-offset-2">{t("farAnyway")}</button>
+          {row("lunch", <Utensils size={15} />, t("outEating"), { away: true })}
+          {outsideDay && <p className="text-xs text-muted">{t("outWorkingHint")}</p>}
         </div>
       )}
 
@@ -103,7 +105,7 @@ export function OfficeTap({ state, doneMs, workday, outsideDay, go }: { state: S
         <div className="space-y-2">
           {state.kind === "in" && row("lunch", <Pause size={15} />, t("lunch"))}
           {state.kind === "outside" && <>{row("in", <MapPin size={15} />, t("atOffice"))}{row("done", <LogOut size={15} />, t("done"))}</>}
-          {state.kind === "none" && outsideDay && (
+          {(state.kind === "none" || (state.kind === "in" && far !== null)) && outsideDay && (
             <div className="space-y-2 rounded-2xl bg-surface-2 p-4">
               <p className="text-sm font-medium">{t("outsideTitle")}</p>
               <input id="outside-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} placeholder={t("notePlaceholder")}
