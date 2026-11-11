@@ -32,7 +32,7 @@ export function OfficePill({ meId }: { meId: string }) {
     return () => { clearInterval(tick); supabase.removeChannel(ch); };
   }, [load, supabase, meId]);
   // Opening emet on a phone while checked in, away from Dock → checked out now, at this spot (Alvaro, 2026-11-11: he got
-  // home and his time was still running). Only when location is already allowed (never a surprise prompt); once per visit.
+  // home and his time was still running). Asks for the location (unless blocked) only while checked in or paused; once per visit.
   const checked = useRef(false);
   const toast = useToast();
   useEffect(() => {
@@ -43,8 +43,8 @@ export function OfficePill({ meId }: { meId: string }) {
     const inNow = officeStatus(visits, meId, Date.now()).inNow;
     if (!inNow && !pausedToday) return;
     checked.current = true;
-    navigator.permissions?.query({ name: "geolocation" as PermissionName }).then((p) => {
-      if (p.state !== "granted") return;
+    // iPhone home-screen apps often report "prompt" (or have no Permissions API) even after Allow: ask unless clearly denied
+    const ask = () => {
       navigator.geolocation.getCurrentPosition(async (pos) => {
         const r = await fetch("/api/office/tap", { method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: inNow ? "auto-out" : "in", lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(() => null);
@@ -52,7 +52,9 @@ export function OfficePill({ meId }: { meId: string }) {
         if (j?.status === "out-away") { setAutoOut(true); load(); }
         if (j?.status === "in") { toast("ok", t("autoBack")); load(); }
       }, () => {}, { enableHighAccuracy: true, timeout: 20000, maximumAge: 60_000 });
-    }).catch(() => {});
+    };
+    if (!navigator.permissions?.query) { ask(); return; }
+    navigator.permissions.query({ name: "geolocation" as PermissionName }).then((p) => { if (p.state !== "denied") ask(); }).catch(ask);
   }, [visits, meId, load, toast, t]);
   useEffect(() => {
     if (!open) return;
