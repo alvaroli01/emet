@@ -66,6 +66,23 @@ export function zoneStep(dist: number, isIn: boolean): { event: OfficeEvent | nu
   return { event: null, reply: "wait" };
 }
 
+/** Same rule with the phone's own accuracy (browser): up to 20 m of GPS error counts in the person's favour for
+ *  arriving (inside a building GPS drifts), and against leaving, so a GPS jump never checks anyone out. */
+export const GPS_SLACK_M = 20;
+export function zoneStepWithAccuracy(dist: number, accuracy: number, isIn: boolean) {
+  const slack = Math.min(Math.max(accuracy, 0), GPS_SLACK_M);
+  if (dist - slack <= IN_M) return { event: isIn ? null : ("arrive" as const), reply: "done" as const };
+  if (dist - slack >= OUT_M) return { event: isIn ? ("leave" as const) : null, reply: "done" as const };
+  return { event: null, reply: "wait" as const };
+}
+
+/** One-tap check-out (2026-11-11): it only counts at Dock — within 80 m, with the same GPS slack in the person's favour.
+ *  Checked out anywhere else = that stretch counts 0 h, so leaving the time running earns nothing. */
+export const checkoutCounts = (dist: number, accuracy: number) => dist - Math.min(Math.max(accuracy, 0), GPS_SLACK_M) <= OUT_M;
+
+/** Working outside is offered Monday, Wednesday and Friday (Tuesday and Thursday are office days). */
+export const isOutsideDay = (now: number) => ["Mon", "Wed", "Fri"].includes(new Date(now).toLocaleDateString("en-US", { weekday: "short", timeZone: "Europe/Madrid" }));
+
 /** Midnight in Spain on that date ("2026-11-10" → "2026-11-09T23:00:00.000Z"), as an ISO instant. */
 export function madridMidnight(day: string): string {
   const noon = Date.parse(`${day}T12:00:00Z`);

@@ -1,55 +1,47 @@
 # Office check-in
 
-Built 2026-11-10 · **live** · OwnTracks since 2026-11-11 (migration `0059_office_owntracks.sql`) · migration `0053_office_and_leader_messages.sql` · code `dashboard/src/lib/office.ts`, `src/app/api/office/`, `src/components/office/office-card.tsx`, `src/components/tools/leader-message.tsx`
+Built 2026-11-10 · **live** · one tap since 2026-11-11 (migration `0060_office_taps.sql`) · code `dashboard/src/lib/office.ts`, `src/app/api/office/tap/`, `src/app/(app)/office/`, `src/components/office/`, `src/components/tools/office-review.tsx`, `src/components/tools/leader-message.tsx`
 
-## What it does
-- **Today → At the office:** who is in right now and since when (Spanish time), my hours today and this week, everyone's hours this week. There is no Check in / Check out button (anti-cheat).
-- **Automatic:** each member's phone checks them in when they come within **30 m** of the office (Alvaro picked 30 m on 10 Nov because the building is big) and out when they are **80 m** away. It works with emet closed and on mobile data.
-- **Privacy:** emet only receives "arrived" / "left" and the time. It never gets a location.
+## What it does (since 11 Nov)
+- **9:00, Monday–Friday:** everyone gets a notification (bell + phone): *At the office? Tap to check in.* It opens **/office**, which reads the phone's position once. emet checks them in **only within 30 m of Dock** (up to 20 m GPS slack in their favour).
+  - Tuesday/Thursday (office days) the tap checks in straight away (`/office?go=in`).
+  - Monday/Wednesday/Friday the page also offers **I'm working outside**.
+- **Check out:** they tap *Check out* when they leave. It **only counts at Dock (within 80 m)**. Anywhere else, emet warns first; checking out anyway, or never checking out, makes that stretch **0 h**. So leaving the time running earns nothing. **18:00** reminder to check out.
+- **Working outside (Mon/Wed/Fri):** they write what they're doing (e.g. *Visiting shops in Indautxu*). emet saves the position at the start, every **2 hours** (notification *Still working outside?* → one tap) and at the end (`office_outside.places`). No answer within 30 minutes ends it at the last tap. Checking in at Dock ends it, and the questions stop.
+- **Everyone can see:** Today → At the office → *Working outside now* and *Working outside this week* (day, time, person, note, map link to the last position). That's the "calendar" for any doubts.
+- **Phones only:** a laptop's location is easy to fake in dev tools.
+- Pause rule stays: checking out pauses the day until 21:00; checking in again resumes it.
 
-## Why the phone does the detecting
-A website can't read location while it's closed (iPhones block it completely), and GPS is ±10–30 m indoors, so 7 m wasn't possible. The university Wi-Fi is shared, so Wi-Fi detection was out too. The phone's own geofence (Shortcuts / MacroDroid) runs in the background for free.
+## How it runs
+- `office_tick()` runs **every 5 minutes** (pg_cron job `office-tick`, Supabase free plan): 9:00 check-in notifications (one per person per day, dedupe `office_checkin:<date>`), 18:00 check-out reminders (only people still in), 2-hour outside questions, and closing unanswered outside stretches.
+- New notification kinds: `office_checkin`, `office_checkout`, `office_outside_check` (in `push_worthy`, texts in all 7 languages).
+- Who gets them: `office_people()` = active class members (no coach, Ollin guests or bot).
+- Tested 11 Nov in a rolled-back transaction with a fake clock: Thu 9:00 → 14 notifications linking `/office?go=in`, no duplicates on the next run; Fri 9:00 → offers working outside; Wed 18:00 → only Alvaro (still in); outside question once per 2 h, ended 30 min after an unanswered question.
 
-## Phone setup (each member, once) — OwnTracks since 11 Nov
-The iPhone shortcut didn't work well (didn't fire, too hard to set up, asked for confirmations, wrong in/out), so on 11 Nov Alvaro moved check-in to **OwnTracks**: a free, open-source app (iPhone + Android, no account) that runs in the background and sends the phone's position to emet.
-- Today → At the office → *Check in automatically with my phone* → **Create my check-in links** → **1. Install OwnTracks** → open it once → back in emet on the same phone **2. Connect it to emet** (an `owntracks:///config?inline=…` link that imports everything: HTTP mode to my link, *significant* monitoring, remote commands on, a 100 m zone around the office). Allow location **Always**. Then never open OwnTracks or emet again.
-- iPhone: keep Background App Refresh on for OwnTracks and don't swipe it closed. Android: battery → Unrestricted.
-- **How emet decides:** OwnTracks posts `{_type: location|transition, lat, lon, acc, tst}`. Within 30 m = in, 80 m away = out. Between 30 and 80 m (and up to 500 m) emet answers `[{"_type":"cmd","action":"reportLocation"}]` after ~8 s, so the phone sends a fresh position about every 10 s — for at most 10 min (`office_links.wait_since`). Fixes rougher than ±80 m and queued ones older than 5 min decide nothing.
-- Tested 11 Nov on live emet with fake OwnTracks payloads: far = nothing, 50 m = reportLocation after 8.6 s, rough fix = no decision, old queued = ignored, at the door = checked in, 160 m = checked out (test visit deleted). **Not yet tested on a real phone at Dock.**
-- **iPhone, 11 Nov:** the one-tap import failed with “URI or file configuration not allowed” (OwnTracks blocks setup links by default; the switch wasn't visible in Settings). Done by hand instead: Settings → Mode **HTTP** → paste the link in **URL** → **Authentication off** → Map → up arrow. Alvaro's iPhone reached emet at 14:34 from Dock (14 m). emet now sends the office zone to such phones itself (`cmd setWaypoints`, until a report has `inregions: ["emet office"]`).
-- The old iPhone shortcut and MacroDroid links still work (same `/api/office/<token>`), but emet no longer shows their steps.
-- **Why not something else (11 Nov):** no spare device to leave at the office (a door screen was the other idea); NFC sticker rejected by Alvaro; our own app would need Apple's €99/year developer account; Bluetooth can't identify iPhones (they change address); the university Wi-Fi is shared.
-- **The office point:** **Dock Bilbao, Uribitarte Pasealekua 3, 48001 Bilbao** (43.2646286, -2.9268837), set 10 Nov from Alvaro's Google Maps link (table `office_place`, migration 0055). An admin can fine-tune it by pressing **Move the office location to here** at the door.
-- **Tested 10 Nov on Alvaro's Mac** with the real shortcut against live emet: location sent every 15 s, check-in, 200 m check-out, resume as a new stretch. The first file failed (empty If value, pasted link not applied); the fixed one has no If step and an empty link box.
-- The shortcut lives in Alvaro's Mac Shortcuts app as **emet check-in** and is shared by that iCloud link. Don't delete it there (the link points to it). To change it, edit it on the Mac and share a new iCloud link.
+## Why not an app (11 Nov)
+- Same day we first moved to **OwnTracks** (free background app). It worked on Alvaro's iPhone at Dock (signals 14:34, 14:43, 14:50), but iPhone blocks its one-tap setup ("URI or file configuration not allowed") and Alvaro decided people won't install and keep an app → removed, along with the iPhone shortcut and MacroDroid links (`/api/office/<token>` deleted).
+- Also ruled out: a device at the office door (none spare), NFC sticker (Alvaro's choice), our own app (Apple €99/year), Bluetooth (iPhones change address), university Wi-Fi (shared). A website can't read location in the background.
+- Repeated "still at the office?" taps were rejected (Alvaro: people won't do it) → the Dock-only check-out rule instead.
 
-## Rules
-- **Pause:** leaving pauses the day until 21:00. Coming back before then resumes it, and the time away never counts. If they don't come back, the hours stop where they paused. Today shows a *Paused* list.
-- **No cheating (Alvaro, 10 Nov):** there is no Check in/out button and no arrive/leave links. Only a real phone position counts, so running the shortcut from home can never check you in. No check-out by midnight (phone off, Leave deleted) = that stretch counts 0 h.
-- Visits are written only by the server. Members can read everyone's visits but can't edit hours.
-- The link only accepts POST, so a WhatsApp link preview can't check anyone in.
-
-## Where to see it (10 Nov)
-- **Top bar:** a pill next to the bell, green *In the office* / grey *Out of office* (amber dot = paused). Tap it for my time today and this week and the rules.
-- **Profiles:** everyone can see anyone's office time today and this week.
-- **Team Leaders → Office:** everyone's status and hours, and whose phone isn't set up or has no signal (`last_ping_at`, migration 0056).
-- **Monday–Friday only:** weekend positions are ignored.
-- **Deleting fines/strikes:** Team Leaders → Strikes. Automatic ones say *automatic*; delete them for anyone who worked elsewhere that day.
-- **iOS 27:** the Arrive/Leave triggers live inside the shortcut (open emet check-in → Edit → Automation). There is no separate Automation tab anymore. Turn on ⓘ → Privacy → Allow Running When Locked.
+## The office point
+**Dock Bilbao, Uribitarte Pasealekua 3, 48001 Bilbao** (43.2646286, -2.9268837), set 10 Nov (table `office_place`, migration 0055). Alvaro's Mac read 15 m from it at the office on 11 Nov (±35 m), so it was left as is. An admin can fine-tune it with **Move the office location to here** on Today → At the office.
 
 ## Late fines (Tuesdays & Thursdays, migration 0054)
 - From the **first** check-in of the day (before 14:00), Spanish time: up to 9:10:59 on time · **9:11:00–9:29:59 = €3** (kind `late_fine`, 0 strikes) · **9:30:00+ = €3 + 1 strike** (`late_arrival`).
 - Added automatically by the DB trigger `office_late`; the person gets a bell + phone alert. Coach, Ollin guests and the bot are never charged. One per day.
-- Phones can fire a minute or two late: leaders delete a wrong one in Team Leaders → Strikes.
-- Tested 10 Nov on live data in a rolled-back transaction: 9:10:59 nothing, 9:11:00 and 9:29:59 €3, 9:30:00 and Thu 9:45 €3 + strike, Wed nothing, second arrival nothing, coach nothing.
+- Leaders delete a wrong one in Team Leaders → Strikes (automatic ones say *automatic*), e.g. for someone who worked elsewhere that day.
+
+## Where to see it
+- **Top bar:** pill next to the bell, green *In the office* / grey *Out of office* (amber = paused). Tap it for my time today and this week, the rules, and *Check in / out →*.
+- **Profiles:** anyone's office time today and this week.
+- **Team Leaders → Office:** everyone's status and hours, and who has **phone alerts off** (they won't get the 9:00 tap).
 
 ## Send a notification (Team Leaders)
 Team Leaders section → **Send a notification**: leaders and admins write up to 300 characters to everyone, one team or chosen people. It goes to the bell and to the phone (kind `leader_message`, DB function `leader_send`, which checks `is_leader()`).
 
 ## Open
-- Every member has to do the OwnTracks setup (on 11 Nov only Alvaro had a link).
-- Test OwnTracks for real at Dock on an iPhone and an Android: does it keep sending in the background, and does reportLocation work while the phone is locked?
-- The first walk (10 Nov) never got within 30 m by GPS. If that repeats with OwnTracks, the unfinished GPS-accuracy slack (`zoneStepWithAccuracy`, uncommitted since 10 Nov) could be reused.
-- Should only leaders see everyone's hours?
+- First real 9:00 run: Thursday 12 Nov. Check the next morning that notifications arrived and people could check in.
+- Everyone needs phone alerts on (14 of 15 people had them on 11 Nov). On iPhone that needs emet added to the Home Screen.
+- Should only leaders see everyone's hours and the outside locations?
 
 Related: [[Today]], [[Phone version]], [[🔵 How the dashboard works]]

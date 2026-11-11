@@ -59,7 +59,7 @@ export function OfficePill({ meId }: { meId: string }) {
               {(["r1", "r2", "r3", "r4", "r5"] as const).map((k) => <li key={k}>{t(k)}</li>)}
             </ul>
           </div>
-          <Link href="/today" onClick={() => setOpen(false)} className="block text-xs underline underline-offset-2 hover:text-ink">{t("setup")}</Link>
+          <Link href="/office" onClick={() => setOpen(false)} className="block text-xs underline underline-offset-2 hover:text-ink">{t("setup")}</Link>
         </div>
       )}
     </div>

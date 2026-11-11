@@ -68,6 +68,10 @@ export default async function TodayPage() {
     supabase.from("office_place").select("lat, lng").maybeSingle<{ lat: number; lng: number }>(),
     supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot").or(`arrived_at.gte.${madridMidnight(week)},left_at.is.null`).returns<Visit[]>(),
   ]);
+  // Working outside this week (Mon/Wed/Fri log everyone can see)
+  const { data: outside } = await supabase.from("office_outside").select("id, user_id, note, started_at, ended_at, places")
+    .gte("started_at", madridMidnight(week)).order("started_at")
+    .returns<{ id: string; user_id: string; note: string; started_at: string; ended_at: string | null; places: { lat: number; lng: number }[] }[]>();
 
   const google = await googleP;
   const notionDl = await notionP;
@@ -165,7 +169,15 @@ export default async function TodayPage() {
     me: { in: vs.some((v) => v.user_id === me.id && isInNow(v, now)), paused: pausedNow(me.id), today: hm(msOf(me.id, dayFrom)), week: hm(msOf(me.id, weekFrom)) },
     week: [...new Set(vs.map((v) => v.user_id))].filter((id) => who.has(id)).map((id) => ({ id, name: who.get(id)!.full_name, avatar: who.get(id)!.avatar_url, ms: msOf(id, weekFrom) }))
       .filter((p) => p.ms > 0).sort((a, b) => b.ms - a.ms).map((p) => ({ ...p, hours: hm(p.ms) })),
-    isAdmin, officeSet: !!officePlace.data, officePoint: officePlace.data ?? null,
+    isAdmin, officeSet: !!officePlace.data,
+    outsideNow: (outside ?? []).filter((o) => !o.ended_at && who.has(o.user_id))
+      .map((o) => ({ id: o.user_id, name: who.get(o.user_id)!.full_name, avatar: who.get(o.user_id)!.avatar_url, since: madridTime(o.started_at), note: o.note })),
+    outsideWeek: [...Map.groupBy((outside ?? []).filter((o) => who.has(o.user_id)), (o) => fmtDay(new Date(o.started_at).toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" })))]
+      .map(([day, items]) => ({ day, items: items.map((o) => {
+        const last = o.places[o.places.length - 1];
+        return { id: o.id, name: who.get(o.user_id)!.full_name, note: o.note, from: madridTime(o.started_at), to: o.ended_at ? madridTime(o.ended_at) : null,
+          map: last ? `https://www.google.com/maps?q=${last.lat},${last.lng}` : null };
+      }) })).reverse(),
   };
 
 

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { distanceM, zoneStep, isStale, isWorkday, officeStatus, decide, visitMs, isInNow, isPaused, hm, madridTime, madridMidnight, STALE_MS, type Visit } from "./office.ts";
+import { distanceM, zoneStep, zoneStepWithAccuracy, checkoutCounts, isOutsideDay, isStale, isWorkday, officeStatus, decide, visitMs, isInNow, isPaused, hm, madridTime, madridMidnight, STALE_MS, type Visit } from "./office.ts";
 
 const T = Date.parse("2026-11-10T09:00:00Z");
 const v = (p: Partial<Visit>): Visit => ({ id: "a", user_id: "u", arrived_at: new Date(T).toISOString(), left_at: null, forgot: false, ...p });
@@ -84,4 +84,22 @@ test("weekdays only, and one person's status (in / paused, hours today and this 
   assert.equal(hm(s.todayMs), "3h 00m"); assert.equal(hm(s.weekMs), "7h 00m");
   const p = officeStatus(vs.slice(0, 2), "u", Date.parse("2026-11-10T13:00:00Z"));
   assert.equal(p.inNow, false); assert.equal(p.paused, true); assert.equal(p.since, "11:00");
+});
+
+test("emet open on the phone: GPS accuracy helps arriving (inside the building) but never pushes anyone out", () => {
+  assert.equal(zoneStepWithAccuracy(45, 25, false).event, "arrive");  // 45 m ± 25 m → counts as within 30 m (20 m slack)
+  assert.equal(zoneStepWithAccuracy(55, 25, false).event, null);      // too far even with the slack
+  assert.equal(zoneStepWithAccuracy(45, 5, false).event, null);       // precise fix: really 45 m away
+  assert.equal(zoneStepWithAccuracy(90, 30, true).event, null);       // 90 m ± 30: maybe only 70 m → stay in
+  assert.equal(zoneStepWithAccuracy(105, 30, true).event, "leave");   // clearly 80 m+ away
+});
+
+test("one-tap check-out only counts at Dock; working outside only Mon/Wed/Fri", () => {
+  assert.equal(checkoutCounts(60, 10), true);    // at the door
+  assert.equal(checkoutCounts(95, 20), true);    // 95 m ± 20 m → maybe 75 m: counts
+  assert.equal(checkoutCounts(150, 20), false);  // checked out from the street / home → that stretch counts 0 h
+  assert.equal(checkoutCounts(150, 500), false); // a rough fix gives at most 20 m slack
+  assert.equal(isOutsideDay(Date.parse("2026-11-09T10:00:00Z")), true);  // Monday
+  assert.equal(isOutsideDay(Date.parse("2026-11-10T10:00:00Z")), false); // Tuesday
+  assert.equal(isOutsideDay(Date.parse("2026-11-13T10:00:00Z")), true);  // Friday
 });
