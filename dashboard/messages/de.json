@@ -1127,8 +1127,8 @@
       "office_checkin": "{outside, select, true {Im Büro oder auswärts? Tippe zum Einstempeln.} other {Im Büro? Tippe zum Einstempeln.}}",
       "office_checkout": "Gehst du? Stempel im Dock aus, bevor du gehst — sonst zählt heute 0 h.",
       "office_outside_check": "Arbeitest du noch auswärts ({title})? Tippe zum Bestätigen — ohne Antwort in 30 Min. endet es.",
-      "office_midday": "{late, select, true {Noch im Dock? Wenn du weg bist, stempel aus.} other {Wenn du weg bist, stempel aus. Gehst du essen? Tippe „Essen gehen“ (max. 1 h).}}",
-      "office_lunch_end": "Sei bis {due} zurück im Dock und tippe „Ich bin im Büro“. Längere Pausen erscheinen im Team-Kalender."
+      "office_midday": "{late, select, true {Noch im Dock? Wenn du weg bist, tippe „Ich gehe“.} other {Wenn du weg bist, tippe „Ich gehe“. Essen oder kurz weg? Tippe „Pause“.}}",
+      "office_lunch_end": "Deine Pause dauert fast 1 Stunde. Zurück im Dock? Tippe „Ich bin zurück“."
     },
     "popupTitle": "Neue Aufgabe für dich",
     "popupDue": "Fällig {date}",
@@ -1238,15 +1238,15 @@
       "atDockToday": "{hours} heute im Dock",
       "st": {
         "in": "Im Dock seit {time}",
-        "lunch": "Beim Essen · zurück bis {time}",
+        "lunch": "In Pause seit {time}",
         "outside": "Auswärts seit {time} · {note}",
         "left": "Gegangen um {time}",
         "none": "Nicht da",
         "away": "Abwesend bis {time} · {note}",
-        "lunchOver": "Beim Essen · {time} bisher (über 1 h)"
+        "lunchOver": "In Pause · {time} bisher (über 1 h)"
       },
       "allDay": "ganztägig",
-      "eating": "Beim Essen"
+      "eating": "Pause"
     }
   },
   "report": {
@@ -3252,7 +3252,7 @@
       "office_checkout": "📍 Ausstempeln",
       "office_outside_check": "📍 Auswärts",
       "office_midday": "📍 Noch im Büro?",
-      "office_lunch_end": "🍽️ Mittagspause endet bald"
+      "office_lunch_end": "⏸️ Pause fast 1 h"
     }
   },
   "strikes": {
@@ -3483,8 +3483,8 @@
     "inSince": "Du bist seit {time} im Büro.",
     "outsideSince": "Auswärts seit {time}: {note}",
     "weekend": "Einstempeln geht Montag bis Freitag.",
-    "atOffice": "Ich bin im Büro",
-    "checkOut": "Ausstempeln",
+    "atOffice": "Ich bin da",
+    "checkOut": "Ich gehe",
     "farWarn": "Du bist {m} m vom Dock entfernt. Ausstempeln hier = dieser Abschnitt zählt 0 h.",
     "farAnyway": "Trotzdem ausstempeln (0 h)",
     "still": "Arbeite noch auswärts",
@@ -3519,16 +3519,17 @@
       "phone-only": "Stempel mit dem Handy ein.",
       "no-note": "Schreib zuerst, was du machst.",
       "error": "Etwas ist schiefgelaufen. Versuch es erneut.",
-      "lunch": "Guten Appetit! Sei bis {time} zurück im Dock und tippe „Ich bin im Büro“.",
-      "lunch-far": "Du bist {m} m vom Dock entfernt. Tippe „Essen gehen“, bevor du das Dock verlässt — von hier geht nur Ausstempeln (0 h).",
+      "lunch": "Pause ✓ — dein Tag läuft weiter, wenn du zurück im Dock bist.",
+      "lunch-far": "Du bist {m} m vom Dock entfernt. Tippe Pause, bevor du das Dock verlässt — von hier geht nur „Ich gehe“ (0 h).",
       "too-far-outside": "Du bist {m} m vom Dock entfernt. Arbeitest du auswärts? Schreib unten, was du machst — emet speichert genau diesen Ort.",
       "closed": "Der Tag wurde um 21:00 geschlossen. Bis morgen."
     },
-    "lunch": "Essen gehen (max. 1 h)",
-    "lunchUntil": "Beim Essen — sei bis {time} zurück im Dock und stempel ein.",
-    "r5": "Um 14:00 und 17:00 fragt emet, ob du noch da bist. Essen gehen? Tippe „Essen gehen“ im Dock: bis zu 1 Stunde, die Pause zählt nicht. Länger als 1 Stunde erscheint als längere Pause im Team-Kalender.",
-    "lunchLeft": "Pause übrig",
-    "lunchOver": "über der Stunde"
+    "lunch": "Pause — kurz weg, komme wieder",
+    "lunchUntil": "Pause seit {time}. Tippe im Dock auf „Ich bin zurück“ und dein Tag läuft weiter.",
+    "r5": "Kurz weg und zurück (Essen, Besorgung)? Tippe im Dock auf „Pause“. Zurück im Dock „Ich bin zurück“ tippen und dein Tag läuft weiter. Pausen über 1 Stunde erscheinen rot im Team-Kalender.",
+    "back": "Ich bin zurück",
+    "breakSoFar": "Pause: {time}",
+    "breakOver": "Pause: {time} (über 1 h)"
   },
   "officeAdmin": {
     "fixTitle": "Jemanden ein- oder ausstempeln",

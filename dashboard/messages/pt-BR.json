@@ -1127,8 +1127,8 @@
       "office_checkin": "{outside, select, true {No escritório ou trabalhando fora? Toque para registrar.} other {No escritório? Toque para registrar.}}",
       "office_checkout": "Vai sair? Registre a saída no Dock antes de ir — senão hoje conta 0 h.",
       "office_outside_check": "Ainda trabalhando fora ({title})? Toque para confirmar — sem resposta em 30 min, termina.",
-      "office_midday": "{late, select, true {Ainda no Dock? Se você saiu, registre a saída.} other {Se você saiu, registre a saída. Vai comer? Toque em “Vou comer” (máx. 1 h).}}",
-      "office_lunch_end": "Volte ao Dock até {due} e toque em “Estou no escritório”. Pausas mais longas aparecem no calendário da equipe."
+      "office_midday": "{late, select, true {Ainda no Dock? Se você saiu, toque em “Estou saindo”.} other {Se você saiu, toque em “Estou saindo”. Vai comer ou sair um pouco? Toque em “Pausa”.}}",
+      "office_lunch_end": "Sua pausa já tem quase 1 hora. De volta ao Dock? Toque em “Voltei”."
     },
     "popupTitle": "Nova tarefa para você",
     "popupDue": "Prazo: {date}",
@@ -1238,15 +1238,15 @@
       "atDockToday": "{hours} no Dock hoje",
       "st": {
         "in": "No Dock desde {time}",
-        "lunch": "Almoçando · volta até {time}",
+        "lunch": "Em pausa desde {time}",
         "outside": "Fora desde {time} · {note}",
         "left": "Saiu às {time}",
         "none": "Não está",
         "away": "Ausente até {time} · {note}",
-        "lunchOver": "Almoçando · {time} até agora (mais de 1 h)"
+        "lunchOver": "Em pausa · {time} até agora (mais de 1 h)"
       },
       "allDay": "o dia todo",
-      "eating": "Almoçando"
+      "eating": "Pausa"
     }
   },
   "report": {
@@ -3252,7 +3252,7 @@
       "office_checkout": "📍 Registrar saída",
       "office_outside_check": "📍 Trabalhando fora",
       "office_midday": "📍 Ainda no escritório?",
-      "office_lunch_end": "🍽️ O almoço acaba logo"
+      "office_lunch_end": "⏸️ Pausa de quase 1 h"
     }
   },
   "strikes": {
@@ -3483,8 +3483,8 @@
     "inSince": "Você está no escritório desde {time}.",
     "outsideSince": "Trabalhando fora desde {time}: {note}",
     "weekend": "O registro funciona de segunda a sexta.",
-    "atOffice": "Estou no escritório",
-    "checkOut": "Registrar saída",
+    "atOffice": "Cheguei",
+    "checkOut": "Estou saindo",
     "farWarn": "Você está a {m} m do Dock. Registrar a saída aqui deixa este trecho com 0 h.",
     "farAnyway": "Registrar mesmo assim (0 h)",
     "still": "Ainda trabalhando fora",
@@ -3519,16 +3519,17 @@
       "phone-only": "Registre pelo celular.",
       "no-note": "Escreva primeiro o que está fazendo.",
       "error": "Algo deu errado. Tente de novo.",
-      "lunch": "Bom almoço! Volte ao Dock até {time} e toque em “Estou no escritório”.",
-      "lunch-far": "Você está a {m} m do Dock. Toque em “Vou comer” antes de sair do Dock — daqui só funciona registrar a saída (0 h).",
+      "lunch": "Em pausa ✓ — seu dia continua quando você voltar ao Dock.",
+      "lunch-far": "Você está a {m} m do Dock. Toque em Pausa antes de sair do Dock — daqui só funciona “Estou saindo” (0 h).",
       "too-far-outside": "Você está a {m} m do Dock. Trabalhando fora? Escreva abaixo o que está fazendo — o emet salva este lugar exato.",
       "closed": "O dia fechou às 21:00. Até amanhã."
     },
-    "lunch": "Vou comer (máx. 1 h)",
-    "lunchUntil": "Almoçando — volte ao Dock e registre a entrada até {time}.",
-    "r5": "Às 14:00 e 17:00 o emet pergunta se você ainda está aqui. Vai comer? Toque em “Vou comer” no Dock: até 1 hora, a pausa não conta. Mais de 1 hora aparece como almoço mais longo no calendário da equipe.",
-    "lunchLeft": "de almoço",
-    "lunchOver": "passou da hora"
+    "lunch": "Pausa — saio e volto",
+    "lunchUntil": "Em pausa desde {time}. Toque em “Voltei” no Dock e seu dia continua.",
+    "r5": "Vai sair e voltar (comer, resolver algo)? Toque em “Pausa” no Dock. De volta ao Dock, toque em “Voltei” e seu dia continua. Pausas de mais de 1 hora aparecem em vermelho no calendário da equipe.",
+    "back": "Voltei",
+    "breakSoFar": "Pausa: {time}",
+    "breakOver": "Pausa: {time} (mais de 1 h)"
   },
   "officeAdmin": {
     "fixTitle": "Registrar entrada ou saída de alguém",

@@ -182,7 +182,7 @@ export default async function TodayPage() {
           : l?.lunch_until && l.left_at && l.left_at >= dayFrom && now < dayClosesAt(now) ? "lunch" // still eating (maybe longer than 1 h)
           : o ? "outside"
           : l?.left_at && l.left_at >= dayFrom ? "left" : awayToday.has(m.id) ? "away" : "none";
-        const since = status === "in" ? madridTime(l!.arrived_at) : status === "lunch" ? (now > Date.parse(l!.lunch_until!) ? hm(now - Date.parse(l!.left_at!)) : madridTime(l!.lunch_until!)) : status === "outside" ? madridTime(o!.started_at)
+        const since = status === "in" ? madridTime(l!.arrived_at) : status === "lunch" ? (now > Date.parse(l!.lunch_until!) ? hm(now - Date.parse(l!.left_at!)) : madridTime(l!.left_at!)) : status === "outside" ? madridTime(o!.started_at)
           : status === "left" ? madridTime(l!.left_at!) : status === "away" ? fmtDay(awayToday.get(m.id)!.to_day) : null;
         const s = seen.get(m.id);
         const over = status === "lunch" && now > Date.parse(l!.lunch_until!);

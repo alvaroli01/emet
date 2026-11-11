@@ -3,13 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Briefcase, ChevronRight, Loader2, LogOut, MapPin, Utensils } from "lucide-react";
+import { Briefcase, ChevronRight, Loader2, LogOut, MapPin, Pause } from "lucide-react";
 
 type State = { kind: "none" } | { kind: "in"; since: string; at: string } | { kind: "lunch"; since: string; at: string } | { kind: "outside"; since: string; at: string; note: string };
 type Action = "in" | "out" | "lunch" | "outside" | "still" | "done";
 
 /** The page a check-in notification opens: one tap reads the phone's position and emet decides (see /api/office/tap). */
-export function OfficeTap({ state, workday, outsideDay, go }: { state: State; workday: boolean; outsideDay: boolean; go?: string }) {
+export function OfficeTap({ state, doneMs, workday, outsideDay, go }: { state: State; doneMs: number; workday: boolean; outsideDay: boolean; go?: string }) {
   const t = useTranslations("officeTap");
   const router = useRouter();
   const [busy, setBusy] = useState<Action | null>(null);
@@ -48,9 +48,13 @@ export function OfficeTap({ state, workday, outsideDay, go }: { state: State; wo
   // Live clock: time at Dock / outside so far, or minutes of lunch left
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => { const id = setInterval(() => setNow(Date.now()), 15_000); return () => clearInterval(id); }, []);
-  const over = state.kind === "lunch" && now > Date.parse(state.at); // eating longer than the hour: counts up in red
-  const mins = state.kind === "none" ? 0 : Math.round(Math.abs(state.kind === "lunch" ? Date.parse(state.at) - now : now - Date.parse(state.at)) / 60e3);
-  const clock = `${over ? "+" : ""}${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, "0")}`;
+  // The big clock = my whole day at Dock (finished stretches + the current one), so a pause never restarts it.
+  // Paused: the day is frozen and a small break timer runs (over 1 h it turns red).
+  const hmm = (ms: number) => { const m = Math.max(0, Math.round(ms / 60e3)); return `${Math.floor(m / 60)}:${String(m % 60).padStart(2, "0")}`; };
+  const dayMs = doneMs + (state.kind === "in" ? now - Date.parse(state.at) : 0);
+  const breakMs = state.kind === "lunch" ? now - Date.parse(state.at) : 0;
+  const over = breakMs > 3600e3;
+  const clock = state.kind === "outside" ? hmm(now - Date.parse(state.at)) : hmm(dayMs);
   const tone = over ? "ring-bad text-bad-text" : { none: "ring-line text-ink", in: "ring-ok text-ok-text", lunch: "ring-warn text-warn-text", outside: "ring-brand text-ink" }[state.kind];
   const primary: Action | null = !workday ? null : state.kind === "in" ? "out" : state.kind === "outside" ? "still" : "in";
   const label = state.kind === "in" ? t("inSince", { time: state.since }) : state.kind === "lunch" ? t("lunchUntil", { time: state.since })
@@ -77,13 +81,14 @@ export function OfficeTap({ state, workday, outsideDay, go }: { state: State; wo
           {state.kind === "none" && workday && <span className="absolute inset-0 animate-ping rounded-full ring-2 ring-brand/30 motion-reduce:hidden" />}
           <span className="flex flex-col items-center gap-1">
             {busy && busy === primary ? <Loader2 size={34} className="animate-spin" />
-              : state.kind === "none" ? <MapPin size={38} /> : <span className="readout text-5xl font-semibold tabular-nums tracking-tight">{clock}</span>}
+              : state.kind === "none" && !doneMs ? <MapPin size={38} /> : <span className="readout text-5xl font-semibold tabular-nums tracking-tight">{clock}</span>}
             <span className="max-w-40 text-center text-sm font-semibold leading-tight">
-              {state.kind === "none" ? (workday ? t("atOffice") : t("weekend")) : state.kind === "in" ? t("checkOut") : state.kind === "outside" ? t("still") : over ? t("lunchOver") : t("lunchLeft")}
+              {state.kind === "none" ? (workday ? t(doneMs ? "back" : "atOffice") : t("weekend")) : state.kind === "in" ? t("checkOut") : state.kind === "outside" ? t("still") : t("back")}
             </span>
           </span>
         </button>
         <p className="mt-5 max-w-72 text-center text-sm text-muted">{label}</p>
+        {state.kind === "lunch" && <p className={`mt-1 text-sm font-medium tabular-nums ${over ? "text-bad-text" : "text-warn-text"}`}>{t(over ? "breakOver" : "breakSoFar", { time: hmm(breakMs) })}</p>}
       </div>
 
       {msg && <p className={`mb-4 rounded-2xl px-4 py-3 text-sm ${msg.ok ? "bg-ok/15 text-ok-text" : "bg-bad/10 text-bad-text"}`}>{msg.text}</p>}
@@ -96,8 +101,7 @@ export function OfficeTap({ state, workday, outsideDay, go }: { state: State; wo
 
       {workday && (
         <div className="space-y-2">
-          {state.kind === "in" && row("lunch", <Utensils size={15} />, t("lunch"))}
-          {state.kind === "lunch" && row("in", <MapPin size={15} />, t("atOffice"))}
+          {state.kind === "in" && row("lunch", <Pause size={15} />, t("lunch"))}
           {state.kind === "outside" && <>{row("in", <MapPin size={15} />, t("atOffice"))}{row("done", <LogOut size={15} />, t("done"))}</>}
           {state.kind === "none" && outsideDay && (
             <div className="space-y-2 rounded-2xl bg-surface-2 p-4">

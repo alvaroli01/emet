@@ -1127,8 +1127,8 @@
       "office_checkin": "{outside, select, true {¿En la oficina o trabajando fuera? Toca para fichar.} other {¿En la oficina? Toca para fichar.}}",
       "office_checkout": "¿Te vas? Ficha la salida en Dock antes de irte; si no, hoy cuenta 0 h.",
       "office_outside_check": "¿Sigues trabajando fuera ({title})? Toca para confirmar; si no respondes en 30 min, se cierra.",
-      "office_midday": "{late, select, true {¿Sigues en Dock? Si te has ido, ficha la salida.} other {Si te has ido, ficha la salida. ¿Vas a comer? Pulsa “Voy a comer” (máx. 1 h).}}",
-      "office_lunch_end": "Vuelve a Dock antes de las {due} y pulsa “Estoy en la oficina”. Los descansos más largos se ven en el calendario del equipo."
+      "office_midday": "{late, select, true {¿Sigues en Dock? Si te has ido, pulsa “Me voy”.} other {Si te has ido, pulsa “Me voy”. ¿Vas a comer o sales un rato? Pulsa “Pausa”.}}",
+      "office_lunch_end": "Tu pausa ya casi es de 1 hora. ¿De vuelta en Dock? Pulsa “He vuelto”."
     },
     "popupTitle": "Nueva tarea para ti",
     "popupDue": "Para el {date}",
@@ -1238,15 +1238,15 @@
       "atDockToday": "{hours} en Dock hoy",
       "st": {
         "in": "En Dock desde las {time}",
-        "lunch": "Comiendo · vuelve a las {time}",
+        "lunch": "En pausa desde las {time}",
         "outside": "Fuera desde las {time} · {note}",
         "left": "Se fue a las {time}",
         "none": "No está",
         "away": "Ausente hasta {time} · {note}",
-        "lunchOver": "Comiendo · {time} (más de 1 h)"
+        "lunchOver": "En pausa · {time} (más de 1 h)"
       },
       "allDay": "todo el día",
-      "eating": "Comiendo"
+      "eating": "Pausa"
     }
   },
   "report": {
@@ -3252,7 +3252,7 @@
       "office_checkout": "📍 Fichar salida",
       "office_outside_check": "📍 Trabajando fuera",
       "office_midday": "📍 ¿Sigues en la oficina?",
-      "office_lunch_end": "🍽️ La comida termina pronto"
+      "office_lunch_end": "⏸️ Pausa de casi 1 h"
     }
   },
   "strikes": {
@@ -3483,8 +3483,8 @@
     "inSince": "Estás en la oficina desde las {time}.",
     "outsideSince": "Trabajando fuera desde las {time}: {note}",
     "weekend": "El fichaje funciona de lunes a viernes.",
-    "atOffice": "Estoy en la oficina",
-    "checkOut": "Fichar salida",
+    "atOffice": "Estoy dentro",
+    "checkOut": "Me voy",
     "farWarn": "Estás a {m} m de Dock. Si fichas la salida aquí, este tramo cuenta 0 h.",
     "farAnyway": "Fichar salida igualmente (0 h)",
     "still": "Sigo trabajando fuera",
@@ -3519,16 +3519,17 @@
       "phone-only": "Ficha desde tu móvil.",
       "no-note": "Escribe primero qué estás haciendo.",
       "error": "Algo ha fallado. Inténtalo otra vez.",
-      "lunch": "¡Que aproveche! Vuelve a Dock antes de las {time} y pulsa “Estoy en la oficina”.",
-      "lunch-far": "Estás a {m} m de Dock. Pulsa “Voy a comer” antes de salir de Dock; desde aquí solo puedes fichar la salida (0 h).",
+      "lunch": "En pausa ✓ — tu día sigue cuando vuelvas a Dock.",
+      "lunch-far": "Estás a {m} m de Dock. Pulsa Pausa antes de salir de Dock; desde aquí solo funciona “Me voy” (0 h).",
       "too-far-outside": "Estás a {m} m de Dock. ¿Trabajas fuera? Escribe abajo qué estás haciendo: emet guarda este sitio exacto.",
       "closed": "El día se cerró a las 21:00. Hasta mañana."
     },
-    "lunch": "Voy a comer (máx. 1 h)",
-    "lunchUntil": "Comiendo: vuelve a Dock y ficha antes de las {time}.",
-    "r5": "A las 14:00 y a las 17:00 emet pregunta si sigues aquí. ¿Vas a comer? Pulsa “Voy a comer” en Dock: hasta 1 hora, el descanso no cuenta. Si pasa de 1 hora, se ve como una comida más larga en el calendario del equipo.",
-    "lunchLeft": "de comida",
-    "lunchOver": "más de la hora"
+    "lunch": "Pausa — salgo y vuelvo",
+    "lunchUntil": "En pausa desde las {time}. Pulsa “He vuelto” en Dock y tu día sigue contando.",
+    "r5": "¿Sales y vuelves (comer, un recado)? Pulsa “Pausa” en Dock. Al volver a Dock, pulsa “He vuelto” y tu día sigue. Las pausas de más de 1 hora se ven en rojo en el calendario del equipo.",
+    "back": "He vuelto",
+    "breakSoFar": "Pausa: {time}",
+    "breakOver": "Pausa: {time} (más de 1 h)"
   },
   "officeAdmin": {
     "fixTitle": "Fichar entrada o salida de alguien",

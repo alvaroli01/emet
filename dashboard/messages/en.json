@@ -1127,8 +1127,8 @@
       "office_checkin": "{outside, select, true {At the office or working outside? Tap to check in.} other {At the office? Tap to check in.}}",
       "office_checkout": "Leaving? Check out at Dock before you go — otherwise today counts 0 h.",
       "office_outside_check": "Still working outside ({title})? Tap to confirm — no answer in 30 min ends it.",
-      "office_midday": "{late, select, true {Still at Dock? If you've left, check out.} other {If you've left, check out. Going to eat? Tap “Going to eat” (max 1 h).}}",
-      "office_lunch_end": "Back at Dock by {due} and tap “I'm at the office”. Longer breaks show in the team calendar."
+      "office_midday": "{late, select, true {Still at Dock? If you've left, tap “I'm out”.} other {If you've left, tap “I'm out”. Going to eat or out for a bit? Tap “Pause”.}}",
+      "office_lunch_end": "Your break is almost 1 hour. Back at Dock? Tap “I'm back”."
     },
     "popupTitle": "New task for you",
     "popupDue": "Due {date}",
@@ -1238,15 +1238,15 @@
       "atDockToday": "{hours} at Dock today",
       "st": {
         "in": "At Dock since {time}",
-        "lunch": "Eating · back by {time}",
+        "lunch": "On a break since {time}",
         "outside": "Outside since {time} · {note}",
         "left": "Left at {time}",
         "none": "Not in",
         "away": "Away until {time} · {note}",
-        "lunchOver": "Eating · {time} so far (over 1 h)"
+        "lunchOver": "On a break · {time} so far (over 1 h)"
       },
       "allDay": "all day",
-      "eating": "Eating"
+      "eating": "Break"
     }
   },
   "report": {
@@ -3252,7 +3252,7 @@
       "office_checkout": "📍 Check out",
       "office_outside_check": "📍 Working outside",
       "office_midday": "📍 Still at the office?",
-      "office_lunch_end": "🍽️ Lunch ends soon"
+      "office_lunch_end": "⏸️ Break almost 1 h"
     }
   },
   "strikes": {
@@ -3483,8 +3483,8 @@
     "inSince": "You're in the office since {time}.",
     "outsideSince": "Working outside since {time}: {note}",
     "weekend": "Check-in runs Monday to Friday.",
-    "atOffice": "I'm at the office",
-    "checkOut": "Check out",
+    "atOffice": "I'm in",
+    "checkOut": "I'm out",
     "farWarn": "You're {m} m from Dock. Checking out here makes this stretch count 0 h.",
     "farAnyway": "Check out anyway (0 h)",
     "still": "Still working outside",
@@ -3519,16 +3519,17 @@
       "phone-only": "Check in from your phone.",
       "no-note": "Write what you're doing first.",
       "error": "Something went wrong. Try again.",
-      "lunch": "Enjoy! Back at Dock by {time} and tap “I'm at the office”.",
-      "lunch-far": "You're {m} m from Dock. Tap “Going to eat” before you leave Dock — from here only Check out works (0 h).",
+      "lunch": "Paused ✓ — your day carries on when you're back at Dock.",
+      "lunch-far": "You're {m} m from Dock. Tap Pause before you leave Dock — from here only “I'm out” works (0 h).",
       "too-far-outside": "You're {m} m from Dock. Working outside? Write what you're doing below — emet saves this exact spot.",
       "closed": "The day closed at 21:00. See you tomorrow."
     },
-    "lunch": "Going to eat (max 1 h)",
-    "lunchUntil": "Eating — be back at Dock and check in by {time}.",
-    "r5": "At 14:00 and 17:00 emet asks if you're still here. Going to eat? Tap “Going to eat” at Dock: up to 1 hour, the break doesn't count. Longer than 1 hour shows as a longer lunch in the team calendar.",
-    "lunchLeft": "left of lunch",
-    "lunchOver": "over the hour"
+    "lunch": "Pause — going out, back later",
+    "lunchUntil": "Paused since {time}. Tap “I'm back” at Dock and your day carries on.",
+    "r5": "Going out and coming back (eating, an errand)? Tap “Pause” at Dock. Back at Dock, tap “I'm back” and your day carries on. Breaks over 1 hour show in red in the team calendar.",
+    "back": "I'm back",
+    "breakSoFar": "Break: {time}",
+    "breakOver": "Break: {time} (over 1 h)"
   },
   "officeAdmin": {
     "fixTitle": "Check someone in or out",
