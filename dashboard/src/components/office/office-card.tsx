@@ -104,7 +104,7 @@ export function OfficeCard({ d }: { d: OfficeData }) {
                       </span>
                       <span className={`text-xs tabular-nums ${x.zero ? "font-medium text-bad-text" : "text-muted"}`}>{x.zero ? t("zero") : x.hours}</span>
                       {x.start && <a href={x.start} target="_blank" rel="noreferrer" className="text-xs text-muted underline underline-offset-2 hover:text-ink"><MapPin size={11} className="inline" /> {t("startPlace")}</a>}
-                      {x.end && <a href={x.end} target="_blank" rel="noreferrer" className="text-xs text-muted underline underline-offset-2 hover:text-ink"><MapPin size={11} className="inline" /> {t("lastPlace")}</a>}
+                      {x.end && <a href={x.end} target="_blank" rel="noreferrer" className={`text-xs underline underline-offset-2 hover:text-ink ${x.kind === "office" ? "text-warn-text" : "text-muted"}`}><MapPin size={11} className="inline" /> {t(x.kind === "office" ? "outPlace" : "lastPlace")}</a>}
                     </li>
                   ))}
                 </ul>

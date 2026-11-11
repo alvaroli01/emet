@@ -66,7 +66,8 @@ export default async function TodayPage() {
       .eq("card_assignees.user_id", me.id).gte("due_at", `${week}T00:00:00Z`).lte("due_at", `${weekEnd}T23:59:59Z`),
     // Office check-ins this week (+ anyone still in from before Monday)
     supabase.from("office_place").select("lat, lng").maybeSingle<{ lat: number; lng: number }>(),
-    supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot, lunch_until").or(`arrived_at.gte.${madridMidnight(week)},left_at.is.null`).returns<(Visit & { lunch_until: string | null })[]>(),
+    supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot, lunch_until, out_lat, out_lng").or(`arrived_at.gte.${madridMidnight(week)},left_at.is.null`)
+      .returns<(Visit & { lunch_until: string | null; out_lat: number | null; out_lng: number | null })[]>(),
   ]);
   const [{ data: seenAll }, { data: absences }] = await Promise.all([
     supabase.from("presence").select("user_id, last_seen_at").returns<{ user_id: string; last_seen_at: string }[]>(),
@@ -201,7 +202,8 @@ export default async function TodayPage() {
       const rows = [
         ...vs.filter((v) => who.has(v.user_id) && v.arrived_at >= madridMidnight(week)).map((v) => ({
           id: v.id, at: v.arrived_at, day: day(v.arrived_at), kind: "office" as const, name: who.get(v.user_id)!.full_name,
-          from: madridTime(v.arrived_at), to: v.left_at && !v.forgot ? madridTime(v.left_at) : null, hours: hm(visitMs(v, now)), zero: v.forgot, note: null, start: null, end: null })),
+          from: madridTime(v.arrived_at), to: v.left_at && !v.forgot ? madridTime(v.left_at) : null, hours: hm(visitMs(v, now)), zero: v.forgot, note: null, start: null,
+          end: v.out_lat !== null && v.out_lng !== null ? map({ lat: v.out_lat, lng: v.out_lng }) : null })), // checked out away from Dock
         ...(outside ?? []).filter((o) => who.has(o.user_id)).map((o) => ({
           id: o.id, at: o.started_at, day: day(o.started_at), kind: "outside" as const, name: who.get(o.user_id)!.full_name,
           from: madridTime(o.started_at), to: o.ended_at ? madridTime(o.ended_at) : null,

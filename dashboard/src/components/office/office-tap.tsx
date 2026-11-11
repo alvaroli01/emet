@@ -29,7 +29,7 @@ export function OfficeTap({ state, doneMs, workday, outsideDay, go }: { state: S
       const s = j?.status ?? "error";
       if (s === "far") { setFar(j?.distance ?? 0); return; }
       if (s === "too-far-outside") setTimeout(() => document.getElementById("outside-note")?.focus(), 50); // Mon/Wed/Fri away from Dock: say what you're doing
-      const good = ["in", "out", "lunch", "outside", "outside-still", "outside-done", "already-in"].includes(s);
+      const good = ["in", "out", "out-away", "lunch", "outside", "outside-still", "outside-done", "already-in"].includes(s);
       setMsg({ ok: good, text: t.has(`s.${s}`) ? t(`s.${s}`, { m: j?.distance ?? 0, time: j?.time ?? "" }) : t("s.error") });
       router.refresh();
     }, (e) => { setBusy(null); setMsg({ ok: false, text: e.code === e.PERMISSION_DENIED ? t("blocked") : t("noLocation") }); },
@@ -97,6 +97,7 @@ export function OfficeTap({ state, doneMs, workday, outsideDay, go }: { state: S
         <div className="mb-4 space-y-2 rounded-2xl bg-bad/10 p-4 text-sm">
           <p className="text-bad-text">{t("farWarn", { m: far })}</p>
           {row("lunch", <Utensils size={15} />, t("outEating"), { away: true })}
+          {row("out", <LogOut size={15} />, t("outDone"))}
           {outsideDay && <p className="text-xs text-muted">{t("outWorkingHint")}</p>}
         </div>
       )}

@@ -7,7 +7,7 @@ import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, i
  * One-tap office check-in (Alvaro, 2026-11-11; replaces the phone apps): the 9:00 notification opens /office, which sends
  * the phone's position with one of these actions. The server decides from the real position:
  * - in: within 30 m of Dock (up to 20 m GPS slack in the person's favour). Also ends a working-outside stretch.
- * - out: only at Dock (within 80 m). Never checked out by 21:00 = that stretch counts 0 h (no time left running).
+ * - out: anywhere; away from Dock the exact spot is kept for the team calendar. Never checked out by 21:00 = 0 h.
  * - lunch: Pause at Dock / "I'm out eating" anywhere — the time stops and carries on when they check in again at Dock.
  * - outside while checked in ("I'm out working", Mon/Wed/Fri): the Dock stretch ends now and the outside one starts here.
  * - outside: Mon/Wed/Fri only, with a note — logged with the position for everyone to see (the outside calendar).
@@ -54,10 +54,10 @@ export async function POST(request: NextRequest) {
   }
   if (action === "out") {
     if (!isIn) return NextResponse.json({ status: "not-in", distance: dist });
-    // "I'm out" only works at Dock (Alvaro, 2026-11-11). Away from Dock the only choices are "out eating" or "out working".
-    if (!checkoutCounts(dist, accuracy)) return NextResponse.json({ status: "far", distance: dist });
-    await db.from("office_visits").update({ left_at: place.at }).eq("id", open!.id);
-    return NextResponse.json({ status: "out", distance: dist });
+    // "I'm out" works anywhere (Alvaro, 2026-11-11): away from Dock the exact spot is kept and shown in the team calendar
+    const atDock = checkoutCounts(dist, accuracy);
+    await db.from("office_visits").update({ left_at: place.at, out_distance_m: dist, ...(atDock ? {} : { out_lat: place.lat, out_lng: place.lng }) }).eq("id", open!.id);
+    return NextResponse.json({ status: atDock ? "out" : "out-away", distance: dist });
   }
   if (action === "lunch") {
     if (!isIn) return NextResponse.json({ status: "not-in", distance: dist });

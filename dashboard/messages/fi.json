@@ -1246,7 +1246,8 @@
         "lunchOver": "Tauolla · {time} tähän mennessä (yli 1 h)"
       },
       "allDay": "koko päivän",
-      "eating": "Tauko"
+      "eating": "Tauko",
+      "outPlace": "leimasi ulos tässä (ei Dockissa)"
     }
   },
   "report": {
@@ -3455,7 +3456,7 @@
     "rulesTitle": "Näin se toimii",
     "r1": "Klo 9:00 (ma–pe) emet lähettää ilmoituksen: yksi napautus leimaa sinut sisään, vain jos puhelimesi on Dockissa (alle 30 m).",
     "r2": "Lähteminen keskeyttää päiväsi; palaa ennen klo 21:00 ja aika jatkuu. Poissaoloaika ei koskaan lasketa. Kaikki näkyy tiimin kalenterissa kohdassa Tänään.",
-    "r3": "Napauta ”Lähden” ennen kuin lähdet Dockista — se toimii vain siellä. Klo 21:00 päivä suljetaan: vielä sisällä = jakso on 0 h.",
+    "r3": "Napauta ”Lähden”, kun lopetat — Dockissa tai missä vain (muualla paikka näkyy tiimin kalenterissa). Klo 21:00 päivä suljetaan: vielä sisällä = 0 h.",
     "r4": "Tiistaisin ja torstaisin, ensimmäinen saapuminen: klo 9:10:59 jälkeen = 3 € sakko; klo 9:29:59 jälkeen = 3 € + 1 strike. 3 strikea neljänneksessä = 75 € rangaistus.",
     "r5": "Teitkö sinä päivänä töitä muualla? Kerro leaderille: hän voi poistaa sakon tai striken.",
     "setup": "Leimaa sisään / ulos →"
@@ -3485,7 +3486,7 @@
     "weekend": "Leimaus toimii maanantaista perjantaihin.",
     "atOffice": "Olen paikalla",
     "checkOut": "Lähden",
-    "farWarn": "Olet {m} m:n päässä Dockista. ”Olen paikalla”, ”Tauko” ja ”Lähden” toimivat vain Dockissa. Oletko syömässä vai töissä ulkona?",
+    "farWarn": "Olet {m} m:n päässä Dockista. ”Olen paikalla” ja ”Tauko” toimivat vain Dockissa. Syömässä, töissä ulkona vai valmis tältä päivältä?",
     "still": "Vielä töissä ulkona",
     "done": "Valmis tältä päivältä",
     "outsideTitle": "Oletko tänään töissä ulkona?",
@@ -3496,7 +3497,7 @@
     "blocked": "Sijainti on estetty emetiltä. Salli se puhelimen asetuksista (Safari/Chrome → Sijainti) ja yritä uudelleen.",
     "rulesTitle": "Näin se toimii",
     "r1": "Sisään voi leimata vain Dockissa (alle 30 m). Tiistain ja torstain myöhästymismaksut ovat yhä voimassa.",
-    "r2": "”Olen paikalla”, ”Tauko” ja ”Lähden” toimivat vain Dockissa. Dockin ulkopuolella voit vain kertoa olevasi syömässä tai töissä ulkona. Klo 21:00 päivä suljetaan: vielä sisällä = jakso on 0 h.",
+    "r2": "”Olen paikalla” ja ”Tauko” toimivat vain Dockissa. ”Lähden” toimii missä vain — Dockin ulkopuolella paikka näkyy tiimin kalenterissa. Klo 21:00 päivä suljetaan: vielä sisällä = jakso on 0 h.",
     "r3": "Maanantaina, keskiviikkona ja perjantaina voit työskennellä ulkona: kirjoita mitä teet; sijaintisi tallennetaan alussa, 2 tunnin välein ja lopussa.",
     "r4": "Jos et vastaa kysymykseen ”Vieläkö töissä ulkona?” 30 minuutissa, se päättyy viimeiseen napautukseesi.",
     "s": {
@@ -3519,7 +3520,8 @@
       "error": "Jokin meni vikaan. Yritä uudelleen.",
       "lunch": "Tauolla ✓ — päiväsi jatkuu, kun palaat Dockiin.",
       "too-far-outside": "Olet {m} m:n päässä Dockista. Oletko töissä ulkona? Kirjoita alle mitä teet — emet tallentaa tämän tarkan paikan.",
-      "closed": "Päivä suljettiin klo 21:00. Nähdään huomenna."
+      "closed": "Päivä suljettiin klo 21:00. Nähdään huomenna.",
+      "out-away": "Leimattu ulos ✓ — et ollut Dockissa, joten tämä paikka näkyy tiimin kalenterissa."
     },
     "lunch": "Tauko — käyn ulkona ja palaan",
     "lunchUntil": "Tauolla klo {time} alkaen. Napauta Dockissa ”Olen takaisin”, niin päiväsi jatkuu.",
@@ -3528,7 +3530,8 @@
     "breakSoFar": "Tauko: {time}",
     "breakOver": "Tauko: {time} (yli 1 h)",
     "outEating": "Olen syömässä",
-    "outWorkingHint": "Töissä ulkona (ma/ke/pe)? Kirjoita alle mitä teet — emet tallentaa tämän tarkan paikan."
+    "outWorkingHint": "Töissä ulkona (ma/ke/pe)? Kirjoita alle mitä teet — emet tallentaa tämän tarkan paikan.",
+    "outDone": "Lähden — valmis tältä päivältä"
   },
   "officeAdmin": {
     "fixTitle": "Leimaa joku sisään tai ulos",

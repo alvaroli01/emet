@@ -1246,7 +1246,8 @@
         "lunchOver": "In Pause · {time} bisher (über 1 h)"
       },
       "allDay": "ganztägig",
-      "eating": "Pause"
+      "eating": "Pause",
+      "outPlace": "hier ausgestempelt (nicht im Dock)"
     }
   },
   "report": {
@@ -3455,7 +3456,7 @@
     "rulesTitle": "So funktioniert's",
     "r1": "Um 9:00 (Mo–Fr) schickt emet eine Benachrichtigung: ein Tipp stempelt dich ein, nur wenn dein Handy im Dock ist (unter 30 m).",
     "r2": "Gehen pausiert deinen Tag; zurück vor 21:00 und die Zeit läuft weiter. Zeit weg zählt nie. Alles erscheint im Team-Kalender unter Heute.",
-    "r3": "Tippe „Ich gehe“, bevor du das Dock verlässt — es geht nur dort. Um 21:00 schließt der Tag: noch eingestempelt = dieser Abschnitt zählt 0 h.",
+    "r3": "Tippe „Ich gehe“, wenn du fertig bist — im Dock oder überall (außerhalb erscheint der Ort im Team-Kalender). Um 21:00 schließt der Tag: noch eingestempelt = 0 h.",
     "r4": "Dienstag und Donnerstag, erste Ankunft: nach 9:10:59 = 3 € Strafe; nach 9:29:59 = 3 € + 1 Strike. 3 Strikes im Quartal = die 75-€-Strafe.",
     "r5": "An dem Tag woanders gearbeitet? Sag es einem Leader: er kann die Strafe oder den Strike löschen.",
     "setup": "Ein- / Ausstempeln →"
@@ -3485,7 +3486,7 @@
     "weekend": "Einstempeln geht Montag bis Freitag.",
     "atOffice": "Ich bin da",
     "checkOut": "Ich gehe",
-    "farWarn": "Du bist {m} m vom Dock entfernt. „Ich bin da“, „Pause“ und „Ich gehe“ gehen nur im Dock. Bist du beim Essen oder arbeitest du auswärts?",
+    "farWarn": "Du bist {m} m vom Dock entfernt. „Ich bin da“ und „Pause“ gehen nur im Dock. Beim Essen, auswärts arbeiten oder fertig für heute?",
     "still": "Arbeite noch auswärts",
     "done": "Fertig für heute",
     "outsideTitle": "Arbeitest du heute auswärts?",
@@ -3496,7 +3497,7 @@
     "blocked": "Der Standort ist für emet blockiert. Erlaube ihn in den Handy-Einstellungen (Safari/Chrome → Standort) und versuch es erneut.",
     "rulesTitle": "So funktioniert es",
     "r1": "Einstempeln geht nur im Dock (unter 30 m). Verspätungsstrafen am Dienstag und Donnerstag gelten weiter.",
-    "r2": "„Ich bin da“, „Pause“ und „Ich gehe“ gehen nur im Dock. Außerhalb kannst du nur sagen, dass du beim Essen bist oder auswärts arbeitest. Um 21:00 schließt der Tag: noch eingestempelt = dieser Abschnitt zählt 0 h.",
+    "r2": "„Ich bin da“ und „Pause“ gehen nur im Dock. „Ich gehe“ geht überall — außerhalb des Docks erscheint der Ort im Team-Kalender. Um 21:00 schließt der Tag: noch eingestempelt = dieser Abschnitt zählt 0 h.",
     "r3": "Montag, Mittwoch und Freitag kannst du auswärts arbeiten: schreib, was du machst; dein Standort wird beim Start, alle 2 Stunden und am Ende gespeichert.",
     "r4": "Keine Antwort auf „Arbeitest du noch auswärts?“ in 30 Minuten beendet es beim letzten Tipp.",
     "s": {
@@ -3519,7 +3520,8 @@
       "error": "Etwas ist schiefgelaufen. Versuch es erneut.",
       "lunch": "Pause ✓ — dein Tag läuft weiter, wenn du zurück im Dock bist.",
       "too-far-outside": "Du bist {m} m vom Dock entfernt. Arbeitest du auswärts? Schreib unten, was du machst — emet speichert genau diesen Ort.",
-      "closed": "Der Tag wurde um 21:00 geschlossen. Bis morgen."
+      "closed": "Der Tag wurde um 21:00 geschlossen. Bis morgen.",
+      "out-away": "Ausgestempelt ✓ — du warst nicht im Dock, daher erscheint dieser Ort im Team-Kalender."
     },
     "lunch": "Pause — kurz weg, komme wieder",
     "lunchUntil": "Pause seit {time}. Tippe im Dock auf „Ich bin zurück“ und dein Tag läuft weiter.",
@@ -3528,7 +3530,8 @@
     "breakSoFar": "Pause: {time}",
     "breakOver": "Pause: {time} (über 1 h)",
     "outEating": "Ich bin beim Essen",
-    "outWorkingHint": "Arbeitest du auswärts (Mo/Mi/Fr)? Schreib unten, was du machst — emet speichert genau diesen Ort."
+    "outWorkingHint": "Arbeitest du auswärts (Mo/Mi/Fr)? Schreib unten, was du machst — emet speichert genau diesen Ort.",
+    "outDone": "Ich gehe — fertig für heute"
   },
   "officeAdmin": {
     "fixTitle": "Jemanden ein- oder ausstempeln",

@@ -1246,7 +1246,8 @@
         "lunchOver": "En pause · {time} jusqu’ici (plus d’1 h)"
       },
       "allDay": "toute la journée",
-      "eating": "Pause"
+      "eating": "Pause",
+      "outPlace": "départ pointé ici (hors du Dock)"
     }
   },
   "report": {
@@ -3455,7 +3456,7 @@
     "rulesTitle": "Comment ça marche",
     "r1": "À 9:00 (lun–ven) emet envoie une notification : un appui te pointe, seulement si ton téléphone est au Dock (à moins de 30 m).",
     "r2": "Partir met ta journée en pause ; reviens avant 21:00 et le temps continue. Le temps d’absence ne compte jamais. Tout apparaît dans le calendrier de l’équipe sur Aujourd’hui.",
-    "r3": "Appuie sur « Je pars » avant de quitter le Dock — ça ne marche que là. À 21:00 la journée se clôture : toujours pointé = 0 h pour cette période.",
+    "r3": "Appuie sur « Je pars » quand tu as fini — au Dock ou ailleurs (hors du Dock l’endroit apparaît dans le calendrier de l’équipe). À 21:00 la journée se clôture : toujours pointé = 0 h.",
     "r4": "Mardi et jeudi, première arrivée : après 9h10:59 = amende de 3 € ; après 9h29:59 = 3 € + 1 strike. 3 strikes dans le trimestre = la punition de 75 €.",
     "r5": "Tu travailles ailleurs ce jour-là ? Dis-le à un leader : il peut supprimer l’amende ou le strike.",
     "setup": "Pointer arrivée / départ →"
@@ -3485,7 +3486,7 @@
     "weekend": "Le pointage fonctionne du lundi au vendredi.",
     "atOffice": "J’arrive",
     "checkOut": "Je pars",
-    "farWarn": "Tu es à {m} m du Dock. « J’arrive », « Pause » et « Je pars » ne marchent qu’au Dock. Tu es dehors pour manger ou pour travailler ?",
+    "farWarn": "Tu es à {m} m du Dock. « J’arrive » et « Pause » ne marchent qu’au Dock. Dehors pour manger, pour travailler, ou fini pour aujourd’hui ?",
     "still": "Toujours en extérieur",
     "done": "Fini pour aujourd’hui",
     "outsideTitle": "Tu travailles dehors aujourd’hui ?",
@@ -3496,7 +3497,7 @@
     "blocked": "La localisation est bloquée pour emet. Autorise-la dans les réglages du téléphone (Safari/Chrome → Localisation) et réessaie.",
     "rulesTitle": "Comment ça marche",
     "r1": "Le pointage ne marche qu’au Dock (à moins de 30 m). Les amendes de retard du mardi et jeudi restent.",
-    "r2": "« J’arrive », « Pause » et « Je pars » ne marchent qu’au Dock. Hors du Dock, tu peux seulement dire que tu manges ou que tu travailles dehors. À 21:00 la journée se clôture : toujours pointé = 0 h pour cette période.",
+    "r2": "« J’arrive » et « Pause » ne marchent qu’au Dock. « Je pars » marche partout — hors du Dock, l’endroit apparaît dans le calendrier de l’équipe. À 21:00 la journée se clôture : toujours pointé = 0 h pour cette période.",
     "r3": "Lundi, mercredi et vendredi tu peux travailler dehors : écris ce que tu fais ; ta position est enregistrée au début, toutes les 2 heures et à la fin.",
     "r4": "Sans réponse à « Toujours en extérieur ? » en 30 minutes, ça s’arrête à ton dernier appui.",
     "s": {
@@ -3519,7 +3520,8 @@
       "error": "Un problème est survenu. Réessaie.",
       "lunch": "En pause ✓ — ta journée continue quand tu reviens au Dock.",
       "too-far-outside": "Tu es à {m} m du Dock. Tu travailles dehors ? Écris ci-dessous ce que tu fais — emet enregistre cet endroit exact.",
-      "closed": "La journée a été clôturée à 21:00. À demain."
+      "closed": "La journée a été clôturée à 21:00. À demain.",
+      "out-away": "Départ pointé ✓ — tu n’étais pas au Dock, cet endroit apparaît donc dans le calendrier de l’équipe."
     },
     "lunch": "Pause — je sors et je reviens",
     "lunchUntil": "En pause depuis {time}. Appuie sur « Je suis de retour » au Dock et ta journée continue.",
@@ -3528,7 +3530,8 @@
     "breakSoFar": "Pause : {time}",
     "breakOver": "Pause : {time} (plus d’1 h)",
     "outEating": "Je suis dehors pour manger",
-    "outWorkingHint": "Tu travailles dehors (lun/mer/ven) ? Écris ci-dessous ce que tu fais — emet enregistre cet endroit exact."
+    "outWorkingHint": "Tu travailles dehors (lun/mer/ven) ? Écris ci-dessous ce que tu fais — emet enregistre cet endroit exact.",
+    "outDone": "Je pars — fini pour aujourd’hui"
   },
   "officeAdmin": {
     "fixTitle": "Pointer l’arrivée ou le départ de quelqu’un",
