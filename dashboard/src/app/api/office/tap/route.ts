@@ -1,13 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient as admin } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, isWorkday, isOutsideDay, type Visit } from "@/lib/office";
+import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, isWorkday, isOutsideDay, madridTime, LUNCH_MS, type Visit } from "@/lib/office";
 
 /**
  * One-tap office check-in (Alvaro, 2026-11-11; replaces the phone apps): the 9:00 notification opens /office, which sends
  * the phone's position with one of these actions. The server decides from the real position:
  * - in: within 30 m of Dock (up to 20 m GPS slack in the person's favour). Also ends a working-outside stretch.
  * - out: within 80 m of Dock = a normal check-out; anywhere else = that stretch counts 0 h (no time left running).
+ * - lunch: "going to eat", tapped at Dock — stops the time for at most 1 h; not back at Dock by then = 0 h (office_tick).
  * - outside: Mon/Wed/Fri only, with a note — logged with the position for everyone to see (the outside calendar).
  * - still: "still working outside" (asked every 2 h) — logs the position again. done: ends it (position logged).
  * Phones only: a laptop's location is easy to fake in dev tools.
@@ -56,6 +57,13 @@ export async function POST(request: NextRequest) {
       ? db.from("office_visits").update({ left_at: place.at }).eq("id", open!.id)
       : db.from("office_visits").update({ left_at: place.at, forgot: true }).eq("id", open!.id)); // not at Dock → 0 h
     return NextResponse.json({ status: counts ? "out" : "out-zero", distance: dist });
+  }
+  if (action === "lunch") {
+    if (!isIn) return NextResponse.json({ status: "not-in", distance: dist });
+    if (!checkoutCounts(dist, accuracy)) return NextResponse.json({ status: "lunch-far", distance: dist }); // tap it before leaving Dock
+    const until = new Date(now + LUNCH_MS).toISOString();
+    await db.from("office_visits").update({ left_at: place.at, lunch_until: until }).eq("id", open!.id);
+    return NextResponse.json({ status: "lunch", time: madridTime(until) });
   }
   if (action === "outside") {
     const note = String(b.note ?? "").trim().slice(0, 200);

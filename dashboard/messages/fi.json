@@ -1126,7 +1126,9 @@
       "late_fine": "3 € sakko: myöhästyit (klo 9:10 jälkeen). Ei strikea. ({reason})",
       "office_checkin": "{outside, select, true {Toimistolla vai töissä ulkona? Napauta ja leimaa.} other {Toimistolla? Napauta ja leimaa.}}",
       "office_checkout": "Lähdetkö? Leimaa ulos Dockissa ennen lähtöä — muuten tänään lasketaan 0 h.",
-      "office_outside_check": "Vieläkö töissä ulkona ({title})? Napauta vahvistaaksesi — ilman vastausta 30 minuutissa se päättyy."
+      "office_outside_check": "Vieläkö töissä ulkona ({title})? Napauta vahvistaaksesi — ilman vastausta 30 minuutissa se päättyy.",
+      "office_midday": "{late, select, true {Vieläkö Dockissa? Jos lähdit, leimaa ulos.} other {Jos lähdit, leimaa ulos. Menetkö syömään? Napauta ”Menen syömään” (enint. 1 h).}}",
+      "office_lunch_end": "Ole takaisin Dockissa klo {due} mennessä ja napauta ”Olen toimistolla” — muuten aamupäivä lasketaan 0 h."
     },
     "popupTitle": "Uusi tehtävä sinulle",
     "popupDue": "Määräaika {date}",
@@ -3237,7 +3239,9 @@
       "late_fine": "3 € myöhästymissakko",
       "office_checkin": "📍 Toimisto",
       "office_checkout": "📍 Leimaa ulos",
-      "office_outside_check": "📍 Töissä ulkona"
+      "office_outside_check": "📍 Töissä ulkona",
+      "office_midday": "📍 Vieläkö toimistolla?",
+      "office_lunch_end": "🍽️ Lounas päättyy pian"
     }
   },
   "strikes": {
@@ -3502,7 +3506,12 @@
       "no-office": "Toimiston sijaintia ei ole vielä asetettu.",
       "phone-only": "Leimaa puhelimellasi.",
       "no-note": "Kirjoita ensin, mitä teet.",
-      "error": "Jokin meni vikaan. Yritä uudelleen."
-    }
+      "error": "Jokin meni vikaan. Yritä uudelleen.",
+      "lunch": "Hyvää ruokahalua! Palaa Dockiin ja napauta ”Olen toimistolla” klo {time} mennessä.",
+      "lunch-far": "Olet {m} m:n päässä Dockista. Napauta ”Menen syömään” ennen kuin lähdet Dockista — täältä toimii vain ulosleimaus (0 h)."
+    },
+    "lunch": "Menen syömään (enint. 1 h)",
+    "lunchUntil": "Syömässä — palaa Dockiin ja leimaa sisään klo {time} mennessä.",
+    "r5": "Klo 14:00 ja 17:00 emet kysyy, oletko vielä paikalla. Menetkö syömään? Napauta ”Menen syömään” Dockissa: enintään 1 tunti, tauko ei lasketa. Jos et palaa Dockiin tunnissa, sitä edeltävä jakso on 0 h."
   }
 }

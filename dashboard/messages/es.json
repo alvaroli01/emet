@@ -1126,7 +1126,9 @@
       "late_fine": "Multa de 3 €: llegaste tarde (después de las 9:10). Sin strike. ({reason})",
       "office_checkin": "{outside, select, true {¿En la oficina o trabajando fuera? Toca para fichar.} other {¿En la oficina? Toca para fichar.}}",
       "office_checkout": "¿Te vas? Ficha la salida en Dock antes de irte; si no, hoy cuenta 0 h.",
-      "office_outside_check": "¿Sigues trabajando fuera ({title})? Toca para confirmar; si no respondes en 30 min, se cierra."
+      "office_outside_check": "¿Sigues trabajando fuera ({title})? Toca para confirmar; si no respondes en 30 min, se cierra.",
+      "office_midday": "{late, select, true {¿Sigues en Dock? Si te has ido, ficha la salida.} other {Si te has ido, ficha la salida. ¿Vas a comer? Pulsa “Voy a comer” (máx. 1 h).}}",
+      "office_lunch_end": "Vuelve a Dock antes de las {due} y pulsa “Estoy en la oficina”; si no, esta mañana cuenta 0 h."
     },
     "popupTitle": "Nueva tarea para ti",
     "popupDue": "Para el {date}",
@@ -3237,7 +3239,9 @@
       "late_fine": "Multa de 3 € por llegar tarde",
       "office_checkin": "📍 Oficina",
       "office_checkout": "📍 Fichar salida",
-      "office_outside_check": "📍 Trabajando fuera"
+      "office_outside_check": "📍 Trabajando fuera",
+      "office_midday": "📍 ¿Sigues en la oficina?",
+      "office_lunch_end": "🍽️ La comida termina pronto"
     }
   },
   "strikes": {
@@ -3502,7 +3506,12 @@
       "no-office": "Aún no se ha puesto la ubicación de la oficina.",
       "phone-only": "Ficha desde tu móvil.",
       "no-note": "Escribe primero qué estás haciendo.",
-      "error": "Algo ha fallado. Inténtalo otra vez."
-    }
+      "error": "Algo ha fallado. Inténtalo otra vez.",
+      "lunch": "¡Que aproveche! Vuelve a Dock y pulsa “Estoy en la oficina” antes de las {time}.",
+      "lunch-far": "Estás a {m} m de Dock. Pulsa “Voy a comer” antes de salir de Dock; desde aquí solo puedes fichar la salida (0 h)."
+    },
+    "lunch": "Voy a comer (máx. 1 h)",
+    "lunchUntil": "Comiendo: vuelve a Dock y ficha antes de las {time}.",
+    "r5": "A las 14:00 y a las 17:00 emet pregunta si sigues aquí. ¿Vas a comer? Pulsa “Voy a comer” en Dock: hasta 1 hora, el descanso no cuenta. Si no vuelves a Dock en 1 hora, el tramo anterior cuenta 0 h."
   }
 }

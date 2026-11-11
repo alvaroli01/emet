@@ -1126,7 +1126,9 @@
       "late_fine": "3 € Strafe: du warst zu spät (nach 9:10). Kein Strike. ({reason})",
       "office_checkin": "{outside, select, true {Im Büro oder auswärts? Tippe zum Einstempeln.} other {Im Büro? Tippe zum Einstempeln.}}",
       "office_checkout": "Gehst du? Stempel im Dock aus, bevor du gehst — sonst zählt heute 0 h.",
-      "office_outside_check": "Arbeitest du noch auswärts ({title})? Tippe zum Bestätigen — ohne Antwort in 30 Min. endet es."
+      "office_outside_check": "Arbeitest du noch auswärts ({title})? Tippe zum Bestätigen — ohne Antwort in 30 Min. endet es.",
+      "office_midday": "{late, select, true {Noch im Dock? Wenn du weg bist, stempel aus.} other {Wenn du weg bist, stempel aus. Gehst du essen? Tippe „Essen gehen“ (max. 1 h).}}",
+      "office_lunch_end": "Sei bis {due} zurück im Dock und tippe „Ich bin im Büro“ — sonst zählt der Vormittag 0 h."
     },
     "popupTitle": "Neue Aufgabe für dich",
     "popupDue": "Fällig {date}",
@@ -3237,7 +3239,9 @@
       "late_fine": "3 € Verspätungsstrafe",
       "office_checkin": "📍 Büro",
       "office_checkout": "📍 Ausstempeln",
-      "office_outside_check": "📍 Auswärts"
+      "office_outside_check": "📍 Auswärts",
+      "office_midday": "📍 Noch im Büro?",
+      "office_lunch_end": "🍽️ Mittagspause endet bald"
     }
   },
   "strikes": {
@@ -3502,7 +3506,12 @@
       "no-office": "Der Bürostandort ist noch nicht gesetzt.",
       "phone-only": "Stempel mit dem Handy ein.",
       "no-note": "Schreib zuerst, was du machst.",
-      "error": "Etwas ist schiefgelaufen. Versuch es erneut."
-    }
+      "error": "Etwas ist schiefgelaufen. Versuch es erneut.",
+      "lunch": "Guten Appetit! Sei bis {time} zurück im Dock und tippe „Ich bin im Büro“.",
+      "lunch-far": "Du bist {m} m vom Dock entfernt. Tippe „Essen gehen“, bevor du das Dock verlässt — von hier geht nur Ausstempeln (0 h)."
+    },
+    "lunch": "Essen gehen (max. 1 h)",
+    "lunchUntil": "Beim Essen — sei bis {time} zurück im Dock und stempel ein.",
+    "r5": "Um 14:00 und 17:00 fragt emet, ob du noch da bist. Essen gehen? Tippe „Essen gehen“ im Dock: bis zu 1 Stunde, die Pause zählt nicht. Nicht innerhalb 1 Stunde zurück im Dock = der Abschnitt davor zählt 0 h."
   }
 }

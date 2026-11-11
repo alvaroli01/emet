@@ -1126,7 +1126,9 @@
       "late_fine": "€3 fine: you arrived late (after 9:10). No strike. ({reason})",
       "office_checkin": "{outside, select, true {At the office or working outside? Tap to check in.} other {At the office? Tap to check in.}}",
       "office_checkout": "Leaving? Check out at Dock before you go — otherwise today counts 0 h.",
-      "office_outside_check": "Still working outside ({title})? Tap to confirm — no answer in 30 min ends it."
+      "office_outside_check": "Still working outside ({title})? Tap to confirm — no answer in 30 min ends it.",
+      "office_midday": "{late, select, true {Still at Dock? If you've left, check out.} other {If you've left, check out. Going to eat? Tap “Going to eat” (max 1 h).}}",
+      "office_lunch_end": "Back at Dock by {due} and tap “I'm at the office” — otherwise this morning counts 0 h."
     },
     "popupTitle": "New task for you",
     "popupDue": "Due {date}",
@@ -3237,7 +3239,9 @@
       "late_fine": "€3 late fine",
       "office_checkin": "📍 Office",
       "office_checkout": "📍 Check out",
-      "office_outside_check": "📍 Working outside"
+      "office_outside_check": "📍 Working outside",
+      "office_midday": "📍 Still at the office?",
+      "office_lunch_end": "🍽️ Lunch ends soon"
     }
   },
   "strikes": {
@@ -3502,7 +3506,12 @@
       "no-office": "The office location isn't set yet.",
       "phone-only": "Check in from your phone.",
       "no-note": "Write what you're doing first.",
-      "error": "Something went wrong. Try again."
-    }
+      "error": "Something went wrong. Try again.",
+      "lunch": "Enjoy! Be back at Dock and tap “I'm at the office” by {time}.",
+      "lunch-far": "You're {m} m from Dock. Tap “Going to eat” before you leave Dock — from here only Check out works (0 h)."
+    },
+    "lunch": "Going to eat (max 1 h)",
+    "lunchUntil": "Eating — be back at Dock and check in by {time}.",
+    "r5": "At 14:00 and 17:00 emet asks if you're still here. Going to eat? Tap “Going to eat” at Dock: up to 1 hour, the break doesn't count. Not back at Dock within 1 hour = the stretch before counts 0 h."
   }
 }

@@ -1126,7 +1126,9 @@
       "late_fine": "Multa de €3: você chegou atrasado (depois das 9:10). Sem strike. ({reason})",
       "office_checkin": "{outside, select, true {No escritório ou trabalhando fora? Toque para registrar.} other {No escritório? Toque para registrar.}}",
       "office_checkout": "Vai sair? Registre a saída no Dock antes de ir — senão hoje conta 0 h.",
-      "office_outside_check": "Ainda trabalhando fora ({title})? Toque para confirmar — sem resposta em 30 min, termina."
+      "office_outside_check": "Ainda trabalhando fora ({title})? Toque para confirmar — sem resposta em 30 min, termina.",
+      "office_midday": "{late, select, true {Ainda no Dock? Se você saiu, registre a saída.} other {Se você saiu, registre a saída. Vai comer? Toque em “Vou comer” (máx. 1 h).}}",
+      "office_lunch_end": "Volte ao Dock até {due} e toque em “Estou no escritório” — senão a manhã conta 0 h."
     },
     "popupTitle": "Nova tarefa para você",
     "popupDue": "Prazo: {date}",
@@ -3237,7 +3239,9 @@
       "late_fine": "Multa de €3 por atraso",
       "office_checkin": "📍 Escritório",
       "office_checkout": "📍 Registrar saída",
-      "office_outside_check": "📍 Trabalhando fora"
+      "office_outside_check": "📍 Trabalhando fora",
+      "office_midday": "📍 Ainda no escritório?",
+      "office_lunch_end": "🍽️ O almoço acaba logo"
     }
   },
   "strikes": {
@@ -3502,7 +3506,12 @@
       "no-office": "A localização do escritório ainda não foi definida.",
       "phone-only": "Registre pelo celular.",
       "no-note": "Escreva primeiro o que está fazendo.",
-      "error": "Algo deu errado. Tente de novo."
-    }
+      "error": "Algo deu errado. Tente de novo.",
+      "lunch": "Bom almoço! Volte ao Dock e toque em “Estou no escritório” até {time}.",
+      "lunch-far": "Você está a {m} m do Dock. Toque em “Vou comer” antes de sair do Dock — daqui só funciona registrar a saída (0 h)."
+    },
+    "lunch": "Vou comer (máx. 1 h)",
+    "lunchUntil": "Almoçando — volte ao Dock e registre a entrada até {time}.",
+    "r5": "Às 14:00 e 17:00 o emet pergunta se você ainda está aqui. Vai comer? Toque em “Vou comer” no Dock: até 1 hora, a pausa não conta. Sem voltar ao Dock em 1 hora = o trecho anterior conta 0 h."
   }
 }

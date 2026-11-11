@@ -80,6 +80,9 @@ export function zoneStepWithAccuracy(dist: number, accuracy: number, isIn: boole
  *  Checked out anywhere else = that stretch counts 0 h, so leaving the time running earns nothing. */
 export const checkoutCounts = (dist: number, accuracy: number) => dist - Math.min(Math.max(accuracy, 0), GPS_SLACK_M) <= OUT_M;
 
+/** Going to eat: the time stops for at most 1 hour (Alvaro, 2026-11-11); not back at Dock by then = that stretch counts 0 h. */
+export const LUNCH_MS = 3600e3;
+
 /** Working outside is offered Monday, Wednesday and Friday (Tuesday and Thursday are office days). */
 export const isOutsideDay = (now: number) => ["Mon", "Wed", "Fri"].includes(new Date(now).toLocaleDateString("en-US", { weekday: "short", timeZone: "Europe/Madrid" }));
 
