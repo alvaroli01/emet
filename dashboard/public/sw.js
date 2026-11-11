@@ -16,7 +16,9 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const url = new URL((event.notification.data && event.notification.data.url) || "/", self.location.origin).href;
+  const u = new URL((event.notification.data && event.notification.data.url) || "/", self.location.origin);
+  u.searchParams.set("pushed", "1"); // opened from a notification: keep this page (StartOnToday sends other launches to Today)
+  const url = u.href;
   event.waitUntil((async () => {
     const tabs = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
     const open = tabs.find((c) => c.url.startsWith(self.location.origin));

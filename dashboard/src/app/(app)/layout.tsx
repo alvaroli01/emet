@@ -10,6 +10,7 @@ import { Backdrop, Breadcrumb, MobileLogo, NotOnToday, TopBarFrame } from "@/com
 import { HeaderRecord } from "@/components/camp/header-record";
 import { NotificationsBell } from "@/components/workspace/notifications";
 import { OfficePill } from "@/components/office/office-pill";
+import { StartOnToday } from "@/components/shell/start-on-today";
 import { CommandPalette, SearchButton } from "@/components/workspace/command-palette";
 import { DailyBrief } from "@/components/workspace/daily-brief";
 import { Presence } from "@/components/workspace/presence";
@@ -54,6 +55,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="flex items-center gap-1 sm:gap-1.5">
             <span className="hidden sm:contents"><SyncIndicator /></span>
             <OfficePill meId={me.id} />
+            <StartOnToday />
             <NotificationsBell meId={me.id} />
             <HeaderRecord />
             <UserMenu name={me.full_name} avatar={me.avatar_url} profileId={me.id}

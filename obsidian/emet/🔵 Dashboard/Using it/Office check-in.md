@@ -8,6 +8,7 @@ Built 2026-11-10 · **live** · one tap since 2026-11-11 (migration `0060_office
   - Monday/Wednesday/Friday the page also offers **I'm working outside**.
 - **Check out:** they tap *Check out* when they leave. It **only counts at Dock (within 80 m)**. Anywhere else, emet warns first; checking out anyway, or never checking out, makes that stretch **0 h**. So leaving the time running earns nothing. 
 - **14:00 and 17:00:** everyone still checked in gets *Still at the office? If you've left, check out.* (Alvaro: someone leaving at 2 without saying anything.)
+- **Works on iPhone (11 Nov, 18:1x):** first version waited for location to be "already allowed", which iPhone home-screen apps never report → fixed to ask on open while checked in. Alvaro confirmed it checked him out at home.
 - **…then "I'll be back":** right after an automatic check-out, a box asks *I'm out, I'll be back* / *Done for today*. *I'll be back* turns that stretch into a pause (`will-return`); the next time they open emet **at Dock**, they are checked in again automatically and the day carries on (the big clock shows the whole day).
 - **Auto check-out on opening emet (11 Nov, 18:00):** Alvaro got home and his time was still running. Now, opening emet on a phone while checked in and **away from Dock** (and location already allowed) checks out at that moment and spot (`/api/office/tap` action `auto-out`, from the top-bar pill), with a message. Nothing happens at Dock or with a rough fix (>150 m).
 - **I'm out works anywhere (11 Nov, latest):** finishing away from Dock is allowed; the exact spot is kept (`office_visits.out_lat/out_lng/out_distance_m`, migration 0066) and the team calendar shows *checked out here (not at Dock)* with a map link. *I'm in* and *Pause* stay Dock-only.
@@ -50,7 +51,7 @@ Built 2026-11-10 · **live** · one tap since 2026-11-11 (migration `0060_office
 - Leaders delete a wrong one in Team Leaders → Strikes (automatic ones say *automatic*), e.g. for someone who worked elsewhere that day.
 
 ## Where to see it
-- **Top bar:** pill next to the bell, green *In the office* / grey *Out of office* (amber = paused). Tap it for my time today and this week, the rules, and *Check in / out →*.
+- **Top bar:** pill next to the bell, green *In the office* / grey *Out of office* (amber = paused). Tap it → straight to the check-in circle (/office).
 - **Profiles:** anyone's office time today and this week.
 - **Team Leaders → Office:** everyone's status and hours, and who has **phone alerts off** (they won't get the 9:00 tap).
 

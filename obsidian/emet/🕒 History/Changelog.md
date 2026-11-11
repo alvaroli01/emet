@@ -7,6 +7,7 @@ updated: 2026-11-11
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-11 — Alvaro — Phone app: always opens on **Today** (fresh launch or back after 5+ min; notification taps keep their page). The top-bar check-in pill now goes straight to the check-in circle. Auto check-out now asks for the location on open (iPhone home-screen apps never say it's already allowed) — tested on Alvaro's iPhone.
 - 2026-11-11 — Alvaro — Office: after an automatic check-out emet asks **"I'm out, I'll be back"** or **"Done for today"**. "I'll be back" turns it into a pause, and the day carries on by itself the next time they open emet at Dock.
 - 2026-11-11 — Alvaro — Office: opening emet on the phone while still checked in **away from Dock** checks you out automatically at that moment and spot (only if location is already allowed; a message says so).
 - 2026-11-11 — Alvaro — Office: **I'm out works anywhere** — finished away from Dock, the exact spot is kept and shown in the team calendar ("checked out here, not at Dock", migration 0066). I'm in and Pause stay Dock-only.
