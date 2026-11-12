@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 import { Building2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
-import { bestPosition } from "@/lib/best-position";
 import { officeStatus, madridMidnight, type Visit } from "@/lib/office";
 
 /** Top bar, next to the bell: "In the office" / "Out of office". Tap it → the check-in circle (/office). */
@@ -43,19 +42,38 @@ export function OfficePill({ meId }: { meId: string }) {
     // Not checked in → opening emet at Dock checks you in straight away (Alvaro, 2026-11-12: no need to tap the circle).
     // Weekends and after 21:00 the server says no; away from Dock nothing happens.
     checked.current = true;
-    // iPhone home-screen apps often report "prompt" (or have no Permissions API) even after Allow: ask unless clearly denied
-    const ask = () => {
-      bestPosition().then(async (pos) => {
-        const r = await fetch("/api/office/tap", { method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: inNow ? "auto-out" : "in", lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(() => null);
-        const j = (r?.ok ? await r.json().catch(() => null) : null) as { status?: string } | null;
-        if (j?.status === "out-away") { setAutoOut(true); load(); }
-        if (j?.status === "in") { toast("ok", t(pausedToday ? "autoBack" : "autoIn")); load(); }
-      }).catch(() => {});
+    // Right away (Alvaro, 2026-11-12): send the first GPS reading at once; only if it's too rough to decide, keep watching
+    // up to 10 s and send again whenever a clearly better reading comes in.
+    const action = inNow ? "auto-out" : "in";
+    let sentAcc = Infinity, busy = false, stop = false;
+    const send = async (pos: GeolocationPosition) => {
+      if (stop || busy || pos.coords.accuracy > sentAcc - 10) return;
+      busy = true; sentAcc = pos.coords.accuracy;
+      const r = await fetch("/api/office/tap", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(() => null);
+      const j = (r?.ok ? await r.json().catch(() => null) : null) as { status?: string } | null;
+      busy = false;
+      const st = j?.status;
+      if (st === "out-away") { finish(); setAutoOut(true); load(); }
+      else if (st === "in") { finish(); toast("ok", t(pausedToday ? "autoBack" : "autoIn")); load(); }
+      else if (st && !["too-far", "too-far-outside", "vague", "nothing"].includes(st)) finish(); // weekend, closed, already in…
     };
-    if (!navigator.permissions?.query) { ask(); return; }
-    navigator.permissions.query({ name: "geolocation" as PermissionName }).then((p) => { if (p.state !== "denied") ask(); }).catch(ask);
+    let id = -1;
+    const timer = setTimeout(() => finish(), 10_000);
+    function finish() { stop = true; clearTimeout(timer); if (id !== -1) navigator.geolocation.clearWatch(id); }
+    // iPhone home-screen apps often report "prompt" (or have no Permissions API) even after Allow: ask unless clearly denied
+    const ask = () => { id = navigator.geolocation.watchPosition(send, () => finish(), { enableHighAccuracy: true, timeout: 20000, maximumAge: 30_000 }); };
+    if (!navigator.permissions?.query) ask();
+    else navigator.permissions.query({ name: "geolocation" as PermissionName }).then((p) => { if (p.state !== "denied") ask(); else finish(); }).catch(ask);
+    return finish;
   }, [visits, meId, load, toast, t]);
+
+  // Switching back to emet (it was in the background) counts as opening it again
+  useEffect(() => {
+    const onVis = () => { if (document.visibilityState === "visible") { checked.current = false; load(); } };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [load]);
 
   async function willReturn(back: boolean) {
     setAutoOut(false);

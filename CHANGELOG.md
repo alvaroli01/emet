@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-12 — Alvaro — Office: the automatic check-in now happens **right when emet opens** (first GPS reading sent at once, better ones only if it was too rough) and also when you switch back to emet from the background.
 - 2026-11-12 — Alvaro — Office: **opening emet on the phone at Dock checks you in automatically** — no need to tap the circle (best of several GPS readings; nothing happens away from Dock, on weekends or after 21:00). Emily marked away 12–16 Nov (trip).
 - 2026-11-12 — Alvaro — Office, first real Thursday: people inside Dock read 50 m away and failed to check in. The check-in area is now **60 m (+ up to 40 m GPS error)**, check-out/pause count up to **120 m**, the check-in screen takes the **best of several readings** (up to 8 s), and the automatic check-out only happens **250 m+** away (Lassi was checked out inside Dock). A fine a leader deletes is no longer re-added by a late check-in (migration 0067). Today's wrong fines were removed and the 11 people who were there (Alvaro, Fernando, Fran, Lassi, Mario, Martin, Nahuel, Nico, Rocco, Sasha, Stefan) were checked in at 09:00.
 - 2026-11-11 — Alvaro — Phone app: always opens on **Today** (fresh launch or back after 5+ min; notification taps keep their page). The top-bar check-in pill now goes straight to the check-in circle. Auto check-out now asks for the location on open (iPhone home-screen apps never say it's already allowed) — tested on Alvaro's iPhone.
