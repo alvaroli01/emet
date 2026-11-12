@@ -4,11 +4,10 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { Briefcase, Building2, Clock, MapPin, Plane, Utensils } from "lucide-react";
+import { Briefcase, Building2, CalendarDays, Clock, MapPin, Plane, Utensils } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
-import type { EmetCalItem } from "@/components/home/emet-calendar";
 
 export type OfficeData = {
   // Everyone: where they are now, since/until when (Spanish time), time at Dock today, last time they opened emet
@@ -18,7 +17,8 @@ export type OfficeData = {
   week: { id: string; name: string; avatar: string | null; hours: string; ms: number }[];
   isAdmin: boolean; officeSet: boolean; // the office point the phones are measured against
   // Working outside (Mon/Wed/Fri): who is out now, and this week's log for everyone — the "outside calendar"
-  emetRows: EmetCalItem[]; // shown as the main emet calendar on Today (EmetCalendar), not in this card
+  calendar: { day: string; items: { id: string; kind: "office" | "outside" | "lunch" | "away"; name: string; from: string; to: string | null; hours: string; zero: boolean;
+    note: string | null; start: string | null; end: string | null }[] }[];
 };
 
 const STATUS_STYLE = { in: "bg-ok/15 text-ok-text", lunch: "bg-warn/15 text-warn-text", lunchOver: "bg-bad/10 text-bad-text", outside: "bg-brand/15 text-ink", left: "bg-surface-2 text-muted", away: "bg-surface-2 text-ink", none: "bg-surface-2 text-muted" } as const;
@@ -84,6 +84,33 @@ export function OfficeCard({ d }: { d: OfficeData }) {
               </li>
             ))}
           </ul>
+        </details>
+      )}
+
+      {d.calendar.length > 0 && (
+        <details className="mb-3">
+          <summary className="cursor-pointer text-xs font-medium uppercase tracking-wide text-muted hover:text-ink"><CalendarDays size={12} className="mr-1 inline" />{t("calendar")}</summary>
+          <div className="mt-2 space-y-3">
+            {d.calendar.map((day) => (
+              <div key={day.day}>
+                <p className="mb-1 text-xs font-medium text-muted">{day.day}</p>
+                <ul className="space-y-1">
+                  {day.items.map((x) => (
+                    <li key={x.id} className="flex flex-wrap items-baseline gap-x-2 text-sm">
+                      <span className="readout w-24 shrink-0 text-xs tabular-nums text-muted">{x.kind === "away" ? t("allDay") : `${x.from}–${x.to ?? (x.zero ? "?" : t("now"))}`}</span>
+                      <span className="min-w-0 flex-1">
+                        {x.kind === "office" ? <Building2 size={12} className="mr-1 inline text-muted" /> : x.kind === "away" ? <Plane size={12} className="mr-1 inline text-muted" /> : x.kind === "lunch" ? <Utensils size={12} className="mr-1 inline text-muted" /> : <Briefcase size={12} className="mr-1 inline text-muted" />}
+                        <span className="font-medium">{x.name}</span>{x.kind === "lunch" ? <> · {t("eating")}{x.note && <span className="font-medium text-bad-text"> {x.note}</span>}</> : x.note && <> · {x.note}</>}
+                      </span>
+                      <span className={`text-xs tabular-nums ${x.zero ? "font-medium text-bad-text" : "text-muted"}`}>{x.zero ? t("zero") : x.hours}</span>
+                      {x.start && <a href={x.start} target="_blank" rel="noreferrer" className="text-xs text-muted underline underline-offset-2 hover:text-ink"><MapPin size={11} className="inline" /> {t("startPlace")}</a>}
+                      {x.end && <a href={x.end} target="_blank" rel="noreferrer" className={`text-xs underline underline-offset-2 hover:text-ink ${x.kind === "office" ? "text-warn-text" : "text-muted"}`}><MapPin size={11} className="inline" /> {t(x.kind === "office" ? "outPlace" : "lastPlace")}</a>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </details>
       )}
 

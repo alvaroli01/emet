@@ -2557,9 +2557,8 @@
     "dueNote": "Tarefas com prazo neste período",
     "vsLastMonth": "vs mês passado",
     "salesCountPeriod": "{count, plural, one {# venda} other {# vendas}} neste período",
-    "emetCalendar": "Calendário do emet",
-    "checkInOut": "Registrar",
-    "myWeekCamp": "Minha semana (Google) →"
+    "emetCalendar": "Minha semana no emet",
+    "myWeekCamp": "Google Agenda → Base camp"
   },
   "financeDash": {
     "totalRevenue": "Receita total",

@@ -2557,9 +2557,8 @@
     "dueNote": "In diesem Zeitraum fällige Aufgaben",
     "vsLastMonth": "vs Vormonat",
     "salesCountPeriod": "{count, plural, one {# Verkauf} other {# Verkäufe}} in diesem Zeitraum",
-    "emetCalendar": "emet-Kalender",
-    "checkInOut": "Ein-/Ausstempeln",
-    "myWeekCamp": "Meine Woche (Google) →"
+    "emetCalendar": "Meine emet-Woche",
+    "myWeekCamp": "Google Kalender → Base camp"
   },
   "financeDash": {
     "totalRevenue": "Gesamtumsatz",

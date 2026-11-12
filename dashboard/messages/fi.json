@@ -2557,9 +2557,8 @@
     "dueNote": "Tämän jakson määräajat",
     "vsLastMonth": "vs edellinen kuukausi",
     "salesCountPeriod": "{count, plural, one {# myynti} other {# myyntiä}} tällä jaksolla",
-    "emetCalendar": "emet-kalenteri",
-    "checkInOut": "Leimaa",
-    "myWeekCamp": "Oma viikko (Google) →"
+    "emetCalendar": "Oma emet-viikko",
+    "myWeekCamp": "Google-kalenteri → Base camp"
   },
   "financeDash": {
     "totalRevenue": "Kokonaistulot",

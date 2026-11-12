@@ -20,7 +20,7 @@ Built 2026-11-10 · **live** · one tap since 2026-11-11 (migration `0060_office
 - **Working outside (Mon/Wed/Fri):** they write what they're doing (e.g. *Visiting shops in Indautxu*). emet saves the position at the start, every **2 hours** (notification *Still working outside?* → one tap) and at the end (`office_outside.places`). No answer within 30 minutes ends it at the last tap. Checking in at Dock ends it, and the questions stop.
 - **Everyone can see (Today → At the office):**
   - **Everyone now:** each class member with their status — *At Dock since 09:02* / *Eating · back by 15:10* / *Outside since 10:00 · note* / *Left at 14:00* / *Not in* — their time at Dock today, and **when they last opened emet** (`presence.last_seen_at`).
-  - **emet calendar (Today's main calendar since 12 Nov, Mon–Fri grid; it replaced "Your week", whose Google Calendar moved to Base camp):** every Dock stretch (from–to, hours, or **0 h** in red if never checked out at Dock) and every outside stretch (note, map links to where they said they were out and the last place).
+  - **Team calendar this week (in the At the office card):** every Dock stretch (from–to, hours, or **0 h** in red if never checked out at Dock) and every outside stretch (note, map links to where they said they were out and the last place).
 - **21:00 the day closes** (Alvaro, 11 Nov): anyone still checked in gets 0 h for that stretch, working outside ends at the last tap, and no check-in is accepted after 21:00 (migration 0063). The 18:00 reminder was dropped.
 - **The 9:00 tap checks in straight away** at Dock. Away from Dock on Mon/Wed/Fri, emet says how far they are and opens *working outside*, saving that exact spot.
 - **Phones only:** a laptop's location is easy to fake in dev tools.

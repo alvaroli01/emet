@@ -2557,9 +2557,8 @@
     "dueNote": "Tasks due in this period",
     "vsLastMonth": "vs last month",
     "salesCountPeriod": "{count, plural, one {# sale} other {# sales}} in this period",
-    "emetCalendar": "emet calendar",
-    "checkInOut": "Check in / out",
-    "myWeekCamp": "My week (Google) →"
+    "emetCalendar": "My emet week",
+    "myWeekCamp": "Google Calendar → Base camp"
   },
   "financeDash": {
     "totalRevenue": "Total revenue",

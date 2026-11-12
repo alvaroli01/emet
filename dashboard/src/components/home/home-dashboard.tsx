@@ -11,7 +11,7 @@ import { MountainLazy } from "@/components/summit/mountain-lazy";
 import { GroupIcon } from "@/components/group-icon";
 import { NumberTicker } from "@/components/ui/number-ticker";
 import { eur } from "@/lib/format";
-import { EmetCalendar, type EmetCalItem } from "@/components/home/emet-calendar";
+import { WeekCalendar, type CalendarItem } from "@/components/home/week-calendar";
 
 export type HomeData = {
   name: string;
@@ -25,7 +25,7 @@ export type HomeData = {
   goal: { revenue: number; goal: number; pct: number; daysLeft: number; nextCampAt: number | null; teams: { slug: string; color: string; label: string; mine: boolean }[] };
   team: { late: number; blockers: number };
   focus: { score: number | null; dueToday: number; late: number; doneWeek: number };
-  calendar: { today: string; days: string[] };
+  calendar: { today: string; days: string[]; items: CalendarItem[] };
 };
 
 const POINT_ICON = { community: Users, visit: Store, learning: GraduationCap } as const;
@@ -162,7 +162,7 @@ function useTypewriter(lines: string[], paused: boolean) {
 }
 
 /** Home: the Bilbao-at-night page — ask box on top, glass cards at the bottom (from the "home page example"). */
-export function HomeDashboard({ d, emet }: { d: HomeData; emet: { today: string; days: string[]; items: EmetCalItem[] } }) {
+export function HomeDashboard({ d }: { d: HomeData }) {
   const t = useTranslations("home");
   const tp = useTranslations("points");
   const locale = useLocale();
@@ -313,16 +313,17 @@ export function HomeDashboard({ d, emet }: { d: HomeData; emet: { today: string;
           </section>
 
           <section className="panel p-4 sm:col-span-2 sm:p-5 lg:col-span-2">
-            {/* The emet calendar (Alvaro, 2026-11-12): who was at Dock, outside, on a long break or away this week.
-                My personal week with Google Calendar lives in Base camp. */}
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-[15px] font-medium">{t("emetCalendar")}</h2>
               <div className="flex items-center gap-1.5 text-xs">
-                <Link href="/office" className="rounded-full bg-surface-2 px-2.5 py-1 font-medium hover:text-link">{t("checkInOut")}</Link>
+                {d.focus.score !== null && <span className="rounded-full bg-surface-2 px-2.5 py-1">{t("focusScore")} <b className="readout text-[#ff7a2e]">{d.focus.score}</b></span>}
+                <span className="rounded-full bg-surface-2 px-2.5 py-1">{t("dueToday")} <b className="readout">{d.focus.dueToday}</b></span>
+                {d.focus.late > 0 && <span className="rounded-full bg-bad/20 px-2.5 py-1 text-bad-text">{t("late")} <b className="readout">{d.focus.late}</b></span>}
                 <Link href="/camp#week" className="rounded-full bg-surface-2 px-2.5 py-1 font-medium hover:text-link">{t("myWeekCamp")}</Link>
+                <Link href="/camp?tab=agenda#camp-tabs" className="rounded-full bg-surface-2 px-2.5 py-1 font-medium hover:text-link">{t("scheduleOpen")}</Link>
               </div>
             </div>
-            <EmetCalendar days={emet.days} today={emet.today} items={emet.items} />
+            <WeekCalendar days={d.calendar.days} today={d.calendar.today} items={d.calendar.items} />
           </section>
         </div>
 
