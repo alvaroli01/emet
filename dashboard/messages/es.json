@@ -3464,7 +3464,8 @@
     "willReturn": "Salgo, vuelvo luego",
     "doneToday": "He terminado por hoy",
     "willReturnSaved": "En pausa: tu día sigue cuando abras emet de vuelta en Dock.",
-    "autoBack": "Bienvenido de vuelta: tu día sigue contando."
+    "autoBack": "Bienvenido de vuelta: tu día sigue contando.",
+    "autoIn": "Estás en Dock: fichado ✓"
   },
   "officeReview": {
     "tool": "Oficina",

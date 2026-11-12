@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Building2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
+import { bestPosition } from "@/lib/best-position";
 import { officeStatus, madridMidnight, type Visit } from "@/lib/office";
 
 /** Top bar, next to the bell: "In the office" / "Out of office". Tap it → the check-in circle (/office). */
@@ -39,17 +40,18 @@ export function OfficePill({ meId }: { meId: string }) {
     const latest = [...visits].sort((a, b) => b.arrived_at.localeCompare(a.arrived_at))[0];
     const pausedToday = !!latest?.lunch_until && !!latest.left_at && latest.left_at >= madridMidnight(new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" }));
     const inNow = officeStatus(visits, meId, Date.now()).inNow;
-    if (!inNow && !pausedToday) return;
+    // Not checked in → opening emet at Dock checks you in straight away (Alvaro, 2026-11-12: no need to tap the circle).
+    // Weekends and after 21:00 the server says no; away from Dock nothing happens.
     checked.current = true;
     // iPhone home-screen apps often report "prompt" (or have no Permissions API) even after Allow: ask unless clearly denied
     const ask = () => {
-      navigator.geolocation.getCurrentPosition(async (pos) => {
+      bestPosition().then(async (pos) => {
         const r = await fetch("/api/office/tap", { method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: inNow ? "auto-out" : "in", lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy }) }).catch(() => null);
         const j = (r?.ok ? await r.json().catch(() => null) : null) as { status?: string } | null;
         if (j?.status === "out-away") { setAutoOut(true); load(); }
-        if (j?.status === "in") { toast("ok", t("autoBack")); load(); }
-      }, () => {}, { enableHighAccuracy: true, timeout: 20000, maximumAge: 60_000 });
+        if (j?.status === "in") { toast("ok", t(pausedToday ? "autoBack" : "autoIn")); load(); }
+      }).catch(() => {});
     };
     if (!navigator.permissions?.query) { ask(); return; }
     navigator.permissions.query({ name: "geolocation" as PermissionName }).then((p) => { if (p.state !== "denied") ask(); }).catch(ask);

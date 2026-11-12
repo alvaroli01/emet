@@ -3464,7 +3464,8 @@
     "willReturn": "Lähden, palaan myöhemmin",
     "doneToday": "Valmis tältä päivältä",
     "willReturnSaved": "Tauolla — päiväsi jatkuu, kun avaat emetin taas Dockissa.",
-    "autoBack": "Tervetuloa takaisin — päiväsi jatkuu."
+    "autoBack": "Tervetuloa takaisin — päiväsi jatkuu.",
+    "autoIn": "Olet Dockissa — leimattu sisään ✓"
   },
   "officeReview": {
     "tool": "Toimisto",

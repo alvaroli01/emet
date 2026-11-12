@@ -3464,7 +3464,8 @@
     "willReturn": "Ich bin weg, komme zurück",
     "doneToday": "Fertig für heute",
     "willReturnSaved": "Pause — dein Tag läuft weiter, wenn du emet wieder im Dock öffnest.",
-    "autoBack": "Willkommen zurück — dein Tag läuft weiter."
+    "autoBack": "Willkommen zurück — dein Tag läuft weiter.",
+    "autoIn": "Du bist im Dock — eingestempelt ✓"
   },
   "officeReview": {
     "tool": "Büro",

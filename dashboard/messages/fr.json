@@ -3464,7 +3464,8 @@
     "willReturn": "Je sors, je reviens",
     "doneToday": "Fini pour aujourd’hui",
     "willReturnSaved": "En pause — ta journée continue quand tu rouvres emet au Dock.",
-    "autoBack": "Re-bonjour — ta journée continue."
+    "autoBack": "Re-bonjour — ta journée continue.",
+    "autoIn": "Tu es au Dock — arrivée pointée ✓"
   },
   "officeReview": {
     "tool": "Bureau",

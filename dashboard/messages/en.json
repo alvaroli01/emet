@@ -3464,7 +3464,8 @@
     "willReturn": "I'm out, I'll be back",
     "doneToday": "Done for today",
     "willReturnSaved": "Paused — your day carries on when you open emet back at Dock.",
-    "autoBack": "Welcome back — your day carries on."
+    "autoBack": "Welcome back — your day carries on.",
+    "autoIn": "You're at Dock — checked in ✓"
   },
   "officeReview": {
     "tool": "Office",
