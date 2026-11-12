@@ -11,7 +11,7 @@ updated: 2026-11-10
 ## Who we are
 - [[What emet is]]: a 15-person non-profit team at LEINN Internacional
 - [[Goal & Money]]: **€30K revenue / €15K profit by June 2027**
-- [[Ground rules]] · [[Weekly rhythm]] · [[LEINN calendar]]
+- [[Ground rules]] · [[Weekly rhythm]] · [[LEINN calendar]] · [[Discord]] (official team chat)
 
 ## The people
 - [[Team structure]]: 5 groups, each with a leader

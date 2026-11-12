@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-12 — Alvaro — **Discord "emet team" is the official team chat** (replaces the WhatsApp community): channels for start-here (admin-only), team, private groups, projects forum, learning, voice and an AI tools forum (paid + open-source tools and student deals). Vault note `🟠 About emet/Company/Discord.md`.
 - 2026-11-12 — Alvaro — Today's calendar is **My emet week**: only my emet work (tasks given to me, my own agenda/self-tasks, Notion deadlines) — no Google events and no check-in times. **Google Calendar** (events + connect button) lives in **Base camp → My week**. Office check-in times stay in Today → At the office (team calendar).
 - 2026-11-12 — Alvaro — Office: the automatic check-in now happens **right when emet opens** (first GPS reading sent at once, better ones only if it was too rough) and also when you switch back to emet from the background.
 - 2026-11-12 — Alvaro — Office: **opening emet on the phone at Dock checks you in automatically** — no need to tap the circle (best of several GPS readings; nothing happens away from Dock, on weekends or after 21:00). Emily marked away 12–16 Nov (trip).
