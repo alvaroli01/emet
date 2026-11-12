@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { bestPosition } from "@/lib/best-position";
+import { madridTime } from "@/lib/office";
 import { Briefcase, ChevronRight, Loader2, LogOut, MapPin, Pause, Utensils } from "lucide-react";
 
 type State = { kind: "none" } | { kind: "in"; since: string; at: string } | { kind: "lunch"; since: string; at: string } | { kind: "outside"; since: string; at: string; note: string };
@@ -43,8 +44,11 @@ export function OfficeTap({ state, doneMs, workday, outsideDay, go }: { state: S
   useEffect(() => {
     if (ran.current || !go) return;
     ran.current = true;
+    // Use the link once: a phone that reopens this page later must not repeat it (2026-11-12: Lassi was checked out
+    // at 09:25 and 14:27 by an old 17:00 "?go=out" page being reopened)
+    window.history.replaceState(null, "", "/office");
     if (go === "in" && state.kind !== "in") send("in");
-    if (go === "out" && state.kind === "in") send("out");
+    if (go === "out" && state.kind === "in" && madridTime(new Date().toISOString()) >= "17:00") send("out"); // the checkout notification is at 17:00
     if (go === "still" && state.kind === "outside") send("still");
   }, [go, state.kind, send]);
 

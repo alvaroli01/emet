@@ -70,5 +70,6 @@ Team Leaders section → **Send a notification**: leaders and admins write up to
 - First real 9:00 run: Thursday 12 Nov. Check the next morning that notifications arrived and people could check in.
 - Everyone needs phone alerts on (14 of 15 people had them on 11 Nov). On iPhone that needs emet added to the Home Screen.
 - Should only leaders see everyone's hours and the outside locations?
+- **Notification links run once (12 Nov 2026):** `/office?go=in|out|still` is used once and removed from the address, and the automatic check-out only runs from 17:00 — a phone reopening an old 17:00 page had been checking Lassi out in the morning.
 
 Related: [[Today]], [[Phone version]], [[🔵 How the dashboard works]]
