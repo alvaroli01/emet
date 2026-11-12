@@ -60,7 +60,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ status: atDock ? "out" : "out-away", distance: dist });
   }
   if (action === "auto-out") { // emet opened on the phone away from Dock while still checked in → checked out now, here
-    if (!isIn || checkoutCounts(dist, accuracy) || accuracy > 150) return NextResponse.json({ status: "nothing", distance: dist });
+    // Only when clearly away (2026-11-12: Lassi was checked out inside Dock by a GPS jump): 250 m+ even counting the error
+    if (!isIn || accuracy > 100 || dist - accuracy < 250) return NextResponse.json({ status: "nothing", distance: dist });
     await db.from("office_visits").update({ left_at: place.at, out_distance_m: dist, out_lat: place.lat, out_lng: place.lng }).eq("id", open!.id);
     return NextResponse.json({ status: "out-away", distance: dist });
   }

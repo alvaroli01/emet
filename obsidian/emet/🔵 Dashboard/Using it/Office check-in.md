@@ -24,6 +24,12 @@ Built 2026-11-10 · **live** · one tap since 2026-11-11 (migration `0060_office
 - **Phones only:** a laptop's location is easy to fake in dev tools.
 - Pause rule stays: checking out pauses the day until 21:00; checking in again resumes it.
 
+## First real Thursday (12 Nov) — GPS fixes
+- People sitting inside Dock read **~50 m away** and couldn't check in (30 m + 20 m slack was too tight indoors); Lassi was even checked out automatically inside Dock by a GPS jump.
+- Fixed at 09:11: check-in within **60 m + up to 40 m** of the phone's own error; pause / check-out at Dock up to **120 m**; automatic check-out only **250 m+** away even counting the error; the check-in screen now watches the GPS for up to 8 s and keeps the most accurate reading.
+- Wrong fines: Alvaro listed who was there (Alvaro, Fernando, Fran, Lassi, Mario, Martin, Nahuel, Nico, Rocco, Sasha, Stefan) → their fines and bell messages deleted, all checked in at 09:00 (first arrival moved to 09:00 for Alvaro, Mario, Stefan).
+- Bug: Alvaro's late check-in after his fine was deleted fined him again → `trg_office_late` now skips any day the 9:11 check already handled (migration 0067).
+
 ## How it runs
 - `office_tick()` runs **every 5 minutes** (pg_cron job `office-tick`, Supabase free plan): 9:00 check-in notifications (one per person per day, dedupe `office_checkin:<date>`), 14:00 and 17:00 questions (only people still in), lunch reminders and expiry, 2-hour outside questions, closing unanswered outside stretches, and the 21:00 day close.
 - New notification kinds: `office_checkin`, `office_checkout`, `office_outside_check` (in `push_worthy`, texts in all 7 languages).

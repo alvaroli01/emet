@@ -21,7 +21,11 @@ export function OfficeTap({ state, doneMs, workday, outsideDay, go }: { state: S
   const send = useCallback((action: Action, extra: Record<string, unknown> = {}) => {
     if (!navigator.geolocation) { setMsg({ ok: false, text: t("noLocation") }); return; }
     setBusy(action); setMsg(null); setFar(null);
-    navigator.geolocation.getCurrentPosition(async (pos) => {
+    // Indoors the first fix is often 50 m+ off (2026-11-12): watch for up to 8 s and keep the most accurate reading
+    // (stop early at ±20 m), then let the server decide.
+    let best: GeolocationPosition | null = null;
+    let id = 0;
+    const finish = async (pos: GeolocationPosition) => {
       const r = await fetch("/api/office/tap", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy, ...extra }) }).catch(() => null);
       const j = (r ? await r.json().catch(() => null) : null) as { status?: string; distance?: number; time?: string } | null;
@@ -32,8 +36,22 @@ export function OfficeTap({ state, doneMs, workday, outsideDay, go }: { state: S
       const good = ["in", "out", "out-away", "lunch", "outside", "outside-still", "outside-done", "already-in"].includes(s);
       setMsg({ ok: good, text: t.has(`s.${s}`) ? t(`s.${s}`, { m: j?.distance ?? 0, time: j?.time ?? "" }) : t("s.error") });
       router.refresh();
-    }, (e) => { setBusy(null); setMsg({ ok: false, text: e.code === e.PERMISSION_DENIED ? t("blocked") : t("noLocation") }); },
-    { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+    };
+    let over = false;
+    const done = () => {
+      if (over) return;
+      over = true; navigator.geolocation.clearWatch(id); clearTimeout(timer);
+      if (best) finish(best); else { setBusy(null); setMsg({ ok: false, text: t("noLocation") }); }
+    };
+    const timer = setTimeout(done, 8000);
+    id = navigator.geolocation.watchPosition((pos) => {
+      if (!best || pos.coords.accuracy < best.coords.accuracy) best = pos;
+      if (pos.coords.accuracy <= 20) done();
+    }, (e) => {
+      if (best || over) return; // keep the reading we already have
+      over = true; navigator.geolocation.clearWatch(id); clearTimeout(timer);
+      setBusy(null); setMsg({ ok: false, text: e.code === e.PERMISSION_DENIED ? t("blocked") : t("noLocation") });
+    }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
   }, [t, router]);
 
   // Opened from a notification: do what it asked straight away (one tap)

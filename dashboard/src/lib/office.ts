@@ -47,8 +47,8 @@ export const hm = (ms: number) => { const m = Math.round(ms / 60e3); return `${M
 /** "09:12", Spanish time */
 export const madridTime = (iso: string) => new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" });
 
-export const IN_M = 30;   // within 30 m of the office = arrived
-export const OUT_M = 80;  // 80 m away = left (Alvaro, 2026-11-10)
+export const IN_M = 60;   // within 60 m of Dock = arrived (2026-11-12: indoor GPS drifts 30–60 m; 30 m failed people inside)
+export const OUT_M = 120; // within 120 m = still at Dock for check-out / pause (2026-11-12, indoor drift)
 
 /** Metres between two points (haversine). */
 export function distanceM(a: { lat: number; lng: number }, b: { lat: number; lng: number }): number {
@@ -57,16 +57,9 @@ export function distanceM(a: { lat: number; lng: number }, b: { lat: number; lng
   return 2 * 6371000 * Math.asin(Math.sqrt(h));
 }
 
-/** The emet shortcut sends its position every 15 s: in at 30 m, out at 150 m, otherwise keep checking ("wait"). */
-export function zoneStep(dist: number, isIn: boolean): { event: OfficeEvent | null; reply: "done" | "wait" } {
-  if (dist <= IN_M) return { event: isIn ? null : "arrive", reply: "done" };
-  if (dist >= OUT_M) return { event: isIn ? "leave" : null, reply: "done" };
-  return { event: null, reply: "wait" };
-}
-
 /** Same rule with the phone's own accuracy (browser): up to 20 m of GPS error counts in the person's favour for
  *  arriving (inside a building GPS drifts), and against leaving, so a GPS jump never checks anyone out. */
-export const GPS_SLACK_M = 20;
+export const GPS_SLACK_M = 40;
 export function zoneStepWithAccuracy(dist: number, accuracy: number, isIn: boolean) {
   const slack = Math.min(Math.max(accuracy, 0), GPS_SLACK_M);
   if (dist - slack <= IN_M) return { event: isIn ? null : ("arrive" as const), reply: "done" as const };

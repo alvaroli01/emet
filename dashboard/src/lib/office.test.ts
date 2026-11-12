@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { distanceM, zoneStep, zoneStepWithAccuracy, checkoutCounts, isOutsideDay, isStale, isWorkday, officeStatus, decide, visitMs, isInNow, isPaused, hm, madridTime, madridMidnight, STALE_MS, type Visit } from "./office.ts";
+import { distanceM, zoneStepWithAccuracy, checkoutCounts, isOutsideDay, isStale, isWorkday, officeStatus, decide, visitMs, isInNow, isPaused, hm, madridTime, madridMidnight, STALE_MS, type Visit } from "./office.ts";
 
 const T = Date.parse("2026-11-10T09:00:00Z");
 const v = (p: Partial<Visit>): Visit => ({ id: "a", user_id: "u", arrived_at: new Date(T).toISOString(), left_at: null, forgot: false, ...p });
@@ -52,13 +52,6 @@ test("shortcut positions: in within 30 m, out from 80 m, keep checking in betwee
   const office = { lat: 43.263, lng: -2.935 };
   const north = (m: number) => ({ lat: office.lat + m / 111195, lng: office.lng });
   assert.ok(Math.abs(distanceM(office, north(100)) - 100) < 0.5);
-  assert.deepEqual(zoneStep(distanceM(office, north(100)), false), { event: null, reply: "done" });   // woke up at Apple's 100 m zone: nothing yet (the shortcut keeps sending)
-  assert.deepEqual(zoneStep(distanceM(office, north(31)), false), { event: null, reply: "wait" });
-  assert.deepEqual(zoneStep(distanceM(office, north(29)), false), { event: "arrive", reply: "done" });
-  assert.deepEqual(zoneStep(10, true), { event: null, reply: "done" });     // already in
-  assert.deepEqual(zoneStep(79, true), { event: null, reply: "wait" });     // walking away, not yet 80 m
-  assert.deepEqual(zoneStep(80, true), { event: "leave", reply: "done" });
-  assert.deepEqual(zoneStep(400, false), { event: null, reply: "done" });   // already out
 });
 
 test("never checked out by 21:00 (the day closes) → that stretch counts 0", () => {
@@ -87,18 +80,18 @@ test("weekdays only, and one person's status (in / paused, hours today and this 
 });
 
 test("emet open on the phone: GPS accuracy helps arriving (inside the building) but never pushes anyone out", () => {
-  assert.equal(zoneStepWithAccuracy(45, 25, false).event, "arrive");  // 45 m ± 25 m → counts as within 30 m (20 m slack)
-  assert.equal(zoneStepWithAccuracy(55, 25, false).event, null);      // too far even with the slack
-  assert.equal(zoneStepWithAccuracy(45, 5, false).event, null);       // precise fix: really 45 m away
-  assert.equal(zoneStepWithAccuracy(90, 30, true).event, null);       // 90 m ± 30: maybe only 70 m → stay in
-  assert.equal(zoneStepWithAccuracy(105, 30, true).event, "leave");   // clearly 80 m+ away
+  assert.equal(zoneStepWithAccuracy(90, 35, false).event, "arrive");  // 90 m ± 35 m inside Dock → counts as within 60 m (up to 40 m slack)
+  assert.equal(zoneStepWithAccuracy(110, 30, false).event, null);     // too far even with the slack
+  assert.equal(zoneStepWithAccuracy(70, 5, false).event, null);       // precise fix: really 70 m away
+  assert.equal(zoneStepWithAccuracy(140, 30, true).event, null);      // 140 m ± 30: maybe only 110 m → stay in
+  assert.equal(zoneStepWithAccuracy(170, 30, true).event, "leave");   // clearly 120 m+ away
 });
 
 test("one-tap check-out only counts at Dock; working outside only Mon/Wed/Fri", () => {
   assert.equal(checkoutCounts(60, 10), true);    // at the door
-  assert.equal(checkoutCounts(95, 20), true);    // 95 m ± 20 m → maybe 75 m: counts
-  assert.equal(checkoutCounts(150, 20), false);  // checked out from the street / home → that stretch counts 0 h
-  assert.equal(checkoutCounts(150, 500), false); // a rough fix gives at most 20 m slack
+  assert.equal(checkoutCounts(150, 40), true);   // 150 m ± 40 m → maybe 110 m: still Dock
+  assert.equal(checkoutCounts(200, 20), false);  // the street / home
+  assert.equal(checkoutCounts(200, 500), false); // a rough fix gives at most 40 m slack
   assert.equal(isOutsideDay(Date.parse("2026-11-09T10:00:00Z")), true);  // Monday
   assert.equal(isOutsideDay(Date.parse("2026-11-10T10:00:00Z")), false); // Tuesday
   assert.equal(isOutsideDay(Date.parse("2026-11-13T10:00:00Z")), true);  // Friday
