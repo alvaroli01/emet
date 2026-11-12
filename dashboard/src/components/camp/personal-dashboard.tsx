@@ -8,6 +8,8 @@ import { Pause, Play, Star, ChevronRight, Plus, Video, CalendarClock, Check, Tra
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { PhoneWeek } from "@/components/home/phone-week";
+import { GoogleCalendarButton } from "@/components/camp/google-calendar";
+import type { GoogleStatus } from "@/components/home/week-calendar";
 
 export type PersonalData = {
   name: string; today: string; weekStart: string;
@@ -18,6 +20,7 @@ export type PersonalData = {
   activity: { label: string; pct: number }[]; activityPct: number;
   worked: { name: string; color: string; share: number }[];
   reminders: { id: string; title: string; remind_at: string; priority: "low" | "medium" | "high"; done: boolean }[];
+  google: GoogleStatus; // my Google Calendar (moved here from Today on 2026-11-12)
 };
 
 const STATUS = { done: "bg-ok/15 text-ok-text", late: "bg-bad/15 text-bad-text", today: "bg-warn/15 text-warn-text", planned: "bg-surface-2 text-muted", google: "bg-[#3b82f6]/20 text-[#93c5fd]", notion: "bg-[#8b5cf6]/20 text-[#c4b5fd]" } as const;
@@ -123,9 +126,10 @@ export function PersonalDashboard({ d }: { d: PersonalData }) {
           </div>
 
           {/* Week board */}
-          <section className="panel p-4 sm:p-5">
+          <section id="week" className="panel scroll-mt-20 p-4 sm:p-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-lg font-medium">{t("myWeek")}</p>
+              <div className="flex items-center gap-2 text-xs"><GoogleCalendarButton status={d.google} /></div>
               <div className="glass-pill p-1 text-sm max-sm:hidden" role="tablist">
                 {(["today", "week"] as const).map((v) => <button key={v} role="tab" aria-selected={view === v} onClick={() => setView(v)} className={`rounded-full px-3.5 py-1.5 ${view === v ? "bg-ink font-medium text-bg" : "text-muted"}`}>{t(v === "today" ? "viewToday" : "viewWeek")}</button>)}
               </div>

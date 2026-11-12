@@ -2556,7 +2556,10 @@
     "dueLabel": "pendientes",
     "dueNote": "Tareas con fecha en este periodo",
     "vsLastMonth": "vs mes pasado",
-    "salesCountPeriod": "{count, plural, one {# venta} other {# ventas}} en este periodo"
+    "salesCountPeriod": "{count, plural, one {# venta} other {# ventas}} en este periodo",
+    "emetCalendar": "Calendario de emet",
+    "checkInOut": "Fichar",
+    "myWeekCamp": "Mi semana (Google) →"
   },
   "financeDash": {
     "totalRevenue": "Ingresos totales",

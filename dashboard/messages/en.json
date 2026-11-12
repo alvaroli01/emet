@@ -2556,7 +2556,10 @@
     "dueLabel": "due",
     "dueNote": "Tasks due in this period",
     "vsLastMonth": "vs last month",
-    "salesCountPeriod": "{count, plural, one {# sale} other {# sales}} in this period"
+    "salesCountPeriod": "{count, plural, one {# sale} other {# sales}} in this period",
+    "emetCalendar": "emet calendar",
+    "checkInOut": "Check in / out",
+    "myWeekCamp": "My week (Google) →"
   },
   "financeDash": {
     "totalRevenue": "Total revenue",

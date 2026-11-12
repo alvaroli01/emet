@@ -7,8 +7,6 @@ import { createClient } from "@/lib/supabase/server";
 import { weekStart, GOAL, pace, totals, type Sale, type Expense } from "@/lib/metrics";
 import { todayISO, shortDate } from "@/lib/format";
 import { LiveRefresh } from "@/components/live-refresh";
-import { loadMyGoogleEvents } from "@/lib/gcal-server";
-import { loadMyNotionDeadlinesFast } from "@/lib/notion/server";
 import { ReportCard } from "@/components/workspace/report-card";
 import type { WeeklyReport } from "@/lib/weekly-report";
 import { cardHref } from "@/lib/projects";
@@ -49,9 +47,7 @@ export default async function TodayPage() {
   ]);
   const since30 = new Date(Date.now() - 30 * DAY).toISOString().slice(0, 10);
   const weekEnd = new Date(Date.parse(week + "T00:00:00Z") + 6 * DAY).toISOString().slice(0, 10);
-  const googleP = loadMyGoogleEvents(supabase, week, weekEnd); // in parallel with the queries below
-  const notionP = loadMyNotionDeadlinesFast(supabase, week, weekEnd); // my Notion deadlines database, if I picked one
-  const [weekSales, myPoints, teamActs, seen, members, dueCards, blockers, myDone, weekAgenda, weekTasks, officePlace, visits] = await Promise.all([
+  const [weekSales, myPoints, teamActs, seen, members, dueCards, blockers, myDone, officePlace, visits] = await Promise.all([
     supabase.from("sales").select("date, amount, heard_about, channel").gte("date", lastMonday),
     supabase.from("member_points").select("kind, amount").eq("user_id", me.id),
     supabase.rpc("team_activity", { since: new Date(Date.parse(week + "T00:00:00Z") - DAY).toISOString() }), // a day early; trimmed to this week below
@@ -60,10 +56,6 @@ export default async function TodayPage() {
     supabase.from("cards").select("board_id, due_at, completed_at").not("due_at", "is", null),
     supabase.from("blockers").select("id", { count: "exact", head: true }).eq("status", "open"),
     supabase.from("cards").select("completed_at, card_assignees!inner(user_id)").eq("card_assignees.user_id", me.id).not("completed_at", "is", null).gte("completed_at", since30),
-    // My week calendar: my own agenda plus tasks assigned to me that are due this week
-    supabase.from("agenda_items").select("id, title, day, start_time, end_time, done").eq("owner_id", me.id).gte("day", week).lte("day", weekEnd).order("start_time"),
-    supabase.from("cards").select("id, title, due_at, completed_at, boards(group_id, project_id), card_assignees!inner(user_id)")
-      .eq("card_assignees.user_id", me.id).gte("due_at", `${week}T00:00:00Z`).lte("due_at", `${weekEnd}T23:59:59Z`),
     // Office check-ins this week (+ anyone still in from before Monday)
     supabase.from("office_place").select("lat, lng").maybeSingle<{ lat: number; lng: number }>(),
     supabase.from("office_visits").select("id, user_id, arrived_at, left_at, forgot, lunch_until, out_lat, out_lng").or(`arrived_at.gte.${madridMidnight(week)},left_at.is.null`)
@@ -79,10 +71,7 @@ export default async function TodayPage() {
     .gte("started_at", madridMidnight(week)).order("started_at")
     .returns<{ id: string; user_id: string; note: string; started_at: string; ended_at: string | null; places: { lat: number; lng: number }[] }[]>();
 
-  const google = await googleP;
-  const notionDl = await notionP;
 
-  const slug = (gid: string | null | undefined) => (gid ? groups.find((g) => g.id === gid)?.slug : undefined);
   const href = (b: { group_id: string | null; project_id?: string | null } | null | undefined, id: string) => cardHref({ id, boards: b });
   const due: Due[] = [
     ...((cards.data ?? []) as unknown as { id: string; title: string; due_at: string; boards: { group_id: string | null } | null }[])
@@ -143,18 +132,6 @@ export default async function TodayPage() {
     calendar: {
       today,
       days: Array.from({ length: 7 }, (_, i) => new Date(Date.parse(week + "T00:00:00Z") + i * DAY).toISOString().slice(0, 10)),
-      items: [
-        ...(weekAgenda.data ?? []).map((a) => ({ id: a.id, title: a.title, day: a.day, start: a.start_time?.slice(0, 5) ?? null, end: a.end_time?.slice(0, 5) ?? null,
-          status: a.done ? "done" as const : a.day < today ? "late" as const : "open" as const, href: "/camp?tab=agenda#camp-tabs" })),
-        ...((weekTasks.data ?? []) as unknown as { id: string; title: string; due_at: string; completed_at: string | null; boards: { group_id: string | null } | null }[])
-          .map((c) => ({ id: c.id, title: c.title, day: c.due_at.slice(0, 10), start: null, end: null, team: slug(c.boards?.group_id) ? tg(slug(c.boards?.group_id)!) : undefined,
-            status: c.completed_at ? "done" as const : c.due_at.slice(0, 10) < today ? "late" as const : "open" as const, href: href(c.boards, c.id) })),
-        ...google.events.map((g) => ({ id: `g:${g.id}`, title: g.title, day: g.day, start: g.start, end: g.end, kind: "google" as const,
-          status: g.day < today ? "done" as const : "open" as const, href: `https://calendar.google.com/calendar/r/day/${g.day.replaceAll("-", "/")}` })),
-        ...notionDl.items.map((n) => ({ id: `n:${n.id}`, title: n.title, day: n.day, start: n.start, end: n.end, kind: "notion" as const,
-          status: n.done ? "done" as const : n.day < today ? "late" as const : "open" as const, href: n.url || "/camp?tab=notion#camp-tabs" })),
-      ],
-      google: google.status,
     },
   };
   const reportIsFresh = report.data && report.data.week_start === week;
@@ -196,7 +173,7 @@ export default async function TodayPage() {
     isAdmin, officeSet: !!officePlace.data,
     // Team calendar this week (everyone sees it): each day, who was at Dock (from–to, hours; 0 h if never checked out at
     // Dock) and who worked outside (note + the exact places: where they said they were out, and the last one)
-    calendar: (() => {
+    emetRows: (() => {
       const map = (p?: { lat: number; lng: number }) => (p ? `https://www.google.com/maps?q=${p.lat},${p.lng}` : null);
       const day = (iso: string) => new Date(iso).toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
       const rows = [
@@ -225,7 +202,7 @@ export default async function TodayPage() {
             id: `${x.id}-${d}`, at: `${d}T00:00`, day: d, kind: "away" as const, name: who.get(x.user_id)!.full_name,
             from: "", to: null, hours: "", zero: false, note: x.reason, start: null, end: null }))),
       ].sort((a, b) => a.at.localeCompare(b.at));
-      return [...Map.groupBy(rows, (r) => r.day)].sort((a, b) => b[0].localeCompare(a[0])).map(([d, items]) => ({ day: fmtDay(d), items }));
+      return rows;
     })(),
   };
 
@@ -233,7 +210,7 @@ export default async function TodayPage() {
   return (
     <div className="space-y-5">
       <LiveRefresh tables={["cards", "card_assignees", "card_checklist_items", "agenda_items", "week_plans", "sales", "weekly_reports", "scout_leads", "member_points", "office_visits"]} />
-      <HomeDashboard d={home} />
+      <HomeDashboard d={home} emet={{ today, days: home.calendar.days.slice(0, 5), items: office.emetRows }} />
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <section className="panel p-5">

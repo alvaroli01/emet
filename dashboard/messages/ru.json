@@ -2556,7 +2556,10 @@
     "dueLabel": "к сроку",
     "dueNote": "Задачи со сроком в этом периоде",
     "vsLastMonth": "vs прошлый месяц",
-    "salesCountPeriod": "{count, plural, one {# продажа} few {# продажи} many {# продаж} other {# продажи}} за этот период"
+    "salesCountPeriod": "{count, plural, one {# продажа} few {# продажи} many {# продаж} other {# продажи}} за этот период",
+    "emetCalendar": "Календарь emet",
+    "checkInOut": "Отметиться",
+    "myWeekCamp": "Моя неделя (Google) →"
   },
   "financeDash": {
     "totalRevenue": "Общая выручка",

@@ -2556,7 +2556,10 @@
     "dueLabel": "fällig",
     "dueNote": "In diesem Zeitraum fällige Aufgaben",
     "vsLastMonth": "vs Vormonat",
-    "salesCountPeriod": "{count, plural, one {# Verkauf} other {# Verkäufe}} in diesem Zeitraum"
+    "salesCountPeriod": "{count, plural, one {# Verkauf} other {# Verkäufe}} in diesem Zeitraum",
+    "emetCalendar": "emet-Kalender",
+    "checkInOut": "Ein-/Ausstempeln",
+    "myWeekCamp": "Meine Woche (Google) →"
   },
   "financeDash": {
     "totalRevenue": "Gesamtumsatz",

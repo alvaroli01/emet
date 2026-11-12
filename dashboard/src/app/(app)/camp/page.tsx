@@ -94,7 +94,8 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
   const byTeam = new Map<string, number>();
   for (const c of boardMeta.data ?? []) { const k = teamName(c.boards) ?? c.boards?.name ?? tp("company"); byTeam.set(k, (byTeam.get(k) ?? 0) + 1); }
   const workedTotal = [...byTeam.values()].reduce((a, b) => a + b, 0);
-  const gEvents = (await google).events;
+  const g = await google;
+  const gEvents = g.events;
   const myProjects = await loadMyProjects(supabase, me.id);
   const gHref = (day: string) => `https://calendar.google.com/calendar/r/day/${day.replaceAll("-", "/")}`;
   const personal: PersonalData = {
@@ -120,6 +121,7 @@ export default async function CampPage({ searchParams }: { searchParams: Promise
     activityPct: perDay.slice(0, workedDays).filter((n) => n > 0).length / workedDays,
     worked: [...byTeam].sort((a, b) => b[1] - a[1]).slice(0, 6).map(([name, n], i) => ({ name, color: COLORS[i], share: n / workedTotal })),
     reminders: (reminders.data ?? []) as PersonalData["reminders"],
+    google: g.status,
   };
 
   return (

@@ -2556,7 +2556,10 @@
     "dueLabel": "para entregar",
     "dueNote": "Tarefas com prazo neste período",
     "vsLastMonth": "vs mês passado",
-    "salesCountPeriod": "{count, plural, one {# venda} other {# vendas}} neste período"
+    "salesCountPeriod": "{count, plural, one {# venda} other {# vendas}} neste período",
+    "emetCalendar": "Calendário do emet",
+    "checkInOut": "Registrar",
+    "myWeekCamp": "Minha semana (Google) →"
   },
   "financeDash": {
     "totalRevenue": "Receita total",

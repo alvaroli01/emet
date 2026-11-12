@@ -2556,7 +2556,10 @@
     "dueLabel": "à faire",
     "dueNote": "Tâches à rendre sur cette période",
     "vsLastMonth": "vs mois dernier",
-    "salesCountPeriod": "{count, plural, one {# vente} other {# ventes}} sur cette période"
+    "salesCountPeriod": "{count, plural, one {# vente} other {# ventes}} sur cette période",
+    "emetCalendar": "Calendrier emet",
+    "checkInOut": "Pointer",
+    "myWeekCamp": "Ma semaine (Google) →"
   },
   "financeDash": {
     "totalRevenue": "Chiffre d’affaires total",
