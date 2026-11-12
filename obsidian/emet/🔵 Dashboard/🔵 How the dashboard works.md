@@ -51,7 +51,7 @@ updated: 2026-11-10
 
 ## Behind the scenes
 - [[Systems map]]: how the parts connect (diagram)
-- [[Tech stack]] (Next.js + Supabase + Vercel, €0) · [[Repo map]] · [[Backups & reliability]]
+- [[Tech stack]] (Next.js + Supabase + Vercel, €0) · [[Repo map]] · [[Backups & reliability]] · [[Security]]
 - [[Design history]] · [[Workspace roadmap]] · [[Shared Claude skills]] · [[Working with Claude]]
 - [[Specs and plans]] · [[Repo README]] · [[Links & accounts]]
 

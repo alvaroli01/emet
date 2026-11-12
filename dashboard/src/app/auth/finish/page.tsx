@@ -11,7 +11,9 @@ export default function FinishLogin() {
   useEffect(() => {
     const hash = new URLSearchParams(window.location.hash.slice(1));
     const next = new URLSearchParams(window.location.search).get("next") ?? "/";
-    const safe = next.startsWith("/") && !next.startsWith("//") ? next : "/";
+    // Same-site paths only: "/\evil.com" or "/\t/evil.com" would otherwise leave the site
+    const u = new URL(next, window.location.origin);
+    const safe = next.startsWith("/") && u.origin === window.location.origin ? u.pathname + u.search + u.hash : "/";
     const access_token = hash.get("access_token");
     const refresh_token = hash.get("refresh_token");
     if (!access_token || !refresh_token) { window.location.replace("/login?error=link"); return; }

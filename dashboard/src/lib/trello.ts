@@ -114,7 +114,12 @@ export async function pushCard(cardId: string) {
   }
 }
 
+/** Deletes a card, but only a real card id (no "../boards/…" paths) on a board we sync. */
 export async function deleteTrelloCard(trelloCardId: string) {
+  if (!/^[a-f0-9]{24}$/.test(trelloCardId)) throw new Error("bad card id");
+  const { board } = await trello<{ board: { id: string; shortLink: string } }>(`/cards/${trelloCardId}`, { query: { fields: "idBoard", board: "true", board_fields: "id,shortLink" } });
+  const { count } = await adminDb().from("boards").select("id", { count: "exact", head: true }).in("trello_board_id", [board.id, board.shortLink]);
+  if (!count) throw new Error("card is not on a synced board");
   await trello(`/cards/${trelloCardId}`, { method: "DELETE" });
 }
 

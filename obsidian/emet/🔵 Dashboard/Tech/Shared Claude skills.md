@@ -14,6 +14,7 @@ Live in the repo's `.claude/skills/` so every teammate's Claude loads the same o
 - Design: `impeccable` (main), `design-taste-frontend`, `redesign-existing-projects`, `minimalist-ui`, `interface-design`, `kpi-dashboard-design`, `shadcn`
 - Motion: `magic-ui`
 - Testing: `webapp-testing`
+- Security (12 Nov 2026): `vibe-security` (Supabase/Next.js app audit), `security-review` (Sentry, code review), `owasp-top-10-testing`, `supabase-audit-rls` → [[Security]]
 
 All free.
 

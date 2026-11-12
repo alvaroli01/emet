@@ -34,7 +34,8 @@ function LoginForm() {
 
   const supabase = createClient();
   const next = params.get("next") ?? "/today";
-  const safeNext = next.startsWith("/") && !next.startsWith("//") ? next : "/today";
+  // Same-site paths only: no "//", backslashes or control chars ("/\evil.com" leaves the site)
+  const safeNext = /^\/(?!\/)[^\\\x00-\x20]*$/.test(next) ? next : "/today";
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
