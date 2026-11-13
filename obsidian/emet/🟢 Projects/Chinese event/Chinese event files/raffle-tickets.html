@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Boletos rifa — Día de Asia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* Print: A4, margins "None", background graphics ON, double-sided "flip on long edge".
+   ?from=1&to=100 in the URL picks which numbers to print (default 1–50). */
+:root{ --red:#a50f1c; --red2:#5e0710; --gold:#e9c06a; --gold2:#b8862f; --cream:#fbf3e2; --navy:#0c1322; }
+@page{ size:A4; margin:0 }
+*{ box-sizing:border-box; margin:0; padding:0 }
+body{ font-family:Inter,Arial,sans-serif; background:#d8d8d8; -webkit-print-color-adjust:exact; print-color-adjust:exact }
+.sheet{ width:210mm; height:297mm; padding:9mm 10mm; background:#fff; margin:0 auto 6mm;
+  display:flex; flex-direction:column; gap:3mm; page-break-after:always }
+.t{ height:54.5mm; display:flex; outline:.25mm dashed #aaa; outline-offset:.8mm }
+.main{ flex:1; position:relative; overflow:hidden }
+.stub{ width:42mm; position:relative; overflow:hidden }
+
+/* ---------- FRONT ---------- */
+.front .main{ background:
+   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='40' viewBox='0 0 60 40'%3E%3Cpath d='M0 30c5-8 15-8 20 0 5-8 15-8 20 0 5-8 15-8 20 0M10 30c3-5 7-5 10 0M30 30c3-5 7-5 10 0M50 30c3-5 7-5 10 0' fill='none' stroke='%23e9c06a' stroke-opacity='.10' stroke-width='1.4'/%3E%3C/svg%3E") 0 0/15mm 10mm,
+   radial-gradient(ellipse at 70% 40%, #c8192a 0%, var(--red) 45%, var(--red2) 100%); color:#fff }
+.frame{ position:absolute; inset:2.2mm; border:.45mm solid var(--gold); pointer-events:none }
+.frame::before{ content:""; position:absolute; inset:.9mm; border:.2mm solid rgba(233,192,106,.6) }
+.corner{ position:absolute; width:6mm; height:6mm; fill:none; stroke:var(--gold); stroke-width:1.3 }
+.c1{ left:1mm; top:1mm } .c2{ right:1mm; top:1mm; transform:scaleX(-1) }
+.c3{ left:1mm; bottom:1mm; transform:scaleY(-1) } .c4{ right:1mm; bottom:1mm; transform:scale(-1) }
+.lantern{ position:absolute; top:-1mm; height:30mm }
+.l1{ left:6mm } .l2{ left:17mm; top:-4mm; height:24mm }
+.ttl{ position:absolute; left:31mm; top:4.6mm; right:34mm }
+.brush{ font-family:'Ma Shan Zheng',cursive; color:var(--gold); font-size:13mm; line-height:.9; text-shadow:0 .4mm 0 var(--red2) }
+.kick{ font:800 2.5mm Inter; letter-spacing:1.1mm; color:var(--gold); margin-top:.8mm }
+.name{ font:900 7.4mm 'Playfair Display',serif; line-height:1; margin-top:.6mm }
+.name i{ font-weight:700; color:var(--gold) }
+.meta{ font-size:2.6mm; margin-top:2mm; opacity:.95; display:flex; gap:1.6mm; align-items:center; white-space:nowrap }
+.meta s{ text-decoration:none; color:var(--gold); font-size:2mm }
+.keep{ font-size:2.15mm; opacity:.75; margin-top:1.1mm }
+.seal{ position:absolute; right:7mm; top:6mm; width:24mm; height:24mm; border-radius:50%;
+  background:radial-gradient(circle,#fff6e0 0 58%, var(--gold) 59% 64%, var(--gold2) 65% 70%, var(--gold) 71% 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--red); box-shadow:0 .6mm 1.4mm rgba(0,0,0,.35) }
+.seal small{ font:800 1.9mm Inter; letter-spacing:.5mm }
+.seal b{ font:900 5.6mm 'Playfair Display',serif; line-height:1 }
+.price{ position:absolute; right:7mm; bottom:5mm; text-align:center; color:var(--gold) }
+.price b{ font:900 7mm 'Playfair Display',serif; display:block; line-height:1 }
+.price span{ display:block; font-size:1.5mm; letter-spacing:.35mm; line-height:1.4; margin-top:.8mm; opacity:.85 }
+.spon{ position:absolute; left:31mm; bottom:4.6mm; z-index:2 }
+.sl{ display:flex; align-items:center; gap:1.4mm; font:700 1.7mm Inter; letter-spacing:.7mm; color:var(--gold); opacity:.9; margin-bottom:1mm }
+.sl::after{ content:""; width:14mm; height:.2mm; background:linear-gradient(90deg,var(--gold),transparent) }
+.sb{ display:flex; align-items:center; gap:1.8mm }
+.mon.sm{ width:6.2mm; height:6.2mm; font-size:3.2mm; background:#c22d1e; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Noto Serif SC',serif; font-weight:900; box-shadow:0 0 0 .3mm var(--gold) }
+.st b{ display:block; font:900 4.2mm 'Playfair Display',serif; letter-spacing:.8mm; color:#fff; line-height:1 }
+.st span{ display:block; font-size:1.95mm; opacity:.85; margin-top:.5mm; letter-spacing:.1mm }
+.sg{ margin-left:3mm; padding-left:3mm; border-left:.25mm solid rgba(233,192,106,.6); line-height:1.1 }
+.sg span{ display:block; font:700 1.7mm Inter; letter-spacing:.7mm; color:var(--gold); opacity:.9 }
+.sg b{ display:block; font:700 3.6mm 'Playfair Display',serif; color:#fff; margin-top:.7mm; letter-spacing:.2mm }
+.gift{ position:absolute; left:31mm; bottom:5mm; background:var(--gold); color:var(--red2); font:800 2.3mm Inter;
+  padding:.9mm 2.4mm .9mm 2mm; clip-path:polygon(0 0,100% 0,96% 50%,100% 100%,0 100%); letter-spacing:.2mm }
+.front .stub{ background:var(--cream); border-right:.5mm dashed #8a6a3a; padding:0 3.2mm 3mm }
+.front .stub .band{ margin:0 -3.2mm 2mm; height:7.5mm; background:var(--red); color:var(--gold); display:flex; align-items:center; justify-content:space-between; padding:0 3.2mm; font:900 3.6mm 'Playfair Display',serif }
+.front .stub .band em{ font:4.6mm 'Ma Shan Zheng'; font-style:normal }
+.fld{ font-size:2.2mm; color:#6b5a40; border-bottom:.25mm solid #b9a37c; padding-top:3.1mm; padding-bottom:.4mm }
+.stub .for{ position:absolute; bottom:2.6mm; left:3.2mm; right:3.2mm; font:700 1.9mm Inter; color:var(--red); letter-spacing:.4mm; text-align:center }
+
+/* ---------- BACK (mirrored for long-edge duplex) ---------- */
+.back .t{ flex-direction:row-reverse }
+.back .main{ background:
+   radial-gradient(ellipse at 15% 110%, rgba(233,192,106,.18), transparent 45%),
+   radial-gradient(ellipse at 95% -20%, rgba(233,192,106,.14), transparent 40%), var(--navy); color:#fff; padding:5.2mm 6.5mm }
+.waves{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none }
+.back .frame{ border-color:rgba(233,192,106,.85) }
+.uhead{ display:flex; align-items:center; gap:2.6mm; position:relative }
+.mon{ width:8.5mm; height:8.5mm; border-radius:50%; background:#c22d1e; color:#fff; font:900 4.4mm 'Noto Serif SC',serif; display:flex; align-items:center; justify-content:center }
+.uname b{ display:block; font:900 5.6mm 'Playfair Display',serif; letter-spacing:1mm; color:var(--gold); line-height:1 }
+.uname span{ font-size:2.1mm; letter-spacing:.5mm; opacity:.8 }
+.show{ margin-left:auto; border:.3mm solid var(--gold); color:var(--gold); font:800 2.1mm Inter; letter-spacing:.5mm; padding:1mm 2mm }
+.uhead,.offers,.ufoot{ z-index:2 }
+.back .frame,.back .corner{ z-index:6 }
+.uhead{ width:76mm }
+.uname span{ white-space:nowrap; letter-spacing:.3mm }
+.back .show{ position:absolute; right:6mm; top:5.5mm; margin:0; z-index:7; background:var(--gold); color:var(--navy); border:0; box-shadow:0 .4mm 1mm rgba(0,0,0,.5) }
+.offers{ position:relative; margin-top:1.8mm; width:74mm; display:flex; flex-direction:column; gap:.9mm }
+.o{ display:flex; align-items:center; gap:2.2mm; padding-bottom:.9mm; border-bottom:.2mm solid rgba(233,192,106,.3) }
+.o:last-child{ border:0; padding:0 }
+.o b{ flex:none; width:19mm; font:900 4.9mm 'Playfair Display',serif; color:var(--gold); line-height:1; text-shadow:0 .3mm .8mm rgba(0,0,0,.6) }
+.o span{ font-size:2.1mm; line-height:1.28 }
+.o span strong{ color:#fff; font-weight:800 }
+.photos{ position:absolute; right:2.6mm; top:2.6mm; bottom:2.6mm; width:68mm; z-index:1; overflow:hidden }
+.back .ufoot{ right:auto; width:78mm; display:block; bottom:4mm; line-height:1.35 }
+.photos img{ position:absolute; display:block }
+.p-beer{ right:23mm; top:9mm; height:28mm; -webkit-mask-image:radial-gradient(ellipse 60% 62% at 55% 52%,#000 55%,transparent 100%); mask-image:radial-gradient(ellipse 60% 62% at 55% 52%,#000 55%,transparent 100%) }
+.p-cola{ right:7mm; top:15mm; height:21mm; -webkit-mask-image:radial-gradient(ellipse 60% 65% at 50% 50%,#000 55%,transparent 100%); mask-image:radial-gradient(ellipse 60% 65% at 50% 50%,#000 55%,transparent 100%) }
+.p-wine{ right:20mm; top:6mm; height:37mm; z-index:2; -webkit-mask-image:radial-gradient(ellipse 50% 70% at 50% 45%,#000 70%,transparent 100%); mask-image:radial-gradient(ellipse 50% 70% at 50% 45%,#000 70%,transparent 100%); filter:drop-shadow(0 0 2mm rgba(0,0,0,.6)) }
+.p-sushi{ right:3mm; bottom:4mm; height:17mm; z-index:3; -webkit-mask-image:radial-gradient(ellipse 58% 70% at 50% 55%,#000 55%,transparent 100%); mask-image:radial-gradient(ellipse 58% 70% at 50% 55%,#000 55%,transparent 100%) }
+.photos{ -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%); mask-image:linear-gradient(90deg,transparent 0,#000 30%) }
+.ufoot{ position:absolute; left:6.5mm; right:6.5mm; bottom:4.6mm; font-size:1.95mm; line-height:1.45; opacity:.8; display:flex; justify-content:space-between; gap:3mm }
+.ufoot .n{ color:var(--gold); font-weight:800; white-space:nowrap }
+.back .stub{ background:var(--cream); border-left:.5mm dashed #8a6a3a; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.2mm; color:#6b5a40; text-align:center }
+.back .stub .fu{ font:9mm 'Noto Serif SC',serif; color:var(--red); width:13mm; height:13mm; border:.4mm solid var(--red); transform:rotate(45deg); display:flex; align-items:center; justify-content:center }
+.back .stub .fu span{ transform:rotate(-45deg); font-size:7mm; font-weight:900 }
+.back .stub p{ font-size:2mm; margin-top:2mm; letter-spacing:.3mm }
+.pv{ width:205mm; margin:0 auto; padding:9mm 0 6mm; background:#fff; font-size:3.6mm; color:#222; line-height:1.5 }
+.pv h1{ font:900 8mm 'Playfair Display',serif; color:var(--red2); padding:0 5mm 4mm }
+.pv h1 span{ display:block; font:600 3.6mm Inter; color:#8a6a3a; margin-top:1mm }
+.pv .lbl{ font:800 3mm Inter; letter-spacing:.5mm; color:var(--red); padding:0 5mm; margin:3mm 0 1.5mm; display:flex; align-items:center; gap:2mm }
+.pv .lbl b{ background:var(--red); color:#fff; width:5mm; height:5mm; border-radius:50%; display:flex; align-items:center; justify-content:center }
+.pv .pvs{ height:auto; width:auto; padding:0 5mm; margin:0 }
+.pv p{ padding:2.5mm 5mm 3mm; color:#444 }
+@media print{ body{ background:#fff } .sheet{ margin:0 } }
+</style>
+</head>
+<body>
+<script>
+const CFG = {
+  event: "Día de Asia",
+  date:  "Mié 25 nov 2026", city: "Bilbao", draw: "Sorteo 20:45",
+  price: "5 €",
+  nif:   "G05894852",
+  // TODO: fill in once agreed with Urrea (he asked 10–30 Nov; we need later dates)
+  urreaValid: "Válido del __/__ al __/__, no fines de semana ni festivos"
+};
+const q = new URLSearchParams(location.search);
+const from = +q.get("from") || 1, to = +q.get("to") || 50;
+const pad = n => String(n).padStart(4, "0");
+
+const corner = c => `<svg class="corner ${c}" viewBox="0 0 24 24"><path d="M2 14V2h12M6 10V6h4M2 2l5 5"/></svg>`;
+const frame = `<div class="frame"></div>${["c1","c2","c3","c4"].map(corner).join("")}`;
+const lantern = cls => `<svg class="lantern ${cls}" viewBox="0 0 40 120">
+  <line x1="20" y1="0" x2="20" y2="30" stroke="#e9c06a" stroke-width="1.2"/>
+  <defs><radialGradient id="lg" cx="45%" cy="45%" r="60%"><stop offset="0" stop-color="#ffd27a"/><stop offset=".35" stop-color="#ff5a3a"/><stop offset=".8" stop-color="#d0141f"/><stop offset="1" stop-color="#7a0610"/></radialGradient>
+  <radialGradient id="glow"><stop offset="0" stop-color="#ffb347" stop-opacity=".55"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient></defs>
+  <circle cx="20" cy="56" r="20" fill="url(#glow)"/>
+  <rect x="12" y="28" width="16" height="5" rx="1" fill="#e9c06a"/>
+  <ellipse cx="20" cy="56" rx="17" ry="23" fill="url(#lg)"/>
+  <ellipse cx="14" cy="46" rx="3" ry="8" fill="#fff" fill-opacity=".18"/>
+  <path d="M20 33v46M11 36c-4 12-4 28 0 40M29 36c4 12 4 28 0 40" stroke="#e9c06a" stroke-opacity=".7" fill="none" stroke-width=".9"/>
+  <rect x="12" y="78" width="16" height="5" rx="1" fill="#e9c06a"/>
+  <path d="M15 83v24M18 83v28M20 83v30M22 83v28M25 83v24" stroke="#e9c06a" stroke-width=".9"/>
+</svg>`;
+const ICON = {
+  // two nigiri + chopsticks
+  sushi: `<svg viewBox="0 0 60 64">
+    <path d="M6 6l46 30M12 3l44 27" stroke="#c99a4a" stroke-width="2.4" stroke-linecap="round"/>
+    <ellipse cx="22" cy="44" rx="15" ry="7" fill="#f7f1e3"/><ellipse cx="22" cy="41" rx="15" ry="6" fill="#fffaf0"/>
+    <path d="M7 39c3-7 25-9 30-1-7 4-23 5-30 1z" fill="#f2793d"/>
+    <path d="M13 36l3 4M19 34l3 5M25 34l3 5M31 35l2 4" stroke="#ffd2b0" stroke-width="1.3" stroke-linecap="round"/>
+    <ellipse cx="40" cy="55" rx="14" ry="6.5" fill="#f7f1e3"/><ellipse cx="40" cy="52" rx="14" ry="5.5" fill="#fffaf0"/>
+    <path d="M26 50c3-6 23-8 28-1-7 4-21 5-28 1z" fill="#d8303a"/>
+    <path d="M32 47l2 4M38 46l2 4M44 46l2 4" stroke="#ff9aa0" stroke-width="1.2" stroke-linecap="round"/>
+    <rect x="37" y="45" width="5" height="12" fill="#1d2b1f"/></svg>`,
+  // Rioja bottle + glass
+  wine: `<svg viewBox="0 0 46 64">
+    <path d="M14 2h6v14c0 3 6 6 6 13v32c0 2-1 3-3 3H11c-2 0-3-1-3-3V29c0-7 6-10 6-13z" fill="#3a0d14"/>
+    <rect x="13.5" y="1" width="7" height="6" rx="1" fill="#b3121f"/>
+    <rect x="9" y="34" width="16" height="17" rx="1" fill="#f3e6c8"/>
+    <rect x="9" y="36" width="16" height="1" fill="#b8862f"/><rect x="9" y="48" width="16" height="1" fill="#b8862f"/>
+    <path d="M17 40l3 2-3 4-3-4z" fill="#b3121f"/>
+    <path d="M30 30h13c0 9-3 13-6.5 13S30 39 30 30z" fill="rgba(255,255,255,.25)" stroke="#fff" stroke-opacity=".6" stroke-width=".8"/>
+    <path d="M30.6 34h11.8c-.6 5-3 7.5-5.9 7.5s-5.3-2.5-5.9-7.5z" fill="#8e1020"/>
+    <path d="M36.5 43v14M31 58h11" stroke="#fff" stroke-opacity=".7" stroke-width="1.2" stroke-linecap="round"/></svg>`,
+  // beer mug + cola glass
+  beer: `<svg viewBox="0 0 64 64">
+    <path d="M8 18h26v38c0 2-1 3-3 3H11c-2 0-3-1-3-3z" fill="#f2a623"/>
+    <path d="M8 18h26v6H8z" fill="#f7c252"/>
+    <path d="M34 26h5c3 0 5 2 5 5v10c0 3-2 5-5 5h-5" fill="none" stroke="#e8e2d0" stroke-width="3.2"/>
+    <path d="M5 18c-1-6 4-9 8-7 2-4 9-4 11 0 3-3 10-2 11 3 3 1 3 5 1 6H6z" fill="#fffaf0"/>
+    <circle cx="16" cy="34" r="1.2" fill="#fff3c4"/><circle cx="24" cy="44" r="1" fill="#fff3c4"/><circle cx="19" cy="50" r="1.3" fill="#fff3c4"/>
+    <path d="M13 22v32M21 22v32M29 22v32" stroke="#fff" stroke-opacity=".25" stroke-width="1.6"/>
+    <path d="M44 30h15l-2 29c0 1-1 2-2 2h-7c-1 0-2-1-2-2z" fill="#3b1408"/>
+    <path d="M44 30h15l-.3 4H44.3z" fill="#c9a07a"/>
+    <rect x="45.5" y="42" width="12" height="5" fill="#d0121b"/>
+    <path d="M55 22l-3 20" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>`
+};
+const waves =`<svg class="waves" viewBox="0 0 560 206" preserveAspectRatio="none">
+  <path d="M-10 190 C120 140 220 210 330 168 S520 120 580 150" stroke="#e9c06a" stroke-opacity=".35" fill="none" stroke-width="1.4"/>
+  <path d="M-10 200 C130 160 230 220 340 182 S520 140 580 168" stroke="#e9c06a" stroke-opacity=".18" fill="none" stroke-width="1"/>
+  <path d="M380 -10 C430 30 500 10 580 40" stroke="#e9c06a" stroke-opacity=".3" fill="none" stroke-width="1.2"/>
+</svg>`;
+
+const front = n => `<div class="t">
+  <div class="stub"><div class="band">Nº ${pad(n)}<em>福</em></div>
+    <div class="fld">Nombre</div><div class="fld">Teléfono</div><div class="fld">Email / Instagram</div>
+    <div class="for">PARA LA URNA</div></div>
+  <div class="main">${frame}${lantern("l1")}${lantern("l2")}
+    <div class="ttl">
+      <div class="brush">抽奖</div>
+      <div class="kick">GRAN RIFA · 亚洲 · アジア · 아시아</div>
+      <div class="name">${CFG.event.replace("Asia","<i>Asia</i>")}</div>
+      <div class="meta">${CFG.date}<s>◆</s>${CFG.city}<s>◆</s>${CFG.draw}</div>
+      <div class="keep">Organiza: emet · NIF ${CFG.nif}</div>
+    </div>
+    <div class="seal"><small>BOLETO Nº</small><b>${pad(n)}</b><small>ASIA</small></div>
+    <div class="price"><b>${CFG.price}</b><span>GUARDA ESTE BOLETO<br>PARA TU PREMIO</span></div>
+    <div class="spon"><div class="sl">PATROCINADOR OFICIAL</div>
+      <div class="sb"><div class="mon sm">金</div><div class="st"><b>URREA LUTXANA</b><span>Sushi japonés · Lutxana kalea 6, Bilbao</span></div>
+      <div class="sg"><span>TU REGALO</span><b>Ver detrás →</b></div></div></div>
+  </div></div>`;
+
+const back = n => `<div class="t">
+  <div class="stub"><div class="fu"><span>福</span></div><p>emet × Olin<br>LEINN · Mondragon<br>NIF ${CFG.nif}</p></div>
+  <div class="main">${waves}${frame}
+    <div class="uhead"><div class="mon">金</div>
+      <div class="uname"><b>URREA LUTXANA</b><span>RESTAURANTE SUSHI JAPONÉS</span></div>
+      </div><div class="show">PATROCINADOR OFICIAL</div>
+    <div class="offers">
+      <div class="o"><b>−3 €</b><span><strong>por mesa</strong> solo en buffet<br>(por grupo, no por persona)</span></div>
+      <div class="o"><b>Gratis</b><span><strong>botella de Glorioso</strong> Rioja<br>para tu mesa</span></div>
+      <div class="o"><b>Refill ∞</b><span><strong>caña, refresco y agua</strong> ilimitados<br>con tu primera bebida pagada</span></div>
+    </div>
+    <div class="photos"><img class="p-beer" src="img-beer.jpg"><img class="p-cola" src="img-cola.jpg"><img class="p-wine" src="img-wine.jpg"><img class="p-sushi" src="img-sushi.jpg"></div>
+    <div class="ufoot"><div>Lutxana kalea 6, 48008 Bilbao · 667 886 999 · urrealutxana.es<br>${CFG.urreaValid}<br><b style="color:#e9c06a">Consumo mínimo 50 € para todas las ofertas</b> · 1 uso · <span class="n">Nº ${pad(n)}</span></div></div>
+  </div></div>`;
+
+let html = "";
+for (let s = from; s <= to; s += 5) {
+  const nums = []; for (let n = s; n < s + 5 && n <= to; n++) nums.push(n);
+  html += `<div class="sheet front">${nums.map(front).join("")}</div>`;
+  html += `<div class="sheet back">${nums.map(back).join("")}</div>`;
+}
+// ?preview=1 → one ticket, front + back with explanations (to show the sponsor)
+if (q.get("preview")) html = `<div class="pv">
+  <h1>Rifa · Día de Asia <span>Boleto con regalo de Urrea Lutxana</span></h1>
+  <div class="lbl"><b>1</b> CARA DELANTERA — el boleto de la rifa</div>
+  <div class="sheet front pvs">${front(1)}</div>
+  <p>Cada boleto lleva un número único. La parte izquierda (el talón) se arranca: el comprador escribe su nombre y teléfono y va a la urna para el sorteo. La parte derecha se la queda el comprador. Abajo aparece <b>Urrea Lutxana como patrocinador oficial</b>, con su dirección.</p>
+  <div class="lbl"><b>2</b> CARA TRASERA — el cupón de Urrea Lutxana</div>
+  <div class="sheet back pvs">${back(1)}</div>
+  <p>Detrás de la parte que se queda el comprador va el regalo de Urrea Lutxana. <b>Todos los que compren un boleto, ganen o no</b>, pueden enseñarlo en el restaurante y, <b>con un consumo mínimo de 50 €</b>, obtener: <b>−3 € por mesa solo en buffet</b>, <b>botella de Glorioso gratis</b> y <b>refill ilimitado</b> de caña, refresco y agua con la primera bebida pagada. Un uso por boleto, no fines de semana ni festivos. <b>Las fechas de validez las acordamos contigo.</b></p>
+</div>`;
+document.body.innerHTML = html;
+</script>
+</body>
+</html>

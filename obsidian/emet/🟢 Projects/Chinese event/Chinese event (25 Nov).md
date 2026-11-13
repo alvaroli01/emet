@@ -126,6 +126,21 @@ Original PPT "西班牙项目介绍 Spain Project Introduction" → [[Chinese ev
 - Tiers (example): **Partner** in kind (prize or product) · **Silver** €200 · **Gold** €500 (+ stand + name in event title)
 - In-kind is the easiest "yes" — ask for prizes first, cash second
 
+## 🍣 Raffle sponsor #1 — Urrea Lutxana (sushi) · added 11 Nov
+**Urrea — Restaurante Sushi Japonés** · Lutxana kalea 6, 48008 Bilbao · Tel 667 886 999 · urrealutxana.es
+Deal: anyone with an event **raffle ticket** can redeem these at the restaurant just by **showing the ticket** (no win needed).
+Promo image: ![[Chinese event files/urrea-black-friday-promo.jpeg]]
+
+| # | Offer | Conditions |
+|---|---|---|
+| 1 | **Black Friday:** unlimited refills (beer / Coca-Cola) with the first drink paid · **free bottle of Glorioso Rioja crianza for €50 spend** | His poster: 10–30 Nov, not weekends or holidays |
+| 2 | **€3 off per group** (per table, not per person) — **buffet only** | Confirmed 11 Nov: **every offer needs a €50 minimum spend**; refills = **caña, refresco y agua** |
+
+- ⚠️ He wanted **10–30 Nov**, but our tickets aren't on sale yet → agree new dates (e.g. from ticket launch until mid/late Dec) #open
+- Confirm: offer 1 + 2 together? weekends excluded for offer 2 too? one use per ticket? #open
+- 🎟️ Printable tickets: `Chinese event files/raffle-tickets.html` (open in Chrome, `?from=1&to=100` picks numbers, A4 duplex long edge, 5 per page) · sample [[Chinese event files/raffle-tickets-sample.pdf]]
+- Ticket back text (ES): *"Enseña este boleto en Urrea Lutxana (Lutxana kalea 6): −3 € por mesa en comida + botella de Glorioso gratis con 50 € de consumo. Válido [fechas], no fines de semana ni festivos. 1 uso por boleto."*
+
 ## 📣 Getting people there (all €0)
 - Instagram + TikTok: countdown reels, the Chinese students introducing themselves, "decode your fortune cookie" teaser, raffle prize reveals
 - Chinese channels via the students/community: WeChat groups, Xiaohongshu (RedNote)
@@ -166,5 +181,6 @@ _Add every idea here with date, who, and status (idea / using / dropped). Never 
 | 2026-10-22 | Hongbao as raffle-ticket holders; cookie messages that win small prizes | Claude suggestion | idea |
 | 2026-10-22 | Paid mini-workshops (calligraphy names, paper-cutting, dumplings) | Claude suggestion | idea |
 | 2026-10-22 | Charge handcraft makers a stall fee | Claude suggestion | idea |
+| 2026-11-11 | Raffle ticket doubles as a discount coupon at Urrea Lutxana (−€3 per group + Black Friday promo) | Urrea owner via Alvaro | agreed, dates #open |
 
 Related: [[Projects & ideas]] · [[Goal & Money]] · [[LEINN calendar]] · [[Open questions]] · Back to [[🏔️ emet Dashboard]]
