@@ -16,7 +16,7 @@ updated: 2026-11-10
 - Spanish at `/` and English at `/en/`, with an ES | EN switch.
 - Pages: home, `/renders`, `/tours`, `/proyectos`, `/nosotros` (team + story), `/webs`, plus legal notice, privacy and cookies.
 - Clean white, Apple-like style. Logo "plano → E sólida" rebuilt in vector (Manrope ExtraBold + gold #C9A15B).
-- Team page: Alvaro (CEO), Mario (web), Francisco (360° models), Gordon (software/servers). Timeline: Phuket → Marbella & País Vasco → today.
+- Team page: Alvaro (CEO), Mario (web), Francisco (360° models), Nahuel (marketing & creative direction), Zayd (video & motion). Gordon (Olin) removed 13 Nov. Timeline: Phuket → Marbella & País Vasco → today.
 - "Why wepemet" uses sourced facts (Texas Tech / Matterport: up to 31% faster sales, 4–9% better price, 92% of buyers).
 - The tour page shows 8 rooms rendered from the photo-matched 3D model.
 - **Webs section** (10 Nov) shows two example sites side by side:

@@ -5,6 +5,8 @@ updated: 2026-10-22
 
 # Stefan
 
+![[Stefan.jpg|220]]
+
 - **Group:** 🗂️ Communications
 - **Role:** Communications leader
 - **Contact:** —

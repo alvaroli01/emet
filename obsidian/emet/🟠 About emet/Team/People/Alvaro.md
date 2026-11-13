@@ -5,6 +5,8 @@ updated: 2026-10-22
 
 # Alvaro
 
+![[Alvaro.jpg|220]]
+
 - **Group:** 👑 Team Leader
 - **Role:** Team leader
 - **Contact:** —

@@ -30,4 +30,22 @@ updated: 2026-10-22
 
 > 🏫 Our LEINN class has 30 people in two teams of 15: **emet** (us) and **Olin**. Shared projects so far: [[Chinese event (25 Nov)]] (Olin: Andres, Eduardo, Gordon, Nico Yarnoz).
 
+## Faces
+
+Who is who, by photo (sources: `~/Downloads/<name> photo.*`, crops from the emet website). No photo yet: Leire, Mirage, Sasha.
+
+- ![[Alvaro.jpg|60]] [[Alvaro]]
+- ![[Elizabeth.jpg|60]] [[Elizabeth]]
+- ![[Emily.jpg|60]] [[Emily]]
+- ![[Fernando.jpg|60]] [[Fernando]]
+- ![[Fran.jpg|60]] [[Fran]]
+- ![[Lassi.jpg|60]] [[Lassi]]
+- ![[Mario.jpg|60]] [[Mario]]
+- ![[Martin.jpg|60]] [[Martin]]
+- ![[Nahuel.jpg|60]] [[Nahuel]]
+- ![[Nico.jpg|60]] [[Nico]]
+- ![[Rocco.jpg|60]] [[Rocco]]
+- ![[Stefan.jpg|60]] [[Stefan]]
+- ![[Zayd.jpg|60]] [[Zayd]]
+
 Back to [[Team structure]]

@@ -5,6 +5,8 @@ updated: 2026-10-22
 
 # Martin
 
+![[Martin.jpg|220]]
+
 - **Group:** 📣 Marketing
 - **Role:** _TBD_
 - **Contact:** —
