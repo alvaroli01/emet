@@ -12,13 +12,13 @@ import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, i
  * - outside while checked in ("I'm out working", Mon/Wed/Fri): the Dock stretch ends now and the outside one starts here.
  * - outside: Mon/Wed/Fri only, with a note — logged with the position for everyone to see (the outside calendar).
  * - still: "still working outside" (asked every 2 h) — logs the position again. done: ends it (position logged).
- * Phones only: a laptop's location is easy to fake in dev tools.
+ * Phones and computers (Alvaro, 2026-11-13: allow checking in from the computer; same distance rules, the laptop's Wi-Fi
+ * position decides). Opening emet only checks in/out by itself on phones (office-pill).
  */
 type Body = { action?: unknown; lat?: unknown; lng?: unknown; accuracy?: unknown; note?: unknown; away?: unknown };
 type Outside = { id: string; places: unknown[] };
 
 export async function POST(request: NextRequest) {
-  if (!/iPhone|iPad|Android/i.test(request.headers.get("user-agent") ?? "")) return NextResponse.json({ status: "phone-only" }, { status: 403 });
   const supabase = await createClient();
   const [{ data: me }, { data: member }] = await Promise.all([supabase.rpc("my_profile_id"), supabase.rpc("is_member")]);
   if (!me || !member) return NextResponse.json({ error: "forbidden" }, { status: 403 });

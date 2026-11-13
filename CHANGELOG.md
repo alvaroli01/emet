@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-13 — Alvaro — Office: **check in from your computer** too (top-bar pill or Today → At the office → the circle). Same Dock distance rules; the laptop's location decides. Before, `/api/office/tap` refused anything that wasn't a phone.
 - 2026-11-13 — Alvaro — Chinese event: **raffle prize = €100 dinner at Urrea Lutxana**, printed on the ticket front; organiser NIF moved under the price.
 - 2026-11-13 — Alvaro — Chinese event: raffle tickets now go up to **Nº 0200** by default (80-page duplex PDF).
 - 2026-11-13 — Alvaro — Chinese event: organiser **Olin, NIF G05894852** added to the raffle tickets (front + back stub); sample PDF/PNG re-rendered.
