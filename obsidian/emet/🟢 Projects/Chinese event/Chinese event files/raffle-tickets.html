@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 /* Print: A4, margins "None", background graphics ON, double-sided "flip on long edge".
-   ?from=1&to=100 in the URL picks which numbers to print (default 1–50). */
+   ?from=1&to=100 in the URL picks which numbers to print (default 1–200). */
 :root{ --red:#a50f1c; --red2:#5e0710; --gold:#e9c06a; --gold2:#b8862f; --cream:#fbf3e2; --navy:#0c1322; }
 @page{ size:A4; margin:0 }
 *{ box-sizing:border-box; margin:0; padding:0 }
@@ -121,7 +121,7 @@ const CFG = {
   urreaValid: "Válido del __/__ al __/__, no fines de semana ni festivos"
 };
 const q = new URLSearchParams(location.search);
-const from = +q.get("from") || 1, to = +q.get("to") || 50;
+const from = +q.get("from") || 1, to = +q.get("to") || 200;
 const pad = n => String(n).padStart(4, "0");
 
 const corner = c => `<svg class="corner ${c}" viewBox="0 0 24 24"><path d="M2 14V2h12M6 10V6h4M2 2l5 5"/></svg>`;

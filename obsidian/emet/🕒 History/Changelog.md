@@ -7,6 +7,7 @@ updated: 2026-11-13
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-13 — Alvaro — Chinese event: raffle tickets now go up to **Nº 0200** by default (80-page duplex PDF).
 - 2026-11-13 — Alvaro — Chinese event: organiser **Olin, NIF G05894852** added to the raffle tickets (front + back stub); sample PDF/PNG re-rendered.
 - 2026-11-12 — Alvaro — Office: an old 17:00 "check out" notification page that the phone reopened was **checking people out again** (Lassi at 09:25 and 14:27, so his clock showed ~30 min). A notification link now runs only once, and the automatic "I'm out" only runs from 17:00. Lassi's day was repaired (in since 08:57).
 - 2026-11-12 — Alvaro — **New objective: €1K a month by 19 Dec** emet starts a SaaS for clinics on its own now; Arda joins in a few months (then The Bound Phuket → Spain too). README §2 + vault note `Objective - 1K a month by 19 Dec`.
