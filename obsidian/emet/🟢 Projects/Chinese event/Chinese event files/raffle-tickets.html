@@ -30,12 +30,14 @@ body{ font-family:Inter,Arial,sans-serif; background:#d8d8d8; -webkit-print-colo
 .lantern{ position:absolute; top:-1mm; height:30mm }
 .l1{ left:6mm } .l2{ left:17mm; top:-4mm; height:24mm }
 .ttl{ position:absolute; left:31mm; top:4.6mm; right:34mm }
-.brush{ font-family:'Ma Shan Zheng',cursive; color:var(--gold); font-size:13mm; line-height:.9; text-shadow:0 .4mm 0 var(--red2) }
+.brush{ font-family:'Ma Shan Zheng',cursive; color:var(--gold); font-size:10.5mm; line-height:.9; text-shadow:0 .4mm 0 var(--red2) }
 .kick{ font:800 2.5mm Inter; letter-spacing:1.1mm; color:var(--gold); margin-top:.8mm }
 .name{ font:900 7.4mm 'Playfair Display',serif; line-height:1; margin-top:.6mm }
 .name i{ font-weight:700; color:var(--gold) }
 .meta{ font-size:2.6mm; margin-top:2mm; opacity:.95; display:flex; gap:1.6mm; align-items:center; white-space:nowrap }
 .meta s{ text-decoration:none; color:var(--gold); font-size:2mm }
+.prize{ display:inline-block; margin-top:1.4mm; background:var(--gold); color:var(--red2); font:800 2.5mm Inter; padding:.7mm 2.2mm; letter-spacing:.15mm }
+.prize b{ font-weight:900 }
 .keep{ font-size:2.15mm; opacity:.75; margin-top:1.1mm }
 .seal{ position:absolute; right:7mm; top:6mm; width:24mm; height:24mm; border-radius:50%;
   background:radial-gradient(circle,#fff6e0 0 58%, var(--gold) 59% 64%, var(--gold2) 65% 70%, var(--gold) 71% 100%);
@@ -117,6 +119,7 @@ const CFG = {
   date:  "Mié 25 nov 2026", city: "Bilbao", draw: "Sorteo 20:45",
   price: "5 €",
   nif:   "G05894852",
+  prize: "Cena de 100 € en Urrea Lutxana",
   // TODO: fill in once agreed with Urrea (he asked 10–30 Nov; we need later dates)
   urreaValid: "Válido del __/__ al __/__, no fines de semana ni festivos"
 };
@@ -188,10 +191,10 @@ const front = n => `<div class="t">
       <div class="kick">GRAN RIFA · 亚洲 · アジア · 아시아</div>
       <div class="name">${CFG.event.replace("Asia","<i>Asia</i>")}</div>
       <div class="meta">${CFG.date}<s>◆</s>${CFG.city}<s>◆</s>${CFG.draw}</div>
-      <div class="keep">Organiza: Olin · NIF ${CFG.nif}</div>
+      <div class="prize">PREMIO: <b>${CFG.prize}</b></div>
     </div>
     <div class="seal"><small>BOLETO Nº</small><b>${pad(n)}</b><small>ASIA</small></div>
-    <div class="price"><b>${CFG.price}</b><span>GUARDA ESTE BOLETO<br>PARA TU PREMIO</span></div>
+    <div class="price"><b>${CFG.price}</b><span>ORGANIZA: OLIN<br>NIF ${CFG.nif}</span></div>
     <div class="spon"><div class="sl">PATROCINADOR OFICIAL</div>
       <div class="sb"><div class="mon sm">金</div><div class="st"><b>URREA LUTXANA</b><span>Sushi japonés · Lutxana kalea 6, Bilbao</span></div>
       <div class="sg"><span>TU REGALO</span><b>Ver detrás →</b></div></div></div>
