@@ -2,6 +2,7 @@
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-13 — Alvaro — Team Leaders: new **All tasks** tab (leaders only) showing every task, whoever it's given to, with the Tasks page's filters (person, status, priority, due). The Tasks page still shows only your own tasks. Project tasks: only projects the leader is in.
 - 2026-11-13 — Alvaro — Office: **check in from your computer** too (top-bar pill or Today → At the office → the circle). Same Dock distance rules; the laptop's location decides. Before, `/api/office/tap` refused anything that wasn't a phone.
 - 2026-11-13 — Alvaro — Chinese event: **raffle prize = €100 dinner at Urrea Lutxana**, printed on the ticket front; organiser NIF moved under the price.
 - 2026-11-13 — Alvaro — Chinese event: raffle tickets now go up to **Nº 0200** by default (80-page duplex PDF).

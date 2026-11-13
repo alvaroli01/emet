@@ -3324,6 +3324,7 @@
     "error": "Etwas ist schiefgelaufen. Versuch es noch einmal."
   },
   "taskHub": {
+    "leaderTool": "Alle Aufgaben",
     "title": "Aufgaben",
     "heroTitle": "Alle Aufgaben an einem Ort",
     "heroSubtitle": "EMET-Aufgaben und die Aufgaben jedes Projekts – mit allen, die ihren Teil erledigt haben.",

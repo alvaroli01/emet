@@ -3324,6 +3324,7 @@
     "error": "Algo ha fallado. Inténtalo de nuevo."
   },
   "taskHub": {
+    "leaderTool": "Todas las tareas",
     "title": "Tareas",
     "heroTitle": "Todas las tareas en un sitio",
     "heroSubtitle": "Tareas de EMET y de cada proyecto, con quién ha terminado su parte.",

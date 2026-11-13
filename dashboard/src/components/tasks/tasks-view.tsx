@@ -23,13 +23,15 @@ export const STATUS_STYLE: Record<Status, string> = {
 };
 export const PRIORITY_STYLE = { high: "text-bad-text", medium: "text-muted", low: "text-muted/60" } as const;
 
-export function TasksView({ tasks, boards, people, projects, goals, goalProgress, groups, viewer, initial, mine }: {
+export function TasksView({ tasks, boards, people, projects, goals, goalProgress, groups, viewer, initial, mine, basePath = "/tasks" }: {
   tasks: Task[]; boards: TaskBoard[]; people: Person[]; projects: ProjectInfo[]; goals: Goal[];
   /** Per project: done / all of its tasks (also the ones not given to me) */
   goalProgress: Record<string, { done: number; total: number }>;
   groups: { id: string; slug: string }[]; viewer: Viewer; initial: { view: View; project: string | null; task: string | null; overdue?: boolean };
   /** Shown under "My tasks": my private board and Notion deadlines (rendered on the server) */
   mine?: React.ReactNode;
+  /** Where the address bar points (Team Leaders → All tasks keeps its own page and tab) */
+  basePath?: string;
 }) {
   const t = useTranslations("taskHub");
   const tg = useTranslations("group.names");
@@ -76,11 +78,12 @@ export function TasksView({ tasks, boards, people, projects, goals, goalProgress
     if (next.view) setView(next.view);
     if (next.project !== undefined) setProjectId(next.project);
     if (next.task !== undefined) setOpen(next.task);
-    const q = new URLSearchParams();
+    const [path, base] = basePath.split("?");
+    const q = new URLSearchParams(base);
     if (v !== "all") q.set("view", v);
     if (v === "project" && p) q.set("project", p);
     if (k && k !== "new") q.set("task", k);
-    const url = `/tasks${q.size ? `?${q}` : ""}`;
+    const url = `${path}${q.size ? `?${q}` : ""}`;
     if (fetch) router.replace(url, { scroll: false });
     else window.history.replaceState(null, "", url);
   }

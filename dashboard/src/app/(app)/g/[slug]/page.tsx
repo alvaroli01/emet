@@ -15,7 +15,9 @@ import { TeamLeaderTools } from "@/components/tools/team-leader";
 import type { ToolProps, ToolTab } from "@/components/tools/types";
 import { ToolWorkspace } from "@/components/shell/tool-workspace";
 import { AssistantBubble } from "@/components/shell/assistant-bubble";
-import { LayoutDashboard, FolderOpen, FolderKanban, Gavel, Megaphone, Building2 } from "lucide-react";
+import { LayoutDashboard, FolderOpen, FolderKanban, Gavel, Megaphone, Building2, ListChecks } from "lucide-react";
+import { TasksView } from "@/components/tasks/tasks-view";
+import { loadTaskHub } from "@/lib/task-hub";
 import { StrikesTool } from "@/components/tools/strikes";
 import { LeaderMessage } from "@/components/tools/leader-message";
 import { OfficeReview } from "@/components/tools/office-review";
@@ -102,6 +104,16 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     id: "office", group: "people" as const, label: (await getTranslations("officeReview"))("tool"), icon: <Building2 size={16} />,
     node: await OfficeReview({ people: board.members }),
   }] : [];
+  // Leaders: every task, whoever it's given to (Alvaro, 2026-11-13); the Tasks page keeps showing only your own
+  const hub = slug === "team-leader" && session.isLeader ? await loadTaskHub(session.me.id, true) : null;
+  const tasksTool = hub ? [{
+    id: "all-tasks", group: "work" as const, label: (await getTranslations("taskHub"))("leaderTool"), icon: <ListChecks size={16} />,
+    node: <TasksView tasks={hub.tasks} boards={hub.boards} people={hub.people} projects={hub.projects} goals={hub.goals} goalProgress={hub.goalProgress}
+                     groups={session.groups.map((g) => ({ id: g.id, slug: g.slug }))} basePath="/g/team-leader?tab=all-tasks"
+                     viewer={{ meId: session.me.id, myGroupId: session.me.group_id, isLeader: session.isLeader, isAdmin: session.isAdmin, isCoach: !!session.me.is_coach,
+                               isGuest: !!session.me.is_guest, editGroups: session.groups.filter((g) => session.canEditGroup(g.id)).map((g) => g.id) }}
+                     initial={{ view: "all", project: null, task: null }} />,
+  }] : [];
   // Team leader only: company documents everyone can open on their own profile
   const td = await getTranslations("documents");
   const docsTool = slug === "team-leader" && session.isAdmin ? [{
@@ -115,6 +127,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     node: <MyProjects projects={await loadMyProjects(await createClient(), session.me.id, true)} canCreate people={board.members} today={todayISO()} title={tp("allTitle")} />,
   }] : [];
   const allTools = [
+    ...tasksTool,
     ...messageTool,
     ...officeTool,
     ...strikesTool,

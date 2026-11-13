@@ -3324,6 +3324,7 @@
     "error": "Un problème est survenu. Réessaie."
   },
   "taskHub": {
+    "leaderTool": "Toutes les tâches",
     "title": "Tâches",
     "heroTitle": "Toutes les tâches au même endroit",
     "heroSubtitle": "Les tâches EMET et celles de chaque projet, avec qui a fini sa part.",

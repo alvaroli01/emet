@@ -3324,6 +3324,7 @@
     "error": "Algo deu errado. Tente de novo."
   },
   "taskHub": {
+    "leaderTool": "Todas as tarefas",
     "title": "Tarefas",
     "heroTitle": "Todas as tarefas em um só lugar",
     "heroSubtitle": "Tarefas da EMET e de cada projeto, com quem já terminou sua parte.",

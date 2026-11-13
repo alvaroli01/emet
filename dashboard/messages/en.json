@@ -3324,6 +3324,7 @@
     "error": "Something went wrong. Try again."
   },
   "taskHub": {
+    "leaderTool": "All tasks",
     "title": "Tasks",
     "heroTitle": "Every task in one place",
     "heroSubtitle": "EMET tasks and each project's tasks, with who has finished their part.",

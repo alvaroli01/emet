@@ -3324,6 +3324,7 @@
     "error": "Jokin meni pieleen. Yritä uudelleen."
   },
   "taskHub": {
+    "leaderTool": "Kaikki tehtävät",
     "title": "Tehtävät",
     "heroTitle": "Kaikki tehtävät yhdessä paikassa",
     "heroSubtitle": "EMETin ja jokaisen projektin tehtävät – ja kuka on tehnyt osuutensa.",
