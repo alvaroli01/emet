@@ -73,6 +73,8 @@ export const checkoutCounts = (dist: number, accuracy: number) => dist - Math.mi
 
 /** Going to eat: the time stops for at most 1 hour (Alvaro, 2026-11-11); not back at Dock by then = that stretch counts 0 h. */
 export const LUNCH_MS = 3600e3;
+/** A break of 2 h 30 m or more = checked out at the moment they left (Alvaro, 2026-11-17; migration 0069 ends it). */
+export const LUNCH_MAX_MS = 2.5 * 3600e3;
 
 /** Working outside is offered Monday, Wednesday and Friday (Tuesday and Thursday are office days). */
 export const isOutsideDay = (now: number) => ["Mon", "Wed", "Fri"].includes(new Date(now).toLocaleDateString("en-US", { weekday: "short", timeZone: "Europe/Madrid" }));

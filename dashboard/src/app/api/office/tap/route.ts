@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient as admin } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, isWorkday, isOutsideDay, madridTime, dayClosesAt, LUNCH_MS, type Visit } from "@/lib/office";
+import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, isWorkday, isOutsideDay, madridTime, dayClosesAt, LUNCH_MS, LUNCH_MAX_MS, type Visit } from "@/lib/office";
 
 /**
  * One-tap office check-in (Alvaro, 2026-11-11; replaces the phone apps): the 9:00 notification opens /office, which sends
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
   if (action === "will-return") { // after an automatic check-out: "I'm out, I'll be back" → that stretch becomes a pause
     const { data: last } = await db.from("office_visits").select("id, left_at").eq("user_id", userId).not("left_at", "is", null).eq("forgot", false)
       .order("arrived_at", { ascending: false }).limit(1).maybeSingle<{ id: string; left_at: string }>();
-    if (isIn || !last || Date.parse(last.left_at) < now - 6 * 3600e3) return NextResponse.json({ status: "nothing" });
+    if (isIn || !last || Date.parse(last.left_at) < now - LUNCH_MAX_MS) return NextResponse.json({ status: "nothing" });
     await db.from("office_visits").update({ lunch_until: new Date(Date.parse(last.left_at) + LUNCH_MS).toISOString() }).eq("id", last.id);
     return NextResponse.json({ status: "lunch" });
   }
