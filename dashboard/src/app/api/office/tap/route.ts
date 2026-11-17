@@ -6,7 +6,7 @@ import { applyEvent, distanceM, zoneStepWithAccuracy, checkoutCounts, isInNow, i
 /**
  * One-tap office check-in (Alvaro, 2026-11-11; replaces the phone apps): the 9:00 notification opens /office, which sends
  * the phone's position with one of these actions. The server decides from the real position:
- * - in: within 30 m of Dock (up to 20 m GPS slack in the person's favour). Also ends a working-outside stretch.
+ * - in: within 100 m of Dock (up to 40 m GPS slack in the person's favour). Also ends a working-outside stretch.
  * - out: anywhere; away from Dock the exact spot is kept for the team calendar. Never checked out by 21:00 = 0 h.
  * - lunch: Pause at Dock / "I'm out eating" anywhere — the time stops and carries on when they check in again at Dock.
  * - outside while checked in ("I'm out working", Mon/Wed/Fri): the Dock stretch ends now and the outside one starts here.

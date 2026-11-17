@@ -80,11 +80,12 @@ test("weekdays only, and one person's status (in / paused, hours today and this 
 });
 
 test("emet open on the phone: GPS accuracy helps arriving (inside the building) but never pushes anyone out", () => {
-  assert.equal(zoneStepWithAccuracy(90, 35, false).event, "arrive");  // 90 m ± 35 m inside Dock → counts as within 60 m (up to 40 m slack)
-  assert.equal(zoneStepWithAccuracy(110, 30, false).event, null);     // too far even with the slack
-  assert.equal(zoneStepWithAccuracy(70, 5, false).event, null);       // precise fix: really 70 m away
-  assert.equal(zoneStepWithAccuracy(140, 30, true).event, null);      // 140 m ± 30: maybe only 110 m → stay in
-  assert.equal(zoneStepWithAccuracy(170, 30, true).event, "leave");   // clearly 120 m+ away
+  assert.equal(zoneStepWithAccuracy(130, 35, false).event, "arrive"); // 130 m ± 35 m inside Dock → counts as within 100 m (up to 40 m slack)
+  assert.equal(zoneStepWithAccuracy(150, 30, false).event, null);     // too far even with the slack
+  assert.equal(zoneStepWithAccuracy(95, 5, false).event, "arrive");   // in the room, 95 m on the map (2026-11-17)
+  assert.equal(zoneStepWithAccuracy(110, 5, false).event, null);      // precise fix: really 110 m away
+  assert.equal(zoneStepWithAccuracy(170, 30, true).event, null);      // 170 m ± 30: maybe only 140 m → stay in
+  assert.equal(zoneStepWithAccuracy(200, 30, true).event, "leave");   // clearly 150 m+ away
 });
 
 test("one-tap check-out only counts at Dock; working outside only Mon/Wed/Fri", () => {

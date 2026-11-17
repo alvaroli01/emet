@@ -47,8 +47,8 @@ export const hm = (ms: number) => { const m = Math.round(ms / 60e3); return `${M
 /** "09:12", Spanish time */
 export const madridTime = (iso: string) => new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid" });
 
-export const IN_M = 60;   // within 60 m of Dock = arrived (2026-11-12: indoor GPS drifts 30–60 m; 30 m failed people inside)
-export const OUT_M = 120; // within 120 m = still at Dock for check-out / pause (2026-11-12, indoor drift)
+export const IN_M = 100;  // within 100 m of Dock = arrived (Alvaro, 2026-11-17: 60 m failed people inside the room)
+export const OUT_M = 150; // within 150 m = still at Dock for check-out / pause (must stay wider than IN_M)
 
 /** Metres between two points (haversine). */
 export function distanceM(a: { lat: number; lng: number }, b: { lat: number; lng: number }): number {
