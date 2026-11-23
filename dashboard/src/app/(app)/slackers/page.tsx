@@ -3,6 +3,7 @@ import { Siren } from "lucide-react";
 import { getSession } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { loadMembers } from "@/lib/boards";
+import { getsTasks } from "@/lib/tasks";
 import { weekStart } from "@/lib/metrics";
 import { madridDay, madridMidnight, visitMs, type Visit } from "@/lib/office";
 import { PageHero } from "@/components/shell/page-hero";
@@ -40,7 +41,7 @@ export default async function SlackersPage({ searchParams }: { searchParams: Pro
   ]);
 
   const byId = new Map(((board.data ?? []) as BoardRow[]).map((b) => [b.user_id, b]));
-  const rows: SlackerRow[] = members.filter((m) => !m.is_coach && byId.has(m.id)).map((m) => {
+  const rows: SlackerRow[] = members.filter((m) => getsTasks(m) && byId.has(m.id)).map((m) => {
     const b = byId.get(m.id)!;
     const mine = ((acts.data ?? []) as Act[]).filter((a) => a.user_id === m.id && a.day < next);
     return {
@@ -62,7 +63,7 @@ export default async function SlackersPage({ searchParams }: { searchParams: Pro
     <div className="space-y-6">
       <PageHero section={{ label: tn("slackers"), icon: <Siren size={16} /> }} title={t("title")} subtitle={t("subtitle")}
         stats={[{ label: t("statVoted"), value: rows.filter((r) => r.self !== null).length, kind: "num" }, { label: t("statMine"), value: voted, kind: "num" }]} />
-      <Slackers key={week} week={week} prev={addDays(week, -7)} next={next <= thisWeek ? next : null} canVote={week >= addDays(thisWeek, -7) && !me.is_coach && !me.is_guest}
+      <Slackers key={week} week={week} prev={addDays(week, -7)} next={next <= thisWeek ? next : null} canVote={week >= addDays(thisWeek, -7) && getsTasks(me) && !me.is_guest}
         meId={me.id} rows={rows} myVotes={Object.fromEntries((votes.data ?? []).map((v) => [v.target_id, v.score]))} />
     </div>
   );
