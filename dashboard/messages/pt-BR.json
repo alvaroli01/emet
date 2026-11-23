@@ -31,7 +31,8 @@
     "askCardText": "Dúvidas sobre o time, o dinheiro ou as tarefas? Respondemos com os nossos dados.",
     "projects": "Projetos",
     "allProjects": "Todos os projetos",
-    "tasks": "Tarefas"
+    "tasks": "Tarefas",
+    "slackers": "Exposing Slackers"
   },
   "shell": {
     "noGroupYet": "Ainda sem grupo",
@@ -3567,5 +3568,44 @@
     "awaySaved": "{name} marcado como ausente",
     "awayInvalid": "Escreva um motivo e confira as datas.",
     "error": "Algo deu errado. Tente de novo."
+  },
+  "slackers": {
+    "title": "Exposing Slackers",
+    "subtitle": "Toda semana: como você acha que trabalhou, como a turma acha que você trabalhou e o que o emet mostra que você realmente fez.",
+    "statVoted": "Se avaliaram",
+    "statMine": "Meus votos",
+    "prevWeek": "Semana anterior",
+    "nextWeek": "Próxima semana",
+    "week": "Semana {from} – {to}",
+    "showOnScreen": "Mostrar na tela",
+    "exitScreen": "Sair da tela",
+    "selfTitle": "Como você trabalhou esta semana?",
+    "selfHint": "1 = fiz corpo mole, 5 = dei tudo. Seja sincero: a prova está ao lado do seu nome.",
+    "noteLabel": "O que fiz esta semana (sua prova)",
+    "notePlaceholder": "Tarefas, reuniões, vendas, visitas… o que a turma pode não ter visto",
+    "noteSaved": "Salvo",
+    "classTitle": "Como cada pessoa trabalhou?",
+    "classHint": "Avalie toda a turma ({done} de {total}).",
+    "secret": "Os votos são secretos: ninguém vê quem deu o quê, só a média.",
+    "error": "Não foi possível salvar. Tente de novo.",
+    "colPerson": "Pessoa",
+    "colSelf": "Própria",
+    "colClass": "Turma",
+    "colVerdict": "Veredito",
+    "colProof": "O que o emet mostra que fez",
+    "votes": "{n, plural, one {# voto} other {# votos}}",
+    "tasksDone": "tarefas feitas",
+    "atOffice": "no escritório",
+    "activeDays": "dias ativo no emet",
+    "actions": "ações no emet",
+    "whichTasks": "Quais tarefas",
+    "legend": "Slacker = média da turma abaixo de 2,5. Se superestima / Se subestima = 1,5 ou mais entre a própria nota e a da turma. A prova é contada pelo emet a partir de tarefas, check-ins no escritório e atividade da semana.",
+    "verdict": {
+      "slacker": "Slacker",
+      "over": "Se superestima",
+      "under": "Se subestima",
+      "fair": "Justo"
+    },
+    "away": "Ausente: {reason}"
   }
 }

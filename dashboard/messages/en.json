@@ -31,7 +31,8 @@
     "askCardText": "Questions about the team, money or tasks — answered from our data.",
     "projects": "Projects",
     "allProjects": "All projects",
-    "tasks": "Tasks"
+    "tasks": "Tasks",
+    "slackers": "Exposing Slackers"
   },
   "shell": {
     "noGroupYet": "No group yet",
@@ -3567,5 +3568,44 @@
     "awaySaved": "{name} marked away",
     "awayInvalid": "Write a reason and check the dates.",
     "error": "Something went wrong. Try again."
+  },
+  "slackers": {
+    "title": "Exposing Slackers",
+    "subtitle": "Every week: how you think you worked, how the class thinks you worked, and what emet shows you actually did.",
+    "statVoted": "Rated themselves",
+    "statMine": "My votes",
+    "prevWeek": "Previous week",
+    "nextWeek": "Next week",
+    "week": "Week {from} – {to}",
+    "showOnScreen": "Show on screen",
+    "exitScreen": "Exit screen",
+    "selfTitle": "How did you work this week?",
+    "selfHint": "1 = I slacked, 5 = I gave everything. Be honest: the proof is next to your name.",
+    "noteLabel": "What I did this week (your proof)",
+    "notePlaceholder": "Tasks, meetings, sales, visits… anything the class may have missed",
+    "noteSaved": "Saved",
+    "classTitle": "How did each person work?",
+    "classHint": "Rate everyone in the class ({done} of {total} done).",
+    "secret": "Votes are secret: nobody sees who gave what, only the average.",
+    "error": "Couldn't save. Try again.",
+    "colPerson": "Person",
+    "colSelf": "Self",
+    "colClass": "Class",
+    "colVerdict": "Verdict",
+    "colProof": "What emet shows they did",
+    "votes": "{n, plural, one {# vote} other {# votes}}",
+    "tasksDone": "tasks done",
+    "atOffice": "at the office",
+    "activeDays": "days active in emet",
+    "actions": "actions in emet",
+    "whichTasks": "Which tasks",
+    "legend": "Slacker = class average under 2.5. Overrates / Underrates = 1.5 or more between their own score and the class's. The proof is counted by emet from tasks, office check-ins and activity that week.",
+    "verdict": {
+      "slacker": "Slacker",
+      "over": "Overrates themself",
+      "under": "Underrates themself",
+      "fair": "Fair"
+    },
+    "away": "Away: {reason}"
   }
 }

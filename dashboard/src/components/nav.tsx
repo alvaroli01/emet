@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, Users, Menu, X, Tent, AudioLines, Lightbulb, Sun, Radar, ChevronDown, ChevronsLeft, ChevronsRight, Sparkles, FolderKanban, ListChecks } from "lucide-react";
+import { LayoutDashboard, Users, Menu, X, Tent, AudioLines, Lightbulb, Sun, Radar, ChevronDown, ChevronsLeft, ChevronsRight, Sparkles, FolderKanban, ListChecks, Siren } from "lucide-react";
 import type { Group } from "@/lib/session";
 import { LogoMark } from "@/components/summit/logo";
 import { GroupIcon } from "@/components/group-icon";
@@ -32,6 +32,7 @@ function useSections({ groups, myGroupId, showProjects }: Props) {
       { href: "/scout", label: t("scout"), icon: <Radar size={17} /> },
       { href: "/meetings", label: t("meetings"), icon: <AudioLines size={17} /> },
       { href: "/team", label: t("team"), icon: <Users size={17} /> },
+      { href: "/slackers", label: t("slackers"), icon: <Siren size={17} /> },
       ...(showProjects ? [{ href: "/projects", label: t("allProjects"), icon: <FolderKanban size={17} /> }] : []),
     ] },
   ];

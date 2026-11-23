@@ -31,7 +31,8 @@
     "askCardText": "Des questions sur l’équipe, l’argent ou les tâches ? Réponse à partir de nos données.",
     "projects": "Projets",
     "allProjects": "Tous les projets",
-    "tasks": "Tâches"
+    "tasks": "Tâches",
+    "slackers": "Exposing Slackers"
   },
   "shell": {
     "noGroupYet": "Pas encore de groupe",
@@ -3567,5 +3568,44 @@
     "awaySaved": "{name} marqué absent",
     "awayInvalid": "Écris un motif et vérifie les dates.",
     "error": "Un problème est survenu. Réessaie."
+  },
+  "slackers": {
+    "title": "Exposing Slackers",
+    "subtitle": "Chaque semaine : comment tu penses avoir travaillé, comment la classe le voit, et ce qu'emet montre que tu as vraiment fait.",
+    "statVoted": "Se sont notés",
+    "statMine": "Mes votes",
+    "prevWeek": "Semaine précédente",
+    "nextWeek": "Semaine suivante",
+    "week": "Semaine {from} – {to}",
+    "showOnScreen": "Afficher à l'écran",
+    "exitScreen": "Quitter l'écran",
+    "selfTitle": "Comment as-tu travaillé cette semaine ?",
+    "selfHint": "1 = j'ai glandé, 5 = j'ai tout donné. Sois honnête : la preuve est à côté de ton nom.",
+    "noteLabel": "Ce que j'ai fait cette semaine (ta preuve)",
+    "notePlaceholder": "Tâches, réunions, ventes, visites… ce que la classe a pu manquer",
+    "noteSaved": "Enregistré",
+    "classTitle": "Comment chaque personne a-t-elle travaillé ?",
+    "classHint": "Note toute la classe ({done} sur {total}).",
+    "secret": "Les votes sont secrets : personne ne voit qui a donné quoi, seulement la moyenne.",
+    "error": "Échec de l'enregistrement. Réessaie.",
+    "colPerson": "Personne",
+    "colSelf": "Soi",
+    "colClass": "Classe",
+    "colVerdict": "Verdict",
+    "colProof": "Ce qu'emet montre qu'ils ont fait",
+    "votes": "{n, plural, one {# vote} other {# votes}}",
+    "tasksDone": "tâches faites",
+    "atOffice": "au bureau",
+    "activeDays": "jours actifs dans emet",
+    "actions": "actions dans emet",
+    "whichTasks": "Quelles tâches",
+    "legend": "Slacker = moyenne de la classe sous 2,5. Se surestime / Se sous-estime = 1,5 ou plus entre sa note et celle de la classe. La preuve est comptée par emet à partir des tâches, des pointages au bureau et de l'activité de la semaine.",
+    "verdict": {
+      "slacker": "Slacker",
+      "over": "Se surestime",
+      "under": "Se sous-estime",
+      "fair": "Juste"
+    },
+    "away": "Absent : {reason}"
   }
 }

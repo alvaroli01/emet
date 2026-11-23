@@ -1,12 +1,15 @@
 ---
 tags: [emet, decisions]
-updated: 2026-11-11
+updated: 2026-11-23
 ---
 
-# Decisions log (synced from README §9, 2026-11-11)
+# Decisions log (synced from README §9, 2026-11-23)
 
 | Date | Decision | Decided by |
 |---|---|---|
+| 2026-11-23 | New weekly dynamic **Exposing Slackers**: self score vs. class score vs. what the dashboard shows each person did, kept week by week as proof. Votes secret, only averages shown; people away that week are marked Away | Alvaro |
+| [[2026-11-12]] | **Discord is emet's official team chat** (server "emet team", invite https://discord.gg/7Bcm6g889p); WhatsApp is phased out. Work (tasks, money, projects) still lives in emet HQ. Admin-only: rules, announcements, emet-hq-updates, leinn-calendar. Passwords are not moved to Discord | Alvaro |
+| [[2026-11-12]] | **Security baseline:** database functions are for signed-in members only (anon gets nothing, new functions too); the site sends security headers from `next.config.ts`. Left open on purpose (low risk, ≤ small effort later): Scout fetches any pasted website (no private-IP block), push endpoints aren't limited to real push services, invite tokens don't expire, cron secrets use plain compare. |  |
 | [[2026-11-11]] | Office check-in moves to the free **OwnTracks** app (set up once with one tap, runs in the background forever) because the iPhone shortcut didn't fire reliably, was too hard to set up and asked for confirmations. No office device (none spare) and no NFC (Alvaro's choice). Our own app was ruled out: iPhone background location needs Apple's €99/year developer account | Alvaro |
 | [[2026-11-11]] | Office check-in is **one tap on a notification**, not an app (OwnTracks dropped the same day: people won't install and keep an app). Check-out only counts at Dock, otherwise that stretch is 0 h (stops people leaving their time running). No repeated "still here?" taps at the office. Mon/Wed/Fri: "working outside" with a note and the location at start, every 2 h and at the end, visible to everyone | Alvaro |
 | [[2026-11-10]] | Ollin names show only inside projects. "Everyone" in a task form means emet people only; a project with Ollin people shows them in a separate **Ollin** row in its task form. The coach and the Grok bot (role "AI assistant") never get tasks |  |

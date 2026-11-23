@@ -31,7 +31,8 @@
     "askCardText": "Dudas sobre el equipo, el dinero o las tareas: te respondemos con nuestros datos.",
     "projects": "Proyectos",
     "allProjects": "Todos los proyectos",
-    "tasks": "Tareas"
+    "tasks": "Tareas",
+    "slackers": "Exposing Slackers"
   },
   "shell": {
     "noGroupYet": "Sin grupo todavía",
@@ -3567,5 +3568,44 @@
     "awaySaved": "{name} marcado como ausente",
     "awayInvalid": "Escribe un motivo y revisa las fechas.",
     "error": "Algo ha fallado. Inténtalo otra vez."
+  },
+  "slackers": {
+    "title": "Exposing Slackers",
+    "subtitle": "Cada semana: cómo crees que has trabajado, cómo cree la clase que has trabajado y lo que emet muestra que hiciste de verdad.",
+    "statVoted": "Se han puntuado",
+    "statMine": "Mis votos",
+    "prevWeek": "Semana anterior",
+    "nextWeek": "Semana siguiente",
+    "week": "Semana {from} – {to}",
+    "showOnScreen": "Mostrar en pantalla",
+    "exitScreen": "Salir de pantalla",
+    "selfTitle": "¿Cómo has trabajado esta semana?",
+    "selfHint": "1 = me he escaqueado, 5 = lo he dado todo. Sé sincero: la prueba está junto a tu nombre.",
+    "noteLabel": "Lo que hice esta semana (tu prueba)",
+    "notePlaceholder": "Tareas, reuniones, ventas, visitas… lo que la clase quizá no vio",
+    "noteSaved": "Guardado",
+    "classTitle": "¿Cómo ha trabajado cada persona?",
+    "classHint": "Puntúa a toda la clase ({done} de {total}).",
+    "secret": "Los votos son secretos: nadie ve quién dio qué, solo la media.",
+    "error": "No se pudo guardar. Inténtalo de nuevo.",
+    "colPerson": "Persona",
+    "colSelf": "Propia",
+    "colClass": "Clase",
+    "colVerdict": "Veredicto",
+    "colProof": "Lo que emet muestra que hizo",
+    "votes": "{n, plural, one {# voto} other {# votos}}",
+    "tasksDone": "tareas hechas",
+    "atOffice": "en la oficina",
+    "activeDays": "días activo en emet",
+    "actions": "acciones en emet",
+    "whichTasks": "Qué tareas",
+    "legend": "Slacker = media de la clase por debajo de 2,5. Se sobrevalora / Se infravalora = 1,5 o más entre su nota y la de la clase. La prueba la cuenta emet con tareas, fichajes en la oficina y actividad de esa semana.",
+    "verdict": {
+      "slacker": "Slacker",
+      "over": "Se sobrevalora",
+      "under": "Se infravalora",
+      "fair": "Justo"
+    },
+    "away": "Fuera: {reason}"
   }
 }

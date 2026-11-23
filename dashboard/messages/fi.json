@@ -31,7 +31,8 @@
     "askCardText": "Kysymyksiä tiimistä, rahasta tai tehtävistä – vastaus tulee meidän datastamme.",
     "projects": "Projektit",
     "allProjects": "Kaikki projektit",
-    "tasks": "Tehtävät"
+    "tasks": "Tehtävät",
+    "slackers": "Exposing Slackers"
   },
   "shell": {
     "noGroupYet": "Ei vielä ryhmää",
@@ -3567,5 +3568,44 @@
     "awaySaved": "{name} merkitty poissaolevaksi",
     "awayInvalid": "Kirjoita syy ja tarkista päivät.",
     "error": "Jokin meni vikaan. Yritä uudelleen."
+  },
+  "slackers": {
+    "title": "Exposing Slackers",
+    "subtitle": "Joka viikko: miten luulet työskennelleesi, miten luokka sen näkee ja mitä emet näyttää sinun oikeasti tehneen.",
+    "statVoted": "Arvioineet itsensä",
+    "statMine": "Ääneni",
+    "prevWeek": "Edellinen viikko",
+    "nextWeek": "Seuraava viikko",
+    "week": "Viikko {from} – {to}",
+    "showOnScreen": "Näytä näytöllä",
+    "exitScreen": "Poistu näytöltä",
+    "selfTitle": "Miten työskentelit tällä viikolla?",
+    "selfHint": "1 = lusmuilin, 5 = annoin kaikkeni. Ole rehellinen: todiste on nimesi vieressä.",
+    "noteLabel": "Mitä tein tällä viikolla (todisteesi)",
+    "notePlaceholder": "Tehtävät, palaverit, myynnit, käynnit… mitä luokka ehkä ei huomannut",
+    "noteSaved": "Tallennettu",
+    "classTitle": "Miten kukin työskenteli?",
+    "classHint": "Arvioi koko luokka ({done}/{total}).",
+    "secret": "Äänet ovat salaisia: kukaan ei näe kuka antoi mitä, vain keskiarvon.",
+    "error": "Tallennus epäonnistui. Yritä uudelleen.",
+    "colPerson": "Henkilö",
+    "colSelf": "Oma",
+    "colClass": "Luokka",
+    "colVerdict": "Tuomio",
+    "colProof": "Mitä emet näyttää hänen tehneen",
+    "votes": "{n, plural, one {# ääni} other {# ääntä}}",
+    "tasksDone": "tehtävää tehty",
+    "atOffice": "toimistolla",
+    "activeDays": "päivää aktiivisena emetissä",
+    "actions": "toimintoa emetissä",
+    "whichTasks": "Mitkä tehtävät",
+    "legend": "Slacker = luokan keskiarvo alle 2,5. Yliarvioi / Aliarvioi itsensä = oman ja luokan arvion ero 1,5 tai enemmän. emet laskee todisteen viikon tehtävistä, toimistokirjauksista ja aktiivisuudesta.",
+    "verdict": {
+      "slacker": "Slacker",
+      "over": "Yliarvioi itsensä",
+      "under": "Aliarvioi itsensä",
+      "fair": "Reilu"
+    },
+    "away": "Poissa: {reason}"
   }
 }

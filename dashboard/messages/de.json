@@ -31,7 +31,8 @@
     "askCardText": "Fragen zum Team, zu Geld oder Aufgaben – beantwortet mit unseren Daten.",
     "projects": "Projekte",
     "allProjects": "Alle Projekte",
-    "tasks": "Aufgaben"
+    "tasks": "Aufgaben",
+    "slackers": "Exposing Slackers"
   },
   "shell": {
     "noGroupYet": "Noch keine Gruppe",
@@ -3567,5 +3568,44 @@
     "awaySaved": "{name} als abwesend markiert",
     "awayInvalid": "Schreib einen Grund und prüf die Daten.",
     "error": "Etwas ist schiefgelaufen. Versuch es erneut."
+  },
+  "slackers": {
+    "title": "Exposing Slackers",
+    "subtitle": "Jede Woche: wie du glaubst, gearbeitet zu haben, wie die Klasse es sieht und was emet zeigt, dass du wirklich getan hast.",
+    "statVoted": "Haben sich bewertet",
+    "statMine": "Meine Stimmen",
+    "prevWeek": "Vorherige Woche",
+    "nextWeek": "Nächste Woche",
+    "week": "Woche {from} – {to}",
+    "showOnScreen": "Auf dem Bildschirm zeigen",
+    "exitScreen": "Bildschirm verlassen",
+    "selfTitle": "Wie hast du diese Woche gearbeitet?",
+    "selfHint": "1 = gefaulenzt, 5 = alles gegeben. Sei ehrlich: der Beweis steht neben deinem Namen.",
+    "noteLabel": "Was ich diese Woche gemacht habe (dein Beweis)",
+    "notePlaceholder": "Aufgaben, Meetings, Verkäufe, Besuche… alles, was die Klasse übersehen haben könnte",
+    "noteSaved": "Gespeichert",
+    "classTitle": "Wie hat jede Person gearbeitet?",
+    "classHint": "Bewerte alle in der Klasse ({done} von {total}).",
+    "secret": "Stimmen sind geheim: niemand sieht, wer was gegeben hat, nur den Durchschnitt.",
+    "error": "Speichern fehlgeschlagen. Versuch es nochmal.",
+    "colPerson": "Person",
+    "colSelf": "Selbst",
+    "colClass": "Klasse",
+    "colVerdict": "Urteil",
+    "colProof": "Was emet zeigt, dass sie getan haben",
+    "votes": "{n, plural, one {# Stimme} other {# Stimmen}}",
+    "tasksDone": "Aufgaben erledigt",
+    "atOffice": "im Büro",
+    "activeDays": "Tage aktiv in emet",
+    "actions": "Aktionen in emet",
+    "whichTasks": "Welche Aufgaben",
+    "legend": "Slacker = Klassendurchschnitt unter 2,5. Überschätzt / Unterschätzt sich = 1,5 oder mehr zwischen eigener Note und der der Klasse. Den Beweis zählt emet aus Aufgaben, Büro-Check-ins und Aktivität dieser Woche.",
+    "verdict": {
+      "slacker": "Slacker",
+      "over": "Überschätzt sich",
+      "under": "Unterschätzt sich",
+      "fair": "Fair"
+    },
+    "away": "Abwesend: {reason}"
   }
 }
