@@ -3613,6 +3613,17 @@
     "linkPlaceholder": "https://…",
     "proofAdded": "Todiste lisätty",
     "badLink": "Liitä koko linkki, joka alkaa https://",
-    "uploadError": "Lataus epäonnistui (max 10 Mt). Yritä uudelleen."
+    "uploadError": "Lataus epäonnistui (max 10 Mt). Yritä uudelleen.",
+    "openProfile": "Napauta nähdäksesi mitä hän lisäsi",
+    "saysTheyDid": "Mitä hän sanoo tehneensä",
+    "nothingWritten": "Ei kirjoitettu mitään tällä viikolla",
+    "proofTitle": "Todisteet",
+    "noProof": "Ei tiedostoja tai linkkejä tällä viikolla",
+    "tasksTitle": "Tällä viikolla valmistuneet tehtävät",
+    "noTasks": "Ei valmistuneita tehtäviä tällä viikolla",
+    "fullProfile": "Avaa koko profiili",
+    "prevPerson": "Edellinen henkilö",
+    "nextPerson": "Seuraava henkilö",
+    "close": "Sulje"
   }
 }

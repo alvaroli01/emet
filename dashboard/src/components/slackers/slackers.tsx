@@ -49,6 +49,90 @@ function ProofChip({ p, onRemove }: { p: Proof; onRemove?: () => void }) {
   );
 }
 
+const IMG = /\.(jpe?g|png|gif|webp|heic|avif)$/i;
+
+/** One person's week, big enough for the projector: scores, their own words, their proof (images shown) and what emet counted. */
+function Profile({ r, n, total, onPrev, onNext, onClose }: { r: SlackerRow; n: number; total: number; onPrev: () => void; onNext: () => void; onClose: () => void }) {
+  const t = useTranslations("slackers");
+  const [urls, setUrls] = useState<Record<string, string>>({});
+  const imgKey = r.proofs.filter((p) => p.path && IMG.test(p.path)).map((p) => p.path).join("|");
+  useEffect(() => {
+    const paths = imgKey ? imgKey.split("|") : [];
+    if (!paths.length) return;
+    let live = true;
+    createClient().storage.from("slacker-proof").createSignedUrls(paths, 600).then(({ data }) => {
+      if (live && data) setUrls(Object.fromEntries(data.filter((d) => d.signedUrl).map((d) => [d.path, d.signedUrl])));
+    });
+    return () => { live = false; };
+  }, [imgKey]);
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => { if (e.key === "ArrowLeft") onPrev(); if (e.key === "ArrowRight") onNext(); if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [onPrev, onNext, onClose]);
+  const v = verdict(r.self, r.classAvg);
+  const images = r.proofs.filter((p) => p.path && urls[p.path]);
+  const others = r.proofs.filter((p) => !(p.path && urls[p.path]));
+  const stat = (value: React.ReactNode, label: string) => <div className="rounded-2xl bg-surface-2 p-4"><div className="text-3xl font-bold">{value}</div><div className="text-sm text-muted">{label}</div></div>;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={onClose} role="dialog" aria-modal="true" aria-label={r.name}>
+      <div className="panel max-h-[92vh] w-full max-w-5xl overflow-y-auto p-6 sm:p-8" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Avatar name={r.name} src={r.avatar} size={72} />
+            <div>
+              <h2 className="text-3xl font-bold">{r.name}</h2>
+              <div className="mt-1 flex flex-wrap gap-2">
+                {v && <span className={`rounded-full px-3 py-1 text-sm font-semibold ${TONE[v]}`}>{t(`verdict.${v}`)}</span>}
+                {r.away && <span className="rounded-full bg-surface-2 px-3 py-1 text-sm text-muted">{t("away", { reason: r.away })}</span>}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="mr-2 text-sm text-muted">{n} / {total}</span>
+            <button type="button" onClick={onPrev} className="rounded-lg border border-line p-2 hover:bg-surface-2" aria-label={t("prevPerson")}><ChevronLeft size={18} /></button>
+            <button type="button" onClick={onNext} className="rounded-lg border border-line p-2 hover:bg-surface-2" aria-label={t("nextPerson")}><ChevronRight size={18} /></button>
+            <button type="button" onClick={onClose} className="ml-1 rounded-lg border border-line p-2 hover:bg-surface-2" aria-label={t("close")}><X size={18} /></button>
+          </div>
+        </div>
+
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {stat(r.self ?? "—", t("colSelf"))}
+          {stat(r.classAvg ?? "—", `${t("colClass")}${r.classN ? ` · ${t("votes", { n: r.classN })}` : ""}`)}
+          {stat(r.tasks.length, t("tasksDone"))}
+          {stat(hm(r.officeMs), t("atOffice"))}
+          {stat(r.activeDays, t("activeDays"))}
+          {stat(r.actions, t("actions"))}
+        </div>
+
+        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">{t("saysTheyDid")}</h3>
+        <p className="mt-2 whitespace-pre-wrap text-xl">{r.note ? `“${r.note}”` : <span className="text-muted">{t("nothingWritten")}</span>}</p>
+
+        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">{t("proofTitle")}</h3>
+        {!r.proofs.length && <p className="mt-2 text-muted">{t("noProof")}</p>}
+        {images.length > 0 && (
+          <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {images.map((p) => (
+              <a key={p.id} href={urls[p.path!]} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-xl border border-line">
+                {/* eslint-disable-next-line @next/next/no-img-element -- private signed URL */}
+                <img src={urls[p.path!]} alt={p.name} className="h-56 w-full object-cover" />
+              </a>
+            ))}
+          </div>
+        )}
+        {others.length > 0 && <div className="mt-2 flex flex-wrap gap-2">{others.map((p) => <ProofChip key={p.id} p={p} />)}</div>}
+
+        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">{t("tasksTitle")}</h3>
+        {r.tasks.length ? <ul className="mt-2 list-disc space-y-1 pl-5 text-lg">{r.tasks.map((x, i) => <li key={i}>{x}</li>)}</ul>
+          : <p className="mt-2 text-muted">{t("noTasks")}</p>}
+
+        <Link href={`/team/${r.id}`} target="_blank" className="mt-6 inline-block text-sm text-muted underline">{t("fullProfile")}</Link>
+      </div>
+    </div>
+  );
+}
+
 function Scores({ value, onPick, disabled, label }: { value: number | undefined; onPick: (n: number) => void; disabled: boolean; label: string }) {
   return (
     <div className="flex gap-1" role="radiogroup" aria-label={label}>
@@ -74,6 +158,7 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
   const [note, setNote] = useState(me?.note ?? "");
   const [present, setPresent] = useState(false);
   const [link, setLink] = useState("");
+  const [openId, setOpenId] = useState<string | null>(null);
   const screen = useRef<HTMLDivElement>(null);
 
   // On screen: the class keeps voting on their phones, so refresh the numbers every 10 s
@@ -151,6 +236,9 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
   const rated = others.filter((r) => votes[r.id]).length;
   // Lowest class score first: that's who gets exposed
   const ranked = [...rows].sort((a, b) => (a.classAvg ?? 99) - (b.classAvg ?? 99) || a.name.localeCompare(b.name));
+  const openIdx = ranked.findIndex((r) => r.id === openId);
+  const open = openIdx >= 0 ? ranked[openIdx] : null;
+  const close = () => setOpenId(null);
   const end = new Date(Date.parse(week + "T00:00:00Z") + 6 * 864e5).toISOString().slice(0, 10);
 
   return (
@@ -231,8 +319,8 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
               {ranked.map((r) => {
                 const v = verdict(r.self, r.classAvg);
                 return (
-                  <tr key={r.id} className="border-t border-line align-top">
-                    <td className="p-3"><span className="flex items-center gap-2"><Avatar name={r.name} src={r.avatar} size={present ? 40 : 28} /><span className="font-medium">{r.name}</span></span></td>
+                  <tr key={r.id} onClick={() => setOpenId(r.id)} className="cursor-pointer border-t border-line align-top transition hover:bg-surface-2/60">
+                    <td className="p-3"><span className="flex items-center gap-2"><Avatar name={r.name} src={r.avatar} size={present ? 40 : 28} /><span><span className="block font-medium">{r.name}</span><span className="text-[11px] text-muted">{t("openProfile")}</span></span></span></td>
                     <td className="p-3 text-center font-semibold">{r.self ?? "—"}</td>
                     <td className="p-3 text-center"><span className="font-semibold">{r.classAvg ?? "—"}</span>{r.classN > 0 && <span className="block text-[11px] text-muted">{t("votes", { n: r.classN })}</span>}</td>
                     <td className="p-3">{v && <span className={`whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${TONE[v]}`}>{t(`verdict.${v}`)}</span>}
@@ -245,13 +333,13 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
                         <span><b className="text-ink">{r.actions}</b> {t("actions")}</span>
                       </div>
                       {r.tasks.length > 0 && (
-                        <details className="mt-1 text-xs" open={present}>
+                        <details className="mt-1 text-xs" open={present} onClick={(e) => e.stopPropagation()}>
                           <summary className="cursor-pointer text-muted">{t("whichTasks")}</summary>
                           <ul className="mt-1 list-disc pl-4">{r.tasks.map((x, i) => <li key={i}>{x}</li>)}</ul>
                         </details>
                       )}
                       {r.note && <p className="mt-1.5 text-xs italic">“{r.note}”</p>}
-                      {r.proofs.length > 0 && <div className="mt-1.5 flex flex-wrap gap-1.5">{r.proofs.map((p) => <ProofChip key={p.id} p={p} />)}</div>}
+                      {r.proofs.length > 0 && <div className="mt-1.5 flex flex-wrap gap-1.5" onClick={(e) => e.stopPropagation()}>{r.proofs.map((p) => <ProofChip key={p.id} p={p} />)}</div>}
                     </td>
                   </tr>
                 );
@@ -260,6 +348,9 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
           </table>
         </div>
         <p className="mt-3 text-xs text-muted">{t("legend")}</p>
+        {open && <Profile r={open} n={openIdx + 1} total={ranked.length} onClose={close}
+          onPrev={() => setOpenId(ranked[(openIdx - 1 + ranked.length) % ranked.length].id)}
+          onNext={() => setOpenId(ranked[(openIdx + 1) % ranked.length].id)} />}
       </div>
     </div>
   );

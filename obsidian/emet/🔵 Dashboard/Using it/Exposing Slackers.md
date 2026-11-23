@@ -12,6 +12,7 @@ Weekly class dynamic (Alvaro, 23 Nov): **how do you think you worked this week, 
 - **Board:** everyone, lowest class score first: own score · class average (+ how many voted) · verdict · proof.
   - **Slacker** = class average under 2.5 · **Overrates / Underrates themself** = 1.5+ between own score and class · **Fair** otherwise.
   - **Proof** (counted by emet for that Mon–Sun week): tasks finished (titles listed), hours at Dock (office check-in), days active in emet, actions in emet, their note, and **Away: <reason>** if they had an absence (trip, sick) — so nobody is exposed for a week they weren't here.
+- **Tap a person** on the board: their week as a big card — self/class score, what they wrote, proof (photos shown, files and links open), tasks finished, hours. ← → (or the arrows) go to the next person. Works in full screen.
 - **Show on screen:** full-screen view for the projector; refreshes every 10 s while people vote.
 - **Weeks:** voting is open for this week and last week. On Mondays the page opens on last week. Arrows go back through every past week (history = the proof).
 - Coaches (Leire), Ollin guests and the Grok bot aren't rated.

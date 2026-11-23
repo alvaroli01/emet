@@ -3613,6 +3613,17 @@
     "linkPlaceholder": "https://…",
     "proofAdded": "Proof added",
     "badLink": "Paste a full link starting with https://",
-    "uploadError": "Upload failed (max 10 MB). Try again."
+    "uploadError": "Upload failed (max 10 MB). Try again.",
+    "openProfile": "Tap to see what they put",
+    "saysTheyDid": "What they say they did",
+    "nothingWritten": "Nothing written this week",
+    "proofTitle": "Proof",
+    "noProof": "No files or links this week",
+    "tasksTitle": "Tasks finished this week",
+    "noTasks": "No tasks finished this week",
+    "fullProfile": "Open full profile",
+    "prevPerson": "Previous person",
+    "nextPerson": "Next person",
+    "close": "Close"
   }
 }

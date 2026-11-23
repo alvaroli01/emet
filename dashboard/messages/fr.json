@@ -3613,6 +3613,17 @@
     "linkPlaceholder": "https://…",
     "proofAdded": "Preuve ajoutée",
     "badLink": "Colle un lien complet qui commence par https://",
-    "uploadError": "Échec de l'envoi (max 10 Mo). Réessaie."
+    "uploadError": "Échec de l'envoi (max 10 Mo). Réessaie.",
+    "openProfile": "Touche pour voir ce qu'il a mis",
+    "saysTheyDid": "Ce qu'il dit avoir fait",
+    "nothingWritten": "Rien écrit cette semaine",
+    "proofTitle": "Preuves",
+    "noProof": "Aucun fichier ni lien cette semaine",
+    "tasksTitle": "Tâches terminées cette semaine",
+    "noTasks": "Aucune tâche terminée cette semaine",
+    "fullProfile": "Ouvrir le profil complet",
+    "prevPerson": "Personne précédente",
+    "nextPerson": "Personne suivante",
+    "close": "Fermer"
   }
 }

@@ -3613,6 +3613,17 @@
     "linkPlaceholder": "https://…",
     "proofAdded": "Prueba añadida",
     "badLink": "Pega un enlace completo que empiece por https://",
-    "uploadError": "No se pudo subir (máx. 10 MB). Inténtalo de nuevo."
+    "uploadError": "No se pudo subir (máx. 10 MB). Inténtalo de nuevo.",
+    "openProfile": "Toca para ver lo que puso",
+    "saysTheyDid": "Lo que dice que hizo",
+    "nothingWritten": "No escribió nada esta semana",
+    "proofTitle": "Pruebas",
+    "noProof": "Sin archivos ni enlaces esta semana",
+    "tasksTitle": "Tareas terminadas esta semana",
+    "noTasks": "Ninguna tarea terminada esta semana",
+    "fullProfile": "Abrir perfil completo",
+    "prevPerson": "Persona anterior",
+    "nextPerson": "Siguiente persona",
+    "close": "Cerrar"
   }
 }

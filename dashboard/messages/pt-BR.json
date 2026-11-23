@@ -3613,6 +3613,17 @@
     "linkPlaceholder": "https://…",
     "proofAdded": "Prova adicionada",
     "badLink": "Cole um link completo começando com https://",
-    "uploadError": "Falha no envio (máx. 10 MB). Tente de novo."
+    "uploadError": "Falha no envio (máx. 10 MB). Tente de novo.",
+    "openProfile": "Toque para ver o que colocou",
+    "saysTheyDid": "O que diz que fez",
+    "nothingWritten": "Nada escrito esta semana",
+    "proofTitle": "Provas",
+    "noProof": "Sem arquivos ou links esta semana",
+    "tasksTitle": "Tarefas concluídas esta semana",
+    "noTasks": "Nenhuma tarefa concluída esta semana",
+    "fullProfile": "Abrir perfil completo",
+    "prevPerson": "Pessoa anterior",
+    "nextPerson": "Próxima pessoa",
+    "close": "Fechar"
   }
 }
