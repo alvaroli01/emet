@@ -3606,6 +3606,13 @@
       "under": "Underrates themself",
       "fair": "Fair"
     },
-    "away": "Away: {reason}"
+    "away": "Away: {reason}",
+    "proofLabel": "Proof: files or links (photos, docs, posts…)",
+    "addFile": "Add file",
+    "addLink": "Add link",
+    "linkPlaceholder": "https://…",
+    "proofAdded": "Proof added",
+    "badLink": "Paste a full link starting with https://",
+    "uploadError": "Upload failed (max 10 MB). Try again."
   }
 }

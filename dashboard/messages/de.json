@@ -3606,6 +3606,13 @@
       "under": "Unterschätzt sich",
       "fair": "Fair"
     },
-    "away": "Abwesend: {reason}"
+    "away": "Abwesend: {reason}",
+    "proofLabel": "Beweise: Dateien oder Links (Fotos, Docs, Posts…)",
+    "addFile": "Datei hinzufügen",
+    "addLink": "Link hinzufügen",
+    "linkPlaceholder": "https://…",
+    "proofAdded": "Beweis hinzugefügt",
+    "badLink": "Füge einen vollständigen Link mit https:// ein",
+    "uploadError": "Upload fehlgeschlagen (max. 10 MB). Versuch es nochmal."
   }
 }

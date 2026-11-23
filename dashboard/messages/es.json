@@ -3606,6 +3606,13 @@
       "under": "Se infravalora",
       "fair": "Justo"
     },
-    "away": "Fuera: {reason}"
+    "away": "Fuera: {reason}",
+    "proofLabel": "Pruebas: archivos o enlaces (fotos, docs, posts…)",
+    "addFile": "Añadir archivo",
+    "addLink": "Añadir enlace",
+    "linkPlaceholder": "https://…",
+    "proofAdded": "Prueba añadida",
+    "badLink": "Pega un enlace completo que empiece por https://",
+    "uploadError": "No se pudo subir (máx. 10 MB). Inténtalo de nuevo."
   }
 }

@@ -4,17 +4,21 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { ChevronLeft, ChevronRight, Lock, Maximize2, Minimize2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Link2, Lock, Maximize2, Minimize2, Paperclip, X } from "lucide-react";
+import { compressImage } from "@/components/finance/claim";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/toast";
 import { Avatar } from "@/components/ui";
 import { shortDate } from "@/lib/format";
 import { hm } from "@/lib/office";
 
+type Proof = { id: string; path: string | null; name: string; link: string | null };
+
 export type SlackerRow = {
   id: string; name: string; avatar: string | null;
   self: number | null; classAvg: number | null; classN: number;
   tasks: string[]; officeMs: number; activeDays: number; actions: number; note: string | null; away: string | null;
+  proofs: Proof[];
 };
 
 /** How the class verdict reads: low class score = slacker; big gap between self and class = sees themself wrong. */
@@ -27,6 +31,23 @@ export function verdict(self: number | null, cls: number | null): "slacker" | "o
   return "fair";
 }
 const TONE = { slacker: "bg-bad/15 text-bad-text", over: "bg-warn/15 text-warn-text", under: "bg-surface-2 text-ink", fair: "bg-ok/15 text-ok-text" } as const;
+
+/** A proof: a file opens through a 10-minute private link; a link opens as is. */
+function ProofChip({ p, onRemove }: { p: Proof; onRemove?: () => void }) {
+  async function open() {
+    if (p.link) return window.open(p.link, "_blank", "noopener");
+    const { data } = await createClient().storage.from("slacker-proof").createSignedUrl(p.path!, 600);
+    if (data) window.open(data.signedUrl, "_blank", "noopener");
+  }
+  return (
+    <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-surface-2 px-2.5 py-1 text-xs">
+      <button type="button" onClick={open} className="inline-flex min-w-0 items-center gap-1 hover:underline">
+        {p.link ? <Link2 size={12} /> : <Paperclip size={12} />}<span className="truncate">{p.name.replace(/^https?:\/\//, "").slice(0, 40)}</span>
+      </button>
+      {onRemove && <button type="button" onClick={onRemove} aria-label="×" className="text-muted hover:text-ink"><X size={12} /></button>}
+    </span>
+  );
+}
 
 function Scores({ value, onPick, disabled, label }: { value: number | undefined; onPick: (n: number) => void; disabled: boolean; label: string }) {
   return (
@@ -52,6 +73,7 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
   const me = rows.find((r) => r.id === meId);
   const [note, setNote] = useState(me?.note ?? "");
   const [present, setPresent] = useState(false);
+  const [link, setLink] = useState("");
   const screen = useRef<HTMLDivElement>(null);
 
   // On screen: the class keeps voting on their phones, so refresh the numbers every 10 s
@@ -91,6 +113,40 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
     router.refresh();
   }
 
+  async function addFile(file: File) {
+    setBusy(true);
+    const supabase = createClient();
+    const blob = await compressImage(file);
+    const name = blob === file ? file.name : file.name.replace(/\.[^.]+$/, "") + ".jpg";
+    const path = `${meId}/${week}/${Date.now()}-${name.replace(/[^\w.-]+/g, "_").slice(-80)}`;
+    const up = await supabase.storage.from("slacker-proof").upload(path, blob, { contentType: blob.type || "application/octet-stream" });
+    const { error } = up.error ? up : await supabase.from("slacker_proofs").insert({ week_start: week, user_id: meId, file_path: path, file_name: name.slice(0, 200) });
+    setBusy(false);
+    if (error) return toast("error", t(up.error ? "uploadError" : "error"));
+    toast("ok", t("proofAdded"));
+    router.refresh();
+  }
+
+  async function addLink() {
+    const url = link.trim();
+    if (!/^https?:\/\/\S+$/i.test(url)) return toast("error", t("badLink"));
+    setBusy(true);
+    const { error } = await createClient().from("slacker_proofs").insert({ week_start: week, user_id: meId, link: url.slice(0, 1000) });
+    setBusy(false);
+    if (error) return toast("error", t("error"));
+    setLink("");
+    toast("ok", t("proofAdded"));
+    router.refresh();
+  }
+
+  async function removeProof(p: Proof) {
+    const supabase = createClient();
+    const { error } = await supabase.from("slacker_proofs").delete().eq("id", p.id);
+    if (error) return toast("error", t("error"));
+    if (p.path) await supabase.storage.from("slacker-proof").remove([p.path]);
+    router.refresh();
+  }
+
   const others = rows.filter((r) => r.id !== meId);
   const rated = others.filter((r) => votes[r.id]).length;
   // Lowest class score first: that's who gets exposed
@@ -122,6 +178,20 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
               <textarea value={note} onChange={(e) => setNote(e.target.value)} onBlur={saveNote} rows={3} maxLength={1000} disabled={busy}
                         placeholder={t("notePlaceholder")} className="input" />
             </label>
+            <div className="mt-3">
+              <span className="mb-1 block text-xs text-muted">{t("proofLabel")}</span>
+              {me.proofs.length > 0 && <div className="mb-2 flex flex-wrap gap-1.5">{me.proofs.map((p) => <ProofChip key={p.id} p={p} onRemove={() => removeProof(p)} />)}</div>}
+              <div className="flex flex-wrap gap-2">
+                <label className={`inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-line px-3 py-2 text-sm hover:bg-surface-2 ${busy ? "pointer-events-none opacity-50" : ""}`}>
+                  <Paperclip size={14} /> {t("addFile")}
+                  <input type="file" className="hidden" disabled={busy} onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) addFile(f); }} />
+                </label>
+                <form onSubmit={(e) => { e.preventDefault(); addLink(); }} className="flex min-w-0 flex-1 gap-2">
+                  <input value={link} onChange={(e) => setLink(e.target.value)} placeholder={t("linkPlaceholder")} className="input min-w-0 flex-1 py-2 text-sm" />
+                  <button disabled={busy || !link.trim()} className="rounded-xl border border-line px-3 text-sm hover:bg-surface-2 disabled:opacity-50">{t("addLink")}</button>
+                </form>
+              </div>
+            </div>
           </div>
           <div className="panel p-5">
             <h3 className="font-semibold">{t("classTitle")}</h3>
@@ -181,6 +251,7 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
                         </details>
                       )}
                       {r.note && <p className="mt-1.5 text-xs italic">“{r.note}”</p>}
+                      {r.proofs.length > 0 && <div className="mt-1.5 flex flex-wrap gap-1.5">{r.proofs.map((p) => <ProofChip key={p.id} p={p} />)}</div>}
                     </td>
                   </tr>
                 );

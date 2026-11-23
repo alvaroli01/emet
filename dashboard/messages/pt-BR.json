@@ -3606,6 +3606,13 @@
       "under": "Se subestima",
       "fair": "Justo"
     },
-    "away": "Ausente: {reason}"
+    "away": "Ausente: {reason}",
+    "proofLabel": "Provas: arquivos ou links (fotos, docs, posts…)",
+    "addFile": "Adicionar arquivo",
+    "addLink": "Adicionar link",
+    "linkPlaceholder": "https://…",
+    "proofAdded": "Prova adicionada",
+    "badLink": "Cole um link completo começando com https://",
+    "uploadError": "Falha no envio (máx. 10 MB). Tente de novo."
   }
 }

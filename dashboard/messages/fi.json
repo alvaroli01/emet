@@ -3606,6 +3606,13 @@
       "under": "Aliarvioi itsensä",
       "fair": "Reilu"
     },
-    "away": "Poissa: {reason}"
+    "away": "Poissa: {reason}",
+    "proofLabel": "Todisteet: tiedostot tai linkit (kuvat, dokumentit, julkaisut…)",
+    "addFile": "Lisää tiedosto",
+    "addLink": "Lisää linkki",
+    "linkPlaceholder": "https://…",
+    "proofAdded": "Todiste lisätty",
+    "badLink": "Liitä koko linkki, joka alkaa https://",
+    "uploadError": "Lataus epäonnistui (max 10 Mt). Yritä uudelleen."
   }
 }

@@ -27,7 +27,7 @@ export default async function SlackersPage({ searchParams }: { searchParams: Pro
   const week = w && /^\d{4}-\d{2}-\d{2}$/.test(w) && weekStart(w) === w && w <= thisWeek ? w : fallback;
   const next = addDays(week, 7);
 
-  const [members, board, votes, notes, visits, acts, away] = await Promise.all([
+  const [members, board, votes, notes, visits, acts, away, proofs] = await Promise.all([
     loadMembers(),
     supabase.rpc("slacker_board", { ws: week }),
     supabase.from("slacker_votes").select("target_id, score").eq("week_start", week).eq("voter_id", me.id).returns<{ target_id: string; score: number }[]>(),
@@ -38,6 +38,8 @@ export default async function SlackersPage({ searchParams }: { searchParams: Pro
     // Away (trips, sick days): shown so nobody gets exposed for a week they weren't here
     supabase.from("office_absences").select("user_id, from_day, to_day, reason").lte("from_day", addDays(week, 6)).gte("to_day", week)
       .returns<{ user_id: string; from_day: string; to_day: string; reason: string }[]>(),
+    supabase.from("slacker_proofs").select("id, user_id, file_path, file_name, link").eq("week_start", week).order("created_at")
+      .returns<{ id: string; user_id: string; file_path: string | null; file_name: string | null; link: string | null }[]>(),
   ]);
 
   const byId = new Map(((board.data ?? []) as BoardRow[]).map((b) => [b.user_id, b]));
@@ -53,6 +55,7 @@ export default async function SlackersPage({ searchParams }: { searchParams: Pro
       actions: mine.reduce((s, a) => s + Number(a.n), 0),
       note: (notes.data ?? []).find((n) => n.user_id === m.id)?.note ?? null,
       away: (away.data ?? []).find((a) => a.user_id === m.id)?.reason ?? null,
+      proofs: (proofs.data ?? []).filter((x) => x.user_id === m.id).map(({ id, file_path, file_name, link }) => ({ id, path: file_path, name: file_name ?? link ?? "", link })),
     };
   });
 
