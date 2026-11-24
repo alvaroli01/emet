@@ -10,6 +10,7 @@ import { PageHero } from "@/components/shell/page-hero";
 import { Slackers, type SlackerRow } from "@/components/slackers/slackers";
 
 const DAY = 864e5;
+type FeedItem = { kind: string; title: string; detail: string | null; at: string; bucket: string | null; path: string | null; link: string | null };
 type BoardRow = { user_id: string; self_score: number | null; class_avg: number | string | null; class_n: number; tasks: { title: string; done_at: string }[] };
 type Act = { user_id: string; day: string; n: number | string };
 const addDays = (iso: string, n: number) => new Date(Date.parse(iso + "T00:00:00Z") + n * DAY).toISOString().slice(0, 10);
@@ -27,7 +28,7 @@ export default async function SlackersPage({ searchParams }: { searchParams: Pro
   const week = w && /^\d{4}-\d{2}-\d{2}$/.test(w) && weekStart(w) === w && w <= thisWeek ? w : fallback;
   const next = addDays(week, 7);
 
-  const [members, board, votes, notes, visits, acts, away, proofs] = await Promise.all([
+  const [members, board, votes, notes, visits, acts, away, proofs, feed] = await Promise.all([
     loadMembers(),
     supabase.rpc("slacker_board", { ws: week }),
     supabase.from("slacker_votes").select("target_id, score").eq("week_start", week).eq("voter_id", me.id).returns<{ target_id: string; score: number }[]>(),
@@ -40,7 +41,10 @@ export default async function SlackersPage({ searchParams }: { searchParams: Pro
       .returns<{ user_id: string; from_day: string; to_day: string; reason: string }[]>(),
     supabase.from("slacker_proofs").select("id, user_id, file_path, file_name, link").eq("week_start", week).order("created_at")
       .returns<{ id: string; user_id: string; file_path: string | null; file_name: string | null; link: string | null }[]>(),
+    // Everything they did in emet that week (tasks, files, visits, notes, ideas, leads, sales, posts, fines…)
+    supabase.rpc("slacker_feed", { ws: week }),
   ]);
+  const things = (feed.data ?? []) as (FeedItem & { user_id: string })[];
 
   const byId = new Map(((board.data ?? []) as BoardRow[]).map((b) => [b.user_id, b]));
   const rows: SlackerRow[] = members.filter((m) => getsTasks(m) && byId.has(m.id)).map((m) => {
@@ -55,7 +59,8 @@ export default async function SlackersPage({ searchParams }: { searchParams: Pro
       actions: mine.reduce((s, a) => s + Number(a.n), 0),
       note: (notes.data ?? []).find((n) => n.user_id === m.id)?.note ?? null,
       away: (away.data ?? []).find((a) => a.user_id === m.id)?.reason ?? null,
-      proofs: (proofs.data ?? []).filter((x) => x.user_id === m.id).map(({ id, file_path, file_name, link }) => ({ id, path: file_path, name: file_name ?? link ?? "", link })),
+      proofs: (proofs.data ?? []).filter((x) => x.user_id === m.id).map(({ id, file_path, file_name, link }) => ({ id, bucket: file_path ? "slacker-proof" : null, path: file_path, name: file_name ?? link ?? "", link })),
+      feed: things.filter((x) => x.user_id === m.id).map(({ kind, title, detail, at, bucket, path, link }) => ({ kind, title, detail, at, bucket, path, link })),
     };
   });
 

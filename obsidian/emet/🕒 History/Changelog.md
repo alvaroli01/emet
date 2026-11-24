@@ -1,12 +1,13 @@
 ---
 tags: [emet, history]
-updated: 2026-11-23
+updated: 2026-11-24
 ---
 
-# Changelog (synced from the repo's CHANGELOG.md, 2026-11-23)
+# Changelog (synced from the repo's CHANGELOG.md, 2026-11-24)
 
 Newest first. Format: `YYYY-MM-DD — Name — what changed`
 
+- 2026-11-24 — Alvaro — Exposing Slackers: the proof now **fills itself** from what each person did in emet that week: tasks finished (+ hand-in files), documents and project files uploaded, visits, community and learning points (+ their files/links), meeting notes, ideas, Scout leads worked, sales, posts, project updates, new prospects, fines and strikes. Photos show on the person's card. Files open only for people allowed to open them; project things only for projects the viewer can see. Migration 0072.
 - 2026-11-23 — Alvaro — Exposing Slackers: **tap anyone on the board** to open their week as a big card for the class (scores, what they wrote, proof photos shown, links/files, tasks finished, hours); ← → go through people, works in Show on screen.
 - 2026-11-23 — Alvaro — Exposing Slackers: add **proof files or links** to your week (photos, docs, posts; 10 MB; the class can open them on the board). AI bot left out of the rating. Migration 0071.
 - 2026-11-23 — Alvaro — New **Exposing Slackers** page (`/slackers`, sidebar → Tools): each week everyone rates themself and the class 1–5 (secret votes, only averages shown), next to the proof emet counted (tasks finished, hours at Dock, days active, actions, own note, Away). **Show on screen** for the class. Migration 0070. Office: Sasha's trip ended 22 Nov; Fran away 23–29 Nov (back Mon 30 Nov).

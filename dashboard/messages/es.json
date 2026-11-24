@@ -3624,6 +3624,26 @@
     "fullProfile": "Abrir perfil completo",
     "prevPerson": "Persona anterior",
     "nextPerson": "Siguiente persona",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "thingsDone": "cosas hechas en emet",
+    "filesAdded": "archivos",
+    "feedTitle": "Todo lo que emet vio que hizo",
+    "feedEmpty": "Nada en emet esta semana",
+    "openFile": "abrir",
+    "feedKind": {
+      "task": "Tareas terminadas",
+      "file": "Archivos subidos",
+      "visit": "Visitas a clientes",
+      "sale": "Ventas",
+      "lead": "Leads de Scout trabajados",
+      "prospect": "Nuevos prospectos",
+      "community": "Puntos de comunidad",
+      "learning": "Aprendizaje",
+      "meeting": "Notas de reunión",
+      "idea": "Ideas propuestas",
+      "post": "Posts publicados",
+      "update": "Novedades de proyectos",
+      "strike": "Multas y strikes"
+    }
   }
 }

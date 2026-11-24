@@ -3624,6 +3624,26 @@
     "fullProfile": "Avaa koko profiili",
     "prevPerson": "Edellinen henkilö",
     "nextPerson": "Seuraava henkilö",
-    "close": "Sulje"
+    "close": "Sulje",
+    "thingsDone": "asiaa tehty emetissä",
+    "filesAdded": "tiedostoa",
+    "feedTitle": "Kaikki mitä emet näki",
+    "feedEmpty": "Ei mitään emetissä tällä viikolla",
+    "openFile": "avaa",
+    "feedKind": {
+      "task": "Valmiit tehtävät",
+      "file": "Ladatut tiedostot",
+      "visit": "Asiakaskäynnit",
+      "sale": "Myynnit",
+      "lead": "Työstetyt Scout-liidit",
+      "prospect": "Uudet prospektit",
+      "community": "Yhteisöpisteet",
+      "learning": "Oppiminen",
+      "meeting": "Palaverimuistiinpanot",
+      "idea": "Ehdotetut ideat",
+      "post": "Julkaistut postaukset",
+      "update": "Projektipäivitykset",
+      "strike": "Sakot ja strikes"
+    }
   }
 }

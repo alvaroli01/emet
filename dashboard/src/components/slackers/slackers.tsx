@@ -12,13 +12,15 @@ import { Avatar } from "@/components/ui";
 import { shortDate } from "@/lib/format";
 import { hm } from "@/lib/office";
 
-type Proof = { id: string; path: string | null; name: string; link: string | null };
+type Proof = { id: string; bucket: string | null; path: string | null; name: string; link: string | null };
+/** One thing they did in emet that week, found automatically (slacker_feed). */
+export type FeedItem = { kind: string; title: string; detail: string | null; at: string; bucket: string | null; path: string | null; link: string | null };
 
 export type SlackerRow = {
   id: string; name: string; avatar: string | null;
   self: number | null; classAvg: number | null; classN: number;
   tasks: string[]; officeMs: number; activeDays: number; actions: number; note: string | null; away: string | null;
-  proofs: Proof[];
+  proofs: Proof[]; feed: FeedItem[];
 };
 
 /** How the class verdict reads: low class score = slacker; big gap between self and class = sees themself wrong. */
@@ -31,12 +33,20 @@ export function verdict(self: number | null, cls: number | null): "slacker" | "o
   return "fair";
 }
 const TONE = { slacker: "bg-bad/15 text-bad-text", over: "bg-warn/15 text-warn-text", under: "bg-surface-2 text-ink", fair: "bg-ok/15 text-ok-text" } as const;
+const KINDS = ["task", "file", "visit", "sale", "lead", "prospect", "community", "learning", "meeting", "idea", "post", "update", "strike"] as const;
+const EMOJI: Record<string, string> = { task: "✅", file: "📎", visit: "🚶", sale: "💶", lead: "🎯", prospect: "👤", community: "🤝", learning: "📚", meeting: "📝", idea: "💡", post: "📣", update: "📌", strike: "⚠️" };
 
-/** A proof: a file opens through a 10-minute private link; a link opens as is. */
+/** Every file from the week: the ones they added here + the ones emet found (task hand-ins, documents, project files, point files). */
+const filesOf = (r: SlackerRow): Proof[] => [
+  ...r.proofs.filter((p) => p.path),
+  ...r.feed.filter((f) => f.path && f.bucket).map((f) => ({ id: `${f.bucket}:${f.path}`, bucket: f.bucket, path: f.path, name: f.title, link: null })),
+];
+
+/** A proof: a file opens through a 10-minute private link (only if the viewer may open it); a link opens as is. */
 function ProofChip({ p, onRemove }: { p: Proof; onRemove?: () => void }) {
   async function open() {
     if (p.link) return window.open(p.link, "_blank", "noopener");
-    const { data } = await createClient().storage.from("slacker-proof").createSignedUrl(p.path!, 600);
+    const { data } = await createClient().storage.from(p.bucket ?? "slacker-proof").createSignedUrl(p.path!, 600);
     if (data) window.open(data.signedUrl, "_blank", "noopener");
   }
   return (
@@ -51,18 +61,23 @@ function ProofChip({ p, onRemove }: { p: Proof; onRemove?: () => void }) {
 
 const IMG = /\.(jpe?g|png|gif|webp|heic|avif)$/i;
 
-/** One person's week, big enough for the projector: scores, their own words, their proof (images shown) and what emet counted. */
+/** One person's week, big enough for the projector: scores, their own words, every file (images shown) and everything emet saw them do. */
 function Profile({ r, n, total, onPrev, onNext, onClose }: { r: SlackerRow; n: number; total: number; onPrev: () => void; onNext: () => void; onClose: () => void }) {
   const t = useTranslations("slackers");
+  const locale = useLocale();
   const [urls, setUrls] = useState<Record<string, string>>({});
-  const imgKey = r.proofs.filter((p) => p.path && IMG.test(p.path)).map((p) => p.path).join("|");
+  const files = filesOf(r);
+  const imgKey = files.filter((p) => IMG.test(p.path!)).map((p) => `${p.bucket ?? "slacker-proof"}:${p.path}`).join("|");
   useEffect(() => {
-    const paths = imgKey ? imgKey.split("|") : [];
-    if (!paths.length) return;
+    if (!imgKey) return;
     let live = true;
-    createClient().storage.from("slacker-proof").createSignedUrls(paths, 600).then(({ data }) => {
-      if (live && data) setUrls(Object.fromEntries(data.filter((d) => d.signedUrl).map((d) => [d.path, d.signedUrl])));
-    });
+    const byBucket = new Map<string, string[]>();
+    for (const k of imgKey.split("|")) { const i = k.indexOf(":"); byBucket.set(k.slice(0, i), [...(byBucket.get(k.slice(0, i)) ?? []), k.slice(i + 1)]); }
+    const sb = createClient();
+    // Files the viewer isn't allowed to open simply don't get a preview
+    Promise.all([...byBucket].map(([bucket, paths]) => sb.storage.from(bucket).createSignedUrls(paths, 600)
+      .then(({ data }) => (data ?? []).filter((d) => d.signedUrl && d.path).map((d) => [`${bucket}:${d.path}`, d.signedUrl as string] as const))))
+      .then((all) => { if (live) setUrls(Object.fromEntries(all.flat())); });
     return () => { live = false; };
   }, [imgKey]);
   useEffect(() => {
@@ -71,8 +86,11 @@ function Profile({ r, n, total, onPrev, onNext, onClose }: { r: SlackerRow; n: n
     return () => window.removeEventListener("keydown", key);
   }, [onPrev, onNext, onClose]);
   const v = verdict(r.self, r.classAvg);
-  const images = r.proofs.filter((p) => p.path && urls[p.path]);
-  const others = r.proofs.filter((p) => !(p.path && urls[p.path]));
+  const keyOf = (p: Proof) => `${p.bucket ?? "slacker-proof"}:${p.path}`;
+  const images = files.filter((p) => urls[keyOf(p)]);
+  const links = r.proofs.filter((p) => p.link);
+  const day = (iso: string) => new Date(iso).toLocaleDateString(locale, { weekday: "short", timeZone: "Europe/Madrid" });
+  const groups = KINDS.map((k) => ({ k, items: r.feed.filter((f) => f.kind === k) })).filter((g) => g.items.length);
   const stat = (value: React.ReactNode, label: string) => <div className="rounded-2xl bg-surface-2 p-4"><div className="text-3xl font-bold">{value}</div><div className="text-sm text-muted">{label}</div></div>;
 
   return (
@@ -100,32 +118,48 @@ function Profile({ r, n, total, onPrev, onNext, onClose }: { r: SlackerRow; n: n
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {stat(r.self ?? "—", t("colSelf"))}
           {stat(r.classAvg ?? "—", `${t("colClass")}${r.classN ? ` · ${t("votes", { n: r.classN })}` : ""}`)}
-          {stat(r.tasks.length, t("tasksDone"))}
+          {stat(r.feed.filter((f) => f.kind !== "strike").length, t("thingsDone"))}
+          {stat(files.length, t("filesAdded"))}
           {stat(hm(r.officeMs), t("atOffice"))}
           {stat(r.activeDays, t("activeDays"))}
-          {stat(r.actions, t("actions"))}
         </div>
 
         <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">{t("saysTheyDid")}</h3>
         <p className="mt-2 whitespace-pre-wrap text-xl">{r.note ? `“${r.note}”` : <span className="text-muted">{t("nothingWritten")}</span>}</p>
 
-        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">{t("proofTitle")}</h3>
-        {!r.proofs.length && <p className="mt-2 text-muted">{t("noProof")}</p>}
+        {(images.length > 0 || links.length > 0) && <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">{t("proofTitle")}</h3>}
         {images.length > 0 && (
           <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {images.map((p) => (
-              <a key={p.id} href={urls[p.path!]} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-xl border border-line">
+              <a key={p.id} href={urls[keyOf(p)]} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-xl border border-line">
                 {/* eslint-disable-next-line @next/next/no-img-element -- private signed URL */}
-                <img src={urls[p.path!]} alt={p.name} className="h-56 w-full object-cover" />
+                <img src={urls[keyOf(p)]} alt={p.name} className="h-56 w-full object-cover" />
               </a>
             ))}
           </div>
         )}
-        {others.length > 0 && <div className="mt-2 flex flex-wrap gap-2">{others.map((p) => <ProofChip key={p.id} p={p} />)}</div>}
+        {links.length > 0 && <div className="mt-2 flex flex-wrap gap-2">{links.map((p) => <ProofChip key={p.id} p={p} />)}</div>}
 
-        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">{t("tasksTitle")}</h3>
-        {r.tasks.length ? <ul className="mt-2 list-disc space-y-1 pl-5 text-lg">{r.tasks.map((x, i) => <li key={i}>{x}</li>)}</ul>
-          : <p className="mt-2 text-muted">{t("noTasks")}</p>}
+        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">{t("feedTitle")}</h3>
+        {!groups.length && <p className="mt-2 text-muted">{t("feedEmpty")}</p>}
+        <div className="mt-2 grid gap-4 md:grid-cols-2">
+          {groups.map(({ k, items }) => (
+            <div key={k} className={`rounded-2xl p-4 ${k === "strike" ? "bg-bad/10" : "bg-surface-2"}`}>
+              <div className="mb-2 font-semibold">{EMOJI[k]} {t(`feedKind.${k}`)} · {items.length}</div>
+              <ul className="space-y-1.5">
+                {items.map((f, i) => (
+                  <li key={i} className="flex flex-wrap items-baseline gap-x-2 text-base">
+                    <span className="text-xs text-muted">{day(f.at)}</span>
+                    <span className="min-w-0 break-words">{f.title}</span>
+                    {f.detail && k !== "file" && k !== "task" && <span className="text-xs text-muted">{["sale", "strike"].includes(k) ? `€${f.detail}` : f.detail}</span>}
+                    {f.path && f.bucket && <ProofChip p={{ id: f.path, bucket: f.bucket, path: f.path, name: t("openFile"), link: null }} />}
+                    {f.link && <ProofChip p={{ id: f.link, bucket: null, path: null, name: f.link, link: f.link }} />}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
         <Link href={`/team/${r.id}`} target="_blank" className="mt-6 inline-block text-sm text-muted underline">{t("fullProfile")}</Link>
       </div>
@@ -330,7 +364,8 @@ export function Slackers({ week, prev, next, canVote, meId, rows, myVotes }: {
                         <span><b className="text-ink">{r.tasks.length}</b> {t("tasksDone")}</span>
                         <span><b className="text-ink">{hm(r.officeMs)}</b> {t("atOffice")}</span>
                         <span><b className="text-ink">{r.activeDays}</b> {t("activeDays")}</span>
-                        <span><b className="text-ink">{r.actions}</b> {t("actions")}</span>
+                        <span><b className="text-ink">{r.feed.filter((f) => f.kind !== "strike").length}</b> {t("thingsDone")}</span>
+                        <span><b className="text-ink">{filesOf(r).length}</b> {t("filesAdded")}</span>
                       </div>
                       {r.tasks.length > 0 && (
                         <details className="mt-1 text-xs" open={present} onClick={(e) => e.stopPropagation()}>
